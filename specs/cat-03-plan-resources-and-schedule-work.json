@@ -172,7 +172,7 @@
         {
           "for": "process",
           "cite": "EN 17007:2017 cl. 6.2 MAN.6",
-          "status": "clause-verified"
+          "status": "verified"
         },
         {
           "for": "demand analogue",
@@ -345,7 +345,7 @@
         {
           "for": "process",
           "cite": "EN 17007:2017 cl. 6.14 RES.4",
-          "status": "clause-verified"
+          "status": "verified"
         },
         {
           "for": "resources and competence",
@@ -510,7 +510,7 @@
         {
           "for": "process",
           "cite": "EN 17007:2017 cl. 6.2 MAN.6 - closest named process; no simulation clause exists",
-          "status": "clause-verified"
+          "status": "verified"
         },
         {
           "for": "systems",
@@ -678,12 +678,12 @@
         {
           "for": "process",
           "cite": "EN 17007:2017 cl. 6.2 MAN.2",
-          "status": "clause-verified"
+          "status": "verified"
         },
         {
           "for": "external provision",
           "cite": "EN 17007:2017 cl. 6.15 SER.4 Provide external services",
-          "status": "clause-verified"
+          "status": "verified"
         },
         {
           "for": "gas intervals",
@@ -853,12 +853,12 @@
         {
           "for": "process",
           "cite": "EN 17007:2017 cl. 6.14 RES.4",
-          "status": "clause-verified"
+          "status": "verified"
         },
         {
           "for": "organisation",
           "cite": "EN 17007:2017 cl. 6.2 MAN.3",
-          "status": "clause-verified"
+          "status": "verified"
         },
         {
           "for": "resources",
@@ -1013,7 +1013,7 @@
         {
           "for": "process",
           "cite": "EN 17007:2017 cl. 6.14 RES.4",
-          "status": "clause-verified"
+          "status": "verified"
         },
         {
           "for": "gas emergency capability",
@@ -1179,12 +1179,12 @@
         {
           "for": "process",
           "cite": "EN 17007:2017 cl. 6.2 MAN.2",
-          "status": "clause-verified"
+          "status": "verified"
         },
         {
           "for": "external services",
           "cite": "EN 17007:2017 cl. 6.15 SER.4",
-          "status": "clause-verified"
+          "status": "verified"
         },
         {
           "for": "externally provided processes",
@@ -1345,12 +1345,12 @@
         {
           "for": "process",
           "cite": "EN 17007:2017 cl. 6.9 DOC.6",
-          "status": "clause-verified"
+          "status": "verified"
         },
         {
           "for": "internal resources",
           "cite": "EN 17007:2017 cl. 6.14 RES.4",
-          "status": "clause-verified"
+          "status": "verified"
         },
         {
           "for": "contractor information transfer",
@@ -1504,7 +1504,7 @@
         {
           "for": "process",
           "cite": "EN 17007:2017 cl. 6.5.5 ACT.4 - closest; EN 17007 has no appointment process",
-          "status": "clause-verified"
+          "status": "verified"
         },
         {
           "for": "service request analogue",
@@ -1657,7 +1657,7 @@
         {
           "for": "process",
           "cite": "EN 17007:2017 cl. 6.5.5 ACT.4",
-          "status": "clause-verified"
+          "status": "verified"
         },
         {
           "for": "payload",
@@ -1810,7 +1810,7 @@
         {
           "for": "process",
           "cite": "EN 17007:2017 cl. 6.5.5 ACT.4",
-          "status": "clause-verified"
+          "status": "verified"
         },
         {
           "for": "verbs",
@@ -1971,7 +1971,7 @@
         {
           "for": "process",
           "cite": "EN 17007:2017 cl. 6.5.5 ACT.4",
-          "status": "clause-verified"
+          "status": "verified"
         },
         {
           "for": "field outcome",
@@ -2133,12 +2133,12 @@
         {
           "for": "process",
           "cite": "EN 17007:2017 cl. 6.5.5 ACT.4",
-          "status": "clause-verified"
+          "status": "verified"
         },
         {
           "for": "sequence",
           "cite": "EN 17007:2017 cl. 6.5.4 ACT.3 Set in order the tasks",
-          "status": "clause-verified"
+          "status": "verified"
         },
         {
           "for": "SCHD component",
@@ -2297,7 +2297,7 @@
         {
           "for": "process",
           "cite": "EN 17007:2017 cl. 6.5.4 ACT.3",
-          "status": "clause-verified"
+          "status": "verified"
         },
         {
           "for": "locations",
@@ -2474,7 +2474,7 @@
         {
           "for": "process",
           "cite": "EN 17007:2017 cl. 6.5.2 ACT.1",
-          "status": "clause-verified"
+          "status": "verified"
         },
         {
           "for": "gas intervals",
@@ -2656,7 +2656,7 @@
         {
           "for": "process",
           "cite": "EN 17007:2017 cl. 6.5.5 ACT.4",
-          "status": "clause-verified"
+          "status": "verified"
         },
         {
           "for": "hazardous leaks",
@@ -2813,7 +2813,7 @@
         {
           "for": "process",
           "cite": "EN 17007:2017 cl. 6.2 MAN.5",
-          "status": "clause-verified"
+          "status": "verified"
         },
         {
           "for": "hard constraints",
@@ -2823,7 +2823,7 @@
         {
           "for": "no EN 17007 approval process",
           "cite": "EN 17007:2017 clause 6 - approval occurs only at SER.4 and DOC.5",
-          "status": "clause-verified"
+          "status": "verified"
         },
         {
           "for": "measures",
@@ -2964,7 +2964,7 @@
         {
           "for": "process",
           "cite": "EN 17007:2017 cl. 6.2 MAN.3",
-          "status": "clause-verified"
+          "status": "verified"
         },
         {
           "for": "crew object and composition flow",
@@ -3128,7 +3128,7 @@
         {
           "for": "process",
           "cite": "EN 17007:2017 cl. 6.17 TOL.4",
-          "status": "clause-verified"
+          "status": "verified"
         },
         {
           "for": "CIM Vehicle and Tool",
@@ -3276,7 +3276,7 @@
         {
           "for": "process",
           "cite": "EN 17007:2017 cl. 6.2 MAN.3",
-          "status": "clause-verified"
+          "status": "verified"
         },
         {
           "for": "WorkLocation",
@@ -3443,7 +3443,7 @@
         {
           "for": "process",
           "cite": "EN 17007:2017 cl. 6.14 RES.4",
-          "status": "clause-verified"
+          "status": "verified"
         },
         {
           "for": "crew and vehicle objects",
@@ -3479,6 +3479,13 @@
       "what": "32 citation statuses lowered to the ceiling in vocabulary.json source_status_ceiling.",
       "why": "The submission marked paywalled standards 'verified'. It was following the Source Authority Pack, which asserted 'verified' for ISO 55001, ISO 9001 and IEC 61968-11 without this project holding those texts. Claude's own category 1.0 and 2.0 files had the same defect - 24 and 18 citations - and were corrected in the same commit. The ceiling is now enforced by validate_spec.py and clamped by the generators, so it cannot recur.",
       "not_a_content_change": "No cite text, field or process was altered. Only the status claim attached to each citation."
+    },
+    {
+      "date": "2026-08-29",
+      "by": "Claude",
+      "what": "27 EN 17007 citations raised from clause-verified to verified.",
+      "why": "EN 17007:2017 is the one standard this project holds in full - it is in Tim Evidence/ and clause 6 was read end to end on 2026-08-29, which is how the level-2 catalogue went from 11 processes to 101 and how two wrong clause numbers were found. A clause-and-code citation to it is verified, not clause-verified. The ceiling only ever lowers a status; raising one is deliberate, and this is it.",
+      "not_a_content_change": "No cite text, field or process was altered."
     }
   ]
 }

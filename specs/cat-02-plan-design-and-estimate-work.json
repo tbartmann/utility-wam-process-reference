@@ -184,7 +184,7 @@
         {
           "for": "process",
           "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.12 MRQ",
-          "status": "clause-verified"
+          "status": "verified"
         }
       ],
       "provenance": {
@@ -363,7 +363,7 @@
         {
           "for": "process",
           "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.12 MRQ",
-          "status": "clause-verified"
+          "status": "verified"
         }
       ],
       "provenance": {
@@ -994,7 +994,7 @@
         {
           "for": "process",
           "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.12 MRQ",
-          "status": "clause-verified"
+          "status": "verified"
         },
         {
           "for": "measures",
@@ -1160,7 +1160,7 @@
         {
           "for": "process",
           "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.5.3 ACT.2",
-          "status": "clause-verified"
+          "status": "verified"
         },
         {
           "for": "controls.financial",
@@ -1338,7 +1338,7 @@
         {
           "for": "process",
           "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.8 BUD",
-          "status": "clause-verified"
+          "status": "verified"
         },
         {
           "for": "measures",
@@ -1515,7 +1515,7 @@
         {
           "for": "process",
           "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.8 BUD",
-          "status": "clause-verified"
+          "status": "verified"
         }
       ],
       "provenance": {
@@ -1676,7 +1676,7 @@
         {
           "for": "process",
           "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.5.3 ACT.2",
-          "status": "clause-verified"
+          "status": "verified"
         },
         {
           "for": "interfaces",
@@ -1998,7 +1998,7 @@
         {
           "for": "process",
           "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.15 SER",
-          "status": "clause-verified"
+          "status": "verified"
         },
         {
           "for": "estimate classification",
@@ -2329,7 +2329,7 @@
         {
           "for": "process",
           "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.8 BUD",
-          "status": "clause-verified"
+          "status": "verified"
         },
         {
           "for": "measures",
@@ -2477,7 +2477,7 @@
         {
           "for": "process",
           "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.8 BUD",
-          "status": "clause-verified"
+          "status": "verified"
         },
         {
           "for": "controls.regulatory",
@@ -2636,7 +2636,7 @@
         {
           "for": "process",
           "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.2 MAN. Corrected 2026-08-29: MAN was recorded at 6.9, which is DOC. EN 17007 has no authorisation process at all - MAN.4 prepares and negotiates budgets and is the nearest thing.",
-          "status": "clause-verified"
+          "status": "verified"
         },
         {
           "for": "authorisation record",
@@ -2794,7 +2794,7 @@
         {
           "for": "process",
           "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.5.3 ACT.2",
-          "status": "clause-verified"
+          "status": "verified"
         },
         {
           "for": "clearance condition",
@@ -2994,7 +2994,7 @@
         {
           "for": "process",
           "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.12 MRQ",
-          "status": "clause-verified"
+          "status": "verified"
         }
       ],
       "provenance": {
@@ -3143,7 +3143,7 @@
         {
           "for": "process",
           "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.5.3 ACT.2",
-          "status": "clause-verified"
+          "status": "verified"
         },
         {
           "for": "work package framing",
@@ -3320,7 +3320,7 @@
         {
           "for": "process",
           "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.5.3 ACT.2 and cl. 6.14 RES",
-          "status": "clause-verified"
+          "status": "verified"
         },
         {
           "for": "measures",
@@ -3474,7 +3474,7 @@
         {
           "for": "process",
           "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.9 DOC, specifically DOC.6 Manage the way in which operational documentation is made available. Corrected 2026-08-29: DOC was recorded at 6.10, which is DTA Manage data.",
-          "status": "clause-verified"
+          "status": "verified"
         },
         {
           "for": "documentation set",
@@ -3641,7 +3641,7 @@
         {
           "for": "process",
           "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.16 SPP and cl. 6.5.3 ACT.2",
-          "status": "clause-verified"
+          "status": "verified"
         },
         {
           "for": "accepted materials",
@@ -3825,7 +3825,7 @@
         {
           "for": "process",
           "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.5.3 ACT.2",
-          "status": "clause-verified"
+          "status": "verified"
         }
       ],
       "provenance": {
@@ -3995,7 +3995,7 @@
         {
           "for": "process",
           "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.5.3 ACT.2",
-          "status": "clause-verified"
+          "status": "verified"
         }
       ],
       "provenance": {
@@ -4150,7 +4150,7 @@
         {
           "for": "process",
           "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.5.3 ACT.2 and cl. 6.7 HSE",
-          "status": "clause-verified"
+          "status": "verified"
         },
         {
           "for": "clearance origin",
@@ -4325,7 +4325,7 @@
         {
           "for": "process",
           "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.5.3 ACT.2",
-          "status": "clause-verified"
+          "status": "verified"
         }
       ],
       "provenance": {

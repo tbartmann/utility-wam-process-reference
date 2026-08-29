@@ -175,7 +175,7 @@
         {
           "for": "process",
           "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.4.2 COR.1",
-          "status": "clause-verified"
+          "status": "verified"
         },
         {
           "for": "trigger, interfaces",
@@ -356,7 +356,7 @@
         {
           "for": "process",
           "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.4.2 COR.1",
-          "status": "clause-verified"
+          "status": "verified"
         },
         {
           "for": "maintenance types",
@@ -533,7 +533,7 @@
         {
           "for": "process",
           "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.4.3 COR.2",
-          "status": "clause-verified"
+          "status": "verified"
         },
         {
           "for": "controls.regulatory (interval shortening)",
@@ -720,7 +720,7 @@
         {
           "for": "process",
           "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.4.2 COR.1",
-          "status": "clause-verified"
+          "status": "verified"
         },
         {
           "for": "interfaces",
@@ -1054,7 +1054,7 @@
         {
           "for": "process",
           "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.3.3 PRV.2",
-          "status": "clause-verified"
+          "status": "verified"
         },
         {
           "for": "controls.regulatory (interval grammar)",
@@ -1388,7 +1388,7 @@
         {
           "for": "process",
           "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.4.2 COR.1",
-          "status": "clause-verified"
+          "status": "verified"
         },
         {
           "for": "controls.regulatory",
@@ -1564,7 +1564,7 @@
         {
           "for": "process",
           "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.4.3 COR.2",
-          "status": "clause-verified"
+          "status": "verified"
         },
         {
           "for": "controls.regulatory",
@@ -1739,7 +1739,7 @@
         {
           "for": "process",
           "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.4.2 COR.1",
-          "status": "clause-verified"
+          "status": "verified"
         },
         {
           "for": "measures",
@@ -1902,7 +1902,7 @@
         {
           "for": "process",
           "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.4.2 COR.1",
-          "status": "clause-verified"
+          "status": "verified"
         },
         {
           "for": "measures",
@@ -2065,7 +2065,7 @@
         {
           "for": "process",
           "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.5.2 ACT.1 'Rank the events'",
-          "status": "clause-verified"
+          "status": "verified"
         },
         {
           "for": "criticality basis",
@@ -2248,7 +2248,7 @@
         {
           "for": "process",
           "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.3.3 PRV.2",
-          "status": "clause-verified"
+          "status": "verified"
         },
         {
           "for": "measures",
@@ -2397,7 +2397,7 @@
         {
           "for": "process",
           "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.5.3 ACT.2, with cl. 6.14 RES for internal resource and cl. 6.15 SER for external. Corrected 2026-08-29: SER alone covers only the external half of this determination.",
-          "status": "clause-verified"
+          "status": "verified"
         },
         {
           "for": "controls.regulatory",
@@ -2566,7 +2566,7 @@
         {
           "for": "process",
           "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.3.3 PRV.2",
-          "status": "clause-verified"
+          "status": "verified"
         },
         {
           "for": "maintenance plan definition",
@@ -2736,7 +2736,7 @@
         {
           "for": "process",
           "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.3.3 PRV.2. Corrected 2026-08-29: previously mapped to PRV.1, whose purpose is characterising and prioritising potential failure modes, not generating cycles from a plan.",
-          "status": "clause-verified"
+          "status": "verified"
         },
         {
           "for": "intervals and dual binding",
@@ -2918,7 +2918,7 @@
         {
           "for": "process",
           "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.3.3 PRV.2, with cl. 6.8 BUD for the funding gate. Corrected 2026-08-29: BUD is economic planning; releasing a tranche against capacity is plan execution.",
-          "status": "clause-verified"
+          "status": "verified"
         },
         {
           "for": "measures",
@@ -2928,7 +2928,7 @@
         {
           "for": "external delivery",
           "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.15 SER Provide external maintenance services",
-          "status": "clause-verified"
+          "status": "verified"
         }
       ],
       "provenance": {
@@ -3084,7 +3084,7 @@
         {
           "for": "process",
           "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.13 OPT Improve the results and cl. 6.2 MAN. Corrected 2026-08-29: MAN was cited at 6.9, which is DOC.",
-          "status": "clause-verified"
+          "status": "verified"
         },
         {
           "for": "improvement framing",

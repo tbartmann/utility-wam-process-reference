@@ -816,11 +816,9 @@
   "_raising": "A ceiling is raised only by obtaining the text. Put the document in Tim Evidence/, record it in the artifact registry with its sha256, and change the entry here in the same commit.",
   "_default": "clause-verified - anything not listed is paywalled until shown otherwise.",
   "held_in_full": {
-   "_note": "Read end to end, or freely available in full. 'verified' is permitted.",
+   "_note": "Read end to end, or freely available in full, AND authoritative for what is cited from them. 'verified' is permitted. Note the two conditions: APQC PCF is held in full but is NOT here, because the pack is explicit that it is structural precedent and never a content source - a ceiling reflects authority as well as access.",
    "EN 17007": "verified",
-   "APQC": "verified",
-   "GFMAM": "verified",
-   "PCF": "verified"
+   "GFMAM": "verified"
   },
   "public_law": {
    "_note": "Public primary sources. 'regulation' is permitted and is the right status.",
@@ -856,6 +854,11 @@
    "ASCE": "clause-verified",
    "PODS": "clause-verified",
    "UPDM": "clause-verified"
+  },
+  "structural_precedent": {
+   "_note": "Held in full, but a taxonomy rather than an authority. Cite for structure and numbering at 'consensus'. Raising one of these to 'verified' would claim APQC as evidence for a process being correct, which it never is.",
+   "APQC": "consensus",
+   "PCF": "consensus"
   }
  }
 }
