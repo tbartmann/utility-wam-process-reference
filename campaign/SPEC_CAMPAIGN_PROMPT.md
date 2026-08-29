@@ -191,6 +191,53 @@ leverage (verb), robust, seamless, holistic, delve, journey, empower, cutting-ed
 best-in-class, streamline, unlock, "in today's world". Spell out every acronym at first
 use. Sentence case for process and group names, Title Case for categories.
 
+## Check your own work before you submit
+
+You cannot run `validate_spec.py` — you have no Python against this repository, and that
+is not a discipline failure, it is a structural limit. **Do not claim a submission passes.**
+Say what you checked and what you could not.
+
+But most of what the validator checks is mechanical and you CAN verify it by reading. Walk
+this list against your own file before you hand it over. Every item below has actually
+rejected a submission.
+
+**Per process — every one, no exceptions:**
+
+- [ ] All ten fields present and non-empty: `intent`, `activities`, `trigger`, `inputs`,
+      `outputs`, `systems`, `interfaces`, `roles`, `data_objects`, `controls`, `measures`,
+      **`variants`**, `notation`, `sources`, `provenance`. *An entire submission was
+      rejected for `variants` missing on all 26 processes.*
+- [ ] `id` and `uid` match your assignment pack exactly. Do not invent either.
+- [ ] Cardinality inside the content budget in `vocabulary.json` — activities 3–8, inputs
+      2–6, outputs 1–5, systems 2–6, roles 2–6, controls 1–4, measures 1–4, variants 0–6,
+      sources at least 3.
+- [ ] Length caps: `intent` ≤ 140 characters, `notation.why` ≤ 190, each activity ≤ 95,
+      `trigger.text` ≤ 135, each control ≤ 300, each measure definition ≤ 150.
+
+**Per citation:**
+
+- [ ] The status is at or below the ceiling in `source_status_ceiling`. Anything ISO, IEC,
+      EN, ASTM, ANSI, IEEE, ASME or ASCE is **`clause-verified` at best**. SMRP, AACE, CGA,
+      EPRI, API RP, IAM, GPTC and APQC are **`consensus` at best**. Only EN 17007 and the
+      GFMAM Landscape support `verified`; only CFR, U.S.C., MUTCD and USACE support
+      `regulation`.
+- [ ] Nothing paraphrases the body of a `clause-verified` source. Clause number and title
+      only.
+- [ ] Measures cite SMRP, EN 15341 or IEEE 1366 and nothing else.
+
+**Per field:**
+
+- [ ] `party`, `component`, `from` and `to` carry only the sixteen IEC 61968-6 cl. 4.2
+      codes. EN 17007 codes — DOC, SPP, HSE, TOL, MRQ, BUD, RES — belong only in
+      `en17007`.
+- [ ] `en17007.process`, `.title` and `.clause` match `vocabulary.json` exactly. Two clause
+      numbers in that file were wrong until 2026-08-29; use the file, not your memory.
+- [ ] No banned term and no vendor or client name anywhere.
+
+**Then say, in your reply:** which items you checked, which you could not, and where you
+are unsure. A submission that names its own weak points is worth more than one that claims
+to be clean.
+
 ## Output contract
 
 ONE file: `SPEC_<category>_<Platform>.json`, in
