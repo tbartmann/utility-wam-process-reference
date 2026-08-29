@@ -5,24 +5,26 @@ rounds; only the category assignment does.
 
 ## The assignment
 
-Category 1.0 is already done and is the **worked example** — read it before starting.
+Category 1.0 is the **worked example** — read it before starting.
 
-| Round | Claude | ChatGPT | Grok |
+**Rounds 1 to 5 are closed. This is the replan of 2026-08-29, and it supersedes the
+round table.** Ten categories are in the reference; 249 processes remain across nine.
+
+| Platform | Categories | Processes | Nature |
 |---|---|---|---|
-| 1 | **2.0** Plan, Design and Estimate Work | **4.0** Dispatch and Execute Field Work | **3.0** Plan Resources and Schedule Work |
-| 2 | **5.0** Close Work, Settle Cost and Update Records | **6.0** Manage Metering and Measurement Operations | **7.0** Manage Vegetation |
-| 3 | **8.0** Manage Compliance, Integrity and Safety | **9.0** Manage Outages and Emergencies | **10.0** Serve Customers in the Field |
-| 4 | **11.0** Manage Joint Use and Third-Party Attachments | **12.0** Manage Assets and Asset Information | **13.0** Manage Materials and Supply Chain |
-| 5 | **14.0** Manage Workforce and Time | **15.0** Manage Performance, Information and Integration | **16.0** Manage Contractors and Partners |
+| **ChatGPT** | 4.0, 6.0, 12.0, 15.0 | 110 | **Rework only.** All four are filed and rejected on mechanical rules. No new category until they merge. |
+| **Grok** | 17.0, 19.0 | 47 | New. Two of the three Asset Lifecycle categories. |
+| **Claude** | 8.0, 14.0, 18.0 | 92 | New, plus merging everything that arrives. |
 
-The Asset Lifecycle band (17.0, 18.0, 19.0 — 14 groups, 72 processes) is unassigned and
-is not part of rounds 1 to 5. It will be specified after the campaign.
+In the reference already: 1.0, 2.0, 5.0 and 11.0 (Claude); 9.0 (ChatGPT); 3.0, 7.0, 10.0,
+13.0 and 16.0 (Grok). 257 of 506 processes, 51%.
 
-Round 1 was swapped on 2026-08-29: Grok specified 3.0 and ChatGPT takes 4.0. Rounds 2
-to 5 are unchanged, and the swap happens to even the totals.
+**18.0 is not available.** It is constrained by twenty-four references to 18.4.4 and twelve
+to 18.2.2 from six merged categories, all of them about the difference between a clearance,
+a permit and an emergency isolation. It is assigned to whoever also merges those six.
 
-Totals: Claude 148 processes, ChatGPT 134, Grok 134. Each platform gets lifecycle,
-specialised and enabling categories, so no single platform's style dominates one band.
+**Take assigned categories only.** A category specified twice is not a contribution, it is
+a reconciliation job — and it has already happened once, on 11.0.
 
 ## Inputs — read all of these before writing anything
 
