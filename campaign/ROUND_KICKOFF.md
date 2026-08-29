@@ -160,7 +160,12 @@ Authority Pack that turned out to be wrong or missing.
 
 | Platform | `<N>` | `<ID> <NAME>` | `<G>` | `<P>` |
 |---|---|---|---|---|
-| ChatGPT | 1 | 3.0 Plan Resources and Schedule Work | 5 | 21 |
-| Grok | 1 | 4.0 Dispatch and Execute Field Work | 6 | 32 |
+| ChatGPT | 1 | 4.0 Dispatch and Execute Field Work | 6 | 32 |
+| Grok | 1 | 3.0 Plan Resources and Schedule Work | 5 | 21 |
 
-Claude's round 1 (2.0 Plan, Design and Estimate Work) is complete and merged.
+**Round 1 was swapped on 2026-08-29.** Grok was given 3.0 and specified it; ChatGPT takes
+4.0. Rounds 2 to 5 are unchanged. The swap evens the totals at 134 processes each, so it
+was left in place rather than reversed.
+
+Claude's round 1 (2.0 Plan, Design and Estimate Work) is complete and merged. Grok's 3.0
+is submitted and passes the validator.

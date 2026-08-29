@@ -1,0 +1,465 @@
+{
+ "_what": "Assignment pack for the process specification campaign. Everything you need about YOUR category. The full model.json is 148 KB and you do not need it; if you want a process id outside this category, ask.",
+ "_binding": "_Collab/00_prompts/SPEC_CAMPAIGN_PROMPT.md is the binding instruction. _Collab/SOURCE_AUTHORITY_PACK.md is the only permitted source list. Read both in full before writing anything.",
+ "platform": "ChatGPT",
+ "round": 3,
+ "model_counts": {
+  "categories": 19,
+  "process_groups": 103,
+  "processes": 506,
+  "work_types": 7
+ },
+ "bands": {
+  "Work Lifecycle": "1.0-5.0. Runs in sequence for a single piece of work.",
+  "Specialised Operations": "6.0-11.0. Each runs the full lifecycle inside its own operational discipline.",
+  "Foundations and Enabling": "12.0-16.0. Supplies assets, materials, workforce, information and external delivery capacity to every lifecycle stage rather than sitting inside the sequence.",
+  "Asset Lifecycle": "17.0-19.0. The asset's own life - planned, created, operated and retired - as distinct from the work performed on it. Appended 2026-08-29 without renumbering anything: categories 1.0 to 16.0 keep their ids, uids and legacy_ids."
+ },
+ "lifecycle_axis": {
+  "_why": "The model is organised on a WORK axis - identify, plan, schedule, execute, close. APQC and GFMAM are organised on an ASSET axis - plan and acquire, design and construct, operate, maintain, dispose. The work axis is what happens inside 'maintain'. Both are valid; carrying both lets the model answer ISO 55001:2024 cl. 8.1 without abandoning the granularity that makes it a process model rather than a benchmarking taxonomy.",
+  "stages": [
+   "plan-and-acquire",
+   "design-and-construct",
+   "operate",
+   "maintain",
+   "dispose",
+   "all"
+  ],
+  "_all": "'all' marks an enabling category that serves every stage rather than sitting at one of them."
+ },
+ "your_category": {
+  "id": "9.0",
+  "num": 9,
+  "band": "Specialised Operations",
+  "name": "Manage Outages and Emergencies",
+  "group_count": "5",
+  "process_count": "24",
+  "groups": [
+   {
+    "id": "9.1",
+    "name": "Respond to emergencies",
+    "processes": [
+     {
+      "id": "9.1.1",
+      "name": "Receive and triage emergency notification",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "legacy_id": "10.1.1",
+      "uid": 10270
+     },
+     {
+      "id": "9.1.2",
+      "name": "Dispatch first responder",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "legacy_id": "10.1.2",
+      "uid": 10271
+     },
+     {
+      "id": "9.1.3",
+      "name": "Make safe and secure the site",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "legacy_id": "10.1.3",
+      "uid": 10272
+     },
+     {
+      "id": "9.1.4",
+      "name": "Escalate to restoration resources",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "legacy_id": "10.1.4",
+      "uid": 10273
+     }
+    ],
+    "applicability": "common",
+    "applies": [
+     "electric",
+     "gas"
+    ],
+    "process_count": 4,
+    "legacy_id": "10.1",
+    "uid": 10269
+   },
+   {
+    "id": "9.2",
+    "name": "Assess damage",
+    "processes": [
+     {
+      "id": "9.2.1",
+      "name": "Perform field damage assessment",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "legacy_id": "10.2.1",
+      "uid": 10275
+     },
+     {
+      "id": "9.2.2",
+      "name": "Aggregate damage into restoration requirement",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "legacy_id": "10.2.2",
+      "uid": 10276
+     },
+     {
+      "id": "9.2.3",
+      "name": "Estimate restoration effort and resources",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "legacy_id": "10.2.3",
+      "uid": 10277
+     },
+     {
+      "id": "9.2.4",
+      "name": "Establish estimated time to restore",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "legacy_id": "10.2.4",
+      "uid": 10278
+     },
+     {
+      "id": "9.2.5",
+      "name": "Refresh damage assessment and restoration forecast",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "legacy_id": "10.2.5",
+      "uid": 10279
+     }
+    ],
+    "applicability": "common",
+    "applies": [
+     "electric",
+     "gas"
+    ],
+    "process_count": 5,
+    "legacy_id": "10.2",
+    "uid": 10274
+   },
+   {
+    "id": "9.3",
+    "name": "Manage restoration",
+    "processes": [
+     {
+      "id": "9.3.1",
+      "name": "Prioritise and sequence restoration work",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "legacy_id": "10.3.1",
+      "uid": 10281
+     },
+     {
+      "id": "9.3.2",
+      "name": "Coordinate authorised isolation and switching",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "legacy_id": "10.3.2",
+      "uid": 10282
+     },
+     {
+      "id": "9.3.3",
+      "name": "Track crew status and restoration progress",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "legacy_id": "10.3.3",
+      "uid": 10283
+     },
+     {
+      "id": "9.3.4",
+      "name": "Confirm restoration and close event",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "legacy_id": "10.3.4",
+      "uid": 10284
+     },
+     {
+      "id": "9.3.5",
+      "name": "Restore and relight customer service",
+      "applies": [
+       "gas"
+      ],
+      "legacy_id": "10.3.5",
+      "uid": 10285
+     }
+    ],
+    "applicability": "mixed",
+    "applies": [
+     "electric",
+     "gas"
+    ],
+    "process_count": 5,
+    "legacy_id": "10.3",
+    "uid": 10280
+   },
+   {
+    "id": "9.4",
+    "name": "Manage major events and mutual aid",
+    "processes": [
+     {
+      "id": "9.4.1",
+      "name": "Activate emergency organisation and roles",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "legacy_id": "10.4.1",
+      "uid": 10287
+     },
+     {
+      "id": "9.4.2",
+      "name": "Mobilise additional and mutual-aid resources",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "legacy_id": "10.4.2",
+      "uid": 10288
+     },
+     {
+      "id": "9.4.3",
+      "name": "Onboard and orient visiting crews",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "legacy_id": "10.4.3",
+      "uid": 10289
+     },
+     {
+      "id": "9.4.4",
+      "name": "Manage logistics, lodging and staging",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "legacy_id": "10.4.4",
+      "uid": 10290
+     },
+     {
+      "id": "9.4.5",
+      "name": "Capture event cost for regulatory recovery",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "legacy_id": "10.4.5",
+      "uid": 10291
+     },
+     {
+      "id": "9.4.6",
+      "name": "Demobilise and release mutual-aid resources",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "legacy_id": "10.4.6",
+      "uid": 10292
+     }
+    ],
+    "applicability": "common",
+    "applies": [
+     "electric",
+     "gas"
+    ],
+    "process_count": 6,
+    "legacy_id": "10.4",
+    "uid": 10286
+   },
+   {
+    "id": "9.6",
+    "name": "Manage wildfire operational response",
+    "processes": [
+     {
+      "id": "9.6.1",
+      "name": "Maintain wildfire operational-response plan and de-energization criteria",
+      "applies": [
+       "electric"
+      ],
+      "legacy_id": "10.6.1",
+      "uid": 10294
+     },
+     {
+      "id": "9.6.2",
+      "name": "Execute public safety power shutoff and customer notice",
+      "applies": [
+       "electric"
+      ],
+      "legacy_id": "10.6.2",
+      "uid": 10295
+     },
+     {
+      "id": "9.6.3",
+      "name": "Patrol and restore after fire weather",
+      "applies": [
+       "electric"
+      ],
+      "legacy_id": "10.6.3",
+      "uid": 10296
+     },
+     {
+      "id": "9.6.4",
+      "name": "Capture event cost and compliance evidence",
+      "applies": [
+       "electric"
+      ],
+      "legacy_id": "10.6.4",
+      "uid": 10297
+     }
+    ],
+    "applicability": "electric",
+    "applies": [
+     "electric"
+    ],
+    "process_count": 4,
+    "legacy_id": "10.6",
+    "uid": 10293
+   }
+  ],
+  "applicability": "mixed",
+  "applies": [
+   "electric",
+   "gas"
+  ],
+  "summary": "Respond to unplanned loss of service and mobilise at scale during major events.",
+  "legacy_id": "10.0",
+  "uid": 10268,
+  "lifecycle": [
+   "operate"
+  ]
+ },
+ "apqc_rows_touching_your_category": [
+  {
+   "apqc": "10.2.6",
+   "pcf_id": "11280",
+   "apqc_name": "Commission new assets",
+   "status": "covered",
+   "model_groups": "19.1",
+   "note": "Commission new assets. Closed 2026-08-29. 19.1.2 schedule, 19.1.3 coordinate energisation with network operations, 19.1.5 commissioning record, 19.1.6 handover into service. 6.3 continues to cover metering endpoints."
+  },
+  {
+   "apqc": "10.4.2",
+   "pcf_id": "19258",
+   "apqc_name": "Decommission productive assets",
+   "status": "covered",
+   "model_groups": "19.2",
+   "note": "Decommission productive assets. Closed 2026-08-29. 19.2 removes the asset physically; 12.1.6 continues to retire the record and 5.3 the accounting."
+  },
+  {
+   "apqc": "10.4.3",
+   "pcf_id": "10953",
+   "apqc_name": "Perform sale or trade",
+   "status": "covered",
+   "model_groups": "19.4",
+   "note": "Sale or trade. Closed 2026-08-29 at 19.4.2. Previously marked out of scope; the disposal route belongs with the other end-of-life transitions, not outside the model."
+  },
+  {
+   "apqc": "10.4.4",
+   "pcf_id": "10954",
+   "apqc_name": "Perform abandonment",
+   "status": "covered",
+   "model_groups": "19.2.4, 8.6.6",
+   "note": "Perform abandonment. 19.2.4 abandons in place as a lifecycle end state under 49 CFR 192.727. 8.6.6 Purge, seal and abandon facilities REMAINS in 8.6 as the gas pressure procedure; the two are hooked, not merged, because purging under 192.629 is a pressure operation and abandonment is a lifecycle transition."
+  },
+  {
+   "apqc": "10.4.5",
+   "pcf_id": "16970",
+   "apqc_name": "Perform waste and hazardous goods management",
+   "status": "covered",
+   "model_groups": "19.3",
+   "note": "Waste and hazardous goods management. Closed 2026-08-29. 19.3 classifies the stream, handles regulated materials under 40 CFR 761, manifests and disposes under RCRA, and salvages. 7.4.4 continues to cover vegetation debris."
+  },
+  {
+   "apqc": "14.1.5",
+   "pcf_id": "11271",
+   "apqc_name": "Manage network faults and outages",
+   "status": "covered",
+   "model_groups": "9.1, 9.2, 9.3",
+   "note": "Manage network faults and outages."
+  },
+  {
+   "apqc": "14.1.8",
+   "pcf_id": "11273",
+   "apqc_name": "Perform emergency response (network distributor)",
+   "status": "covered",
+   "model_groups": "9.1, 9.4",
+   "note": "Emergency response."
+  }
+ ],
+ "gfmam_rows_touching_your_category": [
+  {
+   "subject": "3.3",
+   "group": "Asset Management Planning",
+   "name": "Sustainable Development",
+   "status": "partial",
+   "model_groups": "19.3",
+   "note": "Waste, salvage and hazardous materials closed 2026-08-29 at 19.3. Sustainability as an objective-setting subject remains out of scope: it belongs to the asset management system above this process reference."
+  },
+  {
+   "subject": "3.9",
+   "group": "Asset Management Planning",
+   "name": "Contingency Planning & Resilience Analysis",
+   "status": "partial",
+   "model_groups": "9.4, 9.6",
+   "note": "Major events, mutual aid and wildfire response are the response side. There is no resilience analysis ahead of the event."
+  },
+  {
+   "subject": "6.2",
+   "group": "Delivery",
+   "name": "Asset Creation & Acquisition",
+   "status": "covered",
+   "model_groups": "19.1, 2.1, 2.2, 4.2",
+   "note": "Closed 2026-08-29. 19.1 commissions, coordinates energisation and hands the asset over into service, completing the chain that 2.1 designs and 4.2 builds. Land and property acquisition remains out of scope - corporate real estate, APQC 10.1."
+  },
+  {
+   "subject": "6.4",
+   "group": "Delivery",
+   "name": "Asset Operation",
+   "status": "partial",
+   "model_groups": "18.0, 9.0, 6.0",
+   "note": "The work-facing half is closed at 18.0: planned switching, clearance, coordination and return to service. 9.0 covers unplanned operation. Real-time monitoring, alarm handling, optimisation and protection settings stay OUT OF SCOPE BY DECISION - they are SCADA, ADMS and DERMS functions."
+  },
+  {
+   "subject": "6.6",
+   "group": "Delivery",
+   "name": "Incident Management and Response",
+   "status": "covered",
+   "model_groups": "9.0",
+   "note": ""
+  },
+  {
+   "subject": "6.7",
+   "group": "Delivery",
+   "name": "Asset Repurposing or Disposal",
+   "status": "covered",
+   "model_groups": "19.2, 19.3, 19.4, 12.1.6, 5.3",
+   "note": "Closed 2026-08-29. 19.2 decommissions physically, 19.3 handles waste and salvage, 19.4 transfers ownership and closes the record. 12.1.6 continues to retire the record and 5.3 the accounting."
+  }
+ ],
+ "_apqc_notice": "©2025 APQC and IBM reserve all rights in this work except as expressly granted. This Industry Process Classification Framework was jointly developed by APQC and IBM to facilitate improvement through process management and benchmarking. APQC and IBM grant a perpetual, worldwide, royalty-free license to use, copy, publish, modify, and create derivative works of the PCF, provided that all copies include this notice and any derivative works carry the attribution below. THIS FILE IS A DERIVATIVE WORK AND THE NOTICE AND ATTRIBUTION MUST TRAVEL WITH IT.",
+ "_apqc_attribution": "This work is based in part on an Industry Process Classification Framework (“PCF”), an open standard developed by APQC and IBM to promote benchmarking and best practices worldwide. The PCF is intended to facilitate organizational improvement through process management and benchmarking, regardless of industry, size, or geography. To download the full PCF or other industry-specific versions of the PCF, as well as associated measures and benchmarking, please visit www.apqc.org/pcf."
+}

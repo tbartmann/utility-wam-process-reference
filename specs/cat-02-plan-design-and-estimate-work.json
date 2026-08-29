@@ -174,7 +174,7 @@
         {
           "for": "design inputs",
           "cite": "ISO 9001:2015 cl. 8.3 Design and development (Ed. 6 due 2026-09) cl. 8.3.3",
-          "status": "verified"
+          "status": "clause-verified"
         },
         {
           "for": "design-stage locate",
@@ -343,12 +343,12 @@
         {
           "for": "process",
           "cite": "ISO 9001:2015 cl. 8.3 Design and development (Ed. 6 due 2026-09) cl. 8.3.1 to 8.3.5",
-          "status": "verified"
+          "status": "clause-verified"
         },
         {
           "for": "controls.regulatory (gas)",
           "cite": "49 CFR 192 Subpart B governs the design of pipe, not a design process; 49 CFR 192.127 records duty is gas transmission only, post 2020-07-01 installs. ASME B31.8-2018 is the edition incorporated at 192.7(c)(5)",
-          "status": "regulation"
+          "status": "clause-verified"
         },
         {
           "for": "controls.regulatory (electric)",
@@ -512,7 +512,7 @@
         {
           "for": "process",
           "cite": "ISO 9001:2015 cl. 8.3 Design and development (Ed. 6 due 2026-09) cl. 8.3.4 Design and development controls",
-          "status": "verified"
+          "status": "clause-verified"
         },
         {
           "for": "approval gate",
@@ -522,7 +522,7 @@
         {
           "for": "measures",
           "cite": "SMRP Best Practices, Pillar 5 Work Management 5.3.5, 4.1",
-          "status": "verified"
+          "status": "consensus"
         }
       ],
       "provenance": {
@@ -673,7 +673,7 @@
         {
           "for": "process",
           "cite": "ISO 9001:2015 cl. 8.3 Design and development (Ed. 6 due 2026-09) cl. 8.3.6 Design and development changes, which requires retaining the authorization of the changes",
-          "status": "verified"
+          "status": "clause-verified"
         },
         {
           "for": "change control",
@@ -830,7 +830,7 @@
         {
           "for": "compatible unit concept",
           "cite": "IEC 61968-6:2015 cl. 4.2.5 Design - the only international-standard mention of Compatible Units, naming the DGN Design and Estimation System and Design Location",
-          "status": "verified"
+          "status": "clause-verified"
         },
         {
           "for": "controls.regulatory",
@@ -989,7 +989,7 @@
         {
           "for": "compatible unit and design location model",
           "cite": "IEC 61968-6:2015 cl. 4.2.5 Design - the only international-standard mention of Compatible Units, naming the DGN Design and Estimation System and Design Location",
-          "status": "verified"
+          "status": "clause-verified"
         },
         {
           "for": "process",
@@ -999,7 +999,7 @@
         {
           "for": "measures",
           "cite": "SMRP Best Practices, Pillar 5 Work Management 5.3.1, 5.3.4",
-          "status": "verified"
+          "status": "consensus"
         }
       ],
       "provenance": {
@@ -1175,7 +1175,7 @@
         {
           "for": "measures",
           "cite": "SMRP Best Practices, Pillar 5 Work Management 5.3.1, 5.3.4",
-          "status": "verified"
+          "status": "consensus"
         }
       ],
       "provenance": {
@@ -1343,7 +1343,7 @@
         {
           "for": "measures",
           "cite": "SMRP Best Practices, Pillar 5 Work Management 5.3.3, 5.3.5",
-          "status": "verified"
+          "status": "consensus"
         }
       ],
       "provenance": {
@@ -1681,7 +1681,7 @@
         {
           "for": "interfaces",
           "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 payloads; Annex A verbs",
-          "status": "verified"
+          "status": "clause-verified"
         }
       ],
       "provenance": {
@@ -1855,7 +1855,7 @@
         {
           "for": "measures",
           "cite": "SMRP Best Practices, Pillar 5 Work Management 5.3.3, 5.3.4, 5.3.6",
-          "status": "verified"
+          "status": "consensus"
         }
       ],
       "provenance": {
@@ -2013,7 +2013,7 @@
         {
           "for": "measures",
           "cite": "SMRP Best Practices, Pillar 5 Work Management 5.3.3, 5.3.5",
-          "status": "verified"
+          "status": "consensus"
         }
       ],
       "provenance": {
@@ -2334,7 +2334,7 @@
         {
           "for": "measures",
           "cite": "SMRP Best Practices, Pillar 5 Work Management 5.3.5, 5.3.3",
-          "status": "verified"
+          "status": "consensus"
         }
       ],
       "provenance": {
@@ -2492,7 +2492,7 @@
         {
           "for": "measures",
           "cite": "SMRP Best Practices, Pillar 5 Work Management 5.4.6, 5.4.8",
-          "status": "verified"
+          "status": "consensus"
         }
       ],
       "provenance": {
@@ -2641,7 +2641,7 @@
         {
           "for": "authorisation record",
           "cite": "ISO 9001:2015 cl. 8.3 Design and development (Ed. 6 due 2026-09) cl. 8.3.6(c), which requires retaining the authorization of changes",
-          "status": "verified"
+          "status": "clause-verified"
         },
         {
           "for": "delegation rules",
@@ -2651,7 +2651,7 @@
         {
           "for": "measures",
           "cite": "SMRP Best Practices, Pillar 5 Work Management 5.4.6, 5.4.7",
-          "status": "verified"
+          "status": "consensus"
         }
       ],
       "provenance": {
@@ -2804,7 +2804,7 @@
         {
           "for": "measures",
           "cite": "SMRP Best Practices, Pillar 5 Work Management 5.3.1, 5.4.7",
-          "status": "verified"
+          "status": "consensus"
         }
       ],
       "provenance": {
@@ -2984,12 +2984,12 @@
         {
           "for": "control of changes",
           "cite": "ISO 9001:2015 cl. 8.5.6 Control of changes",
-          "status": "verified"
+          "status": "clause-verified"
         },
         {
           "for": "distribution position",
           "cite": "49 CFR 192.1007 DIMP has no management of change element; API RP 1173 is voluntary and PHMSA ADB-2025-01 only encourages it",
-          "status": "regulation"
+          "status": "consensus"
         },
         {
           "for": "process",
@@ -3158,7 +3158,7 @@
         {
           "for": "measures",
           "cite": "SMRP Best Practices, Pillar 5 Work Management 5.3.1, 5.3.6; EN 15341:2019+A1:2022 cl. 12 O&S9-O&S22 Planning and Control",
-          "status": "verified"
+          "status": "consensus"
         }
       ],
       "provenance": {
@@ -3325,7 +3325,7 @@
         {
           "for": "measures",
           "cite": "SMRP Best Practices, Pillar 5 Work Management 5.4.4, 5.5.2",
-          "status": "verified"
+          "status": "consensus"
         }
       ],
       "provenance": {
@@ -3489,7 +3489,7 @@
         {
           "for": "measures",
           "cite": "SMRP Best Practices, Pillar 5 Work Management 5.4.3, 5.6.1",
-          "status": "verified"
+          "status": "consensus"
         }
       ],
       "provenance": {
@@ -3651,7 +3651,7 @@
         {
           "for": "measures",
           "cite": "SMRP Best Practices, Pillar 5 Work Management 5.4.9, 5.4.8",
-          "status": "verified"
+          "status": "consensus"
         }
       ],
       "provenance": {
@@ -4160,7 +4160,7 @@
         {
           "for": "measures",
           "cite": "SMRP Best Practices, Pillar 5 Work Management 5.4.9, 5.4.4",
-          "status": "verified"
+          "status": "consensus"
         }
       ],
       "provenance": {

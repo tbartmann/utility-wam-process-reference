@@ -1,0 +1,446 @@
+{
+ "_what": "Assignment pack for the process specification campaign. Everything you need about YOUR category. The full model.json is 148 KB and you do not need it; if you want a process id outside this category, ask.",
+ "_binding": "_Collab/00_prompts/SPEC_CAMPAIGN_PROMPT.md is the binding instruction. _Collab/SOURCE_AUTHORITY_PACK.md is the only permitted source list. Read both in full before writing anything.",
+ "platform": "Grok",
+ "round": 3,
+ "model_counts": {
+  "categories": 19,
+  "process_groups": 103,
+  "processes": 506,
+  "work_types": 7
+ },
+ "bands": {
+  "Work Lifecycle": "1.0-5.0. Runs in sequence for a single piece of work.",
+  "Specialised Operations": "6.0-11.0. Each runs the full lifecycle inside its own operational discipline.",
+  "Foundations and Enabling": "12.0-16.0. Supplies assets, materials, workforce, information and external delivery capacity to every lifecycle stage rather than sitting inside the sequence.",
+  "Asset Lifecycle": "17.0-19.0. The asset's own life - planned, created, operated and retired - as distinct from the work performed on it. Appended 2026-08-29 without renumbering anything: categories 1.0 to 16.0 keep their ids, uids and legacy_ids."
+ },
+ "lifecycle_axis": {
+  "_why": "The model is organised on a WORK axis - identify, plan, schedule, execute, close. APQC and GFMAM are organised on an ASSET axis - plan and acquire, design and construct, operate, maintain, dispose. The work axis is what happens inside 'maintain'. Both are valid; carrying both lets the model answer ISO 55001:2024 cl. 8.1 without abandoning the granularity that makes it a process model rather than a benchmarking taxonomy.",
+  "stages": [
+   "plan-and-acquire",
+   "design-and-construct",
+   "operate",
+   "maintain",
+   "dispose",
+   "all"
+  ],
+  "_all": "'all' marks an enabling category that serves every stage rather than sitting at one of them."
+ },
+ "your_category": {
+  "id": "10.0",
+  "num": 10,
+  "band": "Specialised Operations",
+  "name": "Serve Customers in the Field",
+  "group_count": "6",
+  "process_count": "29",
+  "groups": [
+   {
+    "id": "10.1",
+    "name": "Maintain customer and premise information",
+    "processes": [
+     {
+      "id": "10.1.1",
+      "name": "Identify customer, account and premise",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "legacy_id": "11.1.1",
+      "uid": 10300
+     },
+     {
+      "id": "10.1.2",
+      "name": "Record customer interaction and history",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "legacy_id": "11.1.2",
+      "uid": 10301
+     },
+     {
+      "id": "10.1.3",
+      "name": "Maintain access, hazard and site notes",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "legacy_id": "11.1.3",
+      "uid": 10302
+     },
+     {
+      "id": "10.1.4",
+      "name": "Maintain contact and notification preference",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "legacy_id": "11.1.4",
+      "uid": 10303
+     }
+    ],
+    "applicability": "common",
+    "applies": [
+     "electric",
+     "gas"
+    ],
+    "process_count": 4,
+    "legacy_id": "11.1",
+    "uid": 10299
+   },
+   {
+    "id": "10.2",
+    "name": "Manage service orders",
+    "processes": [
+     {
+      "id": "10.2.1",
+      "name": "Create service order or service request",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "legacy_id": "11.2.1",
+      "uid": 10305
+     },
+     {
+      "id": "10.2.2",
+      "name": "Schedule and dispatch service order",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "legacy_id": "11.2.2",
+      "uid": 10306
+     },
+     {
+      "id": "10.2.3",
+      "name": "Execute and complete service order",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "legacy_id": "11.2.3",
+      "uid": 10307
+     },
+     {
+      "id": "10.2.4",
+      "name": "Cancel, amend and reschedule service order",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "legacy_id": "11.2.4",
+      "uid": 10308
+     }
+    ],
+    "applicability": "common",
+    "applies": [
+     "electric",
+     "gas"
+    ],
+    "process_count": 4,
+    "legacy_id": "11.2",
+    "uid": 10304
+   },
+   {
+    "id": "10.3",
+    "name": "Communicate with customers",
+    "processes": [
+     {
+      "id": "10.3.1",
+      "name": "Confirm appointment and provide reminder",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "legacy_id": "11.3.1",
+      "uid": 10310
+     },
+     {
+      "id": "10.3.2",
+      "name": "Notify en-route and arrival",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "legacy_id": "11.3.2",
+      "uid": 10311
+     },
+     {
+      "id": "10.3.3",
+      "name": "Notify outage, restoration and delay",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "legacy_id": "11.3.3",
+      "uid": 10312
+     },
+     {
+      "id": "10.3.4",
+      "name": "Capture customer feedback",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "legacy_id": "11.3.4",
+      "uid": 10313
+     }
+    ],
+    "applicability": "common",
+    "applies": [
+     "electric",
+     "gas"
+    ],
+    "process_count": 4,
+    "legacy_id": "11.3",
+    "uid": 10309
+   },
+   {
+    "id": "10.4",
+    "name": "Perform collections and disconnection field work",
+    "processes": [
+     {
+      "id": "10.4.1",
+      "name": "Issue collections or disconnection order",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "legacy_id": "11.4.1",
+      "uid": 10315
+     },
+     {
+      "id": "10.4.2",
+      "name": "Perform field disconnection and reconnection",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "legacy_id": "11.4.2",
+      "uid": 10316
+     },
+     {
+      "id": "10.4.3",
+      "name": "Record customer contact and payment at premises",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "legacy_id": "11.4.3",
+      "uid": 10317
+     },
+     {
+      "id": "10.4.4",
+      "name": "Apply disconnection eligibility and protection rules",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "legacy_id": "11.4.4",
+      "uid": 10318
+     },
+     {
+      "id": "10.4.5",
+      "name": "Perform reconnection after payment",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "legacy_id": "11.4.5",
+      "uid": 10319
+     }
+    ],
+    "applicability": "common",
+    "applies": [
+     "electric",
+     "gas"
+    ],
+    "process_count": 5,
+    "legacy_id": "11.4",
+    "uid": 10314
+   },
+   {
+    "id": "10.5",
+    "name": "Start, stop and transfer service",
+    "processes": [
+     {
+      "id": "10.5.1",
+      "name": "Receive start, stop or transfer request",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "legacy_id": "11.5.1",
+      "uid": 10321
+     },
+     {
+      "id": "10.5.2",
+      "name": "Establish or verify the premise record",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "legacy_id": "11.5.2",
+      "uid": 10322
+     },
+     {
+      "id": "10.5.3",
+      "name": "Evaluate deposit and credit requirement",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "legacy_id": "11.5.3",
+      "uid": 10323
+     },
+     {
+      "id": "10.5.4",
+      "name": "Raise turn-on, turn-off or transfer field order",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "legacy_id": "11.5.4",
+      "uid": 10324
+     },
+     {
+      "id": "10.5.5",
+      "name": "Confirm service change and close the request",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "legacy_id": "11.5.5",
+      "uid": 10325
+     }
+    ],
+    "applicability": "common",
+    "applies": [
+     "electric",
+     "gas"
+    ],
+    "process_count": 5,
+    "legacy_id": "11.5",
+    "uid": 10320
+   },
+   {
+    "id": "10.6",
+    "name": "Connect new service",
+    "processes": [
+     {
+      "id": "10.6.1",
+      "name": "Receive and qualify new service request",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "legacy_id": "11.6.1",
+      "uid": 10327
+     },
+     {
+      "id": "10.6.2",
+      "name": "Survey premises and determine service route",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "legacy_id": "11.6.2",
+      "uid": 10328
+     },
+     {
+      "id": "10.6.3",
+      "name": "Estimate and agree customer contribution",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "legacy_id": "11.6.3",
+      "uid": 10329
+     },
+     {
+      "id": "10.6.4",
+      "name": "Install service line and set meter",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "legacy_id": "11.6.4",
+      "uid": 10330
+     },
+     {
+      "id": "10.6.5",
+      "name": "Commission service and confirm connection",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "legacy_id": "11.6.5",
+      "uid": 10331
+     },
+     {
+      "id": "10.6.6",
+      "name": "Review and approve distributed energy resource interconnection",
+      "applies": [
+       "electric"
+      ],
+      "legacy_id": "11.6.6",
+      "uid": 10332
+     },
+     {
+      "id": "10.6.7",
+      "name": "Witness, inspect and commission the interconnection",
+      "applies": [
+       "electric"
+      ],
+      "legacy_id": "11.6.7",
+      "uid": 10333
+     }
+    ],
+    "applicability": "mixed",
+    "applies": [
+     "electric",
+     "gas"
+    ],
+    "process_count": 7,
+    "legacy_id": "11.6",
+    "uid": 10326
+   }
+  ],
+  "applicability": "mixed",
+  "applies": [
+   "electric",
+   "gas"
+  ],
+  "summary": "Manage the customer-facing thread of field work from request through to confirmation.",
+  "legacy_id": "11.0",
+  "uid": 10298,
+  "lifecycle": [
+   "operate",
+   "maintain"
+  ]
+ },
+ "apqc_rows_touching_your_category": [
+  {
+   "apqc": "14.3.1",
+   "pcf_id": "19308",
+   "apqc_name": "Manage meter information",
+   "status": "covered",
+   "model_groups": "6.1, 10.1",
+   "note": "Manage meter and customer information changes."
+  }
+ ],
+ "gfmam_rows_touching_your_category": [
+  {
+   "subject": "1.2",
+   "group": "Context & Stakeholders",
+   "name": "Stakeholder Management",
+   "status": "partial",
+   "model_groups": "10.3, 8.9",
+   "note": "Customer communication and pipeline public awareness only. No stakeholder management as a discipline, which is correct for a process reference."
+  }
+ ],
+ "_apqc_notice": "©2025 APQC and IBM reserve all rights in this work except as expressly granted. This Industry Process Classification Framework was jointly developed by APQC and IBM to facilitate improvement through process management and benchmarking. APQC and IBM grant a perpetual, worldwide, royalty-free license to use, copy, publish, modify, and create derivative works of the PCF, provided that all copies include this notice and any derivative works carry the attribution below. THIS FILE IS A DERIVATIVE WORK AND THE NOTICE AND ATTRIBUTION MUST TRAVEL WITH IT.",
+ "_apqc_attribution": "This work is based in part on an Industry Process Classification Framework (“PCF”), an open standard developed by APQC and IBM to promote benchmarking and best practices worldwide. The PCF is intended to facilitate organizational improvement through process management and benchmarking, regardless of industry, size, or geography. To download the full PCF or other industry-specific versions of the PCF, as well as associated measures and benchmarking, please visit www.apqc.org/pcf."
+}

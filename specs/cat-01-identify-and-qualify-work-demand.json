@@ -180,12 +180,12 @@
         {
           "for": "trigger, interfaces",
           "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 message payloads; Annex A verbs",
-          "status": "verified"
+          "status": "clause-verified"
         },
         {
           "for": "data_objects",
           "cite": "IEC 61968-11:2013 CIM extensions for distribution, Work package",
-          "status": "verified"
+          "status": "clause-verified"
         },
         {
           "for": "controls.regulatory",
@@ -195,7 +195,7 @@
         {
           "for": "measures",
           "cite": "SMRP Best Practices, Pillar 5 Work Management",
-          "status": "verified"
+          "status": "consensus"
         },
         {
           "for": "activities",
@@ -366,12 +366,12 @@
         {
           "for": "measures",
           "cite": "SMRP Best Practices, Pillar 5 Work Management 5.4.2, 5.4.12 (definitions read verbatim)",
-          "status": "verified"
+          "status": "consensus"
         },
         {
           "for": "data_objects",
           "cite": "IEC 61968-11:2013 CIM extensions for distribution, Work package",
-          "status": "verified"
+          "status": "clause-verified"
         },
         {
           "for": "activities",
@@ -548,7 +548,7 @@
         {
           "for": "measures",
           "cite": "SMRP Best Practices, Pillar 5 Work Management 5.4.6, 5.4.2",
-          "status": "verified"
+          "status": "consensus"
         },
         {
           "for": "activities",
@@ -725,7 +725,7 @@
         {
           "for": "interfaces",
           "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 message payloads; Annex A verbs; IEC 61968-3 network operations messages",
-          "status": "verified"
+          "status": "clause-verified"
         },
         {
           "for": "activities",
@@ -891,7 +891,7 @@
         {
           "for": "origination route",
           "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 message payloads; Annex A verbs, cl. 4.2 Figure 2 flow [7] Follow-up Work",
-          "status": "verified"
+          "status": "clause-verified"
         },
         {
           "for": "controls.regulatory",
@@ -901,7 +901,7 @@
         {
           "for": "measures",
           "cite": "SMRP Best Practices, Pillar 5 Work Management 5.4.2, 5.3.1",
-          "status": "verified"
+          "status": "consensus"
         },
         {
           "for": "variants",
@@ -1069,7 +1069,7 @@
         {
           "for": "measures",
           "cite": "SMRP Best Practices, Pillar 5 Work Management 5.4.14, 5.4.11",
-          "status": "verified"
+          "status": "consensus"
         }
       ],
       "provenance": {
@@ -1235,7 +1235,7 @@
         {
           "for": "work order definition",
           "cite": "EN 13460:2009 Documentation for maintenance cl. 3.8; EN 15341:2019+A1:2022 Maintenance KPIs, cl. 12 O&S9-O&S22 Planning and Control cl. 3.8",
-          "status": "verified"
+          "status": "clause-verified"
         },
         {
           "for": "work order data items",
@@ -1245,7 +1245,7 @@
         {
           "for": "measures",
           "cite": "SMRP Best Practices, Pillar 5 Work Management 5.4.6; EN 15341:2019+A1:2022 Maintenance KPIs, cl. 12 O&S9-O&S22 Planning and Control",
-          "status": "verified"
+          "status": "consensus"
         }
       ],
       "provenance": {
@@ -1398,7 +1398,7 @@
         {
           "for": "measures",
           "cite": "SMRP Best Practices, Pillar 5 Work Management 4.1, 5.4.7",
-          "status": "verified"
+          "status": "consensus"
         },
         {
           "for": "rule content",
@@ -1579,7 +1579,7 @@
         {
           "for": "measures",
           "cite": "SMRP Best Practices, Pillar 5 Work Management 3.1, 4.1",
-          "status": "verified"
+          "status": "consensus"
         }
       ],
       "provenance": {
@@ -1744,7 +1744,7 @@
         {
           "for": "measures",
           "cite": "SMRP Best Practices, Pillar 5 Work Management 5.4.1, 5.4.7",
-          "status": "verified"
+          "status": "consensus"
         },
         {
           "for": "activities",
@@ -1907,7 +1907,7 @@
         {
           "for": "measures",
           "cite": "SMRP Best Practices, Pillar 5 Work Management 5.4.1, 5.4.2 (definitions read verbatim)",
-          "status": "verified"
+          "status": "consensus"
         },
         {
           "for": "cost treatment",
@@ -2080,12 +2080,12 @@
         {
           "for": "federal position",
           "cite": "49 CFR 192.703(c): 'Hazardous leaks must be repaired promptly.' GPTC Z380.1 does not appear in the 192.7 incorporation-by-reference list.",
-          "status": "regulation"
+          "status": "consensus"
         },
         {
           "for": "measures",
           "cite": "SMRP Best Practices, Pillar 5 Work Management 5.4.4, 5.4.8, 5.4.9",
-          "status": "verified"
+          "status": "consensus"
         }
       ],
       "provenance": {
@@ -2253,7 +2253,7 @@
         {
           "for": "measures",
           "cite": "SMRP Best Practices, Pillar 5 Work Management 5.4.14, 5.4.11",
-          "status": "verified"
+          "status": "consensus"
         }
       ],
       "provenance": {
@@ -2407,7 +2407,7 @@
         {
           "for": "measures",
           "cite": "SMRP Best Practices, Pillar 5 Work Management 5.4.4, 4.1",
-          "status": "verified"
+          "status": "consensus"
         }
       ],
       "provenance": {
@@ -2571,7 +2571,7 @@
         {
           "for": "maintenance plan definition",
           "cite": "EN 13306:2017 Maintenance terminology (CEN/TC 319) cl. 2.5: 'structured and documented set of tasks that include the activities, procedures, resources and the time scale required to carry out maintenance'",
-          "status": "verified"
+          "status": "clause-verified"
         },
         {
           "for": "type taxonomy",
@@ -2581,7 +2581,7 @@
         {
           "for": "measures",
           "cite": "SMRP Best Practices, Pillar 5 Work Management 5.4.14, 5.3.1",
-          "status": "verified"
+          "status": "consensus"
         }
       ],
       "provenance": {
@@ -2746,7 +2746,7 @@
         {
           "for": "measures",
           "cite": "SMRP Best Practices, Pillar 5 Work Management 5.4.14, 5.4.3",
-          "status": "verified"
+          "status": "consensus"
         }
       ],
       "provenance": {
@@ -2923,7 +2923,7 @@
         {
           "for": "measures",
           "cite": "SMRP Best Practices, Pillar 5 Work Management 5.4.8, 5.4.9, 5.4.3",
-          "status": "verified"
+          "status": "consensus"
         },
         {
           "for": "external delivery",
@@ -3089,12 +3089,12 @@
         {
           "for": "improvement framing",
           "cite": "ISO 9001:2015 cl. 4.4.1 g) and h) - evaluate processes and implement changes needed",
-          "status": "verified"
+          "status": "clause-verified"
         },
         {
           "for": "measures",
           "cite": "SMRP Best Practices, Pillar 5 Work Management 5.4.11, 4.1, 5.7.1",
-          "status": "verified"
+          "status": "consensus"
         }
       ],
       "provenance": {

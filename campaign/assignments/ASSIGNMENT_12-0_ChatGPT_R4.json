@@ -1,8 +1,8 @@
 {
  "_what": "Assignment pack for the process specification campaign. Everything you need about YOUR category. The full model.json is 148 KB and you do not need it; if you want a process id outside this category, ask.",
  "_binding": "_Collab/00_prompts/SPEC_CAMPAIGN_PROMPT.md is the binding instruction. _Collab/SOURCE_AUTHORITY_PACK.md is the only permitted source list. Read both in full before writing anything.",
- "platform": "Grok",
- "round": 1,
+ "platform": "ChatGPT",
+ "round": 4,
  "model_counts": {
   "categories": 19,
   "process_groups": 103,
@@ -28,128 +28,70 @@
   "_all": "'all' marks an enabling category that serves every stage rather than sitting at one of them."
  },
  "your_category": {
-  "id": "4.0",
-  "num": 4,
-  "band": "Work Lifecycle",
-  "name": "Dispatch and Execute Field Work",
+  "id": "12.0",
+  "num": 12,
+  "band": "Foundations and Enabling",
+  "name": "Manage Assets and Asset Information",
   "group_count": "6",
   "process_count": "32",
   "groups": [
    {
-    "id": "4.1",
-    "name": "Assign and dispatch work",
+    "id": "12.1",
+    "name": "Establish and maintain asset register",
     "processes": [
      {
-      "id": "4.1.1",
-      "name": "Assign work to crew or individual",
+      "id": "12.1.1",
+      "name": "Create and classify asset records",
       "applies": [
        "gas",
        "electric"
       ],
-      "uid": 10086
+      "uid": 10378
      },
      {
-      "id": "4.1.2",
-      "name": "Dispatch work to the field",
+      "id": "12.1.2",
+      "name": "Maintain asset hierarchy and relationships",
       "applies": [
        "gas",
        "electric"
       ],
-      "uid": 10087
+      "uid": 10379
      },
      {
-      "id": "4.1.3",
-      "name": "Acknowledge, en-route and on-site confirmation",
+      "id": "12.1.3",
+      "name": "Maintain location and network hierarchy",
       "applies": [
        "gas",
        "electric"
       ],
-      "uid": 10088
+      "uid": 10380
      },
      {
-      "id": "4.1.4",
-      "name": "Monitor progress and exception",
+      "id": "12.1.4",
+      "name": "Maintain organisational hierarchy",
       "applies": [
        "gas",
        "electric"
       ],
-      "uid": 10089
+      "uid": 10381
      },
      {
-      "id": "4.1.5",
-      "name": "Reassign, recall and cancel work",
+      "id": "12.1.5",
+      "name": "Maintain asset specifications and attributes",
       "applies": [
        "gas",
        "electric"
       ],
-      "uid": 10090
-     }
-    ],
-    "applicability": "common",
-    "applies": [
-     "electric",
-     "gas"
-    ],
-    "process_count": 5,
-    "uid": 10085
-   },
-   {
-    "id": "4.2",
-    "name": "Execute work in the field",
-    "processes": [
-     {
-      "id": "4.2.1",
-      "name": "Review work package and prerequisites",
-      "applies": [
-       "gas",
-       "electric"
-      ],
-      "uid": 10092
+      "uid": 10382
      },
      {
-      "id": "4.2.2",
-      "name": "Perform pre-job safety assessment",
+      "id": "12.1.6",
+      "name": "Retire and dispose of assets",
       "applies": [
        "gas",
        "electric"
       ],
-      "uid": 10093
-     },
-     {
-      "id": "4.2.3",
-      "name": "Perform the work",
-      "applies": [
-       "gas",
-       "electric"
-      ],
-      "uid": 10094
-     },
-     {
-      "id": "4.2.4",
-      "name": "Record work performed and actuals",
-      "applies": [
-       "gas",
-       "electric"
-      ],
-      "uid": 10095
-     },
-     {
-      "id": "4.2.5",
-      "name": "Suspend, transfer or escalate work",
-      "applies": [
-       "gas",
-       "electric"
-      ],
-      "uid": 10096
-     },
-     {
-      "id": "4.2.6",
-      "name": "Complete work in the field",
-      "applies": [
-       "gas",
-       "electric"
-      ],
-      "uid": 10097
+      "uid": 10383
      }
     ],
     "applicability": "common",
@@ -158,65 +100,141 @@
      "gas"
     ],
     "process_count": 6,
-    "uid": 10091
+    "uid": 10377
    },
    {
-    "id": "4.3",
-    "name": "Capture field data and evidence",
+    "id": "12.2",
+    "name": "Integrate asset and spatial information",
     "processes": [
      {
-      "id": "4.3.1",
-      "name": "Complete electronic forms and checklists",
+      "id": "12.2.1",
+      "name": "Define system of record by asset class",
       "applies": [
        "gas",
        "electric"
       ],
-      "uid": 10099
+      "uid": 10385
      },
      {
-      "id": "4.3.2",
-      "name": "Capture photographs and annotations",
+      "id": "12.2.2",
+      "name": "Reconcile spatial and non-spatial asset records",
       "applies": [
        "gas",
        "electric"
       ],
-      "uid": 10100
+      "uid": 10386
      },
      {
-      "id": "4.3.3",
-      "name": "Capture readings and measurements",
+      "id": "12.2.3",
+      "name": "Publish asset changes to the spatial network model",
       "applies": [
        "gas",
        "electric"
       ],
-      "uid": 10101
+      "uid": 10387
      },
      {
-      "id": "4.3.4",
-      "name": "Capture customer signature and acknowledgement",
+      "id": "12.2.4",
+      "name": "Consume spatial network and connectivity updates",
       "applies": [
        "gas",
        "electric"
       ],
-      "uid": 10102
+      "uid": 10388
      },
      {
-      "id": "4.3.5",
-      "name": "Record as-found and as-left condition",
+      "id": "12.2.5",
+      "name": "Resolve orphaned, duplicate and mismatched records",
       "applies": [
        "gas",
        "electric"
       ],
-      "uid": 10103
+      "uid": 10389
      },
      {
-      "id": "4.3.6",
-      "name": "Capture failure symptoms and preliminary codes",
+      "id": "12.2.6",
+      "name": "Maintain asset identification standards",
       "applies": [
        "gas",
        "electric"
       ],
-      "uid": 10104
+      "uid": 10390
+     },
+     {
+      "id": "12.2.7",
+      "name": "Operate distributed asset data across territories",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "uid": 10391
+     }
+    ],
+    "applicability": "common",
+    "applies": [
+     "electric",
+     "gas"
+    ],
+    "process_count": 7,
+    "uid": 10384
+   },
+   {
+    "id": "12.3",
+    "name": "Manage linear and network assets",
+    "processes": [
+     {
+      "id": "12.3.1",
+      "name": "Define linear assets and their measure basis",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "uid": 10393
+     },
+     {
+      "id": "12.3.2",
+      "name": "Apply linear referencing and measure points",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "uid": 10394
+     },
+     {
+      "id": "12.3.3",
+      "name": "Maintain dynamic segmentation along the asset",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "uid": 10395
+     },
+     {
+      "id": "12.3.4",
+      "name": "Record condition, defect and work by segment",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "uid": 10396
+     },
+     {
+      "id": "12.3.5",
+      "name": "Split, merge and re-measure linear segments",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "uid": 10397
+     },
+     {
+      "id": "12.3.6",
+      "name": "Maintain network connectivity and traceability",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "uid": 10398
      }
     ],
     "applicability": "common",
@@ -225,105 +243,47 @@
      "gas"
     ],
     "process_count": 6,
-    "uid": 10098
+    "uid": 10392
    },
    {
-    "id": "4.4",
-    "name": "Manage field safety",
+    "id": "12.4",
+    "name": "Assess asset condition and performance",
     "processes": [
      {
-      "id": "4.4.1",
-      "name": "Perform job safety analysis and tailboard",
+      "id": "12.4.1",
+      "name": "Conduct condition assessment",
       "applies": [
        "gas",
        "electric"
       ],
-      "uid": 10106
+      "uid": 10400
      },
      {
-      "id": "4.4.2",
-      "name": "Operate lone-worker and safety timer controls",
+      "id": "12.4.2",
+      "name": "Validate failure mode, mechanism, cause and consequence",
       "applies": [
        "gas",
        "electric"
       ],
-      "uid": 10107
+      "uid": 10401
      },
      {
-      "id": "4.4.3",
-      "name": "Report incident, near-miss and hazard",
+      "id": "12.4.3",
+      "name": "Maintain asset health and criticality scoring",
       "applies": [
        "gas",
        "electric"
       ],
-      "uid": 10108
+      "uid": 10402
      },
      {
-      "id": "4.4.4",
-      "name": "Confirm isolation and permit-to-work",
+      "id": "12.4.4",
+      "name": "Analyse asset performance and reliability",
       "applies": [
        "gas",
        "electric"
       ],
-      "uid": 10109
-     },
-     {
-      "id": "4.4.5",
-      "name": "Verify SCADA points with the control room after field changes",
-      "applies": [
-       "gas",
-       "electric"
-      ],
-      "uid": 10110
-     }
-    ],
-    "applicability": "common",
-    "applies": [
-     "electric",
-     "gas"
-    ],
-    "process_count": 5,
-    "uid": 10105
-   },
-   {
-    "id": "4.5",
-    "name": "Enable mobile field operation",
-    "processes": [
-     {
-      "id": "4.5.1",
-      "name": "Operate in disconnected and offline mode",
-      "applies": [
-       "gas",
-       "electric"
-      ],
-      "uid": 10112
-     },
-     {
-      "id": "4.5.2",
-      "name": "Synchronise field data on reconnection",
-      "applies": [
-       "gas",
-       "electric"
-      ],
-      "uid": 10113
-     },
-     {
-      "id": "4.5.3",
-      "name": "Maintain map and spatial context in the field",
-      "applies": [
-       "gas",
-       "electric"
-      ],
-      "uid": 10114
-     },
-     {
-      "id": "4.5.4",
-      "name": "Manage field device provisioning and support",
-      "applies": [
-       "gas",
-       "electric"
-      ],
-      "uid": 10115
+      "uid": 10403
      }
     ],
     "applicability": "common",
@@ -332,65 +292,56 @@
      "gas"
     ],
     "process_count": 4,
-    "uid": 10111
+    "uid": 10399
    },
    {
-    "id": "4.6",
-    "name": "Restore the work site",
+    "id": "12.5",
+    "name": "Define maintenance strategy",
     "processes": [
      {
-      "id": "4.6.1",
-      "name": "Place temporary surface restoration",
+      "id": "12.5.1",
+      "name": "Define preventive maintenance programme",
       "applies": [
        "gas",
        "electric"
       ],
-      "uid": 10117
+      "uid": 10405
      },
      {
-      "id": "4.6.2",
-      "name": "Maintain temporary restoration until permanent work",
+      "id": "12.5.2",
+      "name": "Define condition-based maintenance triggers",
       "applies": [
        "gas",
        "electric"
       ],
-      "uid": 10118
+      "uid": 10406
      },
      {
-      "id": "4.6.3",
-      "name": "Raise and schedule permanent restoration work",
+      "id": "12.5.3",
+      "name": "Define predictive and prescriptive strategies",
       "applies": [
        "gas",
        "electric"
       ],
-      "uid": 10119
+      "uid": 10407
      },
      {
-      "id": "4.6.4",
-      "name": "Perform permanent surface restoration",
+      "id": "12.5.4",
+      "name": "Maintain job plans and task libraries",
       "applies": [
        "gas",
        "electric"
       ],
-      "uid": 10120
+      "uid": 10408
      },
      {
-      "id": "4.6.5",
-      "name": "Obtain jurisdiction inspection and release",
+      "id": "12.5.5",
+      "name": "Manage warranty and claims",
       "applies": [
        "gas",
        "electric"
       ],
-      "uid": 10121
-     },
-     {
-      "id": "4.6.6",
-      "name": "Track restoration against permit deadline",
-      "applies": [
-       "gas",
-       "electric"
-      ],
-      "uid": 10122
+      "uid": 10409
      }
     ],
     "applicability": "common",
@@ -398,8 +349,57 @@
      "electric",
      "gas"
     ],
-    "process_count": 6,
-    "uid": 10116
+    "process_count": 5,
+    "uid": 10404
+   },
+   {
+    "id": "12.6",
+    "name": "Manage asset risk and compliance obligations",
+    "processes": [
+     {
+      "id": "12.6.1",
+      "name": "Maintain regulatory obligation register",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "uid": 10411
+     },
+     {
+      "id": "12.6.2",
+      "name": "Assess asset risk and consequence of failure",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "uid": 10412
+     },
+     {
+      "id": "12.6.3",
+      "name": "Plan asset replacement and renewal",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "uid": 10413
+     },
+     {
+      "id": "12.6.4",
+      "name": "Control asset-related technical change",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "uid": 10414
+     }
+    ],
+    "applicability": "common",
+    "applies": [
+     "electric",
+     "gas"
+    ],
+    "process_count": 4,
+    "uid": 10410
    }
   ],
   "applicability": "common",
@@ -407,48 +407,31 @@
    "electric",
    "gas"
   ],
-  "summary": "Deliver work to the crew and support safe, compliant, first-time-right execution in the field.",
-  "uid": 10084,
+  "summary": "Establish and maintain the asset record, understand asset condition and risk, and set the maintenance strategy that generates work.",
+  "uid": 10376,
   "lifecycle": [
-   "design-and-construct",
-   "maintain"
+   "all"
   ]
  },
  "apqc_rows_touching_your_category": [
   {
-   "apqc": "10.2.4",
-   "pcf_id": "19229",
-   "apqc_name": "Schedule and perform construction work",
+   "apqc": "10.3.1",
+   "pcf_id": "19239",
+   "apqc_name": "Plan asset maintenance",
    "status": "covered",
-   "model_groups": "3.4, 4.2",
-   "note": "Schedule and perform construction work."
-  },
-  {
-   "apqc": "10.2.5",
-   "pcf_id": "19224",
-   "apqc_name": "Manage asset construction",
-   "status": "partial",
-   "model_groups": "5.1, 5.4, 4.4, 17.4.5",
-   "note": "Manage asset construction: 19226 quality control is 5.1, 19227 create work and asset records is 5.4, 19228 site safety and access is 4.4. 19225 Monitor work performance in flight has no group - the model measures after closure (15.1) but does not manage in-flight."
-  },
-  {
-   "apqc": "10.3.2",
-   "pcf_id": "19245",
-   "apqc_name": "Manage asset maintenance",
-   "status": "covered",
-   "model_groups": "3.4, 3.5, 5.1, 5.4, 4.4, 15.1, 15.2",
-   "note": "Manage asset maintenance."
-  },
-  {
-   "apqc": "10.3.3",
-   "pcf_id": "19253",
-   "apqc_name": "Perform asset maintenance",
-   "status": "covered",
-   "model_groups": "4.2, 8.1",
-   "note": "Perform asset maintenance."
+   "model_groups": "1.3, 1.4, 2.5, 3.1, 12.4, 12.5",
+   "note": "Plan asset maintenance. The model splits this one APQC process across six groups, which is the right granularity for a work management reference."
   }
  ],
  "gfmam_rows_touching_your_category": [
+  {
+   "subject": "2.4",
+   "group": "Governance",
+   "name": "Technical Standards & Legislation",
+   "status": "covered",
+   "model_groups": "12.6.1, 8.x",
+   "note": "Regulatory obligation register plus the compliance category."
+  },
   {
    "subject": "2.5",
    "group": "Governance",
@@ -456,6 +439,22 @@
    "status": "partial",
    "model_groups": "2.4.4, 12.6.4",
    "note": "Change to authorised work scope (2.4.4) and asset-related technical change (12.6.4). No organisational or management-system change process, which is correct here."
+  },
+  {
+   "subject": "2.6",
+   "group": "Governance",
+   "name": "Risk",
+   "status": "partial",
+   "model_groups": "12.6.2, 8.8",
+   "note": "Asset risk and consequence of failure, and the distribution integrity programme."
+  },
+  {
+   "subject": "3.4",
+   "group": "Asset Management Planning",
+   "name": "Planning",
+   "status": "covered",
+   "model_groups": "17.2, 17.4, 12.5, 12.6.3",
+   "note": "Closed 2026-08-29. 17.2 determines the solution, 17.4 builds and monitors the capital programme. 12.5 continues to define maintenance strategy and 12.6.3 replacement and renewal."
   },
   {
    "subject": "3.5",
@@ -466,20 +465,44 @@
    "note": "Prioritisation, approval routing and asset risk. The model expresses these as DMN decision tables, which is exactly the auditability GFMAM asks for."
   },
   {
-   "subject": "4.4",
+   "subject": "4.6",
    "group": "Leadership and People",
-   "name": "Competence Management",
-   "status": "covered",
-   "model_groups": "14.2",
-   "note": "Skills and certification, which the model correctly treats as gating work assignment rather than as an HR record."
+   "name": "Knowledge Management",
+   "status": "partial",
+   "model_groups": "12.5.4, 2.5.3",
+   "note": "Job plan and task libraries, and the document set at the place of work."
   },
   {
-   "subject": "6.2",
-   "group": "Delivery",
-   "name": "Asset Creation & Acquisition",
+   "subject": "5.1",
+   "group": "Data and Information",
+   "name": "Asset Management Data & Information Strategy",
+   "status": "partial",
+   "model_groups": "12.2.1, 15.4",
+   "note": "System of record by asset class, and data quality and master data."
+  },
+  {
+   "subject": "5.2",
+   "group": "Data and Information",
+   "name": "Asset Management Data & Information Standards",
    "status": "covered",
-   "model_groups": "19.1, 2.1, 2.2, 4.2",
-   "note": "Closed 2026-08-29. 19.1 commissions, coordinates energisation and hands the asset over into service, completing the chain that 2.1 designs and 4.2 builds. Land and property acquisition remains out of scope - corporate real estate, APQC 10.1."
+   "model_groups": "12.2.6, 15.4",
+   "note": ""
+  },
+  {
+   "subject": "5.3",
+   "group": "Data and Information",
+   "name": "Asset Management Data & Information Management",
+   "status": "covered",
+   "model_groups": "12.1, 12.2, 12.3",
+   "note": ""
+  },
+  {
+   "subject": "5.5",
+   "group": "Data and Information",
+   "name": "Configuration Management",
+   "status": "partial",
+   "model_groups": "12.1.5, 5.4",
+   "note": "Asset specifications and as-built update. No configuration baseline or version control over the asset configuration itself."
   },
   {
    "subject": "6.3",
@@ -488,6 +511,22 @@
    "status": "partial",
    "model_groups": "12.4.4, 12.4.2",
    "note": "Performance and reliability analysis, and failure mode validation. No reliability engineering feedback loop into design."
+  },
+  {
+   "subject": "6.7",
+   "group": "Delivery",
+   "name": "Asset Repurposing or Disposal",
+   "status": "covered",
+   "model_groups": "19.2, 19.3, 19.4, 12.1.6, 5.3",
+   "note": "Closed 2026-08-29. 19.2 decommissions physically, 19.3 handles waste and salvage, 19.4 transfers ownership and closes the record. 12.1.6 continues to retire the record and 5.3 the accounting."
+  },
+  {
+   "subject": "7.2",
+   "group": "Value Realization",
+   "name": "Monitoring",
+   "status": "covered",
+   "model_groups": "15.1, 12.4",
+   "note": ""
   }
  ],
  "_apqc_notice": "©2025 APQC and IBM reserve all rights in this work except as expressly granted. This Industry Process Classification Framework was jointly developed by APQC and IBM to facilitate improvement through process management and benchmarking. APQC and IBM grant a perpetual, worldwide, royalty-free license to use, copy, publish, modify, and create derivative works of the PCF, provided that all copies include this notice and any derivative works carry the attribution below. THIS FILE IS A DERIVATIVE WORK AND THE NOTICE AND ATTRIBUTION MUST TRAVEL WITH IT.",

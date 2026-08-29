@@ -1,0 +1,505 @@
+{
+ "_what": "Assignment pack for the process specification campaign. Everything you need about YOUR category. The full model.json is 148 KB and you do not need it; if you want a process id outside this category, ask.",
+ "_binding": "_Collab/00_prompts/SPEC_CAMPAIGN_PROMPT.md is the binding instruction. _Collab/SOURCE_AUTHORITY_PACK.md is the only permitted source list. Read both in full before writing anything.",
+ "platform": "Claude",
+ "round": 1,
+ "model_counts": {
+  "categories": 19,
+  "process_groups": 103,
+  "processes": 506,
+  "work_types": 7
+ },
+ "bands": {
+  "Work Lifecycle": "1.0-5.0. Runs in sequence for a single piece of work.",
+  "Specialised Operations": "6.0-11.0. Each runs the full lifecycle inside its own operational discipline.",
+  "Foundations and Enabling": "12.0-16.0. Supplies assets, materials, workforce, information and external delivery capacity to every lifecycle stage rather than sitting inside the sequence.",
+  "Asset Lifecycle": "17.0-19.0. The asset's own life - planned, created, operated and retired - as distinct from the work performed on it. Appended 2026-08-29 without renumbering anything: categories 1.0 to 16.0 keep their ids, uids and legacy_ids."
+ },
+ "lifecycle_axis": {
+  "_why": "The model is organised on a WORK axis - identify, plan, schedule, execute, close. APQC and GFMAM are organised on an ASSET axis - plan and acquire, design and construct, operate, maintain, dispose. The work axis is what happens inside 'maintain'. Both are valid; carrying both lets the model answer ISO 55001:2024 cl. 8.1 without abandoning the granularity that makes it a process model rather than a benchmarking taxonomy.",
+  "stages": [
+   "plan-and-acquire",
+   "design-and-construct",
+   "operate",
+   "maintain",
+   "dispose",
+   "all"
+  ],
+  "_all": "'all' marks an enabling category that serves every stage rather than sitting at one of them."
+ },
+ "your_category": {
+  "id": "2.0",
+  "num": 2,
+  "band": "Work Lifecycle",
+  "name": "Plan, Design and Estimate Work",
+  "group_count": "6",
+  "process_count": "26",
+  "groups": [
+   {
+    "id": "2.1",
+    "name": "Engineer and design work",
+    "processes": [
+     {
+      "id": "2.1.1",
+      "name": "Perform site survey and pre-design visit",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "uid": 10026
+     },
+     {
+      "id": "2.1.2",
+      "name": "Produce construction design",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "uid": 10027
+     },
+     {
+      "id": "2.1.3",
+      "name": "Perform design review and approval",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "uid": 10028
+     },
+     {
+      "id": "2.1.4",
+      "name": "Manage design revisions",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "uid": 10029
+     }
+    ],
+    "applicability": "common",
+    "applies": [
+     "electric",
+     "gas"
+    ],
+    "process_count": 4,
+    "uid": 10025
+   },
+   {
+    "id": "2.2",
+    "name": "Perform compatible-unit design and estimating",
+    "processes": [
+     {
+      "id": "2.2.1",
+      "name": "Maintain compatible unit and assembly library",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "uid": 10031
+     },
+     {
+      "id": "2.2.2",
+      "name": "Place compatible units on the spatial design",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "uid": 10032
+     },
+     {
+      "id": "2.2.3",
+      "name": "Derive labour, material and plant from design",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "uid": 10033
+     },
+     {
+      "id": "2.2.4",
+      "name": "Produce compatible-unit cost estimate",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "uid": 10034
+     },
+     {
+      "id": "2.2.5",
+      "name": "Maintain unit accounting and allocation rules",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "uid": 10035
+     },
+     {
+      "id": "2.2.6",
+      "name": "Release approved design to construction work",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "uid": 10036
+     }
+    ],
+    "applicability": "common",
+    "applies": [
+     "electric",
+     "gas"
+    ],
+    "process_count": 6,
+    "uid": 10030
+   },
+   {
+    "id": "2.3",
+    "name": "Estimate work",
+    "processes": [
+     {
+      "id": "2.3.1",
+      "name": "Produce labour, material and equipment estimate",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "uid": 10038
+     },
+     {
+      "id": "2.3.2",
+      "name": "Produce contracted-work estimate",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "uid": 10039
+     },
+     {
+      "id": "2.3.3",
+      "name": "Apply overhead, contingency and escalation",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "uid": 10040
+     },
+     {
+      "id": "2.3.4",
+      "name": "Maintain in-progress estimate revisions",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "uid": 10041
+     }
+    ],
+    "applicability": "common",
+    "applies": [
+     "electric",
+     "gas"
+    ],
+    "process_count": 4,
+    "uid": 10037
+   },
+   {
+    "id": "2.4",
+    "name": "Authorise work",
+    "processes": [
+     {
+      "id": "2.4.1",
+      "name": "Validate funding and budget availability",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "uid": 10043
+     },
+     {
+      "id": "2.4.2",
+      "name": "Route work for approval",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "uid": 10044
+     },
+     {
+      "id": "2.4.3",
+      "name": "Authorise and release work to execution",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "uid": 10045
+     },
+     {
+      "id": "2.4.4",
+      "name": "Manage change to authorised scope",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "uid": 10046
+     }
+    ],
+    "applicability": "common",
+    "applies": [
+     "electric",
+     "gas"
+    ],
+    "process_count": 4,
+    "uid": 10042
+   },
+   {
+    "id": "2.5",
+    "name": "Package work for execution",
+    "processes": [
+     {
+      "id": "2.5.1",
+      "name": "Build job plan and task structure",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "uid": 10048
+     },
+     {
+      "id": "2.5.2",
+      "name": "Define crew, skill and equipment requirements",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "uid": 10049
+     },
+     {
+      "id": "2.5.3",
+      "name": "Assemble drawings, documents and instructions",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "uid": 10050
+     },
+     {
+      "id": "2.5.4",
+      "name": "Define material requirements",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "uid": 10051
+     }
+    ],
+    "applicability": "common",
+    "applies": [
+     "electric",
+     "gas"
+    ],
+    "process_count": 4,
+    "uid": 10047
+   },
+   {
+    "id": "2.6",
+    "name": "Obtain permits and satisfy prerequisites",
+    "processes": [
+     {
+      "id": "2.6.1",
+      "name": "Identify permit and consent requirements",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "uid": 10053
+     },
+     {
+      "id": "2.6.2",
+      "name": "Request, track and receive permits",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "uid": 10054
+     },
+     {
+      "id": "2.6.3",
+      "name": "Validate prerequisites before release",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "uid": 10055
+     },
+     {
+      "id": "2.6.4",
+      "name": "Manage permit cost, expiry and renewal",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "uid": 10056
+     }
+    ],
+    "applicability": "common",
+    "applies": [
+     "electric",
+     "gas"
+    ],
+    "process_count": 4,
+    "uid": 10052
+   }
+  ],
+  "applicability": "common",
+  "applies": [
+   "electric",
+   "gas"
+  ],
+  "summary": "Convert qualified demand into an executable, costed, approved and fully specified work package.",
+  "uid": 10024,
+  "lifecycle": [
+   "design-and-construct",
+   "maintain"
+  ]
+ },
+ "apqc_rows_touching_your_category": [
+  {
+   "apqc": "10.2.3",
+   "pcf_id": "20139",
+   "apqc_name": "Design and plan asset construction",
+   "status": "covered",
+   "model_groups": "2.1, 2.6",
+   "note": "Design and plan asset construction. 19222 Design assets is 2.1; 19221 Obtain asset construction permissions is 2.6; 19223 Plan construction resources is 2.5 and 3.1. 19220 Develop construction strategy has no model home."
+  },
+  {
+   "apqc": "10.3.1",
+   "pcf_id": "19239",
+   "apqc_name": "Plan asset maintenance",
+   "status": "covered",
+   "model_groups": "1.3, 1.4, 2.5, 3.1, 12.4, 12.5",
+   "note": "Plan asset maintenance. The model splits this one APQC process across six groups, which is the right granularity for a work management reference."
+  },
+  {
+   "apqc": "10.4.4",
+   "pcf_id": "10954",
+   "apqc_name": "Perform abandonment",
+   "status": "covered",
+   "model_groups": "19.2.4, 8.6.6",
+   "note": "Perform abandonment. 19.2.4 abandons in place as a lifecycle end state under 49 CFR 192.727. 8.6.6 Purge, seal and abandon facilities REMAINS in 8.6 as the gas pressure procedure; the two are hooked, not merged, because purging under 192.629 is a pressure operation and abandonment is a lifecycle transition."
+  }
+ ],
+ "gfmam_rows_touching_your_category": [
+  {
+   "subject": "2.4",
+   "group": "Governance",
+   "name": "Technical Standards & Legislation",
+   "status": "covered",
+   "model_groups": "12.6.1, 8.x",
+   "note": "Regulatory obligation register plus the compliance category."
+  },
+  {
+   "subject": "2.5",
+   "group": "Governance",
+   "name": "Management of Change",
+   "status": "partial",
+   "model_groups": "2.4.4, 12.6.4",
+   "note": "Change to authorised work scope (2.4.4) and asset-related technical change (12.6.4). No organisational or management-system change process, which is correct here."
+  },
+  {
+   "subject": "2.6",
+   "group": "Governance",
+   "name": "Risk",
+   "status": "partial",
+   "model_groups": "12.6.2, 8.8",
+   "note": "Asset risk and consequence of failure, and the distribution integrity programme."
+  },
+  {
+   "subject": "3.4",
+   "group": "Asset Management Planning",
+   "name": "Planning",
+   "status": "covered",
+   "model_groups": "17.2, 17.4, 12.5, 12.6.3",
+   "note": "Closed 2026-08-29. 17.2 determines the solution, 17.4 builds and monitors the capital programme. 12.5 continues to define maintenance strategy and 12.6.3 replacement and renewal."
+  },
+  {
+   "subject": "3.5",
+   "group": "Asset Management Planning",
+   "name": "Decision-Making",
+   "status": "covered",
+   "model_groups": "1.3, 2.4.2, 12.6",
+   "note": "Prioritisation, approval routing and asset risk. The model expresses these as DMN decision tables, which is exactly the auditability GFMAM asks for."
+  },
+  {
+   "subject": "4.6",
+   "group": "Leadership and People",
+   "name": "Knowledge Management",
+   "status": "partial",
+   "model_groups": "12.5.4, 2.5.3",
+   "note": "Job plan and task libraries, and the document set at the place of work."
+  },
+  {
+   "subject": "5.1",
+   "group": "Data and Information",
+   "name": "Asset Management Data & Information Strategy",
+   "status": "partial",
+   "model_groups": "12.2.1, 15.4",
+   "note": "System of record by asset class, and data quality and master data."
+  },
+  {
+   "subject": "5.2",
+   "group": "Data and Information",
+   "name": "Asset Management Data & Information Standards",
+   "status": "covered",
+   "model_groups": "12.2.6, 15.4",
+   "note": ""
+  },
+  {
+   "subject": "5.3",
+   "group": "Data and Information",
+   "name": "Asset Management Data & Information Management",
+   "status": "covered",
+   "model_groups": "12.1, 12.2, 12.3",
+   "note": ""
+  },
+  {
+   "subject": "5.5",
+   "group": "Data and Information",
+   "name": "Configuration Management",
+   "status": "partial",
+   "model_groups": "12.1.5, 5.4",
+   "note": "Asset specifications and as-built update. No configuration baseline or version control over the asset configuration itself."
+  },
+  {
+   "subject": "6.2",
+   "group": "Delivery",
+   "name": "Asset Creation & Acquisition",
+   "status": "covered",
+   "model_groups": "19.1, 2.1, 2.2, 4.2",
+   "note": "Closed 2026-08-29. 19.1 commissions, coordinates energisation and hands the asset over into service, completing the chain that 2.1 designs and 4.2 builds. Land and property acquisition remains out of scope - corporate real estate, APQC 10.1."
+  },
+  {
+   "subject": "6.3",
+   "group": "Delivery",
+   "name": "Integrated Reliability",
+   "status": "partial",
+   "model_groups": "12.4.4, 12.4.2",
+   "note": "Performance and reliability analysis, and failure mode validation. No reliability engineering feedback loop into design."
+  },
+  {
+   "subject": "6.7",
+   "group": "Delivery",
+   "name": "Asset Repurposing or Disposal",
+   "status": "covered",
+   "model_groups": "19.2, 19.3, 19.4, 12.1.6, 5.3",
+   "note": "Closed 2026-08-29. 19.2 decommissions physically, 19.3 handles waste and salvage, 19.4 transfers ownership and closes the record. 12.1.6 continues to retire the record and 5.3 the accounting."
+  },
+  {
+   "subject": "7.2",
+   "group": "Value Realization",
+   "name": "Monitoring",
+   "status": "covered",
+   "model_groups": "15.1, 12.4",
+   "note": ""
+  }
+ ],
+ "_apqc_notice": "©2025 APQC and IBM reserve all rights in this work except as expressly granted. This Industry Process Classification Framework was jointly developed by APQC and IBM to facilitate improvement through process management and benchmarking. APQC and IBM grant a perpetual, worldwide, royalty-free license to use, copy, publish, modify, and create derivative works of the PCF, provided that all copies include this notice and any derivative works carry the attribution below. THIS FILE IS A DERIVATIVE WORK AND THE NOTICE AND ATTRIBUTION MUST TRAVEL WITH IT.",
+ "_apqc_attribution": "This work is based in part on an Industry Process Classification Framework (“PCF”), an open standard developed by APQC and IBM to promote benchmarking and best practices worldwide. The PCF is intended to facilitate organizational improvement through process management and benchmarking, regardless of industry, size, or geography. To download the full PCF or other industry-specific versions of the PCF, as well as associated measures and benchmarking, please visit www.apqc.org/pcf."
+}

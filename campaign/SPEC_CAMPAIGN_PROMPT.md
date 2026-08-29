@@ -9,7 +9,7 @@ Category 1.0 is already done and is the **worked example** — read it before st
 
 | Round | Claude | ChatGPT | Grok |
 |---|---|---|---|
-| 1 | **2.0** Plan, Design and Estimate Work | **3.0** Plan Resources and Schedule Work | **4.0** Dispatch and Execute Field Work |
+| 1 | **2.0** Plan, Design and Estimate Work | **4.0** Dispatch and Execute Field Work | **3.0** Plan Resources and Schedule Work |
 | 2 | **5.0** Close Work, Settle Cost and Update Records | **6.0** Manage Metering and Measurement Operations | **7.0** Manage Vegetation |
 | 3 | **8.0** Manage Compliance, Integrity and Safety | **9.0** Manage Outages and Emergencies | **10.0** Serve Customers in the Field |
 | 4 | **11.0** Manage Joint Use and Third-Party Attachments | **12.0** Manage Assets and Asset Information | **13.0** Manage Materials and Supply Chain |
@@ -18,7 +18,10 @@ Category 1.0 is already done and is the **worked example** — read it before st
 The Asset Lifecycle band (17.0, 18.0, 19.0 — 14 groups, 72 processes) is unassigned and
 is not part of rounds 1 to 5. It will be specified after the campaign.
 
-Totals: Claude 148 processes, ChatGPT 123, Grok 145. Each platform gets lifecycle,
+Round 1 was swapped on 2026-08-29: Grok specified 3.0 and ChatGPT takes 4.0. Rounds 2
+to 5 are unchanged, and the swap happens to even the totals.
+
+Totals: Claude 148 processes, ChatGPT 134, Grok 134. Each platform gets lifecycle,
 specialised and enabling categories, so no single platform's style dominates one band.
 
 ## Inputs — read all of these before writing anything

@@ -810,5 +810,52 @@
     "observed_max": 275
    }
   }
+ },
+ "source_status_ceiling": {
+  "_why": "A citation status is a claim about what somebody actually read. The status vocabulary alone cannot enforce that, and it did not: on 2026-08-29 all three specification files carried 'verified' against standards nobody in this project holds - 24 in category 1.0, 18 in category 2.0 and 31 in the category 3.0 submission. Claude introduced the pattern and the other platforms inherited it from the pack. This table is the mechanical fix: a source may never be cited above its ceiling, and validate_spec.py enforces it.",
+  "_raising": "A ceiling is raised only by obtaining the text. Put the document in Tim Evidence/, record it in the artifact registry with its sha256, and change the entry here in the same commit.",
+  "_default": "clause-verified - anything not listed is paywalled until shown otherwise.",
+  "held_in_full": {
+   "_note": "Read end to end, or freely available in full. 'verified' is permitted.",
+   "EN 17007": "verified",
+   "APQC": "verified",
+   "GFMAM": "verified",
+   "PCF": "verified"
+  },
+  "public_law": {
+   "_note": "Public primary sources. 'regulation' is permitted and is the right status.",
+   "CFR": "regulation",
+   "U.S.C.": "regulation",
+   "MUTCD": "regulation",
+   "USACE": "regulation",
+   "Nationwide Permit": "regulation",
+   "N.J.A.C.": "regulation",
+   "PHMSA": "regulation"
+  },
+  "member_gated": {
+   "_note": "Industry-body material behind membership. 'consensus' is the ceiling - it is not law and it was not read from an official copy.",
+   "SMRP": "consensus",
+   "AACE": "consensus",
+   "CGA": "consensus",
+   "EPRI": "consensus",
+   "API RP": "consensus",
+   "IAM ": "consensus",
+   "MultiSpeak": "consensus",
+   "GPTC": "consensus"
+  },
+  "paywalled": {
+   "_note": "Clause number and title can be confirmed from public contents pages; the body cannot. 'clause-verified' is the ceiling and it FORBIDS paraphrasing content that was not read.",
+   "ISO ": "clause-verified",
+   "IEC ": "clause-verified",
+   "EN 1": "clause-verified",
+   "ANSI/ASTM": "clause-verified",
+   "ASTM": "clause-verified",
+   "IEEE": "clause-verified",
+   "NESC": "clause-verified",
+   "ASME": "clause-verified",
+   "ASCE": "clause-verified",
+   "PODS": "clause-verified",
+   "UPDM": "clause-verified"
+  }
  }
 }

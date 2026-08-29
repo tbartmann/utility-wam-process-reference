@@ -1,0 +1,3484 @@
+{
+  "category": {
+    "uid": 10057,
+    "id": "3.0",
+    "name": "Plan Resources and Schedule Work",
+    "band": "Work Lifecycle"
+  },
+  "platform": "Grok",
+  "model": "grok-4.6",
+  "round": 1,
+  "date": "2026-08-29",
+  "schema": "eam/specs/SCHEMA.md",
+  "derivation": "STANDARDS-DERIVED. Every field traces to a standard, a regulation or a recognised industry body per campaign/SOURCE_AUTHORITY_PACK.md. Nothing is generalised from a client programme or a product. Field service management is not a standards domain; where the pack says so, the field is judgment and is labelled.",
+  "field_set": "EN 17007:2017 cl. 5.2 maintenance process profile, corroborated by ISO 9001:2015 cl. 4.4.1 a) to h).",
+  "gaps": [
+    "Field service management is not a standards domain. No ISO, IEC, CEN/EN, ANSI or IEEE standard has field service, mobile workforce management, rostering, appointment booking, travel routing or dispatch as its subject. IEC 61968-6:2015 cl. 4.2 SCHD and FRD standardise what is exchanged, not how scheduling is done. Activities in 3.2, 3.3 and 3.4 that describe matching, windows, reservation, routing and overrides are judgment.",
+    "ISO 30409:2016 is strategic workforce planning. It is not used for rostering, on-call or dispatch, per the Source Authority Pack section I.",
+    "ISO/IEC 20000-1:2018 is cited only as a labelled ITSM structural analogue for demand (8.4.2), capacity (8.4.3), service level (8.3.3) and service request (8.6.2). It is not domain authority and is never cited for execution, scheduling or dispatch.",
+    "EN 17007 has no appointment, roster, what-if simulation, travel-routing or schedule-override process. RES.4, ACT.3, ACT.4, MAN.2, MAN.3, MAN.5, MAN.6, SER.4, DOC.6 and TOL.4 are the closest named processes. OPT is improvement of maintenance results, not plan simulation, and is not used for 3.1.3.",
+    "IEC 61968-6:2015 cl. 4.2 has no component for document management, procurement, health and safety, or fleet. Rosters sit on HR; tools and vehicles sit on MM; clearances sit on NO. The absence is recorded rather than inventing a code. SIM is Network operation simulation and is not used for work-demand scenarios.",
+    "IEC 61968-6 is electric-scoped. Gas distribution has no CIM work model; gas borrows the Work package here.",
+    "A clearance is produced by 18.4.4 against a switching plan approved at 18.2.2, under 29 CFR 1910.269(m). It is not a permit. 3.4.3 consumes the approved outage window from 18.2.2/18.2.3 as a schedule constraint; execution consumes the issued clearance. GFMAM 3.8 shutdown scheduling is 18.2, not 3.4.",
+    "3.1 forecasts WORK demand. APQC 10.2.2 Perform utility network planning (pcf_id 19213) is network demand and lives in 17.0. The two must not be collapsed.",
+    "APQC 14.4.2.2 Make appointment (pcf_id 19331) and 14.4.2.1 Schedule work (19330) sit under meter work. This model lifts both to the work lifecycle (3.3, 3.4). APQC 6.3.4.2 (pcf_id 10321) and 5.2.1 (20041) are cross-industry service analogues, not utility process authority.",
+    "Electric distribution has no federal prescriptive inspection interval (16 U.S.C. 824o). 3.4.3 names the state rule as the electric route. 'Business district' is undefined in Part 192 despite being the discriminator in 192.723.",
+    "No standard specifies appointment-window length, reservation behaviour, failure classes, crew size, district design, or a travel-time algorithm. SMRP 5.5.x resourcing-ratio names were not individually verified and are not used as measure names.",
+    "Overtime, standby and on-call PAY sit in 14.4.1. 3.2 consumes labour-agreement constraints and does not specify them. Live person status is 14.1.3; 3.5.4 is the scheduling view of that record plus equipment.",
+    "EN 15341 individual O&S indicator names and EN 17007 process-profile bodies remain paywalled and are cited clause-verified without paraphrase."
+  ],
+  "processes": [
+    {
+      "uid": 10059,
+      "id": "3.1.1",
+      "name": "Model long-range work demand",
+      "group": {
+        "id": "3.1",
+        "name": "Forecast demand and capacity",
+        "uid": 10058
+      },
+      "intent": "Produce a forward view of work volume, by type and period, that capacity can be tested against.",
+      "activities": [
+        "Gather the work bank from planned, cyclic, capital and customer routes",
+        "Convert each item to volume, skill and duration in the planning horizon",
+        "Segment demand by work type, commodity, district and period",
+        "Publish the demand view to capacity planning and to the schedule"
+      ],
+      "trigger": {
+        "kind": "timer",
+        "text": "Planning cycle, or a material change in the work bank.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Approved and forecast work bank",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Cyclic maintenance plan",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Capital and construction programme work",
+          "party": "CON",
+          "data": "Work"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Demand view by type, district and period",
+          "party": "SCHD",
+          "data": "Work"
+        },
+        {
+          "what": "Unmodelled or incomplete demand exception",
+          "party": "MAI",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "MAI",
+          "role": "originating",
+          "service": "Work bank and maintenance plans"
+        },
+        {
+          "component": "SCHD",
+          "role": "owning",
+          "service": "Demand view for capacity planning"
+        },
+        {
+          "component": "CON",
+          "role": "originating",
+          "service": "Construction programme volume"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "MAI",
+          "to": "SCHD",
+          "payload": "WorkRequest",
+          "verb": "get",
+          "pattern": "batch"
+        },
+        {
+          "from": "CON",
+          "to": "SCHD",
+          "payload": "WorkRequest",
+          "verb": "get",
+          "pattern": "batch"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Resource planner",
+          "raci": "R"
+        },
+        {
+          "role": "Maintenance manager",
+          "raci": "A"
+        },
+        {
+          "role": "Scheduler",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkTask",
+        "WorkLocation"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "3.1 forecasts WORK demand and crew load. Network demand and capacity live in 17.0 / APQC 10.2.2 (pcf_id 19213). Do not treat a crew-capacity model as a network-capacity model."
+        },
+        {
+          "kind": "operational",
+          "text": "ISO/IEC 20000-1 cl. 8.4.2 is an IT service analogue for demand management, not a field-work standard. Travel, credentials and geography are outside it."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Backlog",
+          "definition": "SMRP 5.4.8/5.4.9. The demand view is the backlog expressed over the horizon.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Planned Work",
+          "definition": "SMRP 5.3.1. Share of modelled demand that entered as planned rather than reactive.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Cyclic gas inspection and survey load from 49 CFR 192",
+        "Electric inspection load from the named state rule, not a federal interval",
+        "Customer and new-service demand",
+        "Capital and construction programme"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Repeating planning cycle from a timer; the happy path is known.",
+        "artifact": "models/3.1-forecast-demand-and-capacity.bpmn"
+      },
+      "en17007": {
+        "process": "MAN.6",
+        "title": "Define, select, analyse and communicate the information",
+        "clause": "6.2"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.2 MAN.6",
+          "status": "clause-verified"
+        },
+        {
+          "for": "demand analogue",
+          "cite": "ISO/IEC 20000-1:2018 cl. 8.4.2 demand management and cl. 8.4.3 capacity management - IT service management standard used as a structural analogue, not as domain authority",
+          "status": "clause-verified"
+        },
+        {
+          "for": "planning duty",
+          "cite": "ANSI/ASTM/ISO 55001-2024 cl. 6.2.2 asset management planning; cl. 8.1 operational planning and control",
+          "status": "clause-verified"
+        },
+        {
+          "for": "landscape",
+          "cite": "GFMAM Asset Management Landscape 3rd ed. v3.0, 2024-06, subject 3.7 Resourcing Strategy and Management",
+          "status": "verified"
+        },
+        {
+          "for": "structure",
+          "cite": "APQC PCF Utilities v7.2.1 10.3.1.6 Conduct resource planning (pcf_id 19243) and 10.3.1 Plan asset maintenance (19239) - structural precedent only",
+          "status": "consensus"
+        },
+        {
+          "for": "interfaces",
+          "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 message payloads; Annex A verbs",
+          "status": "clause-verified"
+        },
+        {
+          "for": "activities",
+          "cite": "No standard specifies a work-demand forecast method for distribution field work",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "EN 17007:2017 cl. 6.2 MAN.6"
+      }
+    },
+    {
+      "uid": 10060,
+      "id": "3.1.2",
+      "name": "Model resource and skill capacity",
+      "group": {
+        "id": "3.1",
+        "name": "Forecast demand and capacity",
+        "uid": 10058
+      },
+      "intent": "State the people, skills and hours that can be committed in the same horizon as the demand view.",
+      "activities": [
+        "Take the roster, qualifications and contracted capacity as the supply base",
+        "Convert supply to available hours by skill, district and period",
+        "Subtract known leave, training, restrictions and non-wrench time",
+        "Publish the capacity view against the demand view"
+      ],
+      "trigger": {
+        "kind": "timer",
+        "text": "Same planning cycle as the demand view, or a roster change.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Published roster and on-call pattern",
+          "party": "HR",
+          "data": "WorkTimeSchedule"
+        },
+        {
+          "what": "Qualification and restriction position",
+          "party": "HR",
+          "data": "Crew"
+        },
+        {
+          "what": "Contracted crew capacity in force",
+          "party": "MAI",
+          "data": "Crew"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Capacity view by skill, district and period",
+          "party": "SCHD",
+          "data": "Crew"
+        },
+        {
+          "what": "Hours that cannot be committed",
+          "party": "HR",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "HR",
+          "role": "originating",
+          "service": "Roster, skills and restrictions"
+        },
+        {
+          "component": "SCHD",
+          "role": "owning",
+          "service": "Capacity view"
+        },
+        {
+          "component": "MAI",
+          "role": "reference",
+          "service": "Contracted capacity in force"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "HR",
+          "to": "SCHD",
+          "payload": "WorkRequest",
+          "verb": "get",
+          "pattern": "batch"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Resource planner",
+          "raci": "R"
+        },
+        {
+          "role": "Maintenance manager",
+          "raci": "A"
+        },
+        {
+          "role": "Workforce administrator",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Crew",
+        "WorkTimeSchedule"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "Gas: 49 CFR 192.805. Capacity that counts toward covered-task work is qualified capacity, not headcount. Electric: 29 CFR 1910.269(a)(2) qualified employee. 14.2 owns the qualification record; this process consumes it."
+        },
+        {
+          "kind": "operational",
+          "text": "ISO 30409:2016 is strategic workforce planning and is not used here for rostering or dispatch. Capacity in 3.1.2 is the hours the schedule may commit."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Schedule Compliance",
+          "definition": "SMRP 5.4.3/5.4.4. Capacity that was never real is the usual cause of later miss.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Wrench Time",
+          "definition": "SMRP 5.6.1. Non-wrench time must be removed here or the capacity view is overstated.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Internal craft capacity",
+        "Contracted capacity already on agreement",
+        "Standby and on-call as a distinct, limited pool"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Repeating cycle from a timer; conversion of roster to hours is a known path.",
+        "artifact": "models/3.1-forecast-demand-and-capacity.bpmn"
+      },
+      "en17007": {
+        "process": "RES.4",
+        "title": "Provide internal human resources",
+        "clause": "6.14"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.14 RES.4",
+          "status": "clause-verified"
+        },
+        {
+          "for": "resources and competence",
+          "cite": "ANSI/ASTM/ISO 55001-2024 cl. 8.1 operational planning and control including life cycle management; cl. 7.1 resources; cl. 7.2 competence",
+          "status": "clause-verified"
+        },
+        {
+          "for": "capacity analogue",
+          "cite": "ISO/IEC 20000-1:2018 cl. 8.4.2 demand management and cl. 8.4.3 capacity management - IT service management standard used as a structural analogue, not as domain authority",
+          "status": "clause-verified"
+        },
+        {
+          "for": "qualification gate",
+          "cite": "49 CFR 192.805 Qualification program - individuals performing covered tasks must be qualified, or directed and observed by a qualified person under 192.805(c); gas only. Requalification intervals are operator-set under 192.805(g)",
+          "status": "regulation"
+        },
+        {
+          "for": "electric qualified person",
+          "cite": "29 CFR 1910.269(a)(2) qualified employee; 1910.269(c) job briefing before each job - electric O&M",
+          "status": "regulation"
+        },
+        {
+          "for": "data_objects",
+          "cite": "IEC 61968-11:2013 CIM extensions for distribution, Work package",
+          "status": "clause-verified"
+        },
+        {
+          "for": "activities",
+          "cite": "No standard specifies how to convert a roster into committed hours",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "EN 17007:2017 cl. 6.14 RES.4"
+      }
+    },
+    {
+      "uid": 10061,
+      "id": "3.1.3",
+      "name": "Perform what-if and scenario simulation",
+      "group": {
+        "id": "3.1",
+        "name": "Forecast demand and capacity",
+        "uid": 10058
+      },
+      "intent": "Test how the demand and capacity views move under named changes, and record the result.",
+      "activities": [
+        "Name the scenario and the change being tested",
+        "Recompute demand, capacity or both under that change",
+        "Compare the result with the baseline view",
+        "Record the scenario and any recommendation it supports"
+      ],
+      "trigger": {
+        "kind": "manual",
+        "text": "A planner needs to test a named change before committing the plan.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Baseline demand view",
+          "party": "SCHD",
+          "data": "Work"
+        },
+        {
+          "what": "Baseline capacity view",
+          "party": "SCHD",
+          "data": "Crew"
+        },
+        {
+          "what": "Named scenario assumptions",
+          "party": "SCHD",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Scenario result against the baseline",
+          "party": "SCHD",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Recommendation to the capacity plan",
+          "party": "MAI",
+          "data": "Work"
+        }
+      ],
+      "systems": [
+        {
+          "component": "SCHD",
+          "role": "owning",
+          "service": "Scenario comparison"
+        },
+        {
+          "component": "MAI",
+          "role": "receiving",
+          "service": "Plan recommendation"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "SCHD",
+          "to": "MAI",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "request-reply"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Resource planner",
+          "raci": "R"
+        },
+        {
+          "role": "Maintenance manager",
+          "raci": "A"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "Crew",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "IEC 61968-6 SIM is Network operation simulation, not work-demand simulation. This process does not use SIM."
+        },
+        {
+          "kind": "operational",
+          "text": "EN 17007 has no what-if or scenario process. OPT is improvement of maintenance results, not plan simulation. The method is the operator's."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Backlog",
+          "definition": "SMRP 5.4.8/5.4.9. The scenario is useful if it shows whether backlog grows or clears.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Planning and Control indicators",
+          "definition": "EN 15341 cl. 12 O&S9-O&S22. European counterpart block for planning quality.",
+          "cite": "EN 15341:2019+A1:2022 Maintenance KPIs, cl. 12 O&S9-O&S22 Planning and Control"
+        }
+      ],
+      "variants": [
+        "Storm or major-event load",
+        "Loss of a crew or a contractor",
+        "Brought-forward compliance tranche",
+        "Overtime or additional contracted hours"
+      ],
+      "notation": {
+        "class": "SPEC",
+        "why": "A simulation run has a start and an end, but no standard path exists and two planners will not sequence the same tests."
+      },
+      "en17007": {
+        "process": "MAN.6",
+        "title": "Define, select, analyse and communicate the information",
+        "clause": "6.2"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.2 MAN.6 - closest named process; no simulation clause exists",
+          "status": "clause-verified"
+        },
+        {
+          "for": "systems",
+          "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 message payloads; Annex A verbs",
+          "status": "clause-verified"
+        },
+        {
+          "for": "measures",
+          "cite": "EN 15341:2019+A1:2022 Maintenance KPIs, cl. 12 O&S9-O&S22 Planning and Control",
+          "status": "clause-verified"
+        },
+        {
+          "for": "method",
+          "cite": "Scenario method, inputs and acceptance of a recommendation are operator judgment",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "judgment",
+        "primary": "EN 17007:2017 cl. 6.2 MAN.6"
+      }
+    },
+    {
+      "uid": 10062,
+      "id": "3.1.4",
+      "name": "Identify and escalate capacity shortfalls",
+      "group": {
+        "id": "3.1",
+        "name": "Forecast demand and capacity",
+        "uid": 10058
+      },
+      "intent": "Name where demand exceeds capacity, and put that shortfall in front of the person who can close it.",
+      "activities": [
+        "Compare demand and capacity by skill, district and period",
+        "Classify each gap as absorbable, overtime, contract or unworkable",
+        "Escalate unworkable and compliance-dated gaps",
+        "Record the decision and any capacity action taken"
+      ],
+      "trigger": {
+        "kind": "conditional",
+        "text": "Demand exceeds committed capacity in a skill, district or period.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Demand view by type and period",
+          "party": "SCHD",
+          "data": "Work"
+        },
+        {
+          "what": "Capacity view by skill and period",
+          "party": "SCHD",
+          "data": "Crew"
+        },
+        {
+          "what": "Compliance and commitment dates on the work",
+          "party": "MAI",
+          "data": "Work"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Named shortfall with classification",
+          "party": "SCHD",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Escalation to add, move or defer capacity",
+          "party": "HR",
+          "data": "Crew"
+        }
+      ],
+      "systems": [
+        {
+          "component": "SCHD",
+          "role": "owning",
+          "service": "Demand versus capacity comparison"
+        },
+        {
+          "component": "HR",
+          "role": "receiving",
+          "service": "Internal capacity action"
+        },
+        {
+          "component": "MAI",
+          "role": "receiving",
+          "service": "Contracted capacity action"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "SCHD",
+          "to": "HR",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        },
+        {
+          "from": "SCHD",
+          "to": "MAI",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Resource planner",
+          "raci": "R"
+        },
+        {
+          "role": "Maintenance manager",
+          "raci": "A"
+        },
+        {
+          "role": "Contractor coordinator",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "Crew",
+        "WorkActivityRecord",
+        "Priority"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "A shortfall on gas work dated by 49 CFR 192 (both the calendar-year count and the not-to-exceed month figure) is not absorbable by silence. 192.481(d) can shorten the next interval after a finding."
+        },
+        {
+          "kind": "operational",
+          "text": "Adding contracted hours is 3.2.3 and 16.0. Deferring work is a planning decision, not a silent schedule miss. EN 17007 has no approval process for the escalation itself."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Overdue Work",
+          "definition": "SMRP 5.4.11. Shortfalls that are not closed become overdue.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Backlog",
+          "definition": "SMRP 5.4.8/5.4.9. The gap this process names, in hours or jobs.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Overtime on the internal roster",
+        "Additional contracted capacity",
+        "Move work across district or period",
+        "Unworkable - escalate without a capacity action"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Comparison then a classified escalation is a repeating path from a conditional start.",
+        "artifact": "models/3.1-forecast-demand-and-capacity.bpmn"
+      },
+      "en17007": {
+        "process": "MAN.2",
+        "title": "Identify the internal or external activities (carried out by the staff of the user company or participating com",
+        "clause": "6.2"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.2 MAN.2",
+          "status": "clause-verified"
+        },
+        {
+          "for": "external provision",
+          "cite": "EN 17007:2017 cl. 6.15 SER.4 Provide external services",
+          "status": "clause-verified"
+        },
+        {
+          "for": "gas intervals",
+          "cite": "49 CFR Part 192, current eCFR",
+          "status": "regulation"
+        },
+        {
+          "for": "planning of changes",
+          "cite": "ANSI/ASTM/ISO 55001-2024 cl. 6.3 planning of changes; cl. 8.3 externally provided processes",
+          "status": "clause-verified"
+        },
+        {
+          "for": "interfaces",
+          "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 message payloads; Annex A verbs",
+          "status": "clause-verified"
+        },
+        {
+          "for": "classification",
+          "cite": "Absorbable / overtime / contract / unworkable is operator judgment",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "EN 17007:2017 cl. 6.2 MAN.2"
+      }
+    },
+    {
+      "uid": 10064,
+      "id": "3.2.1",
+      "name": "Build shift patterns and rosters",
+      "group": {
+        "id": "3.2",
+        "name": "Plan shifts and rosters",
+        "uid": 10063
+      },
+      "intent": "Turn required cover into named people on named shifts for a roster period.",
+      "activities": [
+        "Set the cover the period needs by skill, district and shift",
+        "Place people on shifts against qualifications and labour rules",
+        "Balance rest, weekends and known restrictions",
+        "Hold a draft roster for leave and on-call overlay"
+      ],
+      "trigger": {
+        "kind": "timer",
+        "text": "Roster period is due to be built.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Required cover by skill and shift",
+          "party": "SCHD",
+          "data": "Crew"
+        },
+        {
+          "what": "People, qualifications and restrictions",
+          "party": "HR",
+          "data": "Crew"
+        },
+        {
+          "what": "Labour-agreement constraints on the roster",
+          "party": "HR",
+          "data": "WorkTimeSchedule"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Draft roster for the period",
+          "party": "HR",
+          "data": "WorkTimeSchedule"
+        },
+        {
+          "what": "Unfilled shift or skill gap",
+          "party": "SCHD",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "HR",
+          "role": "owning",
+          "service": "Roster construction"
+        },
+        {
+          "component": "SCHD",
+          "role": "reference",
+          "service": "Cover the schedule needs"
+        },
+        {
+          "component": "MAI",
+          "role": "reference",
+          "service": "Work volume driving cover"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "SCHD",
+          "to": "HR",
+          "payload": "WorkRequest",
+          "verb": "get",
+          "pattern": "request-reply"
+        },
+        {
+          "from": "HR",
+          "to": "SCHD",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Workforce administrator",
+          "raci": "R"
+        },
+        {
+          "role": "Maintenance manager",
+          "raci": "A"
+        },
+        {
+          "role": "Resource planner",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Crew",
+        "WorkTimeSchedule"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "No ISO, IEC, CEN or ANSI standard has rostering as its subject. ISO 30409:2016 is not used. Shift design is operator and labour-agreement territory."
+        },
+        {
+          "kind": "financial",
+          "text": "Pay rules, premiums and overtime sit in 14.4.1. This process must not invent them; it consumes them as constraints."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Schedule Compliance",
+          "definition": "SMRP 5.4.3/5.4.4. A roster that cannot cover the work will miss once scheduled.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Wrench Time",
+          "definition": "SMRP 5.6.1. Shift design that loads travel or idle time into the day shows up here later.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Normal weekday craft roster",
+        "Shifted operations cover",
+        "Seasonal or programme peak roster"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "A roster period is an instance with a known build path.",
+        "artifact": "models/3.2-plan-shifts-and-rosters.bpmn"
+      },
+      "en17007": {
+        "process": "RES.4",
+        "title": "Provide internal human resources",
+        "clause": "6.14"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.14 RES.4",
+          "status": "clause-verified"
+        },
+        {
+          "for": "organisation",
+          "cite": "EN 17007:2017 cl. 6.2 MAN.3",
+          "status": "clause-verified"
+        },
+        {
+          "for": "resources",
+          "cite": "ANSI/ASTM/ISO 55001-2024 cl. 8.1 operational planning and control including life cycle management; cl. 7.1 resources; cl. 7.2 competence",
+          "status": "clause-verified"
+        },
+        {
+          "for": "interfaces",
+          "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 message payloads; Annex A verbs",
+          "status": "clause-verified"
+        },
+        {
+          "for": "roster method",
+          "cite": "Field service rostering is not a standards domain",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "EN 17007:2017 cl. 6.14 RES.4"
+      }
+    },
+    {
+      "uid": 10065,
+      "id": "3.2.2",
+      "name": "Plan leave, standby and on-call",
+      "group": {
+        "id": "3.2",
+        "name": "Plan shifts and rosters",
+        "uid": 10063
+      },
+      "intent": "Place leave, standby and on-call on the roster so cover remains real.",
+      "activities": [
+        "Collect leave and absence already approved",
+        "Set standby and on-call cover against the residual risk",
+        "Test that remaining cover still meets the skill need",
+        "Write leave, standby and on-call onto the roster"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "Leave, absence or an on-call period needs to be placed on the roster.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Draft roster",
+          "party": "HR",
+          "data": "WorkTimeSchedule"
+        },
+        {
+          "what": "Approved leave and absence",
+          "party": "HR",
+          "data": "Crew"
+        },
+        {
+          "what": "On-call and standby requirement",
+          "party": "SCHD",
+          "data": "Crew"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Roster with leave, standby and on-call",
+          "party": "HR",
+          "data": "WorkTimeSchedule"
+        },
+        {
+          "what": "Cover breach caused by leave or on-call",
+          "party": "SCHD",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "HR",
+          "role": "owning",
+          "service": "Leave and on-call on the roster"
+        },
+        {
+          "component": "SCHD",
+          "role": "reference",
+          "service": "Cover still required"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "HR",
+          "to": "SCHD",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Workforce administrator",
+          "raci": "R"
+        },
+        {
+          "role": "Maintenance manager",
+          "raci": "A"
+        },
+        {
+          "role": "Crew supervisor",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Crew",
+        "WorkTimeSchedule",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "Gas: 49 CFR 192.615 emergency plans require response capability. On-call is one way an operator meets it; the CFR does not prescribe a roster pattern. Electric emergency cover is state and operator."
+        },
+        {
+          "kind": "operational",
+          "text": "Standby and on-call hours are not interchangeable with shift hours in the capacity view. Counting them twice overstates 3.1.2."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Schedule Compliance",
+          "definition": "SMRP 5.4.3/5.4.4. Leave that was not subtracted is a later miss.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Reactive Work",
+          "definition": "SMRP 5.4.1. On-call exists to take reactive load without stripping the planned roster.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Planned leave",
+        "Unplanned absence",
+        "Duty standby",
+        "Call-out on-call"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Message start; overlay onto a roster is a known path.",
+        "artifact": "models/3.2-plan-shifts-and-rosters.bpmn"
+      },
+      "en17007": {
+        "process": "RES.4",
+        "title": "Provide internal human resources",
+        "clause": "6.14"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.14 RES.4",
+          "status": "clause-verified"
+        },
+        {
+          "for": "gas emergency capability",
+          "cite": "49 CFR 192.615 emergency plans",
+          "status": "regulation"
+        },
+        {
+          "for": "data_objects",
+          "cite": "IEC 61968-11:2013 CIM extensions for distribution, Work package",
+          "status": "clause-verified"
+        },
+        {
+          "for": "on-call pattern",
+          "cite": "No standard specifies standby or on-call design",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "EN 17007:2017 cl. 6.14 RES.4"
+      }
+    },
+    {
+      "uid": 10066,
+      "id": "3.2.3",
+      "name": "Balance internal and contracted capacity",
+      "group": {
+        "id": "3.2",
+        "name": "Plan shifts and rosters",
+        "uid": 10063
+      },
+      "intent": "Decide, for a period and skill, how much cover is internal and how much is contracted.",
+      "activities": [
+        "Take the residual gap after the internal roster is set",
+        "Test contracted capacity already qualified and available",
+        "Allocate the gap internal, contracted, or both",
+        "Commit the split to the roster and to contractor management"
+      ],
+      "trigger": {
+        "kind": "conditional",
+        "text": "Internal cover does not meet the required hours or skill mix.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Residual capacity gap",
+          "party": "SCHD",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Internal roster still open",
+          "party": "HR",
+          "data": "WorkTimeSchedule"
+        },
+        {
+          "what": "Qualified contracted crews available",
+          "party": "MAI",
+          "data": "Crew"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Internal versus contracted split",
+          "party": "SCHD",
+          "data": "Crew"
+        },
+        {
+          "what": "Contracted hours to be called",
+          "party": "MAI",
+          "data": "Crew"
+        }
+      ],
+      "systems": [
+        {
+          "component": "SCHD",
+          "role": "owning",
+          "service": "Split of cover"
+        },
+        {
+          "component": "HR",
+          "role": "reference",
+          "service": "Internal remainder"
+        },
+        {
+          "component": "MAI",
+          "role": "receiving",
+          "service": "Contracted call-off"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "SCHD",
+          "to": "MAI",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        },
+        {
+          "from": "SCHD",
+          "to": "HR",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Resource planner",
+          "raci": "R"
+        },
+        {
+          "role": "Maintenance manager",
+          "raci": "A"
+        },
+        {
+          "role": "Contractor coordinator",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Crew",
+        "WorkTimeSchedule",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "29 CFR 1910.269(a)(3) host and contract employer information transfer. 16.1 must have qualified the contractor; 3.2.3 must not put an unqualified contractor on the roster."
+        },
+        {
+          "kind": "operational",
+          "text": "EN 17007 SER is external provision; RES is internal. MAN.2 is the choice between them. Qualification, insurance and call-off live in 16.0; this process only commits the split."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Planned Work",
+          "definition": "SMRP 5.3.1. Contracted hours used to keep planned work planned, not to absorb chaos.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Schedule Compliance",
+          "definition": "SMRP 5.4.3/5.4.4. A split that cannot be staffed will miss.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Internal only",
+        "Contracted fill of a named gap",
+        "Programme or peak contracted cover"
+      ],
+      "notation": {
+        "class": "DMN",
+        "why": "The output is a value: internal, contracted, or a split - not a state change of the work.",
+        "artifact": "models/3.2.3-internal-versus-contracted.dmn"
+      },
+      "en17007": {
+        "process": "MAN.2",
+        "title": "Identify the internal or external activities (carried out by the staff of the user company or participating com",
+        "clause": "6.2"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.2 MAN.2",
+          "status": "clause-verified"
+        },
+        {
+          "for": "external services",
+          "cite": "EN 17007:2017 cl. 6.15 SER.4",
+          "status": "clause-verified"
+        },
+        {
+          "for": "externally provided processes",
+          "cite": "ANSI/ASTM/ISO 55001-2024 cl. 8.3",
+          "status": "clause-verified"
+        },
+        {
+          "for": "host/contractor transfer",
+          "cite": "29 CFR 1910.269(a)(3)",
+          "status": "regulation"
+        },
+        {
+          "for": "interfaces",
+          "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 message payloads; Annex A verbs",
+          "status": "clause-verified"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "EN 17007:2017 cl. 6.2 MAN.2"
+      }
+    },
+    {
+      "uid": 10067,
+      "id": "3.2.4",
+      "name": "Publish and communicate the roster",
+      "group": {
+        "id": "3.2",
+        "name": "Plan shifts and rosters",
+        "uid": 10063
+      },
+      "intent": "Issue the roster to the people and systems that will work and schedule against it.",
+      "activities": [
+        "Close the roster for the period",
+        "Issue it to the people named on it",
+        "Issue it to scheduling as committed capacity",
+        "Record acknowledgements and later amendments"
+      ],
+      "trigger": {
+        "kind": "manual",
+        "text": "The roster for the period is ready to issue.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Closed roster for the period",
+          "party": "HR",
+          "data": "WorkTimeSchedule"
+        },
+        {
+          "what": "People and contractors named on it",
+          "party": "HR",
+          "data": "Crew"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Published roster",
+          "party": "SCHD",
+          "data": "WorkTimeSchedule"
+        },
+        {
+          "what": "Issue record to the people named",
+          "party": "HR",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "HR",
+          "role": "owning",
+          "service": "Roster publication"
+        },
+        {
+          "component": "SCHD",
+          "role": "receiving",
+          "service": "Committed capacity"
+        },
+        {
+          "component": "MAI",
+          "role": "receiving",
+          "service": "Contracted names on the roster"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "HR",
+          "to": "SCHD",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        },
+        {
+          "from": "HR",
+          "to": "MAI",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Workforce administrator",
+          "raci": "R"
+        },
+        {
+          "role": "Maintenance manager",
+          "raci": "A"
+        },
+        {
+          "role": "Crew supervisor",
+          "raci": "I"
+        }
+      ],
+      "data_objects": [
+        "Crew",
+        "WorkTimeSchedule",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "29 CFR 1910.269(a)(3) information transfer to contract employers when they appear on the published roster. There is no cl. 4.2 component for document management; the roster record sits on HR."
+        },
+        {
+          "kind": "operational",
+          "text": "A roster that is not the one scheduling uses is not published. Amendments after issue re-enter 3.2.2 or 3.4.5; they do not silently rewrite history."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Schedule Compliance",
+          "definition": "SMRP 5.4.3/5.4.4. The published roster is the capacity the schedule will be judged against.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Planning and Control indicators",
+          "definition": "EN 15341 cl. 12 O&S9-O&S22, applied to whether the roster was issued in time to plan.",
+          "cite": "EN 15341:2019+A1:2022 Maintenance KPIs, cl. 12 O&S9-O&S22 Planning and Control"
+        }
+      ],
+      "variants": [
+        "Period issue",
+        "In-period amendment",
+        "Contractor names on the same issue"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Issue of a closed roster is a known path from a manual start.",
+        "artifact": "models/3.2-plan-shifts-and-rosters.bpmn"
+      },
+      "en17007": {
+        "process": "DOC.6",
+        "title": "Manage the way in which operational documentation is made available",
+        "clause": "6.9"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.9 DOC.6",
+          "status": "clause-verified"
+        },
+        {
+          "for": "internal resources",
+          "cite": "EN 17007:2017 cl. 6.14 RES.4",
+          "status": "clause-verified"
+        },
+        {
+          "for": "contractor information transfer",
+          "cite": "29 CFR 1910.269(a)(3)",
+          "status": "regulation"
+        },
+        {
+          "for": "interfaces",
+          "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 message payloads; Annex A verbs",
+          "status": "clause-verified"
+        },
+        {
+          "for": "issue method",
+          "cite": "How a roster is issued and acknowledged is operator judgment",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "EN 17007:2017 cl. 6.9 DOC.6"
+      }
+    },
+    {
+      "uid": 10069,
+      "id": "3.3.1",
+      "name": "Offer appointment windows",
+      "group": {
+        "id": "3.3",
+        "name": "Manage appointments",
+        "uid": 10068
+      },
+      "intent": "State the windows in which a customer-present job can be offered, given real capacity.",
+      "activities": [
+        "Identify the jobs that need the customer present",
+        "Read remaining capacity in each window",
+        "Apply any service-level window the operator has committed to",
+        "Return the windows that may be offered"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "A customer-present job needs a window before it can be booked.",
+        "cim": "ServiceOrder.create"
+      },
+      "inputs": [
+        {
+          "what": "Customer-present work needing a window",
+          "party": "CS",
+          "data": "Work"
+        },
+        {
+          "what": "Remaining capacity by window",
+          "party": "SCHD",
+          "data": "WorkTimeSchedule"
+        },
+        {
+          "what": "Service-level window the operator commits to",
+          "party": "CS",
+          "data": "Work"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Offerable windows",
+          "party": "CS",
+          "data": "WorkTimeSchedule"
+        },
+        {
+          "what": "No window available",
+          "party": "SCHD",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "CS",
+          "role": "originating",
+          "service": "Customer-present request"
+        },
+        {
+          "component": "SCHD",
+          "role": "owning",
+          "service": "Window availability"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "CS",
+          "to": "SCHD",
+          "payload": "ServiceOrder",
+          "verb": "get",
+          "pattern": "request-reply"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Customer service representative",
+          "raci": "R"
+        },
+        {
+          "role": "Scheduler",
+          "raci": "A"
+        },
+        {
+          "role": "Resource planner",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkTimeSchedule",
+        "WorkLocation"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "No standard specifies appointment-window length or how many to offer. ISO/IEC 20000-1 cl. 8.3.3 is an ITSM analogue for a service level, not a field-work rule. State customer-service codes are out of this pack and are not implied."
+        },
+        {
+          "kind": "operational",
+          "text": "A window offered against capacity that 3.3.2 has not reserved is a promise the schedule cannot keep."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Work Order Cycle Time",
+          "definition": "SMRP 5.4.7. From request to the window offered, then to close.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Schedule Compliance",
+          "definition": "SMRP 5.4.3/5.4.4. Offered windows that cannot be kept fail here.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Meter access or exchange",
+        "Service alteration at the premise",
+        "No offerable window - hold or escalate"
+      ],
+      "notation": {
+        "class": "DMN",
+        "why": "The output is a set of windows, a value, not a state change of the work.",
+        "artifact": "models/3.3.1-offer-appointment-windows.dmn"
+      },
+      "en17007": {
+        "process": "ACT.4",
+        "title": "Schedule the tasks",
+        "clause": "6.5.5"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.5.5 ACT.4 - closest; EN 17007 has no appointment process",
+          "status": "clause-verified"
+        },
+        {
+          "for": "service request analogue",
+          "cite": "ISO/IEC 20000-1:2018 cl. 8.6.2 service request management and cl. 8.3.3 service level management - IT service management standard used as a structural analogue, not as domain authority",
+          "status": "clause-verified"
+        },
+        {
+          "for": "payload",
+          "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 message payloads; Annex A verbs",
+          "status": "clause-verified"
+        },
+        {
+          "for": "APQC activity",
+          "cite": "APQC PCF Utilities v7.2.1 14.4.2.2 Make appointment (pcf_id 19331) sits under meter work; this model lifts the activity to the work lifecycle",
+          "status": "consensus"
+        },
+        {
+          "for": "window rules",
+          "cite": "Appointment-window design is not standardised",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "judgment",
+        "primary": "IEC 61968-6:2015 cl. 5 ServiceOrder"
+      }
+    },
+    {
+      "uid": 10070,
+      "id": "3.3.2",
+      "name": "Reserve capacity against appointment",
+      "group": {
+        "id": "3.3",
+        "name": "Manage appointments",
+        "uid": 10068
+      },
+      "intent": "Hold the hours and skill of a chosen window so nothing else is booked over them.",
+      "activities": [
+        "Take the chosen window and the work it will cover",
+        "Test that the capacity is still free",
+        "Reserve the hours and skill against that work",
+        "Reject the reservation if the window has since gone"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "A window has been chosen and must be held.",
+        "cim": "ServiceOrder.change"
+      },
+      "inputs": [
+        {
+          "what": "Chosen window and the work",
+          "party": "CS",
+          "data": "Work"
+        },
+        {
+          "what": "Live capacity in that window",
+          "party": "SCHD",
+          "data": "WorkTimeSchedule"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Reservation against the work",
+          "party": "SCHD",
+          "data": "WorkTimeSchedule"
+        },
+        {
+          "what": "Rejected reservation",
+          "party": "CS",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "SCHD",
+          "role": "owning",
+          "service": "Capacity reservation"
+        },
+        {
+          "component": "CS",
+          "role": "originating",
+          "service": "Chosen window"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "CS",
+          "to": "SCHD",
+          "payload": "ServiceOrder",
+          "verb": "change",
+          "pattern": "request-reply"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Scheduler",
+          "raci": "R"
+        },
+        {
+          "role": "Maintenance manager",
+          "raci": "A"
+        },
+        {
+          "role": "Customer service representative",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkTimeSchedule",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "IEC 61968-6 standardises the ServiceOrder exchange, not the reservation rule. Double-booking is an operator failure mode, not a standards one."
+        },
+        {
+          "kind": "operational",
+          "text": "A reservation is not a dispatch. 4.1 assigns and dispatches. Releasing the reservation without a cancel at 3.3.3 strands the customer."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Schedule Compliance",
+          "definition": "SMRP 5.4.3/5.4.4. A held window that is given away fails the appointment.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Work Order Cycle Time",
+          "definition": "SMRP 5.4.7. Time spent in reservation before confirm.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Hold succeeds",
+        "Hold rejected - window already taken"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Request-reply reservation is a repeating path.",
+        "artifact": "models/3.3-manage-appointments.bpmn"
+      },
+      "en17007": {
+        "process": "ACT.4",
+        "title": "Schedule the tasks",
+        "clause": "6.5.5"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.5.5 ACT.4",
+          "status": "clause-verified"
+        },
+        {
+          "for": "payload",
+          "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 message payloads; Annex A verbs",
+          "status": "clause-verified"
+        },
+        {
+          "for": "data_objects",
+          "cite": "IEC 61968-11:2013 CIM extensions for distribution, Work package",
+          "status": "clause-verified"
+        },
+        {
+          "for": "reservation rule",
+          "cite": "No standard specifies appointment reservation behaviour",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "EN 17007:2017 cl. 6.5.5 ACT.4"
+      }
+    },
+    {
+      "uid": 10071,
+      "id": "3.3.3",
+      "name": "Confirm, amend and cancel appointments",
+      "group": {
+        "id": "3.3",
+        "name": "Manage appointments",
+        "uid": 10068
+      },
+      "intent": "Make the appointment binding, change it, or release it.",
+      "activities": [
+        "Confirm the reserved window to the customer and to the schedule",
+        "Amend to a new window only through 3.3.1 and 3.3.2 again",
+        "Cancel and release the reserved capacity",
+        "Record the confirm, amend or cancel on the work"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "The reserved window is to be confirmed, moved or released.",
+        "cim": "ServiceOrder.change"
+      },
+      "inputs": [
+        {
+          "what": "Reservation to be confirmed, moved or released",
+          "party": "SCHD",
+          "data": "WorkTimeSchedule"
+        },
+        {
+          "what": "Customer instruction",
+          "party": "CS",
+          "data": "Work"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Confirmed, amended or cancelled appointment",
+          "party": "CS",
+          "data": "Work"
+        },
+        {
+          "what": "Capacity released or moved",
+          "party": "SCHD",
+          "data": "WorkTimeSchedule"
+        }
+      ],
+      "systems": [
+        {
+          "component": "CS",
+          "role": "owning",
+          "service": "Customer appointment record"
+        },
+        {
+          "component": "SCHD",
+          "role": "owning",
+          "service": "Capacity against the appointment"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "CS",
+          "to": "SCHD",
+          "payload": "ServiceOrder",
+          "verb": "change",
+          "pattern": "request-reply"
+        },
+        {
+          "from": "CS",
+          "to": "SCHD",
+          "payload": "ServiceOrder",
+          "verb": "cancel",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Customer service representative",
+          "raci": "R"
+        },
+        {
+          "role": "Scheduler",
+          "raci": "A"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkTimeSchedule",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "IEC 61968-6 Annex A supplies change and cancel. It does not say when an amendment is allowed or how late a cancel may arrive."
+        },
+        {
+          "kind": "operational",
+          "text": "An amendment that skips 3.3.2 will overbook. A cancel that does not release capacity hides hours the next customer could have used."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Work Order Cycle Time",
+          "definition": "SMRP 5.4.7. Confirm to close, and time lost in amendment.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Schedule Compliance",
+          "definition": "SMRP 5.4.3/5.4.4. Confirmed appointments are commitments the schedule is judged on.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Confirm",
+        "Customer-initiated amend",
+        "Operator-initiated amend",
+        "Cancel"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Confirm, change and cancel are a known message path.",
+        "artifact": "models/3.3-manage-appointments.bpmn"
+      },
+      "en17007": {
+        "process": "ACT.4",
+        "title": "Schedule the tasks",
+        "clause": "6.5.5"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.5.5 ACT.4",
+          "status": "clause-verified"
+        },
+        {
+          "for": "verbs",
+          "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 message payloads; Annex A verbs",
+          "status": "clause-verified"
+        },
+        {
+          "for": "service request analogue",
+          "cite": "ISO/IEC 20000-1:2018 cl. 8.6.2 service request management and cl. 8.3.3 service level management - IT service management standard used as a structural analogue, not as domain authority",
+          "status": "clause-verified"
+        },
+        {
+          "for": "amendment policy",
+          "cite": "When an appointment may be moved is operator judgment",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "IEC 61968-6:2015 Annex A verbs"
+      }
+    },
+    {
+      "uid": 10072,
+      "id": "3.3.4",
+      "name": "Manage appointment failure and rebooking",
+      "group": {
+        "id": "3.3",
+        "name": "Manage appointments",
+        "uid": 10068
+      },
+      "intent": "When an appointment is missed, release or rebook it and record why.",
+      "activities": [
+        "Record the failure and who missed - customer or crew",
+        "Release or hold the remaining capacity",
+        "Offer a new window through 3.3.1 where the work still stands",
+        "Close or rebook and keep the failure visible to planning"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "The confirmed window passed without a completed visit.",
+        "cim": "ServiceOrder.change"
+      },
+      "inputs": [
+        {
+          "what": "Confirmed appointment that failed",
+          "party": "SCHD",
+          "data": "WorkTimeSchedule"
+        },
+        {
+          "what": "Field outcome or customer no-access",
+          "party": "FRD",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Failure record on the work",
+          "party": "MAI",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Rebooked window or released capacity",
+          "party": "SCHD",
+          "data": "WorkTimeSchedule"
+        }
+      ],
+      "systems": [
+        {
+          "component": "FRD",
+          "role": "originating",
+          "service": "Visit outcome"
+        },
+        {
+          "component": "SCHD",
+          "role": "owning",
+          "service": "Capacity after failure"
+        },
+        {
+          "component": "CS",
+          "role": "receiving",
+          "service": "Rebooking with the customer"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "FRD",
+          "to": "SCHD",
+          "payload": "ServiceOrder",
+          "verb": "change",
+          "pattern": "event"
+        },
+        {
+          "from": "CS",
+          "to": "SCHD",
+          "payload": "ServiceOrder",
+          "verb": "change",
+          "pattern": "request-reply"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Scheduler",
+          "raci": "R"
+        },
+        {
+          "role": "Maintenance manager",
+          "raci": "A"
+        },
+        {
+          "role": "Customer service representative",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkTimeSchedule",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "No standard defines appointment failure or a rebooking duty. Access to meters and plant is operator and tariff territory, not IEC 61968-6."
+        },
+        {
+          "kind": "operational",
+          "text": "Crew-caused failure is a schedule miss (SMRP 5.4.3/5.4.4). Customer-caused failure is not. Mixing them hides both problems."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Schedule Compliance",
+          "definition": "SMRP 5.4.3/5.4.4. Count crew-caused misses here; do not dilute with no-access.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Work Order Cycle Time",
+          "definition": "SMRP 5.4.7. Failure to successful rebooking.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Customer no-access",
+        "Crew late or unable",
+        "Hazard or access condition found on arrival"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Failure then release or rebook is a repeating path from a message start.",
+        "artifact": "models/3.3-manage-appointments.bpmn"
+      },
+      "en17007": {
+        "process": "ACT.4",
+        "title": "Schedule the tasks",
+        "clause": "6.5.5"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.5.5 ACT.4",
+          "status": "clause-verified"
+        },
+        {
+          "for": "field outcome",
+          "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 message payloads; Annex A verbs",
+          "status": "clause-verified"
+        },
+        {
+          "for": "measures",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management",
+          "status": "consensus"
+        },
+        {
+          "for": "failure classes",
+          "cite": "No standard classifies appointment failure",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "judgment",
+        "primary": "EN 17007:2017 cl. 6.5.5 ACT.4"
+      }
+    },
+    {
+      "uid": 10074,
+      "id": "3.4.1",
+      "name": "Schedule against skill, location and priority",
+      "group": {
+        "id": "3.4",
+        "name": "Optimise the schedule",
+        "uid": 10073
+      },
+      "intent": "Place ready work on a qualified resource, at a place and time that the constraints allow.",
+      "activities": [
+        "Take work released as ready to schedule",
+        "Match skill, qualification, location and priority",
+        "Place each item on a crew and a WorkTimeSchedule",
+        "Leave unmatched work in the ready bank with the reason"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "Work has been released as ready to schedule.",
+        "cim": "MaintenanceOrder.change"
+      },
+      "inputs": [
+        {
+          "what": "Work released as ready to schedule",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Crews, skills and remaining hours",
+          "party": "SCHD",
+          "data": "Crew"
+        },
+        {
+          "what": "Priority and due date on the work",
+          "party": "MAI",
+          "data": "Priority"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Work placed on a crew and time",
+          "party": "SCHD",
+          "data": "WorkTimeSchedule"
+        },
+        {
+          "what": "Unmatched ready work and the reason",
+          "party": "MAI",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "MAI",
+          "role": "originating",
+          "service": "Ready work"
+        },
+        {
+          "component": "SCHD",
+          "role": "owning",
+          "service": "Placement on crew and time"
+        },
+        {
+          "component": "HR",
+          "role": "reference",
+          "service": "Qualification position from 14.2"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "MAI",
+          "to": "SCHD",
+          "payload": "MaintenanceOrder",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Scheduler",
+          "raci": "R"
+        },
+        {
+          "role": "Maintenance manager",
+          "raci": "A"
+        },
+        {
+          "role": "Resource planner",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkTask",
+        "Crew",
+        "WorkTimeSchedule",
+        "Priority",
+        "WorkLocation"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "Gas covered tasks: 49 CFR 192.805. Electric: 29 CFR 1910.269(a)(2). 14.2.4 restricts assignment on a lapsed qualification; 3.4.1 must consume that restriction. This is not dispatch - 4.1.1 assigns and 4.1.2 dispatches."
+        },
+        {
+          "kind": "operational",
+          "text": "FSM is not a standards domain. IEC 61968-6 SCHD names the component and the exchange, not the matching method. 2.5.2 stated the requirement; 3.4.1 places people against it."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Schedule Compliance",
+          "definition": "SMRP 5.4.3/5.4.4. The placement this process makes is what compliance is scored on.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Planned Work",
+          "definition": "SMRP 5.3.1. Ready planned work that is not placed becomes unplanned by neglect.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Internal crew",
+        "Contracted crew already on the roster",
+        "Unmatched - held in the ready bank"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Ready work in, placed or held out, is a repeating path.",
+        "artifact": "models/3.4-optimise-the-schedule.bpmn"
+      },
+      "en17007": {
+        "process": "ACT.4",
+        "title": "Schedule the tasks",
+        "clause": "6.5.5"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.5.5 ACT.4",
+          "status": "clause-verified"
+        },
+        {
+          "for": "sequence",
+          "cite": "EN 17007:2017 cl. 6.5.4 ACT.3 Set in order the tasks",
+          "status": "clause-verified"
+        },
+        {
+          "for": "SCHD component",
+          "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 message payloads; Annex A verbs",
+          "status": "clause-verified"
+        },
+        {
+          "for": "qualification gate",
+          "cite": "49 CFR 192.805 Qualification program - individuals performing covered tasks must be qualified, or directed and observed by a qualified person under 192.805(c); gas only. Requalification intervals are operator-set under 192.805(g)",
+          "status": "regulation"
+        },
+        {
+          "for": "electric qualified person",
+          "cite": "29 CFR 1910.269(a)(2) qualified employee; 1910.269(c) job briefing before each job - electric O&M",
+          "status": "regulation"
+        },
+        {
+          "for": "structure",
+          "cite": "APQC PCF Utilities v7.2.1 10.3.2.1 Schedule maintenance work (pcf_id 19246) and 10.2.4 Schedule and perform construction work (19229) - structural precedent only",
+          "status": "consensus"
+        },
+        {
+          "for": "matching method",
+          "cite": "How skill, location and priority are combined is not standardised",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "EN 17007:2017 cl. 6.5.5 ACT.4"
+      }
+    },
+    {
+      "uid": 10075,
+      "id": "3.4.2",
+      "name": "Optimise travel and routing",
+      "group": {
+        "id": "3.4",
+        "name": "Optimise the schedule",
+        "uid": 10073
+      },
+      "intent": "Order the day's placed work so travel is accounted for, without breaking the constraints 3.4.3 applies.",
+      "activities": [
+        "Take the work already placed on each crew",
+        "Order stops against location and time windows",
+        "Put travel between stops onto the WorkTimeSchedule",
+        "Reject an order that breaks a window, qualification or clearance"
+      ],
+      "trigger": {
+        "kind": "conditional",
+        "text": "Placed work on a crew can be ordered for travel.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Work placed on each crew",
+          "party": "SCHD",
+          "data": "WorkTimeSchedule"
+        },
+        {
+          "what": "Work locations",
+          "party": "GINV",
+          "data": "WorkLocation"
+        },
+        {
+          "what": "Windows and constraints still in force",
+          "party": "SCHD",
+          "data": "Work"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Ordered route with travel on the day",
+          "party": "SCHD",
+          "data": "WorkTimeSchedule"
+        },
+        {
+          "what": "Order rejected against a constraint",
+          "party": "SCHD",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "SCHD",
+          "role": "owning",
+          "service": "Route order"
+        },
+        {
+          "component": "GINV",
+          "role": "reference",
+          "service": "Location of each stop"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "SCHD",
+          "to": "GINV",
+          "payload": "WorkRequest",
+          "verb": "get",
+          "pattern": "request-reply"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Scheduler",
+          "raci": "R"
+        },
+        {
+          "role": "Maintenance manager",
+          "raci": "A"
+        }
+      ],
+      "data_objects": [
+        "WorkTimeSchedule",
+        "WorkLocation",
+        "Crew"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "No standard specifies a routing algorithm, a travel-time model or a stop-order rule. The method is vendor and operator judgment. Constraints from 3.4.3 outrank a shorter route."
+        },
+        {
+          "kind": "operational",
+          "text": "Wrench time (SMRP 5.6.1) is not in EN 15341, EN 13306 or EN 17007. Travel put on the day here is what that measure later subtracts."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Wrench Time",
+          "definition": "SMRP 5.6.1. Travel this process puts on the day is the principal subtraction.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Schedule Compliance",
+          "definition": "SMRP 5.4.3/5.4.4. A shorter route that misses a window is not a better route.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Single-crew day route",
+        "Appointment-window locked stops",
+        "No safe order - return to 3.4.1"
+      ],
+      "notation": {
+        "class": "SPEC",
+        "why": "A routing run has a start and an end, but no standard path exists; the algorithm is vendor-defined."
+      },
+      "en17007": {
+        "process": "ACT.3",
+        "title": "Set in order the tasks",
+        "clause": "6.5.4"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.5.4 ACT.3",
+          "status": "clause-verified"
+        },
+        {
+          "for": "locations",
+          "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 message payloads; Annex A verbs",
+          "status": "clause-verified"
+        },
+        {
+          "for": "wrench time",
+          "cite": "SMRP Best Practices 5.6.1 Wrench Time",
+          "status": "consensus"
+        },
+        {
+          "for": "routing method",
+          "cite": "Travel optimisation is not a standards domain",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "judgment",
+        "primary": "EN 17007:2017 cl. 6.5.4 ACT.3"
+      }
+    },
+    {
+      "uid": 10076,
+      "id": "3.4.3",
+      "name": "Apply service-level and compliance constraints",
+      "group": {
+        "id": "3.4",
+        "name": "Optimise the schedule",
+        "uid": 10073
+      },
+      "intent": "Attach the dates, qualifications, windows and clearances that the schedule is not allowed to break.",
+      "activities": [
+        "Attach statutory and programme due dates to the work",
+        "Attach qualification and competent-person constraints",
+        "Attach customer windows and approved outage windows",
+        "Return the constraint set the placer and the router must honour"
+      ],
+      "trigger": {
+        "kind": "conditional",
+        "text": "Work is ready to place and its constraints have not been bound.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Ready work with type and location",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Qualification restriction from 14.2.4",
+          "party": "HR",
+          "data": "Crew"
+        },
+        {
+          "what": "Approved outage window from 18.2.2 / 18.2.3",
+          "party": "NO",
+          "data": "WorkTimeSchedule"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Constraint set bound to the work",
+          "party": "SCHD",
+          "data": "Work"
+        },
+        {
+          "what": "Work that cannot be scheduled yet, with the missing constraint",
+          "party": "MAI",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "SCHD",
+          "role": "owning",
+          "service": "Constraint binding"
+        },
+        {
+          "component": "NO",
+          "role": "reference",
+          "service": "Approved outage window"
+        },
+        {
+          "component": "HR",
+          "role": "reference",
+          "service": "Qualification restriction"
+        },
+        {
+          "component": "MAI",
+          "role": "reference",
+          "service": "Due date and work type"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "NO",
+          "to": "SCHD",
+          "payload": "WorkRequest",
+          "verb": "get",
+          "pattern": "request-reply"
+        },
+        {
+          "from": "HR",
+          "to": "SCHD",
+          "payload": "WorkRequest",
+          "verb": "get",
+          "pattern": "request-reply"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Scheduler",
+          "raci": "R"
+        },
+        {
+          "role": "Maintenance manager",
+          "raci": "A"
+        },
+        {
+          "role": "Network operator",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "Priority",
+        "WorkTimeSchedule",
+        "Crew"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "49 CFR 192 intervals bind twice: calendar-year count and not-to-exceed months. 192.481(d) can shorten the next interval after a finding. Electric has no federal interval - name the state rule."
+        },
+        {
+          "kind": "regulatory",
+          "text": "A clearance is not a permit. 18.4.4 issues it under 29 CFR 1910.269(m). This process consumes the outage window from 18.2.2/18.2.3, not the clearance itself."
+        },
+        {
+          "kind": "regulatory",
+          "text": "Electric O&M: 1910.269(a)(2) qualified person and (c) job briefing. Excavation: 1926 Subpart P competent person. 1910.147 LOTO applies to gas; electric T&D uses 1910.269(d)/(m)."
+        }
+      ],
+      "measures": [
+        {
+          "name": "PM Compliance",
+          "definition": "SMRP 5.4.14. Compliance-dated work that this process did not bind will miss.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Overdue Work",
+          "definition": "SMRP 5.4.11. The date this process attaches is the one overdue is scored against.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Gas Part 192 cyclic work",
+        "Electric inspection under a named state rule",
+        "Customer appointment window",
+        "Work that needs an approved outage window or later a clearance"
+      ],
+      "notation": {
+        "class": "DMN",
+        "why": "The output is a constraint set - dates, windows, eligible resources - a value, not a placement.",
+        "artifact": "models/3.4.3-apply-constraints.dmn"
+      },
+      "en17007": {
+        "process": "ACT.1",
+        "title": "Rank the events",
+        "clause": "6.5.2"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.5.2 ACT.1",
+          "status": "clause-verified"
+        },
+        {
+          "for": "gas intervals",
+          "cite": "49 CFR Part 192, current eCFR",
+          "status": "regulation"
+        },
+        {
+          "for": "clearance and deenergizing",
+          "cite": "29 CFR 1910.269(m) Deenergizing lines and equipment for employee protection; clearance produced by 18.4.4 against a switching plan approved at 18.2.2",
+          "status": "regulation"
+        },
+        {
+          "for": "job briefing and qualified person",
+          "cite": "29 CFR 1910.269(a)(2) qualified employee; 1910.269(c) job briefing before each job - electric O&M",
+          "status": "regulation"
+        },
+        {
+          "for": "excavation competent person",
+          "cite": "29 CFR 1926 Subpart P, secs. 1926.650-652",
+          "status": "regulation"
+        },
+        {
+          "for": "LOTO split",
+          "cite": "29 CFR 1910.147(a)(1)(ii)(C) electric-utility exclusion; 1910.269(d) and (m)",
+          "status": "regulation"
+        },
+        {
+          "for": "service level analogue",
+          "cite": "ISO/IEC 20000-1:2018 cl. 8.6.2 service request management and cl. 8.3.3 service level management - IT service management standard used as a structural analogue, not as domain authority",
+          "status": "clause-verified"
+        }
+      ],
+      "provenance": {
+        "basis": "regulation",
+        "primary": "49 CFR Part 192; 29 CFR 1910.269"
+      }
+    },
+    {
+      "uid": 10077,
+      "id": "3.4.4",
+      "name": "Re-optimise for disruption and emergent work",
+      "group": {
+        "id": "3.4",
+        "name": "Optimise the schedule",
+        "uid": 10073
+      },
+      "intent": "Rebuild the affected part of the schedule when emergent work or a disruption invalidates it.",
+      "activities": [
+        "Identify the work and the crews the disruption has hit",
+        "Protect compliance-dated and in-progress work",
+        "Place the emergent item and re-place what it displaced",
+        "Publish the change to dispatch; do not dispatch from here"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "Emergent work or a disruption has invalidated part of the published schedule.",
+        "cim": "MaintenanceOrder.change"
+      },
+      "inputs": [
+        {
+          "what": "Published schedule still in force",
+          "party": "SCHD",
+          "data": "WorkTimeSchedule"
+        },
+        {
+          "what": "Emergent work or disruption event",
+          "party": "TCM",
+          "data": "Work"
+        },
+        {
+          "what": "Constraint set still binding",
+          "party": "SCHD",
+          "data": "Work"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Revised schedule for the affected crews",
+          "party": "SCHD",
+          "data": "WorkTimeSchedule"
+        },
+        {
+          "what": "Displaced work returned to the ready bank",
+          "party": "MAI",
+          "data": "Work"
+        }
+      ],
+      "systems": [
+        {
+          "component": "TCM",
+          "role": "originating",
+          "service": "Trouble and emergent demand"
+        },
+        {
+          "component": "SCHD",
+          "role": "owning",
+          "service": "Re-placement"
+        },
+        {
+          "component": "MAI",
+          "role": "receiving",
+          "service": "Displaced ready work"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "TCM",
+          "to": "SCHD",
+          "payload": "MaintenanceOrder",
+          "verb": "change",
+          "pattern": "event"
+        },
+        {
+          "from": "SCHD",
+          "to": "MAI",
+          "payload": "MaintenanceOrder",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Scheduler",
+          "raci": "R"
+        },
+        {
+          "role": "Maintenance manager",
+          "raci": "A"
+        },
+        {
+          "role": "Dispatcher",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkTimeSchedule",
+        "Crew",
+        "Priority"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "Gas Grade 1 / hazardous leak: 49 CFR 192.703(c) requires prompt repair. Leak grades themselves are ANSI/GPTC Z380.1 G-192-11, consensus, not incorporated by reference into Part 192. That work outranks planned work on the same crew."
+        },
+        {
+          "kind": "operational",
+          "text": "Same-day rebuild is still scheduling, not dispatch. 4.1.5 reassigns in execution. 9.0 owns the emergency itself. IEEE 1366 measures the electric reliability result; it does not specify this process."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Unplanned Work",
+          "definition": "SMRP 5.3.2. Emergent work counted here.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Schedule Compliance",
+          "definition": "SMRP 5.4.3/5.4.4. Score remaining planned work after the rebuild, not as if the day were untouched.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Single-job emergent",
+        "Crew loss or vehicle loss",
+        "Major-event load - hand to 9.0 when it is no longer a day's rebuild"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Message start; protect, place, publish is a repeating path.",
+        "artifact": "models/3.4-optimise-the-schedule.bpmn"
+      },
+      "en17007": {
+        "process": "ACT.4",
+        "title": "Schedule the tasks",
+        "clause": "6.5.5"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.5.5 ACT.4",
+          "status": "clause-verified"
+        },
+        {
+          "for": "hazardous leaks",
+          "cite": "49 CFR 192.703(c); ANSI/GPTC Z380.1 G-192-11 (consensus, not IBR into Part 192)",
+          "status": "consensus"
+        },
+        {
+          "for": "trouble payload",
+          "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 message payloads; Annex A verbs",
+          "status": "clause-verified"
+        },
+        {
+          "for": "reliability measure",
+          "cite": "IEEE 1366-2022 - result measure, not a process standard",
+          "status": "clause-verified"
+        },
+        {
+          "for": "rebuild method",
+          "cite": "No standard specifies same-day re-optimisation",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "EN 17007:2017 cl. 6.5.5 ACT.4"
+      }
+    },
+    {
+      "uid": 10078,
+      "id": "3.4.5",
+      "name": "Manage schedule exceptions and overrides",
+      "group": {
+        "id": "3.4",
+        "name": "Optimise the schedule",
+        "uid": 10073
+      },
+      "intent": "Handle a placement that a person, not the matching rule, must make or break.",
+      "activities": [
+        "Record the exception and the reason",
+        "Test it against hard constraints 3.4.3 already bound",
+        "Accept, reject or send back to 3.4.1",
+        "Keep the override visible so measures still work"
+      ],
+      "trigger": {
+        "kind": "manual",
+        "text": "A scheduler or manager needs to place or break an item the matching rule will not.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Proposed override and reason",
+          "party": "SCHD",
+          "data": "Work"
+        },
+        {
+          "what": "Bound constraints on that work",
+          "party": "SCHD",
+          "data": "Work"
+        },
+        {
+          "what": "Current placement if any",
+          "party": "SCHD",
+          "data": "WorkTimeSchedule"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Accepted override on the schedule",
+          "party": "SCHD",
+          "data": "WorkTimeSchedule"
+        },
+        {
+          "what": "Rejected override with the hard constraint named",
+          "party": "MAI",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "SCHD",
+          "role": "owning",
+          "service": "Override record"
+        },
+        {
+          "component": "MAI",
+          "role": "receiving",
+          "service": "Rejected override"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "SCHD",
+          "to": "MAI",
+          "payload": "MaintenanceOrder",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Scheduler",
+          "raci": "R"
+        },
+        {
+          "role": "Maintenance manager",
+          "raci": "A"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkTimeSchedule",
+        "WorkActivityRecord",
+        "Priority"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "An override cannot waive 49 CFR 192.805, 29 CFR 1910.269(a)(2), a 1926 Subpart P competent person, or a missing clearance under 1910.269(m). Those are hard. Customer preference and convenience are not."
+        },
+        {
+          "kind": "operational",
+          "text": "EN 17007 has no approval or authorisation process for an override. Two competent schedulers will not sequence exceptions the same way; that is why this is a case, not a flow."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Schedule Compliance",
+          "definition": "SMRP 5.4.3/5.4.4. Overrides counted as compliant without a record make the measure false.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Reactive Work",
+          "definition": "SMRP 5.4.1. Convenience overrides that bump planned work move the mix.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Customer commitment honour",
+        "Manager-directed pull-forward",
+        "Reject - hard constraint",
+        "Return to matching"
+      ],
+      "notation": {
+        "class": "CMMN",
+        "why": "Two competent schedulers will legitimately sequence overrides differently. CMMN is justified; the 2016 spec is unchanged and Camunda 8 dropped it, so a runtime means Flowable.",
+        "artifact": "models/3.4.5-schedule-exceptions.cmmn"
+      },
+      "en17007": {
+        "process": "MAN.5",
+        "title": "Oversee the actions",
+        "clause": "6.2"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.2 MAN.5",
+          "status": "clause-verified"
+        },
+        {
+          "for": "hard constraints",
+          "cite": "49 CFR 192.805 Qualification program - individuals performing covered tasks must be qualified, or directed and observed by a qualified person under 192.805(c); gas only. Requalification intervals are operator-set under 192.805(g); 29 CFR 1910.269(a)(2) qualified employee; 1910.269(c) job briefing before each job - electric O&M",
+          "status": "regulation"
+        },
+        {
+          "for": "no EN 17007 approval process",
+          "cite": "EN 17007:2017 clause 6 - approval occurs only at SER.4 and DOC.5",
+          "status": "clause-verified"
+        },
+        {
+          "for": "measures",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management",
+          "status": "consensus"
+        },
+        {
+          "for": "exception cases",
+          "cite": "Which overrides are allowed is operator judgment",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "judgment",
+        "primary": "EN 17007:2017 cl. 6.2 MAN.5"
+      }
+    },
+    {
+      "uid": 10080,
+      "id": "3.5.1",
+      "name": "Define crews and crew composition",
+      "group": {
+        "id": "3.5",
+        "name": "Manage crews and resources",
+        "uid": 10079
+      },
+      "intent": "Name the standing crews and the mix of roles, skills and size each one carries.",
+      "activities": [
+        "Name each standing crew and its district or function",
+        "State the role mix and size",
+        "State the qualifications the mix must keep current",
+        "Publish the crew as a resource the roster and the schedule may use"
+      ],
+      "trigger": {
+        "kind": "none",
+        "text": "Standing definition; revised when the organisation of work changes.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Organisation and job profiles",
+          "party": "HR",
+          "data": "Crew"
+        },
+        {
+          "what": "Qualification requirements by work type",
+          "party": "HR",
+          "data": "Crew"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Standing crew definition",
+          "party": "SCHD",
+          "data": "Crew"
+        },
+        {
+          "what": "Composition change record",
+          "party": "HR",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "HR",
+          "role": "owning",
+          "service": "Crew master"
+        },
+        {
+          "component": "SCHD",
+          "role": "receiving",
+          "service": "Crew as a schedulable resource"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "HR",
+          "to": "SCHD",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Maintenance manager",
+          "raci": "A"
+        },
+        {
+          "role": "Resource planner",
+          "raci": "R"
+        },
+        {
+          "role": "Workforce administrator",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Crew"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "2.5.2 states what a JOB needs. 3.5.1 states the standing CREW. Do not collapse them. IEC 61968-6 names Crew Composition as a data flow; it does not specify how a crew is designed."
+        },
+        {
+          "kind": "regulatory",
+          "text": "Electric: a crew sent to 1910.269 work must include a qualified employee. Gas: covered-task mix under 192.805, including 192.805(c) direction and observation. Size and mix beyond that are operator judgment."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Wrench Time",
+          "definition": "SMRP 5.6.1. A crew that is the wrong mix spends the day waiting on a skill it does not have.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Schedule Compliance",
+          "definition": "SMRP 5.4.3/5.4.4. Work that needs a mix this process never defined cannot be placed.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Single-person customer job",
+        "Two-person craft crew",
+        "Specialist or programme crew"
+      ],
+      "notation": {
+        "class": "SPEC",
+        "why": "Standing capability with no instance boundary; revised when the organisation of work changes."
+      },
+      "en17007": {
+        "process": "MAN.3",
+        "title": "Determine the organization, job profiles and responsibilities",
+        "clause": "6.2"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.2 MAN.3",
+          "status": "clause-verified"
+        },
+        {
+          "for": "crew object and composition flow",
+          "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 message payloads; Annex A verbs; IEC 61968-11:2013 CIM extensions for distribution, Work package",
+          "status": "clause-verified"
+        },
+        {
+          "for": "qualified person",
+          "cite": "29 CFR 1910.269(a)(2) qualified employee; 1910.269(c) job briefing before each job - electric O&M",
+          "status": "regulation"
+        },
+        {
+          "for": "gas OQ mix",
+          "cite": "49 CFR 192.805 Qualification program - individuals performing covered tasks must be qualified, or directed and observed by a qualified person under 192.805(c); gas only. Requalification intervals are operator-set under 192.805(g)",
+          "status": "regulation"
+        },
+        {
+          "for": "crew design",
+          "cite": "Standing crew size and mix are not standardised",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "EN 17007:2017 cl. 6.2 MAN.3"
+      }
+    },
+    {
+      "uid": 10081,
+      "id": "3.5.2",
+      "name": "Assign equipment and vehicles to crews",
+      "group": {
+        "id": "3.5",
+        "name": "Manage crews and resources",
+        "uid": 10079
+      },
+      "intent": "Give each standing crew the vehicles and tools it needs to take the work it is defined for.",
+      "activities": [
+        "Take the crew definition and the equipment it needs",
+        "Assign vehicles and tools from the available pool",
+        "Record the assignment against the crew",
+        "Mark equipment that is down or shared"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "A crew needs its vehicle and tool assignment, or an assignment has changed.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Standing crew definition",
+          "party": "SCHD",
+          "data": "Crew"
+        },
+        {
+          "what": "Available vehicles and tools",
+          "party": "MM",
+          "data": "Vehicle"
+        },
+        {
+          "what": "Tool and equipment requirement from 2.5.2",
+          "party": "MAI",
+          "data": "Tool"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Vehicle and tool assignment to the crew",
+          "party": "SCHD",
+          "data": "Crew"
+        },
+        {
+          "what": "Unassigned or down equipment",
+          "party": "MM",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "MM",
+          "role": "owning",
+          "service": "Vehicle and tool pool"
+        },
+        {
+          "component": "SCHD",
+          "role": "receiving",
+          "service": "Equipment on the crew"
+        },
+        {
+          "component": "MAI",
+          "role": "reference",
+          "service": "What the work type needs"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "MM",
+          "to": "SCHD",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Resource planner",
+          "raci": "R"
+        },
+        {
+          "role": "Maintenance manager",
+          "raci": "A"
+        },
+        {
+          "role": "Crew supervisor",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Crew",
+        "Vehicle",
+        "Tool"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "IEC 61968-6 cl. 4.2 has no fleet component. Vehicles and tools sit on MM, as the pack requires for tools and spares. There is no honest code for a dedicated fleet system."
+        },
+        {
+          "kind": "operational",
+          "text": "TOL.4 is the EN 17007 process for delivering tools and support equipment. Assignment method and sharing rules are operator judgment."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Wrench Time",
+          "definition": "SMRP 5.6.1. A crew without its vehicle or tool is not working.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Schedule Compliance",
+          "definition": "SMRP 5.4.3/5.4.4. Work placed on a crew whose vehicle is down will miss.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Dedicated vehicle",
+        "Shared pool",
+        "Specialist tool issued per job"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Assignment of a pool item to a crew is a repeating path.",
+        "artifact": "models/3.5.2-assign-equipment.bpmn"
+      },
+      "en17007": {
+        "process": "TOL.4",
+        "title": "Deliver the tools and other support equipment",
+        "clause": "6.17"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.17 TOL.4",
+          "status": "clause-verified"
+        },
+        {
+          "for": "CIM Vehicle and Tool",
+          "cite": "IEC 61968-11:2013 CIM extensions for distribution, Work package",
+          "status": "clause-verified"
+        },
+        {
+          "for": "MM placement",
+          "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 message payloads; Annex A verbs",
+          "status": "clause-verified"
+        },
+        {
+          "for": "assignment rules",
+          "cite": "No standard specifies crew-to-vehicle assignment",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "EN 17007:2017 cl. 6.17 TOL.4"
+      }
+    },
+    {
+      "uid": 10082,
+      "id": "3.5.3",
+      "name": "Maintain work areas, districts and territories",
+      "group": {
+        "id": "3.5",
+        "name": "Manage crews and resources",
+        "uid": 10079
+      },
+      "intent": "Keep the map of who covers where current, so location matching has a home.",
+      "activities": [
+        "Name each work area, district or territory",
+        "Bind it to the crews that cover it",
+        "Record boundary changes",
+        "Publish the map to scheduling and to demand planning"
+      ],
+      "trigger": {
+        "kind": "none",
+        "text": "Standing map; revised when boundaries or cover change.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Network and premise geography",
+          "party": "GINV",
+          "data": "WorkLocation"
+        },
+        {
+          "what": "Standing crews",
+          "party": "SCHD",
+          "data": "Crew"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Area-to-crew cover map",
+          "party": "SCHD",
+          "data": "WorkLocation"
+        },
+        {
+          "what": "Boundary change record",
+          "party": "GINV",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "GINV",
+          "role": "reference",
+          "service": "Geography"
+        },
+        {
+          "component": "SCHD",
+          "role": "owning",
+          "service": "Cover map"
+        },
+        {
+          "component": "HR",
+          "role": "reference",
+          "service": "Which crews exist"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "GINV",
+          "to": "SCHD",
+          "payload": "WorkRequest",
+          "verb": "get",
+          "pattern": "request-reply"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Resource planner",
+          "raci": "R"
+        },
+        {
+          "role": "Maintenance manager",
+          "raci": "A"
+        }
+      ],
+      "data_objects": [
+        "WorkLocation",
+        "Crew"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "No standard specifies district or territory design for distribution field work. IEC 61968-11 WorkLocation is the place of the job, not the organisational territory. The map is the operator's."
+        },
+        {
+          "kind": "operational",
+          "text": "14.1.2 maintains organisation and reporting structure. 3.5.3 is the scheduling geography, not the HR tree. Do not merge them."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Schedule Compliance",
+          "definition": "SMRP 5.4.3/5.4.4. Work sent to the wrong territory misses or travels.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Wrench Time",
+          "definition": "SMRP 5.6.1. Cross-boundary travel is usually a map problem, not a routing one.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Stable district cover",
+        "Temporary cover of another area",
+        "Programme territory that is not a district"
+      ],
+      "notation": {
+        "class": "SPEC",
+        "why": "Standing map with no instance boundary."
+      },
+      "en17007": {
+        "process": "MAN.3",
+        "title": "Determine the organization, job profiles and responsibilities",
+        "clause": "6.2"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.2 MAN.3",
+          "status": "clause-verified"
+        },
+        {
+          "for": "WorkLocation",
+          "cite": "IEC 61968-11:2013 CIM extensions for distribution, Work package",
+          "status": "clause-verified"
+        },
+        {
+          "for": "geography component",
+          "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 message payloads; Annex A verbs",
+          "status": "clause-verified"
+        },
+        {
+          "for": "territory design",
+          "cite": "District and territory design is not standardised",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "EN 17007:2017 cl. 6.2 MAN.3"
+      }
+    },
+    {
+      "uid": 10083,
+      "id": "3.5.4",
+      "name": "Monitor resource availability",
+      "group": {
+        "id": "3.5",
+        "name": "Manage crews and resources",
+        "uid": 10079
+      },
+      "intent": "Keep a live view of which crews, people and equipment the schedule may still use today.",
+      "activities": [
+        "Read rostered people, current status and restrictions",
+        "Read vehicle and tool status",
+        "Flag who is no longer available to place",
+        "Feed the change to 3.4.4 when a placement is already in force"
+      ],
+      "trigger": {
+        "kind": "none",
+        "text": "Standing watch on who and what can still be placed.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Rostered people and current status",
+          "party": "HR",
+          "data": "Crew"
+        },
+        {
+          "what": "Vehicle and tool status",
+          "party": "MM",
+          "data": "Vehicle"
+        },
+        {
+          "what": "Placements already in force",
+          "party": "SCHD",
+          "data": "WorkTimeSchedule"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Live availability view",
+          "party": "SCHD",
+          "data": "Crew"
+        },
+        {
+          "what": "Loss of a placed resource, to 3.4.4",
+          "party": "SCHD",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "HR",
+          "role": "originating",
+          "service": "Person status - 14.1.3 owns the record"
+        },
+        {
+          "component": "MM",
+          "role": "originating",
+          "service": "Vehicle and tool status"
+        },
+        {
+          "component": "SCHD",
+          "role": "owning",
+          "service": "Availability the schedule may use"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "HR",
+          "to": "SCHD",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        },
+        {
+          "from": "MM",
+          "to": "SCHD",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Scheduler",
+          "raci": "R"
+        },
+        {
+          "role": "Maintenance manager",
+          "raci": "A"
+        },
+        {
+          "role": "Crew supervisor",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Crew",
+        "Vehicle",
+        "WorkTimeSchedule",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "14.1.3 maintains worker availability and status as a record. 3.5.4 is the scheduling view of that record plus equipment. Do not duplicate the HR process here."
+        },
+        {
+          "kind": "regulatory",
+          "text": "Gas: 49 CFR Part 199 drug and alcohol testing can remove a covered employee from availability. Electric utilities are not under Part 199. Qualification lapse is 14.2.4, consumed here as unavailable."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Schedule Compliance",
+          "definition": "SMRP 5.4.3/5.4.4. Placements against people who were already unavailable fail here.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Wrench Time",
+          "definition": "SMRP 5.6.1. Availability that ignores travel, briefing and wait time will overstate the day.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "In-day sickness or restriction",
+        "Vehicle down",
+        "Qualification made inactive",
+        "Contractor crew withdrawn"
+      ],
+      "notation": {
+        "class": "SPEC",
+        "why": "Standing watch; no instance with a start and an end."
+      },
+      "en17007": {
+        "process": "RES.4",
+        "title": "Provide internal human resources",
+        "clause": "6.14"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.14 RES.4",
+          "status": "clause-verified"
+        },
+        {
+          "for": "crew and vehicle objects",
+          "cite": "IEC 61968-11:2013 CIM extensions for distribution, Work package",
+          "status": "clause-verified"
+        },
+        {
+          "for": "gas drug and alcohol",
+          "cite": "49 CFR Part 199 - gas covered employees only",
+          "status": "regulation"
+        },
+        {
+          "for": "interfaces",
+          "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 message payloads; Annex A verbs",
+          "status": "clause-verified"
+        },
+        {
+          "for": "live-status method",
+          "cite": "No standard specifies availability monitoring for field crews",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "EN 17007:2017 cl. 6.14 RES.4"
+      }
+    }
+  ],
+  "merge_corrections": [
+    {
+      "date": "2026-08-29",
+      "by": "Claude",
+      "what": "32 citation statuses lowered to the ceiling in vocabulary.json source_status_ceiling.",
+      "why": "The submission marked paywalled standards 'verified'. It was following the Source Authority Pack, which asserted 'verified' for ISO 55001, ISO 9001 and IEC 61968-11 without this project holding those texts. Claude's own category 1.0 and 2.0 files had the same defect - 24 and 18 citations - and were corrected in the same commit. The ceiling is now enforced by validate_spec.py and clamped by the generators, so it cannot recur.",
+      "not_a_content_change": "No cite text, field or process was altered. Only the status claim attached to each citation."
+    }
+  ]
+}

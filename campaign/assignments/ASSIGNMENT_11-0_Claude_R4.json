@@ -1,0 +1,448 @@
+{
+ "_what": "Assignment pack for the process specification campaign. Everything you need about YOUR category. The full model.json is 148 KB and you do not need it; if you want a process id outside this category, ask.",
+ "_binding": "_Collab/00_prompts/SPEC_CAMPAIGN_PROMPT.md is the binding instruction. _Collab/SOURCE_AUTHORITY_PACK.md is the only permitted source list. Read both in full before writing anything.",
+ "platform": "Claude",
+ "round": 4,
+ "model_counts": {
+  "categories": 19,
+  "process_groups": 103,
+  "processes": 506,
+  "work_types": 7
+ },
+ "bands": {
+  "Work Lifecycle": "1.0-5.0. Runs in sequence for a single piece of work.",
+  "Specialised Operations": "6.0-11.0. Each runs the full lifecycle inside its own operational discipline.",
+  "Foundations and Enabling": "12.0-16.0. Supplies assets, materials, workforce, information and external delivery capacity to every lifecycle stage rather than sitting inside the sequence.",
+  "Asset Lifecycle": "17.0-19.0. The asset's own life - planned, created, operated and retired - as distinct from the work performed on it. Appended 2026-08-29 without renumbering anything: categories 1.0 to 16.0 keep their ids, uids and legacy_ids."
+ },
+ "lifecycle_axis": {
+  "_why": "The model is organised on a WORK axis - identify, plan, schedule, execute, close. APQC and GFMAM are organised on an ASSET axis - plan and acquire, design and construct, operate, maintain, dispose. The work axis is what happens inside 'maintain'. Both are valid; carrying both lets the model answer ISO 55001:2024 cl. 8.1 without abandoning the granularity that makes it a process model rather than a benchmarking taxonomy.",
+  "stages": [
+   "plan-and-acquire",
+   "design-and-construct",
+   "operate",
+   "maintain",
+   "dispose",
+   "all"
+  ],
+  "_all": "'all' marks an enabling category that serves every stage rather than sitting at one of them."
+ },
+ "your_category": {
+  "id": "11.0",
+  "num": 11,
+  "band": "Specialised Operations",
+  "name": "Manage Joint Use and Third-Party Attachments",
+  "applicability": "electric",
+  "group_count": "6",
+  "process_count": "35",
+  "groups": [
+   {
+    "id": "11.1",
+    "name": "Manage joint use agreements and rates",
+    "processes": [
+     {
+      "id": "11.1.1",
+      "name": "Establish joint use and licence agreement terms",
+      "applies": [
+       "electric"
+      ],
+      "legacy_id": "16.1.1",
+      "uid": 10336
+     },
+     {
+      "id": "11.1.2",
+      "name": "Maintain pole ownership and joint ownership ratios",
+      "applies": [
+       "electric"
+      ],
+      "legacy_id": "16.1.2",
+      "uid": 10337
+     },
+     {
+      "id": "11.1.3",
+      "name": "Determine attachment rental rates",
+      "applies": [
+       "electric"
+      ],
+      "legacy_id": "16.1.3",
+      "uid": 10338
+     },
+     {
+      "id": "11.1.4",
+      "name": "Maintain rate formula cost inputs",
+      "applies": [
+       "electric"
+      ],
+      "legacy_id": "16.1.4",
+      "uid": 10339
+     },
+     {
+      "id": "11.1.5",
+      "name": "Monitor jurisdictional and regulatory obligations",
+      "applies": [
+       "electric"
+      ],
+      "legacy_id": "16.1.5",
+      "uid": 10340
+     },
+     {
+      "id": "11.1.6",
+      "name": "Renew and renegotiate agreements",
+      "applies": [
+       "electric"
+      ],
+      "legacy_id": "16.1.6",
+      "uid": 10341
+     }
+    ],
+    "applicability": "electric",
+    "applies": [
+     "electric"
+    ],
+    "process_count": 6,
+    "legacy_id": "16.1",
+    "uid": 10335
+   },
+   {
+    "id": "11.2",
+    "name": "Administer attachment applications and permits",
+    "processes": [
+     {
+      "id": "11.2.1",
+      "name": "Receive and validate attachment application",
+      "applies": [
+       "electric"
+      ],
+      "legacy_id": "16.2.1",
+      "uid": 10343
+     },
+     {
+      "id": "11.2.2",
+      "name": "Assess application scope and fees",
+      "applies": [
+       "electric"
+      ],
+      "legacy_id": "16.2.2",
+      "uid": 10344
+     },
+     {
+      "id": "11.2.3",
+      "name": "Sequence and batch application workload",
+      "applies": [
+       "electric"
+      ],
+      "legacy_id": "16.2.3",
+      "uid": 10345
+     },
+     {
+      "id": "11.2.4",
+      "name": "Track regulatory application timelines",
+      "applies": [
+       "electric"
+      ],
+      "legacy_id": "16.2.4",
+      "uid": 10346
+     },
+     {
+      "id": "11.2.5",
+      "name": "Issue or condition attachment permit",
+      "applies": [
+       "electric"
+      ],
+      "legacy_id": "16.2.5",
+      "uid": 10347
+     },
+     {
+      "id": "11.2.6",
+      "name": "Apply for attachment on third-party structures",
+      "applies": [
+       "electric"
+      ],
+      "legacy_id": "16.2.6",
+      "uid": 10348
+     }
+    ],
+    "applicability": "electric",
+    "applies": [
+     "electric"
+    ],
+    "process_count": 6,
+    "legacy_id": "16.2",
+    "uid": 10342
+   },
+   {
+    "id": "11.3",
+    "name": "Engineer and deliver make-ready work",
+    "processes": [
+     {
+      "id": "11.3.1",
+      "name": "Survey structure and existing attachments",
+      "applies": [
+       "electric"
+      ],
+      "legacy_id": "16.3.1",
+      "uid": 10350
+     },
+     {
+      "id": "11.3.2",
+      "name": "Perform structural loading analysis",
+      "applies": [
+       "electric"
+      ],
+      "legacy_id": "16.3.2",
+      "uid": 10351
+     },
+     {
+      "id": "11.3.3",
+      "name": "Design make-ready and clearance solution",
+      "applies": [
+       "electric"
+      ],
+      "legacy_id": "16.3.3",
+      "uid": 10352
+     },
+     {
+      "id": "11.3.4",
+      "name": "Estimate make-ready cost",
+      "applies": [
+       "electric"
+      ],
+      "legacy_id": "16.3.4",
+      "uid": 10353
+     },
+     {
+      "id": "11.3.5",
+      "name": "Allocate make-ready and replacement cost",
+      "applies": [
+       "electric"
+      ],
+      "legacy_id": "16.3.5",
+      "uid": 10354
+     },
+     {
+      "id": "11.3.6",
+      "name": "Execute and inspect make-ready construction",
+      "applies": [
+       "electric"
+      ],
+      "legacy_id": "16.3.6",
+      "uid": 10355
+     }
+    ],
+    "applicability": "electric",
+    "applies": [
+     "electric"
+    ],
+    "process_count": 6,
+    "legacy_id": "16.3",
+    "uid": 10349
+   },
+   {
+    "id": "11.4",
+    "name": "Manage attachment inventory and audits",
+    "processes": [
+     {
+      "id": "11.4.1",
+      "name": "Maintain attachment inventory on structures",
+      "applies": [
+       "electric"
+      ],
+      "legacy_id": "16.4.1",
+      "uid": 10357
+     },
+     {
+      "id": "11.4.2",
+      "name": "Maintain conduit and duct occupancy records",
+      "applies": [
+       "electric"
+      ],
+      "legacy_id": "16.4.2",
+      "uid": 10358
+     },
+     {
+      "id": "11.4.3",
+      "name": "Plan and scope joint use audit",
+      "applies": [
+       "electric"
+      ],
+      "legacy_id": "16.4.3",
+      "uid": 10359
+     },
+     {
+      "id": "11.4.4",
+      "name": "Capture and validate field attachment data",
+      "applies": [
+       "electric"
+      ],
+      "legacy_id": "16.4.4",
+      "uid": 10360
+     },
+     {
+      "id": "11.4.5",
+      "name": "Reconcile audit findings to billing records",
+      "applies": [
+       "electric"
+      ],
+      "legacy_id": "16.4.5",
+      "uid": 10361
+     },
+     {
+      "id": "11.4.6",
+      "name": "Identify and pursue unauthorised attachments",
+      "applies": [
+       "electric"
+      ],
+      "legacy_id": "16.4.6",
+      "uid": 10362
+     }
+    ],
+    "applicability": "electric",
+    "applies": [
+     "electric"
+    ],
+    "process_count": 6,
+    "legacy_id": "16.4",
+    "uid": 10356
+   },
+   {
+    "id": "11.5",
+    "name": "Manage transfers and structure replacement",
+    "processes": [
+     {
+      "id": "11.5.1",
+      "name": "Notify attachers of transfer obligation",
+      "applies": [
+       "electric"
+      ],
+      "legacy_id": "16.5.1",
+      "uid": 10364
+     },
+     {
+      "id": "11.5.2",
+      "name": "Sequence multi-party transfer work",
+      "applies": [
+       "electric"
+      ],
+      "legacy_id": "16.5.2",
+      "uid": 10365
+     },
+     {
+      "id": "11.5.3",
+      "name": "Track transfer completion and ageing",
+      "applies": [
+       "electric"
+      ],
+      "legacy_id": "16.5.3",
+      "uid": 10366
+     },
+     {
+      "id": "11.5.4",
+      "name": "Reduce double-wood and stub structure backlog",
+      "applies": [
+       "electric"
+      ],
+      "legacy_id": "16.5.4",
+      "uid": 10367
+     },
+     {
+      "id": "11.5.5",
+      "name": "Resolve clearance and safety violations",
+      "applies": [
+       "electric"
+      ],
+      "legacy_id": "16.5.5",
+      "uid": 10368
+     }
+    ],
+    "applicability": "electric",
+    "applies": [
+     "electric"
+    ],
+    "process_count": 5,
+    "legacy_id": "16.5",
+    "uid": 10363
+   },
+   {
+    "id": "11.6",
+    "name": "Bill, settle and resolve attachment disputes",
+    "processes": [
+     {
+      "id": "11.6.1",
+      "name": "Calculate periodic attachment rental",
+      "applies": [
+       "electric"
+      ],
+      "legacy_id": "16.6.1",
+      "uid": 10370
+     },
+     {
+      "id": "11.6.2",
+      "name": "Invoice attachers and joint owners",
+      "applies": [
+       "electric"
+      ],
+      "legacy_id": "16.6.2",
+      "uid": 10371
+     },
+     {
+      "id": "11.6.3",
+      "name": "Settle joint ownership and net balances",
+      "applies": [
+       "electric"
+      ],
+      "legacy_id": "16.6.3",
+      "uid": 10372
+     },
+     {
+      "id": "11.6.4",
+      "name": "Verify and pay rent on third-party structures",
+      "applies": [
+       "electric"
+      ],
+      "legacy_id": "16.6.4",
+      "uid": 10373
+     },
+     {
+      "id": "11.6.5",
+      "name": "Back-bill and penalise unauthorised attachments",
+      "applies": [
+       "electric"
+      ],
+      "legacy_id": "16.6.5",
+      "uid": 10374
+     },
+     {
+      "id": "11.6.6",
+      "name": "Manage disputes and regulatory complaints",
+      "applies": [
+       "electric"
+      ],
+      "legacy_id": "16.6.6",
+      "uid": 10375
+     }
+    ],
+    "applicability": "electric",
+    "applies": [
+     "electric"
+    ],
+    "process_count": 6,
+    "legacy_id": "16.6",
+    "uid": 10369
+   }
+  ],
+  "applies": [
+   "electric"
+  ],
+  "summary": "Administer shared use of poles, conduit and structures by third parties, from application and make-ready through inventory, transfers, rental billing and dispute.",
+  "legacy_id": "16.0",
+  "uid": 10334,
+  "lifecycle": [
+   "design-and-construct",
+   "maintain"
+  ]
+ },
+ "apqc_rows_touching_your_category": [],
+ "gfmam_rows_touching_your_category": [],
+ "_apqc_notice": "©2025 APQC and IBM reserve all rights in this work except as expressly granted. This Industry Process Classification Framework was jointly developed by APQC and IBM to facilitate improvement through process management and benchmarking. APQC and IBM grant a perpetual, worldwide, royalty-free license to use, copy, publish, modify, and create derivative works of the PCF, provided that all copies include this notice and any derivative works carry the attribution below. THIS FILE IS A DERIVATIVE WORK AND THE NOTICE AND ATTRIBUTION MUST TRAVEL WITH IT.",
+ "_apqc_attribution": "This work is based in part on an Industry Process Classification Framework (“PCF”), an open standard developed by APQC and IBM to promote benchmarking and best practices worldwide. The PCF is intended to facilitate organizational improvement through process management and benchmarking, regardless of industry, size, or geography. To download the full PCF or other industry-specific versions of the PCF, as well as associated measures and benchmarking, please visit www.apqc.org/pcf."
+}

@@ -1,0 +1,388 @@
+{
+ "_what": "Assignment pack for the process specification campaign. Everything you need about YOUR category. The full model.json is 148 KB and you do not need it; if you want a process id outside this category, ask.",
+ "_binding": "_Collab/00_prompts/SPEC_CAMPAIGN_PROMPT.md is the binding instruction. _Collab/SOURCE_AUTHORITY_PACK.md is the only permitted source list. Read both in full before writing anything.",
+ "platform": "Grok",
+ "round": 5,
+ "model_counts": {
+  "categories": 19,
+  "process_groups": 103,
+  "processes": 506,
+  "work_types": 7
+ },
+ "bands": {
+  "Work Lifecycle": "1.0-5.0. Runs in sequence for a single piece of work.",
+  "Specialised Operations": "6.0-11.0. Each runs the full lifecycle inside its own operational discipline.",
+  "Foundations and Enabling": "12.0-16.0. Supplies assets, materials, workforce, information and external delivery capacity to every lifecycle stage rather than sitting inside the sequence.",
+  "Asset Lifecycle": "17.0-19.0. The asset's own life - planned, created, operated and retired - as distinct from the work performed on it. Appended 2026-08-29 without renumbering anything: categories 1.0 to 16.0 keep their ids, uids and legacy_ids."
+ },
+ "lifecycle_axis": {
+  "_why": "The model is organised on a WORK axis - identify, plan, schedule, execute, close. APQC and GFMAM are organised on an ASSET axis - plan and acquire, design and construct, operate, maintain, dispose. The work axis is what happens inside 'maintain'. Both are valid; carrying both lets the model answer ISO 55001:2024 cl. 8.1 without abandoning the granularity that makes it a process model rather than a benchmarking taxonomy.",
+  "stages": [
+   "plan-and-acquire",
+   "design-and-construct",
+   "operate",
+   "maintain",
+   "dispose",
+   "all"
+  ],
+  "_all": "'all' marks an enabling category that serves every stage rather than sitting at one of them."
+ },
+ "your_category": {
+  "id": "16.0",
+  "num": 16,
+  "band": "Foundations and Enabling",
+  "name": "Manage Contractors and Partners",
+  "group_count": "5",
+  "process_count": "22",
+  "groups": [
+   {
+    "id": "16.1",
+    "name": "Qualify and onboard contractors",
+    "processes": [
+     {
+      "id": "16.1.1",
+      "name": "Register contractor organisation and crews",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "legacy_id": "5.1.1",
+      "uid": 10514
+     },
+     {
+      "id": "16.1.2",
+      "name": "Capture capability, skill and equipment profile",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "legacy_id": "5.1.2",
+      "uid": 10515
+     },
+     {
+      "id": "16.1.3",
+      "name": "Verify insurance, certification and compliance",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "legacy_id": "5.1.3",
+      "uid": 10516
+     },
+     {
+      "id": "16.1.4",
+      "name": "Maintain qualification currency and suspension",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "legacy_id": "5.1.4",
+      "uid": 10517
+     }
+    ],
+    "applicability": "common",
+    "applies": [
+     "electric",
+     "gas"
+    ],
+    "process_count": 4,
+    "legacy_id": "5.1",
+    "hooks": [
+     "14.2",
+     "13.4",
+     "8.1"
+    ],
+    "uid": 10513
+   },
+   {
+    "id": "16.2",
+    "name": "Award and assign contracted work",
+    "processes": [
+     {
+      "id": "16.2.1",
+      "name": "Determine internal versus contracted delivery",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "legacy_id": "5.2.1",
+      "uid": 10519
+     },
+     {
+      "id": "16.2.2",
+      "name": "Award work to contractor",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "legacy_id": "5.2.2",
+      "uid": 10520
+     },
+     {
+      "id": "16.2.3",
+      "name": "Issue work package to contractor",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "legacy_id": "5.2.3",
+      "uid": 10521
+     },
+     {
+      "id": "16.2.4",
+      "name": "Confirm acceptance and committed date",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "legacy_id": "5.2.4",
+      "uid": 10522
+     }
+    ],
+    "applicability": "common",
+    "applies": [
+     "electric",
+     "gas"
+    ],
+    "process_count": 4,
+    "legacy_id": "5.2",
+    "hooks": [
+     "2.3",
+     "2.4",
+     "3.1",
+     "3.5"
+    ],
+    "uid": 10518
+   },
+   {
+    "id": "16.3",
+    "name": "Oversee contractor execution",
+    "processes": [
+     {
+      "id": "16.3.1",
+      "name": "Receive contractor progress and status",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "legacy_id": "5.3.1",
+      "uid": 10524
+     },
+     {
+      "id": "16.3.2",
+      "name": "Receive contractor completion evidence",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "legacy_id": "5.3.2",
+      "uid": 10525
+     },
+     {
+      "id": "16.3.3",
+      "name": "Inspect and accept contracted work",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "legacy_id": "5.3.3",
+      "uid": 10526
+     },
+     {
+      "id": "16.3.4",
+      "name": "Manage contractor rework and defect",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "legacy_id": "5.3.4",
+      "uid": 10527
+     }
+    ],
+    "applicability": "common",
+    "applies": [
+     "electric",
+     "gas"
+    ],
+    "process_count": 4,
+    "legacy_id": "5.3",
+    "hooks": [
+     "4.1",
+     "4.2",
+     "4.3",
+     "4.4"
+    ],
+    "uid": 10523
+   },
+   {
+    "id": "16.4",
+    "name": "Settle and evaluate contractor performance",
+    "processes": [
+     {
+      "id": "16.4.1",
+      "name": "Capture contracted units and quantities",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "legacy_id": "5.4.1",
+      "uid": 10529
+     },
+     {
+      "id": "16.4.2",
+      "name": "Validate against contract rates and terms",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "legacy_id": "5.4.2",
+      "uid": 10530
+     },
+     {
+      "id": "16.4.3",
+      "name": "Authorise contractor payment",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "legacy_id": "5.4.3",
+      "uid": 10531
+     },
+     {
+      "id": "16.4.4",
+      "name": "Measure contractor quality and service level",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "legacy_id": "5.4.4",
+      "uid": 10532
+     }
+    ],
+    "applicability": "common",
+    "applies": [
+     "electric",
+     "gas"
+    ],
+    "process_count": 4,
+    "legacy_id": "5.4",
+    "hooks": [
+     "5.1",
+     "5.2",
+     "15.2"
+    ],
+    "uid": 10528
+   },
+   {
+    "id": "16.5",
+    "name": "Integrate with contractor systems",
+    "processes": [
+     {
+      "id": "16.5.1",
+      "name": "Provide contractor access to work information",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "legacy_id": "5.5.1",
+      "uid": 10534
+     },
+     {
+      "id": "16.5.2",
+      "name": "Exchange work assignment and acceptance",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "legacy_id": "5.5.2",
+      "uid": 10535
+     },
+     {
+      "id": "16.5.3",
+      "name": "Receive contractor progress and completion",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "legacy_id": "5.5.3",
+      "uid": 10536
+     },
+     {
+      "id": "16.5.4",
+      "name": "Exchange units, quantities and cost for settlement",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "legacy_id": "5.5.4",
+      "uid": 10537
+     },
+     {
+      "id": "16.5.5",
+      "name": "Federate contractor crew and credential data",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "legacy_id": "5.5.5",
+      "uid": 10538
+     },
+     {
+      "id": "16.5.6",
+      "name": "Reconcile contractor data exceptions",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "legacy_id": "5.5.6",
+      "uid": 10539
+     }
+    ],
+    "applicability": "common",
+    "applies": [
+     "electric",
+     "gas"
+    ],
+    "process_count": 6,
+    "legacy_id": "5.5",
+    "hooks": [
+     "15.5",
+     "13.7"
+    ],
+    "uid": 10533
+   }
+  ],
+  "applicability": "common",
+  "applies": [
+   "electric",
+   "gas"
+  ],
+  "summary": "Qualify, award to, oversee and settle with third-party crews. Attaches to the work lifecycle rather than sitting inside it.",
+  "legacy_id": "5.0",
+  "uid": 10512,
+  "lifecycle": [
+   "all"
+  ]
+ },
+ "apqc_rows_touching_your_category": [],
+ "gfmam_rows_touching_your_category": [
+  {
+   "subject": "3.7",
+   "group": "Asset Management Planning",
+   "name": "Resourcing Strategy and Management",
+   "status": "covered",
+   "model_groups": "3.1, 3.2, 3.5, 14.x, 16.1",
+   "note": "Forecast, roster, crew management, workforce administration, contractor qualification."
+  },
+  {
+   "subject": "6.8",
+   "group": "Delivery",
+   "name": "Supply Chain Management",
+   "status": "covered",
+   "model_groups": "13.0, 16.0",
+   "note": ""
+  }
+ ],
+ "_apqc_notice": "©2025 APQC and IBM reserve all rights in this work except as expressly granted. This Industry Process Classification Framework was jointly developed by APQC and IBM to facilitate improvement through process management and benchmarking. APQC and IBM grant a perpetual, worldwide, royalty-free license to use, copy, publish, modify, and create derivative works of the PCF, provided that all copies include this notice and any derivative works carry the attribution below. THIS FILE IS A DERIVATIVE WORK AND THE NOTICE AND ATTRIBUTION MUST TRAVEL WITH IT.",
+ "_apqc_attribution": "This work is based in part on an Industry Process Classification Framework (“PCF”), an open standard developed by APQC and IBM to promote benchmarking and best practices worldwide. The PCF is intended to facilitate organizational improvement through process management and benchmarking, regardless of industry, size, or geography. To download the full PCF or other industry-specific versions of the PCF, as well as associated measures and benchmarking, please visit www.apqc.org/pcf."
+}

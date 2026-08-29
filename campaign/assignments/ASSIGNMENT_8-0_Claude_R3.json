@@ -1,0 +1,711 @@
+{
+ "_what": "Assignment pack for the process specification campaign. Everything you need about YOUR category. The full model.json is 148 KB and you do not need it; if you want a process id outside this category, ask.",
+ "_binding": "_Collab/00_prompts/SPEC_CAMPAIGN_PROMPT.md is the binding instruction. _Collab/SOURCE_AUTHORITY_PACK.md is the only permitted source list. Read both in full before writing anything.",
+ "platform": "Claude",
+ "round": 3,
+ "model_counts": {
+  "categories": 19,
+  "process_groups": 103,
+  "processes": 506,
+  "work_types": 7
+ },
+ "bands": {
+  "Work Lifecycle": "1.0-5.0. Runs in sequence for a single piece of work.",
+  "Specialised Operations": "6.0-11.0. Each runs the full lifecycle inside its own operational discipline.",
+  "Foundations and Enabling": "12.0-16.0. Supplies assets, materials, workforce, information and external delivery capacity to every lifecycle stage rather than sitting inside the sequence.",
+  "Asset Lifecycle": "17.0-19.0. The asset's own life - planned, created, operated and retired - as distinct from the work performed on it. Appended 2026-08-29 without renumbering anything: categories 1.0 to 16.0 keep their ids, uids and legacy_ids."
+ },
+ "lifecycle_axis": {
+  "_why": "The model is organised on a WORK axis - identify, plan, schedule, execute, close. APQC and GFMAM are organised on an ASSET axis - plan and acquire, design and construct, operate, maintain, dispose. The work axis is what happens inside 'maintain'. Both are valid; carrying both lets the model answer ISO 55001:2024 cl. 8.1 without abandoning the granularity that makes it a process model rather than a benchmarking taxonomy.",
+  "stages": [
+   "plan-and-acquire",
+   "design-and-construct",
+   "operate",
+   "maintain",
+   "dispose",
+   "all"
+  ],
+  "_all": "'all' marks an enabling category that serves every stage rather than sitting at one of them."
+ },
+ "your_category": {
+  "id": "8.0",
+  "num": 8,
+  "band": "Specialised Operations",
+  "name": "Manage Compliance, Integrity and Safety",
+  "group_count": "9",
+  "process_count": "49",
+  "groups": [
+   {
+    "id": "8.1",
+    "name": "Perform regulatory inspection and survey",
+    "processes": [
+     {
+      "id": "8.1.1",
+      "name": "Perform leak survey and detection",
+      "applies": [
+       "gas"
+      ],
+      "legacy_id": "9.1.1",
+      "uid": 10211
+     },
+     {
+      "id": "8.1.2",
+      "name": "Perform asset patrol and mandated inspection",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "legacy_id": "9.1.2",
+      "uid": 10212
+     },
+     {
+      "id": "8.1.3",
+      "name": "Perform pressure and pipeline integrity test",
+      "applies": [
+       "gas"
+      ],
+      "legacy_id": "9.1.3",
+      "uid": 10213
+     },
+     {
+      "id": "8.1.4",
+      "name": "Record compliance evidence and completion dates",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "legacy_id": "9.1.4",
+      "uid": 10214
+     },
+     {
+      "id": "8.1.5",
+      "name": "Perform electrical diagnostic testing",
+      "applies": [
+       "electric"
+      ],
+      "legacy_id": "9.1.5",
+      "uid": 10215
+     },
+     {
+      "id": "8.1.6",
+      "name": "Inspect and service distribution valves",
+      "applies": [
+       "gas"
+      ],
+      "legacy_id": "9.1.6",
+      "uid": 10216
+     },
+     {
+      "id": "8.1.7",
+      "name": "Inspect vaults and below-grade enclosures",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "legacy_id": "9.1.7",
+      "uid": 10217
+     },
+     {
+      "id": "8.1.8",
+      "name": "Perform structure test-and-treat inspection",
+      "applies": [
+       "electric"
+      ],
+      "legacy_id": "9.1.8",
+      "uid": 10218
+     }
+    ],
+    "applicability": "mixed",
+    "applies": [
+     "electric",
+     "gas"
+    ],
+    "process_count": 8,
+    "legacy_id": "9.1",
+    "uid": 10210
+   },
+   {
+    "id": "8.2",
+    "name": "Manage corrosion",
+    "processes": [
+     {
+      "id": "8.2.1",
+      "name": "Inspect rectifiers and power sources",
+      "applies": [
+       "gas"
+      ],
+      "legacy_id": "9.2.1",
+      "uid": 10220
+     },
+     {
+      "id": "8.2.2",
+      "name": "Read and record test station potentials",
+      "applies": [
+       "gas"
+      ],
+      "legacy_id": "9.2.2",
+      "uid": 10221
+     },
+     {
+      "id": "8.2.3",
+      "name": "Perform close interval survey",
+      "applies": [
+       "gas"
+      ],
+      "legacy_id": "9.2.3",
+      "uid": 10222
+     },
+     {
+      "id": "8.2.4",
+      "name": "Inspect coating and atmospheric corrosion",
+      "applies": [
+       "gas"
+      ],
+      "legacy_id": "9.2.4",
+      "uid": 10223
+     },
+     {
+      "id": "8.2.5",
+      "name": "Monitor internal corrosion",
+      "applies": [
+       "gas"
+      ],
+      "legacy_id": "9.2.5",
+      "uid": 10224
+     },
+     {
+      "id": "8.2.6",
+      "name": "Generate and track corrosion remediation work",
+      "applies": [
+       "gas"
+      ],
+      "legacy_id": "9.2.6",
+      "uid": 10225
+     }
+    ],
+    "applicability": "gas",
+    "applies": [
+     "gas"
+    ],
+    "process_count": 6,
+    "legacy_id": "9.2",
+    "uid": 10219
+   },
+   {
+    "id": "8.3",
+    "name": "Manage leaks and hazards",
+    "processes": [
+     {
+      "id": "8.3.1",
+      "name": "Classify leak by grade and severity",
+      "applies": [
+       "gas"
+      ],
+      "legacy_id": "9.3.1",
+      "uid": 10227
+     },
+     {
+      "id": "8.3.2",
+      "name": "Repair leak and make safe",
+      "applies": [
+       "gas"
+      ],
+      "legacy_id": "9.3.2",
+      "uid": 10228
+     },
+     {
+      "id": "8.3.3",
+      "name": "Perform leak re-check and re-survey",
+      "applies": [
+       "gas"
+      ],
+      "legacy_id": "9.3.3",
+      "uid": 10229
+     },
+     {
+      "id": "8.3.4",
+      "name": "Track leak to closure",
+      "applies": [
+       "gas"
+      ],
+      "legacy_id": "9.3.4",
+      "uid": 10230
+     }
+    ],
+    "applicability": "gas",
+    "applies": [
+     "gas"
+    ],
+    "process_count": 4,
+    "legacy_id": "9.3",
+    "uid": 10226
+   },
+   {
+    "id": "8.4",
+    "name": "Prevent damage to buried assets",
+    "processes": [
+     {
+      "id": "8.4.1",
+      "name": "Receive and validate locate request",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "legacy_id": "9.4.1",
+      "uid": 10232
+     },
+     {
+      "id": "8.4.2",
+      "name": "Schedule and perform locate and mark-out",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "legacy_id": "9.4.2",
+      "uid": 10233
+     },
+     {
+      "id": "8.4.3",
+      "name": "Record locate evidence and positive response",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "legacy_id": "9.4.3",
+      "uid": 10234
+     },
+     {
+      "id": "8.4.4",
+      "name": "Investigate and manage damage claims",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "legacy_id": "9.4.4",
+      "uid": 10235
+     },
+     {
+      "id": "8.4.5",
+      "name": "Report damage and near-miss statistics",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "legacy_id": "9.4.5",
+      "uid": 10236
+     }
+    ],
+    "applicability": "common",
+    "applies": [
+     "electric",
+     "gas"
+    ],
+    "process_count": 5,
+    "legacy_id": "9.4",
+    "uid": 10231
+   },
+   {
+    "id": "8.5",
+    "name": "Manage health, safety and environment",
+    "processes": [
+     {
+      "id": "8.5.1",
+      "name": "Maintain safety procedures and controls",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "legacy_id": "9.5.1",
+      "uid": 10238
+     },
+     {
+      "id": "8.5.2",
+      "name": "Investigate incidents and near misses",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "legacy_id": "9.5.2",
+      "uid": 10239
+     },
+     {
+      "id": "8.5.3",
+      "name": "Manage environmental obligations and spills",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "legacy_id": "9.5.3",
+      "uid": 10240
+     },
+     {
+      "id": "8.5.4",
+      "name": "Report safety and environmental performance",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "legacy_id": "9.5.4",
+      "uid": 10241
+     },
+     {
+      "id": "8.5.5",
+      "name": "Operate avian and wildlife protection",
+      "applies": [
+       "electric"
+      ],
+      "legacy_id": "9.5.5",
+      "uid": 10242
+     }
+    ],
+    "applicability": "mixed",
+    "applies": [
+     "electric",
+     "gas"
+    ],
+    "process_count": 5,
+    "legacy_id": "9.5",
+    "uid": 10237
+   },
+   {
+    "id": "8.6",
+    "name": "Manage gas pressure and odorization",
+    "processes": [
+     {
+      "id": "8.6.1",
+      "name": "Inspect pressure regulating and limiting stations",
+      "applies": [
+       "gas"
+      ],
+      "legacy_id": "9.6.1",
+      "uid": 10244
+     },
+     {
+      "id": "8.6.2",
+      "name": "Verify overpressure protection",
+      "applies": [
+       "gas"
+      ],
+      "legacy_id": "9.6.2",
+      "uid": 10245
+     },
+     {
+      "id": "8.6.3",
+      "name": "Monitor system pressure and abnormal operation",
+      "applies": [
+       "gas"
+      ],
+      "legacy_id": "9.6.3",
+      "uid": 10246
+     },
+     {
+      "id": "8.6.4",
+      "name": "Monitor and maintain odorant level",
+      "applies": [
+       "gas"
+      ],
+      "legacy_id": "9.6.4",
+      "uid": 10247
+     },
+     {
+      "id": "8.6.5",
+      "name": "Purge, tap and commission pipe",
+      "applies": [
+       "gas"
+      ],
+      "legacy_id": "9.6.5",
+      "uid": 10248
+     },
+     {
+      "id": "8.6.6",
+      "name": "Purge, seal and abandon facilities",
+      "applies": [
+       "gas"
+      ],
+      "legacy_id": "9.6.6",
+      "uid": 10249
+     }
+    ],
+    "applicability": "gas",
+    "applies": [
+     "gas"
+    ],
+    "process_count": 6,
+    "legacy_id": "9.6",
+    "uid": 10243
+   },
+   {
+    "id": "8.7",
+    "name": "Manage cross bores and subsurface conflicts",
+    "processes": [
+     {
+      "id": "8.7.1",
+      "name": "Identify cross bore risk from trenchless installation",
+      "applies": [
+       "gas"
+      ],
+      "legacy_id": "9.7.1",
+      "uid": 10251
+     },
+     {
+      "id": "8.7.2",
+      "name": "Inspect sewer laterals for cross bores",
+      "applies": [
+       "gas"
+      ],
+      "legacy_id": "9.7.2",
+      "uid": 10252
+     },
+     {
+      "id": "8.7.3",
+      "name": "Remediate confirmed cross bores",
+      "applies": [
+       "gas"
+      ],
+      "legacy_id": "9.7.3",
+      "uid": 10253
+     },
+     {
+      "id": "8.7.4",
+      "name": "Maintain cross bore inspection records",
+      "applies": [
+       "gas"
+      ],
+      "legacy_id": "9.7.4",
+      "uid": 10254
+     }
+    ],
+    "applicability": "gas",
+    "applies": [
+     "gas"
+    ],
+    "process_count": 4,
+    "legacy_id": "9.7",
+    "uid": 10250
+   },
+   {
+    "id": "8.8",
+    "name": "Manage distribution integrity programme",
+    "processes": [
+     {
+      "id": "8.8.1",
+      "name": "Maintain the written programme and system knowledge",
+      "applies": [
+       "gas"
+      ],
+      "legacy_id": "9.8.1",
+      "uid": 10256
+     },
+     {
+      "id": "8.8.2",
+      "name": "Identify and assess system threats",
+      "applies": [
+       "gas"
+      ],
+      "legacy_id": "9.8.2",
+      "uid": 10257
+     },
+     {
+      "id": "8.8.3",
+      "name": "Evaluate and rank risk",
+      "applies": [
+       "gas"
+      ],
+      "legacy_id": "9.8.3",
+      "uid": 10258
+     },
+     {
+      "id": "8.8.4",
+      "name": "Select and implement risk-reduction measures",
+      "applies": [
+       "gas"
+      ],
+      "legacy_id": "9.8.4",
+      "uid": 10259
+     },
+     {
+      "id": "8.8.5",
+      "name": "Measure programme performance against baseline",
+      "applies": [
+       "gas"
+      ],
+      "legacy_id": "9.8.5",
+      "uid": 10260
+     },
+     {
+      "id": "8.8.6",
+      "name": "Re-evaluate programme on mandated cycle",
+      "applies": [
+       "gas"
+      ],
+      "legacy_id": "9.8.6",
+      "uid": 10261
+     },
+     {
+      "id": "8.8.7",
+      "name": "Report the four mandatory integrity measures",
+      "applies": [
+       "gas"
+      ],
+      "legacy_id": "9.8.7",
+      "uid": 10262
+     }
+    ],
+    "applicability": "gas",
+    "applies": [
+     "gas"
+    ],
+    "process_count": 7,
+    "legacy_id": "9.8",
+    "uid": 10255
+   },
+   {
+    "id": "8.9",
+    "name": "Conduct pipeline public awareness",
+    "processes": [
+     {
+      "id": "8.9.1",
+      "name": "Maintain the written public-education programme",
+      "applies": [
+       "gas"
+      ],
+      "legacy_id": "9.9.1",
+      "uid": 10264
+     },
+     {
+      "id": "8.9.2",
+      "name": "Identify stakeholder audiences",
+      "applies": [
+       "gas"
+      ],
+      "legacy_id": "9.9.2",
+      "uid": 10265
+     },
+     {
+      "id": "8.9.3",
+      "name": "Deliver baseline and supplemental messages",
+      "applies": [
+       "gas"
+      ],
+      "legacy_id": "9.9.3",
+      "uid": 10266
+     },
+     {
+      "id": "8.9.4",
+      "name": "Measure effectiveness and retain records",
+      "applies": [
+       "gas"
+      ],
+      "legacy_id": "9.9.4",
+      "uid": 10267
+     }
+    ],
+    "applicability": "gas",
+    "applies": [
+     "gas"
+    ],
+    "process_count": 4,
+    "legacy_id": "9.9",
+    "uid": 10263
+   }
+  ],
+  "applicability": "mixed",
+  "applies": [
+   "electric",
+   "gas"
+  ],
+  "summary": "Meet regulatory obligations for asset integrity and public safety with auditable evidence.",
+  "legacy_id": "9.0",
+  "uid": 10209,
+  "lifecycle": [
+   "maintain",
+   "operate"
+  ]
+ },
+ "apqc_rows_touching_your_category": [
+  {
+   "apqc": "10.3.3",
+   "pcf_id": "19253",
+   "apqc_name": "Perform asset maintenance",
+   "status": "covered",
+   "model_groups": "4.2, 8.1",
+   "note": "Perform asset maintenance."
+  },
+  {
+   "apqc": "10.4.4",
+   "pcf_id": "10954",
+   "apqc_name": "Perform abandonment",
+   "status": "covered",
+   "model_groups": "19.2.4, 8.6.6",
+   "note": "Perform abandonment. 19.2.4 abandons in place as a lifecycle end state under 49 CFR 192.727. 8.6.6 Purge, seal and abandon facilities REMAINS in 8.6 as the gas pressure procedure; the two are hooked, not merged, because purging under 192.629 is a pressure operation and abandonment is a lifecycle transition."
+  },
+  {
+   "apqc": "14.1.2",
+   "pcf_id": "11266",
+   "apqc_name": "Develop network operational plans",
+   "status": "partial",
+   "model_groups": "18.1",
+   "note": "Develop network operational plans. 19270 create switching and reconfiguration plans is closed at 18.1.2. The rest of the group - 19268 operation requirements, 19269 network demand analysis, 19271 simulate demand and network conditions - is real-time and forward planning, and 18.0 is scoped work-facing only by decision."
+  },
+  {
+   "apqc": "14.1.6",
+   "pcf_id": "19285",
+   "apqc_name": "Perform planned network operation",
+   "status": "covered",
+   "model_groups": "18.1, 18.2, 18.3, 18.4, 18.5",
+   "note": "Perform planned network operation. Closed 2026-08-29 and the reason the Asset Lifecycle band exists. All seven APQC activities map: 19286 submit to 18.2.1, 19287 approve or reject to 18.2.2, 19288 schedule to 18.2.3, 19289 notify to 18.3, 19290 execute switching to 18.4.1, 19291 coordinate with maintenance and construction to 18.2.5, 19292 return to service to 18.5. 2.6.3 and 4.4.4 now name 18.4.4 as the producing process for the clearance."
+  }
+ ],
+ "gfmam_rows_touching_your_category": [
+  {
+   "subject": "1.2",
+   "group": "Context & Stakeholders",
+   "name": "Stakeholder Management",
+   "status": "partial",
+   "model_groups": "10.3, 8.9",
+   "note": "Customer communication and pipeline public awareness only. No stakeholder management as a discipline, which is correct for a process reference."
+  },
+  {
+   "subject": "2.3",
+   "group": "Governance",
+   "name": "Asset Management Assurance and Audit",
+   "status": "partial",
+   "model_groups": "7.5, 8.8, 15.3",
+   "note": "Audit exists per programme - vegetation, DIMP, reporting obligations - but there is no assurance process over the asset management system itself."
+  },
+  {
+   "subject": "2.6",
+   "group": "Governance",
+   "name": "Risk",
+   "status": "partial",
+   "model_groups": "12.6.2, 8.8",
+   "note": "Asset risk and consequence of failure, and the distribution integrity programme."
+  },
+  {
+   "subject": "3.8",
+   "group": "Asset Management Planning",
+   "name": "Shutdown and Outage Strategy and Planning",
+   "status": "covered",
+   "model_groups": "18.0",
+   "note": "GFMAM defines this as \"An organisation's processes for the identification, planning, scheduling, execution, and control of work related to shutdowns, turnarounds, or outages (STOs).\" All five verbs are now present: 18.1 identification and planning, 18.2 scheduling, 18.4 execution, 18.4.4 and 18.5 control. This subject and APQC 14.1.6 together are why the Asset Lifecycle band exists."
+  },
+  {
+   "subject": "6.4",
+   "group": "Delivery",
+   "name": "Asset Operation",
+   "status": "partial",
+   "model_groups": "18.0, 9.0, 6.0",
+   "note": "The work-facing half is closed at 18.0: planned switching, clearance, coordination and return to service. 9.0 covers unplanned operation. Real-time monitoring, alarm handling, optimisation and protection settings stay OUT OF SCOPE BY DECISION - they are SCADA, ADMS and DERMS functions."
+  },
+  {
+   "subject": "6.5",
+   "group": "Delivery",
+   "name": "Maintenance Delivery",
+   "status": "covered",
+   "model_groups": "1.0-5.0, 8.0",
+   "note": "This is the model's centre of gravity and it is the most complete subject in it."
+  }
+ ],
+ "_apqc_notice": "©2025 APQC and IBM reserve all rights in this work except as expressly granted. This Industry Process Classification Framework was jointly developed by APQC and IBM to facilitate improvement through process management and benchmarking. APQC and IBM grant a perpetual, worldwide, royalty-free license to use, copy, publish, modify, and create derivative works of the PCF, provided that all copies include this notice and any derivative works carry the attribution below. THIS FILE IS A DERIVATIVE WORK AND THE NOTICE AND ATTRIBUTION MUST TRAVEL WITH IT.",
+ "_apqc_attribution": "This work is based in part on an Industry Process Classification Framework (“PCF”), an open standard developed by APQC and IBM to promote benchmarking and best practices worldwide. The PCF is intended to facilitate organizational improvement through process management and benchmarking, regardless of industry, size, or geography. To download the full PCF or other industry-specific versions of the PCF, as well as associated measures and benchmarking, please visit www.apqc.org/pcf."
+}
