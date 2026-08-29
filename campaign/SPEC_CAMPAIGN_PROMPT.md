@@ -23,8 +23,9 @@ specialised and enabling categories, so no single platform's style dominates one
 
 ## Inputs — read all of these before writing anything
 
-Repository: `https://github.com/tbartmann/Tim-Method-2026`, branch `main`.
-Working folder: `02 Industry Specialization/Utilities/`.
+**Public repository: `https://github.com/tbartmann/utility-wam-process-reference`.**
+Everything below is in it. The working repository it mirrors is private and contains
+client material; you do not need it and should not ask for it.
 
 1. **`_Collab/SOURCE_AUTHORITY_PACK.md`** — the only source list. Binding. Read it first.
 2. `build/eam/specs/SCHEMA.md` — the field set and the notation selection rule.
