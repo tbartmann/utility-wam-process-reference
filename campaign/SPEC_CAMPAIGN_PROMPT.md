@@ -208,6 +208,11 @@ rejected a submission.
       **`variants`**, `notation`, `sources`, `provenance`. *An entire submission was
       rejected for `variants` missing on all 26 processes.*
 - [ ] `id` and `uid` match your assignment pack exactly. Do not invent either.
+- [ ] **Variants are different for every process, and none is merely the commodity.**
+      A variant is a named way the work differs in practice — the route, the method, the
+      outcome — such that a utility recognises its own operation. `model.json` already
+      carries commodity in `applies`; restating it adds nothing. *A resubmission was
+      rejected for carrying one identical commodity-only set on 25 of 26 processes.*
 - [ ] Cardinality inside the content budget in `vocabulary.json` — activities 3–8, inputs
       2–6, outputs 1–5, systems 2–6, roles 2–6, controls 1–4, measures 1–4, variants 0–6,
       sources at least 3.
