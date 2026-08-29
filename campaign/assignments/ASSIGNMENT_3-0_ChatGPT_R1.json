@@ -1,0 +1,358 @@
+{
+ "_what": "Assignment pack for the process specification campaign. Everything you need about YOUR category. The full model.json is 148 KB and you do not need it; if you want a process id outside this category, ask.",
+ "_binding": "_Collab/00_prompts/SPEC_CAMPAIGN_PROMPT.md is the binding instruction. _Collab/SOURCE_AUTHORITY_PACK.md is the only permitted source list. Read both in full before writing anything.",
+ "platform": "ChatGPT",
+ "round": 1,
+ "model_counts": {
+  "categories": 19,
+  "process_groups": 103,
+  "processes": 506,
+  "work_types": 7
+ },
+ "bands": {
+  "Work Lifecycle": "1.0-5.0. Runs in sequence for a single piece of work.",
+  "Specialised Operations": "6.0-11.0. Each runs the full lifecycle inside its own operational discipline.",
+  "Foundations and Enabling": "12.0-16.0. Supplies assets, materials, workforce, information and external delivery capacity to every lifecycle stage rather than sitting inside the sequence.",
+  "Asset Lifecycle": "17.0-19.0. The asset's own life - planned, created, operated and retired - as distinct from the work performed on it. Appended 2026-08-29 without renumbering anything: categories 1.0 to 16.0 keep their ids, uids and legacy_ids."
+ },
+ "lifecycle_axis": {
+  "_why": "The model is organised on a WORK axis - identify, plan, schedule, execute, close. APQC and GFMAM are organised on an ASSET axis - plan and acquire, design and construct, operate, maintain, dispose. The work axis is what happens inside 'maintain'. Both are valid; carrying both lets the model answer ISO 55001:2024 cl. 8.1 without abandoning the granularity that makes it a process model rather than a benchmarking taxonomy.",
+  "stages": [
+   "plan-and-acquire",
+   "design-and-construct",
+   "operate",
+   "maintain",
+   "dispose",
+   "all"
+  ],
+  "_all": "'all' marks an enabling category that serves every stage rather than sitting at one of them."
+ },
+ "your_category": {
+  "id": "3.0",
+  "num": 3,
+  "band": "Work Lifecycle",
+  "name": "Plan Resources and Schedule Work",
+  "group_count": "5",
+  "process_count": "21",
+  "groups": [
+   {
+    "id": "3.1",
+    "name": "Forecast demand and capacity",
+    "processes": [
+     {
+      "id": "3.1.1",
+      "name": "Model long-range work demand",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "uid": 10059
+     },
+     {
+      "id": "3.1.2",
+      "name": "Model resource and skill capacity",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "uid": 10060
+     },
+     {
+      "id": "3.1.3",
+      "name": "Perform what-if and scenario simulation",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "uid": 10061
+     },
+     {
+      "id": "3.1.4",
+      "name": "Identify and escalate capacity shortfalls",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "uid": 10062
+     }
+    ],
+    "applicability": "common",
+    "applies": [
+     "electric",
+     "gas"
+    ],
+    "process_count": 4,
+    "uid": 10058
+   },
+   {
+    "id": "3.2",
+    "name": "Plan shifts and rosters",
+    "processes": [
+     {
+      "id": "3.2.1",
+      "name": "Build shift patterns and rosters",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "uid": 10064
+     },
+     {
+      "id": "3.2.2",
+      "name": "Plan leave, standby and on-call",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "uid": 10065
+     },
+     {
+      "id": "3.2.3",
+      "name": "Balance internal and contracted capacity",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "uid": 10066
+     },
+     {
+      "id": "3.2.4",
+      "name": "Publish and communicate the roster",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "uid": 10067
+     }
+    ],
+    "applicability": "common",
+    "applies": [
+     "electric",
+     "gas"
+    ],
+    "process_count": 4,
+    "uid": 10063
+   },
+   {
+    "id": "3.3",
+    "name": "Manage appointments",
+    "processes": [
+     {
+      "id": "3.3.1",
+      "name": "Offer appointment windows",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "uid": 10069
+     },
+     {
+      "id": "3.3.2",
+      "name": "Reserve capacity against appointment",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "uid": 10070
+     },
+     {
+      "id": "3.3.3",
+      "name": "Confirm, amend and cancel appointments",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "uid": 10071
+     },
+     {
+      "id": "3.3.4",
+      "name": "Manage appointment failure and rebooking",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "uid": 10072
+     }
+    ],
+    "applicability": "common",
+    "applies": [
+     "electric",
+     "gas"
+    ],
+    "process_count": 4,
+    "uid": 10068
+   },
+   {
+    "id": "3.4",
+    "name": "Optimise the schedule",
+    "processes": [
+     {
+      "id": "3.4.1",
+      "name": "Schedule against skill, location and priority",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "uid": 10074
+     },
+     {
+      "id": "3.4.2",
+      "name": "Optimise travel and routing",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "uid": 10075
+     },
+     {
+      "id": "3.4.3",
+      "name": "Apply service-level and compliance constraints",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "uid": 10076
+     },
+     {
+      "id": "3.4.4",
+      "name": "Re-optimise for disruption and emergent work",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "uid": 10077
+     },
+     {
+      "id": "3.4.5",
+      "name": "Manage schedule exceptions and overrides",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "uid": 10078
+     }
+    ],
+    "applicability": "common",
+    "applies": [
+     "electric",
+     "gas"
+    ],
+    "process_count": 5,
+    "uid": 10073
+   },
+   {
+    "id": "3.5",
+    "name": "Manage crews and resources",
+    "processes": [
+     {
+      "id": "3.5.1",
+      "name": "Define crews and crew composition",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "uid": 10080
+     },
+     {
+      "id": "3.5.2",
+      "name": "Assign equipment and vehicles to crews",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "uid": 10081
+     },
+     {
+      "id": "3.5.3",
+      "name": "Maintain work areas, districts and territories",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "uid": 10082
+     },
+     {
+      "id": "3.5.4",
+      "name": "Monitor resource availability",
+      "applies": [
+       "gas",
+       "electric"
+      ],
+      "uid": 10083
+     }
+    ],
+    "applicability": "common",
+    "applies": [
+     "electric",
+     "gas"
+    ],
+    "process_count": 4,
+    "uid": 10079
+   }
+  ],
+  "applicability": "common",
+  "applies": [
+   "electric",
+   "gas"
+  ],
+  "summary": "Match approved work to the right resource at the right time, from long-range capacity planning through to same-day re-optimisation.",
+  "uid": 10057,
+  "lifecycle": [
+   "maintain"
+  ]
+ },
+ "apqc_rows_touching_your_category": [
+  {
+   "apqc": "10.2.4",
+   "pcf_id": "19229",
+   "apqc_name": "Schedule and perform construction work",
+   "status": "covered",
+   "model_groups": "3.4, 4.2",
+   "note": "Schedule and perform construction work."
+  },
+  {
+   "apqc": "10.3.1",
+   "pcf_id": "19239",
+   "apqc_name": "Plan asset maintenance",
+   "status": "covered",
+   "model_groups": "1.3, 1.4, 2.5, 3.1, 12.4, 12.5",
+   "note": "Plan asset maintenance. The model splits this one APQC process across six groups, which is the right granularity for a work management reference."
+  },
+  {
+   "apqc": "10.3.2",
+   "pcf_id": "19245",
+   "apqc_name": "Manage asset maintenance",
+   "status": "covered",
+   "model_groups": "3.4, 3.5, 5.1, 5.4, 4.4, 15.1, 15.2",
+   "note": "Manage asset maintenance."
+  },
+  {
+   "apqc": "14.4.1",
+   "pcf_id": "19326",
+   "apqc_name": "Procure meter components",
+   "status": "partial",
+   "model_groups": "13.1, 13.4",
+   "note": "Procure meter components."
+  }
+ ],
+ "gfmam_rows_touching_your_category": [
+  {
+   "subject": "3.7",
+   "group": "Asset Management Planning",
+   "name": "Resourcing Strategy and Management",
+   "status": "covered",
+   "model_groups": "3.1, 3.2, 3.5, 14.x, 16.1",
+   "note": "Forecast, roster, crew management, workforce administration, contractor qualification."
+  },
+  {
+   "subject": "6.8",
+   "group": "Delivery",
+   "name": "Supply Chain Management",
+   "status": "covered",
+   "model_groups": "13.0, 16.0",
+   "note": ""
+  }
+ ],
+ "_apqc_notice": "©2025 APQC and IBM reserve all rights in this work except as expressly granted. This Industry Process Classification Framework was jointly developed by APQC and IBM to facilitate improvement through process management and benchmarking. APQC and IBM grant a perpetual, worldwide, royalty-free license to use, copy, publish, modify, and create derivative works of the PCF, provided that all copies include this notice and any derivative works carry the attribution below. THIS FILE IS A DERIVATIVE WORK AND THE NOTICE AND ATTRIBUTION MUST TRAVEL WITH IT.",
+ "_apqc_attribution": "This work is based in part on an Industry Process Classification Framework (“PCF”), an open standard developed by APQC and IBM to promote benchmarking and best practices worldwide. The PCF is intended to facilitate organizational improvement through process management and benchmarking, regardless of industry, size, or geography. To download the full PCF or other industry-specific versions of the PCF, as well as associated measures and benchmarking, please visit www.apqc.org/pcf."
+}

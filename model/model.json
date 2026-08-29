@@ -1,0 +1,6913 @@
+{
+ "meta": {
+  "title": "Utility Work and Asset Management - Industry Process Reference",
+  "description": "Product-neutral process taxonomy for gas, electric and multi-utility operations.",
+  "numbering": "APQC-style: Category n.0 > Process Group n.m > Process n.m.p",
+  "source_deck": "Utility Work and Asset Management - Industry Process Reference.pptx",
+  "reconstructed": "parsed from the master reference deck; counts validated against the deck's own declared totals",
+  "counts": {
+   "categories": 19,
+   "process_groups": 103,
+   "processes": 506,
+   "work_types": 7
+  },
+  "applicability": {
+   "rule": "A process is tagged to one commodity ONLY where it acts on an asset class, hazard or regulatory regime that exists in that commodity alone. Everything else is tagged to both. Group and category labels are derived from the process tags, never assigned directly.",
+   "labels": {
+    "common": "every process applies to both commodities",
+    "gas": "every process is gas-only",
+    "electric": "every process is electric-only",
+    "mixed": "a blend - the group appears in both views but with different content"
+   },
+   "views": {
+    "Combined": "all processes - for a dual-commodity utility",
+    "Gas": "processes where gas is in applies",
+    "Electric": "processes where electric is in applies"
+   },
+   "counts": {
+    "common": 331,
+    "gas_only": 37,
+    "electric_only": 66,
+    "gas_view": 368,
+    "electric_view": 397
+   }
+  },
+  "scope_note": "Front of meter only. This reference covers the regulated utility: moving gas or electricity across a network it owns, under a regulatory regime, up to the meter. Behind-the-meter home services - selling, installing and servicing customer-owned heating, cooling, water heating, generation, electrical and plumbing equipment - is a different business with its own process model, held separately in '02 Industry Specialization/Behind the Meter Home Services'. The two commonly share a call centre and a work management platform; that is shared tooling, not a shared process model.",
+  "revision_note": "Revised 2026-08-26 by three-platform Round 1 consensus (ChatGPT, Grok, Claude): added distribution integrity programme (9.8), public awareness (9.9) and wildfire operational response (10.6); operator qualification (14.2.5-6); DER interconnection (11.6.6-7); valve, vault, structure and electrical-diagnostic inspection (9.1.5-8); abandonment (9.6.6); avian protection (9.5.5); damage-assessment refresh (10.2.5); mutual-aid demobilisation (10.4.6); management of change (12.6.4); ISO 14224-aligned failure wording (4.3.6, 12.4.2); pressure testing retagged gas-only (9.1.3). See _Collab/30_consensus/CONSENSUS_ROUND1_Change_Log.md. Round 2 (2026-08-26): consensus ratified 14-0 on the resolved divergences; 9.8.7 annual integrity reporting split from 9.8.5; 'written' restored on 9.8.1/9.9.1; 10.6.1 narrowed to operational response; 4.4.5 SCADA point-to-point verification added as the work-side control-room hook; ISO 55001:2024 and GFMAM v3.0 mapping merged into meta.standards_mapping.",
+  "failure_coding_note": "Failure recording (4.3.6 capture, 12.4.2 validate) is anchored to ISO 14224 data structures - equipment class, failure mode, mechanism, cause, impact - with a documented electric-distribution equivalent where ISO 14224 classes do not fit.",
+  "standards_mapping_note": "Mapped by Round 2 three-platform consensus (see meta.standards_mapping). The reference maps operating content to ISO 55001:2024 clause families and GFMAM Landscape v3.0 subjects; it does not claim conformity or alignment, and the management-system shell is deliberately out of scope.",
+  "decisions_2026_08_26": "Tim, 2026-08-26: (1) WT7 Reimbursable / Third-Party Work added so the work-type classification stays mutually exclusive - joint-use make-ready, customer-contribution construction and damage-claim repairs are neither the utility's capital nor its O&M. (2) Retail service plans, contracts and lead generation belong in the Home Services reference, not this model - the mixed regulated/retail view was a carryover from a prior client that ran both businesses in one company. The regime axis stays retired here. (3) Control-room operations: EXCLUDED from this reference - continuous network operation, not discrete work; obligations land in SCADA/DMS platforms, not the EAM/field systems this reference scopes. Knowledge preserved in the Control Room Operations Companion deck and research/Control Room - Research Note.md, including the proposed group 10.5 verbatim and the criteria for reopening.",
+  "scope_exclusions": "Deliberately out of scope: real-time network and control-room operations (gas control under 49 CFR 192.631; the electric distribution operations centre), SCADA/DMS operation, fleet garage maintenance, and LNG facilities (49 CFR 193). The model covers the work-management interfaces to these (4.4.4, 10.3.2, 10.1, 9.6.3), not the operations themselves.",
+  "standards_mapping": {
+   "method": "Round 2 three-platform consensus, 2026-08-26. A clause or subject maps where at least two of three independent mappings placed it; primary where at least two placed it primary. This maps operating content only - it asserts no conformity with ISO 55001:2024 and no coverage of the GFMAM Landscape; the management-system shell (leadership, policy, SAMP, audit, management review) is deliberately out of scope. Verify subject wording against the purchased texts before client use.",
+   "iso55001_2024_notes": "Official 4.5 title is 'Asset management decision-making' (value is its purpose, not its name). 7.6 Data and information is revised and retitled, not new; 7.7 Knowledge is new; 8.3 is the 2024 renaming of outsourcing; 10.3 predictive action replaces preventive action.",
+   "gfmam_v3_notes": "Third Edition, June 2024: 7 groups, 40 subjects. Data and Information subjects carry the full 'Asset Management Data and Information ...' names.",
+   "categories": {
+    "1.0": {
+     "iso_primary": [
+      "8.1"
+     ],
+     "iso_secondary": [
+      "4.2",
+      "6.1"
+     ],
+     "gfmam_primary": [
+      "3.2 Demand Analysis"
+     ],
+     "gfmam_secondary": [
+      "3.4 Planning",
+      "1.2 Stakeholder Management"
+     ]
+    },
+    "2.0": {
+     "iso_primary": [
+      "8.1"
+     ],
+     "iso_secondary": [
+      "4.5",
+      "6.2",
+      "8.2"
+     ],
+     "gfmam_primary": [
+      "6.2 Asset Creation and Acquisition",
+      "6.1 Systems Engineering"
+     ],
+     "gfmam_secondary": [
+      "3.4 Planning",
+      "3.5 Decision-Making"
+     ]
+    },
+    "3.0": {
+     "iso_primary": [
+      "7.1",
+      "8.1"
+     ],
+     "iso_secondary": [
+      "6.2",
+      "8.3"
+     ],
+     "gfmam_primary": [
+      "3.7 Resourcing Strategy and Management"
+     ],
+     "gfmam_secondary": [
+      "3.8 Shutdown and Outage Strategy and Planning",
+      "3.4 Planning"
+     ]
+    },
+    "4.0": {
+     "iso_primary": [
+      "8.1"
+     ],
+     "iso_secondary": [
+      "7.2",
+      "7.5"
+     ],
+     "gfmam_primary": [
+      "6.5 Maintenance Delivery"
+     ],
+     "gfmam_secondary": [
+      "6.4 Asset Operation"
+     ]
+    },
+    "5.0": {
+     "iso_primary": [
+      "8.1",
+      "7.6"
+     ],
+     "iso_secondary": [
+      "7.5",
+      "9.1"
+     ],
+     "gfmam_primary": [
+      "1.3 Asset Costing and Valuation",
+      "5.5 Configuration Management"
+     ],
+     "gfmam_secondary": [
+      "5.3 AM Data and Information Management",
+      "6.2 Asset Creation and Acquisition"
+     ]
+    },
+    "6.0": {
+     "iso_primary": [
+      "8.1"
+     ],
+     "iso_secondary": [
+      "7.6",
+      "9.1"
+     ],
+     "gfmam_primary": [
+      "6.4 Asset Operation"
+     ],
+     "gfmam_secondary": [
+      "5.3 AM Data and Information Management",
+      "6.5 Maintenance Delivery"
+     ]
+    },
+    "7.0": {
+     "iso_primary": [
+      "8.1",
+      "6.1"
+     ],
+     "iso_secondary": [
+      "9.1",
+      "10.3",
+      "8.3"
+     ],
+     "gfmam_primary": [
+      "6.5 Maintenance Delivery"
+     ],
+     "gfmam_secondary": [
+      "2.6 Risk",
+      "2.4 Technical Standards and Legislation",
+      "6.3 Integrated Reliability"
+     ]
+    },
+    "8.0": {
+     "iso_primary": [
+      "6.1",
+      "8.1"
+     ],
+     "iso_secondary": [
+      "7.2",
+      "9.1",
+      "10.3",
+      "8.2"
+     ],
+     "gfmam_primary": [
+      "2.4 Technical Standards and Legislation",
+      "2.6 Risk"
+     ],
+     "gfmam_secondary": [
+      "6.3 Integrated Reliability",
+      "2.5 Management of Change",
+      "6.6 Incident Management and Response"
+     ]
+    },
+    "9.0": {
+     "iso_primary": [
+      "8.1"
+     ],
+     "iso_secondary": [
+      "6.1",
+      "7.1",
+      "8.3"
+     ],
+     "gfmam_primary": [
+      "6.6 Incident Management and Response"
+     ],
+     "gfmam_secondary": [
+      "3.9 Contingency Planning and Resilience Analysis",
+      "3.8 Shutdown and Outage Strategy and Planning"
+     ]
+    },
+    "10.0": {
+     "iso_primary": [
+      "8.1"
+     ],
+     "iso_secondary": [
+      "4.2",
+      "7.4"
+     ],
+     "gfmam_primary": [
+      "1.2 Stakeholder Management"
+     ],
+     "gfmam_secondary": [
+      "6.4 Asset Operation",
+      "6.2 Asset Creation and Acquisition"
+     ]
+    },
+    "11.0": {
+     "iso_primary": [
+      "8.3"
+     ],
+     "iso_secondary": [
+      "4.2",
+      "6.1",
+      "8.1"
+     ],
+     "gfmam_primary": [
+      "1.2 Stakeholder Management"
+     ],
+     "gfmam_secondary": [
+      "1.3 Asset Costing and Valuation",
+      "2.4 Technical Standards and Legislation",
+      "6.2 Asset Creation and Acquisition"
+     ]
+    },
+    "12.0": {
+     "iso_primary": [
+      "7.6"
+     ],
+     "iso_secondary": [
+      "4.5",
+      "6.1",
+      "8.1",
+      "8.2",
+      "10.3"
+     ],
+     "gfmam_primary": [
+      "5.1-5.5 AM Data and Information (all) and Configuration Management",
+      "6.3 Integrated Reliability"
+     ],
+     "gfmam_secondary": [
+      "3.5 Decision-Making",
+      "2.5 Management of Change",
+      "6.7 Asset Repurposing or Disposal"
+     ]
+    },
+    "13.0": {
+     "iso_primary": [
+      "8.3",
+      "7.1"
+     ],
+     "iso_secondary": [
+      "7.6",
+      "9.1"
+     ],
+     "gfmam_primary": [
+      "6.8 Supply Chain Management"
+     ],
+     "gfmam_secondary": [
+      "3.7 Resourcing Strategy and Management",
+      "5.3 AM Data and Information Management"
+     ]
+    },
+    "14.0": {
+     "iso_primary": [
+      "7.2"
+     ],
+     "iso_secondary": [
+      "7.1"
+     ],
+     "gfmam_primary": [
+      "4.4 Competence Management"
+     ],
+     "gfmam_secondary": [
+      "4.2 Organisational Arrangements",
+      "3.7 Resourcing Strategy and Management"
+     ]
+    },
+    "15.0": {
+     "iso_primary": [
+      "9.1"
+     ],
+     "iso_secondary": [
+      "7.6",
+      "10.2",
+      "7.5"
+     ],
+     "gfmam_primary": [
+      "7.2 Monitoring"
+     ],
+     "gfmam_secondary": [
+      "7.3 Continuous Improvement",
+      "7.1 Outcomes and Impacts",
+      "5.4 AM Data and Information Systems"
+     ]
+    },
+    "16.0": {
+     "iso_primary": [
+      "8.3"
+     ],
+     "iso_secondary": [
+      "7.1",
+      "7.2",
+      "9.1"
+     ],
+     "gfmam_primary": [
+      "6.8 Supply Chain Management"
+     ],
+     "gfmam_secondary": [
+      "3.7 Resourcing Strategy and Management",
+      "4.4 Competence Management"
+     ]
+    }
+   },
+   "no_home": {
+    "correct_by_scope": "ISO 4.1-4.4, 5 Leadership, 6.2.1 SAMP, 9.2 internal audit, 9.3 management review, clause 10 system-level corrective action; GFMAM 1.1, 2.1, 2.2, 2.3, 3.1, 4.1, 4.3, 4.5. The management-system shell sits above this operating reference.",
+    "genuine_gaps": "ISO 7.7 / GFMAM 4.6 Knowledge Management; GFMAM 3.3 Sustainable Development; GFMAM 3.6 Life Cycle Value Realization and ISO 4.5 as a stated decision framework; GFMAM 2.3 assurance if the reference is used for control assurance; GFMAM 7.1 Outcomes and Impacts as value realisation. Recorded as observations - no clause-named process additions."
+   }
+  },
+  "layers": {
+   "Work Lifecycle": "1.0-5.0. Runs in sequence for a single piece of work.",
+   "Specialised Operations": "6.0-11.0. Each runs the full lifecycle inside its own operational discipline.",
+   "Foundations and Enabling": "12.0-16.0. Supplies assets, materials, workforce, information and external delivery capacity to every lifecycle stage rather than sitting inside the sequence.",
+   "Asset Lifecycle": "17.0-19.0. The asset's own life - planned, created, operated and retired - as distinct from the work performed on it. Appended 2026-08-29 without renumbering anything: categories 1.0 to 16.0 keep their ids, uids and legacy_ids."
+  },
+  "sourcing": {
+   "principle": "Contracting is a delivery mode, not a lifecycle stage. Categories 1.0 to 5.0 run once for a piece of work whoever performs it; 16.0 holds the processes that exist only because the performer is external - qualification, award, oversight, settlement and system federation - and attaches to the lifecycle at named points rather than sitting between two of its stages.",
+   "why_not_a_stage": "No process framework consulted places supplier or contractor management as a sequential step inside a work lifecycle. ISO 55001:2024 puts the whole asset lifecycle in clause 8.1 and external provision beside it in 8.3. ISO 9001:2015 clause 8.1 requires that outsourced processes be controlled and points at 8.4, whose Annex A.8 covers purchasing, associate-company arrangements and process outsourcing in one clause. GFMAM Landscape v3.0 calls 6.2 Asset Creation and Acquisition a stage in the asset life cycle and describes 6.8 Supply Chain Management as operating over the entire life cycle. APQC states that its numbering does not imply order, and inserts no supplier stage into any of its own execute-then-close sequences. TM Forum eTOM models Supplier/Partner Relationship Management as a horizontal grouping supporting Fulfillment, Assurance and Billing. ASCM SCOR v14 moved contracts and agreements out of Source into the cross-cutting Orchestrate layer.",
+   "hook_note": "Group-level hooks are recorded on each 16.x group. They are attachment points, not a sequence: 16.1 runs before any specific work exists, 16.3 runs concurrently with 4.0, and 16.4 straddles 5.0."
+  },
+  "stable_ids": "Every category, group and process carries uid, a permanent element id that never changes and is never reused. The dotted id is positional and may change when the framework is restructured - it is an index, not an identity. This follows APQC practice, where element id 10280 'Manage suppliers' keeps its identity while its dotted number differs between the cross-industry and utilities frameworks. Pre-2026-08-28 numbering is recorded as legacy_id and in build/eam/id_crosswalk.csv.",
+  "renumbering_note": "Renumbered 2026-08-28 by the structural revision. Dotted ids quoted in revision_note and in the Round 1 and Round 2 change logs are the pre-revision numbering and are deliberately left as written, because those are dated records. Use build/eam/id_crosswalk.csv to translate.",
+  "structural_revision_note": "Revised 2026-08-28. Manage Contractors and Partners moved from 5.0 in the work lifecycle to 16.0 in Foundations and Enabling; Close Work, Settle Cost and Update Records moved 6.0 to 5.0; the specialised block became contiguous at 6.0-11.0 and Joint Use moved 16.0 to 11.0, ending the one category that sat outside its own band. Content, counts and commodity tags are unchanged - this is a placement and numbering change only. See _Collab/30_consensus/STRUCTURAL_REVISION_Change_Log.md.",
+  "lifecycle_axis": {
+   "_why": "The model is organised on a WORK axis - identify, plan, schedule, execute, close. APQC and GFMAM are organised on an ASSET axis - plan and acquire, design and construct, operate, maintain, dispose. The work axis is what happens inside 'maintain'. Both are valid; carrying both lets the model answer ISO 55001:2024 cl. 8.1 without abandoning the granularity that makes it a process model rather than a benchmarking taxonomy.",
+   "stages": [
+    "plan-and-acquire",
+    "design-and-construct",
+    "operate",
+    "maintain",
+    "dispose",
+    "all"
+   ],
+   "_all": "'all' marks an enabling category that serves every stage rather than sitting at one of them."
+  },
+  "asset_lifecycle_note": "Categories 17.0 to 19.0 close six themes that APQC PCF Utilities and the GFMAM Asset Management Landscape independently found absent: planned outage and switching, asset operation, asset creation and commissioning, network demand analysis, capital programme and whole-life value, and decommissioning and disposal. Two independent organisations plus ISO 55001:2024 cl. 8.1 meets this repository's promotion rule. See research/The Asset Lifecycle Gap - Finding.md. 18.0 is scoped work-facing only by decision: real-time monitoring, alarms, optimisation and protection settings are SCADA, ADMS and DERMS functions."
+ },
+ "work_types": [
+  {
+   "id": "WT1",
+   "name": "Capital / Construction Work"
+  },
+  {
+   "id": "WT2",
+   "name": "Operations and Maintenance Work"
+  },
+  {
+   "id": "WT3",
+   "name": "Customer and Service Work"
+  },
+  {
+   "id": "WT4",
+   "name": "Compliance and Inspection Work"
+  },
+  {
+   "id": "WT5",
+   "name": "Emergency and Restoration Work"
+  },
+  {
+   "id": "WT6",
+   "name": "Programme Work"
+  },
+  {
+   "id": "WT7",
+   "name": "Reimbursable / Third-Party Work"
+  }
+ ],
+ "categories": [
+  {
+   "id": "1.0",
+   "num": 1,
+   "band": "Work Lifecycle",
+   "name": "Identify and Qualify Work Demand",
+   "group_count": "4",
+   "process_count": "18",
+   "groups": [
+    {
+     "id": "1.1",
+     "name": "Capture work demand",
+     "processes": [
+      {
+       "id": "1.1.1",
+       "name": "Capture customer-originated request",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10003
+      },
+      {
+       "id": "1.1.2",
+       "name": "Capture condition- or sensor-originated demand",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10004
+      },
+      {
+       "id": "1.1.3",
+       "name": "Capture inspection or survey finding",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10005
+      },
+      {
+       "id": "1.1.4",
+       "name": "Capture network or outage event",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10006
+      },
+      {
+       "id": "1.1.5",
+       "name": "Capture field-originated (follow-on) work",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10007
+      },
+      {
+       "id": "1.1.6",
+       "name": "Capture regulatory or mandated demand",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10008
+      }
+     ],
+     "applicability": "common",
+     "applies": [
+      "electric",
+      "gas"
+     ],
+     "process_count": 6,
+     "uid": 10002
+    },
+    {
+     "id": "1.2",
+     "name": "Validate and screen work",
+     "processes": [
+      {
+       "id": "1.2.1",
+       "name": "Validate and enrich request detail",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10010
+      },
+      {
+       "id": "1.2.2",
+       "name": "Identify and merge duplicate demand",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10011
+      },
+      {
+       "id": "1.2.3",
+       "name": "Confirm asset, location and premise",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10012
+      },
+      {
+       "id": "1.2.4",
+       "name": "Reject or redirect out-of-scope demand",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10013
+      }
+     ],
+     "applicability": "common",
+     "applies": [
+      "electric",
+      "gas"
+     ],
+     "process_count": 4,
+     "uid": 10009
+    },
+    {
+     "id": "1.3",
+     "name": "Categorise and prioritise work",
+     "processes": [
+      {
+       "id": "1.3.1",
+       "name": "Assign work type and classification",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10015
+      },
+      {
+       "id": "1.3.2",
+       "name": "Assign priority and response target",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10016
+      },
+      {
+       "id": "1.3.3",
+       "name": "Apply compliance and due-date rules",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10017
+      },
+      {
+       "id": "1.3.4",
+       "name": "Route to responsible organisation",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10018
+      }
+     ],
+     "applicability": "common",
+     "applies": [
+      "electric",
+      "gas"
+     ],
+     "process_count": 4,
+     "uid": 10014
+    },
+    {
+     "id": "1.4",
+     "name": "Generate programmed work",
+     "processes": [
+      {
+       "id": "1.4.1",
+       "name": "Generate preventive maintenance work",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10020
+      },
+      {
+       "id": "1.4.2",
+       "name": "Generate inspection and survey cycles",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10021
+      },
+      {
+       "id": "1.4.3",
+       "name": "Generate campaign and programme work",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10022
+      },
+      {
+       "id": "1.4.4",
+       "name": "Manage work generation exceptions",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10023
+      }
+     ],
+     "applicability": "common",
+     "applies": [
+      "electric",
+      "gas"
+     ],
+     "process_count": 4,
+     "uid": 10019
+    }
+   ],
+   "applicability": "common",
+   "applies": [
+    "electric",
+    "gas"
+   ],
+   "summary": "Capture demand for field work from every origin and convert it into validated, prioritised and categorised work.",
+   "uid": 10001,
+   "lifecycle": [
+    "maintain"
+   ]
+  },
+  {
+   "id": "2.0",
+   "num": 2,
+   "band": "Work Lifecycle",
+   "name": "Plan, Design and Estimate Work",
+   "group_count": "6",
+   "process_count": "26",
+   "groups": [
+    {
+     "id": "2.1",
+     "name": "Engineer and design work",
+     "processes": [
+      {
+       "id": "2.1.1",
+       "name": "Perform site survey and pre-design visit",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10026
+      },
+      {
+       "id": "2.1.2",
+       "name": "Produce construction design",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10027
+      },
+      {
+       "id": "2.1.3",
+       "name": "Perform design review and approval",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10028
+      },
+      {
+       "id": "2.1.4",
+       "name": "Manage design revisions",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10029
+      }
+     ],
+     "applicability": "common",
+     "applies": [
+      "electric",
+      "gas"
+     ],
+     "process_count": 4,
+     "uid": 10025
+    },
+    {
+     "id": "2.2",
+     "name": "Perform compatible-unit design and estimating",
+     "processes": [
+      {
+       "id": "2.2.1",
+       "name": "Maintain compatible unit and assembly library",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10031
+      },
+      {
+       "id": "2.2.2",
+       "name": "Place compatible units on the spatial design",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10032
+      },
+      {
+       "id": "2.2.3",
+       "name": "Derive labour, material and plant from design",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10033
+      },
+      {
+       "id": "2.2.4",
+       "name": "Produce compatible-unit cost estimate",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10034
+      },
+      {
+       "id": "2.2.5",
+       "name": "Maintain unit accounting and allocation rules",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10035
+      },
+      {
+       "id": "2.2.6",
+       "name": "Release approved design to construction work",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10036
+      }
+     ],
+     "applicability": "common",
+     "applies": [
+      "electric",
+      "gas"
+     ],
+     "process_count": 6,
+     "uid": 10030
+    },
+    {
+     "id": "2.3",
+     "name": "Estimate work",
+     "processes": [
+      {
+       "id": "2.3.1",
+       "name": "Produce labour, material and equipment estimate",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10038
+      },
+      {
+       "id": "2.3.2",
+       "name": "Produce contracted-work estimate",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10039
+      },
+      {
+       "id": "2.3.3",
+       "name": "Apply overhead, contingency and escalation",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10040
+      },
+      {
+       "id": "2.3.4",
+       "name": "Maintain in-progress estimate revisions",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10041
+      }
+     ],
+     "applicability": "common",
+     "applies": [
+      "electric",
+      "gas"
+     ],
+     "process_count": 4,
+     "uid": 10037
+    },
+    {
+     "id": "2.4",
+     "name": "Authorise work",
+     "processes": [
+      {
+       "id": "2.4.1",
+       "name": "Validate funding and budget availability",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10043
+      },
+      {
+       "id": "2.4.2",
+       "name": "Route work for approval",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10044
+      },
+      {
+       "id": "2.4.3",
+       "name": "Authorise and release work to execution",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10045
+      },
+      {
+       "id": "2.4.4",
+       "name": "Manage change to authorised scope",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10046
+      }
+     ],
+     "applicability": "common",
+     "applies": [
+      "electric",
+      "gas"
+     ],
+     "process_count": 4,
+     "uid": 10042
+    },
+    {
+     "id": "2.5",
+     "name": "Package work for execution",
+     "processes": [
+      {
+       "id": "2.5.1",
+       "name": "Build job plan and task structure",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10048
+      },
+      {
+       "id": "2.5.2",
+       "name": "Define crew, skill and equipment requirements",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10049
+      },
+      {
+       "id": "2.5.3",
+       "name": "Assemble drawings, documents and instructions",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10050
+      },
+      {
+       "id": "2.5.4",
+       "name": "Define material requirements",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10051
+      }
+     ],
+     "applicability": "common",
+     "applies": [
+      "electric",
+      "gas"
+     ],
+     "process_count": 4,
+     "uid": 10047
+    },
+    {
+     "id": "2.6",
+     "name": "Obtain permits and satisfy prerequisites",
+     "processes": [
+      {
+       "id": "2.6.1",
+       "name": "Identify permit and consent requirements",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10053
+      },
+      {
+       "id": "2.6.2",
+       "name": "Request, track and receive permits",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10054
+      },
+      {
+       "id": "2.6.3",
+       "name": "Validate prerequisites before release",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10055
+      },
+      {
+       "id": "2.6.4",
+       "name": "Manage permit cost, expiry and renewal",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10056
+      }
+     ],
+     "applicability": "common",
+     "applies": [
+      "electric",
+      "gas"
+     ],
+     "process_count": 4,
+     "uid": 10052
+    }
+   ],
+   "applicability": "common",
+   "applies": [
+    "electric",
+    "gas"
+   ],
+   "summary": "Convert qualified demand into an executable, costed, approved and fully specified work package.",
+   "uid": 10024,
+   "lifecycle": [
+    "design-and-construct",
+    "maintain"
+   ]
+  },
+  {
+   "id": "3.0",
+   "num": 3,
+   "band": "Work Lifecycle",
+   "name": "Plan Resources and Schedule Work",
+   "group_count": "5",
+   "process_count": "21",
+   "groups": [
+    {
+     "id": "3.1",
+     "name": "Forecast demand and capacity",
+     "processes": [
+      {
+       "id": "3.1.1",
+       "name": "Model long-range work demand",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10059
+      },
+      {
+       "id": "3.1.2",
+       "name": "Model resource and skill capacity",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10060
+      },
+      {
+       "id": "3.1.3",
+       "name": "Perform what-if and scenario simulation",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10061
+      },
+      {
+       "id": "3.1.4",
+       "name": "Identify and escalate capacity shortfalls",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10062
+      }
+     ],
+     "applicability": "common",
+     "applies": [
+      "electric",
+      "gas"
+     ],
+     "process_count": 4,
+     "uid": 10058
+    },
+    {
+     "id": "3.2",
+     "name": "Plan shifts and rosters",
+     "processes": [
+      {
+       "id": "3.2.1",
+       "name": "Build shift patterns and rosters",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10064
+      },
+      {
+       "id": "3.2.2",
+       "name": "Plan leave, standby and on-call",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10065
+      },
+      {
+       "id": "3.2.3",
+       "name": "Balance internal and contracted capacity",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10066
+      },
+      {
+       "id": "3.2.4",
+       "name": "Publish and communicate the roster",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10067
+      }
+     ],
+     "applicability": "common",
+     "applies": [
+      "electric",
+      "gas"
+     ],
+     "process_count": 4,
+     "uid": 10063
+    },
+    {
+     "id": "3.3",
+     "name": "Manage appointments",
+     "processes": [
+      {
+       "id": "3.3.1",
+       "name": "Offer appointment windows",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10069
+      },
+      {
+       "id": "3.3.2",
+       "name": "Reserve capacity against appointment",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10070
+      },
+      {
+       "id": "3.3.3",
+       "name": "Confirm, amend and cancel appointments",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10071
+      },
+      {
+       "id": "3.3.4",
+       "name": "Manage appointment failure and rebooking",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10072
+      }
+     ],
+     "applicability": "common",
+     "applies": [
+      "electric",
+      "gas"
+     ],
+     "process_count": 4,
+     "uid": 10068
+    },
+    {
+     "id": "3.4",
+     "name": "Optimise the schedule",
+     "processes": [
+      {
+       "id": "3.4.1",
+       "name": "Schedule against skill, location and priority",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10074
+      },
+      {
+       "id": "3.4.2",
+       "name": "Optimise travel and routing",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10075
+      },
+      {
+       "id": "3.4.3",
+       "name": "Apply service-level and compliance constraints",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10076
+      },
+      {
+       "id": "3.4.4",
+       "name": "Re-optimise for disruption and emergent work",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10077
+      },
+      {
+       "id": "3.4.5",
+       "name": "Manage schedule exceptions and overrides",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10078
+      }
+     ],
+     "applicability": "common",
+     "applies": [
+      "electric",
+      "gas"
+     ],
+     "process_count": 5,
+     "uid": 10073
+    },
+    {
+     "id": "3.5",
+     "name": "Manage crews and resources",
+     "processes": [
+      {
+       "id": "3.5.1",
+       "name": "Define crews and crew composition",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10080
+      },
+      {
+       "id": "3.5.2",
+       "name": "Assign equipment and vehicles to crews",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10081
+      },
+      {
+       "id": "3.5.3",
+       "name": "Maintain work areas, districts and territories",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10082
+      },
+      {
+       "id": "3.5.4",
+       "name": "Monitor resource availability",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10083
+      }
+     ],
+     "applicability": "common",
+     "applies": [
+      "electric",
+      "gas"
+     ],
+     "process_count": 4,
+     "uid": 10079
+    }
+   ],
+   "applicability": "common",
+   "applies": [
+    "electric",
+    "gas"
+   ],
+   "summary": "Match approved work to the right resource at the right time, from long-range capacity planning through to same-day re-optimisation.",
+   "uid": 10057,
+   "lifecycle": [
+    "maintain"
+   ]
+  },
+  {
+   "id": "4.0",
+   "num": 4,
+   "band": "Work Lifecycle",
+   "name": "Dispatch and Execute Field Work",
+   "group_count": "6",
+   "process_count": "32",
+   "groups": [
+    {
+     "id": "4.1",
+     "name": "Assign and dispatch work",
+     "processes": [
+      {
+       "id": "4.1.1",
+       "name": "Assign work to crew or individual",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10086
+      },
+      {
+       "id": "4.1.2",
+       "name": "Dispatch work to the field",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10087
+      },
+      {
+       "id": "4.1.3",
+       "name": "Acknowledge, en-route and on-site confirmation",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10088
+      },
+      {
+       "id": "4.1.4",
+       "name": "Monitor progress and exception",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10089
+      },
+      {
+       "id": "4.1.5",
+       "name": "Reassign, recall and cancel work",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10090
+      }
+     ],
+     "applicability": "common",
+     "applies": [
+      "electric",
+      "gas"
+     ],
+     "process_count": 5,
+     "uid": 10085
+    },
+    {
+     "id": "4.2",
+     "name": "Execute work in the field",
+     "processes": [
+      {
+       "id": "4.2.1",
+       "name": "Review work package and prerequisites",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10092
+      },
+      {
+       "id": "4.2.2",
+       "name": "Perform pre-job safety assessment",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10093
+      },
+      {
+       "id": "4.2.3",
+       "name": "Perform the work",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10094
+      },
+      {
+       "id": "4.2.4",
+       "name": "Record work performed and actuals",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10095
+      },
+      {
+       "id": "4.2.5",
+       "name": "Suspend, transfer or escalate work",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10096
+      },
+      {
+       "id": "4.2.6",
+       "name": "Complete work in the field",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10097
+      }
+     ],
+     "applicability": "common",
+     "applies": [
+      "electric",
+      "gas"
+     ],
+     "process_count": 6,
+     "uid": 10091
+    },
+    {
+     "id": "4.3",
+     "name": "Capture field data and evidence",
+     "processes": [
+      {
+       "id": "4.3.1",
+       "name": "Complete electronic forms and checklists",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10099
+      },
+      {
+       "id": "4.3.2",
+       "name": "Capture photographs and annotations",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10100
+      },
+      {
+       "id": "4.3.3",
+       "name": "Capture readings and measurements",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10101
+      },
+      {
+       "id": "4.3.4",
+       "name": "Capture customer signature and acknowledgement",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10102
+      },
+      {
+       "id": "4.3.5",
+       "name": "Record as-found and as-left condition",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10103
+      },
+      {
+       "id": "4.3.6",
+       "name": "Capture failure symptoms and preliminary codes",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10104
+      }
+     ],
+     "applicability": "common",
+     "applies": [
+      "electric",
+      "gas"
+     ],
+     "process_count": 6,
+     "uid": 10098
+    },
+    {
+     "id": "4.4",
+     "name": "Manage field safety",
+     "processes": [
+      {
+       "id": "4.4.1",
+       "name": "Perform job safety analysis and tailboard",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10106
+      },
+      {
+       "id": "4.4.2",
+       "name": "Operate lone-worker and safety timer controls",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10107
+      },
+      {
+       "id": "4.4.3",
+       "name": "Report incident, near-miss and hazard",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10108
+      },
+      {
+       "id": "4.4.4",
+       "name": "Confirm isolation and permit-to-work",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10109
+      },
+      {
+       "id": "4.4.5",
+       "name": "Verify SCADA points with the control room after field changes",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10110
+      }
+     ],
+     "applicability": "common",
+     "applies": [
+      "electric",
+      "gas"
+     ],
+     "process_count": 5,
+     "uid": 10105
+    },
+    {
+     "id": "4.5",
+     "name": "Enable mobile field operation",
+     "processes": [
+      {
+       "id": "4.5.1",
+       "name": "Operate in disconnected and offline mode",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10112
+      },
+      {
+       "id": "4.5.2",
+       "name": "Synchronise field data on reconnection",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10113
+      },
+      {
+       "id": "4.5.3",
+       "name": "Maintain map and spatial context in the field",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10114
+      },
+      {
+       "id": "4.5.4",
+       "name": "Manage field device provisioning and support",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10115
+      }
+     ],
+     "applicability": "common",
+     "applies": [
+      "electric",
+      "gas"
+     ],
+     "process_count": 4,
+     "uid": 10111
+    },
+    {
+     "id": "4.6",
+     "name": "Restore the work site",
+     "processes": [
+      {
+       "id": "4.6.1",
+       "name": "Place temporary surface restoration",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10117
+      },
+      {
+       "id": "4.6.2",
+       "name": "Maintain temporary restoration until permanent work",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10118
+      },
+      {
+       "id": "4.6.3",
+       "name": "Raise and schedule permanent restoration work",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10119
+      },
+      {
+       "id": "4.6.4",
+       "name": "Perform permanent surface restoration",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10120
+      },
+      {
+       "id": "4.6.5",
+       "name": "Obtain jurisdiction inspection and release",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10121
+      },
+      {
+       "id": "4.6.6",
+       "name": "Track restoration against permit deadline",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10122
+      }
+     ],
+     "applicability": "common",
+     "applies": [
+      "electric",
+      "gas"
+     ],
+     "process_count": 6,
+     "uid": 10116
+    }
+   ],
+   "applicability": "common",
+   "applies": [
+    "electric",
+    "gas"
+   ],
+   "summary": "Deliver work to the crew and support safe, compliant, first-time-right execution in the field.",
+   "uid": 10084,
+   "lifecycle": [
+    "design-and-construct",
+    "maintain"
+   ]
+  },
+  {
+   "id": "5.0",
+   "num": 5,
+   "band": "Work Lifecycle",
+   "name": "Close Work, Settle Cost and Update Records",
+   "group_count": "4",
+   "process_count": "20",
+   "groups": [
+    {
+     "id": "5.1",
+     "name": "Verify and close work",
+     "processes": [
+      {
+       "id": "5.1.1",
+       "name": "Review completion and evidence",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "6.1.1",
+       "uid": 10125
+      },
+      {
+       "id": "5.1.2",
+       "name": "Perform quality and compliance check",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "6.1.2",
+       "uid": 10126
+      },
+      {
+       "id": "5.1.3",
+       "name": "Return work for rework where deficient",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "6.1.3",
+       "uid": 10127
+      },
+      {
+       "id": "5.1.4",
+       "name": "Close work order and task",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "6.1.4",
+       "uid": 10128
+      }
+     ],
+     "applicability": "common",
+     "applies": [
+      "electric",
+      "gas"
+     ],
+     "process_count": 4,
+     "legacy_id": "6.1",
+     "uid": 10124
+    },
+    {
+     "id": "5.2",
+     "name": "Capture and settle cost",
+     "processes": [
+      {
+       "id": "5.2.1",
+       "name": "Post labour actuals",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "6.2.1",
+       "uid": 10130
+      },
+      {
+       "id": "5.2.2",
+       "name": "Post material and equipment actuals",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "6.2.2",
+       "uid": 10131
+      },
+      {
+       "id": "5.2.3",
+       "name": "Post contracted cost",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "6.2.3",
+       "uid": 10132
+      },
+      {
+       "id": "5.2.4",
+       "name": "Settle cost to work order and project",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "6.2.4",
+       "uid": 10133
+      },
+      {
+       "id": "5.2.5",
+       "name": "Resolve costing exceptions",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "6.2.5",
+       "uid": 10134
+      }
+     ],
+     "applicability": "common",
+     "applies": [
+      "electric",
+      "gas"
+     ],
+     "process_count": 5,
+     "legacy_id": "6.2",
+     "uid": 10129
+    },
+    {
+     "id": "5.3",
+     "name": "Capitalise and unitise completed work",
+     "processes": [
+      {
+       "id": "5.3.1",
+       "name": "Determine capital versus expense treatment",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "6.3.1",
+       "uid": 10136
+      },
+      {
+       "id": "5.3.2",
+       "name": "Unitise completed capital work",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "6.3.2",
+       "uid": 10137
+      },
+      {
+       "id": "5.3.3",
+       "name": "Post to fixed asset and property record",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "6.3.3",
+       "uid": 10138
+      },
+      {
+       "id": "5.3.4",
+       "name": "Close funding project or programme",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "6.3.4",
+       "uid": 10139
+      }
+     ],
+     "applicability": "common",
+     "applies": [
+      "electric",
+      "gas"
+     ],
+     "process_count": 4,
+     "legacy_id": "6.3",
+     "uid": 10135
+    },
+    {
+     "id": "5.4",
+     "name": "Produce digital as-built and update asset records",
+     "processes": [
+      {
+       "id": "5.4.1",
+       "name": "Capture field redline against the issued design",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "6.4.1",
+       "uid": 10141
+      },
+      {
+       "id": "5.4.2",
+       "name": "Perform survey-grade asset location capture",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "6.4.2",
+       "uid": 10142
+      },
+      {
+       "id": "5.4.3",
+       "name": "Record installed, removed and abandoned units",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "6.4.3",
+       "uid": 10143
+      },
+      {
+       "id": "5.4.4",
+       "name": "Reconcile as-built against the design",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "6.4.4",
+       "uid": 10144
+      },
+      {
+       "id": "5.4.5",
+       "name": "Review, approve and accept the as-built",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "6.4.5",
+       "uid": 10145
+      },
+      {
+       "id": "5.4.6",
+       "name": "Update asset register and segmentation",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "6.4.6",
+       "uid": 10146
+      },
+      {
+       "id": "5.4.7",
+       "name": "Publish as-built change to the network model",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "6.4.7",
+       "uid": 10147
+      }
+     ],
+     "applicability": "common",
+     "applies": [
+      "electric",
+      "gas"
+     ],
+     "process_count": 7,
+     "legacy_id": "6.4",
+     "uid": 10140
+    }
+   ],
+   "applicability": "common",
+   "applies": [
+    "electric",
+    "gas"
+   ],
+   "summary": "Complete the work record, settle the cost and update the asset and financial position.",
+   "legacy_id": "6.0",
+   "uid": 10123,
+   "lifecycle": [
+    "design-and-construct",
+    "maintain"
+   ]
+  },
+  {
+   "id": "6.0",
+   "num": 6,
+   "band": "Specialised Operations",
+   "name": "Manage Metering and Measurement Operations",
+   "group_count": "6",
+   "process_count": "26",
+   "groups": [
+    {
+     "id": "6.1",
+     "name": "Manage the meter asset population",
+     "processes": [
+      {
+       "id": "6.1.1",
+       "name": "Maintain meter and endpoint asset record",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "7.1.1",
+       "uid": 10150
+      },
+      {
+       "id": "6.1.2",
+       "name": "Plan meter deployment and change-out programme",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "7.1.2",
+       "uid": 10151
+      },
+      {
+       "id": "6.1.3",
+       "name": "Manage meter stock and rotation",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "7.1.3",
+       "uid": 10152
+      },
+      {
+       "id": "6.1.4",
+       "name": "Retire and dispose of meters",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "7.1.4",
+       "uid": 10153
+      }
+     ],
+     "applicability": "common",
+     "applies": [
+      "electric",
+      "gas"
+     ],
+     "process_count": 4,
+     "legacy_id": "7.1",
+     "uid": 10149
+    },
+    {
+     "id": "6.2",
+     "name": "Perform meter field operations",
+     "processes": [
+      {
+       "id": "6.2.1",
+       "name": "Set, exchange and remove meters",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "7.2.1",
+       "uid": 10155
+      },
+      {
+       "id": "6.2.2",
+       "name": "Perform turn-on, turn-off and reconnection",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "7.2.2",
+       "uid": 10156
+      },
+      {
+       "id": "6.2.3",
+       "name": "Install communication module or endpoint",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "7.2.3",
+       "uid": 10157
+      },
+      {
+       "id": "6.2.4",
+       "name": "Investigate meter condition and access issues",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "7.2.4",
+       "uid": 10158
+      }
+     ],
+     "applicability": "common",
+     "applies": [
+      "electric",
+      "gas"
+     ],
+     "process_count": 4,
+     "legacy_id": "7.2",
+     "uid": 10154
+    },
+    {
+     "id": "6.3",
+     "name": "Programme and commission endpoints",
+     "processes": [
+      {
+       "id": "6.3.1",
+       "name": "Programme meter, register or module",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "7.3.1",
+       "uid": 10160
+      },
+      {
+       "id": "6.3.2",
+       "name": "Apply configuration and firmware",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "7.3.2",
+       "uid": 10161
+      },
+      {
+       "id": "6.3.3",
+       "name": "Commission endpoint to the communication network",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "7.3.3",
+       "uid": 10162
+      },
+      {
+       "id": "6.3.4",
+       "name": "Validate installation, read and signal",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "7.3.4",
+       "uid": 10163
+      },
+      {
+       "id": "6.3.5",
+       "name": "Record programming and commissioning audit trail",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "7.3.5",
+       "uid": 10164
+      }
+     ],
+     "applicability": "common",
+     "applies": [
+      "electric",
+      "gas"
+     ],
+     "process_count": 5,
+     "legacy_id": "7.3",
+     "uid": 10159
+    },
+    {
+     "id": "6.4",
+     "name": "Test, prove and certify meters",
+     "processes": [
+      {
+       "id": "6.4.1",
+       "name": "Receive and inspect returned meters",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "7.4.1",
+       "uid": 10166
+      },
+      {
+       "id": "6.4.2",
+       "name": "Perform bench and prover accuracy testing",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "7.4.2",
+       "uid": 10167
+      },
+      {
+       "id": "6.4.3",
+       "name": "Certify accuracy and record test result",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "7.4.3",
+       "uid": 10168
+      },
+      {
+       "id": "6.4.4",
+       "name": "Produce test and prover reporting",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "7.4.4",
+       "uid": 10169
+      },
+      {
+       "id": "6.4.5",
+       "name": "Repair, refurbish or condemn meters",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "7.4.5",
+       "uid": 10170
+      },
+      {
+       "id": "6.4.6",
+       "name": "Maintain test equipment calibration",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "7.4.6",
+       "uid": 10171
+      }
+     ],
+     "applicability": "common",
+     "applies": [
+      "electric",
+      "gas"
+     ],
+     "process_count": 6,
+     "legacy_id": "7.4",
+     "uid": 10165
+    },
+    {
+     "id": "6.5",
+     "name": "Obtain and validate measurement data",
+     "processes": [
+      {
+       "id": "6.5.1",
+       "name": "Perform manual or mobile meter reading",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "7.5.1",
+       "uid": 10173
+      },
+      {
+       "id": "6.5.2",
+       "name": "Validate reads and resolve exceptions",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "7.5.2",
+       "uid": 10174
+      },
+      {
+       "id": "6.5.3",
+       "name": "Estimate consumption where read unavailable",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "7.5.3",
+       "uid": 10175
+      },
+      {
+       "id": "6.5.4",
+       "name": "Investigate measurement anomalies",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "7.5.4",
+       "uid": 10176
+      }
+     ],
+     "applicability": "common",
+     "applies": [
+      "electric",
+      "gas"
+     ],
+     "process_count": 4,
+     "legacy_id": "7.5",
+     "uid": 10172
+    },
+    {
+     "id": "6.6",
+     "name": "Protect revenue",
+     "processes": [
+      {
+       "id": "6.6.1",
+       "name": "Detect suspected theft or tamper",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "7.6.1",
+       "uid": 10178
+      },
+      {
+       "id": "6.6.2",
+       "name": "Investigate revenue anomaly in the field",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "7.6.2",
+       "uid": 10179
+      },
+      {
+       "id": "6.6.3",
+       "name": "Remediate and recover unbilled revenue",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "7.6.3",
+       "uid": 10180
+      }
+     ],
+     "applicability": "common",
+     "applies": [
+      "electric",
+      "gas"
+     ],
+     "process_count": 3,
+     "legacy_id": "7.6",
+     "uid": 10177
+    }
+   ],
+   "applicability": "common",
+   "applies": [
+    "electric",
+    "gas"
+   ],
+   "summary": "Install, programme, prove and maintain metering endpoints and safeguard measurement integrity.",
+   "legacy_id": "7.0",
+   "uid": 10148,
+   "lifecycle": [
+    "operate",
+    "maintain"
+   ]
+  },
+  {
+   "id": "7.0",
+   "num": 7,
+   "band": "Specialised Operations",
+   "name": "Manage Vegetation",
+   "group_count": "5",
+   "process_count": "22",
+   "groups": [
+    {
+     "id": "7.1",
+     "name": "Plan the vegetation programme",
+     "processes": [
+      {
+       "id": "7.1.1",
+       "name": "Define cycle-based and risk-based strategy",
+       "applies": [
+        "electric"
+       ],
+       "legacy_id": "8.1.1",
+       "uid": 10183
+      },
+      {
+       "id": "7.1.2",
+       "name": "Capture remote survey data",
+       "applies": [
+        "electric"
+       ],
+       "legacy_id": "8.1.2",
+       "uid": 10184
+      },
+      {
+       "id": "7.1.3",
+       "name": "Score and rank spans, circuits and segments",
+       "applies": [
+        "electric"
+       ],
+       "legacy_id": "8.1.3",
+       "uid": 10185
+      },
+      {
+       "id": "7.1.4",
+       "name": "Plan budget, cycle and territory",
+       "applies": [
+        "electric"
+       ],
+       "legacy_id": "8.1.4",
+       "uid": 10186
+      },
+      {
+       "id": "7.1.5",
+       "name": "Model growth and encroachment rates",
+       "applies": [
+        "electric"
+       ],
+       "legacy_id": "8.1.5",
+       "uid": 10187
+      }
+     ],
+     "applicability": "electric",
+     "applies": [
+      "electric"
+     ],
+     "process_count": 5,
+     "legacy_id": "8.1",
+     "uid": 10182
+    },
+    {
+     "id": "7.2",
+     "name": "Inspect and prescribe vegetation work",
+     "processes": [
+      {
+       "id": "7.2.1",
+       "name": "Perform ground and aerial patrol",
+       "applies": [
+        "electric"
+       ],
+       "legacy_id": "8.2.1",
+       "uid": 10189
+      },
+      {
+       "id": "7.2.2",
+       "name": "Measure clearance against required distance",
+       "applies": [
+        "electric"
+       ],
+       "legacy_id": "8.2.2",
+       "uid": 10190
+      },
+      {
+       "id": "7.2.3",
+       "name": "Identify hazard and danger trees",
+       "applies": [
+        "electric"
+       ],
+       "legacy_id": "8.2.3",
+       "uid": 10191
+      },
+      {
+       "id": "7.2.4",
+       "name": "Prescribe work method and specification",
+       "applies": [
+        "electric"
+       ],
+       "legacy_id": "8.2.4",
+       "uid": 10192
+      }
+     ],
+     "applicability": "electric",
+     "applies": [
+      "electric"
+     ],
+     "process_count": 4,
+     "legacy_id": "8.2",
+     "uid": 10188
+    },
+    {
+     "id": "7.3",
+     "name": "Obtain access and consent",
+     "processes": [
+      {
+       "id": "7.3.1",
+       "name": "Notify customer, landowner and community",
+       "applies": [
+        "electric"
+       ],
+       "legacy_id": "8.3.1",
+       "uid": 10194
+      },
+      {
+       "id": "7.3.2",
+       "name": "Obtain permission, permit and easement access",
+       "applies": [
+        "electric"
+       ],
+       "legacy_id": "8.3.2",
+       "uid": 10195
+      },
+      {
+       "id": "7.3.3",
+       "name": "Manage refusal and agree alternate method",
+       "applies": [
+        "electric"
+       ],
+       "legacy_id": "8.3.3",
+       "uid": 10196
+      },
+      {
+       "id": "7.3.4",
+       "name": "Reschedule constrained work",
+       "applies": [
+        "electric"
+       ],
+       "legacy_id": "8.3.4",
+       "uid": 10197
+      }
+     ],
+     "applicability": "electric",
+     "applies": [
+      "electric"
+     ],
+     "process_count": 4,
+     "legacy_id": "8.3",
+     "uid": 10193
+    },
+    {
+     "id": "7.4",
+     "name": "Execute vegetation work",
+     "processes": [
+      {
+       "id": "7.4.1",
+       "name": "Dispatch vegetation crew",
+       "applies": [
+        "electric"
+       ],
+       "legacy_id": "8.4.1",
+       "uid": 10199
+      },
+      {
+       "id": "7.4.2",
+       "name": "Perform pruning, trimming and removal",
+       "applies": [
+        "electric"
+       ],
+       "legacy_id": "8.4.2",
+       "uid": 10200
+      },
+      {
+       "id": "7.4.3",
+       "name": "Apply integrated vegetation management method",
+       "applies": [
+        "electric"
+       ],
+       "legacy_id": "8.4.3",
+       "uid": 10201
+      },
+      {
+       "id": "7.4.4",
+       "name": "Dispose of debris and restore site",
+       "applies": [
+        "electric"
+       ],
+       "legacy_id": "8.4.4",
+       "uid": 10202
+      },
+      {
+       "id": "7.4.5",
+       "name": "Capture completion evidence",
+       "applies": [
+        "electric"
+       ],
+       "legacy_id": "8.4.5",
+       "uid": 10203
+      }
+     ],
+     "applicability": "electric",
+     "applies": [
+      "electric"
+     ],
+     "process_count": 5,
+     "legacy_id": "8.4",
+     "uid": 10198
+    },
+    {
+     "id": "7.5",
+     "name": "Audit and report vegetation compliance",
+     "processes": [
+      {
+       "id": "7.5.1",
+       "name": "Perform post-work audit and quality inspection",
+       "applies": [
+        "electric"
+       ],
+       "legacy_id": "8.5.1",
+       "uid": 10205
+      },
+      {
+       "id": "7.5.2",
+       "name": "Maintain clearance compliance evidence",
+       "applies": [
+        "electric"
+       ],
+       "legacy_id": "8.5.2",
+       "uid": 10206
+      },
+      {
+       "id": "7.5.3",
+       "name": "Measure vegetation-caused interruptions (IEEE 1366)",
+       "applies": [
+        "electric"
+       ],
+       "legacy_id": "8.5.3",
+       "uid": 10207
+      },
+      {
+       "id": "7.5.4",
+       "name": "Report to regulator and applicable reliability entity",
+       "applies": [
+        "electric"
+       ],
+       "legacy_id": "8.5.4",
+       "uid": 10208
+      }
+     ],
+     "applicability": "electric",
+     "applies": [
+      "electric"
+     ],
+     "process_count": 4,
+     "legacy_id": "8.5",
+     "uid": 10204
+    }
+   ],
+   "applicability": "electric",
+   "applies": [
+    "electric"
+   ],
+   "summary": "Control vegetation encroachment on the network as a recurring, largely contracted and separately regulated programme.",
+   "legacy_id": "8.0",
+   "uid": 10181,
+   "lifecycle": [
+    "maintain"
+   ]
+  },
+  {
+   "id": "8.0",
+   "num": 8,
+   "band": "Specialised Operations",
+   "name": "Manage Compliance, Integrity and Safety",
+   "group_count": "9",
+   "process_count": "49",
+   "groups": [
+    {
+     "id": "8.1",
+     "name": "Perform regulatory inspection and survey",
+     "processes": [
+      {
+       "id": "8.1.1",
+       "name": "Perform leak survey and detection",
+       "applies": [
+        "gas"
+       ],
+       "legacy_id": "9.1.1",
+       "uid": 10211
+      },
+      {
+       "id": "8.1.2",
+       "name": "Perform asset patrol and mandated inspection",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "9.1.2",
+       "uid": 10212
+      },
+      {
+       "id": "8.1.3",
+       "name": "Perform pressure and pipeline integrity test",
+       "applies": [
+        "gas"
+       ],
+       "legacy_id": "9.1.3",
+       "uid": 10213
+      },
+      {
+       "id": "8.1.4",
+       "name": "Record compliance evidence and completion dates",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "9.1.4",
+       "uid": 10214
+      },
+      {
+       "id": "8.1.5",
+       "name": "Perform electrical diagnostic testing",
+       "applies": [
+        "electric"
+       ],
+       "legacy_id": "9.1.5",
+       "uid": 10215
+      },
+      {
+       "id": "8.1.6",
+       "name": "Inspect and service distribution valves",
+       "applies": [
+        "gas"
+       ],
+       "legacy_id": "9.1.6",
+       "uid": 10216
+      },
+      {
+       "id": "8.1.7",
+       "name": "Inspect vaults and below-grade enclosures",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "9.1.7",
+       "uid": 10217
+      },
+      {
+       "id": "8.1.8",
+       "name": "Perform structure test-and-treat inspection",
+       "applies": [
+        "electric"
+       ],
+       "legacy_id": "9.1.8",
+       "uid": 10218
+      }
+     ],
+     "applicability": "mixed",
+     "applies": [
+      "electric",
+      "gas"
+     ],
+     "process_count": 8,
+     "legacy_id": "9.1",
+     "uid": 10210
+    },
+    {
+     "id": "8.2",
+     "name": "Manage corrosion",
+     "processes": [
+      {
+       "id": "8.2.1",
+       "name": "Inspect rectifiers and power sources",
+       "applies": [
+        "gas"
+       ],
+       "legacy_id": "9.2.1",
+       "uid": 10220
+      },
+      {
+       "id": "8.2.2",
+       "name": "Read and record test station potentials",
+       "applies": [
+        "gas"
+       ],
+       "legacy_id": "9.2.2",
+       "uid": 10221
+      },
+      {
+       "id": "8.2.3",
+       "name": "Perform close interval survey",
+       "applies": [
+        "gas"
+       ],
+       "legacy_id": "9.2.3",
+       "uid": 10222
+      },
+      {
+       "id": "8.2.4",
+       "name": "Inspect coating and atmospheric corrosion",
+       "applies": [
+        "gas"
+       ],
+       "legacy_id": "9.2.4",
+       "uid": 10223
+      },
+      {
+       "id": "8.2.5",
+       "name": "Monitor internal corrosion",
+       "applies": [
+        "gas"
+       ],
+       "legacy_id": "9.2.5",
+       "uid": 10224
+      },
+      {
+       "id": "8.2.6",
+       "name": "Generate and track corrosion remediation work",
+       "applies": [
+        "gas"
+       ],
+       "legacy_id": "9.2.6",
+       "uid": 10225
+      }
+     ],
+     "applicability": "gas",
+     "applies": [
+      "gas"
+     ],
+     "process_count": 6,
+     "legacy_id": "9.2",
+     "uid": 10219
+    },
+    {
+     "id": "8.3",
+     "name": "Manage leaks and hazards",
+     "processes": [
+      {
+       "id": "8.3.1",
+       "name": "Classify leak by grade and severity",
+       "applies": [
+        "gas"
+       ],
+       "legacy_id": "9.3.1",
+       "uid": 10227
+      },
+      {
+       "id": "8.3.2",
+       "name": "Repair leak and make safe",
+       "applies": [
+        "gas"
+       ],
+       "legacy_id": "9.3.2",
+       "uid": 10228
+      },
+      {
+       "id": "8.3.3",
+       "name": "Perform leak re-check and re-survey",
+       "applies": [
+        "gas"
+       ],
+       "legacy_id": "9.3.3",
+       "uid": 10229
+      },
+      {
+       "id": "8.3.4",
+       "name": "Track leak to closure",
+       "applies": [
+        "gas"
+       ],
+       "legacy_id": "9.3.4",
+       "uid": 10230
+      }
+     ],
+     "applicability": "gas",
+     "applies": [
+      "gas"
+     ],
+     "process_count": 4,
+     "legacy_id": "9.3",
+     "uid": 10226
+    },
+    {
+     "id": "8.4",
+     "name": "Prevent damage to buried assets",
+     "processes": [
+      {
+       "id": "8.4.1",
+       "name": "Receive and validate locate request",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "9.4.1",
+       "uid": 10232
+      },
+      {
+       "id": "8.4.2",
+       "name": "Schedule and perform locate and mark-out",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "9.4.2",
+       "uid": 10233
+      },
+      {
+       "id": "8.4.3",
+       "name": "Record locate evidence and positive response",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "9.4.3",
+       "uid": 10234
+      },
+      {
+       "id": "8.4.4",
+       "name": "Investigate and manage damage claims",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "9.4.4",
+       "uid": 10235
+      },
+      {
+       "id": "8.4.5",
+       "name": "Report damage and near-miss statistics",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "9.4.5",
+       "uid": 10236
+      }
+     ],
+     "applicability": "common",
+     "applies": [
+      "electric",
+      "gas"
+     ],
+     "process_count": 5,
+     "legacy_id": "9.4",
+     "uid": 10231
+    },
+    {
+     "id": "8.5",
+     "name": "Manage health, safety and environment",
+     "processes": [
+      {
+       "id": "8.5.1",
+       "name": "Maintain safety procedures and controls",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "9.5.1",
+       "uid": 10238
+      },
+      {
+       "id": "8.5.2",
+       "name": "Investigate incidents and near misses",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "9.5.2",
+       "uid": 10239
+      },
+      {
+       "id": "8.5.3",
+       "name": "Manage environmental obligations and spills",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "9.5.3",
+       "uid": 10240
+      },
+      {
+       "id": "8.5.4",
+       "name": "Report safety and environmental performance",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "9.5.4",
+       "uid": 10241
+      },
+      {
+       "id": "8.5.5",
+       "name": "Operate avian and wildlife protection",
+       "applies": [
+        "electric"
+       ],
+       "legacy_id": "9.5.5",
+       "uid": 10242
+      }
+     ],
+     "applicability": "mixed",
+     "applies": [
+      "electric",
+      "gas"
+     ],
+     "process_count": 5,
+     "legacy_id": "9.5",
+     "uid": 10237
+    },
+    {
+     "id": "8.6",
+     "name": "Manage gas pressure and odorization",
+     "processes": [
+      {
+       "id": "8.6.1",
+       "name": "Inspect pressure regulating and limiting stations",
+       "applies": [
+        "gas"
+       ],
+       "legacy_id": "9.6.1",
+       "uid": 10244
+      },
+      {
+       "id": "8.6.2",
+       "name": "Verify overpressure protection",
+       "applies": [
+        "gas"
+       ],
+       "legacy_id": "9.6.2",
+       "uid": 10245
+      },
+      {
+       "id": "8.6.3",
+       "name": "Monitor system pressure and abnormal operation",
+       "applies": [
+        "gas"
+       ],
+       "legacy_id": "9.6.3",
+       "uid": 10246
+      },
+      {
+       "id": "8.6.4",
+       "name": "Monitor and maintain odorant level",
+       "applies": [
+        "gas"
+       ],
+       "legacy_id": "9.6.4",
+       "uid": 10247
+      },
+      {
+       "id": "8.6.5",
+       "name": "Purge, tap and commission pipe",
+       "applies": [
+        "gas"
+       ],
+       "legacy_id": "9.6.5",
+       "uid": 10248
+      },
+      {
+       "id": "8.6.6",
+       "name": "Purge, seal and abandon facilities",
+       "applies": [
+        "gas"
+       ],
+       "legacy_id": "9.6.6",
+       "uid": 10249
+      }
+     ],
+     "applicability": "gas",
+     "applies": [
+      "gas"
+     ],
+     "process_count": 6,
+     "legacy_id": "9.6",
+     "uid": 10243
+    },
+    {
+     "id": "8.7",
+     "name": "Manage cross bores and subsurface conflicts",
+     "processes": [
+      {
+       "id": "8.7.1",
+       "name": "Identify cross bore risk from trenchless installation",
+       "applies": [
+        "gas"
+       ],
+       "legacy_id": "9.7.1",
+       "uid": 10251
+      },
+      {
+       "id": "8.7.2",
+       "name": "Inspect sewer laterals for cross bores",
+       "applies": [
+        "gas"
+       ],
+       "legacy_id": "9.7.2",
+       "uid": 10252
+      },
+      {
+       "id": "8.7.3",
+       "name": "Remediate confirmed cross bores",
+       "applies": [
+        "gas"
+       ],
+       "legacy_id": "9.7.3",
+       "uid": 10253
+      },
+      {
+       "id": "8.7.4",
+       "name": "Maintain cross bore inspection records",
+       "applies": [
+        "gas"
+       ],
+       "legacy_id": "9.7.4",
+       "uid": 10254
+      }
+     ],
+     "applicability": "gas",
+     "applies": [
+      "gas"
+     ],
+     "process_count": 4,
+     "legacy_id": "9.7",
+     "uid": 10250
+    },
+    {
+     "id": "8.8",
+     "name": "Manage distribution integrity programme",
+     "processes": [
+      {
+       "id": "8.8.1",
+       "name": "Maintain the written programme and system knowledge",
+       "applies": [
+        "gas"
+       ],
+       "legacy_id": "9.8.1",
+       "uid": 10256
+      },
+      {
+       "id": "8.8.2",
+       "name": "Identify and assess system threats",
+       "applies": [
+        "gas"
+       ],
+       "legacy_id": "9.8.2",
+       "uid": 10257
+      },
+      {
+       "id": "8.8.3",
+       "name": "Evaluate and rank risk",
+       "applies": [
+        "gas"
+       ],
+       "legacy_id": "9.8.3",
+       "uid": 10258
+      },
+      {
+       "id": "8.8.4",
+       "name": "Select and implement risk-reduction measures",
+       "applies": [
+        "gas"
+       ],
+       "legacy_id": "9.8.4",
+       "uid": 10259
+      },
+      {
+       "id": "8.8.5",
+       "name": "Measure programme performance against baseline",
+       "applies": [
+        "gas"
+       ],
+       "legacy_id": "9.8.5",
+       "uid": 10260
+      },
+      {
+       "id": "8.8.6",
+       "name": "Re-evaluate programme on mandated cycle",
+       "applies": [
+        "gas"
+       ],
+       "legacy_id": "9.8.6",
+       "uid": 10261
+      },
+      {
+       "id": "8.8.7",
+       "name": "Report the four mandatory integrity measures",
+       "applies": [
+        "gas"
+       ],
+       "legacy_id": "9.8.7",
+       "uid": 10262
+      }
+     ],
+     "applicability": "gas",
+     "applies": [
+      "gas"
+     ],
+     "process_count": 7,
+     "legacy_id": "9.8",
+     "uid": 10255
+    },
+    {
+     "id": "8.9",
+     "name": "Conduct pipeline public awareness",
+     "processes": [
+      {
+       "id": "8.9.1",
+       "name": "Maintain the written public-education programme",
+       "applies": [
+        "gas"
+       ],
+       "legacy_id": "9.9.1",
+       "uid": 10264
+      },
+      {
+       "id": "8.9.2",
+       "name": "Identify stakeholder audiences",
+       "applies": [
+        "gas"
+       ],
+       "legacy_id": "9.9.2",
+       "uid": 10265
+      },
+      {
+       "id": "8.9.3",
+       "name": "Deliver baseline and supplemental messages",
+       "applies": [
+        "gas"
+       ],
+       "legacy_id": "9.9.3",
+       "uid": 10266
+      },
+      {
+       "id": "8.9.4",
+       "name": "Measure effectiveness and retain records",
+       "applies": [
+        "gas"
+       ],
+       "legacy_id": "9.9.4",
+       "uid": 10267
+      }
+     ],
+     "applicability": "gas",
+     "applies": [
+      "gas"
+     ],
+     "process_count": 4,
+     "legacy_id": "9.9",
+     "uid": 10263
+    }
+   ],
+   "applicability": "mixed",
+   "applies": [
+    "electric",
+    "gas"
+   ],
+   "summary": "Meet regulatory obligations for asset integrity and public safety with auditable evidence.",
+   "legacy_id": "9.0",
+   "uid": 10209,
+   "lifecycle": [
+    "maintain",
+    "operate"
+   ]
+  },
+  {
+   "id": "9.0",
+   "num": 9,
+   "band": "Specialised Operations",
+   "name": "Manage Outages and Emergencies",
+   "group_count": "5",
+   "process_count": "24",
+   "groups": [
+    {
+     "id": "9.1",
+     "name": "Respond to emergencies",
+     "processes": [
+      {
+       "id": "9.1.1",
+       "name": "Receive and triage emergency notification",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "10.1.1",
+       "uid": 10270
+      },
+      {
+       "id": "9.1.2",
+       "name": "Dispatch first responder",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "10.1.2",
+       "uid": 10271
+      },
+      {
+       "id": "9.1.3",
+       "name": "Make safe and secure the site",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "10.1.3",
+       "uid": 10272
+      },
+      {
+       "id": "9.1.4",
+       "name": "Escalate to restoration resources",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "10.1.4",
+       "uid": 10273
+      }
+     ],
+     "applicability": "common",
+     "applies": [
+      "electric",
+      "gas"
+     ],
+     "process_count": 4,
+     "legacy_id": "10.1",
+     "uid": 10269
+    },
+    {
+     "id": "9.2",
+     "name": "Assess damage",
+     "processes": [
+      {
+       "id": "9.2.1",
+       "name": "Perform field damage assessment",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "10.2.1",
+       "uid": 10275
+      },
+      {
+       "id": "9.2.2",
+       "name": "Aggregate damage into restoration requirement",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "10.2.2",
+       "uid": 10276
+      },
+      {
+       "id": "9.2.3",
+       "name": "Estimate restoration effort and resources",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "10.2.3",
+       "uid": 10277
+      },
+      {
+       "id": "9.2.4",
+       "name": "Establish estimated time to restore",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "10.2.4",
+       "uid": 10278
+      },
+      {
+       "id": "9.2.5",
+       "name": "Refresh damage assessment and restoration forecast",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "10.2.5",
+       "uid": 10279
+      }
+     ],
+     "applicability": "common",
+     "applies": [
+      "electric",
+      "gas"
+     ],
+     "process_count": 5,
+     "legacy_id": "10.2",
+     "uid": 10274
+    },
+    {
+     "id": "9.3",
+     "name": "Manage restoration",
+     "processes": [
+      {
+       "id": "9.3.1",
+       "name": "Prioritise and sequence restoration work",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "10.3.1",
+       "uid": 10281
+      },
+      {
+       "id": "9.3.2",
+       "name": "Coordinate authorised isolation and switching",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "10.3.2",
+       "uid": 10282
+      },
+      {
+       "id": "9.3.3",
+       "name": "Track crew status and restoration progress",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "10.3.3",
+       "uid": 10283
+      },
+      {
+       "id": "9.3.4",
+       "name": "Confirm restoration and close event",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "10.3.4",
+       "uid": 10284
+      },
+      {
+       "id": "9.3.5",
+       "name": "Restore and relight customer service",
+       "applies": [
+        "gas"
+       ],
+       "legacy_id": "10.3.5",
+       "uid": 10285
+      }
+     ],
+     "applicability": "mixed",
+     "applies": [
+      "electric",
+      "gas"
+     ],
+     "process_count": 5,
+     "legacy_id": "10.3",
+     "uid": 10280
+    },
+    {
+     "id": "9.4",
+     "name": "Manage major events and mutual aid",
+     "processes": [
+      {
+       "id": "9.4.1",
+       "name": "Activate emergency organisation and roles",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "10.4.1",
+       "uid": 10287
+      },
+      {
+       "id": "9.4.2",
+       "name": "Mobilise additional and mutual-aid resources",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "10.4.2",
+       "uid": 10288
+      },
+      {
+       "id": "9.4.3",
+       "name": "Onboard and orient visiting crews",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "10.4.3",
+       "uid": 10289
+      },
+      {
+       "id": "9.4.4",
+       "name": "Manage logistics, lodging and staging",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "10.4.4",
+       "uid": 10290
+      },
+      {
+       "id": "9.4.5",
+       "name": "Capture event cost for regulatory recovery",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "10.4.5",
+       "uid": 10291
+      },
+      {
+       "id": "9.4.6",
+       "name": "Demobilise and release mutual-aid resources",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "10.4.6",
+       "uid": 10292
+      }
+     ],
+     "applicability": "common",
+     "applies": [
+      "electric",
+      "gas"
+     ],
+     "process_count": 6,
+     "legacy_id": "10.4",
+     "uid": 10286
+    },
+    {
+     "id": "9.6",
+     "name": "Manage wildfire operational response",
+     "processes": [
+      {
+       "id": "9.6.1",
+       "name": "Maintain wildfire operational-response plan and de-energization criteria",
+       "applies": [
+        "electric"
+       ],
+       "legacy_id": "10.6.1",
+       "uid": 10294
+      },
+      {
+       "id": "9.6.2",
+       "name": "Execute public safety power shutoff and customer notice",
+       "applies": [
+        "electric"
+       ],
+       "legacy_id": "10.6.2",
+       "uid": 10295
+      },
+      {
+       "id": "9.6.3",
+       "name": "Patrol and restore after fire weather",
+       "applies": [
+        "electric"
+       ],
+       "legacy_id": "10.6.3",
+       "uid": 10296
+      },
+      {
+       "id": "9.6.4",
+       "name": "Capture event cost and compliance evidence",
+       "applies": [
+        "electric"
+       ],
+       "legacy_id": "10.6.4",
+       "uid": 10297
+      }
+     ],
+     "applicability": "electric",
+     "applies": [
+      "electric"
+     ],
+     "process_count": 4,
+     "legacy_id": "10.6",
+     "uid": 10293
+    }
+   ],
+   "applicability": "mixed",
+   "applies": [
+    "electric",
+    "gas"
+   ],
+   "summary": "Respond to unplanned loss of service and mobilise at scale during major events.",
+   "legacy_id": "10.0",
+   "uid": 10268,
+   "lifecycle": [
+    "operate"
+   ]
+  },
+  {
+   "id": "10.0",
+   "num": 10,
+   "band": "Specialised Operations",
+   "name": "Serve Customers in the Field",
+   "group_count": "6",
+   "process_count": "29",
+   "groups": [
+    {
+     "id": "10.1",
+     "name": "Maintain customer and premise information",
+     "processes": [
+      {
+       "id": "10.1.1",
+       "name": "Identify customer, account and premise",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "11.1.1",
+       "uid": 10300
+      },
+      {
+       "id": "10.1.2",
+       "name": "Record customer interaction and history",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "11.1.2",
+       "uid": 10301
+      },
+      {
+       "id": "10.1.3",
+       "name": "Maintain access, hazard and site notes",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "11.1.3",
+       "uid": 10302
+      },
+      {
+       "id": "10.1.4",
+       "name": "Maintain contact and notification preference",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "11.1.4",
+       "uid": 10303
+      }
+     ],
+     "applicability": "common",
+     "applies": [
+      "electric",
+      "gas"
+     ],
+     "process_count": 4,
+     "legacy_id": "11.1",
+     "uid": 10299
+    },
+    {
+     "id": "10.2",
+     "name": "Manage service orders",
+     "processes": [
+      {
+       "id": "10.2.1",
+       "name": "Create service order or service request",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "11.2.1",
+       "uid": 10305
+      },
+      {
+       "id": "10.2.2",
+       "name": "Schedule and dispatch service order",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "11.2.2",
+       "uid": 10306
+      },
+      {
+       "id": "10.2.3",
+       "name": "Execute and complete service order",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "11.2.3",
+       "uid": 10307
+      },
+      {
+       "id": "10.2.4",
+       "name": "Cancel, amend and reschedule service order",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "11.2.4",
+       "uid": 10308
+      }
+     ],
+     "applicability": "common",
+     "applies": [
+      "electric",
+      "gas"
+     ],
+     "process_count": 4,
+     "legacy_id": "11.2",
+     "uid": 10304
+    },
+    {
+     "id": "10.3",
+     "name": "Communicate with customers",
+     "processes": [
+      {
+       "id": "10.3.1",
+       "name": "Confirm appointment and provide reminder",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "11.3.1",
+       "uid": 10310
+      },
+      {
+       "id": "10.3.2",
+       "name": "Notify en-route and arrival",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "11.3.2",
+       "uid": 10311
+      },
+      {
+       "id": "10.3.3",
+       "name": "Notify outage, restoration and delay",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "11.3.3",
+       "uid": 10312
+      },
+      {
+       "id": "10.3.4",
+       "name": "Capture customer feedback",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "11.3.4",
+       "uid": 10313
+      }
+     ],
+     "applicability": "common",
+     "applies": [
+      "electric",
+      "gas"
+     ],
+     "process_count": 4,
+     "legacy_id": "11.3",
+     "uid": 10309
+    },
+    {
+     "id": "10.4",
+     "name": "Perform collections and disconnection field work",
+     "processes": [
+      {
+       "id": "10.4.1",
+       "name": "Issue collections or disconnection order",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "11.4.1",
+       "uid": 10315
+      },
+      {
+       "id": "10.4.2",
+       "name": "Perform field disconnection and reconnection",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "11.4.2",
+       "uid": 10316
+      },
+      {
+       "id": "10.4.3",
+       "name": "Record customer contact and payment at premises",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "11.4.3",
+       "uid": 10317
+      },
+      {
+       "id": "10.4.4",
+       "name": "Apply disconnection eligibility and protection rules",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "11.4.4",
+       "uid": 10318
+      },
+      {
+       "id": "10.4.5",
+       "name": "Perform reconnection after payment",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "11.4.5",
+       "uid": 10319
+      }
+     ],
+     "applicability": "common",
+     "applies": [
+      "electric",
+      "gas"
+     ],
+     "process_count": 5,
+     "legacy_id": "11.4",
+     "uid": 10314
+    },
+    {
+     "id": "10.5",
+     "name": "Start, stop and transfer service",
+     "processes": [
+      {
+       "id": "10.5.1",
+       "name": "Receive start, stop or transfer request",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "11.5.1",
+       "uid": 10321
+      },
+      {
+       "id": "10.5.2",
+       "name": "Establish or verify the premise record",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "11.5.2",
+       "uid": 10322
+      },
+      {
+       "id": "10.5.3",
+       "name": "Evaluate deposit and credit requirement",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "11.5.3",
+       "uid": 10323
+      },
+      {
+       "id": "10.5.4",
+       "name": "Raise turn-on, turn-off or transfer field order",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "11.5.4",
+       "uid": 10324
+      },
+      {
+       "id": "10.5.5",
+       "name": "Confirm service change and close the request",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "11.5.5",
+       "uid": 10325
+      }
+     ],
+     "applicability": "common",
+     "applies": [
+      "electric",
+      "gas"
+     ],
+     "process_count": 5,
+     "legacy_id": "11.5",
+     "uid": 10320
+    },
+    {
+     "id": "10.6",
+     "name": "Connect new service",
+     "processes": [
+      {
+       "id": "10.6.1",
+       "name": "Receive and qualify new service request",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "11.6.1",
+       "uid": 10327
+      },
+      {
+       "id": "10.6.2",
+       "name": "Survey premises and determine service route",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "11.6.2",
+       "uid": 10328
+      },
+      {
+       "id": "10.6.3",
+       "name": "Estimate and agree customer contribution",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "11.6.3",
+       "uid": 10329
+      },
+      {
+       "id": "10.6.4",
+       "name": "Install service line and set meter",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "11.6.4",
+       "uid": 10330
+      },
+      {
+       "id": "10.6.5",
+       "name": "Commission service and confirm connection",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "11.6.5",
+       "uid": 10331
+      },
+      {
+       "id": "10.6.6",
+       "name": "Review and approve distributed energy resource interconnection",
+       "applies": [
+        "electric"
+       ],
+       "legacy_id": "11.6.6",
+       "uid": 10332
+      },
+      {
+       "id": "10.6.7",
+       "name": "Witness, inspect and commission the interconnection",
+       "applies": [
+        "electric"
+       ],
+       "legacy_id": "11.6.7",
+       "uid": 10333
+      }
+     ],
+     "applicability": "mixed",
+     "applies": [
+      "electric",
+      "gas"
+     ],
+     "process_count": 7,
+     "legacy_id": "11.6",
+     "uid": 10326
+    }
+   ],
+   "applicability": "mixed",
+   "applies": [
+    "electric",
+    "gas"
+   ],
+   "summary": "Manage the customer-facing thread of field work from request through to confirmation.",
+   "legacy_id": "11.0",
+   "uid": 10298,
+   "lifecycle": [
+    "operate",
+    "maintain"
+   ]
+  },
+  {
+   "id": "11.0",
+   "num": 11,
+   "band": "Specialised Operations",
+   "name": "Manage Joint Use and Third-Party Attachments",
+   "applicability": "electric",
+   "group_count": "6",
+   "process_count": "35",
+   "groups": [
+    {
+     "id": "11.1",
+     "name": "Manage joint use agreements and rates",
+     "processes": [
+      {
+       "id": "11.1.1",
+       "name": "Establish joint use and licence agreement terms",
+       "applies": [
+        "electric"
+       ],
+       "legacy_id": "16.1.1",
+       "uid": 10336
+      },
+      {
+       "id": "11.1.2",
+       "name": "Maintain pole ownership and joint ownership ratios",
+       "applies": [
+        "electric"
+       ],
+       "legacy_id": "16.1.2",
+       "uid": 10337
+      },
+      {
+       "id": "11.1.3",
+       "name": "Determine attachment rental rates",
+       "applies": [
+        "electric"
+       ],
+       "legacy_id": "16.1.3",
+       "uid": 10338
+      },
+      {
+       "id": "11.1.4",
+       "name": "Maintain rate formula cost inputs",
+       "applies": [
+        "electric"
+       ],
+       "legacy_id": "16.1.4",
+       "uid": 10339
+      },
+      {
+       "id": "11.1.5",
+       "name": "Monitor jurisdictional and regulatory obligations",
+       "applies": [
+        "electric"
+       ],
+       "legacy_id": "16.1.5",
+       "uid": 10340
+      },
+      {
+       "id": "11.1.6",
+       "name": "Renew and renegotiate agreements",
+       "applies": [
+        "electric"
+       ],
+       "legacy_id": "16.1.6",
+       "uid": 10341
+      }
+     ],
+     "applicability": "electric",
+     "applies": [
+      "electric"
+     ],
+     "process_count": 6,
+     "legacy_id": "16.1",
+     "uid": 10335
+    },
+    {
+     "id": "11.2",
+     "name": "Administer attachment applications and permits",
+     "processes": [
+      {
+       "id": "11.2.1",
+       "name": "Receive and validate attachment application",
+       "applies": [
+        "electric"
+       ],
+       "legacy_id": "16.2.1",
+       "uid": 10343
+      },
+      {
+       "id": "11.2.2",
+       "name": "Assess application scope and fees",
+       "applies": [
+        "electric"
+       ],
+       "legacy_id": "16.2.2",
+       "uid": 10344
+      },
+      {
+       "id": "11.2.3",
+       "name": "Sequence and batch application workload",
+       "applies": [
+        "electric"
+       ],
+       "legacy_id": "16.2.3",
+       "uid": 10345
+      },
+      {
+       "id": "11.2.4",
+       "name": "Track regulatory application timelines",
+       "applies": [
+        "electric"
+       ],
+       "legacy_id": "16.2.4",
+       "uid": 10346
+      },
+      {
+       "id": "11.2.5",
+       "name": "Issue or condition attachment permit",
+       "applies": [
+        "electric"
+       ],
+       "legacy_id": "16.2.5",
+       "uid": 10347
+      },
+      {
+       "id": "11.2.6",
+       "name": "Apply for attachment on third-party structures",
+       "applies": [
+        "electric"
+       ],
+       "legacy_id": "16.2.6",
+       "uid": 10348
+      }
+     ],
+     "applicability": "electric",
+     "applies": [
+      "electric"
+     ],
+     "process_count": 6,
+     "legacy_id": "16.2",
+     "uid": 10342
+    },
+    {
+     "id": "11.3",
+     "name": "Engineer and deliver make-ready work",
+     "processes": [
+      {
+       "id": "11.3.1",
+       "name": "Survey structure and existing attachments",
+       "applies": [
+        "electric"
+       ],
+       "legacy_id": "16.3.1",
+       "uid": 10350
+      },
+      {
+       "id": "11.3.2",
+       "name": "Perform structural loading analysis",
+       "applies": [
+        "electric"
+       ],
+       "legacy_id": "16.3.2",
+       "uid": 10351
+      },
+      {
+       "id": "11.3.3",
+       "name": "Design make-ready and clearance solution",
+       "applies": [
+        "electric"
+       ],
+       "legacy_id": "16.3.3",
+       "uid": 10352
+      },
+      {
+       "id": "11.3.4",
+       "name": "Estimate make-ready cost",
+       "applies": [
+        "electric"
+       ],
+       "legacy_id": "16.3.4",
+       "uid": 10353
+      },
+      {
+       "id": "11.3.5",
+       "name": "Allocate make-ready and replacement cost",
+       "applies": [
+        "electric"
+       ],
+       "legacy_id": "16.3.5",
+       "uid": 10354
+      },
+      {
+       "id": "11.3.6",
+       "name": "Execute and inspect make-ready construction",
+       "applies": [
+        "electric"
+       ],
+       "legacy_id": "16.3.6",
+       "uid": 10355
+      }
+     ],
+     "applicability": "electric",
+     "applies": [
+      "electric"
+     ],
+     "process_count": 6,
+     "legacy_id": "16.3",
+     "uid": 10349
+    },
+    {
+     "id": "11.4",
+     "name": "Manage attachment inventory and audits",
+     "processes": [
+      {
+       "id": "11.4.1",
+       "name": "Maintain attachment inventory on structures",
+       "applies": [
+        "electric"
+       ],
+       "legacy_id": "16.4.1",
+       "uid": 10357
+      },
+      {
+       "id": "11.4.2",
+       "name": "Maintain conduit and duct occupancy records",
+       "applies": [
+        "electric"
+       ],
+       "legacy_id": "16.4.2",
+       "uid": 10358
+      },
+      {
+       "id": "11.4.3",
+       "name": "Plan and scope joint use audit",
+       "applies": [
+        "electric"
+       ],
+       "legacy_id": "16.4.3",
+       "uid": 10359
+      },
+      {
+       "id": "11.4.4",
+       "name": "Capture and validate field attachment data",
+       "applies": [
+        "electric"
+       ],
+       "legacy_id": "16.4.4",
+       "uid": 10360
+      },
+      {
+       "id": "11.4.5",
+       "name": "Reconcile audit findings to billing records",
+       "applies": [
+        "electric"
+       ],
+       "legacy_id": "16.4.5",
+       "uid": 10361
+      },
+      {
+       "id": "11.4.6",
+       "name": "Identify and pursue unauthorised attachments",
+       "applies": [
+        "electric"
+       ],
+       "legacy_id": "16.4.6",
+       "uid": 10362
+      }
+     ],
+     "applicability": "electric",
+     "applies": [
+      "electric"
+     ],
+     "process_count": 6,
+     "legacy_id": "16.4",
+     "uid": 10356
+    },
+    {
+     "id": "11.5",
+     "name": "Manage transfers and structure replacement",
+     "processes": [
+      {
+       "id": "11.5.1",
+       "name": "Notify attachers of transfer obligation",
+       "applies": [
+        "electric"
+       ],
+       "legacy_id": "16.5.1",
+       "uid": 10364
+      },
+      {
+       "id": "11.5.2",
+       "name": "Sequence multi-party transfer work",
+       "applies": [
+        "electric"
+       ],
+       "legacy_id": "16.5.2",
+       "uid": 10365
+      },
+      {
+       "id": "11.5.3",
+       "name": "Track transfer completion and ageing",
+       "applies": [
+        "electric"
+       ],
+       "legacy_id": "16.5.3",
+       "uid": 10366
+      },
+      {
+       "id": "11.5.4",
+       "name": "Reduce double-wood and stub structure backlog",
+       "applies": [
+        "electric"
+       ],
+       "legacy_id": "16.5.4",
+       "uid": 10367
+      },
+      {
+       "id": "11.5.5",
+       "name": "Resolve clearance and safety violations",
+       "applies": [
+        "electric"
+       ],
+       "legacy_id": "16.5.5",
+       "uid": 10368
+      }
+     ],
+     "applicability": "electric",
+     "applies": [
+      "electric"
+     ],
+     "process_count": 5,
+     "legacy_id": "16.5",
+     "uid": 10363
+    },
+    {
+     "id": "11.6",
+     "name": "Bill, settle and resolve attachment disputes",
+     "processes": [
+      {
+       "id": "11.6.1",
+       "name": "Calculate periodic attachment rental",
+       "applies": [
+        "electric"
+       ],
+       "legacy_id": "16.6.1",
+       "uid": 10370
+      },
+      {
+       "id": "11.6.2",
+       "name": "Invoice attachers and joint owners",
+       "applies": [
+        "electric"
+       ],
+       "legacy_id": "16.6.2",
+       "uid": 10371
+      },
+      {
+       "id": "11.6.3",
+       "name": "Settle joint ownership and net balances",
+       "applies": [
+        "electric"
+       ],
+       "legacy_id": "16.6.3",
+       "uid": 10372
+      },
+      {
+       "id": "11.6.4",
+       "name": "Verify and pay rent on third-party structures",
+       "applies": [
+        "electric"
+       ],
+       "legacy_id": "16.6.4",
+       "uid": 10373
+      },
+      {
+       "id": "11.6.5",
+       "name": "Back-bill and penalise unauthorised attachments",
+       "applies": [
+        "electric"
+       ],
+       "legacy_id": "16.6.5",
+       "uid": 10374
+      },
+      {
+       "id": "11.6.6",
+       "name": "Manage disputes and regulatory complaints",
+       "applies": [
+        "electric"
+       ],
+       "legacy_id": "16.6.6",
+       "uid": 10375
+      }
+     ],
+     "applicability": "electric",
+     "applies": [
+      "electric"
+     ],
+     "process_count": 6,
+     "legacy_id": "16.6",
+     "uid": 10369
+    }
+   ],
+   "applies": [
+    "electric"
+   ],
+   "summary": "Administer shared use of poles, conduit and structures by third parties, from application and make-ready through inventory, transfers, rental billing and dispute.",
+   "legacy_id": "16.0",
+   "uid": 10334,
+   "lifecycle": [
+    "design-and-construct",
+    "maintain"
+   ]
+  },
+  {
+   "id": "12.0",
+   "num": 12,
+   "band": "Foundations and Enabling",
+   "name": "Manage Assets and Asset Information",
+   "group_count": "6",
+   "process_count": "32",
+   "groups": [
+    {
+     "id": "12.1",
+     "name": "Establish and maintain asset register",
+     "processes": [
+      {
+       "id": "12.1.1",
+       "name": "Create and classify asset records",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10378
+      },
+      {
+       "id": "12.1.2",
+       "name": "Maintain asset hierarchy and relationships",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10379
+      },
+      {
+       "id": "12.1.3",
+       "name": "Maintain location and network hierarchy",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10380
+      },
+      {
+       "id": "12.1.4",
+       "name": "Maintain organisational hierarchy",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10381
+      },
+      {
+       "id": "12.1.5",
+       "name": "Maintain asset specifications and attributes",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10382
+      },
+      {
+       "id": "12.1.6",
+       "name": "Retire and dispose of assets",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10383
+      }
+     ],
+     "applicability": "common",
+     "applies": [
+      "electric",
+      "gas"
+     ],
+     "process_count": 6,
+     "uid": 10377
+    },
+    {
+     "id": "12.2",
+     "name": "Integrate asset and spatial information",
+     "processes": [
+      {
+       "id": "12.2.1",
+       "name": "Define system of record by asset class",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10385
+      },
+      {
+       "id": "12.2.2",
+       "name": "Reconcile spatial and non-spatial asset records",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10386
+      },
+      {
+       "id": "12.2.3",
+       "name": "Publish asset changes to the spatial network model",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10387
+      },
+      {
+       "id": "12.2.4",
+       "name": "Consume spatial network and connectivity updates",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10388
+      },
+      {
+       "id": "12.2.5",
+       "name": "Resolve orphaned, duplicate and mismatched records",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10389
+      },
+      {
+       "id": "12.2.6",
+       "name": "Maintain asset identification standards",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10390
+      },
+      {
+       "id": "12.2.7",
+       "name": "Operate distributed asset data across territories",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10391
+      }
+     ],
+     "applicability": "common",
+     "applies": [
+      "electric",
+      "gas"
+     ],
+     "process_count": 7,
+     "uid": 10384
+    },
+    {
+     "id": "12.3",
+     "name": "Manage linear and network assets",
+     "processes": [
+      {
+       "id": "12.3.1",
+       "name": "Define linear assets and their measure basis",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10393
+      },
+      {
+       "id": "12.3.2",
+       "name": "Apply linear referencing and measure points",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10394
+      },
+      {
+       "id": "12.3.3",
+       "name": "Maintain dynamic segmentation along the asset",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10395
+      },
+      {
+       "id": "12.3.4",
+       "name": "Record condition, defect and work by segment",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10396
+      },
+      {
+       "id": "12.3.5",
+       "name": "Split, merge and re-measure linear segments",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10397
+      },
+      {
+       "id": "12.3.6",
+       "name": "Maintain network connectivity and traceability",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10398
+      }
+     ],
+     "applicability": "common",
+     "applies": [
+      "electric",
+      "gas"
+     ],
+     "process_count": 6,
+     "uid": 10392
+    },
+    {
+     "id": "12.4",
+     "name": "Assess asset condition and performance",
+     "processes": [
+      {
+       "id": "12.4.1",
+       "name": "Conduct condition assessment",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10400
+      },
+      {
+       "id": "12.4.2",
+       "name": "Validate failure mode, mechanism, cause and consequence",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10401
+      },
+      {
+       "id": "12.4.3",
+       "name": "Maintain asset health and criticality scoring",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10402
+      },
+      {
+       "id": "12.4.4",
+       "name": "Analyse asset performance and reliability",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10403
+      }
+     ],
+     "applicability": "common",
+     "applies": [
+      "electric",
+      "gas"
+     ],
+     "process_count": 4,
+     "uid": 10399
+    },
+    {
+     "id": "12.5",
+     "name": "Define maintenance strategy",
+     "processes": [
+      {
+       "id": "12.5.1",
+       "name": "Define preventive maintenance programme",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10405
+      },
+      {
+       "id": "12.5.2",
+       "name": "Define condition-based maintenance triggers",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10406
+      },
+      {
+       "id": "12.5.3",
+       "name": "Define predictive and prescriptive strategies",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10407
+      },
+      {
+       "id": "12.5.4",
+       "name": "Maintain job plans and task libraries",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10408
+      },
+      {
+       "id": "12.5.5",
+       "name": "Manage warranty and claims",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10409
+      }
+     ],
+     "applicability": "common",
+     "applies": [
+      "electric",
+      "gas"
+     ],
+     "process_count": 5,
+     "uid": 10404
+    },
+    {
+     "id": "12.6",
+     "name": "Manage asset risk and compliance obligations",
+     "processes": [
+      {
+       "id": "12.6.1",
+       "name": "Maintain regulatory obligation register",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10411
+      },
+      {
+       "id": "12.6.2",
+       "name": "Assess asset risk and consequence of failure",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10412
+      },
+      {
+       "id": "12.6.3",
+       "name": "Plan asset replacement and renewal",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10413
+      },
+      {
+       "id": "12.6.4",
+       "name": "Control asset-related technical change",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10414
+      }
+     ],
+     "applicability": "common",
+     "applies": [
+      "electric",
+      "gas"
+     ],
+     "process_count": 4,
+     "uid": 10410
+    }
+   ],
+   "applicability": "common",
+   "applies": [
+    "electric",
+    "gas"
+   ],
+   "summary": "Establish and maintain the asset record, understand asset condition and risk, and set the maintenance strategy that generates work.",
+   "uid": 10376,
+   "lifecycle": [
+    "all"
+   ]
+  },
+  {
+   "id": "13.0",
+   "num": 13,
+   "band": "Foundations and Enabling",
+   "name": "Manage Materials and Supply Chain",
+   "group_count": "7",
+   "process_count": "40",
+   "groups": [
+    {
+     "id": "13.1",
+     "name": "Plan material requirements",
+     "processes": [
+      {
+       "id": "13.1.1",
+       "name": "Determine work order material requirement",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10417
+      },
+      {
+       "id": "13.1.2",
+       "name": "Reserve stock against work",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10418
+      },
+      {
+       "id": "13.1.3",
+       "name": "Forecast material demand",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10419
+      },
+      {
+       "id": "13.1.4",
+       "name": "Manage long-lead and critical items",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10420
+      }
+     ],
+     "applicability": "common",
+     "applies": [
+      "electric",
+      "gas"
+     ],
+     "process_count": 4,
+     "uid": 10416
+    },
+    {
+     "id": "13.2",
+     "name": "Operate storerooms and warehouses",
+     "processes": [
+      {
+       "id": "13.2.1",
+       "name": "Receive material",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10422
+      },
+      {
+       "id": "13.2.2",
+       "name": "Issue material to work or crew",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10423
+      },
+      {
+       "id": "13.2.3",
+       "name": "Return material to stock",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10424
+      },
+      {
+       "id": "13.2.4",
+       "name": "Transfer material between locations",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10425
+      },
+      {
+       "id": "13.2.5",
+       "name": "Perform cycle count and stock adjustment",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10426
+      }
+     ],
+     "applicability": "common",
+     "applies": [
+      "electric",
+      "gas"
+     ],
+     "process_count": 5,
+     "uid": 10421
+    },
+    {
+     "id": "13.3",
+     "name": "Manage mobile and vehicle inventory",
+     "processes": [
+      {
+       "id": "13.3.1",
+       "name": "Establish each vehicle as a stocking location",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10428
+      },
+      {
+       "id": "13.3.2",
+       "name": "Define and maintain standard vehicle stock lists",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10429
+      },
+      {
+       "id": "13.3.3",
+       "name": "Record field material consumption against work",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10430
+      },
+      {
+       "id": "13.3.4",
+       "name": "Search and view stock held across the fleet",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10431
+      },
+      {
+       "id": "13.3.5",
+       "name": "Transfer material vehicle-to-vehicle in the field",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10432
+      },
+      {
+       "id": "13.3.6",
+       "name": "Request and source material from nearby stock",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10433
+      },
+      {
+       "id": "13.3.7",
+       "name": "Replenish vehicle stock from storeroom",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10434
+      },
+      {
+       "id": "13.3.8",
+       "name": "Perform vehicle stock count and reconciliation",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10435
+      },
+      {
+       "id": "13.3.9",
+       "name": "Account for stock in transit",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10436
+      }
+     ],
+     "applicability": "common",
+     "applies": [
+      "electric",
+      "gas"
+     ],
+     "process_count": 9,
+     "uid": 10427
+    },
+    {
+     "id": "13.4",
+     "name": "Procure goods and services",
+     "processes": [
+      {
+       "id": "13.4.1",
+       "name": "Raise purchase requisition",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10438
+      },
+      {
+       "id": "13.4.2",
+       "name": "Convert requisition to purchase order",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10439
+      },
+      {
+       "id": "13.4.3",
+       "name": "Receive against purchase order",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10440
+      },
+      {
+       "id": "13.4.4",
+       "name": "Process supplier invoice and payment",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10441
+      }
+     ],
+     "applicability": "common",
+     "applies": [
+      "electric",
+      "gas"
+     ],
+     "process_count": 4,
+     "uid": 10437
+    },
+    {
+     "id": "13.5",
+     "name": "Optimise inventory investment",
+     "processes": [
+      {
+       "id": "13.5.1",
+       "name": "Classify demand pattern and variability",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10443
+      },
+      {
+       "id": "13.5.2",
+       "name": "Forecast intermittent demand (non-parametric)",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10444
+      },
+      {
+       "id": "13.5.3",
+       "name": "Set stocking policy and reorder points",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10445
+      },
+      {
+       "id": "13.5.4",
+       "name": "Optimise safety stock to service-level targets",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10446
+      },
+      {
+       "id": "13.5.5",
+       "name": "Position stock across the location network",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10447
+      },
+      {
+       "id": "13.5.6",
+       "name": "Identify slow-moving and surplus inventory",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10448
+      },
+      {
+       "id": "13.5.7",
+       "name": "Manage critical spares and insurance spares",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10449
+      }
+     ],
+     "applicability": "common",
+     "applies": [
+      "electric",
+      "gas"
+     ],
+     "process_count": 7,
+     "uid": 10442
+    },
+    {
+     "id": "13.6",
+     "name": "Maintain item and catalogue information",
+     "processes": [
+      {
+       "id": "13.6.1",
+       "name": "Create and maintain item master",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10451
+      },
+      {
+       "id": "13.6.2",
+       "name": "Maintain commodity and classification codes",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10452
+      },
+      {
+       "id": "13.6.3",
+       "name": "Maintain manufacturer and equivalent parts",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10453
+      },
+      {
+       "id": "13.6.4",
+       "name": "Maintain pricing and contract catalogue",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10454
+      }
+     ],
+     "applicability": "common",
+     "applies": [
+      "electric",
+      "gas"
+     ],
+     "process_count": 4,
+     "uid": 10450
+    },
+    {
+     "id": "13.7",
+     "name": "Integrate with suppliers",
+     "processes": [
+      {
+       "id": "13.7.1",
+       "name": "Onboard and qualify suppliers",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10456
+      },
+      {
+       "id": "13.7.2",
+       "name": "Exchange catalogue and pricing content",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10457
+      },
+      {
+       "id": "13.7.3",
+       "name": "Transmit orders and receive acknowledgement",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10458
+      },
+      {
+       "id": "13.7.4",
+       "name": "Receive advance shipment and delivery confirmation",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10459
+      },
+      {
+       "id": "13.7.5",
+       "name": "Exchange invoice and payment information",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10460
+      },
+      {
+       "id": "13.7.6",
+       "name": "Manage consignment and vendor-managed inventory",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10461
+      },
+      {
+       "id": "13.7.7",
+       "name": "Measure supplier delivery and quality performance",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10462
+      }
+     ],
+     "applicability": "common",
+     "applies": [
+      "electric",
+      "gas"
+     ],
+     "process_count": 7,
+     "uid": 10455
+    }
+   ],
+   "applicability": "common",
+   "applies": [
+    "electric",
+    "gas"
+   ],
+   "summary": "Ensure the crew has the right material and that consumption is recorded and costed accurately.",
+   "uid": 10415,
+   "lifecycle": [
+    "all"
+   ]
+  },
+  {
+   "id": "14.0",
+   "num": 14,
+   "band": "Foundations and Enabling",
+   "name": "Manage Workforce and Time",
+   "group_count": "4",
+   "process_count": "18",
+   "groups": [
+    {
+     "id": "14.1",
+     "name": "Administer the workforce",
+     "processes": [
+      {
+       "id": "14.1.1",
+       "name": "Maintain worker and role records",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10465
+      },
+      {
+       "id": "14.1.2",
+       "name": "Maintain organisation and reporting structure",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10466
+      },
+      {
+       "id": "14.1.3",
+       "name": "Maintain worker availability and status",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10467
+      },
+      {
+       "id": "14.1.4",
+       "name": "Provision and de-provision system and mobile access",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10468
+      }
+     ],
+     "applicability": "common",
+     "applies": [
+      "electric",
+      "gas"
+     ],
+     "process_count": 4,
+     "uid": 10464
+    },
+    {
+     "id": "14.2",
+     "name": "Manage skills and certification",
+     "processes": [
+      {
+       "id": "14.2.1",
+       "name": "Maintain skills and competency profile",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10470
+      },
+      {
+       "id": "14.2.2",
+       "name": "Track certification, licence and currency",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10471
+      },
+      {
+       "id": "14.2.3",
+       "name": "Plan and record training",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10472
+      },
+      {
+       "id": "14.2.4",
+       "name": "Restrict assignment on lapsed qualification",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10473
+      },
+      {
+       "id": "14.2.5",
+       "name": "Identify covered tasks and qualify individuals",
+       "applies": [
+        "gas"
+       ],
+       "uid": 10474
+      },
+      {
+       "id": "14.2.6",
+       "name": "Apply span-of-control and abnormal-operating-condition rules on assignment",
+       "applies": [
+        "gas"
+       ],
+       "uid": 10475
+      }
+     ],
+     "applicability": "mixed",
+     "applies": [
+      "electric",
+      "gas"
+     ],
+     "process_count": 6,
+     "uid": 10469
+    },
+    {
+     "id": "14.3",
+     "name": "Capture and approve time",
+     "processes": [
+      {
+       "id": "14.3.1",
+       "name": "Record time against work in the field",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10477
+      },
+      {
+       "id": "14.3.2",
+       "name": "Cascade time across the crew",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10478
+      },
+      {
+       "id": "14.3.3",
+       "name": "Edit, submit and correct timesheets",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10479
+      },
+      {
+       "id": "14.3.4",
+       "name": "Review, approve and exception-handle time",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10480
+      }
+     ],
+     "applicability": "common",
+     "applies": [
+      "electric",
+      "gas"
+     ],
+     "process_count": 4,
+     "uid": 10476
+    },
+    {
+     "id": "14.4",
+     "name": "Cost labour and interface to payroll",
+     "processes": [
+      {
+       "id": "14.4.1",
+       "name": "Apply pay rules, premiums and agreements",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10482
+      },
+      {
+       "id": "14.4.2",
+       "name": "Post labour cost to work and project",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10483
+      },
+      {
+       "id": "14.4.3",
+       "name": "Transfer approved time to payroll",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10484
+      },
+      {
+       "id": "14.4.4",
+       "name": "Reconcile time and pay exceptions",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10485
+      }
+     ],
+     "applicability": "common",
+     "applies": [
+      "electric",
+      "gas"
+     ],
+     "process_count": 4,
+     "uid": 10481
+    }
+   ],
+   "applicability": "mixed",
+   "applies": [
+    "electric",
+    "gas"
+   ],
+   "summary": "Maintain who is available, what they are qualified for, and what their time costs.",
+   "uid": 10463,
+   "lifecycle": [
+    "all"
+   ]
+  },
+  {
+   "id": "15.0",
+   "num": 15,
+   "band": "Foundations and Enabling",
+   "name": "Manage Performance, Information and Integration",
+   "group_count": "5",
+   "process_count": "20",
+   "groups": [
+    {
+     "id": "15.1",
+     "name": "Report operational performance",
+     "processes": [
+      {
+       "id": "15.1.1",
+       "name": "Produce standard operational reporting",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10488
+      },
+      {
+       "id": "15.1.2",
+       "name": "Produce ad-hoc and self-service analysis",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10489
+      },
+      {
+       "id": "15.1.3",
+       "name": "Provide field and supervisory reporting",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10490
+      }
+     ],
+     "applicability": "common",
+     "applies": [
+      "electric",
+      "gas"
+     ],
+     "process_count": 3,
+     "uid": 10487
+    },
+    {
+     "id": "15.2",
+     "name": "Measure and improve performance",
+     "processes": [
+      {
+       "id": "15.2.1",
+       "name": "Measure productivity and resource utilisation",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10492
+      },
+      {
+       "id": "15.2.2",
+       "name": "Measure service level and backlog",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10493
+      },
+      {
+       "id": "15.2.3",
+       "name": "Measure first-time-fix, rework and quality",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10494
+      },
+      {
+       "id": "15.2.4",
+       "name": "Identify and act on improvement opportunity",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10495
+      }
+     ],
+     "applicability": "common",
+     "applies": [
+      "electric",
+      "gas"
+     ],
+     "process_count": 4,
+     "uid": 10491
+    },
+    {
+     "id": "15.3",
+     "name": "Meet reporting obligations",
+     "processes": [
+      {
+       "id": "15.3.1",
+       "name": "Produce regulatory and compliance reporting",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10497
+      },
+      {
+       "id": "15.3.2",
+       "name": "Produce reliability and safety reporting",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10498
+      },
+      {
+       "id": "15.3.3",
+       "name": "Retain evidence and audit records",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10499
+      }
+     ],
+     "applicability": "common",
+     "applies": [
+      "electric",
+      "gas"
+     ],
+     "process_count": 3,
+     "uid": 10496
+    },
+    {
+     "id": "15.4",
+     "name": "Manage data quality and master data",
+     "processes": [
+      {
+       "id": "15.4.1",
+       "name": "Define master data ownership and standards",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10501
+      },
+      {
+       "id": "15.4.2",
+       "name": "Monitor and remediate data quality",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10502
+      },
+      {
+       "id": "15.4.3",
+       "name": "Manage reference data and code sets",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10503
+      },
+      {
+       "id": "15.4.4",
+       "name": "Maintain organisational scoping and data visibility rules",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10504
+      }
+     ],
+     "applicability": "common",
+     "applies": [
+      "electric",
+      "gas"
+     ],
+     "process_count": 4,
+     "uid": 10500
+    },
+    {
+     "id": "15.5",
+     "name": "Integrate systems and exchange data",
+     "processes": [
+      {
+       "id": "15.5.1",
+       "name": "Exchange work and activity information",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10506
+      },
+      {
+       "id": "15.5.2",
+       "name": "Exchange asset and spatial information",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10507
+      },
+      {
+       "id": "15.5.3",
+       "name": "Exchange time, cost and financial information",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10508
+      },
+      {
+       "id": "15.5.4",
+       "name": "Exchange document and attachment content",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10509
+      },
+      {
+       "id": "15.5.5",
+       "name": "Monitor interface health and reconcile exceptions",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10510
+      },
+      {
+       "id": "15.5.6",
+       "name": "Exchange procurement, invoice and ledger transactions",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10511
+      }
+     ],
+     "applicability": "common",
+     "applies": [
+      "electric",
+      "gas"
+     ],
+     "process_count": 6,
+     "uid": 10505
+    }
+   ],
+   "applicability": "common",
+   "applies": [
+    "electric",
+    "gas"
+   ],
+   "summary": "Make the operation measurable and keep the information estate consistent.",
+   "uid": 10486,
+   "lifecycle": [
+    "all"
+   ]
+  },
+  {
+   "id": "16.0",
+   "num": 16,
+   "band": "Foundations and Enabling",
+   "name": "Manage Contractors and Partners",
+   "group_count": "5",
+   "process_count": "22",
+   "groups": [
+    {
+     "id": "16.1",
+     "name": "Qualify and onboard contractors",
+     "processes": [
+      {
+       "id": "16.1.1",
+       "name": "Register contractor organisation and crews",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "5.1.1",
+       "uid": 10514
+      },
+      {
+       "id": "16.1.2",
+       "name": "Capture capability, skill and equipment profile",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "5.1.2",
+       "uid": 10515
+      },
+      {
+       "id": "16.1.3",
+       "name": "Verify insurance, certification and compliance",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "5.1.3",
+       "uid": 10516
+      },
+      {
+       "id": "16.1.4",
+       "name": "Maintain qualification currency and suspension",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "5.1.4",
+       "uid": 10517
+      }
+     ],
+     "applicability": "common",
+     "applies": [
+      "electric",
+      "gas"
+     ],
+     "process_count": 4,
+     "legacy_id": "5.1",
+     "hooks": [
+      "14.2",
+      "13.4",
+      "8.1"
+     ],
+     "uid": 10513
+    },
+    {
+     "id": "16.2",
+     "name": "Award and assign contracted work",
+     "processes": [
+      {
+       "id": "16.2.1",
+       "name": "Determine internal versus contracted delivery",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "5.2.1",
+       "uid": 10519
+      },
+      {
+       "id": "16.2.2",
+       "name": "Award work to contractor",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "5.2.2",
+       "uid": 10520
+      },
+      {
+       "id": "16.2.3",
+       "name": "Issue work package to contractor",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "5.2.3",
+       "uid": 10521
+      },
+      {
+       "id": "16.2.4",
+       "name": "Confirm acceptance and committed date",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "5.2.4",
+       "uid": 10522
+      }
+     ],
+     "applicability": "common",
+     "applies": [
+      "electric",
+      "gas"
+     ],
+     "process_count": 4,
+     "legacy_id": "5.2",
+     "hooks": [
+      "2.3",
+      "2.4",
+      "3.1",
+      "3.5"
+     ],
+     "uid": 10518
+    },
+    {
+     "id": "16.3",
+     "name": "Oversee contractor execution",
+     "processes": [
+      {
+       "id": "16.3.1",
+       "name": "Receive contractor progress and status",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "5.3.1",
+       "uid": 10524
+      },
+      {
+       "id": "16.3.2",
+       "name": "Receive contractor completion evidence",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "5.3.2",
+       "uid": 10525
+      },
+      {
+       "id": "16.3.3",
+       "name": "Inspect and accept contracted work",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "5.3.3",
+       "uid": 10526
+      },
+      {
+       "id": "16.3.4",
+       "name": "Manage contractor rework and defect",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "5.3.4",
+       "uid": 10527
+      }
+     ],
+     "applicability": "common",
+     "applies": [
+      "electric",
+      "gas"
+     ],
+     "process_count": 4,
+     "legacy_id": "5.3",
+     "hooks": [
+      "4.1",
+      "4.2",
+      "4.3",
+      "4.4"
+     ],
+     "uid": 10523
+    },
+    {
+     "id": "16.4",
+     "name": "Settle and evaluate contractor performance",
+     "processes": [
+      {
+       "id": "16.4.1",
+       "name": "Capture contracted units and quantities",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "5.4.1",
+       "uid": 10529
+      },
+      {
+       "id": "16.4.2",
+       "name": "Validate against contract rates and terms",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "5.4.2",
+       "uid": 10530
+      },
+      {
+       "id": "16.4.3",
+       "name": "Authorise contractor payment",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "5.4.3",
+       "uid": 10531
+      },
+      {
+       "id": "16.4.4",
+       "name": "Measure contractor quality and service level",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "5.4.4",
+       "uid": 10532
+      }
+     ],
+     "applicability": "common",
+     "applies": [
+      "electric",
+      "gas"
+     ],
+     "process_count": 4,
+     "legacy_id": "5.4",
+     "hooks": [
+      "5.1",
+      "5.2",
+      "15.2"
+     ],
+     "uid": 10528
+    },
+    {
+     "id": "16.5",
+     "name": "Integrate with contractor systems",
+     "processes": [
+      {
+       "id": "16.5.1",
+       "name": "Provide contractor access to work information",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "5.5.1",
+       "uid": 10534
+      },
+      {
+       "id": "16.5.2",
+       "name": "Exchange work assignment and acceptance",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "5.5.2",
+       "uid": 10535
+      },
+      {
+       "id": "16.5.3",
+       "name": "Receive contractor progress and completion",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "5.5.3",
+       "uid": 10536
+      },
+      {
+       "id": "16.5.4",
+       "name": "Exchange units, quantities and cost for settlement",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "5.5.4",
+       "uid": 10537
+      },
+      {
+       "id": "16.5.5",
+       "name": "Federate contractor crew and credential data",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "5.5.5",
+       "uid": 10538
+      },
+      {
+       "id": "16.5.6",
+       "name": "Reconcile contractor data exceptions",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": "5.5.6",
+       "uid": 10539
+      }
+     ],
+     "applicability": "common",
+     "applies": [
+      "electric",
+      "gas"
+     ],
+     "process_count": 6,
+     "legacy_id": "5.5",
+     "hooks": [
+      "15.5",
+      "13.7"
+     ],
+     "uid": 10533
+    }
+   ],
+   "applicability": "common",
+   "applies": [
+    "electric",
+    "gas"
+   ],
+   "summary": "Qualify, award to, oversee and settle with third-party crews. Attaches to the work lifecycle rather than sitting inside it.",
+   "legacy_id": "5.0",
+   "uid": 10512,
+   "lifecycle": [
+    "all"
+   ]
+  },
+  {
+   "id": "17.0",
+   "num": 17,
+   "band": "Asset Lifecycle",
+   "name": "Plan the Network and Capital Programme",
+   "group_count": "5",
+   "process_count": "26",
+   "applicability": "common",
+   "applies": [
+    "gas",
+    "electric"
+   ],
+   "summary": "Determine what the network must deliver, what it cannot deliver today, and which investments close the difference. This is where most capital work originates; the work lifecycle in 1.0 to 5.0 begins after it.",
+   "uid": 10540,
+   "derivation": "APQC 10.2.1 Manage capital program for productive assets (19209) and 10.2.2 Perform utility network planning (19213); GFMAM 3.2 Demand Analysis, 3.4 Planning, 3.6 Life cycle Value Realization; ISO 55001:2024 cl. 6.2.2 and cl. 8.1; IEEE 1729-2025; 49 CFR 192.609 and 192.611.",
+   "groups": [
+    {
+     "id": "17.1",
+     "name": "Analyse network demand and capacity",
+     "applicability": "common",
+     "applies": [
+      "gas",
+      "electric"
+     ],
+     "process_count": 5,
+     "uid": 10541,
+     "processes": [
+      {
+       "id": "17.1.1",
+       "name": "Forecast network demand by area and horizon",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10542
+      },
+      {
+       "id": "17.1.2",
+       "name": "Assess capacity and performance of existing plant",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10543
+      },
+      {
+       "id": "17.1.3",
+       "name": "Model the network and test scenarios",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10544
+      },
+      {
+       "id": "17.1.4",
+       "name": "Assess new connection and load-growth impact",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10545
+      },
+      {
+       "id": "17.1.5",
+       "name": "Identify capacity and reliability shortfalls",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10546
+      }
+     ],
+     "hooks": [
+      "12.4",
+      "3.1"
+     ]
+    },
+    {
+     "id": "17.2",
+     "name": "Determine network solutions and requirements",
+     "applicability": "mixed",
+     "applies": [
+      "gas",
+      "electric"
+     ],
+     "process_count": 6,
+     "uid": 10547,
+     "processes": [
+      {
+       "id": "17.2.1",
+       "name": "Develop options for each identified shortfall",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10548
+      },
+      {
+       "id": "17.2.2",
+       "name": "Evaluate options against whole-life value",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10549
+      },
+      {
+       "id": "17.2.3",
+       "name": "Determine protection and control requirements",
+       "applies": [
+        "electric"
+       ],
+       "uid": 10550
+      },
+      {
+       "id": "17.2.4",
+       "name": "Determine secondary systems requirements",
+       "applies": [
+        "electric"
+       ],
+       "uid": 10551
+      },
+      {
+       "id": "17.2.5",
+       "name": "Determine pressure and regulation requirements",
+       "applies": [
+        "gas"
+       ],
+       "uid": 10552
+      },
+      {
+       "id": "17.2.6",
+       "name": "Select the solution and record the basis",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10553
+      }
+     ],
+     "hooks": [
+      "2.1",
+      "12.5"
+     ]
+    },
+    {
+     "id": "17.3",
+     "name": "Determine the regulatory classification of the network",
+     "applicability": "gas",
+     "applies": [
+      "gas",
+      "electric"
+     ],
+     "process_count": 5,
+     "uid": 10554,
+     "processes": [
+      {
+       "id": "17.3.1",
+       "name": "Determine and maintain gas class location",
+       "applies": [
+        "gas"
+       ],
+       "uid": 10555
+      },
+      {
+       "id": "17.3.2",
+       "name": "Confirm maximum allowable operating pressure against class",
+       "applies": [
+        "gas"
+       ],
+       "uid": 10556
+      },
+      {
+       "id": "17.3.3",
+       "name": "Determine high-consequence and covered-segment status",
+       "applies": [
+        "gas"
+       ],
+       "uid": 10557
+      },
+      {
+       "id": "17.3.4",
+       "name": "Confirm jurisdictional and regulated-segment boundaries",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10558
+      },
+      {
+       "id": "17.3.5",
+       "name": "Raise work from a classification change",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10559
+      }
+     ],
+     "hooks": [
+      "8.8",
+      "12.6"
+     ]
+    },
+    {
+     "id": "17.4",
+     "name": "Build and monitor the capital programme",
+     "applicability": "common",
+     "applies": [
+      "gas",
+      "electric"
+     ],
+     "process_count": 6,
+     "uid": 10560,
+     "processes": [
+      {
+       "id": "17.4.1",
+       "name": "Define the capital investment plan",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10561
+      },
+      {
+       "id": "17.4.2",
+       "name": "Prioritise and balance the investment portfolio",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10562
+      },
+      {
+       "id": "17.4.3",
+       "name": "Secure programme funding and external financing",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10563
+      },
+      {
+       "id": "17.4.4",
+       "name": "Release programme tranches to work initiation",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10564
+      },
+      {
+       "id": "17.4.5",
+       "name": "Monitor programme delivery and spend against plan",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10565
+      },
+      {
+       "id": "17.4.6",
+       "name": "Re-baseline the programme",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10566
+      }
+     ],
+     "hooks": [
+      "2.4",
+      "15.1"
+     ]
+    },
+    {
+     "id": "17.5",
+     "name": "Realise whole-life value",
+     "applicability": "common",
+     "applies": [
+      "gas",
+      "electric"
+     ],
+     "process_count": 4,
+     "uid": 10567,
+     "processes": [
+      {
+       "id": "17.5.1",
+       "name": "Establish the whole-life cost basis by asset class",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10568
+      },
+      {
+       "id": "17.5.2",
+       "name": "Compare intervention options over the asset life cycle",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10569
+      },
+      {
+       "id": "17.5.3",
+       "name": "Evaluate delivered outcomes against the investment case",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10570
+      },
+      {
+       "id": "17.5.4",
+       "name": "Feed results back into strategy and design standards",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10571
+      }
+     ],
+     "hooks": [
+      "12.4",
+      "15.2"
+     ]
+    }
+   ],
+   "lifecycle": [
+    "plan-and-acquire"
+   ]
+  },
+  {
+   "id": "18.0",
+   "num": 18,
+   "band": "Asset Lifecycle",
+   "name": "Operate the Network for Planned Work",
+   "group_count": "5",
+   "process_count": "25",
+   "applicability": "common",
+   "applies": [
+    "gas",
+    "electric"
+   ],
+   "summary": "Plan, approve and execute the switching and isolation that planned work requires, issue the clearance the crew works under, and return the network to service. SCOPE DECISION: work-facing only. Real-time monitoring, alarm handling, optimisation and protection settings are SCADA, ADMS and DERMS functions and are deliberately out of scope.",
+   "uid": 10572,
+   "derivation": "APQC 14.1.2 Develop network operational plans (11266), specifically 19270 Create switching/network reconfiguration plans, and 14.1.6 Perform planned network operation (19285) in full; GFMAM 3.8 Shutdown and Outage Strategy and Planning; 29 CFR 1910.269(m) and (d); 29 CFR 1910.147; 49 CFR 192.629 and 192.727. Interface model IEC 61968-3 Ed. 3.0:2021.",
+   "groups": [
+    {
+     "id": "18.1",
+     "name": "Plan network switching and isolation",
+     "applicability": "common",
+     "applies": [
+      "gas",
+      "electric"
+     ],
+     "process_count": 5,
+     "uid": 10573,
+     "processes": [
+      {
+       "id": "18.1.1",
+       "name": "Determine the isolation the work requires",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10574
+      },
+      {
+       "id": "18.1.2",
+       "name": "Create the switching or diversion plan",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10575
+      },
+      {
+       "id": "18.1.3",
+       "name": "Assess customer and network impact of the outage",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10576
+      },
+      {
+       "id": "18.1.4",
+       "name": "Verify the plan against the current network state",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10577
+      },
+      {
+       "id": "18.1.5",
+       "name": "Determine abnormal-condition and contingency arrangements",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10578
+      }
+     ],
+     "hooks": [
+      "2.6",
+      "12.3"
+     ]
+    },
+    {
+     "id": "18.2",
+     "name": "Approve and schedule planned network operations",
+     "applicability": "common",
+     "applies": [
+      "gas",
+      "electric"
+     ],
+     "process_count": 5,
+     "uid": 10579,
+     "processes": [
+      {
+       "id": "18.2.1",
+       "name": "Submit the outage plan for approval",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10580
+      },
+      {
+       "id": "18.2.2",
+       "name": "Approve, reject or defer the outage plan",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10581
+      },
+      {
+       "id": "18.2.3",
+       "name": "Schedule the planned network operation",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10582
+      },
+      {
+       "id": "18.2.4",
+       "name": "Resolve conflicting or competing outage requests",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10583
+      },
+      {
+       "id": "18.2.5",
+       "name": "Coordinate with maintenance and construction schedules",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10584
+      }
+     ],
+     "hooks": [
+      "3.4",
+      "2.6",
+      "16.3"
+     ]
+    },
+    {
+     "id": "18.3",
+     "name": "Notify parties affected by a planned outage",
+     "applicability": "common",
+     "applies": [
+      "gas",
+      "electric"
+     ],
+     "process_count": 4,
+     "uid": 10585,
+     "processes": [
+      {
+       "id": "18.3.1",
+       "name": "Identify affected customers and third parties",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10586
+      },
+      {
+       "id": "18.3.2",
+       "name": "Issue statutory and contractual outage notices",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10587
+      },
+      {
+       "id": "18.3.3",
+       "name": "Notify critical, medical and life-support customers",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10588
+      },
+      {
+       "id": "18.3.4",
+       "name": "Communicate change, deferral or cancellation",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10589
+      }
+     ],
+     "hooks": [
+      "10.3",
+      "9.4"
+     ]
+    },
+    {
+     "id": "18.4",
+     "name": "Execute switching and issue clearance",
+     "applicability": "common",
+     "applies": [
+      "gas",
+      "electric"
+     ],
+     "process_count": 6,
+     "uid": 10590,
+     "processes": [
+      {
+       "id": "18.4.1",
+       "name": "Perform the switching or valve operation",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10591
+      },
+      {
+       "id": "18.4.2",
+       "name": "Verify isolation and apply protective grounds",
+       "applies": [
+        "electric"
+       ],
+       "uid": 10592
+      },
+      {
+       "id": "18.4.3",
+       "name": "Purge, vent or make the section safe",
+       "applies": [
+        "gas"
+       ],
+       "uid": 10593
+      },
+      {
+       "id": "18.4.4",
+       "name": "Issue the clearance or permit-to-work",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10594
+      },
+      {
+       "id": "18.4.5",
+       "name": "Maintain the register of clearances held",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10595
+      },
+      {
+       "id": "18.4.6",
+       "name": "Manage clearance transfer, extension and expiry",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10596
+      }
+     ],
+     "hooks": [
+      "4.4",
+      "2.6",
+      "8.5"
+     ]
+    },
+    {
+     "id": "18.5",
+     "name": "Return the network to service",
+     "applicability": "common",
+     "applies": [
+      "gas",
+      "electric"
+     ],
+     "process_count": 5,
+     "uid": 10597,
+     "processes": [
+      {
+       "id": "18.5.1",
+       "name": "Confirm work complete and all personnel clear",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10598
+      },
+      {
+       "id": "18.5.2",
+       "name": "Surrender and cancel the clearance",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10599
+      },
+      {
+       "id": "18.5.3",
+       "name": "Reverse switching and restore the normal configuration",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10600
+      },
+      {
+       "id": "18.5.4",
+       "name": "Confirm restoration and notify affected parties",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10601
+      },
+      {
+       "id": "18.5.5",
+       "name": "Record the as-operated network state",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10602
+      }
+     ],
+     "hooks": [
+      "5.1",
+      "12.2"
+     ]
+    }
+   ],
+   "lifecycle": [
+    "operate"
+   ]
+  },
+  {
+   "id": "19.0",
+   "num": 19,
+   "band": "Asset Lifecycle",
+   "name": "Commission, Decommission and Dispose of Assets",
+   "group_count": "4",
+   "process_count": "21",
+   "applicability": "common",
+   "applies": [
+    "gas",
+    "electric"
+   ],
+   "summary": "Move assets into and out of service. Both ends of service life share one shape - schedule it, coordinate with network operations, energise or make safe, capture the record, update the register - which is why they sit in one category rather than two.",
+   "uid": 10603,
+   "derivation": "APQC 10.2.6 Commission new assets (11280), 10.4.2 Decommission productive assets (19258), 10.4.3 Perform sale or trade (10953), 10.4.4 Perform abandonment (10954), 10.4.5 Perform waste and hazardous goods management (16970); GFMAM 6.2 Asset Creation & Acquisition, 6.7 Asset Repurposing or Disposal, 3.3 Sustainable Development; ISO 55001:2024 cl. 8.1; 49 CFR 192.727 and 192.629; 40 CFR 761; RCRA 40 CFR 260 to 268.",
+   "groups": [
+    {
+     "id": "19.1",
+     "name": "Commission and energise new assets",
+     "applicability": "common",
+     "applies": [
+      "gas",
+      "electric"
+     ],
+     "process_count": 6,
+     "uid": 10604,
+     "processes": [
+      {
+       "id": "19.1.1",
+       "name": "Confirm construction acceptance and test results",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10605
+      },
+      {
+       "id": "19.1.2",
+       "name": "Schedule commissioning",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10606
+      },
+      {
+       "id": "19.1.3",
+       "name": "Coordinate energisation with network operations",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10607
+      },
+      {
+       "id": "19.1.4",
+       "name": "Energise or pressurise and verify performance",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10608
+      },
+      {
+       "id": "19.1.5",
+       "name": "Capture the commissioning record",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10609
+      },
+      {
+       "id": "19.1.6",
+       "name": "Hand the asset over into service",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10610
+      }
+     ],
+     "hooks": [
+      "5.1",
+      "18.2",
+      "12.1"
+     ]
+    },
+    {
+     "id": "19.2",
+     "name": "Decommission and remove assets from service",
+     "applicability": "common",
+     "applies": [
+      "gas",
+      "electric"
+     ],
+     "process_count": 6,
+     "uid": 10611,
+     "processes": [
+      {
+       "id": "19.2.1",
+       "name": "Confirm the decision to remove the asset from service",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10612
+      },
+      {
+       "id": "19.2.2",
+       "name": "Coordinate de-energisation or depressurisation",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10613
+      },
+      {
+       "id": "19.2.3",
+       "name": "Isolate, purge and make the asset safe",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10614
+      },
+      {
+       "id": "19.2.4",
+       "name": "Remove the asset or abandon it in place",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10615
+      },
+      {
+       "id": "19.2.5",
+       "name": "Record removal, abandonment and any residual risk",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10616
+      },
+      {
+       "id": "19.2.6",
+       "name": "Update the network model and spatial record",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10617
+      }
+     ],
+     "hooks": [
+      "18.4",
+      "12.1",
+      "5.4"
+     ]
+    },
+    {
+     "id": "19.3",
+     "name": "Manage waste, salvage and hazardous materials",
+     "applicability": "common",
+     "applies": [
+      "gas",
+      "electric"
+     ],
+     "process_count": 5,
+     "uid": 10618,
+     "processes": [
+      {
+       "id": "19.3.1",
+       "name": "Classify the waste stream and its handling requirement",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10619
+      },
+      {
+       "id": "19.3.2",
+       "name": "Handle regulated materials and contaminated media",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10620
+      },
+      {
+       "id": "19.3.3",
+       "name": "Manifest, transport and dispose of regulated waste",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10621
+      },
+      {
+       "id": "19.3.4",
+       "name": "Recover, salvage and recycle serviceable material",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10622
+      },
+      {
+       "id": "19.3.5",
+       "name": "Record disposal evidence against the asset and the work",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10623
+      }
+     ],
+     "hooks": [
+      "13.2",
+      "8.5",
+      "4.6"
+     ]
+    },
+    {
+     "id": "19.4",
+     "name": "Dispose of and transfer asset ownership",
+     "applicability": "common",
+     "applies": [
+      "gas",
+      "electric"
+     ],
+     "process_count": 4,
+     "uid": 10624,
+     "processes": [
+      {
+       "id": "19.4.1",
+       "name": "Determine the disposal or transfer route",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10625
+      },
+      {
+       "id": "19.4.2",
+       "name": "Transfer ownership, sell or trade the asset",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10626
+      },
+      {
+       "id": "19.4.3",
+       "name": "Retire the accounting and continuing property record",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10627
+      },
+      {
+       "id": "19.4.4",
+       "name": "Close out obligations and satisfy record retention",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10628
+      }
+     ],
+     "hooks": [
+      "5.3",
+      "12.1",
+      "11.1"
+     ]
+    }
+   ],
+   "lifecycle": [
+    "design-and-construct",
+    "dispose"
+   ]
+  }
+ ]
+}

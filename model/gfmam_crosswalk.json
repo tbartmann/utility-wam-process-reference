@@ -1,0 +1,341 @@
+{
+ "_source": "GFMAM Asset Management Landscape v3.0 (third edition, June 2024)",
+ "_notice": "GFMAM Asset Management Landscape, third edition, June 2024, ISBN 978-1-7774676-8-5, Global Forum on Maintenance and Asset Management. Subject numbers and names are cited for identification. Definitions are quoted only where read verbatim from the published PDF and are attributed inline.",
+ "_why": "GFMAM is an asset management AUTHORITY. APQC is a benchmarking taxonomy. A gap that both show is corroborated by two independent organisations, which is this repository's promotion threshold.",
+ "_counts": {
+  "scope": 9,
+  "partial": 13,
+  "covered": 18
+ },
+ "subject_groups": {
+  "1": "Context & Stakeholders",
+  "2": "Governance",
+  "3": "Asset Management Planning",
+  "4": "Leadership and People",
+  "5": "Data and Information",
+  "6": "Delivery",
+  "7": "Value Realization"
+ },
+ "rows": [
+  {
+   "subject": "1.1",
+   "group": "Context & Stakeholders",
+   "name": "Organisational Purpose and Context",
+   "status": "scope",
+   "model_groups": "",
+   "note": "Management-system subject."
+  },
+  {
+   "subject": "1.2",
+   "group": "Context & Stakeholders",
+   "name": "Stakeholder Management",
+   "status": "partial",
+   "model_groups": "10.3, 8.9",
+   "note": "Customer communication and pipeline public awareness only. No stakeholder management as a discipline, which is correct for a process reference."
+  },
+  {
+   "subject": "1.3",
+   "group": "Context & Stakeholders",
+   "name": "Asset Costing and Valuation",
+   "status": "partial",
+   "model_groups": "5.2, 5.3",
+   "note": "The model settles cost to the work order and unitises it to the property record. It does not value the asset base."
+  },
+  {
+   "subject": "2.1",
+   "group": "Governance",
+   "name": "Asset Management Policy",
+   "status": "scope",
+   "model_groups": "",
+   "note": "Management-system subject."
+  },
+  {
+   "subject": "2.2",
+   "group": "Governance",
+   "name": "Asset Management System",
+   "status": "scope",
+   "model_groups": "",
+   "note": "Management-system subject."
+  },
+  {
+   "subject": "2.3",
+   "group": "Governance",
+   "name": "Asset Management Assurance and Audit",
+   "status": "partial",
+   "model_groups": "7.5, 8.8, 15.3",
+   "note": "Audit exists per programme - vegetation, DIMP, reporting obligations - but there is no assurance process over the asset management system itself."
+  },
+  {
+   "subject": "2.4",
+   "group": "Governance",
+   "name": "Technical Standards & Legislation",
+   "status": "covered",
+   "model_groups": "12.6.1, 8.x",
+   "note": "Regulatory obligation register plus the compliance category."
+  },
+  {
+   "subject": "2.5",
+   "group": "Governance",
+   "name": "Management of Change",
+   "status": "partial",
+   "model_groups": "2.4.4, 12.6.4",
+   "note": "Change to authorised work scope (2.4.4) and asset-related technical change (12.6.4). No organisational or management-system change process, which is correct here."
+  },
+  {
+   "subject": "2.6",
+   "group": "Governance",
+   "name": "Risk",
+   "status": "partial",
+   "model_groups": "12.6.2, 8.8",
+   "note": "Asset risk and consequence of failure, and the distribution integrity programme."
+  },
+  {
+   "subject": "3.1",
+   "group": "Asset Management Planning",
+   "name": "Asset Management Strategy and Objectives",
+   "status": "scope",
+   "model_groups": "",
+   "note": "Strategy setting sits above a work management reference."
+  },
+  {
+   "subject": "3.2",
+   "group": "Asset Management Planning",
+   "name": "Demand Analysis",
+   "status": "covered",
+   "model_groups": "17.1",
+   "note": "Demand the ASSET must serve - load, throughput, growth. Closed 2026-08-29 at 17.1. 3.1 continues to forecast WORK demand and crew capacity, which is a different thing with the same word; both now exist and are distinguishable."
+  },
+  {
+   "subject": "3.3",
+   "group": "Asset Management Planning",
+   "name": "Sustainable Development",
+   "status": "partial",
+   "model_groups": "19.3",
+   "note": "Waste, salvage and hazardous materials closed 2026-08-29 at 19.3. Sustainability as an objective-setting subject remains out of scope: it belongs to the asset management system above this process reference."
+  },
+  {
+   "subject": "3.4",
+   "group": "Asset Management Planning",
+   "name": "Planning",
+   "status": "covered",
+   "model_groups": "17.2, 17.4, 12.5, 12.6.3",
+   "note": "Closed 2026-08-29. 17.2 determines the solution, 17.4 builds and monitors the capital programme. 12.5 continues to define maintenance strategy and 12.6.3 replacement and renewal."
+  },
+  {
+   "subject": "3.5",
+   "group": "Asset Management Planning",
+   "name": "Decision-Making",
+   "status": "covered",
+   "model_groups": "1.3, 2.4.2, 12.6",
+   "note": "Prioritisation, approval routing and asset risk. The model expresses these as DMN decision tables, which is exactly the auditability GFMAM asks for."
+  },
+  {
+   "subject": "3.6",
+   "group": "Asset Management Planning",
+   "name": "Life cycle Value Realization",
+   "status": "covered",
+   "model_groups": "17.5",
+   "note": "Closed 2026-08-29. 17.5 establishes the whole-life cost basis, compares intervention options over the life cycle and evaluates outcomes against the investment case. This is what ISO 55001:2024 cl. 8.1 requires and the model previously did not do."
+  },
+  {
+   "subject": "3.7",
+   "group": "Asset Management Planning",
+   "name": "Resourcing Strategy and Management",
+   "status": "covered",
+   "model_groups": "3.1, 3.2, 3.5, 14.x, 16.1",
+   "note": "Forecast, roster, crew management, workforce administration, contractor qualification."
+  },
+  {
+   "subject": "3.8",
+   "group": "Asset Management Planning",
+   "name": "Shutdown and Outage Strategy and Planning",
+   "status": "covered",
+   "model_groups": "18.0",
+   "note": "GFMAM defines this as \"An organisation's processes for the identification, planning, scheduling, execution, and control of work related to shutdowns, turnarounds, or outages (STOs).\" All five verbs are now present: 18.1 identification and planning, 18.2 scheduling, 18.4 execution, 18.4.4 and 18.5 control. This subject and APQC 14.1.6 together are why the Asset Lifecycle band exists."
+  },
+  {
+   "subject": "3.9",
+   "group": "Asset Management Planning",
+   "name": "Contingency Planning & Resilience Analysis",
+   "status": "partial",
+   "model_groups": "9.4, 9.6",
+   "note": "Major events, mutual aid and wildfire response are the response side. There is no resilience analysis ahead of the event."
+  },
+  {
+   "subject": "4.1",
+   "group": "Leadership and People",
+   "name": "Asset Management Leadership",
+   "status": "scope",
+   "model_groups": "",
+   "note": "Organisational subject."
+  },
+  {
+   "subject": "4.2",
+   "group": "Leadership and People",
+   "name": "Organisational Arrangements",
+   "status": "scope",
+   "model_groups": "",
+   "note": "Organisational subject."
+  },
+  {
+   "subject": "4.3",
+   "group": "Leadership and People",
+   "name": "Organisational Culture",
+   "status": "scope",
+   "model_groups": "",
+   "note": "Organisational subject."
+  },
+  {
+   "subject": "4.4",
+   "group": "Leadership and People",
+   "name": "Competence Management",
+   "status": "covered",
+   "model_groups": "14.2",
+   "note": "Skills and certification, which the model correctly treats as gating work assignment rather than as an HR record."
+  },
+  {
+   "subject": "4.5",
+   "group": "Leadership and People",
+   "name": "Organisational Change Management",
+   "status": "scope",
+   "model_groups": "",
+   "note": "Organisational subject."
+  },
+  {
+   "subject": "4.6",
+   "group": "Leadership and People",
+   "name": "Knowledge Management",
+   "status": "partial",
+   "model_groups": "12.5.4, 2.5.3",
+   "note": "Job plan and task libraries, and the document set at the place of work."
+  },
+  {
+   "subject": "5.1",
+   "group": "Data and Information",
+   "name": "Asset Management Data & Information Strategy",
+   "status": "partial",
+   "model_groups": "12.2.1, 15.4",
+   "note": "System of record by asset class, and data quality and master data."
+  },
+  {
+   "subject": "5.2",
+   "group": "Data and Information",
+   "name": "Asset Management Data & Information Standards",
+   "status": "covered",
+   "model_groups": "12.2.6, 15.4",
+   "note": ""
+  },
+  {
+   "subject": "5.3",
+   "group": "Data and Information",
+   "name": "Asset Management Data & Information Management",
+   "status": "covered",
+   "model_groups": "12.1, 12.2, 12.3",
+   "note": ""
+  },
+  {
+   "subject": "5.4",
+   "group": "Data and Information",
+   "name": "Asset Management Data & Information Systems",
+   "status": "covered",
+   "model_groups": "15.5",
+   "note": "Integration and data exchange, with the IEC 61968-6 component set as the landscape."
+  },
+  {
+   "subject": "5.5",
+   "group": "Data and Information",
+   "name": "Configuration Management",
+   "status": "partial",
+   "model_groups": "12.1.5, 5.4",
+   "note": "Asset specifications and as-built update. No configuration baseline or version control over the asset configuration itself."
+  },
+  {
+   "subject": "6.1",
+   "group": "Delivery",
+   "name": "Systems Engineering",
+   "status": "scope",
+   "model_groups": "",
+   "note": "Engineering discipline rather than a work management process."
+  },
+  {
+   "subject": "6.2",
+   "group": "Delivery",
+   "name": "Asset Creation & Acquisition",
+   "status": "covered",
+   "model_groups": "19.1, 2.1, 2.2, 4.2",
+   "note": "Closed 2026-08-29. 19.1 commissions, coordinates energisation and hands the asset over into service, completing the chain that 2.1 designs and 4.2 builds. Land and property acquisition remains out of scope - corporate real estate, APQC 10.1."
+  },
+  {
+   "subject": "6.3",
+   "group": "Delivery",
+   "name": "Integrated Reliability",
+   "status": "partial",
+   "model_groups": "12.4.4, 12.4.2",
+   "note": "Performance and reliability analysis, and failure mode validation. No reliability engineering feedback loop into design."
+  },
+  {
+   "subject": "6.4",
+   "group": "Delivery",
+   "name": "Asset Operation",
+   "status": "partial",
+   "model_groups": "18.0, 9.0, 6.0",
+   "note": "The work-facing half is closed at 18.0: planned switching, clearance, coordination and return to service. 9.0 covers unplanned operation. Real-time monitoring, alarm handling, optimisation and protection settings stay OUT OF SCOPE BY DECISION - they are SCADA, ADMS and DERMS functions."
+  },
+  {
+   "subject": "6.5",
+   "group": "Delivery",
+   "name": "Maintenance Delivery",
+   "status": "covered",
+   "model_groups": "1.0-5.0, 8.0",
+   "note": "This is the model's centre of gravity and it is the most complete subject in it."
+  },
+  {
+   "subject": "6.6",
+   "group": "Delivery",
+   "name": "Incident Management and Response",
+   "status": "covered",
+   "model_groups": "9.0",
+   "note": ""
+  },
+  {
+   "subject": "6.7",
+   "group": "Delivery",
+   "name": "Asset Repurposing or Disposal",
+   "status": "covered",
+   "model_groups": "19.2, 19.3, 19.4, 12.1.6, 5.3",
+   "note": "Closed 2026-08-29. 19.2 decommissions physically, 19.3 handles waste and salvage, 19.4 transfers ownership and closes the record. 12.1.6 continues to retire the record and 5.3 the accounting."
+  },
+  {
+   "subject": "6.8",
+   "group": "Delivery",
+   "name": "Supply Chain Management",
+   "status": "covered",
+   "model_groups": "13.0, 16.0",
+   "note": ""
+  },
+  {
+   "subject": "7.1",
+   "group": "Value Realization",
+   "name": "Outcomes and Impacts",
+   "status": "partial",
+   "model_groups": "15.1, 15.3",
+   "note": ""
+  },
+  {
+   "subject": "7.2",
+   "group": "Value Realization",
+   "name": "Monitoring",
+   "status": "covered",
+   "model_groups": "15.1, 12.4",
+   "note": ""
+  },
+  {
+   "subject": "7.3",
+   "group": "Value Realization",
+   "name": "Continuous Improvement",
+   "status": "covered",
+   "model_groups": "15.2",
+   "note": ""
+  }
+ ]
+}

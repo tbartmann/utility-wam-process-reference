@@ -1,0 +1,814 @@
+{
+ "_note": "Controlled vocabulary for the process specification campaign. Every enumerated value a platform may use is listed here. validate_spec.py rejects anything not in this file. Adding a value is a deliberate act - raise it as a gap, do not invent it in a submission.",
+ "_version": "1.0",
+ "_authored": "2026-08-28",
+ "components": {
+  "_source": "IEC 61968-6:2015 cl. 4.2 reference components",
+  "GINV": "Geographical inventory",
+  "MAI": "Maintenance and inspection",
+  "CON": "Construction",
+  "DGN": "Design",
+  "SCHD": "Work scheduling and dispatching",
+  "FRD": "Field recording",
+  "AM": "Asset management",
+  "NO": "Network operations",
+  "SIM": "Network operation simulation",
+  "NE": "Network extension planning",
+  "TCM": "Trouble call management",
+  "MR&C": "Meter read and control",
+  "CS": "Customer service",
+  "HR": "Human resources",
+  "MM": "Materials management",
+  "FIN": "Financial"
+ },
+ "data_objects": {
+  "_source": "IEC 61968-11:2013 CIM Work package. NOTE there is no WorkOrder class - use Work plus the workOrderNumber attribute.",
+  "classes": [
+   "BaseWork",
+   "Work",
+   "WorkTask",
+   "WorkActivityRecord",
+   "WorkAsset",
+   "WorkLocation",
+   "MaintenanceLocation",
+   "InternalLocation",
+   "MaterialItem",
+   "RepairItem",
+   "Tool",
+   "Vehicle",
+   "Crew",
+   "WorkTimeSchedule",
+   "MaintenanceWorkTask",
+   "RepairWorkTask",
+   "Asset",
+   "Priority",
+   "WorkKind",
+   "WorkStatusKind",
+   "WorkTaskKind"
+  ]
+ },
+ "payloads": {
+  "_source": "IEC 61968-6:2015 cl. 5.3-5.5",
+  "values": [
+   "WorkRequest",
+   "ServiceOrder",
+   "MaintenanceOrder"
+  ]
+ },
+ "verbs": {
+  "_source": "IEC 61968-6:2015 Annex A",
+  "values": [
+   "create",
+   "change",
+   "cancel",
+   "close",
+   "get",
+   "reply"
+  ]
+ },
+ "patterns": {
+  "values": [
+   "event",
+   "request-reply",
+   "batch",
+   "publish-subscribe"
+  ]
+ },
+ "trigger_kinds": {
+  "_source": "BPMN 2.0 start event types plus none",
+  "values": [
+   "message",
+   "timer",
+   "signal",
+   "conditional",
+   "manual",
+   "error",
+   "none"
+  ]
+ },
+ "notation_classes": {
+  "values": [
+   "BPMN",
+   "DMN",
+   "CMMN",
+   "SPEC"
+  ]
+ },
+ "raci": {
+  "values": [
+   "R",
+   "A",
+   "C",
+   "I"
+  ]
+ },
+ "control_kinds": {
+  "values": [
+   "regulatory",
+   "financial",
+   "operational"
+  ]
+ },
+ "source_statuses": {
+  "verified": "Read verbatim from official or issuing-body text.",
+  "regulation": "Verbatim from current eCFR or equivalent primary regulatory text.",
+  "clause-verified": "Clause number and title confirmed; body paywalled and NOT read. Cite by reference; never paraphrase the content.",
+  "consensus": "Published guidance from a recognised industry body. Not law.",
+  "judgment": "Professional inference. Attributed to nobody."
+ },
+ "provenance_bases": {
+  "values": [
+   "standard",
+   "regulation",
+   "consensus",
+   "judgment"
+  ]
+ },
+ "en17007_processes": {
+  "_source": "EN 17007:2017. Level-1 names from Table 1; clause numbers from the contents; level-2 process names read from clause 6 of the supplied text, 2026-08-29. CORRECTED 2026-08-29: MAN was recorded at 6.9 and is 6.2; DOC was recorded at 6.10 and is 6.9 - 6.10 is DTA. Both errors had reached shipped citations because the validator checked clause numbers for level-2 processes only.",
+  "_naming": "The contents heads clause 6.12 'MRG process' while Table 1 gives 'MRQ'. MRQ is used throughout this repository.",
+  "_scope_note": "Level-2 processes are narrower than their titles suggest. COR.1 is scoped to CORRECTIVE maintenance and its purpose already includes ranking and a first schedule, so it overlaps ACT.1. COR.2 is fault diagnosis, not asset identification. PRV.1 is failure-mode characterisation; cycles come from PRV.2. MRQ.4 and MRQ.6 read 'contribute to' and 'participate in' - MRQ is maintenance's INPUT to someone else's design process, not the production of a design.",
+  "_gap": "TOL.1 is not machine-readable in the supplied text and is recorded as absent rather than guessed. EN 17007 has NO funding, approval or authorisation process: the only occurrences of 'approval' and 'authorized' in clause 6 are SER.4 service acceptance and DOC.5 document update rights. MAN.4 'Prepare and negotiate the budgets' is the closest, and it is budget setting, not work authorisation.",
+  "level1": {
+   "MAN": [
+    "Manage maintenance (strategy and improvement, human resources, continuous improvement, compliance, etc.)",
+    "6.2"
+   ],
+   "PRV": [
+    "Prevent undesirable events by avoiding failures and faults",
+    "6.3"
+   ],
+   "COR": [
+    "Restore the items in required state",
+    "6.4"
+   ],
+   "ACT": [
+    "Implement preventive and/or corrective actions on the item",
+    "6.5"
+   ],
+   "IMP": [
+    "Improve the items",
+    "6.6"
+   ],
+   "HSE": [
+    "Ensure personal health and safety to individuals and preserve environment in maintenance",
+    "6.7"
+   ],
+   "BUD": [
+    "Budget maintenance of items",
+    "6.8"
+   ],
+   "DOC": [
+    "Deliver the operational documentation",
+    "6.9"
+   ],
+   "DTA": [
+    "Manage data",
+    "6.10"
+   ],
+   "IST": [
+    "Provide the needed infrastructures",
+    "6.11"
+   ],
+   "MRQ": [
+    "Deliver maintenance requirements during items design and modification",
+    "6.12"
+   ],
+   "OPT": [
+    "Improve the results",
+    "6.13"
+   ],
+   "RES": [
+    "Provide internal human resources",
+    "6.14"
+   ],
+   "SER": [
+    "Provide external maintenance services",
+    "6.15"
+   ],
+   "SPP": [
+    "Deliver spare parts",
+    "6.16"
+   ],
+   "TOL": [
+    "Deliver the tools, support equipment and information system",
+    "6.17"
+   ]
+  },
+  "level2": {
+   "MAN.1": [
+    "Establish the maintenance policy, strategy and development actions",
+    "6.2"
+   ],
+   "MAN.2": [
+    "Identify the internal or external activities (carried out by the staff of the user company or participating com",
+    "6.2"
+   ],
+   "MAN.3": [
+    "Determine the organization, job profiles and responsibilities",
+    "6.2"
+   ],
+   "MAN.4": [
+    "Prepare and negotiate the budgets",
+    "6.2"
+   ],
+   "MAN.5": [
+    "Oversee the actions",
+    "6.2"
+   ],
+   "MAN.6": [
+    "Define, select, analyse and communicate the information",
+    "6.2"
+   ],
+   "MAN.7": [
+    "Define policy and strategy areas of improvement",
+    "6.2"
+   ],
+   "PRV.1": [
+    "Characterize the undesirable events",
+    "6.3.2"
+   ],
+   "PRV.2": [
+    "Use and update the Maintenance Plans",
+    "6.3.3"
+   ],
+   "COR.1": [
+    "Classify the actual events",
+    "6.4.2"
+   ],
+   "COR.2": [
+    "Diagnose the state of the items in question",
+    "6.4.3"
+   ],
+   "ACT.1": [
+    "Rank the events",
+    "6.5.2"
+   ],
+   "ACT.2": [
+    "Prepare for the maintenance tasks",
+    "6.5.3"
+   ],
+   "ACT.3": [
+    "Set in order the tasks",
+    "6.5.4"
+   ],
+   "ACT.4": [
+    "Schedule the tasks",
+    "6.5.5"
+   ],
+   "ACT.5": [
+    "Start the scheduled tasks",
+    "6.5.6"
+   ],
+   "ACT.6": [
+    "Perform the maintenance tasks",
+    "6.5.7"
+   ],
+   "ACT.7": [
+    "Finish the tasks",
+    "6.5.8"
+   ],
+   "IMP.1": [
+    "Collect data",
+    "6.6"
+   ],
+   "IMP.2": [
+    "Define reliability, maintainability, safety and logistic support requirements",
+    "6.6"
+   ],
+   "IMP.3": [
+    "Establish specifications for the required improvements of the item",
+    "6.6"
+   ],
+   "IMP.4": [
+    "Issue an invitation to tender to internal or external suppliers",
+    "6.6"
+   ],
+   "IMP.5": [
+    "Analyse and choose options and validate the solutions",
+    "6.6"
+   ],
+   "IMP.6": [
+    "Carry out realization",
+    "6.6"
+   ],
+   "IMP.7": [
+    "Verify conformity with the reliability, maintainability, safety and logistic support requirements",
+    "6.6"
+   ],
+   "IMP.8": [
+    "Establish the initial maintenance plan",
+    "6.6"
+   ],
+   "IMP.9": [
+    "Determine the initial logistical resources",
+    "6.6"
+   ],
+   "IMP.10": [
+    "Identify skills and training needs",
+    "6.6"
+   ],
+   "HSE.1": [
+    "Prepare the risk assessment",
+    "6.7"
+   ],
+   "HSE.2": [
+    "Identify risks",
+    "6.7"
+   ],
+   "HSE.3": [
+    "Prioritize risks",
+    "6.7"
+   ],
+   "HSE.4": [
+    "Propose measures for preventing risks and consequences of identified risks",
+    "6.7"
+   ],
+   "HSE.5": [
+    "Monitor risk management",
+    "6.7"
+   ],
+   "BUD.1": [
+    "Define, compile cost elements and calculate or estimate actual costs",
+    "6.8"
+   ],
+   "BUD.2": [
+    "Create a budget estimate for regular maintenance",
+    "6.8"
+   ],
+   "BUD.3": [
+    "Create a budget estimate for infrequent or exceptional maintenance tasks",
+    "6.8"
+   ],
+   "BUD.4": [
+    "Extract budgeted and actual expenditures",
+    "6.8"
+   ],
+   "BUD.5": [
+    "Analyse, explain and, if applicable, take corrective actions",
+    "6.8"
+   ],
+   "DOC.1": [
+    "Define and manage rights to the documentation",
+    "6.9"
+   ],
+   "DOC.2": [
+    "Classify and structure the documentation",
+    "6.9"
+   ],
+   "DOC.3": [
+    "Compile (collect, create) the reference documentation",
+    "6.9"
+   ],
+   "DOC.4": [
+    "Update the reference documentation",
+    "6.9"
+   ],
+   "DOC.5": [
+    "Ensure access to necessary information at all times",
+    "6.9"
+   ],
+   "DOC.6": [
+    "Manage the way in which operational documentation is made available",
+    "6.9"
+   ],
+   "DTA.1": [
+    "Store and validate the raw data in a library and/or a database",
+    "6.10"
+   ],
+   "DTA.2": [
+    "Evaluate the reliability and maintainability of the items by maintaining an actual state assessment of the item",
+    "6.10"
+   ],
+   "DTA.3": [
+    "Draw up and maintain an up-to-date list of critical items",
+    "6.10"
+   ],
+   "DTA.4": [
+    "Evaluate and analyse maintenance data and HSE data",
+    "6.10"
+   ],
+   "DTA.5": [
+    "Evaluate and analyse data related to spare parts",
+    "6.10"
+   ],
+   "DTA.6": [
+    "Evaluate and analyse cases of known or predictable obsolescence",
+    "6.10"
+   ],
+   "DTA.7": [
+    "Collect and analyse events at other organizations",
+    "6.10"
+   ],
+   "DTA.8": [
+    "Compare maintenance practices and materials used by other operators or recommended by suppliers",
+    "6.10"
+   ],
+   "DTA.9": [
+    "Monitor methods, technologies, regulations, standards, etc",
+    "6.10"
+   ],
+   "DTA.10": [
+    "Save and provide access to data in a data processing system",
+    "6.10"
+   ],
+   "DTA.11": [
+    "Calculate, save and provide access to performance and monitoring indicators",
+    "6.10"
+   ],
+   "IST.1": [
+    "Plan and provide appropriate and safe premises and areas",
+    "6.11"
+   ],
+   "IST.2": [
+    "Plan and provide the necessary power, utilities and services",
+    "6.11"
+   ],
+   "IST.3": [
+    "Maintain and/or update the infrastructures and facilities",
+    "6.11"
+   ],
+   "MRQ.1": [
+    "Collect feedback data",
+    "6.12"
+   ],
+   "MRQ.2": [
+    "Perform risk analyses",
+    "6.12"
+   ],
+   "MRQ.3": [
+    "Develop reliability, maintainability and logistic support requirements",
+    "6.12"
+   ],
+   "MRQ.4": [
+    "Oversee or contribute to the drafting of specifications",
+    "6.12"
+   ],
+   "MRQ.5": [
+    "Issue an invitation to tender to suppliers",
+    "6.12"
+   ],
+   "MRQ.6": [
+    "Participate in the analysis and choice of options and validate the solutions",
+    "6.12"
+   ],
+   "MRQ.7": [
+    "Follow up realization",
+    "6.12"
+   ],
+   "MRQ.8": [
+    "Verify conformity with the reliability, maintainability and logistic support requirements",
+    "6.12"
+   ],
+   "MRQ.9": [
+    "Establish the initial maintenance plan",
+    "6.12"
+   ],
+   "MRQ.10": [
+    "Determine the initial logistical resources",
+    "6.12"
+   ],
+   "MRQ.11": [
+    "Identify skills and training needs",
+    "6.12"
+   ],
+   "OPT.1": [
+    "Determine the areas of improvement",
+    "6.13"
+   ],
+   "OPT.2": [
+    "Prioritize areas of improvement related to the PRV and COR processes",
+    "6.13"
+   ],
+   "OPT.3": [
+    "Prioritize areas of improvement related to the IMP process",
+    "6.13"
+   ],
+   "OPT.4": [
+    "Prioritize areas of improvement related to the MAN process",
+    "6.13"
+   ],
+   "OPT.5": [
+    "Prioritize areas of improvement related to the BUD, DOC, DTA, TOL, SPP, RES, STR and HSE processes",
+    "6.13"
+   ],
+   "OPT.6": [
+    "Prioritize and specify modifications of existing items (MRQ process)",
+    "6.13"
+   ],
+   "OPT.7": [
+    "Prioritize improvements for future investments (MRQ process)",
+    "6.13"
+   ],
+   "RES.1": [
+    "Manage jobs and skills",
+    "6.14"
+   ],
+   "RES.2": [
+    "Recruit competent staff",
+    "6.14"
+   ],
+   "RES.3": [
+    "Ensure training, qualification and certification of internal staff",
+    "6.14"
+   ],
+   "RES.4": [
+    "Provide internal human resources",
+    "6.14"
+   ],
+   "SER.1": [
+    "Identify competent external companies",
+    "6.15"
+   ],
+   "SER.2": [
+    "Contract with external companies",
+    "6.15"
+   ],
+   "SER.3": [
+    "Manage contracts and evaluate companies and services",
+    "6.15"
+   ],
+   "SER.4": [
+    "Provide external services",
+    "6.15"
+   ],
+   "SPP.1": [
+    "Determine the spare items to keep in stock for maintenance",
+    "6.16"
+   ],
+   "SPP.2": [
+    "Manage stocks",
+    "6.16"
+   ],
+   "SPP.3": [
+    "Reserve or issue a purchase request for spare items",
+    "6.16"
+   ],
+   "SPP.4": [
+    "Order spare items from suppliers",
+    "6.16"
+   ],
+   "SPP.5": [
+    "Establish and monitor contracts with suppliers",
+    "6.16"
+   ],
+   "SPP.6": [
+    "Receive ordered or repaired spare items",
+    "6.16"
+   ],
+   "SPP.7": [
+    "Add the spare items to stock",
+    "6.16"
+   ],
+   "SPP.8": [
+    "Perform preventive maintenance on spare items in stock",
+    "6.16"
+   ],
+   "SPP.9": [
+    "Deliver spare items",
+    "6.16"
+   ],
+   "SPP.10": [
+    "Assess replaced items",
+    "6.16"
+   ],
+   "SPP.11": [
+    "Repair replaced items",
+    "6.16"
+   ],
+   "SPP.12": [
+    "Disposal of faulty or damaged items",
+    "6.16"
+   ],
+   "TOL.2": [
+    "Store the support tools and equipment",
+    "6.17"
+   ],
+   "TOL.3": [
+    "Maintain and/or Update the support equipment",
+    "6.17"
+   ],
+   "TOL.4": [
+    "Deliver the tools and other support equipment",
+    "6.17"
+   ],
+   "TOL.5": [
+    "Determine and provide a maintenance management, decision support software tools and documentation system",
+    "6.17"
+   ],
+   "TOL.6": [
+    "“Maintain” and/or update the maintenance documentation system",
+    "6.17"
+   ]
+  }
+ },
+ "decision_variables": {
+  "_note": "Shared variable names for DMN. A decision reused across categories MUST use these exact names or the two copies drift and become uncallable. 1.3.4 routing and 16.2.1 sourcing are the same determination - this is how they stay one rule set. lowerCamelCase, no underscores.",
+  "maintenanceType": "EN 13306 cl. 7: preventive.predetermined | preventive.conditionBased | corrective.immediate | corrective.deferred | unclassified",
+  "rank": "immediate | scheduled | routine",
+  "originationRoute": "customerRequest | deviceCondition | inspectionFinding | networkEvent | fieldIdentified | regulatoryProgramme | plannedCycle",
+  "hazardGrade": "GPTC G-192-11: grade1 | grade2 | grade3 | none",
+  "obligation": "The obligation reference, or null",
+  "populationAttribute": "businessDistrict | serviceLine | cathodicallyUnprotected | offshore | programmePopulation | null",
+  "priorFinding": "The outcome of the previous compliance activity, or null",
+  "lastCompliant": "date of last compliant completion",
+  "criticality": "critical | high | medium | low",
+  "requiredQualification": "covered-task qualification identifier, or null",
+  "district": "owning organisational unit identifier",
+  "assetClass": "CIM asset class",
+  "deliveryRoute": "internal | externalService | qualifiedCrewPool | districtFieldOperations | meteringOperations | workManagementReview"
+ },
+ "id_convention": {
+  "_note": "IDs in generated XML are DERIVED, never hand-chosen, so three platforms cannot diverge. The generator applies these; platforms never write IDs.",
+  "process": "P_<category>_<group>  e.g. P_1_1  for BPMN process of group 1.1",
+  "node": "n_<processId>_<seq>",
+  "flow": "f_<source>_<target>",
+  "decision": "d_<dotted id with dots as underscores>  e.g. d_1_3_1",
+  "input_data": "in_<decisionVariable>",
+  "case": "c_<dotted id>",
+  "artifact_file": "<group or process id>-<kebab-case name>.<bpmn|dmn|cmmn>"
+ },
+ "expression_language": {
+  "reference": "FEEL. The published reference files are OMG-conformant and use FEEL.",
+  "flowable": "JUEL. Flowable has no FEEL implementation and meets no DMN conformance level. The Flowable binding is generated separately by build_flowable_binding.py and is NEVER merged into the reference.",
+  "rule": "Never write a vendor expression into a reference file."
+ },
+ "banned_terms": {
+  "_note": "Product, client and vendor names. validate_spec.py rejects a submission containing any of these. Observed client material goes to eam/specializations/, where this check does not apply.",
+  "values": [
+   "maximo",
+   "clevest",
+   "informatica",
+   "njr",
+   "njng",
+   "locusview",
+   "workbook",
+   "workspace",
+   "oracle",
+   "sap",
+   "pcad",
+   "pragmacad",
+   "opengrid",
+   "wec",
+   "salesforce",
+   "servicenow",
+   "sitetracker",
+   "clicksoftware",
+   "fieldglass",
+   "arcgis",
+   "smallworld",
+   "gwd"
+  ]
+ },
+ "banned_language": {
+  "_note": "House style. Rejected in intent, activities, controls and measures text.",
+  "values": [
+   "leverage",
+   "robust",
+   "seamless",
+   "holistic",
+   "delve",
+   "journey",
+   "empower",
+   "cutting-edge",
+   "best-in-class",
+   "streamline",
+   "unlock",
+   "in today's world",
+   "utilize"
+  ]
+ },
+ "content_budget": {
+  "_note": "Content is budgeted so one fixed slide layout absorbs every category without shrinking type or repaginating. Ranges are set from measured category 1.0 with headroom. A breach is an error, not a warning: it is the thing that makes two decks look different even though one generator built them.",
+  "_derivation": "category 1.0, 18 processes: p90 and max measured 2026-08-28",
+  "cardinality": {
+   "activities": {
+    "min": 3,
+    "max": 8,
+    "observed": "4-6"
+   },
+   "inputs": {
+    "min": 2,
+    "max": 6,
+    "observed": "3-4"
+   },
+   "outputs": {
+    "min": 1,
+    "max": 5,
+    "observed": "2-3"
+   },
+   "systems": {
+    "min": 2,
+    "max": 6,
+    "observed": "3-5"
+   },
+   "interfaces": {
+    "min": 0,
+    "max": 5,
+    "observed": "1-2"
+   },
+   "roles": {
+    "min": 2,
+    "max": 6,
+    "observed": "3-4"
+   },
+   "data_objects": {
+    "min": 1,
+    "max": 6,
+    "observed": "2-4"
+   },
+   "controls": {
+    "min": 1,
+    "max": 4,
+    "observed": "2-3"
+   },
+   "measures": {
+    "min": 1,
+    "max": 4,
+    "observed": "2-3"
+   },
+   "variants": {
+    "min": 0,
+    "max": 6,
+    "observed": "3-4"
+   },
+   "sources": {
+    "min": 3,
+    "max": 8,
+    "observed": "3-6"
+   }
+  },
+  "length": {
+   "intent": {
+    "max": 140,
+    "observed_max": 88,
+    "where": "slide subtitle"
+   },
+   "activities_item": {
+    "max": 95,
+    "observed_max": 81,
+    "where": "header band, joined"
+   },
+   "trigger_text": {
+    "max": 135,
+    "observed_max": 111,
+    "where": "header band"
+   },
+   "notation_why": {
+    "max": 190,
+    "observed_max": 182,
+    "where": "header band"
+   },
+   "inputs_what": {
+    "max": 76,
+    "observed_max": 59,
+    "where": "left card row"
+   },
+   "outputs_what": {
+    "max": 70,
+    "observed_max": 65,
+    "where": "right card row"
+   },
+   "systems_service": {
+    "max": 58,
+    "observed_max": 49,
+    "where": "left card row"
+   },
+   "roles_role": {
+    "max": 44,
+    "observed_max": 31,
+    "where": "right card row"
+   },
+   "controls_text": {
+    "max": 300,
+    "observed_max": 283,
+    "where": "bottom left block"
+   },
+   "measures_definition": {
+    "max": 150,
+    "observed_max": 134,
+    "where": "bottom right block"
+   },
+   "variants_item": {
+    "max": 95,
+    "observed_max": 86,
+    "where": "bottom right block"
+   }
+  },
+  "block_total": {
+   "_note": "The two bottom blocks share a fixed band. These caps keep the band filled without spilling past the footer.",
+   "controls": {
+    "max": 950,
+    "observed_max": 638
+   },
+   "measures": {
+    "max": 460,
+    "observed_max": 257
+   },
+   "variants": {
+    "max": 330,
+    "observed_max": 275
+   }
+  }
+ }
+}

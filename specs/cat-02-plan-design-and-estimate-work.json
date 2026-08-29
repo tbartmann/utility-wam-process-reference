@@ -1,0 +1,4337 @@
+{
+  "category": {
+    "uid": 10024,
+    "id": "2.0",
+    "name": "Plan, Design and Estimate Work",
+    "band": "Work Lifecycle"
+  },
+  "platform": "Claude",
+  "model": "claude-opus-5",
+  "round": 1,
+  "date": "2026-08-29",
+  "schema": "eam/specs/SCHEMA.md",
+  "derivation": "STANDARDS-DERIVED. Every field traces to a standard, a regulation or a recognised industry body per _Collab/SOURCE_AUTHORITY_PACK.md. Nothing is generalised from a client programme or a product.",
+  "field_set": "EN 17007:2017 cl. 5.2 maintenance process profile, corroborated by ISO 9001:2015 cl. 4.4.1 a) to h).",
+  "gaps": [
+    "No standard specifies what a work package or job plan must contain. EN 13460:2009 Annex B 'Work order information items' is INFORMATIVE and paywalled with no public content; ISO 14224 cl. 9.6 is maintenance-record data, not package content; IEC 61968-6 is a data model. The only prescriptive list is 7 CFR 1724.53(b)(1), binding RUS borrowers only. 2.5.1 and 2.5.3 are marked judgment accordingly.",
+    "'Compatible unit' has exactly one international-standard mention - IEC 61968-6:2015 cl. 4.2.5, which names the concept, the Design and Estimation System and the Design Location. The CONTENT of a unit library has no authority at all and is the operator's.",
+    "No consensus practice exists for permit management as a process. CGA Best Practices covers 811 comprehensively and nothing else. Obtaining, tracking, expiring and closing out road-opening, railroad, environmental and traffic permits is judgment. NOTE the distinction from the CLEARANCE, which is a different instrument: a permit-to-work issued by network operations against an approved switching plan, produced by 18.4.4 and governed by 29 CFR 1910.269(m). 2.6.3 validates that it is held; it does not produce it.",
+    "AACE Recommended Practices are the only real authority for estimate classification but AACE states in RP 17R-97 cl. 1 that they are guidelines, not standards, and no AACE RP is ANSI-recognised. They are cited as consensus. Contingency and escalation VALUES are firm judgment - the RPs give method, not numbers.",
+    "NESC (ANSI/IEEE C2-2023) contains no design-review, approval or documentation requirement, and 49 CFR 192 Subpart B governs the design of pipe rather than a design process. The only federal design-records duty is 49 CFR 192.127, gas transmission only. A design-record obligation for distribution is therefore the operator's to set.",
+    "Management of change is federally mandated only for onshore gas TRANSMISSION at 49 CFR 192.13(d). DIMP has no MOC element, so for gas distribution MOC is voluntary practice under API RP 1173.",
+    "FERC 18 CFR 101 and 201 bind FPA and NGA entities. A state-regulated distribution utility is bound by what its commission adopted, which is usually these instructions but not automatically.",
+    "IEC 61968-6:2015 cl. 4.2 has no reference component for document and records management, for procurement, or for health and safety. Work packaging and prerequisite validation therefore have no natural owning component and are placed on MAI here. Note also that EN 17007 process codes DOC, SPP and HSE are NOT cl. 4.2 component codes; the two namespaces collide by spelling and must not be mixed."
+  ],
+  "processes": [
+    {
+      "uid": 10026,
+      "id": "2.1.1",
+      "name": "Perform site survey and pre-design visit",
+      "group": {
+        "id": "2.1",
+        "name": "Engineer and design work",
+        "uid": 10025
+      },
+      "intent": "Establish the site conditions the design has to be correct against.",
+      "activities": [
+        "Determine what must be verified on site for this work type",
+        "Identify existing buried and overhead facilities in the area",
+        "Record constraints - access, clearance, ground, environmental, third-party plant",
+        "Capture the survey as a design input record"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "Authorised demand needs a design and site conditions are not known.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Work scope and location",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Existing facility records",
+          "party": "GINV",
+          "data": "WorkLocation"
+        },
+        {
+          "what": "Asset records at the site",
+          "party": "AM",
+          "data": "WorkAsset"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Survey record with verified conditions",
+          "party": "DGN",
+          "data": "WorkLocation"
+        },
+        {
+          "what": "Discrepancy against the facility record",
+          "party": "GINV",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "DGN",
+          "role": "owning",
+          "service": "Design and estimation"
+        },
+        {
+          "component": "GINV",
+          "role": "reference",
+          "service": "Geographical inventory"
+        },
+        {
+          "component": "AM",
+          "role": "reference",
+          "service": "Asset register"
+        },
+        {
+          "component": "FRD",
+          "role": "contributing",
+          "service": "Field survey capture"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "DGN",
+          "to": "GINV",
+          "payload": "WorkRequest",
+          "verb": "get",
+          "pattern": "request-reply"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Designer",
+          "raci": "R"
+        },
+        {
+          "role": "Engineering manager",
+          "raci": "A"
+        },
+        {
+          "role": "Field technician",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkLocation",
+        "WorkAsset"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "The designer is expected to use all reasonable means of obtaining information about underground facilities in the area, and to indicate existing public and private facilities on the drawings."
+        },
+        {
+          "kind": "operational",
+          "text": "Where subsurface utility engineering is used, its quality level is itself a design input and belongs on the record, not in someone's head."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Actual Hours to Planning Estimate",
+          "definition": "SMRP 5.3.4. A survey that missed conditions shows up here first.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Rework",
+          "definition": "SMRP 4.1, applied to designs returned for site conditions.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Desk survey from records only, where the work is low risk",
+        "Field survey with facility locate requested at design stage",
+        "Subsurface utility engineering to a stated quality level"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Known repeating sequence from a message start.",
+        "artifact": "models/2.1-engineer-and-design-work.bpmn"
+      },
+      "en17007": {
+        "process": "MRQ",
+        "title": "Deliver maintenance requirements during items design and modification",
+        "clause": "6.12"
+      },
+      "sources": [
+        {
+          "for": "controls.regulatory",
+          "cite": "Common Ground Alliance Best Practices v22.0, March 2026, practices 2-2, 2-3 and 2-14",
+          "status": "consensus"
+        },
+        {
+          "for": "subsurface utility engineering",
+          "cite": "ASCE 38-22 Standard Guideline for Investigating and Documenting Existing Utilities, named by CGA practice 2-14",
+          "status": "consensus"
+        },
+        {
+          "for": "design inputs",
+          "cite": "ISO 9001:2015 cl. 8.3 Design and development (Ed. 6 due 2026-09) cl. 8.3.3",
+          "status": "verified"
+        },
+        {
+          "for": "design-stage locate",
+          "cite": "Common Ground Alliance Best Practices v22.0, March 2026, practice 3-15 - the 811 centre accepts design requests, distinct from the excavation ticket",
+          "status": "consensus"
+        },
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.12 MRQ",
+          "status": "clause-verified"
+        }
+      ],
+      "provenance": {
+        "basis": "consensus",
+        "primary": "Common Ground Alliance Best Practices v22.0, March 2026"
+      }
+    },
+    {
+      "uid": 10027,
+      "id": "2.1.2",
+      "name": "Produce construction design",
+      "group": {
+        "id": "2.1",
+        "name": "Engineer and design work",
+        "uid": 10025
+      },
+      "intent": "Produce the design the work will be built to.",
+      "activities": [
+        "Assemble design inputs including statutory and code requirements",
+        "Produce the design against the applicable construction standards",
+        "Record the design outputs including acceptance criteria",
+        "Retain the documented information the design rests on"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "Site conditions and scope are established and a design is required.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Survey record and verified conditions",
+          "party": "DGN",
+          "data": "WorkLocation"
+        },
+        {
+          "what": "Applicable construction standards and codes",
+          "party": "DGN",
+          "data": null
+        },
+        {
+          "what": "Network model and connectivity",
+          "party": "GINV",
+          "data": "WorkLocation"
+        },
+        {
+          "what": "Material and equipment catalogue",
+          "party": "MM",
+          "data": "MaterialItem"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Design with drawings and specifications",
+          "party": "DGN",
+          "data": "Work"
+        },
+        {
+          "what": "Design record retained for the life of the asset",
+          "party": "AM",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "DGN",
+          "role": "owning",
+          "service": "Design production"
+        },
+        {
+          "component": "GINV",
+          "role": "reference",
+          "service": "Network model"
+        },
+        {
+          "component": "MM",
+          "role": "reference",
+          "service": "Material catalogue"
+        },
+        {
+          "component": "NE",
+          "role": "contributing",
+          "service": "Network extension planning"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "DGN",
+          "to": "GINV",
+          "payload": "WorkRequest",
+          "verb": "get",
+          "pattern": "request-reply"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Designer",
+          "raci": "R"
+        },
+        {
+          "role": "Engineering manager",
+          "raci": "A"
+        },
+        {
+          "role": "Asset engineer",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkLocation",
+        "WorkAsset",
+        "MaterialItem"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "Design inputs must consider statutory and regulatory requirements and the codes of practice the organisation has committed to, and conflicting inputs must be resolved, not carried forward."
+        },
+        {
+          "kind": "regulatory",
+          "text": "For gas, the federal design rules govern the pipe, not the design process, and the only design-records duty is transmission-only. For electric the safety code sets criteria and requires no design record at all. A design-record obligation is therefore the operator's to set."
+        },
+        {
+          "kind": "operational",
+          "text": "Design outputs must state acceptance criteria, or construction cannot be verified."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Actual Cost to Planning Estimate",
+          "definition": "SMRP 5.3.3.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Rework",
+          "definition": "SMRP 4.1, applied to design revisions raised during construction.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Standard construction to a published assembly, no bespoke design",
+        "Engineered design requiring calculation and professional review",
+        "Design against a third-party or joint-use constraint"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Known repeating sequence with defined inputs and outputs.",
+        "artifact": "models/2.1-engineer-and-design-work.bpmn"
+      },
+      "en17007": {
+        "process": "MRQ",
+        "title": "Deliver maintenance requirements during items design and modification",
+        "clause": "6.12"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "ISO 9001:2015 cl. 8.3 Design and development (Ed. 6 due 2026-09) cl. 8.3.1 to 8.3.5",
+          "status": "verified"
+        },
+        {
+          "for": "controls.regulatory (gas)",
+          "cite": "49 CFR 192 Subpart B governs the design of pipe, not a design process; 49 CFR 192.127 records duty is gas transmission only, post 2020-07-01 installs. ASME B31.8-2018 is the edition incorporated at 192.7(c)(5)",
+          "status": "regulation"
+        },
+        {
+          "for": "controls.regulatory (electric)",
+          "cite": "NESC ANSI/IEEE C2-2023 sets safety criteria and contains no design-review, approval or documentation requirement",
+          "status": "clause-verified"
+        },
+        {
+          "for": "design process for RUS borrowers",
+          "cite": "7 CFR Part 1724 cl. 1724.51, 1724.53, 1724.54 and 1724.32 (RUS borrowers) - 1724.51 requires distribution facilities to conform to RUS construction standards and use accepted materials",
+          "status": "regulation"
+        },
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.12 MRQ",
+          "status": "clause-verified"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "ISO 9001:2015 cl. 8.3 Design and development (Ed. 6 due 2026-09)"
+      }
+    },
+    {
+      "uid": 10028,
+      "id": "2.1.3",
+      "name": "Perform design review and approval",
+      "group": {
+        "id": "2.1",
+        "name": "Engineer and design work",
+        "uid": 10025
+      },
+      "intent": "Review the design against its inputs and authorise it for use.",
+      "activities": [
+        "Review the design against the input requirements",
+        "Verify the outputs meet the inputs",
+        "Validate the result meets the intended use",
+        "Record the action taken on any problem found",
+        "Authorise the design"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "A design is complete and requires review before release.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Design with drawings and specifications",
+          "party": "DGN",
+          "data": "Work"
+        },
+        {
+          "what": "Design inputs the review is against",
+          "party": "DGN",
+          "data": null
+        },
+        {
+          "what": "Reviewer qualification and authority",
+          "party": "HR",
+          "data": null
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Reviewed and authorised design",
+          "party": "DGN",
+          "data": "Work"
+        },
+        {
+          "what": "Retained record of the review and its outcome",
+          "party": "AM",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "DGN",
+          "role": "owning",
+          "service": "Design review and approval"
+        },
+        {
+          "component": "HR",
+          "role": "reference",
+          "service": "Reviewer authority"
+        },
+        {
+          "component": "AM",
+          "role": "consuming",
+          "service": "Design record retention"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "DGN",
+          "to": "CON",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Designer",
+          "raci": "R"
+        },
+        {
+          "role": "Engineering manager",
+          "raci": "A"
+        },
+        {
+          "role": "Reviewing engineer",
+          "raci": "C"
+        },
+        {
+          "role": "Asset engineer",
+          "raci": "I"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "Review, verification and validation have distinct purposes and may be conducted separately or in combination, but documented information of each has to be retained."
+        },
+        {
+          "kind": "operational",
+          "text": "For borrowers of federal rural utilities finance, plans and specifications require approval before construction, with a standing exemption where standard drawings, materials and contracts are used."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Planning Variance Index",
+          "definition": "SMRP 5.3.5.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Rework",
+          "definition": "SMRP 4.1, applied to designs rejected at review.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Self-certified against a standard assembly",
+        "Peer review within engineering",
+        "Professional engineer certification where required",
+        "External approval by a funder or authority"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Known sequence with a defined rejection path.",
+        "artifact": "models/2.1-engineer-and-design-work.bpmn"
+      },
+      "en17007": {
+        "process": "MRQ",
+        "title": "Deliver maintenance requirements during items design and modification",
+        "clause": "6.12"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "ISO 9001:2015 cl. 8.3 Design and development (Ed. 6 due 2026-09) cl. 8.3.4 Design and development controls",
+          "status": "verified"
+        },
+        {
+          "for": "approval gate",
+          "cite": "7 CFR Part 1724 cl. 1724.51, 1724.53, 1724.54 and 1724.32 (RUS borrowers) - 1724.54 requirements for approval of plans and specifications, and 1724.51(b)(1) professional engineer certification",
+          "status": "regulation"
+        },
+        {
+          "for": "measures",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.3.5, 4.1",
+          "status": "verified"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "ISO 9001:2015 cl. 8.3 Design and development (Ed. 6 due 2026-09)"
+      }
+    },
+    {
+      "uid": 10029,
+      "id": "2.1.4",
+      "name": "Manage design revisions",
+      "group": {
+        "id": "2.1",
+        "name": "Engineer and design work",
+        "uid": 10025
+      },
+      "intent": "Control changes to a design after it has been issued.",
+      "activities": [
+        "Identify the change and what prompted it",
+        "Review the change for adverse impact on conformity",
+        "Authorise the change",
+        "Record the actions taken to prevent adverse impacts",
+        "Reissue the design and withdraw the superseded version"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "A change to an issued design is proposed.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Issued design and its revision history",
+          "party": "DGN",
+          "data": "Work"
+        },
+        {
+          "what": "Reason for the change",
+          "party": "CON",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Impact on cost, schedule and permits",
+          "party": "DGN",
+          "data": "Work"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Reissued design at a new revision",
+          "party": "DGN",
+          "data": "Work"
+        },
+        {
+          "what": "Retained record of the change and its authorisation",
+          "party": "AM",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "DGN",
+          "role": "owning",
+          "service": "Design revision control"
+        },
+        {
+          "component": "CON",
+          "role": "originating",
+          "service": "Construction feedback"
+        },
+        {
+          "component": "AM",
+          "role": "consuming",
+          "service": "Revision record"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "CON",
+          "to": "DGN",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        },
+        {
+          "from": "DGN",
+          "to": "CON",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Designer",
+          "raci": "R"
+        },
+        {
+          "role": "Engineering manager",
+          "raci": "A"
+        },
+        {
+          "role": "Field supervisor",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "Changes made during or after design must be identified, reviewed and controlled so there is no adverse impact on conformity, and the authorisation of the change must be retained."
+        },
+        {
+          "kind": "operational",
+          "text": "A superseded design left in circulation is built. Withdrawal is part of the change, not an afterthought."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Rework",
+          "definition": "SMRP 4.1, applied to construction rework caused by a late design change.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Actual Cost to Planning Estimate",
+          "definition": "SMRP 5.3.3, split by whether a design change occurred.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Minor correction with no cost or scope effect",
+        "Change affecting cost, schedule or material",
+        "Change affecting a permit or a regulatory commitment - re-permitting required"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Known sequence; the authorisation step is a defined gate.",
+        "artifact": "models/2.1-engineer-and-design-work.bpmn"
+      },
+      "en17007": {
+        "process": "MRQ",
+        "title": "Deliver maintenance requirements during items design and modification",
+        "clause": "6.12"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "ISO 9001:2015 cl. 8.3 Design and development (Ed. 6 due 2026-09) cl. 8.3.6 Design and development changes, which requires retaining the authorization of the changes",
+          "status": "verified"
+        },
+        {
+          "for": "change control",
+          "cite": "ISO 55001:2024 cl. 6.3 Planning of changes and cl. 8.2 Control of change",
+          "status": "clause-verified"
+        },
+        {
+          "for": "permit consequence",
+          "cite": "49 CFR 192.13(d) management of change element list - onshore gas TRANSMISSION only; DIMP cl. 192.1007 has no MOC element, so distribution MOC is voluntary - it names acquisition of required work permits as an element of change",
+          "status": "regulation"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "ISO 9001:2015 cl. 8.3 Design and development (Ed. 6 due 2026-09)"
+      }
+    },
+    {
+      "uid": 10031,
+      "id": "2.2.1",
+      "name": "Maintain compatible unit and assembly library",
+      "group": {
+        "id": "2.2",
+        "name": "Perform compatible-unit design and estimating",
+        "uid": 10030
+      },
+      "intent": "Maintain the library of standard assemblies work is designed and costed from.",
+      "activities": [
+        "Define each unit and what it comprises",
+        "Attach labour, material and plant content to the unit",
+        "Align the unit set to the property units listing used for accounting",
+        "Review and version the library as standards and costs change"
+      ],
+      "trigger": {
+        "kind": "none",
+        "text": "A standing capability. No instance boundary.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Construction standards and accepted materials",
+          "party": "DGN",
+          "data": null
+        },
+        {
+          "what": "Property units listing used for accounting",
+          "party": "FIN",
+          "data": null
+        },
+        {
+          "what": "Material catalogue and current prices",
+          "party": "MM",
+          "data": "MaterialItem"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Versioned unit and assembly library",
+          "party": "DGN",
+          "data": null
+        },
+        {
+          "what": "Unit content available to estimating",
+          "party": "FIN",
+          "data": null
+        }
+      ],
+      "systems": [
+        {
+          "component": "DGN",
+          "role": "owning",
+          "service": "Unit and assembly library"
+        },
+        {
+          "component": "FIN",
+          "role": "reference",
+          "service": "Property units listing"
+        },
+        {
+          "component": "MM",
+          "role": "reference",
+          "service": "Material catalogue and pricing"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "MM",
+          "to": "DGN",
+          "payload": "WorkRequest",
+          "verb": "get",
+          "pattern": "request-reply"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Designer",
+          "raci": "C"
+        },
+        {
+          "role": "Engineering standards owner",
+          "raci": "A"
+        },
+        {
+          "role": "Finance",
+          "raci": "C"
+        },
+        {
+          "role": "Materials planner",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "MaterialItem",
+        "WorkAsset"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "A written property units listing must be maintained and applied consistently for accounting additions and retirements. The unit library and that listing have to agree or the estimate and the accounting will not."
+        },
+        {
+          "kind": "operational",
+          "text": "The content of a unit library has no standards basis. It is the operator's, and it should be versioned and owned rather than accumulating."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Actual Cost to Planning Estimate",
+          "definition": "SMRP 5.3.3. Systematic drift indicates stale unit content, not poor estimating.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Planning Variance Index",
+          "definition": "SMRP 5.3.5, trended by unit.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Published assembly catalogue adopted from a funder or standards body",
+        "Operator-defined library aligned to its own construction standards",
+        "Hybrid, with local units layered on a published catalogue"
+      ],
+      "notation": {
+        "class": "SPEC",
+        "why": "A standing capability with no instance boundary. Nothing starts and ends, so no flow model is owed.",
+        "artifact": null
+      },
+      "en17007": {
+        "process": "MRQ",
+        "title": "Deliver maintenance requirements during items design and modification",
+        "clause": "6.12"
+      },
+      "sources": [
+        {
+          "for": "compatible unit concept",
+          "cite": "IEC 61968-6:2015 cl. 4.2.5 Design - the only international-standard mention of Compatible Units, naming the DGN Design and Estimation System and Design Location",
+          "status": "verified"
+        },
+        {
+          "for": "controls.regulatory",
+          "cite": "18 CFR Part 101 Electric Plant Instructions 4, 10 and 11 and Definitions 18 and 34; 18 CFR Part 201 is word-for-word parallel for gas. Binds FPA and NGA entities; states adopt them for distribution utilities - Electric Plant Instruction 10(A) requires the written property units listing and consistent application",
+          "status": "regulation"
+        },
+        {
+          "for": "published assembly catalogue",
+          "cite": "USDA RUS Bulletin 1728F-804, incorporated by reference in 7 CFR Part 1728 - a coded assembly catalogue that functions as a unit library, though it never uses the term",
+          "status": "regulation"
+        },
+        {
+          "for": "library content",
+          "cite": "No standards basis. The catalogue's content is the operator's.",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "regulation",
+        "primary": "18 CFR Part 101 Electric Plant Instructions 4, 10 and 11 and Definitions 18 and 34; 18 CFR Part 201 is word-for-word parallel for gas. Binds FPA and NGA entities; states adopt them for distribution utilities"
+      }
+    },
+    {
+      "uid": 10032,
+      "id": "2.2.2",
+      "name": "Place compatible units on the spatial design",
+      "group": {
+        "id": "2.2",
+        "name": "Perform compatible-unit design and estimating",
+        "uid": 10030
+      },
+      "intent": "Express the design as units placed at locations.",
+      "activities": [
+        "Divide the design into design locations",
+        "Select the units that build each location",
+        "Record quantities and any non-standard line items",
+        "Reconcile the placed units against the drawing"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "An authorised design requires unit-based expression for estimating.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Authorised design",
+          "party": "DGN",
+          "data": "Work"
+        },
+        {
+          "what": "Unit and assembly library",
+          "party": "DGN",
+          "data": null
+        },
+        {
+          "what": "Spatial location and network position",
+          "party": "GINV",
+          "data": "WorkLocation"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Unit-based design with quantities by location",
+          "party": "DGN",
+          "data": "Work"
+        },
+        {
+          "what": "Non-standard line items requiring separate estimate",
+          "party": "DGN",
+          "data": "Work"
+        }
+      ],
+      "systems": [
+        {
+          "component": "DGN",
+          "role": "owning",
+          "service": "Design and estimation"
+        },
+        {
+          "component": "GINV",
+          "role": "reference",
+          "service": "Spatial reference and design location"
+        },
+        {
+          "component": "MM",
+          "role": "reference",
+          "service": "Material catalogue"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "DGN",
+          "to": "GINV",
+          "payload": "WorkRequest",
+          "verb": "get",
+          "pattern": "request-reply"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Designer",
+          "raci": "R"
+        },
+        {
+          "role": "Engineering manager",
+          "raci": "A"
+        },
+        {
+          "role": "Estimator",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkLocation",
+        "MaterialItem"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "A design made only of units cannot express work the library does not cover. Line items must remain available or estimators force work into the wrong unit."
+        },
+        {
+          "kind": "operational",
+          "text": "Units are associated with a design location, and that association is what carries the estimate through to as-built and to the asset record."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Planned Work",
+          "definition": "SMRP 5.3.1. Unit-based design is what makes work plannable at scale.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Actual Hours to Planning Estimate",
+          "definition": "SMRP 5.3.4, by unit type.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Wholly unit-based design",
+        "Mixed units and line items",
+        "Line items only, where no unit fits"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Repeating sequence with a defined reconciliation step.",
+        "artifact": "models/2.2-compatible-unit-design-and-estimating.bpmn"
+      },
+      "en17007": {
+        "process": "MRQ",
+        "title": "Deliver maintenance requirements during items design and modification",
+        "clause": "6.12"
+      },
+      "sources": [
+        {
+          "for": "compatible unit and design location model",
+          "cite": "IEC 61968-6:2015 cl. 4.2.5 Design - the only international-standard mention of Compatible Units, naming the DGN Design and Estimation System and Design Location",
+          "status": "verified"
+        },
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.12 MRQ",
+          "status": "clause-verified"
+        },
+        {
+          "for": "measures",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.3.1, 5.3.4",
+          "status": "verified"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "IEC 61968-6:2015 cl. 4.2.5 Design - the only international-standard mention of Compatible Units, naming the DGN Design and Estimation System and Design Location"
+      }
+    },
+    {
+      "uid": 10033,
+      "id": "2.2.3",
+      "name": "Derive labour, material and plant from design",
+      "group": {
+        "id": "2.2",
+        "name": "Perform compatible-unit design and estimating",
+        "uid": 10030
+      },
+      "intent": "Derive the labour, material and plant the design implies.",
+      "activities": [
+        "Explode each placed unit into its labour, material and plant content",
+        "Aggregate across the design",
+        "Add content for non-standard line items",
+        "Publish the requirement to materials and to resource planning"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "A unit-based design is complete and its content is required.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Unit-based design with quantities",
+          "party": "DGN",
+          "data": "Work"
+        },
+        {
+          "what": "Unit content definitions",
+          "party": "DGN",
+          "data": null
+        },
+        {
+          "what": "Material availability and lead time",
+          "party": "MM",
+          "data": "MaterialItem"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Labour requirement by skill",
+          "party": "SCHD",
+          "data": "WorkTask"
+        },
+        {
+          "what": "Material requirement by item",
+          "party": "MM",
+          "data": "MaterialItem"
+        },
+        {
+          "what": "Plant and equipment requirement",
+          "party": "SCHD",
+          "data": "Tool"
+        }
+      ],
+      "systems": [
+        {
+          "component": "DGN",
+          "role": "owning",
+          "service": "Design content derivation"
+        },
+        {
+          "component": "MM",
+          "role": "consuming",
+          "service": "Material requirement"
+        },
+        {
+          "component": "SCHD",
+          "role": "consuming",
+          "service": "Labour and plant requirement"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "DGN",
+          "to": "MM",
+          "payload": "WorkRequest",
+          "verb": "create",
+          "pattern": "event"
+        },
+        {
+          "from": "DGN",
+          "to": "SCHD",
+          "payload": "WorkRequest",
+          "verb": "create",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Designer",
+          "raci": "R"
+        },
+        {
+          "role": "Estimator",
+          "raci": "A"
+        },
+        {
+          "role": "Materials planner",
+          "raci": "C"
+        },
+        {
+          "role": "Maintenance planner",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkTask",
+        "MaterialItem",
+        "Tool"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "Derivation is only as good as the unit content. Where a line item was used instead of a unit, its content is manual and needs the same review as an estimate."
+        },
+        {
+          "kind": "financial",
+          "text": "Labour and overhead estimated from standard unit costs is accepted practice for federal rural utilities borrowers, but arbitrary overhead percentages added to direct construction cost are not permitted."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Planned Work",
+          "definition": "SMRP 5.3.1.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Actual Hours to Planning Estimate",
+          "definition": "SMRP 5.3.4 - the direct test of unit content quality.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Fully derived from units",
+        "Derived with manual content for line items",
+        "Derived and then adjusted for site conditions"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Deterministic derivation with a defined publication step.",
+        "artifact": "models/2.2-compatible-unit-design-and-estimating.bpmn"
+      },
+      "en17007": {
+        "process": "ACT.2",
+        "title": "Prepare for the maintenance tasks",
+        "clause": "6.5.3"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.5.3 ACT.2",
+          "status": "clause-verified"
+        },
+        {
+          "for": "controls.financial",
+          "cite": "18 CFR Part 101 Electric Plant Instructions 4, 10 and 11 and Definitions 18 and 34; 18 CFR Part 201 is word-for-word parallel for gas. Binds FPA and NGA entities; states adopt them for distribution utilities - Electric Plant Instruction 4(B) prohibits adding arbitrary overhead percentages to direct construction cost",
+          "status": "regulation"
+        },
+        {
+          "for": "standard unit costs",
+          "cite": "7 CFR 1767.41 Work Order Procedures and 7 CFR 1767.16(j)-(k) (RUS borrowers) - labour and overhead estimated using standard record unit costs",
+          "status": "regulation"
+        },
+        {
+          "for": "measures",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.3.1, 5.3.4",
+          "status": "verified"
+        }
+      ],
+      "provenance": {
+        "basis": "regulation",
+        "primary": "18 CFR Part 101 Electric Plant Instructions 4, 10 and 11 and Definitions 18 and 34; 18 CFR Part 201 is word-for-word parallel for gas. Binds FPA and NGA entities; states adopt them for distribution utilities"
+      }
+    },
+    {
+      "uid": 10034,
+      "id": "2.2.4",
+      "name": "Produce compatible-unit cost estimate",
+      "group": {
+        "id": "2.2",
+        "name": "Perform compatible-unit design and estimating",
+        "uid": 10030
+      },
+      "intent": "Cost the unit-based design.",
+      "activities": [
+        "Apply current unit costs to the placed units",
+        "Cost non-standard line items separately",
+        "State the estimate class against the maturity of the design",
+        "Record the basis of the estimate"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "Design content is derived and a cost estimate is required.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Derived labour, material and plant content",
+          "party": "DGN",
+          "data": "Work"
+        },
+        {
+          "what": "Current unit costs",
+          "party": "FIN",
+          "data": null
+        },
+        {
+          "what": "Design maturity for estimate classification",
+          "party": "DGN",
+          "data": null
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Unit-based cost estimate with its class",
+          "party": "FIN",
+          "data": "Work"
+        },
+        {
+          "what": "Basis of estimate record",
+          "party": "FIN",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "DGN",
+          "role": "owning",
+          "service": "Cost estimation"
+        },
+        {
+          "component": "FIN",
+          "role": "consuming",
+          "service": "Estimate and basis of estimate"
+        },
+        {
+          "component": "MM",
+          "role": "reference",
+          "service": "Current material pricing"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "DGN",
+          "to": "FIN",
+          "payload": "WorkRequest",
+          "verb": "create",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Estimator",
+          "raci": "R"
+        },
+        {
+          "role": "Engineering manager",
+          "raci": "A"
+        },
+        {
+          "role": "Finance",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "An estimate without a stated class and a documented basis cannot be compared with the outturn, so estimating never improves. The maturity of design definition is what determines the class, not the effort spent estimating."
+        },
+        {
+          "kind": "operational",
+          "text": "Where a stage gate is expressed as a percentage design review, the percentage may not correspond to the definition the class requires. Classify on definition, and note the exception."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Actual Cost to Planning Estimate",
+          "definition": "SMRP 5.3.3, reported within estimate class so the comparison is fair.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Planning Variance Index",
+          "definition": "SMRP 5.3.5.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Class 5 order of magnitude at concept",
+        "Class 3 at authorisation, the common gate for utility construction",
+        "Class 1 at issue for construction"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Known sequence; classification and contingency are delegated decisions.",
+        "artifact": "models/2.2-compatible-unit-design-and-estimating.bpmn"
+      },
+      "en17007": {
+        "process": "BUD",
+        "title": "Budget maintenance of items",
+        "clause": "6.8"
+      },
+      "sources": [
+        {
+          "for": "estimate classification",
+          "cite": "AACE International RP 96R-18 Cost Estimate Classification System, power transmission line infrastructure, rev. 2020-08-07 - cl. 2 states it applies to distribution as well as transmission; substations excluded",
+          "status": "consensus"
+        },
+        {
+          "for": "gas equivalent",
+          "cite": "AACE International RP 97R-18, pipeline transportation infrastructure, rev. 2020-08-07",
+          "status": "consensus"
+        },
+        {
+          "for": "consensus standard",
+          "cite": "ASTM E2516-11(2024) Standard Classification for Cost Estimate Classification System",
+          "status": "clause-verified"
+        },
+        {
+          "for": "basis of estimate",
+          "cite": "AACE International RP 34R-05 Basis of Estimate",
+          "status": "consensus"
+        },
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.8 BUD",
+          "status": "clause-verified"
+        },
+        {
+          "for": "measures",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.3.3, 5.3.5",
+          "status": "verified"
+        }
+      ],
+      "provenance": {
+        "basis": "consensus",
+        "primary": "AACE International RP 96R-18 Cost Estimate Classification System, power transmission line infrastructure, rev. 2020-08-07 - cl. 2 states it applies to distribution as well as transmission; substations excluded"
+      }
+    },
+    {
+      "uid": 10035,
+      "id": "2.2.5",
+      "name": "Maintain unit accounting and allocation rules",
+      "group": {
+        "id": "2.2",
+        "name": "Perform compatible-unit design and estimating",
+        "uid": 10030
+      },
+      "intent": "Determine how the work will be accounted for, and against which units.",
+      "activities": [
+        "Establish whether the work adds, replaces or retires a unit of property",
+        "Apply the betterment test where a minor item is replaced independently",
+        "Assign the accounting treatment and the plant account",
+        "Record the units for the addition and retirement entries"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "A costed design requires its accounting treatment before authorisation.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Unit-based design and its cost estimate",
+          "party": "DGN",
+          "data": "Work"
+        },
+        {
+          "what": "Property units listing",
+          "party": "FIN",
+          "data": null
+        },
+        {
+          "what": "Existing plant being replaced or retired",
+          "party": "AM",
+          "data": "WorkAsset"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Accounting treatment and plant account",
+          "party": "FIN",
+          "data": "Work"
+        },
+        {
+          "what": "Retirement units identified for the work order",
+          "party": "AM",
+          "data": "WorkAsset"
+        }
+      ],
+      "systems": [
+        {
+          "component": "FIN",
+          "role": "owning",
+          "service": "Unit accounting and allocation"
+        },
+        {
+          "component": "DGN",
+          "role": "contributing",
+          "service": "Unit-based design"
+        },
+        {
+          "component": "AM",
+          "role": "reference",
+          "service": "Existing plant and continuing property record"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "DGN",
+          "to": "FIN",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Estimator",
+          "raci": "C"
+        },
+        {
+          "role": "Finance",
+          "raci": "A"
+        },
+        {
+          "role": "Asset engineer",
+          "raci": "C"
+        },
+        {
+          "role": "Engineering manager",
+          "raci": "I"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkAsset"
+      ],
+      "controls": [
+        {
+          "kind": "financial",
+          "text": "The determination is whether a retirement unit or a minor item is affected, and where a minor item is replaced independently, whether the replacement effects a substantial betterment. Only the excess over replacing without betterment is capitalised."
+        },
+        {
+          "kind": "financial",
+          "text": "All construction and retirements must be recorded by work order, with retirement items kept separate from construction and any maintenance cost in the work segregated."
+        },
+        {
+          "kind": "regulatory",
+          "text": "The federal accounts bind investor-owned entities under the Federal Power Act and the Natural Gas Act. A state utility is bound by what its commission adopted, usually these."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Actual Cost to Planning Estimate",
+          "definition": "SMRP 5.3.3, split capital and expense.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Rework",
+          "definition": "SMRP 4.1, applied to work orders reclassified after closure.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Addition of a retirement unit - capitalised",
+        "Replacement of a minor item without betterment - expensed",
+        "Replacement of a minor item with substantial betterment - excess capitalised",
+        "Retirement with no replacement"
+      ],
+      "notation": {
+        "class": "DMN",
+        "why": "The output is an accounting classification determined from the work's effect on units of property against a published rule. It is the logic an auditor asks to see.",
+        "artifact": "models/2.2.5-capitalisation-determination.dmn"
+      },
+      "en17007": {
+        "process": "BUD",
+        "title": "Budget maintenance of items",
+        "clause": "6.8"
+      },
+      "sources": [
+        {
+          "for": "capital versus expense",
+          "cite": "18 CFR Part 101 Electric Plant Instructions 4, 10 and 11 and Definitions 18 and 34; 18 CFR Part 201 is word-for-word parallel for gas. Binds FPA and NGA entities; states adopt them for distribution utilities - Electric Plant Instruction 10(C)(1) and 10(C)(3) betterment test; Operating Expense Instruction 2 item 8",
+          "status": "regulation"
+        },
+        {
+          "for": "units of property",
+          "cite": "18 CFR Part 101 Electric Plant Instructions 4, 10 and 11 and Definitions 18 and 34; 18 CFR Part 201 is word-for-word parallel for gas. Binds FPA and NGA entities; states adopt them for distribution utilities - Definitions 34 retirement unit and 18 minor item of property; Definition 8 continuing plant inventory record",
+          "status": "regulation"
+        },
+        {
+          "for": "work order requirement",
+          "cite": "18 CFR Part 101 Electric Plant Instructions 4, 10 and 11 and Definitions 18 and 34; 18 CFR Part 201 is word-for-word parallel for gas. Binds FPA and NGA entities; states adopt them for distribution utilities - Electric Plant Instruction 11",
+          "status": "regulation"
+        },
+        {
+          "for": "RUS borrowers",
+          "cite": "7 CFR 1767.41 Work Order Procedures and 7 CFR 1767.16(j)-(k) (RUS borrowers)",
+          "status": "regulation"
+        },
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.8 BUD",
+          "status": "clause-verified"
+        }
+      ],
+      "provenance": {
+        "basis": "regulation",
+        "primary": "18 CFR Part 101 Electric Plant Instructions 4, 10 and 11 and Definitions 18 and 34; 18 CFR Part 201 is word-for-word parallel for gas. Binds FPA and NGA entities; states adopt them for distribution utilities"
+      }
+    },
+    {
+      "uid": 10036,
+      "id": "2.2.6",
+      "name": "Release approved design to construction work",
+      "group": {
+        "id": "2.2",
+        "name": "Perform compatible-unit design and estimating",
+        "uid": 10030
+      },
+      "intent": "Release the approved design so construction work can be raised against it.",
+      "activities": [
+        "Confirm the design is authorised and its accounting treatment assigned",
+        "Confirm funding and any external approval are in place",
+        "Release the design and its content to work management",
+        "Fix the design revision the release is against"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "An authorised, costed and classified design is ready for construction.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Authorised design at a fixed revision",
+          "party": "DGN",
+          "data": "Work"
+        },
+        {
+          "what": "Accounting treatment and plant account",
+          "party": "FIN",
+          "data": "Work"
+        },
+        {
+          "what": "Funding and external approval status",
+          "party": "FIN",
+          "data": null
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Construction work raised against the design",
+          "party": "CON",
+          "data": "Work"
+        },
+        {
+          "what": "Design revision recorded on the work",
+          "party": "MAI",
+          "data": "Work"
+        }
+      ],
+      "systems": [
+        {
+          "component": "DGN",
+          "role": "owning",
+          "service": "Design release"
+        },
+        {
+          "component": "CON",
+          "role": "receiving",
+          "service": "Construction work"
+        },
+        {
+          "component": "MAI",
+          "role": "consuming",
+          "service": "Work registration"
+        },
+        {
+          "component": "FIN",
+          "role": "reference",
+          "service": "Funding and approval status"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "DGN",
+          "to": "CON",
+          "payload": "WorkRequest",
+          "verb": "create",
+          "pattern": "event"
+        },
+        {
+          "from": "DGN",
+          "to": "MAI",
+          "payload": "WorkRequest",
+          "verb": "create",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Engineering manager",
+          "raci": "A"
+        },
+        {
+          "role": "Designer",
+          "raci": "R"
+        },
+        {
+          "role": "Maintenance planner",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkTask",
+        "WorkAsset"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "Where federal rural utilities finance applies, facilities must be approved and receive environmental clearance before construction starts, and that includes amendments adding facilities or making significant physical changes."
+        },
+        {
+          "kind": "operational",
+          "text": "The work must carry the design revision it was released against, or a later revision cannot be reconciled to what was built."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Planned Work",
+          "definition": "SMRP 5.3.1.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Work Order Cycle Time",
+          "definition": "SMRP 5.4.7, measured from design release.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Release in full",
+        "Staged release by design location or phase",
+        "Release held pending environmental or external clearance"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Known sequence with defined release gates.",
+        "artifact": "models/2.2-compatible-unit-design-and-estimating.bpmn"
+      },
+      "en17007": {
+        "process": "ACT.2",
+        "title": "Prepare for the maintenance tasks",
+        "clause": "6.5.3"
+      },
+      "sources": [
+        {
+          "for": "clearance before construction",
+          "cite": "7 CFR 1710.250(e) - facilities in a construction work plan must be approved and receive environmental clearance before the start of construction",
+          "status": "regulation"
+        },
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.5.3 ACT.2",
+          "status": "clause-verified"
+        },
+        {
+          "for": "interfaces",
+          "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 payloads; Annex A verbs",
+          "status": "verified"
+        }
+      ],
+      "provenance": {
+        "basis": "regulation",
+        "primary": "7 CFR 1710.250(e)"
+      }
+    },
+    {
+      "uid": 10038,
+      "id": "2.3.1",
+      "name": "Produce labour, material and equipment estimate",
+      "group": {
+        "id": "2.3",
+        "name": "Estimate work",
+        "uid": 10037
+      },
+      "intent": "Estimate the labour, material and equipment the work will consume.",
+      "activities": [
+        "Establish the estimate class from the maturity of definition",
+        "Estimate labour by skill and duration",
+        "Estimate material and equipment from the design or from history",
+        "Document the basis, including assumptions and exclusions"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "Work requires a cost estimate and is not wholly unit-based.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Scope, design or job plan",
+          "party": "DGN",
+          "data": "Work"
+        },
+        {
+          "what": "Historical cost and duration for similar work",
+          "party": "FIN",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Current labour rates and material prices",
+          "party": "FIN",
+          "data": null
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Labour, material and equipment estimate",
+          "party": "FIN",
+          "data": "Work"
+        },
+        {
+          "what": "Basis of estimate with assumptions and exclusions",
+          "party": "FIN",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "DGN",
+          "role": "contributing",
+          "service": "Design content"
+        },
+        {
+          "component": "FIN",
+          "role": "owning",
+          "service": "Estimating"
+        },
+        {
+          "component": "MM",
+          "role": "reference",
+          "service": "Material pricing"
+        },
+        {
+          "component": "HR",
+          "role": "reference",
+          "service": "Labour rates"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "DGN",
+          "to": "FIN",
+          "payload": "WorkRequest",
+          "verb": "get",
+          "pattern": "request-reply"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Estimator",
+          "raci": "R"
+        },
+        {
+          "role": "Engineering manager",
+          "raci": "A"
+        },
+        {
+          "role": "Maintenance planner",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkTask",
+        "MaterialItem"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "The maturity of project definition is the sole primary determinant of estimate class. Accuracy ranges are indicative of a range of ranges, not absolute targets, and should not be used as performance metrics."
+        },
+        {
+          "kind": "operational",
+          "text": "An estimate without a documented basis cannot be defended, reused or improved. Assumptions and exclusions are the estimate."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Actual Cost to Planning Estimate",
+          "definition": "SMRP 5.3.3.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Actual Hours to Planning Estimate",
+          "definition": "SMRP 5.3.4.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Planner Productivity",
+          "definition": "SMRP 5.3.6.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Analogous estimate from comparable completed work",
+        "Parametric estimate from unit rates",
+        "Detailed bottom-up estimate from the design"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Known sequence; classification and contingency are delegated decisions.",
+        "artifact": "models/2.3-estimate-work.bpmn"
+      },
+      "en17007": {
+        "process": "BUD",
+        "title": "Budget maintenance of items",
+        "clause": "6.8"
+      },
+      "sources": [
+        {
+          "for": "estimate classification",
+          "cite": "AACE International RP 96R-18 Cost Estimate Classification System, power transmission line infrastructure, rev. 2020-08-07 - cl. 2 states it applies to distribution as well as transmission; substations excluded",
+          "status": "consensus"
+        },
+        {
+          "for": "classification principle",
+          "cite": "AACE PGD-01 - the maturity level of definition is the sole primary determining characteristic of class, and accuracy ranges are an indicative range-of-ranges not absolute metrics",
+          "status": "consensus"
+        },
+        {
+          "for": "basis of estimate",
+          "cite": "AACE International RP 34R-05 Basis of Estimate",
+          "status": "consensus"
+        },
+        {
+          "for": "cost management framing",
+          "cite": "ISO 21502:2020 cl. 7.7 Cost management, cl. 7.10 Change control cl. 7.7.2 estimating cost",
+          "status": "clause-verified"
+        },
+        {
+          "for": "measures",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.3.3, 5.3.4, 5.3.6",
+          "status": "verified"
+        }
+      ],
+      "provenance": {
+        "basis": "consensus",
+        "primary": "AACE International RP 96R-18 Cost Estimate Classification System, power transmission line infrastructure, rev. 2020-08-07 - cl. 2 states it applies to distribution as well as transmission; substations excluded"
+      }
+    },
+    {
+      "uid": 10039,
+      "id": "2.3.2",
+      "name": "Produce contracted-work estimate",
+      "group": {
+        "id": "2.3",
+        "name": "Estimate work",
+        "uid": 10037
+      },
+      "intent": "Estimate the portion of the work an external party will deliver.",
+      "activities": [
+        "Establish the scope to be externally delivered",
+        "Estimate against contract rates or a schedule of rates where one exists",
+        "Estimate the retained internal cost of oversight and acceptance",
+        "Document the basis and its dependence on the contract"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "Part or all of the work is to be externally delivered and requires costing.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Scope proposed for external delivery",
+          "party": "DGN",
+          "data": "Work"
+        },
+        {
+          "what": "Contract rates or schedule of rates",
+          "party": "FIN",
+          "data": null
+        },
+        {
+          "what": "Internal capacity position",
+          "party": "SCHD",
+          "data": "Crew"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Contracted-work estimate",
+          "party": "FIN",
+          "data": "Work"
+        },
+        {
+          "what": "Retained internal cost of oversight",
+          "party": "FIN",
+          "data": "Work"
+        }
+      ],
+      "systems": [
+        {
+          "component": "FIN",
+          "role": "owning",
+          "service": "Contracted-work estimating"
+        },
+        {
+          "component": "SCHD",
+          "role": "reference",
+          "service": "Internal capacity"
+        },
+        {
+          "component": "DGN",
+          "role": "contributing",
+          "service": "Scope definition"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "FIN",
+          "to": "SCHD",
+          "payload": "WorkRequest",
+          "verb": "get",
+          "pattern": "request-reply"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Estimator",
+          "raci": "R"
+        },
+        {
+          "role": "Contract owner",
+          "raci": "A"
+        },
+        {
+          "role": "Engineering manager",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkTask"
+      ],
+      "controls": [
+        {
+          "kind": "financial",
+          "text": "An external estimate that omits the retained cost of oversight, inspection and acceptance understates the true cost of the sourcing decision and biases it."
+        },
+        {
+          "kind": "operational",
+          "text": "The estimate depends on a contract existing. Where no rate is awarded the figure is a forecast, not an estimate, and should say so."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Actual Cost to Planning Estimate",
+          "definition": "SMRP 5.3.3, reported separately for externally delivered work.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Planning Variance Index",
+          "definition": "SMRP 5.3.5.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Against an awarded schedule of rates",
+        "Against a competitive quotation",
+        "Forecast where no contract is yet in place"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Known sequence with a defined dependency on contract status.",
+        "artifact": "models/2.3-estimate-work.bpmn"
+      },
+      "en17007": {
+        "process": "SER",
+        "title": "Provide external maintenance services",
+        "clause": "6.15"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.15 SER",
+          "status": "clause-verified"
+        },
+        {
+          "for": "estimate classification",
+          "cite": "AACE International RP 96R-18 Cost Estimate Classification System, power transmission line infrastructure, rev. 2020-08-07 - cl. 2 states it applies to distribution as well as transmission; substations excluded",
+          "status": "consensus"
+        },
+        {
+          "for": "contract basis",
+          "cite": "EN 13269:2016 Guideline on preparation of maintenance contracts",
+          "status": "clause-verified"
+        },
+        {
+          "for": "measures",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.3.3, 5.3.5",
+          "status": "verified"
+        }
+      ],
+      "provenance": {
+        "basis": "consensus",
+        "primary": "AACE International RP 96R-18 Cost Estimate Classification System, power transmission line infrastructure, rev. 2020-08-07 - cl. 2 states it applies to distribution as well as transmission; substations excluded"
+      }
+    },
+    {
+      "uid": 10040,
+      "id": "2.3.3",
+      "name": "Apply overhead, contingency and escalation",
+      "group": {
+        "id": "2.3",
+        "name": "Estimate work",
+        "uid": 10037
+      },
+      "intent": "Add the allowances the estimate class and the risk profile require.",
+      "activities": [
+        "Determine the applicable overhead treatment",
+        "Determine contingency from the estimate class and the identified risks",
+        "Determine escalation over the delivery period",
+        "Record each allowance and its basis separately from the base estimate"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "A base estimate is complete and requires allowances.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Base estimate and its class",
+          "party": "FIN",
+          "data": "Work"
+        },
+        {
+          "what": "Identified risks for the work",
+          "party": "FIN",
+          "data": null
+        },
+        {
+          "what": "Delivery period and escalation basis",
+          "party": "FIN",
+          "data": null
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Estimate with overhead, contingency and escalation stated separately",
+          "party": "FIN",
+          "data": "Work"
+        },
+        {
+          "what": "Allowance basis recorded",
+          "party": "FIN",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "FIN",
+          "role": "owning",
+          "service": "Allowance determination"
+        },
+        {
+          "component": "DGN",
+          "role": "reference",
+          "service": "Estimate class and definition maturity"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "FIN",
+          "to": "MAI",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Estimator",
+          "raci": "R"
+        },
+        {
+          "role": "Finance",
+          "raci": "A"
+        },
+        {
+          "role": "Engineering manager",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "financial",
+          "text": "Adding arbitrary percentages or amounts to direct construction cost to cover assumed overhead is not permitted under the federal accounts. Overhead is allocated on a defined basis or not at all."
+        },
+        {
+          "kind": "operational",
+          "text": "Contingency covers items whose state, occurrence or effect is uncertain. It is not a buffer for scope that is known but unpriced, and rolling it up with the base estimate hides both."
+        },
+        {
+          "kind": "operational",
+          "text": "The published method gives how to determine contingency and escalation, not what the values should be. The values are the operator's and should be reviewed against outturn."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Actual Cost to Planning Estimate",
+          "definition": "SMRP 5.3.3, compared to the estimate excluding and including contingency.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Planning Variance Index",
+          "definition": "SMRP 5.3.5.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Contingency from the estimate class",
+        "Contingency from a risk-based determination",
+        "Escalation by index over a stated delivery period",
+        "No allowance, where the work is short and priced"
+      ],
+      "notation": {
+        "class": "DMN",
+        "why": "The output is an allowance value determined from estimate class and risk against a published rule set. A table lets the values be reviewed against outturn rather than argued each time.",
+        "artifact": "models/2.3.3-contingency-and-escalation.dmn"
+      },
+      "en17007": {
+        "process": "BUD",
+        "title": "Budget maintenance of items",
+        "clause": "6.8"
+      },
+      "sources": [
+        {
+          "for": "contingency and escalation method",
+          "cite": "AACE International RP 40R-08 Contingency and RP 68R-11 Escalation; RP 119R-21 accuracy range and contingency from parametric risk models",
+          "status": "consensus"
+        },
+        {
+          "for": "contingency definition",
+          "cite": "AACE 10S-90 Cost Engineering Terminology, rev. 2026-06-11 - an amount added to an estimate to allow for items, conditions or events for which the state, occurrence or effect is uncertain",
+          "status": "consensus"
+        },
+        {
+          "for": "controls.financial",
+          "cite": "18 CFR Part 101 Electric Plant Instructions 4, 10 and 11 and Definitions 18 and 34; 18 CFR Part 201 is word-for-word parallel for gas. Binds FPA and NGA entities; states adopt them for distribution utilities - Electric Plant Instruction 4(B)",
+          "status": "regulation"
+        },
+        {
+          "for": "allowance values",
+          "cite": "Method is published; the values are firm judgment and must be reviewed against outturn",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "consensus",
+        "primary": "AACE International RP 40R-08 Contingency and RP 68R-11 Escalation"
+      }
+    },
+    {
+      "uid": 10041,
+      "id": "2.3.4",
+      "name": "Maintain in-progress estimate revisions",
+      "group": {
+        "id": "2.3",
+        "name": "Estimate work",
+        "uid": 10037
+      },
+      "intent": "Keep the estimate current as the work is defined and delivered.",
+      "activities": [
+        "Detect the event that invalidates the current estimate",
+        "Re-estimate the affected scope",
+        "Restate the estimate class where definition has matured",
+        "Retain the superseded estimate and the reason for the change"
+      ],
+      "trigger": {
+        "kind": "conditional",
+        "text": "Scope, design, market price or delivery period changes materially.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Current estimate and its basis",
+          "party": "FIN",
+          "data": "Work"
+        },
+        {
+          "what": "The change that prompted revision",
+          "party": "DGN",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Committed and incurred cost to date",
+          "party": "FIN",
+          "data": "Work"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Revised estimate at a stated class",
+          "party": "FIN",
+          "data": "Work"
+        },
+        {
+          "what": "Superseded estimate retained with its reason",
+          "party": "FIN",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "FIN",
+          "role": "owning",
+          "service": "Estimate revision"
+        },
+        {
+          "component": "DGN",
+          "role": "contributing",
+          "service": "Design change"
+        },
+        {
+          "component": "CON",
+          "role": "contributing",
+          "service": "Construction feedback"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "DGN",
+          "to": "FIN",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Estimator",
+          "raci": "R"
+        },
+        {
+          "role": "Finance",
+          "raci": "A"
+        },
+        {
+          "role": "Engineering manager",
+          "raci": "C"
+        },
+        {
+          "role": "Programme manager",
+          "raci": "I"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "financial",
+          "text": "An estimate revised without retaining its predecessor destroys the record that estimating performance is measured from, and makes cost growth invisible."
+        },
+        {
+          "kind": "operational",
+          "text": "Re-estimating without restating the class conceals that definition has matured and the accuracy range has narrowed."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Planning Variance Index",
+          "definition": "SMRP 5.3.5, trended across revisions.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Actual Cost to Planning Estimate",
+          "definition": "SMRP 5.3.3, measured against the estimate at authorisation, not the latest revision.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Revision from design change",
+        "Revision from market price movement",
+        "Revision from maturing definition at a stage gate",
+        "Revision from site conditions found during construction"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Conditional start with a known sequence.",
+        "artifact": "models/2.3-estimate-work.bpmn"
+      },
+      "en17007": {
+        "process": "BUD",
+        "title": "Budget maintenance of items",
+        "clause": "6.8"
+      },
+      "sources": [
+        {
+          "for": "estimate review and documentation",
+          "cite": "AACE International RP 31R-03 Reviewing, Validating and Documenting the Estimate",
+          "status": "consensus"
+        },
+        {
+          "for": "cost control framing",
+          "cite": "ISO 21502:2020 cl. 7.7 Cost management, cl. 7.10 Change control cl. 7.7.4 controlling costs",
+          "status": "clause-verified"
+        },
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.8 BUD",
+          "status": "clause-verified"
+        },
+        {
+          "for": "measures",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.3.5, 5.3.3",
+          "status": "verified"
+        }
+      ],
+      "provenance": {
+        "basis": "consensus",
+        "primary": "AACE International RP 31R-03"
+      }
+    },
+    {
+      "uid": 10043,
+      "id": "2.4.1",
+      "name": "Validate funding and budget availability",
+      "group": {
+        "id": "2.4",
+        "name": "Authorise work",
+        "uid": 10042
+      },
+      "intent": "Confirm the work is funded before it is authorised.",
+      "activities": [
+        "Identify the funding source and the account the work will charge",
+        "Confirm the amount is available and uncommitted",
+        "Confirm any external funding condition is satisfied",
+        "Commit the funds against the work"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "Estimated work requires funding confirmation before approval.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Estimate including allowances",
+          "party": "FIN",
+          "data": "Work"
+        },
+        {
+          "what": "Budget position for the account",
+          "party": "FIN",
+          "data": null
+        },
+        {
+          "what": "Accounting treatment and plant account",
+          "party": "FIN",
+          "data": "Work"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Funding confirmation and committed amount",
+          "party": "FIN",
+          "data": "Work"
+        },
+        {
+          "what": "Referral where funding is unavailable",
+          "party": "FIN",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "FIN",
+          "role": "owning",
+          "service": "Funding validation and commitment"
+        },
+        {
+          "component": "MAI",
+          "role": "consuming",
+          "service": "Work authorisation"
+        },
+        {
+          "component": "DGN",
+          "role": "reference",
+          "service": "Estimate"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "FIN",
+          "to": "MAI",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Finance",
+          "raci": "A"
+        },
+        {
+          "role": "Programme manager",
+          "raci": "R"
+        },
+        {
+          "role": "Engineering manager",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work"
+      ],
+      "controls": [
+        {
+          "kind": "financial",
+          "text": "Funding is confirmed against the account the accounting treatment assigned, not against a general budget. Capital and expense are not interchangeable at this gate."
+        },
+        {
+          "kind": "regulatory",
+          "text": "For borrowers of federal rural utilities finance, eligibility requires the facilities to be in an approved construction work plan, with amendments needed to add facilities or make significant physical changes."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Work Order Aging",
+          "definition": "SMRP 5.4.6, applied to work held at the funding gate.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Planned Backlog",
+          "definition": "SMRP 5.4.8, which cannot be planned until funded.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Funded from an approved programme",
+        "Funded from operating budget",
+        "Reimbursable, funded by a third party",
+        "Unfunded - held or referred"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Known sequence with a defined hold path.",
+        "artifact": "models/2.4-authorise-work.bpmn"
+      },
+      "en17007": {
+        "process": "BUD",
+        "title": "Budget maintenance of items",
+        "clause": "6.8"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.8 BUD",
+          "status": "clause-verified"
+        },
+        {
+          "for": "controls.regulatory",
+          "cite": "7 CFR 1710.250(e) and 7 CFR 1710.251 construction work plan requirements",
+          "status": "regulation"
+        },
+        {
+          "for": "controls.financial",
+          "cite": "18 CFR Part 101 Electric Plant Instructions 4, 10 and 11 and Definitions 18 and 34; 18 CFR Part 201 is word-for-word parallel for gas. Binds FPA and NGA entities; states adopt them for distribution utilities - Electric Plant Instruction 10",
+          "status": "regulation"
+        },
+        {
+          "for": "measures",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.4.6, 5.4.8",
+          "status": "verified"
+        }
+      ],
+      "provenance": {
+        "basis": "regulation",
+        "primary": "18 CFR Part 101 Electric Plant Instructions 4, 10 and 11 and Definitions 18 and 34; 18 CFR Part 201 is word-for-word parallel for gas. Binds FPA and NGA entities; states adopt them for distribution utilities"
+      }
+    },
+    {
+      "uid": 10044,
+      "id": "2.4.2",
+      "name": "Route work for approval",
+      "group": {
+        "id": "2.4",
+        "name": "Authorise work",
+        "uid": 10042
+      },
+      "intent": "Send the work to the authority that can approve it.",
+      "activities": [
+        "Determine the approval authority from value, type and risk",
+        "Route to that authority",
+        "Record the decision and its rationale",
+        "Escalate where the authority declines or defers"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "Funded work requires approval before release.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Estimate, treatment and funding position",
+          "party": "FIN",
+          "data": "Work"
+        },
+        {
+          "what": "Delegation of authority rules",
+          "party": "HR",
+          "data": null
+        },
+        {
+          "what": "Risk and regulatory exposure of the work",
+          "party": "MAI",
+          "data": "Work"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Approval decision with authority recorded",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Escalation where the decision is not taken",
+          "party": "MAI",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "MAI",
+          "role": "owning",
+          "service": "Approval routing"
+        },
+        {
+          "component": "FIN",
+          "role": "reference",
+          "service": "Value and treatment"
+        },
+        {
+          "component": "HR",
+          "role": "reference",
+          "service": "Delegation of authority"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "MAI",
+          "to": "FIN",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Maintenance manager",
+          "raci": "R"
+        },
+        {
+          "role": "Approving authority",
+          "raci": "A"
+        },
+        {
+          "role": "Finance",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "financial",
+          "text": "The approving authority must be identifiable on the record. An approval that cannot be attributed is not a control."
+        },
+        {
+          "kind": "operational",
+          "text": "Routing on value alone sends high-risk low-value work to a low authority. Type and regulatory exposure belong in the rule."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Work Order Aging",
+          "definition": "SMRP 5.4.6, applied to work awaiting approval.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Work Order Cycle Time",
+          "definition": "SMRP 5.4.7, measured from estimate to approval.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Value-based delegated authority",
+        "Type-based authority for regulated or safety-critical work",
+        "Committee approval above a threshold",
+        "External approval by a funder or regulator"
+      ],
+      "notation": {
+        "class": "DMN",
+        "why": "The output is an approval authority determined from value, type and risk against a delegation rule. It changes far more often than the flow around it.",
+        "artifact": "models/2.4.2-approval-routing.dmn"
+      },
+      "en17007": {
+        "process": "MAN",
+        "title": "Manage maintenance (strategy and improvement, human resources, continuous improvement, compliance, etc.)",
+        "clause": "6.2"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.2 MAN. Corrected 2026-08-29: MAN was recorded at 6.9, which is DOC. EN 17007 has no authorisation process at all - MAN.4 prepares and negotiates budgets and is the nearest thing.",
+          "status": "clause-verified"
+        },
+        {
+          "for": "authorisation record",
+          "cite": "ISO 9001:2015 cl. 8.3 Design and development (Ed. 6 due 2026-09) cl. 8.3.6(c), which requires retaining the authorization of changes",
+          "status": "verified"
+        },
+        {
+          "for": "delegation rules",
+          "cite": "Delegation of authority is an operator determination. No standard sets thresholds.",
+          "status": "judgment"
+        },
+        {
+          "for": "measures",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.4.6, 5.4.7",
+          "status": "verified"
+        }
+      ],
+      "provenance": {
+        "basis": "judgment",
+        "primary": "Operator delegation of authority, framed against EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319)"
+      }
+    },
+    {
+      "uid": 10045,
+      "id": "2.4.3",
+      "name": "Authorise and release work to execution",
+      "group": {
+        "id": "2.4",
+        "name": "Authorise work",
+        "uid": 10042
+      },
+      "intent": "Authorise the work and release it to planning and scheduling.",
+      "activities": [
+        "Confirm approval, funding and design release are all in place",
+        "Record the authorised scope, cost and date basis",
+        "Release the work to resource planning and scheduling",
+        "Fix the baseline the work will be measured against"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "Work is approved and all release conditions are satisfied.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Approval decision and authority",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Committed funding",
+          "party": "FIN",
+          "data": "Work"
+        },
+        {
+          "what": "Released design at a fixed revision",
+          "party": "DGN",
+          "data": "Work"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Authorised work released to scheduling",
+          "party": "SCHD",
+          "data": "Work"
+        },
+        {
+          "what": "Authorised baseline for scope, cost and date",
+          "party": "FIN",
+          "data": "Work"
+        }
+      ],
+      "systems": [
+        {
+          "component": "MAI",
+          "role": "owning",
+          "service": "Work authorisation"
+        },
+        {
+          "component": "SCHD",
+          "role": "receiving",
+          "service": "Released work"
+        },
+        {
+          "component": "FIN",
+          "role": "consuming",
+          "service": "Authorised baseline"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "MAI",
+          "to": "SCHD",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Maintenance manager",
+          "raci": "A"
+        },
+        {
+          "role": "Programme manager",
+          "raci": "R"
+        },
+        {
+          "role": "Maintenance planner",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkTask"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "Releasing without a fixed baseline means later variance cannot be attributed to anything. The baseline is the point of the gate."
+        },
+        {
+          "kind": "regulatory",
+          "text": "Where environmental clearance or an external approval is a condition, release before it is obtained is a compliance exposure, not an acceleration."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Planned Work",
+          "definition": "SMRP 5.3.1. Work released without a plan is unplanned by definition.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Work Order Cycle Time",
+          "definition": "SMRP 5.4.7, measured from demand to authorisation.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Full release",
+        "Staged release by phase or design location",
+        "Conditional release pending a named clearance"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Known sequence with defined release conditions.",
+        "artifact": "models/2.4-authorise-work.bpmn"
+      },
+      "en17007": {
+        "process": "ACT.2",
+        "title": "Prepare for the maintenance tasks",
+        "clause": "6.5.3"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.5.3 ACT.2",
+          "status": "clause-verified"
+        },
+        {
+          "for": "clearance condition",
+          "cite": "7 CFR 1710.250(e)",
+          "status": "regulation"
+        },
+        {
+          "for": "measures",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.3.1, 5.4.7",
+          "status": "verified"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319)"
+      }
+    },
+    {
+      "uid": 10046,
+      "id": "2.4.4",
+      "name": "Manage change to authorised scope",
+      "group": {
+        "id": "2.4",
+        "name": "Authorise work",
+        "uid": 10042
+      },
+      "intent": "Control change to work that has already been authorised.",
+      "activities": [
+        "Record the reason for the change and who may approve it",
+        "Analyse the implications for cost, schedule, permits and safety",
+        "Acquire any work permit the change now requires",
+        "Re-approve at the authority the changed value and risk require",
+        "Communicate the change to affected parties and record it"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "A change to authorised scope, cost or method is proposed.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Authorised baseline",
+          "party": "FIN",
+          "data": "Work"
+        },
+        {
+          "what": "Proposed change and its origin",
+          "party": "CON",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Permit and clearance position",
+          "party": "MAI",
+          "data": "Work"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Re-authorised work at a revised baseline",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Record of the change, its analysis and its approval",
+          "party": "AM",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Notification to affected parties",
+          "party": "SCHD",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "MAI",
+          "role": "owning",
+          "service": "Change control"
+        },
+        {
+          "component": "FIN",
+          "role": "consuming",
+          "service": "Revised baseline"
+        },
+        {
+          "component": "DGN",
+          "role": "contributing",
+          "service": "Design implication"
+        },
+        {
+          "component": "SCHD",
+          "role": "consuming",
+          "service": "Schedule implication"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "CON",
+          "to": "MAI",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        },
+        {
+          "from": "MAI",
+          "to": "SCHD",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Maintenance manager",
+          "raci": "R"
+        },
+        {
+          "role": "Approving authority",
+          "raci": "A"
+        },
+        {
+          "role": "Engineering manager",
+          "raci": "C"
+        },
+        {
+          "role": "Field supervisor",
+          "raci": "I"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "A management of change process is expected to cover the reason for change, the authority for approving it, analysis of implications, acquisition of required work permits, documentation, communication to affected parties, time limitations and qualification of staff."
+        },
+        {
+          "kind": "regulatory",
+          "text": "That federal requirement binds onshore gas transmission only. Gas distribution integrity management contains no management of change element, so for distribution this is voluntary practice - state that rather than implying a mandate."
+        },
+        {
+          "kind": "operational",
+          "text": "Risks from a planned change, permanent or temporary, are assessed before it happens."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Rework",
+          "definition": "SMRP 4.1, applied to work redone because a change was not controlled.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Actual Cost to Planning Estimate",
+          "definition": "SMRP 5.3.3, split by whether scope changed after authorisation.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Change within delegated tolerance - recorded, not re-approved",
+        "Change requiring re-approval at a higher authority",
+        "Change requiring a new or amended permit",
+        "Change requiring a design revision and re-release"
+      ],
+      "notation": {
+        "class": "CMMN",
+        "why": "The elements are enumerated but not sequenced. A permit implication is chased before a cost implication when the crew is on site, and the reverse when it is not.",
+        "artifact": "models/2.4.4-scope-change.cmmn"
+      },
+      "en17007": {
+        "process": "MRQ",
+        "title": "Deliver maintenance requirements during items design and modification",
+        "clause": "6.12"
+      },
+      "sources": [
+        {
+          "for": "change elements",
+          "cite": "49 CFR 192.13(d) management of change element list - onshore gas TRANSMISSION only; DIMP cl. 192.1007 has no MOC element, so distribution MOC is voluntary",
+          "status": "regulation"
+        },
+        {
+          "for": "change control",
+          "cite": "ISO 55001:2024 cl. 6.3 Planning of changes and cl. 8.2 Control of change - the risk requirement moved from 8.2 into 6.3 in the 2024 edition, so both are cited",
+          "status": "clause-verified"
+        },
+        {
+          "for": "control of changes",
+          "cite": "ISO 9001:2015 cl. 8.5.6 Control of changes",
+          "status": "verified"
+        },
+        {
+          "for": "distribution position",
+          "cite": "49 CFR 192.1007 DIMP has no management of change element; API RP 1173 is voluntary and PHMSA ADB-2025-01 only encourages it",
+          "status": "regulation"
+        },
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.12 MRQ",
+          "status": "clause-verified"
+        }
+      ],
+      "provenance": {
+        "basis": "regulation",
+        "primary": "49 CFR 192.13(d) management of change element list - onshore gas TRANSMISSION only; DIMP cl. 192.1007 has no MOC element, so distribution MOC is voluntary"
+      }
+    },
+    {
+      "uid": 10048,
+      "id": "2.5.1",
+      "name": "Build job plan and task structure",
+      "group": {
+        "id": "2.5",
+        "name": "Package work for execution",
+        "uid": 10047
+      },
+      "intent": "Build the plan of tasks the work will be executed as.",
+      "activities": [
+        "Break the work into tasks with a defined sequence and dependencies",
+        "Attach the procedure or method statement to each task",
+        "State the acceptance criteria each task is complete against",
+        "Estimate duration and set the task structure"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "Authorised work requires a job plan before it can be scheduled.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Authorised work and its released design",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Applicable procedures and method statements",
+          "party": "MAI",
+          "data": null
+        },
+        {
+          "what": "Historical duration for similar tasks",
+          "party": "AM",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Job plan with tasks, sequence and durations",
+          "party": "SCHD",
+          "data": "WorkTask"
+        },
+        {
+          "what": "Acceptance criteria per task",
+          "party": "MAI",
+          "data": "WorkTask"
+        }
+      ],
+      "systems": [
+        {
+          "component": "MAI",
+          "role": "owning",
+          "service": "Job planning"
+        },
+        {
+          "component": "SCHD",
+          "role": "consuming",
+          "service": "Task structure for scheduling"
+        },
+        {
+          "component": "AM",
+          "role": "reference",
+          "service": "Procedures held against the asset class"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "MAI",
+          "to": "SCHD",
+          "payload": "WorkRequest",
+          "verb": "create",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Maintenance planner",
+          "raci": "R"
+        },
+        {
+          "role": "Maintenance manager",
+          "raci": "A"
+        },
+        {
+          "role": "Field supervisor",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkTask",
+        "WorkTimeSchedule"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "No standard specifies what a job plan must contain. The content is the operator's, and it should be stated per work type rather than left to the planner's habit."
+        },
+        {
+          "kind": "operational",
+          "text": "A task with no acceptance criterion cannot be verified complete, so closure becomes a judgement call in the field."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Planned Work",
+          "definition": "SMRP 5.3.1 - the direct measure of whether this process is happening.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Planner Productivity",
+          "definition": "SMRP 5.3.6.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Planning and Control indicators",
+          "definition": "EN 15341 cl. 12, O&S9-O&S22.",
+          "cite": "EN 15341:2019+A1:2022 cl. 12 O&S9-O&S22 Planning and Control"
+        }
+      ],
+      "variants": [
+        "Standard job plan from a library",
+        "Job plan derived from the design",
+        "Bespoke plan for non-standard work"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Known repeating sequence.",
+        "artifact": "models/2.5-package-work-for-execution.bpmn"
+      },
+      "en17007": {
+        "process": "ACT.2",
+        "title": "Prepare for the maintenance tasks",
+        "clause": "6.5.3"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.5.3 ACT.2",
+          "status": "clause-verified"
+        },
+        {
+          "for": "work package framing",
+          "cite": "ISO 21502:2020 cl. 7.7 Cost management, cl. 7.10 Change control cl. 6.6.5 Managing the start, progress and close of each work package",
+          "status": "clause-verified"
+        },
+        {
+          "for": "content",
+          "cite": "No standard specifies work package or job plan content. EN 13460:2009 Annex B Work order information items is INFORMATIVE and paywalled; the only prescriptive list is 7 CFR 1724.53(b)(1) and it binds RUS borrowers only.",
+          "status": "judgment"
+        },
+        {
+          "for": "measures",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.3.1, 5.3.6; EN 15341:2019+A1:2022 cl. 12 O&S9-O&S22 Planning and Control",
+          "status": "verified"
+        }
+      ],
+      "provenance": {
+        "basis": "judgment",
+        "primary": "No standard for job plan content; framed against EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319)"
+      }
+    },
+    {
+      "uid": 10049,
+      "id": "2.5.2",
+      "name": "Define crew, skill and equipment requirements",
+      "group": {
+        "id": "2.5",
+        "name": "Package work for execution",
+        "uid": 10047
+      },
+      "intent": "State the crew, skills and equipment the work requires.",
+      "activities": [
+        "Determine the crew composition each task needs",
+        "State the qualification each covered task requires",
+        "State the plant, tools and access equipment required",
+        "Publish the requirement to resource planning"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "A job plan requires its resource specification.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Job plan with tasks and durations",
+          "party": "SCHD",
+          "data": "WorkTask"
+        },
+        {
+          "what": "Qualification requirements for the tasks",
+          "party": "HR",
+          "data": null
+        },
+        {
+          "what": "Plant and tool availability",
+          "party": "MM",
+          "data": "Tool"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Crew, skill and equipment requirement",
+          "party": "SCHD",
+          "data": "Crew"
+        },
+        {
+          "what": "Qualification constraint carried on the work",
+          "party": "MAI",
+          "data": "WorkTask"
+        }
+      ],
+      "systems": [
+        {
+          "component": "MAI",
+          "role": "owning",
+          "service": "Resource specification"
+        },
+        {
+          "component": "SCHD",
+          "role": "consuming",
+          "service": "Resource planning"
+        },
+        {
+          "component": "HR",
+          "role": "reference",
+          "service": "Qualification and competence"
+        },
+        {
+          "component": "MM",
+          "role": "reference",
+          "service": "Tools and support equipment"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "MAI",
+          "to": "SCHD",
+          "payload": "WorkRequest",
+          "verb": "create",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Maintenance planner",
+          "raci": "R"
+        },
+        {
+          "role": "Field supervisor",
+          "raci": "A"
+        },
+        {
+          "role": "Crew lead",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkTask",
+        "Crew",
+        "Tool",
+        "Vehicle"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "Where a task is a covered task the individual performing it must be qualified, and the operator is responsible for that whether the individual is an employee or a contractor. The qualification belongs on the work here, not as a check at dispatch."
+        },
+        {
+          "kind": "regulatory",
+          "text": "Work near energised electric supply lines carries minimum approach distances and a qualified-person determination that constrain crew composition before scheduling, not during it."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Schedule Compliance Work Orders",
+          "definition": "SMRP 5.4.4. Work specified without an available skill mix fails here.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Craft Worker to Planner Ratio",
+          "definition": "SMRP 5.5.2.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Standard crew for a standard job plan",
+        "Qualification-constrained crew for a covered task",
+        "Specialist crew or external service",
+        "Crew requiring a second person for energised work"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Known sequence with a defined qualification constraint.",
+        "artifact": "models/2.5-package-work-for-execution.bpmn"
+      },
+      "en17007": {
+        "process": "ACT.2",
+        "title": "Prepare for the maintenance tasks",
+        "clause": "6.5.3"
+      },
+      "sources": [
+        {
+          "for": "controls.regulatory (gas)",
+          "cite": "49 CFR 192 Subpart N cl. 192.801(b) defines a covered task by the activity; cl. 192.805(b) makes the operator responsible for ensuring the individual is qualified",
+          "status": "regulation"
+        },
+        {
+          "for": "controls.regulatory (electric)",
+          "cite": "29 CFR 1910.269(l) minimum approach distance and the qualified-person determination; cl. 1910.269(c) job briefing",
+          "status": "regulation"
+        },
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.5.3 ACT.2 and cl. 6.14 RES",
+          "status": "clause-verified"
+        },
+        {
+          "for": "measures",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.4.4, 5.5.2",
+          "status": "verified"
+        }
+      ],
+      "provenance": {
+        "basis": "regulation",
+        "primary": "49 CFR 192 Subpart N and 29 CFR 1910.269"
+      }
+    },
+    {
+      "uid": 10050,
+      "id": "2.5.3",
+      "name": "Assemble drawings, documents and instructions",
+      "group": {
+        "id": "2.5",
+        "name": "Package work for execution",
+        "uid": 10047
+      },
+      "intent": "Assemble the documents the crew needs at the place of work.",
+      "activities": [
+        "Identify the documents each task requires",
+        "Assemble drawings, procedures and permits at the current revision",
+        "Confirm the crew will have them at the place of use",
+        "Withdraw superseded documents from the package"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "A job plan and resource specification require their document set.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Job plan and task structure",
+          "party": "SCHD",
+          "data": "WorkTask"
+        },
+        {
+          "what": "Design drawings at the released revision",
+          "party": "DGN",
+          "data": "Work"
+        },
+        {
+          "what": "Procedures, instructions and permits",
+          "party": "MAI",
+          "data": null
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Assembled work package at fixed revisions",
+          "party": "SCHD",
+          "data": "Work"
+        },
+        {
+          "what": "Document revision recorded on the work",
+          "party": "MAI",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "MAI",
+          "role": "owning",
+          "service": "Operational documentation"
+        },
+        {
+          "component": "DGN",
+          "role": "contributing",
+          "service": "Drawings at revision"
+        },
+        {
+          "component": "SCHD",
+          "role": "consuming",
+          "service": "Package for dispatch"
+        },
+        {
+          "component": "FRD",
+          "role": "consuming",
+          "service": "Documents at the place of use"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "MAI",
+          "to": "SCHD",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Maintenance planner",
+          "raci": "R"
+        },
+        {
+          "role": "Document owner",
+          "raci": "A"
+        },
+        {
+          "role": "Field supervisor",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkTask",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "The purpose is to provide all those concerned, at the place of use, with the up-to-date and usable documents they need, while optimising logistic times. A package assembled correctly but not available in the field has failed."
+        },
+        {
+          "kind": "operational",
+          "text": "Superseded revisions left in a package get built. Withdrawal is part of assembly."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Schedule Compliance Hours",
+          "definition": "SMRP 5.4.3. Work that cannot start for a missing document shows here.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Wrench Time",
+          "definition": "SMRP 5.6.1 - note this is defined by SMRP and by no standards body.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Digital package delivered to the mobile device",
+        "Physical package issued at the depot",
+        "Mixed, where a permit or drawing must travel as paper"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Known repeating sequence with a defined withdrawal step.",
+        "artifact": "models/2.5-package-work-for-execution.bpmn"
+      },
+      "en17007": {
+        "process": "DOC",
+        "title": "Deliver the operational documentation",
+        "clause": "6.9"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.9 DOC, specifically DOC.6 Manage the way in which operational documentation is made available. Corrected 2026-08-29: DOC was recorded at 6.10, which is DTA Manage data.",
+          "status": "clause-verified"
+        },
+        {
+          "for": "documentation set",
+          "cite": "EN 13460:2009 Documents for maintenance - Annex B Work order information items is INFORMATIVE guidance, not a requirement",
+          "status": "clause-verified"
+        },
+        {
+          "for": "package contents by asset class",
+          "cite": "7 CFR 1724.53(b)(1) enumerates specifications and drawings, staking sheets, key map and detail maps for distribution lines; RUS borrowers only",
+          "status": "regulation"
+        },
+        {
+          "for": "measures",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.4.3, 5.6.1",
+          "status": "verified"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319)"
+      }
+    },
+    {
+      "uid": 10051,
+      "id": "2.5.4",
+      "name": "Define material requirements",
+      "group": {
+        "id": "2.5",
+        "name": "Package work for execution",
+        "uid": 10047
+      },
+      "intent": "State the material the work requires and secure it.",
+      "activities": [
+        "Derive the material requirement from the design or job plan",
+        "Check availability against stock and lead time",
+        "Reserve or requisition what is required",
+        "Flag work that cannot proceed for material"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "A job plan requires its material specification.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Design content or job plan",
+          "party": "DGN",
+          "data": "Work"
+        },
+        {
+          "what": "Stock position and lead time",
+          "party": "MM",
+          "data": "MaterialItem"
+        },
+        {
+          "what": "Approved material catalogue",
+          "party": "MM",
+          "data": "MaterialItem"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Material requirement and reservation",
+          "party": "MM",
+          "data": "MaterialItem"
+        },
+        {
+          "what": "Constraint where material is unavailable",
+          "party": "SCHD",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "MM",
+          "role": "owning",
+          "service": "Material planning and reservation"
+        },
+        {
+          "component": "DGN",
+          "role": "contributing",
+          "service": "Design content"
+        },
+        {
+          "component": "SCHD",
+          "role": "consuming",
+          "service": "Material constraint on scheduling"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "DGN",
+          "to": "MM",
+          "payload": "WorkRequest",
+          "verb": "create",
+          "pattern": "event"
+        },
+        {
+          "from": "MM",
+          "to": "SCHD",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Maintenance planner",
+          "raci": "R"
+        },
+        {
+          "role": "Materials planner",
+          "raci": "A"
+        },
+        {
+          "role": "Designer",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkTask",
+        "MaterialItem"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "Material must be provided within the required timeframes, and the requirement has to reach materials early enough for lead time to be absorbed. Reserving late converts a planning problem into a schedule failure."
+        },
+        {
+          "kind": "regulatory",
+          "text": "Only accepted materials may be used where a construction standard specifies them. Substitution is a design change, not a stores decision."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Ready Backlog",
+          "definition": "SMRP 5.4.9 - work with material secured is what makes backlog ready rather than merely planned.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Planned Backlog",
+          "definition": "SMRP 5.4.8.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Stock material reserved",
+        "Non-stock material requisitioned against lead time",
+        "Free-issue material provided to an external party",
+        "Material constraint - work held"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Known sequence with a defined constraint path.",
+        "artifact": "models/2.5-package-work-for-execution.bpmn"
+      },
+      "en17007": {
+        "process": "SPP",
+        "title": "Deliver spare parts",
+        "clause": "6.16"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.16 SPP and cl. 6.5.3 ACT.2",
+          "status": "clause-verified"
+        },
+        {
+          "for": "accepted materials",
+          "cite": "7 CFR 1724.51(a) requires distribution facilities to conform to applicable RUS construction standards and use RUS accepted materials; RUS borrowers only",
+          "status": "regulation"
+        },
+        {
+          "for": "measures",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.4.9, 5.4.8",
+          "status": "verified"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319)"
+      }
+    },
+    {
+      "uid": 10053,
+      "id": "2.6.1",
+      "name": "Identify permit and consent requirements",
+      "group": {
+        "id": "2.6",
+        "name": "Obtain permits and satisfy prerequisites",
+        "uid": 10052
+      },
+      "intent": "Determine which permits and consents the work requires.",
+      "activities": [
+        "Establish the work's location, method and disturbance",
+        "Determine which permits and consents apply",
+        "Determine the lead time each requires",
+        "Record the determination on the work"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "Authorised work requires its permit position established before planning.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Work location, method and extent of disturbance",
+          "party": "DGN",
+          "data": "Work"
+        },
+        {
+          "what": "Land, easement and jurisdiction position",
+          "party": "GINV",
+          "data": "WorkLocation"
+        },
+        {
+          "what": "Third-party plant and crossings in the area",
+          "party": "GINV",
+          "data": "WorkLocation"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Permit and consent requirement with lead times",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Constraint on the earliest possible start",
+          "party": "SCHD",
+          "data": "Work"
+        }
+      ],
+      "systems": [
+        {
+          "component": "MAI",
+          "role": "owning",
+          "service": "Permit determination"
+        },
+        {
+          "component": "GINV",
+          "role": "reference",
+          "service": "Land, jurisdiction and third-party plant"
+        },
+        {
+          "component": "SCHD",
+          "role": "consuming",
+          "service": "Earliest start constraint"
+        },
+        {
+          "component": "DGN",
+          "role": "contributing",
+          "service": "Method and disturbance"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "MAI",
+          "to": "SCHD",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Maintenance planner",
+          "raci": "R"
+        },
+        {
+          "role": "Permit coordinator",
+          "raci": "A"
+        },
+        {
+          "role": "Engineering manager",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkLocation"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "Excavation triggers a statutory notification to the one-call centre with a defined waiting period before work may begin. That period is state law and is a hard constraint on the earliest start."
+        },
+        {
+          "kind": "regulatory",
+          "text": "Work in the public way requires traffic control to the national device standard, but the road-opening or encroachment permit itself is issued under state or municipal ordinance and is not federally standardised."
+        },
+        {
+          "kind": "regulatory",
+          "text": "Disturbance thresholds trigger stormwater and waters-of-the-US permitting, but routine maintenance keeping the original line and grade, capacity or purpose is excluded."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Work Order Aging",
+          "definition": "SMRP 5.4.6, applied to work held for permits.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Ready Backlog",
+          "definition": "SMRP 5.4.9 - work is not ready until its permits are held.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Locate request only",
+        "Locate plus traffic control",
+        "Locate, traffic control and an environmental authorisation",
+        "Railroad, waterway or other third-party crossing consent",
+        "No permit required"
+      ],
+      "notation": {
+        "class": "DMN",
+        "why": "The output is a set of applicable permits determined from location, method and disturbance against jurisdictional rules, which change far more often than the process around them.",
+        "artifact": "models/2.6.1-permit-determination.dmn"
+      },
+      "en17007": {
+        "process": "ACT.2",
+        "title": "Prepare for the maintenance tasks",
+        "clause": "6.5.3"
+      },
+      "sources": [
+        {
+          "for": "locate request",
+          "cite": "Common Ground Alliance Best Practices v22.0, March 2026 practices 3-16 and 5-1, which set the request content and the statutory waiting window",
+          "status": "consensus"
+        },
+        {
+          "for": "excavator duty",
+          "cite": "The call-before-you-dig duty is state one-call statute. 49 CFR 192.614 obliges the operator as FACILITY OWNER, not as excavator.",
+          "status": "regulation"
+        },
+        {
+          "for": "traffic control",
+          "cite": "MUTCD 11th Edition December 2023 with Revision 1 incorporated December 2025, per 23 CFR 655.601(d)(2)(i); Part 6 Temporary Traffic Control",
+          "status": "regulation"
+        },
+        {
+          "for": "environmental",
+          "cite": "USACE Nationwide Permits 2026, effective 2026-03-15 - NWP 12 gas pipelines, NWP 57 electric utility lines, NWP 58 other utility lines, NWP 3 maintenance; 40 CFR 122.26(b)(15)(i) small construction threshold and its routine maintenance exclusion",
+          "status": "regulation"
+        },
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.5.3 ACT.2",
+          "status": "clause-verified"
+        }
+      ],
+      "provenance": {
+        "basis": "consensus",
+        "primary": "Common Ground Alliance Best Practices v22.0, March 2026"
+      }
+    },
+    {
+      "uid": 10054,
+      "id": "2.6.2",
+      "name": "Request, track and receive permits",
+      "group": {
+        "id": "2.6",
+        "name": "Obtain permits and satisfy prerequisites",
+        "uid": 10052
+      },
+      "intent": "Obtain the permits the work requires.",
+      "activities": [
+        "Submit each request to its issuing party",
+        "Track the request against its expected response time",
+        "Receive and record the permit with its conditions and validity",
+        "Chase or escalate where a response is overdue"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "A permit requirement has been determined and requests must be made.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Permit requirement with lead times",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Work location, extent and proposed dates",
+          "party": "DGN",
+          "data": "WorkLocation"
+        },
+        {
+          "what": "Requestor and excavator details",
+          "party": "MAI",
+          "data": null
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Permits held with conditions and validity",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Locate reference number and positive response",
+          "party": "MAI",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Revised earliest start where a permit is delayed",
+          "party": "SCHD",
+          "data": "Work"
+        }
+      ],
+      "systems": [
+        {
+          "component": "MAI",
+          "role": "owning",
+          "service": "Permit request and tracking"
+        },
+        {
+          "component": "SCHD",
+          "role": "consuming",
+          "service": "Start constraint"
+        },
+        {
+          "component": "GINV",
+          "role": "reference",
+          "service": "Location for the request"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "MAI",
+          "to": "SCHD",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Permit coordinator",
+          "raci": "R"
+        },
+        {
+          "role": "Maintenance manager",
+          "raci": "A"
+        },
+        {
+          "role": "Maintenance planner",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkLocation",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "A locate request captures a defined minimum content set - requestor and excavator details, for whom the work is done, the specific location, the start date and time, and a description of the proposed excavation. The reference number returned is the evidence the request was made and must be retained."
+        },
+        {
+          "kind": "operational",
+          "text": "There is no consensus practice for permit management as a process. Tracking, chasing and escalation are the operator's design, and should be stated rather than assumed."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Work Order Aging",
+          "definition": "SMRP 5.4.6, applied to work awaiting permits.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Work Order Cycle Time",
+          "definition": "SMRP 5.4.7, with permit wait reported separately so it is not read as planning delay.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Locate request through the one-call centre",
+        "Municipal or state permit application",
+        "Third-party consent negotiation",
+        "Emergency notification where the statutory window does not apply"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Known repeating sequence with a defined chase and escalation path.",
+        "artifact": "models/2.6-permits-and-prerequisites.bpmn"
+      },
+      "en17007": {
+        "process": "ACT.2",
+        "title": "Prepare for the maintenance tasks",
+        "clause": "6.5.3"
+      },
+      "sources": [
+        {
+          "for": "locate request content",
+          "cite": "Common Ground Alliance Best Practices v22.0, March 2026 practice 3-16",
+          "status": "consensus"
+        },
+        {
+          "for": "locate reference number",
+          "cite": "Common Ground Alliance Best Practices v22.0, March 2026 practice 5-3 - the excavator receives and maintains a reference number verifying the locate was requested",
+          "status": "consensus"
+        },
+        {
+          "for": "waiting window",
+          "cite": "Common Ground Alliance Best Practices v22.0, March 2026 practice 5-1, subject to state law",
+          "status": "consensus"
+        },
+        {
+          "for": "permit management as a process",
+          "cite": "No standard or consensus practice exists. CGA covers 811 comprehensively and nothing else.",
+          "status": "judgment"
+        },
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.5.3 ACT.2",
+          "status": "clause-verified"
+        }
+      ],
+      "provenance": {
+        "basis": "consensus",
+        "primary": "Common Ground Alliance Best Practices v22.0, March 2026"
+      }
+    },
+    {
+      "uid": 10055,
+      "id": "2.6.3",
+      "name": "Validate prerequisites before release",
+      "group": {
+        "id": "2.6",
+        "name": "Obtain permits and satisfy prerequisites",
+        "uid": 10052
+      },
+      "intent": "Confirm every prerequisite is satisfied before the work is released to be scheduled.",
+      "activities": [
+        "Check permits are held, in date and their conditions understood",
+        "Check material, qualification and equipment are secured",
+        "Check any safety prerequisite - isolation, clearance, briefing - is arranged",
+        "Release the work as ready, or hold it against the missing prerequisite"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "A packaged work item is proposed as ready to schedule.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Permits held and their conditions",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Material reservation and qualification position",
+          "party": "MM",
+          "data": "MaterialItem"
+        },
+        {
+          "what": "Clearance issued against a planned switching operation",
+          "party": "NO",
+          "data": null
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Work released as ready to schedule",
+          "party": "SCHD",
+          "data": "Work"
+        },
+        {
+          "what": "Hold with the named missing prerequisite",
+          "party": "MAI",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "MAI",
+          "role": "owning",
+          "service": "Prerequisite validation"
+        },
+        {
+          "component": "SCHD",
+          "role": "receiving",
+          "service": "Ready work"
+        },
+        {
+          "component": "MM",
+          "role": "reference",
+          "service": "Material position"
+        },
+        {
+          "component": "HR",
+          "role": "reference",
+          "service": "Qualification position"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "MAI",
+          "to": "SCHD",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Maintenance planner",
+          "raci": "R"
+        },
+        {
+          "role": "Field supervisor",
+          "raci": "A"
+        },
+        {
+          "role": "Permit coordinator",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkTask",
+        "MaterialItem"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "Where the method involves an enclosed space, an excavation or energised electric work, the entry permit, competent person or qualified person requirement gates who may be assigned, and it must be satisfied before scheduling rather than discovered at the site."
+        },
+        {
+          "kind": "operational",
+          "text": "Ready is a defined state, not an opinion. Work marked ready without every prerequisite held is what makes schedule compliance meaningless."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Ready Backlog",
+          "definition": "SMRP 5.4.9 - this process is what the measure counts.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Schedule Compliance Work Orders",
+          "definition": "SMRP 5.4.4, which depends on ready being honest.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "All prerequisites held - released as ready",
+        "Held for permit",
+        "Held for material",
+        "Held for qualification or crew availability"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Known sequence with a defined hold path per prerequisite type.",
+        "artifact": "models/2.6-permits-and-prerequisites.bpmn"
+      },
+      "en17007": {
+        "process": "ACT.2",
+        "title": "Prepare for the maintenance tasks",
+        "clause": "6.5.3"
+      },
+      "sources": [
+        {
+          "for": "controls.regulatory",
+          "cite": "29 CFR 1910.269(e) enclosed spaces and cl. 1910.269(c) job briefing; 29 CFR 1926 Subpart P excavations and its competent person requirement",
+          "status": "regulation"
+        },
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.5.3 ACT.2 and cl. 6.7 HSE",
+          "status": "clause-verified"
+        },
+        {
+          "for": "clearance origin",
+          "cite": "The clearance is produced by 18.4.4 Issue the clearance or permit-to-work, against a switching plan approved at 18.2.2. Before the Asset Lifecycle band was added on 2026-08-29 this input had no producing process in the model.",
+          "status": "judgment"
+        },
+        {
+          "for": "measures",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.4.9, 5.4.4",
+          "status": "verified"
+        }
+      ],
+      "provenance": {
+        "basis": "regulation",
+        "primary": "29 CFR 1910.269 and 29 CFR 1926 Subpart P"
+      }
+    },
+    {
+      "uid": 10056,
+      "id": "2.6.4",
+      "name": "Manage permit cost, expiry and renewal",
+      "group": {
+        "id": "2.6",
+        "name": "Obtain permits and satisfy prerequisites",
+        "uid": 10052
+      },
+      "intent": "Keep permits valid for as long as the work needs them.",
+      "activities": [
+        "Track validity and expiry against the planned start and duration",
+        "Renew or extend before expiry where the work will not complete in time",
+        "Record permit cost against the work",
+        "Close out the permit and satisfy any reinstatement condition"
+      ],
+      "trigger": {
+        "kind": "timer",
+        "text": "A held permit approaches expiry, or work completes against it.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Permits held with validity dates",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Planned start and duration",
+          "party": "SCHD",
+          "data": "WorkTimeSchedule"
+        },
+        {
+          "what": "Permit fees and charges",
+          "party": "FIN",
+          "data": "Work"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Renewed or extended permit",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Permit cost charged to the work",
+          "party": "FIN",
+          "data": "Work"
+        },
+        {
+          "what": "Permit closed out with conditions satisfied",
+          "party": "MAI",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "MAI",
+          "role": "owning",
+          "service": "Permit validity and closeout"
+        },
+        {
+          "component": "FIN",
+          "role": "consuming",
+          "service": "Permit cost"
+        },
+        {
+          "component": "SCHD",
+          "role": "reference",
+          "service": "Planned dates"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "MAI",
+          "to": "FIN",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Permit coordinator",
+          "raci": "R"
+        },
+        {
+          "role": "Maintenance manager",
+          "raci": "A"
+        },
+        {
+          "role": "Finance",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkActivityRecord",
+        "WorkTimeSchedule"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "A locate is valid for a limited period and must be updated where work extends beyond it. Working on an expired locate is the condition most damage-prevention programmes exist to prevent."
+        },
+        {
+          "kind": "financial",
+          "text": "Permit fees are a direct cost of the work and belong on the work order. Left in an overhead pool they distort the comparison between methods that need permits and methods that do not."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Work Order Cycle Time",
+          "definition": "SMRP 5.4.7 - a permit renewal is usually the visible cause of a long cycle.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Actual Cost to Planning Estimate",
+          "definition": "SMRP 5.3.3, with permit cost visible.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Locate update before expiry",
+        "Permit extension for a longer duration",
+        "Permit closeout with reinstatement",
+        "Permit lapsed - work stopped and re-requested"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Timer-started with a known renewal and closeout sequence.",
+        "artifact": "models/2.6-permits-and-prerequisites.bpmn"
+      },
+      "en17007": {
+        "process": "ACT.2",
+        "title": "Prepare for the maintenance tasks",
+        "clause": "6.5.3"
+      },
+      "sources": [
+        {
+          "for": "locate updates",
+          "cite": "Common Ground Alliance Best Practices v22.0, March 2026 practice 5-23 Locate Request Updates",
+          "status": "consensus"
+        },
+        {
+          "for": "permit management as a process",
+          "cite": "No standard or consensus practice exists for obtaining, tracking, expiring or closing out permits.",
+          "status": "judgment"
+        },
+        {
+          "for": "cost treatment",
+          "cite": "18 CFR Part 101 Electric Plant Instructions 4, 10 and 11 and Definitions 18 and 34; 18 CFR Part 201 is word-for-word parallel for gas. Binds FPA and NGA entities; states adopt them for distribution utilities - Electric Plant Instruction 3 enumerates the components of construction cost",
+          "status": "regulation"
+        },
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.5.3 ACT.2",
+          "status": "clause-verified"
+        }
+      ],
+      "provenance": {
+        "basis": "consensus",
+        "primary": "Common Ground Alliance Best Practices v22.0, March 2026"
+      }
+    }
+  ]
+}

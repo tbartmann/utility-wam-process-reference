@@ -1,0 +1,3106 @@
+{
+  "category": {
+    "uid": 10001,
+    "id": "1.0",
+    "name": "Identify and Qualify Work Demand",
+    "band": "Work Lifecycle"
+  },
+  "schema": "eam/specs/SCHEMA.md",
+  "authored": "2026-08-28",
+  "derivation": "STANDARDS-DERIVED. Every field traces to a standard, a regulation or a recognised industry body. Nothing is generalised from a client programme or a product. Observed material is held separately in eam/specializations/ and is never merged.",
+  "field_set": "EN 17007:2017 cl. 5.2 maintenance process profile, corroborated by ISO 9001:2015 cl. 4.4.1 a) to h).",
+  "primary_sources": [
+    "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319)",
+    "EN 13306:2017 Maintenance terminology (CEN/TC 319)",
+    "EN 15341:2019+A1:2022 Maintenance KPIs, cl. 12 O&S9-O&S22 Planning and Control",
+    "EN 13460:2009 Documentation for maintenance",
+    "ISO 14224:2016 cl. 9.6 Maintenance data",
+    "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 message payloads; Annex A verbs",
+    "IEC 61968-11:2013 CIM extensions for distribution, Work package",
+    "SMRP Best Practices, Pillar 5 Work Management",
+    "ANSI/GPTC Z380.1, Guide Material Appendix G-192-11 sec. 5.6 and Tables 3a-3c (AGA/GPTC, ANSI-accredited consensus; NOT incorporated by reference into 49 CFR 192 - the federal text is sec. 192.703(c) alone)",
+    "IEEE 1366 Guide for Electric Power Distribution Reliability Indices",
+    "49 CFR Part 192 (current eCFR)",
+    "Common Ground Alliance Best Practices, locate request content",
+    "ISO 9001:2015 cl. 4.4.1"
+  ],
+  "platform": "Claude",
+  "model": "claude-opus-5",
+  "round": 0,
+  "date": "2026-08-28",
+  "gaps": [
+    "No standards body publishes a work request content model spanning gas and electric. IEC 61968-6 is closest and is electric-only. The two public consensus content sets are domain-specific: CGA Best Practices for locate requests, ANSI/GPTC G-192-11 sec. 6.1 for leak records. Minimum content in 1.2.1 is therefore left to the operator and said to be so.",
+    "EN 13306 cl. 7 maintenance-type definitions and EN 15341 individual O&S indicator names are paywalled. Cited as clause-verified; their content is not reproduced. Buying the four standards listed in the Source Authority Pack section J would convert 24 citations from clause-verified to verified.",
+    "EN 17007 process profile bodies for COR.1, COR.2 and ACT.1-ACT.5 are paywalled, so the activity decompositions in this category are judgment consistent with the process titles rather than the standard's own lists.",
+    "Duplicate-matching attributes in 1.2.2 are an operator determination. No standard specifies them.",
+    "Electric distribution has no federal prescriptive inspection interval, so 1.3.3 carries gas intervals with citations and names state rule as the electric route rather than implying a national one.",
+    "ISO 14224 was checked for a maintenance priority or urgency taxonomy and none was found. EN 13306 Annex E criticality matrix is used instead."
+  ],
+  "processes": [
+    {
+      "uid": 10003,
+      "id": "1.1.1",
+      "name": "Capture customer-originated request",
+      "group": {
+        "id": "1.1",
+        "name": "Capture work demand",
+        "uid": 10002
+      },
+      "intent": "Turn a customer's report or request into a classified event that maintenance can act on.",
+      "activities": [
+        "Receive the contact and record what was reported",
+        "Establish premise, service point and account",
+        "Test for a reportable hazard condition and escalate immediately if found",
+        "Record any commitment made to the customer",
+        "Register the event for classification"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "Customer contact reporting a condition or requesting a service.",
+        "cim": "WorkRequest.create"
+      },
+      "inputs": [
+        {
+          "what": "Reported condition or service request",
+          "party": "CS",
+          "data": "Work"
+        },
+        {
+          "what": "Premise, service point and account",
+          "party": "CS",
+          "data": "WorkLocation"
+        },
+        {
+          "what": "Service and work history at the premise",
+          "party": "AM",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Classified event with originator and reported condition",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Contact record and any commitment given",
+          "party": "CS",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "CS",
+          "role": "originating",
+          "service": "Customer contact and service request capture"
+        },
+        {
+          "component": "MAI",
+          "role": "receiving",
+          "service": "Work request registration"
+        },
+        {
+          "component": "GINV",
+          "role": "reference",
+          "service": "Premise and service point lookup"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "CS",
+          "to": "MAI",
+          "payload": "WorkRequest",
+          "verb": "create",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Customer service representative",
+          "raci": "R"
+        },
+        {
+          "role": "Maintenance manager",
+          "raci": "A"
+        },
+        {
+          "role": "Dispatcher",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkLocation",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "A reported gas hazard is graded on the reported condition and, where graded 1, requires prompt action and continuous action until no longer hazardous - the clock runs from the report, not from work creation."
+        },
+        {
+          "kind": "operational",
+          "text": "Commitments given at contact become schedule constraints. If they are not captured here they are invisible to planning."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Work Order Cycle Time",
+          "definition": "SMRP 5.4.7. Applied from contact to closure for customer-originated work.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Reactive Work",
+          "definition": "SMRP 5.4.1. Customer-originated demand is a principal contributor; trend it to see whether proactive work is displacing it.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "New service or service alteration request",
+        "Report of a condition on utility plant",
+        "Report of a suspected hazard - graded and escalated, not screened",
+        "Enquiry that is not work - answered and closed"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Known repeating sequence from a message start event.",
+        "artifact": "models/1.1-capture-work-demand.bpmn"
+      },
+      "en17007": {
+        "process": "COR.1",
+        "title": "Classify the actual events",
+        "clause": "6.4.2"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.4.2 COR.1",
+          "status": "clause-verified"
+        },
+        {
+          "for": "trigger, interfaces",
+          "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 message payloads; Annex A verbs",
+          "status": "verified"
+        },
+        {
+          "for": "data_objects",
+          "cite": "IEC 61968-11:2013 CIM extensions for distribution, Work package",
+          "status": "verified"
+        },
+        {
+          "for": "controls.regulatory",
+          "cite": "ANSI/GPTC Z380.1, Guide Material Appendix G-192-11 sec. 5.6 and Tables 3a-3c (AGA/GPTC, ANSI-accredited consensus; NOT incorporated by reference into 49 CFR 192 - the federal text is sec. 192.703(c) alone); 49 CFR 192.703(c)",
+          "status": "consensus"
+        },
+        {
+          "for": "measures",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management",
+          "status": "verified"
+        },
+        {
+          "for": "activities",
+          "cite": "Decomposition consistent with COR.1; the clause body is paywalled",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319)"
+      }
+    },
+    {
+      "uid": 10004,
+      "id": "1.1.2",
+      "name": "Capture condition- or sensor-originated demand",
+      "group": {
+        "id": "1.1",
+        "name": "Capture work demand",
+        "uid": 10002
+      },
+      "intent": "Convert a device, sensor or telemetry condition into a classified event.",
+      "activities": [
+        "Detect the condition against its defined threshold",
+        "Aggregate related conditions to one event per asset",
+        "Attach asset identity, class and criticality",
+        "Suppress or defer under a documented rule, or register the event"
+      ],
+      "trigger": {
+        "kind": "conditional",
+        "text": "Measurement, alarm or exception crossing a defined condition.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Device alarm, exception or reading",
+          "party": "MR&C",
+          "data": "Work"
+        },
+        {
+          "what": "Telemetry or network condition",
+          "party": "NO",
+          "data": "Work"
+        },
+        {
+          "what": "Asset identity, class and criticality",
+          "party": "AM",
+          "data": "WorkAsset"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Condition-originated event",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Suppressed or aggregated condition record",
+          "party": "AM",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "MR&C",
+          "role": "originating",
+          "service": "Meter and device exception detection"
+        },
+        {
+          "component": "NO",
+          "role": "originating",
+          "service": "Network condition and alarm detection"
+        },
+        {
+          "component": "AM",
+          "role": "reference",
+          "service": "Asset identity, criticality and condition history"
+        },
+        {
+          "component": "MAI",
+          "role": "receiving",
+          "service": "Work request registration"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "MR&C",
+          "to": "MAI",
+          "payload": "WorkRequest",
+          "verb": "create",
+          "pattern": "event"
+        },
+        {
+          "from": "NO",
+          "to": "MAI",
+          "payload": "WorkRequest",
+          "verb": "create",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Reliability engineer",
+          "raci": "A"
+        },
+        {
+          "role": "Control room operator",
+          "raci": "C"
+        },
+        {
+          "role": "Maintenance manager",
+          "raci": "R"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkAsset",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "Condition-based maintenance is a defined maintenance type; work raised this way must be distinguishable from time-based work or the proactive and reactive measures cannot be computed."
+        },
+        {
+          "kind": "operational",
+          "text": "A suppression or deadband rule that hides a real condition is a safety exposure. Suppression logic needs a named owner and a review cycle."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Proactive Work",
+          "definition": "SMRP 5.4.2. Condition-originated work identified before failure counts here; it is the measure this route exists to move.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "PM & PdM Yield",
+          "definition": "SMRP 5.4.12. What share of condition-based tasks actually found something.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Condition-based - a monitored parameter crosses a threshold",
+        "Predictive - a trend projects a threshold crossing",
+        "Network-wide event aggregated to one event per affected section"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Repeating sequence from a conditional start; aggregation is a known pattern.",
+        "artifact": "models/1.1-capture-work-demand.bpmn"
+      },
+      "en17007": {
+        "process": "COR.1",
+        "title": "Classify the actual events",
+        "clause": "6.4.2"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.4.2 COR.1",
+          "status": "clause-verified"
+        },
+        {
+          "for": "maintenance types",
+          "cite": "EN 13306:2017 Maintenance terminology (CEN/TC 319), cl. 7 Maintenance types; ISO 14224:2016 cl. 9.6 Maintenance data cl. 9.6.2 Maintenance categories",
+          "status": "clause-verified"
+        },
+        {
+          "for": "measures",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.4.2, 5.4.12 (definitions read verbatim)",
+          "status": "verified"
+        },
+        {
+          "for": "data_objects",
+          "cite": "IEC 61968-11:2013 CIM extensions for distribution, Work package",
+          "status": "verified"
+        },
+        {
+          "for": "activities",
+          "cite": "Decomposition; clause bodies paywalled",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "EN 13306:2017 Maintenance terminology (CEN/TC 319)"
+      }
+    },
+    {
+      "uid": 10005,
+      "id": "1.1.3",
+      "name": "Capture inspection or survey finding",
+      "group": {
+        "id": "1.1",
+        "name": "Capture work demand",
+        "uid": 10002
+      },
+      "intent": "Turn a finding recorded during inspection, survey or patrol into follow-on work.",
+      "activities": [
+        "Record the finding against the originating inspection",
+        "Grade or classify the finding under the applicable scheme",
+        "Determine whether the finding is remediated on this visit or returned to",
+        "Raise linked follow-on work carrying the finding and its grade",
+        "Update asset condition"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "Inspection, survey or patrol result carrying a defect or exception.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Inspection or survey result with condition or grade",
+          "party": "FRD",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Originating inspection work",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Asset and location record",
+          "party": "AM",
+          "data": "WorkAsset"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Follow-on work linked to the finding",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Updated asset condition",
+          "party": "AM",
+          "data": "WorkAsset"
+        }
+      ],
+      "systems": [
+        {
+          "component": "FRD",
+          "role": "originating",
+          "service": "Field result and finding capture"
+        },
+        {
+          "component": "MAI",
+          "role": "receiving",
+          "service": "Follow-on work registration"
+        },
+        {
+          "component": "AM",
+          "role": "consuming",
+          "service": "Asset condition update"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "FRD",
+          "to": "MAI",
+          "payload": "WorkRequest",
+          "verb": "create",
+          "pattern": "event"
+        },
+        {
+          "from": "FRD",
+          "to": "AM",
+          "payload": "MaintenanceOrder",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Field technician",
+          "raci": "R"
+        },
+        {
+          "role": "Compliance programme owner",
+          "raci": "A"
+        },
+        {
+          "role": "Reliability engineer",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkTask",
+        "WorkAsset",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "A finding can shorten the next interval for the same asset. Atmospheric corrosion found on a service line moves the next inspection from 63 to 39 months, so the due-date calculation must read the outcome of the prior inspection and not only its date."
+        },
+        {
+          "kind": "regulatory",
+          "text": "Where a leak is graded 2, it is reevaluated at least every six months until cleared, and regrading is a full reassessment against the original criteria, not a decrement."
+        },
+        {
+          "kind": "operational",
+          "text": "The link from finding to follow-on work is the evidence chain. An unlinked follow-on cannot be shown to close the finding."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Work Order Aging",
+          "definition": "SMRP 5.4.6. Applied to open findings awaiting remediation.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Proactive Work",
+          "definition": "SMRP 5.4.2, whose definition expressly includes corrective work identified from preventive and predictive work orders.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Immediate hazard found - mitigated on the visit, with a permanent repair to follow",
+        "Condition within tolerance - recorded and monitored, no work raised",
+        "Defect requiring return - follow-on work carrying the interval the finding sets"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Repeating sequence; the grade-and-route step calls a decision.",
+        "artifact": "models/1.1-capture-work-demand.bpmn"
+      },
+      "en17007": {
+        "process": "COR.2",
+        "title": "Diagnose the state of the items in question",
+        "clause": "6.4.3"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.4.3 COR.2",
+          "status": "clause-verified"
+        },
+        {
+          "for": "controls.regulatory (interval shortening)",
+          "cite": "49 CFR 192.481(d) - 'If atmospheric corrosion is found on a service line during the most recent inspection, then the next inspection ... must be within 3 calendar years, but with intervals not exceeding 39 months.'",
+          "status": "regulation"
+        },
+        {
+          "for": "controls.regulatory (leak regrading)",
+          "cite": "ANSI/GPTC Z380.1, Guide Material Appendix G-192-11 sec. 5.6 and Tables 3a-3c (AGA/GPTC, ANSI-accredited consensus; NOT incorporated by reference into 49 CFR 192 - the federal text is sec. 192.703(c) alone)",
+          "status": "consensus"
+        },
+        {
+          "for": "measures",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.4.6, 5.4.2",
+          "status": "verified"
+        },
+        {
+          "for": "activities",
+          "cite": "Decomposition",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "regulation",
+        "primary": "49 CFR 192.481(d)"
+      }
+    },
+    {
+      "uid": 10006,
+      "id": "1.1.4",
+      "name": "Capture network or outage event",
+      "group": {
+        "id": "1.1",
+        "name": "Capture work demand",
+        "uid": 10002
+      },
+      "intent": "Convert a network or outage event into restoration work and a permanent repair.",
+      "activities": [
+        "Detect the event and establish the affected network section",
+        "Aggregate customer trouble reports to the event",
+        "Raise restoration work for the immediate response",
+        "Record cause, extent and duration attributes for reliability reporting",
+        "Raise permanent repair work where restoration was temporary"
+      ],
+      "trigger": {
+        "kind": "signal",
+        "text": "Outage, trouble call cluster or protective operation reported by network operations or trouble call management.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Outage or trouble event with affected section",
+          "party": "NO",
+          "data": "Work"
+        },
+        {
+          "what": "Customer trouble reports",
+          "party": "TCM",
+          "data": "Work"
+        },
+        {
+          "what": "Network connectivity and device state",
+          "party": "GINV",
+          "data": "WorkLocation"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Restoration work",
+          "party": "SCHD",
+          "data": "Work"
+        },
+        {
+          "what": "Permanent repair work",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Event attributes for reliability reporting",
+          "party": "AM",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "NO",
+          "role": "originating",
+          "service": "Network event detection and outage management"
+        },
+        {
+          "component": "TCM",
+          "role": "originating",
+          "service": "Trouble report aggregation"
+        },
+        {
+          "component": "GINV",
+          "role": "reference",
+          "service": "Network connectivity model"
+        },
+        {
+          "component": "SCHD",
+          "role": "receiving",
+          "service": "Emergency dispatch"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "NO",
+          "to": "SCHD",
+          "payload": "WorkRequest",
+          "verb": "create",
+          "pattern": "event"
+        },
+        {
+          "from": "TCM",
+          "to": "NO",
+          "payload": "WorkRequest",
+          "verb": "create",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Control room operator",
+          "raci": "A"
+        },
+        {
+          "role": "Dispatcher",
+          "raci": "R"
+        },
+        {
+          "role": "Field supervisor",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkTask",
+        "WorkLocation"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "Cause, extent and duration are the inputs to the distribution reliability indices. The capture point is where those attributes are first fixed, and major event days are classified by a defined statistical method rather than by judgement."
+        },
+        {
+          "kind": "operational",
+          "text": "Restoration and permanent repair are different records with different clocks. Collapsing them loses the repair backlog."
+        }
+      ],
+      "measures": [
+        {
+          "name": "SAIFI, SAIDI, CAIDI",
+          "definition": "IEEE 1366 distribution reliability indices, with major event days classified by the standard's method.",
+          "cite": "IEEE 1366 Guide for Electric Power Distribution Reliability Indices"
+        },
+        {
+          "name": "Reactive Work",
+          "definition": "SMRP 5.4.1. Event-originated work is the clearest reactive category.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Single-premise interruption - trouble order, no network event",
+        "Section outage - restoration work plus a permanent repair record",
+        "Major event day - classified by the standard's statistical method, reported separately"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Repeating sequence from a signal start; the emergency path is a known fork.",
+        "artifact": "models/1.1-capture-work-demand.bpmn"
+      },
+      "en17007": {
+        "process": "COR.1",
+        "title": "Classify the actual events",
+        "clause": "6.4.2"
+      },
+      "sources": [
+        {
+          "for": "measures",
+          "cite": "IEEE 1366 Guide for Electric Power Distribution Reliability Indices",
+          "status": "clause-verified"
+        },
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.4.2 COR.1",
+          "status": "clause-verified"
+        },
+        {
+          "for": "interfaces",
+          "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 message payloads; Annex A verbs; IEC 61968-3 network operations messages",
+          "status": "verified"
+        },
+        {
+          "for": "activities",
+          "cite": "Decomposition",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "IEEE 1366 Guide for Electric Power Distribution Reliability Indices"
+      }
+    },
+    {
+      "uid": 10007,
+      "id": "1.1.5",
+      "name": "Capture field-originated (follow-on) work",
+      "group": {
+        "id": "1.1",
+        "name": "Capture work demand",
+        "uid": 10002
+      },
+      "intent": "Register work identified by a resource already on site, as a distinct event.",
+      "activities": [
+        "Capture the identified work with location, asset and condition",
+        "Establish whether it is a distinct work item or an addition to the work in hand",
+        "Constrain what may be raised to the resource's qualification and the work in hand",
+        "Register the event, or record it against the originating work"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "A resource performing work identifies further work at the same or a nearby location.",
+        "cim": "WorkRequest.create"
+      },
+      "inputs": [
+        {
+          "what": "Identified work with location, asset and condition",
+          "party": "FRD",
+          "data": "Work"
+        },
+        {
+          "what": "Work currently in hand",
+          "party": "SCHD",
+          "data": "Work"
+        },
+        {
+          "what": "Qualification held by the identifying resource",
+          "party": "HR",
+          "data": null
+        }
+      ],
+      "outputs": [
+        {
+          "what": "New event for classification",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Record against the originating work where no distinct item arises",
+          "party": "MAI",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "FRD",
+          "role": "originating",
+          "service": "Field capture of identified work"
+        },
+        {
+          "component": "MAI",
+          "role": "receiving",
+          "service": "Work registration"
+        },
+        {
+          "component": "SCHD",
+          "role": "consuming",
+          "service": "Scheduling of the registered work"
+        },
+        {
+          "component": "HR",
+          "role": "reference",
+          "service": "Qualification held"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "FRD",
+          "to": "MAI",
+          "payload": "WorkRequest",
+          "verb": "create",
+          "pattern": "event"
+        },
+        {
+          "from": "MAI",
+          "to": "FRD",
+          "payload": "ServiceOrder",
+          "verb": "reply",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Field technician",
+          "raci": "R"
+        },
+        {
+          "role": "Field supervisor",
+          "raci": "A"
+        },
+        {
+          "role": "Dispatcher",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkTask",
+        "WorkActivityRecord",
+        "WorkAsset"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "Where the identified work is a covered task, the individual who performs it must be qualified, and the qualification obligation attaches to the task and to the individual regardless of whether they are an employee or a contractor."
+        },
+        {
+          "kind": "financial",
+          "text": "Work registered without a cost treatment misstates capital and operating expenditure. Establishing the treatment before release is the control."
+        },
+        {
+          "kind": "operational",
+          "text": "Follow-up work is a named flow in the reference architecture. It is a distinct origination route and should be measurable as one."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Proactive Work",
+          "definition": "SMRP 5.4.2 - work identified before failure, including work identified during other work.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Planned Work",
+          "definition": "SMRP 5.3.1. Field-identified work enters unplanned and should be converted, not executed on discovery except where hazard requires it.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Distinct work item requiring its own record and completion evidence",
+        "Addition to the work in hand, recorded on the originating work",
+        "Immediate hazard - acted on under the hazard rule, then recorded"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Known repeating sequence with a defined fork on distinct-versus-addition.",
+        "artifact": "models/1.1-capture-work-demand.bpmn"
+      },
+      "en17007": {
+        "process": "COR.1",
+        "title": "Classify the actual events",
+        "clause": "6.4.2"
+      },
+      "sources": [
+        {
+          "for": "origination route",
+          "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 message payloads; Annex A verbs, cl. 4.2 Figure 2 flow [7] Follow-up Work",
+          "status": "verified"
+        },
+        {
+          "for": "controls.regulatory",
+          "cite": "49 CFR 192.801-192.805 - Subpart N regulates 'individuals performing covered tasks' and does not distinguish employees from contractors; PHMSA 86 FR 3956 (15 Jan 2021) confirms operators are responsible for contractor compliance with the operator's programme",
+          "status": "regulation"
+        },
+        {
+          "for": "measures",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.4.2, 5.3.1",
+          "status": "verified"
+        },
+        {
+          "for": "variants",
+          "cite": "Distinct-versus-addition follows from EN 13460 cl. 3.8's definition of a work order as the document for a maintenance operation; a finer variant decomposition is an implementation choice and is held in the specialization layer",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 message payloads; Annex A verbs"
+      }
+    },
+    {
+      "uid": 10008,
+      "id": "1.1.6",
+      "name": "Capture regulatory or mandated demand",
+      "group": {
+        "id": "1.1",
+        "name": "Capture work demand",
+        "uid": 10002
+      },
+      "intent": "Generate work that exists because a regulation or mandated programme requires it.",
+      "activities": [
+        "Identify the obligation and the population it applies to",
+        "Compute the next due date from the interval and the last compliant completion",
+        "Generate work carrying the obligation reference",
+        "Maintain the coverage position against the population"
+      ],
+      "trigger": {
+        "kind": "timer",
+        "text": "A regulatory interval, mandated programme obligation or enforceable order becomes due.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Obligation, its interval and its population definition",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Assets or locations in scope",
+          "party": "AM",
+          "data": "WorkAsset"
+        },
+        {
+          "what": "Date and outcome of last compliant completion",
+          "party": "AM",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Mandated work carrying its obligation reference",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Coverage position against the population",
+          "party": "AM",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "MAI",
+          "role": "originating",
+          "service": "Obligation register and mandated work generation"
+        },
+        {
+          "component": "AM",
+          "role": "reference",
+          "service": "Population and compliance history"
+        },
+        {
+          "component": "GINV",
+          "role": "reference",
+          "service": "Location and system segmentation"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "MAI",
+          "to": "SCHD",
+          "payload": "MaintenanceOrder",
+          "verb": "create",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Compliance programme owner",
+          "raci": "A"
+        },
+        {
+          "role": "Maintenance manager",
+          "raci": "R"
+        },
+        {
+          "role": "Regulatory affairs",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkAsset",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "Federal gas intervals are expressed as a nominal period and a not-to-exceed month figure together - annual and 15 months, three years and 39 months, five years and 63 months. Both bind; satisfying one is not compliance."
+        },
+        {
+          "kind": "regulatory",
+          "text": "The obligation reference must travel on the work record. Work that cannot be traced to its obligation is not evidence of compliance."
+        },
+        {
+          "kind": "regulatory",
+          "text": "Intervals are ceilings that a regulator may lower for a particular operator. A model that treats them as immutable constants will be wrong for operators holding an approved deviation."
+        }
+      ],
+      "measures": [
+        {
+          "name": "PM & PdM Compliance",
+          "definition": "SMRP 5.4.14, applied to mandated cycles.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "PM & PdM Work Orders Overdue",
+          "definition": "SMRP 5.4.11. On a mandated cycle an overdue count above zero is a compliance exposure, not a backlog measure.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Calendar interval measured from last compliant completion",
+        "Condition-conditional interval, shortened by a prior adverse finding",
+        "Enforceable order or approved deviation overriding the standing interval"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Timer-started repeating sequence; the interval arithmetic is a decision.",
+        "artifact": "models/1.1-capture-work-demand.bpmn"
+      },
+      "en17007": {
+        "process": "PRV.2",
+        "title": "Use and update the Maintenance Plans",
+        "clause": "6.3.3"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.3.3 PRV.2",
+          "status": "clause-verified"
+        },
+        {
+          "for": "controls.regulatory (interval grammar)",
+          "cite": "49 CFR 192 - the canonical construction is 'at intervals not exceeding X months, but at least once each calendar year'; e.g. 192.465(a), 192.723(b)(1), 192.739(a), 192.743(a), 192.747(a), 192.749(a)",
+          "status": "regulation"
+        },
+        {
+          "for": "controls.regulatory (deviation)",
+          "cite": "49 CFR 192.1013",
+          "status": "regulation"
+        },
+        {
+          "for": "measures",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.4.14, 5.4.11",
+          "status": "verified"
+        }
+      ],
+      "provenance": {
+        "basis": "regulation",
+        "primary": "49 CFR Part 192"
+      }
+    },
+    {
+      "uid": 10010,
+      "id": "1.2.1",
+      "name": "Validate and enrich request detail",
+      "group": {
+        "id": "1.2",
+        "name": "Validate and screen work",
+        "uid": 10009
+      },
+      "intent": "Bring an event up to the detail the rest of the lifecycle needs.",
+      "activities": [
+        "Resolve premise, asset and network position from the authoritative registers",
+        "Apply the minimum content required for the work type",
+        "Raise a data quality exception where the event cannot be resolved",
+        "Release the enriched event or hold it"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "An event arrives from any origination route.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Event as captured",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Premise, account and service point",
+          "party": "CS",
+          "data": "WorkLocation"
+        },
+        {
+          "what": "Asset record and attributes",
+          "party": "AM",
+          "data": "WorkAsset"
+        },
+        {
+          "what": "Network position",
+          "party": "GINV",
+          "data": "WorkLocation"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Enriched event fit to plan against",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Data quality exception where enrichment failed",
+          "party": "MAI",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "MAI",
+          "role": "owning",
+          "service": "Event enrichment"
+        },
+        {
+          "component": "GINV",
+          "role": "reference",
+          "service": "Network and premise lookup"
+        },
+        {
+          "component": "AM",
+          "role": "reference",
+          "service": "Asset attribute lookup"
+        },
+        {
+          "component": "CS",
+          "role": "reference",
+          "service": "Account and premise lookup"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "MAI",
+          "to": "GINV",
+          "payload": "WorkRequest",
+          "verb": "get",
+          "pattern": "request-reply"
+        },
+        {
+          "from": "MAI",
+          "to": "AM",
+          "payload": "WorkRequest",
+          "verb": "get",
+          "pattern": "request-reply"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Maintenance manager",
+          "raci": "R"
+        },
+        {
+          "role": "Data steward",
+          "raci": "A"
+        },
+        {
+          "role": "Dispatcher",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkLocation",
+        "WorkAsset"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "There is no consensus definition, spanning gas and electric, of what a work request must contain. The minimum content set is the operator's, and it should be stated per work type rather than assumed."
+        },
+        {
+          "kind": "operational",
+          "text": "Enrichment that silently defaults a wrong value is worse than a visible exception."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Work Order Aging",
+          "definition": "SMRP 5.4.6, applied to events held at enrichment.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Planning and Control indicators",
+          "definition": "EN 15341 cl. 12, O&S9-O&S22 - the European counterpart block for work preparation.",
+          "cite": "EN 15341:2019+A1:2022 Maintenance KPIs, cl. 12 O&S9-O&S22 Planning and Control"
+        }
+      ],
+      "variants": [
+        "Fully identified asset - resolved from the register",
+        "Location known, asset not - bound to location, asset resolved in the field",
+        "Neither resolvable - exception, held out of planning"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Known sequence of lookups with a defined exception path.",
+        "artifact": "models/1.2-validate-and-screen-work.bpmn"
+      },
+      "en17007": {
+        "process": "COR.1",
+        "title": "Classify the actual events",
+        "clause": "6.4.2"
+      },
+      "sources": [
+        {
+          "for": "minimum content (absence of a standard)",
+          "cite": "No standards body publishes a work request content model spanning gas and electric. IEC 61968-6 is the closest and is electric-only. The two public consensus content sets are domain-specific: CGA Best Practices for locate requests and ANSI/GPTC G-192-11 sec. 6.1 for leak records.",
+          "status": "consensus"
+        },
+        {
+          "for": "work order definition",
+          "cite": "EN 13460:2009 Documentation for maintenance cl. 3.8; EN 15341:2019+A1:2022 Maintenance KPIs, cl. 12 O&S9-O&S22 Planning and Control cl. 3.8",
+          "status": "verified"
+        },
+        {
+          "for": "work order data items",
+          "cite": "EN 13460:2009 Documentation for maintenance Annex B Work order information items",
+          "status": "clause-verified"
+        },
+        {
+          "for": "measures",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.4.6; EN 15341:2019+A1:2022 Maintenance KPIs, cl. 12 O&S9-O&S22 Planning and Control",
+          "status": "verified"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "EN 13460:2009 Documentation for maintenance"
+      }
+    },
+    {
+      "uid": 10011,
+      "id": "1.2.2",
+      "name": "Identify and merge duplicate demand",
+      "group": {
+        "id": "1.2",
+        "name": "Validate and screen work",
+        "uid": 10009
+      },
+      "intent": "Determine whether an event describes work already known.",
+      "activities": [
+        "Compare the event against open and recently closed work at the same subject",
+        "Apply the matching rule",
+        "Merge, link, or confirm the event as distinct",
+        "Preserve separate evidence of response where the report was a hazard"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "An enriched event reaches screening.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Enriched event",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Open and recently closed work at the same asset or location",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Matching rule set",
+          "party": "MAI",
+          "data": null
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Merged work with the further report appended",
+          "party": "MAI",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Event confirmed distinct",
+          "party": "MAI",
+          "data": "Work"
+        }
+      ],
+      "systems": [
+        {
+          "component": "MAI",
+          "role": "owning",
+          "service": "Duplicate determination and merge"
+        },
+        {
+          "component": "TCM",
+          "role": "contributing",
+          "service": "Trouble report clustering"
+        },
+        {
+          "component": "CS",
+          "role": "consuming",
+          "service": "Originator notification of existing work"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "TCM",
+          "to": "MAI",
+          "payload": "WorkRequest",
+          "verb": "get",
+          "pattern": "request-reply"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Maintenance manager",
+          "raci": "A"
+        },
+        {
+          "role": "Dispatcher",
+          "raci": "R"
+        },
+        {
+          "role": "Customer service representative",
+          "raci": "I"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "Each report of a hazard needs its own evidence of investigation and response even where the resulting work is merged."
+        },
+        {
+          "kind": "operational",
+          "text": "Merging a genuine second condition into an existing record hides work. The matching rule needs a measured false-merge rate, not only a duplicate-catch rate."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Rework",
+          "definition": "SMRP 4.1. A merge later reopened as distinct work is rework of the screening decision.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Work Order Cycle Time",
+          "definition": "SMRP 5.4.7, compared between merged and distinct events.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Same subject, same condition, work open - merged",
+        "Same subject, different condition - distinct and linked",
+        "Same subject, condition recently closed - recurrence, not a duplicate"
+      ],
+      "notation": {
+        "class": "DMN",
+        "why": "The match is a determination from attributes against rules, and the rules change more often than the flow around them.",
+        "artifact": "models/1.2.2-duplicate-determination.dmn"
+      },
+      "en17007": {
+        "process": "COR.1",
+        "title": "Classify the actual events",
+        "clause": "6.4.2"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.4.2 COR.1",
+          "status": "clause-verified"
+        },
+        {
+          "for": "controls.regulatory",
+          "cite": "49 CFR 192.703(c) and ANSI/GPTC Z380.1, Guide Material Appendix G-192-11 sec. 5.6 and Tables 3a-3c (AGA/GPTC, ANSI-accredited consensus; NOT incorporated by reference into 49 CFR 192 - the federal text is sec. 192.703(c) alone)",
+          "status": "consensus"
+        },
+        {
+          "for": "measures",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 4.1, 5.4.7",
+          "status": "verified"
+        },
+        {
+          "for": "rule content",
+          "cite": "Matching attributes are an operator determination; no standard specifies them",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "judgment",
+        "primary": "Operator determination, framed against EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319)"
+      }
+    },
+    {
+      "uid": 10012,
+      "id": "1.2.3",
+      "name": "Confirm asset, location and premise",
+      "group": {
+        "id": "1.2",
+        "name": "Validate and screen work",
+        "uid": 10009
+      },
+      "intent": "Fix the item the work will be performed on.",
+      "activities": [
+        "Resolve the reported location or identifier against the authoritative registers",
+        "Establish the regulatory regime the location falls under",
+        "Bind the event to an item, a location or a service point",
+        "Raise a discrepancy against the register where the two disagree"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "An event with an unconfirmed or ambiguous subject.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Reported location or identifier",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Geographical inventory and connectivity",
+          "party": "GINV",
+          "data": "WorkLocation"
+        },
+        {
+          "what": "Asset register",
+          "party": "AM",
+          "data": "WorkAsset"
+        },
+        {
+          "what": "Premise and service point",
+          "party": "CS",
+          "data": "WorkLocation"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Confirmed subject on the work",
+          "party": "MAI",
+          "data": "WorkLocation"
+        },
+        {
+          "what": "Discrepancy raised against the register",
+          "party": "AM",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "GINV",
+          "role": "authoritative",
+          "service": "Network and land base"
+        },
+        {
+          "component": "AM",
+          "role": "authoritative",
+          "service": "Asset register"
+        },
+        {
+          "component": "CS",
+          "role": "authoritative",
+          "service": "Premise and service point"
+        },
+        {
+          "component": "MAI",
+          "role": "consuming",
+          "service": "Subject binding"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "MAI",
+          "to": "GINV",
+          "payload": "WorkRequest",
+          "verb": "get",
+          "pattern": "request-reply"
+        },
+        {
+          "from": "MAI",
+          "to": "AM",
+          "payload": "WorkRequest",
+          "verb": "get",
+          "pattern": "request-reply"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Maintenance manager",
+          "raci": "R"
+        },
+        {
+          "role": "Records or GIS owner",
+          "raci": "A"
+        },
+        {
+          "role": "Field technician",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkLocation",
+        "WorkAsset"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "For gas distribution, several intervals turn on whether the location is inside a business district - and Part 192 does not define the term. The boundary is the operator's, set in the operating and maintenance manual, and it must be resolvable here or the due date cannot be computed."
+        },
+        {
+          "kind": "operational",
+          "text": "Work bound to the wrong item corrupts the history that maintenance strategy is derived from."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Systems Covered by Criticality Analysis",
+          "definition": "SMRP 3.1. Subject binding is what makes criticality reachable from work.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Rework",
+          "definition": "SMRP 4.1, applied to work re-dispatched after a wrong subject.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Item-based work - bound to the register entry",
+        "Location-based work with no discrete item - bound to location only",
+        "Service-point work - bound to the premise"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Sequenced lookups with a register-discrepancy path.",
+        "artifact": "models/1.2-validate-and-screen-work.bpmn"
+      },
+      "en17007": {
+        "process": "COR.2",
+        "title": "Diagnose the state of the items in question",
+        "clause": "6.4.3"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.4.3 COR.2",
+          "status": "clause-verified"
+        },
+        {
+          "for": "controls.regulatory",
+          "cite": "49 CFR 192.723(b)(1) and 192.721(b) turn on business district; 49 CFR 192.3 contains no definition of the term, and 192.605 places the operating and maintenance manual with the operator",
+          "status": "regulation"
+        },
+        {
+          "for": "item terminology",
+          "cite": "EN 13306:2017 Maintenance terminology (CEN/TC 319) cl. 3 Item related terms",
+          "status": "clause-verified"
+        },
+        {
+          "for": "measures",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 3.1, 4.1",
+          "status": "verified"
+        }
+      ],
+      "provenance": {
+        "basis": "regulation",
+        "primary": "49 CFR 192.723, 192.721, 192.3"
+      }
+    },
+    {
+      "uid": 10013,
+      "id": "1.2.4",
+      "name": "Reject or redirect out-of-scope demand",
+      "group": {
+        "id": "1.2",
+        "name": "Validate and screen work",
+        "uid": 10009
+      },
+      "intent": "Dispose of demand that should not become work here.",
+      "activities": [
+        "Establish the ownership boundary and the evidence for it",
+        "Disprove any reported hazard before rejecting on scope",
+        "Refer to the owning party",
+        "Return the reason to the originator",
+        "Escalate where ownership or scope is disputed",
+        "Close with a recorded reason"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "Screening finds the event out of scope, misdirected, or not work.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Event with screening outcome",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Ownership and responsibility boundaries",
+          "party": "AM",
+          "data": null
+        },
+        {
+          "what": "Originator and any commitment given",
+          "party": "CS",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Closed event with recorded reason",
+          "party": "MAI",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Referral to the owning party",
+          "party": "CS",
+          "data": "Work"
+        },
+        {
+          "what": "Reason returned to the originator",
+          "party": "CS",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "MAI",
+          "role": "owning",
+          "service": "Screening disposition"
+        },
+        {
+          "component": "CS",
+          "role": "consuming",
+          "service": "Originator feedback and referral"
+        },
+        {
+          "component": "AM",
+          "role": "reference",
+          "service": "Ownership boundaries"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "MAI",
+          "to": "CS",
+          "payload": "WorkRequest",
+          "verb": "close",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Maintenance manager",
+          "raci": "A"
+        },
+        {
+          "role": "Dispatcher",
+          "raci": "R"
+        },
+        {
+          "role": "Customer service representative",
+          "raci": "C"
+        },
+        {
+          "role": "Asset engineer",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "Anything reported as a hazard is not rejected on scope grounds until the hazard is disproved. Grade 1 requires action until the condition is no longer hazardous, and grading is the operator personnel's judgement at the scene."
+        },
+        {
+          "kind": "operational",
+          "text": "Rejection without a recorded reason and a route back to the originator destroys the feedback loop, and the demand recurs."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Reactive Work",
+          "definition": "SMRP 5.4.1. Recurring rejected demand re-presents as reactive work and is visible here first.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Work Order Cycle Time",
+          "definition": "SMRP 5.4.7, applied to disposal as well as delivery.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Item owned by another party - referred with evidence",
+        "Another operator's plant - referred",
+        "Not work - answered and closed",
+        "Disputed ownership - escalated for engineering determination"
+      ],
+      "notation": {
+        "class": "CMMN",
+        "why": "The handler chooses among referral, feedback, escalation and closure in an order that depends on the case. Two competent people would legitimately sequence it differently.",
+        "artifact": "models/1.2.4-screening-disposition.cmmn"
+      },
+      "en17007": {
+        "process": "COR.1",
+        "title": "Classify the actual events",
+        "clause": "6.4.2"
+      },
+      "sources": [
+        {
+          "for": "controls.regulatory",
+          "cite": "ANSI/GPTC Z380.1, Guide Material Appendix G-192-11 sec. 5.6 and Tables 3a-3c (AGA/GPTC, ANSI-accredited consensus; NOT incorporated by reference into 49 CFR 192 - the federal text is sec. 192.703(c) alone); 49 CFR 192.703(c)",
+          "status": "consensus"
+        },
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.4.2 COR.1",
+          "status": "clause-verified"
+        },
+        {
+          "for": "measures",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.4.1, 5.4.7",
+          "status": "verified"
+        },
+        {
+          "for": "activities",
+          "cite": "Decomposition",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "consensus",
+        "primary": "ANSI/GPTC Z380.1, Guide Material Appendix G-192-11 sec. 5.6 and Tables 3a-3c (AGA/GPTC, ANSI-accredited consensus; NOT incorporated by reference into 49 CFR 192 - the federal text is sec. 192.703(c) alone)"
+      }
+    },
+    {
+      "uid": 10015,
+      "id": "1.3.1",
+      "name": "Assign work type and classification",
+      "group": {
+        "id": "1.3",
+        "name": "Categorise and prioritise work",
+        "uid": 10014
+      },
+      "intent": "Determine the maintenance type, which governs how everything downstream treats the work.",
+      "activities": [
+        "Establish whether the work prevents a failure or restores after one",
+        "Within preventive, establish whether it is predetermined or condition-based",
+        "Within corrective, establish whether it is immediate or deferred",
+        "Derive the cost treatment the type implies"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "A screened event needs classification.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Screened event with condition and origination route",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Asset class and criticality",
+          "party": "AM",
+          "data": "WorkAsset"
+        },
+        {
+          "what": "Maintenance type rule set",
+          "party": "MAI",
+          "data": "WorkKind"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Assigned maintenance type",
+          "party": "MAI",
+          "data": "WorkKind"
+        },
+        {
+          "what": "Cost treatment implied by the type",
+          "party": "FIN",
+          "data": "Work"
+        }
+      ],
+      "systems": [
+        {
+          "component": "MAI",
+          "role": "owning",
+          "service": "Maintenance type determination"
+        },
+        {
+          "component": "AM",
+          "role": "reference",
+          "service": "Asset class and criticality"
+        },
+        {
+          "component": "FIN",
+          "role": "consuming",
+          "service": "Cost treatment derivation"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "MAI",
+          "to": "FIN",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Maintenance manager",
+          "raci": "A"
+        },
+        {
+          "role": "Dispatcher",
+          "raci": "R"
+        },
+        {
+          "role": "Finance",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkKind"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "The maintenance type taxonomy is defined in EN 13306 cl. 7 and mirrored in ISO 14224 cl. 9.6.2. Use the standard's types rather than a local list, or the proactive and reactive measures cannot be compared with anyone."
+        },
+        {
+          "kind": "financial",
+          "text": "Type drives capital versus expense treatment. Misclassification is a financial reporting error, not a scheduling inconvenience."
+        },
+        {
+          "kind": "operational",
+          "text": "Types must be mutually exclusive or the type can only be chosen, never derived."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Proactive Work",
+          "definition": "SMRP 5.4.2, whose formula depends on this classification being right.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Reactive Work",
+          "definition": "SMRP 5.4.1, the complement.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Preventive - predetermined",
+        "Preventive - condition-based, including predictive",
+        "Corrective - immediate",
+        "Corrective - deferred"
+      ],
+      "notation": {
+        "class": "DMN",
+        "why": "The output is a classification value determined from inputs against a rule set.",
+        "artifact": "models/1.3-categorise-and-prioritise.dmn"
+      },
+      "en17007": {
+        "process": "COR.1",
+        "title": "Classify the actual events",
+        "clause": "6.4.2"
+      },
+      "sources": [
+        {
+          "for": "type taxonomy",
+          "cite": "EN 13306:2017 Maintenance terminology (CEN/TC 319) cl. 7 Maintenance types (clause and title confirmed from official contents; definitions are paywalled and are NOT reproduced here); ISO 14224:2016 cl. 9.6 Maintenance data cl. 9.6.2 Maintenance categories",
+          "status": "clause-verified"
+        },
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.4.2 COR.1",
+          "status": "clause-verified"
+        },
+        {
+          "for": "measures",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.4.1, 5.4.2 (definitions read verbatim)",
+          "status": "verified"
+        },
+        {
+          "for": "cost treatment",
+          "cite": "Operator and regulator determination; no maintenance standard assigns capitalisation",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "EN 13306:2017 Maintenance terminology (CEN/TC 319)"
+      }
+    },
+    {
+      "uid": 10016,
+      "id": "1.3.2",
+      "name": "Assign priority and response target",
+      "group": {
+        "id": "1.3",
+        "name": "Categorise and prioritise work",
+        "uid": 10014
+      },
+      "intent": "Rank the event and set the response target it will be measured against.",
+      "activities": [
+        "Apply any hazard grade, which fixes the response",
+        "Otherwise rank on criticality and consequence",
+        "Derive the response target from the rank",
+        "Record any override and its reason"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "A classified event needs a rank and a response target.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Maintenance type and reported condition",
+          "party": "MAI",
+          "data": "WorkKind"
+        },
+        {
+          "what": "Asset criticality and consequence",
+          "party": "AM",
+          "data": "WorkAsset"
+        },
+        {
+          "what": "Hazard grade where one applies",
+          "party": "MAI",
+          "data": null
+        },
+        {
+          "what": "Ranking rule set",
+          "party": "MAI",
+          "data": "Priority"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Rank",
+          "party": "SCHD",
+          "data": "Priority"
+        },
+        {
+          "what": "Response target",
+          "party": "SCHD",
+          "data": "Work"
+        }
+      ],
+      "systems": [
+        {
+          "component": "MAI",
+          "role": "owning",
+          "service": "Ranking"
+        },
+        {
+          "component": "SCHD",
+          "role": "consuming",
+          "service": "Scheduling against the response target"
+        },
+        {
+          "component": "AM",
+          "role": "reference",
+          "service": "Criticality"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "MAI",
+          "to": "SCHD",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Maintenance manager",
+          "raci": "A"
+        },
+        {
+          "role": "Dispatcher",
+          "raci": "R"
+        },
+        {
+          "role": "Asset engineer",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "Priority"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "Where a gas leak is graded, the grade sets the repair priority, and it is assigned by operator personnel at the scene. Grade 1 requires immediate and continuous action; grade 2 is repaired within a defined period and reevaluated until cleared."
+        },
+        {
+          "kind": "regulatory",
+          "text": "Leak grades are industry consensus, not federal law - the federal requirement is only that hazardous leaks be repaired promptly. They bind where a state adopts them."
+        },
+        {
+          "kind": "operational",
+          "text": "Rank inflation makes the queue meaningless. Watch the share of work at the top rank."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Schedule Compliance Work Orders",
+          "definition": "SMRP 5.4.4, measured within rank bands.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Planned Backlog and Ready Backlog",
+          "definition": "SMRP 5.4.8 and 5.4.9, by rank.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Hazard-graded - the grade fixes the response, not judgement",
+        "Criticality-ranked against the criticality matrix",
+        "Committed - the target is the commitment given",
+        "Override - permitted, recorded with a reason and reviewed"
+      ],
+      "notation": {
+        "class": "DMN",
+        "why": "The output is a rank and a date determined from inputs. Consensus and regulated intervals belong in a table where they can be audited.",
+        "artifact": "models/1.3-categorise-and-prioritise.dmn"
+      },
+      "en17007": {
+        "process": "ACT.1",
+        "title": "Rank the events",
+        "clause": "6.5.2"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.5.2 ACT.1 'Rank the events'",
+          "status": "clause-verified"
+        },
+        {
+          "for": "criticality basis",
+          "cite": "EN 13306:2017 Maintenance terminology (CEN/TC 319) Annex E Criticality matrix",
+          "status": "clause-verified"
+        },
+        {
+          "for": "hazard grading",
+          "cite": "ANSI/GPTC Z380.1, Guide Material Appendix G-192-11 sec. 5.6 and Tables 3a-3c (AGA/GPTC, ANSI-accredited consensus; NOT incorporated by reference into 49 CFR 192 - the federal text is sec. 192.703(c) alone)",
+          "status": "consensus"
+        },
+        {
+          "for": "federal position",
+          "cite": "49 CFR 192.703(c): 'Hazardous leaks must be repaired promptly.' GPTC Z380.1 does not appear in the 192.7 incorporation-by-reference list.",
+          "status": "regulation"
+        },
+        {
+          "for": "measures",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.4.4, 5.4.8, 5.4.9",
+          "status": "verified"
+        }
+      ],
+      "provenance": {
+        "basis": "consensus",
+        "primary": "ANSI/GPTC Z380.1, Guide Material Appendix G-192-11 sec. 5.6 and Tables 3a-3c (AGA/GPTC, ANSI-accredited consensus; NOT incorporated by reference into 49 CFR 192 - the federal text is sec. 192.703(c) alone)"
+      }
+    },
+    {
+      "uid": 10017,
+      "id": "1.3.3",
+      "name": "Apply compliance and due-date rules",
+      "group": {
+        "id": "1.3",
+        "name": "Categorise and prioritise work",
+        "uid": 10014
+      },
+      "intent": "Apply the interval that fixes when mandated work must be complete.",
+      "activities": [
+        "Identify the obligation and the population attribute that selects the interval",
+        "Read the date and the outcome of the last compliant completion",
+        "Compute the due date against both the nominal period and the not-to-exceed figure",
+        "Record the interval basis for audit"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "Work carrying a compliance obligation needs a due date.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Obligation and interval basis",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Date and outcome of last compliant completion",
+          "party": "AM",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Population attribute that selects the interval",
+          "party": "GINV",
+          "data": "WorkLocation"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Due date and the interval it came from",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Interval basis recorded for audit",
+          "party": "AM",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "MAI",
+          "role": "owning",
+          "service": "Interval application"
+        },
+        {
+          "component": "AM",
+          "role": "reference",
+          "service": "Compliance history"
+        },
+        {
+          "component": "GINV",
+          "role": "reference",
+          "service": "Segment and population attributes"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "MAI",
+          "to": "AM",
+          "payload": "MaintenanceOrder",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Compliance programme owner",
+          "raci": "A"
+        },
+        {
+          "role": "Maintenance manager",
+          "raci": "R"
+        },
+        {
+          "role": "Regulatory affairs",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "Federal gas intervals bind twice - a nominal period in calendar years and a not-to-exceed figure in months. Satisfying the calendar year alone is not compliance."
+        },
+        {
+          "kind": "regulatory",
+          "text": "Some intervals are conditional on the prior outcome, not only the prior date, and some are conditional on asset attributes such as cathodic protection status. A table keyed only on geography will produce wrong due dates."
+        },
+        {
+          "kind": "regulatory",
+          "text": "For electric distribution there is no federal prescriptive interval layer at all. Where an interval is needed it comes from state rule, and the reference names the state exemplar rather than implying a national one."
+        }
+      ],
+      "measures": [
+        {
+          "name": "PM & PdM Compliance",
+          "definition": "SMRP 5.4.14.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "PM & PdM Work Orders Overdue",
+          "definition": "SMRP 5.4.11. On a mandated cycle this is a compliance exposure, not a backlog measure.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Interval selected by population attribute - business district, service line, offshore",
+        "Interval shortened by an adverse prior finding",
+        "Interval conditional on asset attributes such as protection status",
+        "Fixed date from an enforceable order, overriding the standing interval"
+      ],
+      "notation": {
+        "class": "DMN",
+        "why": "Interval arithmetic against a published rule set. The clearest decision-table case in the category, and the one most often buried in application code where a regulator cannot see it.",
+        "artifact": "models/1.3-categorise-and-prioritise.dmn"
+      },
+      "en17007": {
+        "process": "PRV.2",
+        "title": "Use and update the Maintenance Plans",
+        "clause": "6.3.3"
+      },
+      "sources": [
+        {
+          "for": "intervals",
+          "cite": "49 CFR 192.723(b)(1) and (b)(2), 192.481(a) and (d), 192.465(a), (b)(1), (b)(2), (c) and (e), 192.739(a), 192.743(a), 192.747(a), 192.749(a) - all quoted from the current eCFR",
+          "status": "regulation"
+        },
+        {
+          "for": "electric position",
+          "cite": "16 U.S.C. 824o places distribution outside the federal reliability standards regime; distribution inspection intervals are state rule (California GO 165 is a developed exemplar, not a national norm)",
+          "status": "regulation"
+        },
+        {
+          "for": "deviation",
+          "cite": "49 CFR 192.1013 - intervals are ceilings a regulator may lower",
+          "status": "regulation"
+        },
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.3.3 PRV.2",
+          "status": "clause-verified"
+        },
+        {
+          "for": "measures",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.4.14, 5.4.11",
+          "status": "verified"
+        }
+      ],
+      "provenance": {
+        "basis": "regulation",
+        "primary": "49 CFR Part 192, current eCFR"
+      }
+    },
+    {
+      "uid": 10018,
+      "id": "1.3.4",
+      "name": "Route to responsible organisation",
+      "group": {
+        "id": "1.3",
+        "name": "Categorise and prioritise work",
+        "uid": 10014
+      },
+      "intent": "Assign the work to the organisation that will deliver it.",
+      "activities": [
+        "Establish the qualification the work requires",
+        "Establish whether internal capacity or an external service is the route",
+        "Assign to the owning organisation",
+        "Hold for review where the work cannot be routed"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "Classified and ranked work needs an owner.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Maintenance type, location and qualification required",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Organisational responsibilities",
+          "party": "HR",
+          "data": null
+        },
+        {
+          "what": "Internal capacity and external service coverage",
+          "party": "SCHD",
+          "data": "Crew"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Responsible organisation",
+          "party": "SCHD",
+          "data": "Work"
+        },
+        {
+          "what": "Internal or external delivery determination",
+          "party": "SCHD",
+          "data": "Work"
+        }
+      ],
+      "systems": [
+        {
+          "component": "MAI",
+          "role": "owning",
+          "service": "Routing determination"
+        },
+        {
+          "component": "SCHD",
+          "role": "consuming",
+          "service": "Assignment"
+        },
+        {
+          "component": "HR",
+          "role": "reference",
+          "service": "Organisation and qualification"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "MAI",
+          "to": "SCHD",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Maintenance manager",
+          "raci": "A"
+        },
+        {
+          "role": "Dispatcher",
+          "raci": "R"
+        },
+        {
+          "role": "Field supervisor",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "Crew"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "Where the work is a covered task the individual performing it must be qualified, and the operator is responsible for that whether the individual is an employee or a contractor. Qualification is therefore a routing input, not a dispatch check."
+        },
+        {
+          "kind": "operational",
+          "text": "The internal-versus-external determination made here is the same determination category 16.0 owns. One rule set, called twice, or the two drift and the reference contradicts itself."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Schedule Compliance Work Orders",
+          "definition": "SMRP 5.4.4, by owning organisation.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Rework",
+          "definition": "SMRP 4.1, applied to work re-routed after assignment.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Geographic routing to the owning organisation",
+        "Qualification-based routing where the work is a covered task",
+        "External service routing, handed to 16.0",
+        "Unroutable - held for review rather than defaulted"
+      ],
+      "notation": {
+        "class": "DMN",
+        "why": "The output is a routing value from inputs against rules. Shares its sourcing rule with 16.2.1.",
+        "artifact": "models/1.3-categorise-and-prioritise.dmn"
+      },
+      "en17007": {
+        "process": "ACT.2",
+        "title": "Prepare for the maintenance tasks",
+        "clause": "6.5.3"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.5.3 ACT.2, with cl. 6.14 RES for internal resource and cl. 6.15 SER for external. Corrected 2026-08-29: SER alone covers only the external half of this determination.",
+          "status": "clause-verified"
+        },
+        {
+          "for": "controls.regulatory",
+          "cite": "49 CFR 192.801(b) defines a covered task by the activity, not the employment relationship; 192.805(b) requires the operator to ensure individuals are qualified",
+          "status": "regulation"
+        },
+        {
+          "for": "measures",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.4.4, 4.1",
+          "status": "verified"
+        }
+      ],
+      "provenance": {
+        "basis": "regulation",
+        "primary": "49 CFR 192 Subpart N"
+      }
+    },
+    {
+      "uid": 10020,
+      "id": "1.4.1",
+      "name": "Generate preventive maintenance work",
+      "group": {
+        "id": "1.4",
+        "name": "Generate programmed work",
+        "uid": 10019
+      },
+      "intent": "Generate preventive work from the maintenance plan.",
+      "activities": [
+        "Select the in-service population the plan applies to",
+        "Test the interval, usage or condition trigger",
+        "Generate work with its task content and lead time",
+        "Publish the forward load"
+      ],
+      "trigger": {
+        "kind": "timer",
+        "text": "A preventive interval, usage threshold or monitored condition becomes due.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Maintenance plan and interval per class",
+          "party": "AM",
+          "data": "WorkAsset"
+        },
+        {
+          "what": "In-service population",
+          "party": "AM",
+          "data": "WorkAsset"
+        },
+        {
+          "what": "Usage, runtime or condition readings",
+          "party": "MR&C",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Last completion per item",
+          "party": "AM",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Preventive work with its task content",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Forward load",
+          "party": "SCHD",
+          "data": "Work"
+        }
+      ],
+      "systems": [
+        {
+          "component": "AM",
+          "role": "originating",
+          "service": "Maintenance plan and generation"
+        },
+        {
+          "component": "MAI",
+          "role": "receiving",
+          "service": "Work registration"
+        },
+        {
+          "component": "SCHD",
+          "role": "consuming",
+          "service": "Forward load"
+        },
+        {
+          "component": "MR&C",
+          "role": "reference",
+          "service": "Usage and condition readings"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "AM",
+          "to": "MAI",
+          "payload": "MaintenanceOrder",
+          "verb": "create",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Reliability engineer",
+          "raci": "A"
+        },
+        {
+          "role": "Maintenance planner",
+          "raci": "R"
+        },
+        {
+          "role": "Field supervisor",
+          "raci": "I"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkTask",
+        "WorkAsset",
+        "WorkTimeSchedule"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "A maintenance plan is a structured and documented set of tasks including activities, procedures, resources and time scale. Generation that produces a date without the task content has not produced usable work."
+        },
+        {
+          "kind": "operational",
+          "text": "Generation lead time must exceed the planning and scheduling cycle, or preventive work is late the day it is created."
+        },
+        {
+          "kind": "operational",
+          "text": "Generation against retired or transferred items creates work that cannot be performed. The status test belongs in generation."
+        }
+      ],
+      "measures": [
+        {
+          "name": "PM & PdM Compliance",
+          "definition": "SMRP 5.4.14.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Planned Work",
+          "definition": "SMRP 5.3.1. Preventive work generated with lead time should be planned by definition; a low figure here means generation is too late.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Predetermined - calendar or usage based",
+        "Condition-based - generated when a monitored parameter crosses a threshold",
+        "Route or round based, grouping many items into one visit"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Timer-started repeating sequence; the interval test is a decision.",
+        "artifact": "models/1.4-generate-programmed-work.bpmn"
+      },
+      "en17007": {
+        "process": "PRV.2",
+        "title": "Use and update the Maintenance Plans",
+        "clause": "6.3.3"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.3.3 PRV.2",
+          "status": "clause-verified"
+        },
+        {
+          "for": "maintenance plan definition",
+          "cite": "EN 13306:2017 Maintenance terminology (CEN/TC 319) cl. 2.5: 'structured and documented set of tasks that include the activities, procedures, resources and the time scale required to carry out maintenance'",
+          "status": "verified"
+        },
+        {
+          "for": "type taxonomy",
+          "cite": "EN 13306:2017 Maintenance terminology (CEN/TC 319) cl. 7",
+          "status": "clause-verified"
+        },
+        {
+          "for": "measures",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.4.14, 5.3.1",
+          "status": "verified"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "EN 13306:2017 Maintenance terminology (CEN/TC 319)"
+      }
+    },
+    {
+      "uid": 10021,
+      "id": "1.4.2",
+      "name": "Generate inspection and survey cycles",
+      "group": {
+        "id": "1.4",
+        "name": "Generate programmed work",
+        "uid": 10019
+      },
+      "intent": "Generate the inspection and survey cycles the compliance regime requires.",
+      "activities": [
+        "Define the population and the cycle window",
+        "Release the cycle in tranches across the window",
+        "Track coverage against the population, not against work completed",
+        "Reconcile the population at cycle close"
+      ],
+      "trigger": {
+        "kind": "timer",
+        "text": "An inspection or survey cycle becomes due for a population.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Obligation, interval and population definition",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Route, segment or area definition",
+          "party": "GINV",
+          "data": "WorkLocation"
+        },
+        {
+          "what": "Coverage achieved in the current cycle",
+          "party": "AM",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Inspection or survey work",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Cycle coverage position",
+          "party": "AM",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "MAI",
+          "role": "originating",
+          "service": "Cycle generation"
+        },
+        {
+          "component": "GINV",
+          "role": "reference",
+          "service": "Route and segment definition"
+        },
+        {
+          "component": "AM",
+          "role": "consuming",
+          "service": "Coverage tracking"
+        },
+        {
+          "component": "SCHD",
+          "role": "consuming",
+          "service": "Load levelling"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "MAI",
+          "to": "SCHD",
+          "payload": "MaintenanceOrder",
+          "verb": "create",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Compliance programme owner",
+          "raci": "A"
+        },
+        {
+          "role": "Maintenance planner",
+          "raci": "R"
+        },
+        {
+          "role": "Field supervisor",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkTask",
+        "WorkLocation",
+        "WorkTimeSchedule"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "Coverage is measured against the population, not against work completed. Completing every generated job while missing part of the population is still non-compliance."
+        },
+        {
+          "kind": "regulatory",
+          "text": "Where a cycle runs on a multi-year interval, both the calendar-year count and the not-to-exceed month figure bind, so a cycle cannot be levelled purely for convenience."
+        },
+        {
+          "kind": "operational",
+          "text": "A cycle released as one tranche cannot be levelled. Release against the window."
+        }
+      ],
+      "measures": [
+        {
+          "name": "PM & PdM Compliance",
+          "definition": "SMRP 5.4.14, computed on the population.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Schedule Compliance Hours",
+          "definition": "SMRP 5.4.3, for the tranche.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Route-based survey generation",
+        "Population-based inspection generation per item",
+        "Area or grid-based generation",
+        "Risk-ranked generation where the regime permits it"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Timer-started, with a coverage reconciliation loop.",
+        "artifact": "models/1.4-generate-programmed-work.bpmn"
+      },
+      "en17007": {
+        "process": "PRV.2",
+        "title": "Use and update the Maintenance Plans",
+        "clause": "6.3.3"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.3.3 PRV.2. Corrected 2026-08-29: previously mapped to PRV.1, whose purpose is characterising and prioritising potential failure modes, not generating cycles from a plan.",
+          "status": "clause-verified"
+        },
+        {
+          "for": "intervals and dual binding",
+          "cite": "49 CFR 192.723(b)(2): 'at least once every 5 calendar years at intervals not exceeding 63 months'",
+          "status": "regulation"
+        },
+        {
+          "for": "measures",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.4.14, 5.4.3",
+          "status": "verified"
+        }
+      ],
+      "provenance": {
+        "basis": "regulation",
+        "primary": "49 CFR 192.723"
+      }
+    },
+    {
+      "uid": 10022,
+      "id": "1.4.3",
+      "name": "Generate campaign and programme work",
+      "group": {
+        "id": "1.4",
+        "name": "Generate programmed work",
+        "uid": 10019
+      },
+      "intent": "Release programme work as managed tranches against capacity.",
+      "activities": [
+        "Confirm the programme is funded and its scope defined",
+        "Select the eligible population for the tranche",
+        "Test capacity and material availability",
+        "Release the tranche and update the programme position"
+      ],
+      "trigger": {
+        "kind": "timer",
+        "text": "A programme tranche becomes due for release under the programme plan.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Programme scope, plan and tranche definition",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Eligible population",
+          "party": "AM",
+          "data": "WorkAsset"
+        },
+        {
+          "what": "Internal and external capacity",
+          "party": "SCHD",
+          "data": "Crew"
+        },
+        {
+          "what": "Material availability",
+          "party": "MM",
+          "data": "MaterialItem"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Released tranche",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Programme position and remaining scope",
+          "party": "AM",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "MAI",
+          "role": "originating",
+          "service": "Tranche release"
+        },
+        {
+          "component": "SCHD",
+          "role": "reference",
+          "service": "Capacity position"
+        },
+        {
+          "component": "MM",
+          "role": "reference",
+          "service": "Material availability"
+        },
+        {
+          "component": "AM",
+          "role": "consuming",
+          "service": "Programme progress"
+        },
+        {
+          "component": "FIN",
+          "role": "reference",
+          "service": "Programme funding"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "MAI",
+          "to": "SCHD",
+          "payload": "WorkRequest",
+          "verb": "create",
+          "pattern": "event"
+        },
+        {
+          "from": "MM",
+          "to": "MAI",
+          "payload": "WorkRequest",
+          "verb": "get",
+          "pattern": "request-reply"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Programme manager",
+          "raci": "A"
+        },
+        {
+          "role": "Maintenance planner",
+          "raci": "R"
+        },
+        {
+          "role": "Materials planner",
+          "raci": "C"
+        },
+        {
+          "role": "Contract owner",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkTask",
+        "WorkAsset",
+        "MaterialItem"
+      ],
+      "controls": [
+        {
+          "kind": "financial",
+          "text": "Programme work is normally capital and frequently externally delivered. Releasing without funding and an awarded service creates work nobody can deliver or pay for."
+        },
+        {
+          "kind": "operational",
+          "text": "Releasing beyond absorbable capacity converts a programme into a backlog and destroys the schedule for everything else."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Planned Backlog and Ready Backlog",
+          "definition": "SMRP 5.4.8 and 5.4.9, watched against the release rate.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Schedule Compliance Hours",
+          "definition": "SMRP 5.4.3, for the tranche.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Replacement programme releasing by segment",
+        "Change-out programme releasing by population",
+        "Cyclical programme releasing by area",
+        "Externally delivered programme released against an awarded volume"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Sequenced release with capacity and material gates.",
+        "artifact": "models/1.4-generate-programmed-work.bpmn"
+      },
+      "en17007": {
+        "process": "PRV.2",
+        "title": "Use and update the Maintenance Plans",
+        "clause": "6.3.3"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.3.3 PRV.2, with cl. 6.8 BUD for the funding gate. Corrected 2026-08-29: BUD is economic planning; releasing a tranche against capacity is plan execution.",
+          "status": "clause-verified"
+        },
+        {
+          "for": "measures",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.4.8, 5.4.9, 5.4.3",
+          "status": "verified"
+        },
+        {
+          "for": "external delivery",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.15 SER Provide external maintenance services",
+          "status": "clause-verified"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319)"
+      }
+    },
+    {
+      "uid": 10023,
+      "id": "1.4.4",
+      "name": "Manage work generation exceptions",
+      "group": {
+        "id": "1.4",
+        "name": "Generate programmed work",
+        "uid": 10019
+      },
+      "intent": "Resolve the cases where programmed generation did not produce usable work.",
+      "activities": [
+        "Reconcile generated volume against expected volume",
+        "Investigate the variance",
+        "Correct the plan, interval or item record",
+        "Rerun generation, or raise the missed work directly",
+        "Accept a gap with a recorded rationale"
+      ],
+      "trigger": {
+        "kind": "conditional",
+        "text": "A generation run reports a failure, a population gap, or an implausible volume.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Generation run result and exceptions",
+          "party": "MAI",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Expected volume for the run",
+          "party": "AM",
+          "data": null
+        },
+        {
+          "what": "Plan and item records implicated",
+          "party": "AM",
+          "data": "WorkAsset"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Corrected generation, rerun or directly raised work",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Correction to the plan, interval or item record",
+          "party": "AM",
+          "data": "WorkAsset"
+        },
+        {
+          "what": "Accepted gap with recorded rationale",
+          "party": "AM",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "MAI",
+          "role": "owning",
+          "service": "Exception handling"
+        },
+        {
+          "component": "AM",
+          "role": "consuming",
+          "service": "Plan and record correction"
+        },
+        {
+          "component": "SCHD",
+          "role": "consuming",
+          "service": "Direct release of missed work"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "MAI",
+          "to": "AM",
+          "payload": "MaintenanceOrder",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Maintenance planner",
+          "raci": "R"
+        },
+        {
+          "role": "Reliability engineer",
+          "raci": "A"
+        },
+        {
+          "role": "Compliance programme owner",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkAsset",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "A silent generation failure on a mandated cycle is a compliance failure that surfaces at audit. Reconcile generated against expected volume every run."
+        },
+        {
+          "kind": "operational",
+          "text": "Repeated manual correction of the same exception is a defect in the maintenance plan. Correct the plan, not the instance - this is the improvement loop, not an administrative task."
+        }
+      ],
+      "measures": [
+        {
+          "name": "PM & PdM Work Orders Overdue",
+          "definition": "SMRP 5.4.11.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Rework",
+          "definition": "SMRP 4.1, applied to repeated correction of the same exception.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Continuous Improvement Hours",
+          "definition": "SMRP 5.7.1. Effort spent correcting plans rather than instances.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Run failed - rerun after correction",
+        "Volume implausible - investigated before release",
+        "Population gap - work raised directly and the plan corrected",
+        "Gap accepted - rationale recorded and reviewed"
+      ],
+      "notation": {
+        "class": "CMMN",
+        "why": "The planner chooses among investigate, correct, rerun, raise directly and accept, in an order that depends on what the run did.",
+        "artifact": "models/1.4.4-generation-exception.cmmn"
+      },
+      "en17007": {
+        "process": "OPT",
+        "title": "Improve the results",
+        "clause": "6.13"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.13 OPT Improve the results and cl. 6.2 MAN. Corrected 2026-08-29: MAN was cited at 6.9, which is DOC.",
+          "status": "clause-verified"
+        },
+        {
+          "for": "improvement framing",
+          "cite": "ISO 9001:2015 cl. 4.4.1 g) and h) - evaluate processes and implement changes needed",
+          "status": "verified"
+        },
+        {
+          "for": "measures",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.4.11, 4.1, 5.7.1",
+          "status": "verified"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319)"
+      }
+    }
+  ]
+}
