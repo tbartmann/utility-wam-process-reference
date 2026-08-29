@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_P_11_3" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <process id="P_11_3" name="11.3 Engineer and deliver make-ready work" isExecutable="false">
+    <documentation>11.3.1, 11.3.3, 11.3.4 and 11.3.6 are drawn; loading is specified at 11.3.2 and cost allocation is decided at 11.3.5. Three federal duties shape the path and none of them is optional. Existing attachers may attend the survey on 3 business days notice, 47 CFR 1.1411(d)(3)(ii). The estimate is itemised and due within 14 days of the survey, and the ACTUAL cost is invoiced afterwards if it differs, 1.1411(e) and (e)(3). And every affected attacher gets immediate written notice on payment with the completion date and their right to move their own equipment first, 1.1411(f).</documentation>
+    <laneSet id="P_11_3_lanes">
+      <lane id="l_113_frd" name="Field survey">
+        <flowNodeRef>n_113_start</flowNodeRef>
+        <flowNodeRef>n_113_not</flowNodeRef>
+        <flowNodeRef>n_113_rep</flowNodeRef>
+        <flowNodeRef>n_113_surv</flowNodeRef>
+      </lane>
+      <lane id="l_113_dgn" name="Engineering">
+        <flowNodeRef>n_113_load</flowNodeRef>
+        <flowNodeRef>n_113_lg</flowNodeRef>
+        <flowNodeRef>n_113_repl</flowNodeRef>
+        <flowNodeRef>n_113_des</flowNodeRef>
+        <flowNodeRef>n_113_cls</flowNodeRef>
+        <flowNodeRef>n_113_obj</flowNodeRef>
+      </lane>
+      <lane id="l_113_fin" name="Estimating">
+        <flowNodeRef>n_113_est</flowNodeRef>
+        <flowNodeRef>n_113_alloc</flowNodeRef>
+        <flowNodeRef>n_113_pay</flowNodeRef>
+      </lane>
+      <lane id="l_113_con" name="Construction">
+        <flowNodeRef>n_113_mrnot</flowNodeRef>
+        <flowNodeRef>n_113_build</flowNodeRef>
+        <flowNodeRef>n_113_insp</flowNodeRef>
+        <flowNodeRef>n_113_rel</flowNodeRef>
+        <flowNodeRef>n_113_end</flowNodeRef>
+      </lane>
+    </laneSet>
+    <startEvent id="n_113_start" name="Complete application needs a survey"><messageEventDefinition id="n_113_start_md"/></startEvent>
+    <sendTask id="n_113_not" name="Give 3 business days notice of the field inspection"><documentation>11.3.1. 1.1411(d)(3)(ii): date, time, location and the contractor's name, and the attachers may attend.</documentation></sendTask>
+    <serviceTask id="n_113_rep" name="Supply the cyclical pole inspection report if asked"><documentation>11.3.1. 1.1411(d)(4)(i) within 10 business days of a written request.</documentation></serviceTask>
+    <userTask id="n_113_surv" name="Record attachments, positions, condition and violations"><documentation>11.3.1. Attributing an existing violation to whoever caused it is what makes 11.3.5 defensible later.</documentation></userTask>
+    <serviceTask id="n_113_load" name="Analyse loading (11.3.2)"><documentation>11.3.2. Specified, not modelled: NESC Rule 250B is unread and writing the table would invent the arithmetic.</documentation></serviceTask>
+    <exclusiveGateway id="n_113_lg" name="Disposition"/>
+    <sendTask id="n_113_repl" name="Commit a replacement to 11.5"><documentation>11.3.2. And 1.1411(j)(3) removes the attacher's self-help on pole replacements.</documentation></sendTask>
+    <userTask id="n_113_des" name="Design the clearance solution"><documentation>11.3.3. NESC Rules 235C and 238 govern; NRECA puts the communication worker safety zone at generally 40 in.</documentation></userTask>
+    <exclusiveGateway id="n_113_cls" name="Simple or complex"/>
+    <userTask id="n_113_obj" name="Object in writing that simple work is complex"><documentation>11.3.3. 1.1411(k)(2)(ii) makes a specific written objection determinative.</documentation></userTask>
+    <userTask id="n_113_est" name="Price and issue the itemised estimate"><documentation>11.3.4. Within 14 days of the survey, 29 for a Large Order, pole by pole where asked.</documentation></userTask>
+    <businessRuleTask id="n_113_alloc" name="Allocate the cost (11.3.5)"><documentation>11.3.5. 1.1411(e)(4) bars charging the new attacher for another party's pre-existing non-compliance.</documentation></businessRuleTask>
+    <receiveTask id="n_113_pay" name="Receive acceptance and payment"><documentation>11.3.4. 1.1411(e)(1) lets you withdraw the estimate 14 days after presentation.</documentation></receiveTask>
+    <sendTask id="n_113_mrnot" name="Notify every affected attacher immediately"><documentation>11.3.6. 1.1411(f): where, what, the date, their right to move first, and the new attacher's right to finish if the date slips.</documentation></sendTask>
+    <userTask id="n_113_build" name="Build the make-ready to the design"><documentation>11.3.6. 1.1411(g) holds you to the dates you set for the others.</documentation></userTask>
+    <userTask id="n_113_insp" name="Inspect and record the as-built"><documentation>11.3.6.</documentation></userTask>
+    <sendTask id="n_113_rel" name="Tell the new attacher it may attach"><documentation>11.3.6.</documentation></sendTask>
+    <endEvent id="n_113_end" name="Structure ready for the attachment"/>
+    <sequenceFlow id="f_n_113_start_n_113_not" sourceRef="n_113_start" targetRef="n_113_not" name=""/>
+    <sequenceFlow id="f_n_113_not_n_113_surv" sourceRef="n_113_not" targetRef="n_113_surv" name=""/>
+    <sequenceFlow id="f_n_113_not_n_113_rep" sourceRef="n_113_not" targetRef="n_113_rep" name="report requested"/>
+    <sequenceFlow id="f_n_113_surv_n_113_load" sourceRef="n_113_surv" targetRef="n_113_load" name=""/>
+    <sequenceFlow id="f_n_113_load_n_113_lg" sourceRef="n_113_load" targetRef="n_113_lg" name=""/>
+    <sequenceFlow id="f_n_113_lg_n_113_repl" sourceRef="n_113_lg" targetRef="n_113_repl" name="replacement required"><conditionExpression xsi:type="tFormalExpression"><![CDATA[disposition = "replacementRequired"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_113_repl_n_113_est" sourceRef="n_113_repl" targetRef="n_113_est" name=""/>
+    <sequenceFlow id="f_n_113_lg_n_113_des" sourceRef="n_113_lg" targetRef="n_113_des" name="adequate after make-ready"/>
+    <sequenceFlow id="f_n_113_des_n_113_cls" sourceRef="n_113_des" targetRef="n_113_cls" name=""/>
+    <sequenceFlow id="f_n_113_cls_n_113_obj" sourceRef="n_113_cls" targetRef="n_113_obj" name="designated simple but complex"><conditionExpression xsi:type="tFormalExpression"><![CDATA[simple = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_113_obj_n_113_est" sourceRef="n_113_obj" targetRef="n_113_est" name=""/>
+    <sequenceFlow id="f_n_113_cls_n_113_est" sourceRef="n_113_cls" targetRef="n_113_est" name="classified"/>
+    <sequenceFlow id="f_n_113_est_n_113_alloc" sourceRef="n_113_est" targetRef="n_113_alloc" name=""/>
+    <sequenceFlow id="f_n_113_alloc_n_113_pay" sourceRef="n_113_alloc" targetRef="n_113_pay" name=""/>
+    <sequenceFlow id="f_n_113_pay_n_113_mrnot" sourceRef="n_113_pay" targetRef="n_113_mrnot" name=""/>
+    <sequenceFlow id="f_n_113_mrnot_n_113_build" sourceRef="n_113_mrnot" targetRef="n_113_build" name=""/>
+    <sequenceFlow id="f_n_113_build_n_113_insp" sourceRef="n_113_build" targetRef="n_113_insp" name=""/>
+    <sequenceFlow id="f_n_113_insp_n_113_rel" sourceRef="n_113_insp" targetRef="n_113_rel" name=""/>
+    <sequenceFlow id="f_n_113_rel_n_113_end" sourceRef="n_113_rel" targetRef="n_113_end" name=""/>
+  </process>
+  <bpmndi:BPMNDiagram id="dg_P_11_3">
+    <bpmndi:BPMNPlane id="pl_P_11_3" bpmnElement="P_11_3">
+      <bpmndi:BPMNShape id="sh_n_113_start" bpmnElement="n_113_start"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_113_not" bpmnElement="n_113_not"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_113_rep" bpmnElement="n_113_rep"><dc:Bounds x="425" y="90" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_113_surv" bpmnElement="n_113_surv"><dc:Bounds x="425" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_113_load" bpmnElement="n_113_load"><dc:Bounds x="595" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_113_lg" bpmnElement="n_113_lg"><dc:Bounds x="807" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_113_repl" bpmnElement="n_113_repl"><dc:Bounds x="765" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_113_des" bpmnElement="n_113_des"><dc:Bounds x="935" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_113_cls" bpmnElement="n_113_cls"><dc:Bounds x="1147" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_113_obj" bpmnElement="n_113_obj"><dc:Bounds x="1105" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_113_est" bpmnElement="n_113_est"><dc:Bounds x="1275" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_113_alloc" bpmnElement="n_113_alloc"><dc:Bounds x="1445" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_113_pay" bpmnElement="n_113_pay"><dc:Bounds x="1615" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_113_mrnot" bpmnElement="n_113_mrnot"><dc:Bounds x="1785" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_113_build" bpmnElement="n_113_build"><dc:Bounds x="1955" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_113_insp" bpmnElement="n_113_insp"><dc:Bounds x="2125" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_113_rel" bpmnElement="n_113_rel"><dc:Bounds x="2295" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_113_end" bpmnElement="n_113_end"><dc:Bounds x="2512" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ed_f_n_113_start_n_113_not" bpmnElement="f_n_113_start_n_113_not"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_113_not_n_113_surv" bpmnElement="f_n_113_not_n_113_surv"><di:waypoint x="385" y="235"/><di:waypoint x="425" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_113_not_n_113_rep" bpmnElement="f_n_113_not_n_113_rep"><di:waypoint x="385" y="235"/><di:waypoint x="400" y="235"/><di:waypoint x="400" y="125"/><di:waypoint x="425" y="125"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_113_surv_n_113_load" bpmnElement="f_n_113_surv_n_113_load"><di:waypoint x="555" y="235"/><di:waypoint x="595" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_113_load_n_113_lg" bpmnElement="f_n_113_load_n_113_lg"><di:waypoint x="725" y="235"/><di:waypoint x="807" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_113_lg_n_113_repl" bpmnElement="f_n_113_lg_n_113_repl"><di:waypoint x="853" y="235"/><di:waypoint x="740" y="235"/><di:waypoint x="740" y="455"/><di:waypoint x="765" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_113_repl_n_113_est" bpmnElement="f_n_113_repl_n_113_est"><di:waypoint x="895" y="455"/><di:waypoint x="1250" y="455"/><di:waypoint x="1250" y="235"/><di:waypoint x="1275" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_113_lg_n_113_des" bpmnElement="f_n_113_lg_n_113_des"><di:waypoint x="853" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_113_des_n_113_cls" bpmnElement="f_n_113_des_n_113_cls"><di:waypoint x="1065" y="235"/><di:waypoint x="1147" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_113_cls_n_113_obj" bpmnElement="f_n_113_cls_n_113_obj"><di:waypoint x="1193" y="235"/><di:waypoint x="1080" y="235"/><di:waypoint x="1080" y="455"/><di:waypoint x="1105" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_113_obj_n_113_est" bpmnElement="f_n_113_obj_n_113_est"><di:waypoint x="1235" y="455"/><di:waypoint x="1250" y="455"/><di:waypoint x="1250" y="235"/><di:waypoint x="1275" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_113_cls_n_113_est" bpmnElement="f_n_113_cls_n_113_est"><di:waypoint x="1193" y="235"/><di:waypoint x="1275" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_113_est_n_113_alloc" bpmnElement="f_n_113_est_n_113_alloc"><di:waypoint x="1405" y="235"/><di:waypoint x="1445" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_113_alloc_n_113_pay" bpmnElement="f_n_113_alloc_n_113_pay"><di:waypoint x="1575" y="235"/><di:waypoint x="1615" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_113_pay_n_113_mrnot" bpmnElement="f_n_113_pay_n_113_mrnot"><di:waypoint x="1745" y="235"/><di:waypoint x="1785" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_113_mrnot_n_113_build" bpmnElement="f_n_113_mrnot_n_113_build"><di:waypoint x="1915" y="235"/><di:waypoint x="1955" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_113_build_n_113_insp" bpmnElement="f_n_113_build_n_113_insp"><di:waypoint x="2085" y="235"/><di:waypoint x="2125" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_113_insp_n_113_rel" bpmnElement="f_n_113_insp_n_113_rel"><di:waypoint x="2255" y="235"/><di:waypoint x="2295" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_113_rel_n_113_end" bpmnElement="f_n_113_rel_n_113_end"><di:waypoint x="2425" y="235"/><di:waypoint x="2512" y="235"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

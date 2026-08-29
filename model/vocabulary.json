@@ -847,7 +847,8 @@
       "MultiSpeak": "consensus",
       "GPTC": "consensus",
       "Edison Electric Institute": "consensus",
-      "EEI": "consensus"
+      "EEI": "consensus",
+      "NRECA": "consensus"
     },
     "paywalled": {
       "_note": "Clause number and title can be confirmed from public contents pages; the body cannot. 'clause-verified' is the ceiling and it FORBIDS paraphrasing content that was not read.",

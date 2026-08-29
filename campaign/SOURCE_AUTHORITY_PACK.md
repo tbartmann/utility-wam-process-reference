@@ -589,3 +589,115 @@ chain, pp. 24–34) · **EN 13460:2009** (Annex B work order information items) 
 **EN 13306:2017** (cl. 7 and Annex E) · **EN 15341:2019+A1:2022** (cl. 12, O&S9–O&S22).
 Also worth having: **ANSI/GPTC Z380.1-2025** and **SMRP Best Practices 7th Edition**
 (free with SMRP membership).
+
+---
+
+## Section E — Joint use and third-party attachments (added 2026-08-29 for category 11.0)
+
+**This category had no coverage in the pack at all, and that is not an oversight in the
+pack — it is the finding.** Neither APQC PCF Utilities nor the GFMAM Asset Management
+Landscape has a home for pole attachment work, which makes 11.0 the only category in the
+model that no public framework reaches. Everything below was obtained for this round.
+
+Federal law is unusually thick here, and it is *procedural* law: it prescribes the
+timetable a utility must run its attachment process to, which is precisely the kind of
+content the rest of this reference has to derive from consensus.
+
+### E1 — The statute
+
+| Source | Locator | What it establishes | Status |
+|---|---|---|---|
+| **47 U.S.C. 224** | (a)(4) | "pole attachment" is any attachment by a cable television system or provider of telecommunications service to a pole, duct, conduit or right-of-way owned or controlled by a utility | `regulation` |
+| | (b)(1) | the FCC regulates rates, terms and conditions to be just and reasonable | `regulation` |
+| | (c)(1)–(2) | **reverse preemption**: the FCC has no jurisdiction where a State certifies that it regulates pole attachments and considers the interests of subscribers | `regulation` |
+| | (d)(1) | the cable rate floor: not less than the additional costs of providing pole attachments | `regulation` |
+| | (e) | the telecommunications rate formula | `regulation` |
+| | (f)(1) | a utility **shall** provide nondiscriminatory access | `regulation` |
+| | (f)(2) | an **electric** utility may deny access on a non-discriminatory basis for insufficient capacity, safety, reliability or generally applicable engineering purposes | `regulation` |
+| | (h) | written notice of intended modification | `regulation` |
+| | (i) | an attacher does not bear the cost of rearranging or replacing its attachment where that is required by an **additional** attachment | `regulation` |
+
+**224(c) is the single most important structural fact in this category.** Roughly half the
+states have certified, and in those states the federal timeline below does not apply — the
+state's does. Every process here therefore determines *which regime governs* before it
+applies a number. No state regime is in this pack; naming one is `judgment`.
+
+### E2 — The FCC rules, 47 CFR Part 1 Subpart J (read verbatim from the current eCFR)
+
+| Locator | What it establishes | Status |
+|---|---|---|
+| **1.1403(a)** | duty to provide access; denial only on a non-discriminatory basis for insufficient capacity, safety, reliability or generally applicable engineering purposes, in writing with all supporting evidence | `regulation` |
+| **1.1403(c)** | **60 days** written notice before removal, a rate increase, or modification other than make-ready, routine maintenance or emergency response | `regulation` |
+| **1.1406(d)** | the maximum just and reasonable rate formulas — (d)(1) cable, (d)(2) telecommunications (higher of two), (d)(3) conduit | `regulation` |
+| **1.1407** | remedies: prescribe a rate, terminate or substitute a term, order a refund with interest, order access within a specified time | `regulation` |
+| **1.1408(b)** | **modification cost allocation**: borne by all parties that obtain access as a result of the modification and all parties that directly benefit, shared proportionately | `regulation` |
+| **1.1409(a)–(d)** | unusable-space apportionment at two-thirds of an equal share; rebuttable presumptive attaching-entity averages of **3** (non-urbanized, under 50,000) and **5** (urbanized) | `regulation` |
+| **1.1410** | rebuttable presumptions: attachment **1 ft**, usable space **13.5 ft**, unusable space **24 ft**, pole height **37.5 ft** | `regulation` |
+| **1.1411** | the access timeline — see E3 | `regulation` |
+| **1.1412(a)–(c)** | contractor lists for self-help and simple work; minimum qualifications, including agreeing to follow **NESC** guidelines where the utility publishes none, and OSHA Qualified and Competent Person rules | `regulation` |
+| **1.1415** | the Rapid Broadband Assessment Team, and the Accelerated Docket route for disputes alleged to delay broadband deployment | `regulation` |
+| **1.1416** | **overlashing**: no prior approval for an existing attacher overlashing its own wires or a permitted third party; no more than **15 days** advance notice; a utility may not block an overlash over another attacher's preexisting violation | `regulation` |
+
+### E3 — The 47 CFR 1.1411 timeline, verbatim
+
+Order sizes, at **1.1411(a)(4)–(5)**: a **Mid-Sized Order** is greater than the lesser of
+300 poles or 0.5% of the utility's poles in a state, up to the lesser of 3,000 or 5%. A
+**Large Order** runs from there to the lesser of 6,000 or 10%. Above that, 1.1411(h)(4)
+requires good-faith negotiation of the timing and no number applies.
+
+| Stage | Locator | Standard | Mid-Sized | Large |
+|---|---|---|---|---|
+| Advance notice before submitting | (c)(1) | — | 15 days | 60 days |
+| Meet and confer after advance notice | (c)(3) | — | — | within 30 days |
+| Completeness determination | (d)(1)(i) | 10 business days, else **deemed complete** | same | same |
+| Resubmitted application deemed complete | (d)(1)(ii) | 5 business days | same | same |
+| Grant or deny on the merits | (d)(2) | 45 days | 60 days | 90 days |
+| Survey | (d)(3)(i) | 45 days | 60 days | 90 days |
+| Estimate after survey | (e) | 14 days | 14 days | 29 days |
+| Make-ready **in** the communications space | (f)(1)(ii) | 30 days | 75 days | 120 days |
+| Make-ready **above** the communications space | (f)(2)(ii) | 90 days | 135 days | 180 days |
+
+Other numbers read from the same section: a **3 business day** notice of field inspection
+(d)(3)(ii); cyclical pole inspection reports on written request within **10 business days**
+(d)(4)(i); a **15 day** warning where the utility knows it cannot meet the survey (d)(3)(i)
+or make-ready (f)(4) deadline; the utility's **15 day** right of control above the
+communications space (f)(2)(iv); an estimate withdrawable **14 days** after presentation
+(e)(1); multiple requests within **30 days** treatable as one (h)(5).
+
+**One-touch make-ready**, 1.1411(k): available for **simple** make-ready at the new
+attacher's election, with a **15 day** merits review (30 Mid-Sized, 45 Large) and **15
+days** prior written notice of the work. The utility may object that make-ready designated
+simple is complex, and **that objection is determinative**.
+
+**Self-help**, 1.1411(j): available for surveys, estimates and make-ready when the utility
+misses its deadline — and **1.1411(j)(3) states that self-help is not available for pole
+replacements.** That single sentence is why 11.5 exists as its own group.
+
+**Cost, 1.1411(e)(4):** a utility **may not charge** a new attacher to bring poles,
+attachments or third-party equipment into compliance where they were out of compliance
+because of work performed by a party other than the new attacher before the new
+attachment. Read with 1.1408(b) and 47 U.S.C. 224(i), this is the whole of the federal
+cost-allocation rule for make-ready.
+
+### E4 — Engineering and the physical envelope
+
+| Source | Locator | Status | Note |
+|---|---|---|---|
+| **NESC (ANSI/IEEE C2-2023)** | Rule 235C vertical clearances between conductors at poles; Rule 238 supply/communication equipment clearances; Rule 250B combined ice and wind loading districts; Rule 224A1 qualified workers in the supply space; Rule 230E1 vertical clearance above ground | `clause-verified` | Rule numbers and subjects confirmed from the NRECA guide below, which cites the 2023 edition. **The body is paywalled and is not paraphrased anywhere in this category.** |
+| **NRECA**, *Guide for the Application of Clearance Requirements on Joint-Use Poles*, Distribution Subcommittee Overhead Work Group, May 2025 | whole | `consensus` | Public. Establishes the **communication worker safety zone** — generally 40 in above the communication space — as the separation between communication and supply space. The 40 in figure is NRECA's and is cited as NRECA's, not as NESC's. |
+| **29 CFR 1910.268** | Telecommunications | `regulation` | The standard that governs the attacher's own workers, distinct from 1910.269 for the utility's. |
+| **29 CFR 1910.269(a)(3)** | host and contract employer information transfer | `regulation` | Applies to a contractor doing make-ready on the utility's structures exactly as it applies at 16.2.2. |
+
+### E5 — What is NOT in the pack, and is therefore `judgment`
+
+* **Every state joint use regime.** 47 U.S.C. 224(c) hands roughly half the country to state
+  commissions and no state rule is held here. A process may say the regime must be
+  determined; it may not state what any state's rule says.
+* **Joint ownership ratios and net settlement.** Two-party pole ownership with periodic
+  balancing is universal practice and no standard describes it.
+* **Unauthorised attachment penalties and back-billing periods.** Contract and tariff.
+* **Audit cycle length and sampling method.** No source states one.
+* **Double-wood and stub-pole backlog targets.** No source states one.
+* **Transfer notification exchanges.** A multi-party notification system is the norm and
+  the reference names no product, per the product-neutrality rule.
+

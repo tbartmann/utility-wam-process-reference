@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/CMMN/20151109/MODEL" xmlns:cmmndi="http://www.omg.org/spec/CMMN/20151109/CMMNDI" xmlns:dc="http://www.omg.org/spec/CMMN/20151109/DC" xmlns:di="http://www.omg.org/spec/CMMN/20151109/DI" id="defs_Unauthorised_attachments" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <case id="Unauthorised_attachments" name="11.4.6 Identify and pursue unauthorised attachments">
+    <caseFileModel id="Unauthorised_attachments_cfm">
+      <caseFileItem id="cf_finding" name="Unpermitted findings from 11.4.5"/>
+      <caseFileItem id="cf_history" name="Permit and agreement history"/>
+      <caseFileItem id="cf_evidence" name="Ownership and dating evidence from the field"/>
+    </caseFileModel>
+    <casePlanModel id="Unauthorised_attachments_plan" name="11.4.6 Identify and pursue unauthorised attachments" autoComplete="true">
+      <documentation>Notification, negotiation, back-billing and removal are all available and their order depends entirely on who the owner turns out to be - which is the CMMN test. Two federal rules bound the case and both cut against the obvious move. Removal is not a first step: 47 CFR 1.1403(c) requires no less than 60 days written notice before removing facilities. And an unapproved overlash is not an unauthorised attachment at all - 1.1416(a) requires no prior approval for an existing attacher overlashing its own wires or a permitted third party.
+
+An attachment with no permit behind it is a FINDING, not a verdict. The permit may simply predate the record, and establishing which is the substance of this case.</documentation>
+      <planItem id="pi_t_history" name="Test the finding against permit and agreement history" definitionRef="t_history_def">
+        <itemControl id="ic_t_history">
+          <requiredRule id="rr_t_history"><condition><![CDATA[true]]></condition></requiredRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_overlash" name="Test whether it is an overlash" definitionRef="t_overlash_def">
+        <itemControl id="ic_t_overlash">
+          <requiredRule id="rr_t_overlash"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_overlash"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_attribute" name="Attribute the attachment to an owner" definitionRef="t_attribute_def">
+        <itemControl id="ic_t_attribute">
+          <repetitionRule id="rep_t_attribute"><condition><![CDATA[true]]></condition></repetitionRule>
+          <requiredRule id="rr_t_attribute"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_attribute"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_date" name="Establish the period it has been there" definitionRef="t_date_def">
+        <itemControl id="ic_t_date">
+          <requiredRule id="rr_t_date"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_date"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_notify" name="Notify the owner" definitionRef="t_notify_def">
+        <itemControl id="ic_t_notify">
+          <requiredRule id="rr_t_notify"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_notify"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_regularise" name="Regularise by a retrospective permit" definitionRef="t_regularise_def">
+        <itemControl id="ic_t_regularise">
+          <requiredRule id="rr_t_regularise"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_regularise"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_charge" name="Refer the charge treatment to 11.6.5" definitionRef="t_charge_def">
+        <itemControl id="ic_t_charge">
+          <requiredRule id="rr_t_charge"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_charge"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_remove" name="Serve the 60-day notice and remove" definitionRef="t_remove_def">
+        <itemControl id="ic_t_remove">
+          <requiredRule id="rr_t_remove"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_remove"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_close" name="Record the disposition" definitionRef="t_close_def">
+        <itemControl id="ic_t_close">
+          <requiredRule id="rr_t_close"><condition><![CDATA[true]]></condition></requiredRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_m_attributed" name="Owner established" definitionRef="m_attributed_def"/>
+      <planItem id="pi_m_regularised" name="Attachment regularised" definitionRef="m_regularised_def"/>
+      <planItem id="pi_m_closed" name="Case closed" definitionRef="m_closed_def"/>
+      <humanTask id="t_history_def" name="Test the finding against permit and agreement history" isBlocking="true"><documentation>Required and first. A permit that predates the record is not an unauthorised attachment, and treating it as one is how a utility bills a counterparty for its own filing gap.</documentation></humanTask>
+      <humanTask id="t_overlash_def" name="Test whether it is an overlash" isBlocking="true"><documentation>Discretionary but cheap. 1.1416(a) means an unapproved overlash needs no approval and cannot be charged as unauthorised.</documentation></humanTask>
+      <humanTask id="t_attribute_def" name="Attribute the attachment to an owner" isBlocking="true"><documentation>Discretionary and often repeating. Tags, cable markings, splice records and the counterparty's own inventory all help and none is conclusive alone.</documentation></humanTask>
+      <humanTask id="t_date_def" name="Establish the period it has been there" isBlocking="true"><documentation>Discretionary. What can be EVIDENCED, not what can be asserted - 11.6.5 charges from discovery where the period cannot be proved.</documentation></humanTask>
+      <humanTask id="t_notify_def" name="Notify the owner" isBlocking="true"><documentation>Discretionary in sequence. In practice this resolves most cases, because the owner usually wants the attachment regularised.</documentation></humanTask>
+      <humanTask id="t_regularise_def" name="Regularise by a retrospective permit" isBlocking="true"><documentation>Discretionary and usually the right outcome. It converts a dispute into recurring revenue.</documentation></humanTask>
+      <humanTask id="t_charge_def" name="Refer the charge treatment to 11.6.5" isBlocking="true"><documentation>Discretionary. The treatment and its authority are decided there; no period or multiplier is set here.</documentation></humanTask>
+      <humanTask id="t_remove_def" name="Serve the 60-day notice and remove" isBlocking="true"><documentation>Discretionary and last. 1.1403(c). Removal before the notice period is a rule breach whatever the attachment's status.</documentation></humanTask>
+      <humanTask id="t_close_def" name="Record the disposition" isBlocking="true"><documentation>Required. Regularised, removed, or written off with a reason - and a finding that quietly ages out of the queue is none of those.</documentation></humanTask>
+      <milestone id="m_attributed_def" name="Owner established"><documentation>Or established as unattributable, which is also an answer.</documentation></milestone>
+      <milestone id="m_regularised_def" name="Attachment regularised"><documentation>Permitted, billed and in the inventory.</documentation></milestone>
+      <milestone id="m_closed_def" name="Case closed"><documentation>Regularised, removed after notice, or written off with its reason recorded.</documentation></milestone>
+    </casePlanModel>
+  </case>
+  <cmmndi:CMMNDI>
+    <cmmndi:CMMNDiagram id="dg_Unauthorised_attachments">
+      <cmmndi:CMMNShape id="sh_plan" cmmnElementRef="Unauthorised_attachments_plan"><dc:Bounds x="40" y="40" width="1200" height="300"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_history" cmmnElementRef="pi_t_history"><dc:Bounds x="80" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_overlash" cmmnElementRef="pi_t_overlash"><dc:Bounds x="270" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_attribute" cmmnElementRef="pi_t_attribute"><dc:Bounds x="460" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_date" cmmnElementRef="pi_t_date"><dc:Bounds x="80" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_notify" cmmnElementRef="pi_t_notify"><dc:Bounds x="270" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_regularise" cmmnElementRef="pi_t_regularise"><dc:Bounds x="460" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_charge" cmmnElementRef="pi_t_charge"><dc:Bounds x="80" y="290" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_remove" cmmnElementRef="pi_t_remove"><dc:Bounds x="270" y="290" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_close" cmmnElementRef="pi_t_close"><dc:Bounds x="460" y="290" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_m_attributed" cmmnElementRef="pi_m_attributed"><dc:Bounds x="80" y="390" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_m_regularised" cmmnElementRef="pi_m_regularised"><dc:Bounds x="270" y="390" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_m_closed" cmmnElementRef="pi_m_closed"><dc:Bounds x="460" y="390" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+    </cmmndi:CMMNDiagram>
+  </cmmndi:CMMNDI>
+</definitions>

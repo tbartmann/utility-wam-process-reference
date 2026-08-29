@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_P_11_1" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <process id="P_11_1" name="11.1 Manage joint use agreements and rates" isExecutable="false">
+    <documentation>11.1.1 and 11.1.6 are drawn. Ownership and rate inputs are standing records; the rate itself and the governing regime are decisions. The path exists to hold one sequence: the regime is settled BEFORE the rate is calculated, because in a State certified under 47 U.S.C. 224(c) the federal formulas do not apply at all. A rate calculated on the wrong regime is recoverable from the utility under 47 CFR 1.1407(a)(3), with interest.</documentation>
+    <laneSet id="P_11_1_lanes">
+      <lane id="l_111_ju" name="Joint use">
+        <flowNodeRef>n_111_start</flowNodeRef>
+        <flowNodeRef>n_111_reg</flowNodeRef>
+        <flowNodeRef>n_111_draft</flowNodeRef>
+        <flowNodeRef>n_111_neg</flowNodeRef>
+        <flowNodeRef>n_111_ag</flowNodeRef>
+        <flowNodeRef>n_111_disp</flowNodeRef>
+        <flowNodeRef>n_111_exec</flowNodeRef>
+        <flowNodeRef>n_111_pub</flowNodeRef>
+        <flowNodeRef>n_111_live</flowNodeRef>
+        <flowNodeRef>n_111_t</flowNodeRef>
+        <flowNodeRef>n_111_test</flowNodeRef>
+        <flowNodeRef>n_111_chg</flowNodeRef>
+        <flowNodeRef>n_111_not</flowNodeRef>
+        <flowNodeRef>n_111_case</flowNodeRef>
+        <flowNodeRef>n_111_out</flowNodeRef>
+        <flowNodeRef>n_111_hold</flowNodeRef>
+      </lane>
+      <lane id="l_111_fin" name="Rates">
+        <flowNodeRef>n_111_rate</flowNodeRef>
+      </lane>
+    </laneSet>
+    <startEvent id="n_111_start" name="Counterparty needs an agreement"><messageEventDefinition id="n_111_start_md"/></startEvent>
+    <businessRuleTask id="n_111_reg" name="Determine the governing regime (11.1.5)"><documentation>11.1.1. First, and before anything is priced.</documentation></businessRuleTask>
+    <userTask id="n_111_draft" name="Draft access, make-ready, transfer and billing terms"><documentation>11.1.1.</documentation></userTask>
+    <businessRuleTask id="n_111_rate" name="Determine the rate (11.1.3)"><documentation>11.1.1. Under the ceiling at 47 CFR 1.1406(d) and above the floor at 47 U.S.C. 224(d)(1).</documentation></businessRuleTask>
+    <userTask id="n_111_neg" name="Negotiate the terms"><documentation>11.1.1.</documentation></userTask>
+    <exclusiveGateway id="n_111_ag" name="Agreed"/>
+    <sendTask id="n_111_disp" name="Refer the disagreement to 11.6.6"><documentation>11.1.1. Access does not wait for the agreement: 47 U.S.C. 224(f)(1) is statutory and an unsigned contract is not a 224(f)(2) ground for denial.</documentation></sendTask>
+    <serviceTask id="n_111_exec" name="Execute the agreement"><documentation>11.1.1.</documentation></serviceTask>
+    <sendTask id="n_111_pub" name="Publish the procedures the agreement obliges"><documentation>11.1.1. 47 CFR 1.1411(d)(1) measures completeness against procedures published at the time of submission. An unpublished term cannot reject an application.</documentation></sendTask>
+    <endEvent id="n_111_live" name="Agreement in force"/>
+    <startEvent id="n_111_t" name="Agreement approaching expiry"><timerEventDefinition id="n_111_t_td"/></startEvent>
+    <userTask id="n_111_test" name="Test the terms against the current regime and rate"><documentation>11.1.6.</documentation></userTask>
+    <exclusiveGateway id="n_111_chg" name="Rate increasing"/>
+    <sendTask id="n_111_not" name="Give 60 days written notice"><documentation>11.1.6. 47 CFR 1.1403(c) requires it before a rate increase, whether or not the agreement mentions it.</documentation></sendTask>
+    <callActivity id="n_111_case" name="Run the renegotiation case (11.1.6)"><documentation>11.1.6. Rate, backlog, unauthorised attachments and audit findings are live at once and no two negotiators take them in the same order.</documentation></callActivity>
+    <exclusiveGateway id="n_111_out" name="Outcome"/>
+    <endEvent id="n_111_hold" name="Holdover or evergreen continuation"><documentation>11.1.6.</documentation></endEvent>
+    <sequenceFlow id="f_n_111_start_n_111_reg" sourceRef="n_111_start" targetRef="n_111_reg" name=""/>
+    <sequenceFlow id="f_n_111_reg_n_111_draft" sourceRef="n_111_reg" targetRef="n_111_draft" name=""/>
+    <sequenceFlow id="f_n_111_draft_n_111_rate" sourceRef="n_111_draft" targetRef="n_111_rate" name=""/>
+    <sequenceFlow id="f_n_111_rate_n_111_neg" sourceRef="n_111_rate" targetRef="n_111_neg" name=""/>
+    <sequenceFlow id="f_n_111_neg_n_111_ag" sourceRef="n_111_neg" targetRef="n_111_ag" name=""/>
+    <sequenceFlow id="f_n_111_ag_n_111_disp" sourceRef="n_111_ag" targetRef="n_111_disp" name="not agreed"><conditionExpression xsi:type="tFormalExpression"><![CDATA[agreed = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_111_ag_n_111_exec" sourceRef="n_111_ag" targetRef="n_111_exec" name="agreed"/>
+    <sequenceFlow id="f_n_111_exec_n_111_pub" sourceRef="n_111_exec" targetRef="n_111_pub" name=""/>
+    <sequenceFlow id="f_n_111_pub_n_111_live" sourceRef="n_111_pub" targetRef="n_111_live" name=""/>
+    <sequenceFlow id="f_n_111_t_n_111_test" sourceRef="n_111_t" targetRef="n_111_test" name=""/>
+    <sequenceFlow id="f_n_111_test_n_111_chg" sourceRef="n_111_test" targetRef="n_111_chg" name=""/>
+    <sequenceFlow id="f_n_111_chg_n_111_not" sourceRef="n_111_chg" targetRef="n_111_not" name="rate increasing"><conditionExpression xsi:type="tFormalExpression"><![CDATA[rateIncrease = true]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_111_not_n_111_case" sourceRef="n_111_not" targetRef="n_111_case" name=""/>
+    <sequenceFlow id="f_n_111_chg_n_111_case" sourceRef="n_111_chg" targetRef="n_111_case" name="no increase"/>
+    <sequenceFlow id="f_n_111_case_n_111_out" sourceRef="n_111_case" targetRef="n_111_out" name=""/>
+    <sequenceFlow id="f_n_111_out_n_111_hold" sourceRef="n_111_out" targetRef="n_111_hold" name="not agreed"><conditionExpression xsi:type="tFormalExpression"><![CDATA[outcome = "holdover"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_111_out_n_111_exec" sourceRef="n_111_out" targetRef="n_111_exec" name="agreed"/>
+  </process>
+  <bpmndi:BPMNDiagram id="dg_P_11_1">
+    <bpmndi:BPMNPlane id="pl_P_11_1" bpmnElement="P_11_1">
+      <bpmndi:BPMNShape id="sh_n_111_start" bpmnElement="n_111_start"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_111_reg" bpmnElement="n_111_reg"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_111_draft" bpmnElement="n_111_draft"><dc:Bounds x="425" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_111_rate" bpmnElement="n_111_rate"><dc:Bounds x="595" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_111_neg" bpmnElement="n_111_neg"><dc:Bounds x="765" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_111_ag" bpmnElement="n_111_ag"><dc:Bounds x="977" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_111_disp" bpmnElement="n_111_disp"><dc:Bounds x="935" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_111_exec" bpmnElement="n_111_exec"><dc:Bounds x="1105" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_111_pub" bpmnElement="n_111_pub"><dc:Bounds x="1275" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_111_live" bpmnElement="n_111_live"><dc:Bounds x="1492" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_111_t" bpmnElement="n_111_t"><dc:Bounds x="132" y="657" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_111_test" bpmnElement="n_111_test"><dc:Bounds x="255" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_111_chg" bpmnElement="n_111_chg"><dc:Bounds x="467" y="652" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_111_not" bpmnElement="n_111_not"><dc:Bounds x="425" y="860" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_111_case" bpmnElement="n_111_case"><dc:Bounds x="595" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_111_out" bpmnElement="n_111_out"><dc:Bounds x="807" y="652" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_111_hold" bpmnElement="n_111_hold"><dc:Bounds x="812" y="877" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ed_f_n_111_start_n_111_reg" bpmnElement="f_n_111_start_n_111_reg"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_111_reg_n_111_draft" bpmnElement="f_n_111_reg_n_111_draft"><di:waypoint x="385" y="235"/><di:waypoint x="425" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_111_draft_n_111_rate" bpmnElement="f_n_111_draft_n_111_rate"><di:waypoint x="555" y="235"/><di:waypoint x="595" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_111_rate_n_111_neg" bpmnElement="f_n_111_rate_n_111_neg"><di:waypoint x="725" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_111_neg_n_111_ag" bpmnElement="f_n_111_neg_n_111_ag"><di:waypoint x="895" y="235"/><di:waypoint x="977" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_111_ag_n_111_disp" bpmnElement="f_n_111_ag_n_111_disp"><di:waypoint x="1023" y="235"/><di:waypoint x="910" y="235"/><di:waypoint x="910" y="455"/><di:waypoint x="935" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_111_ag_n_111_exec" bpmnElement="f_n_111_ag_n_111_exec"><di:waypoint x="1023" y="235"/><di:waypoint x="1105" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_111_exec_n_111_pub" bpmnElement="f_n_111_exec_n_111_pub"><di:waypoint x="1235" y="235"/><di:waypoint x="1275" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_111_pub_n_111_live" bpmnElement="f_n_111_pub_n_111_live"><di:waypoint x="1405" y="235"/><di:waypoint x="1492" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_111_t_n_111_test" bpmnElement="f_n_111_t_n_111_test"><di:waypoint x="168" y="675"/><di:waypoint x="255" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_111_test_n_111_chg" bpmnElement="f_n_111_test_n_111_chg"><di:waypoint x="385" y="675"/><di:waypoint x="467" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_111_chg_n_111_not" bpmnElement="f_n_111_chg_n_111_not"><di:waypoint x="513" y="675"/><di:waypoint x="400" y="675"/><di:waypoint x="400" y="895"/><di:waypoint x="425" y="895"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_111_not_n_111_case" bpmnElement="f_n_111_not_n_111_case"><di:waypoint x="555" y="895"/><di:waypoint x="570" y="895"/><di:waypoint x="570" y="675"/><di:waypoint x="595" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_111_chg_n_111_case" bpmnElement="f_n_111_chg_n_111_case"><di:waypoint x="513" y="675"/><di:waypoint x="595" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_111_case_n_111_out" bpmnElement="f_n_111_case_n_111_out"><di:waypoint x="725" y="675"/><di:waypoint x="807" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_111_out_n_111_hold" bpmnElement="f_n_111_out_n_111_hold"><di:waypoint x="853" y="675"/><di:waypoint x="787" y="675"/><di:waypoint x="787" y="895"/><di:waypoint x="812" y="895"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_111_out_n_111_exec" bpmnElement="f_n_111_out_n_111_exec"><di:waypoint x="853" y="675"/><di:waypoint x="1080" y="675"/><di:waypoint x="1080" y="235"/><di:waypoint x="1105" y="235"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

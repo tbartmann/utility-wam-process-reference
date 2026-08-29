@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/" id="Governing_regime" name="11.1.5 Monitor jurisdictional and regulatory obligations" namespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <description>The first determination in the category and the one every other model consumes. 47 U.S.C. 224(c)(1) removes Commission jurisdiction where a State regulates pole attachments, and (c)(2) requires that State to certify that it does and that it considers subscriber interests. Roughly half have certified. Separately, 224(a)(1) defines the utility the section reaches at all, and municipally owned and cooperatively owned systems sit outside it entirely.
+
+So this table returns WHICH REGIME GOVERNS and never what any State requires, because this reference holds no State rule. That is the same shape as 7.2.2 returning who sets a vegetation clearance and 10.4.4 returning who sets a disconnection protection: where the answer is somebody else's, the model names the somebody else.</description>
+  <inputData id="in_ownerClass" name="Owner class"><variable id="in_ownerClass_v" name="Owner class" typeRef="string"/></inputData>
+  <inputData id="in_stateCertified" name="State has certified under 224(c)"><variable id="in_stateCertified_v" name="State has certified under 224(c)" typeRef="boolean"/></inputData>
+  <inputData id="in_utilityIsAttacher" name="Utility is the attacher, not the owner"><variable id="in_utilityIsAttacher_v" name="Utility is the attacher, not the owner" typeRef="boolean"/></inputData>
+  <inputData id="in_counterpartyClass" name="Counterparty class"><variable id="in_counterpartyClass_v" name="Counterparty class" typeRef="string"/></inputData>
+  <knowledgeSource id="ks_224c" name="47 U.S.C. 224(c) State certification and 224(a)(1) who is a utility"><description>224(c)(2) requires a State to certify that it regulates the rates, terms and conditions for pole attachments and that it considers the interests of subscribers. The certification list is the Commission's and changes; this reference holds no State's rules and states none.</description></knowledgeSource>
+  <decision id="d_11_1_5" name="Governing regime">
+    <variable id="d_11_1_5_v" name="Governing regime" typeRef="string"/>
+    <informationRequirement id="ir_d_11_1_5_ks_224c"><requiredInput href="#ks_224c"/></informationRequirement>
+    <decisionTable id="d_11_1_5_dt" hitPolicy="FIRST" preferredOrientation="Rule-as-Row">
+      <input id="d_11_1_5_i1" label="Utility is the attacher"><inputExpression id="d_11_1_5_i1_e" typeRef="boolean"><text>in_utilityIsAttacher</text></inputExpression></input>
+      <input id="d_11_1_5_i2" label="Owner class"><inputExpression id="d_11_1_5_i2_e" typeRef="string"><text>in_ownerClass</text></inputExpression></input>
+      <input id="d_11_1_5_i3" label="State certified under 224(c)"><inputExpression id="d_11_1_5_i3_e" typeRef="boolean"><text>in_stateCertified</text></inputExpression></input>
+      <output id="d_11_1_5_o" label="Governing regime" name="Governing regime" typeRef="string"/>
+      <rule id="d_11_1_5_r1">
+        <description>The utility is attaching to somebody else's structure, so the owner's regime governs and 11.2.6 runs to the owner's published procedures. Note the remedy is not symmetric: 224(a)(5) excludes incumbent local exchange carriers from 'telecommunications carrier' and 47 CFR 1.1413 handles their complaints separately.</description>
+        <inputEntry id="d_11_1_5_r1_ie1"><text>true</text></inputEntry>
+        <inputEntry id="d_11_1_5_r1_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_11_1_5_r1_ie3"><text>-</text></inputEntry>
+        <outputEntry id="d_11_1_5_r1_oe"><text>"counterpartyRegime"</text></outputEntry>
+      </rule>
+      <rule id="d_11_1_5_r2">
+        <description>47 U.S.C. 224(a)(1) does not reach a municipally owned or cooperatively owned system. Neither the FCC timeline nor the FCC rate formulas apply, and the category still has to work on agreement terms alone.</description>
+        <inputEntry id="d_11_1_5_r2_ie1"><text>false</text></inputEntry>
+        <inputEntry id="d_11_1_5_r2_ie2"><text>"municipal","cooperative"</text></inputEntry>
+        <inputEntry id="d_11_1_5_r2_ie3"><text>-</text></inputEntry>
+        <outputEntry id="d_11_1_5_r2_oe"><text>"outsideSection224"</text></outputEntry>
+      </rule>
+      <rule id="d_11_1_5_r3">
+        <description>The State has certified under 224(c) and displaces the Commission entirely. The State's timeline and the State's formula govern. THIS REFERENCE STATES NEITHER - applying the federal day counts here is the most likely way to get this category wrong.</description>
+        <inputEntry id="d_11_1_5_r3_ie1"><text>false</text></inputEntry>
+        <inputEntry id="d_11_1_5_r3_ie2"><text>"investorOwned"</text></inputEntry>
+        <inputEntry id="d_11_1_5_r3_ie3"><text>true</text></inputEntry>
+        <outputEntry id="d_11_1_5_r3_oe"><text>"certifiedState"</text></outputEntry>
+      </rule>
+      <rule id="d_11_1_5_r4">
+        <description>47 CFR Part 1 Subpart J governs: the 1.1411 timeline, the 1.1406(d) formulas, the 1.1409 and 1.1410 presumptions. This is the only branch in which the numbers drawn elsewhere in this category apply.</description>
+        <inputEntry id="d_11_1_5_r4_ie1"><text>false</text></inputEntry>
+        <inputEntry id="d_11_1_5_r4_ie2"><text>"investorOwned"</text></inputEntry>
+        <inputEntry id="d_11_1_5_r4_ie3"><text>false</text></inputEntry>
+        <outputEntry id="d_11_1_5_r4_oe"><text>"fcc"</text></outputEntry>
+      </rule>
+      <rule id="d_11_1_5_r5">
+        <description>Owner class not established. Better a named exception than a default that quietly assumes the federal regime.</description>
+        <inputEntry id="d_11_1_5_r5_ie1"><text>-</text></inputEntry>
+        <inputEntry id="d_11_1_5_r5_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_11_1_5_r5_ie3"><text>-</text></inputEntry>
+        <outputEntry id="d_11_1_5_r5_oe"><text>"determineManually"</text></outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram id="drd_Governing_regime">
+      <dmndi:DMNShape id="sh_in_ownerClass" dmnElementRef="in_ownerClass"><dc:Bounds x="60" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_stateCertified" dmnElementRef="in_stateCertified"><dc:Bounds x="245" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_utilityIsAttacher" dmnElementRef="in_utilityIsAttacher"><dc:Bounds x="430" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_counterpartyClass" dmnElementRef="in_counterpartyClass"><dc:Bounds x="615" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_d_11_1_5" dmnElementRef="d_11_1_5"><dc:Bounds x="60" y="240" width="180" height="70"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_ks_224c" dmnElementRef="ks_224c"><dc:Bounds x="900" y="100" width="160" height="55"/></dmndi:DMNShape>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</definitions>

@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_P_11_2" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <process id="P_11_2" name="11.2 Administer attachment applications and permits" isExecutable="false">
+    <documentation>11.2.1, 11.2.4, 11.2.5 and 11.2.6 are drawn; sizing is 11.2.2 and sequencing is 11.2.3. This is the clock, and the clock is law rather than practice. Two consequences are drawn rather than annotated. Silence is a decision: under 47 CFR 1.1411(d)(1)(i) an application not answered within 10 business days, or rejected without reasons, is DEEMED COMPLETE and the 45-day survey clock starts anyway. And a missed deadline hands the applicant self-help under 1.1411(j) - except on pole replacements, which (j)(3) excludes.</documentation>
+    <laneSet id="P_11_2_lanes">
+      <lane id="l_112_ju" name="Joint use administration">
+        <flowNodeRef>n_112_start</flowNodeRef>
+        <flowNodeRef>n_112_size</flowNodeRef>
+        <flowNodeRef>n_112_comp</flowNodeRef>
+        <flowNodeRef>n_112_cg</flowNodeRef>
+        <flowNodeRef>n_112_inc</flowNodeRef>
+        <flowNodeRef>n_112_clock</flowNodeRef>
+        <flowNodeRef>n_112_risk</flowNodeRef>
+        <flowNodeRef>n_112_warn</flowNodeRef>
+        <flowNodeRef>n_112_dev</flowNodeRef>
+        <flowNodeRef>n_112_perm</flowNodeRef>
+        <flowNodeRef>n_112_end</flowNodeRef>
+        <flowNodeRef>n_112_ob</flowNodeRef>
+        <flowNodeRef>n_112_oapp</flowNodeRef>
+        <flowNodeRef>n_112_osub</flowNodeRef>
+        <flowNodeRef>n_112_oacc</flowNodeRef>
+        <flowNodeRef>n_112_orent</flowNodeRef>
+        <flowNodeRef>n_112_oend</flowNodeRef>
+      </lane>
+      <lane id="l_112_dgn" name="Engineering">
+        <flowNodeRef>n_112_surv</flowNodeRef>
+        <flowNodeRef>n_112_dec</flowNodeRef>
+        <flowNodeRef>n_112_dg</flowNodeRef>
+        <flowNodeRef>n_112_deny</flowNodeRef>
+      </lane>
+    </laneSet>
+    <startEvent id="n_112_start" name="Attachment application received"><messageEventDefinition id="n_112_start_md"/></startEvent>
+    <businessRuleTask id="n_112_size" name="Classify the order size (11.2.2)"><documentation>11.2.1. The class sets every deadline that follows.</documentation></businessRuleTask>
+    <userTask id="n_112_comp" name="Test completeness against published procedures"><documentation>11.2.1. Against what was published at the time of submission, not what you would like to have required.</documentation></userTask>
+    <exclusiveGateway id="n_112_cg" name="Complete"/>
+    <sendTask id="n_112_inc" name="Notify incomplete, stating EVERY reason"><documentation>11.2.1. 1.1411(d)(1)(i): no reasons and it is deemed complete. A resubmission is deemed complete in 5 business days unless you say which reasons it missed.</documentation></sendTask>
+    <serviceTask id="n_112_clock" name="Start the clock from the complete date"><documentation>11.2.4. From completeness, not from receipt.</documentation></serviceTask>
+    <callActivity id="n_112_surv" name="Survey the structures (11.3.1)"><documentation>11.2.4. 45 days standard, 60 Mid-Sized, 90 Large.</documentation></callActivity>
+    <exclusiveGateway id="n_112_risk" name="Deadline at risk"/>
+    <sendTask id="n_112_warn" name="Warn the attacher within 15 days"><documentation>11.2.4. 1.1411(d)(3)(i) and (f)(4) require it where you know or should know you cannot meet the date. Silence forfeits the right to deviate.</documentation></sendTask>
+    <userTask id="n_112_dev" name="Record a deviation with its cause and a new date"><documentation>11.2.4. 1.1411(i)(2) allows it for good and sufficient cause, in writing, naming the poles.</documentation></userTask>
+    <userTask id="n_112_dec" name="Grant, condition or deny"><documentation>11.2.5. Denial only under 1.1403(a) and 224(f)(2), in writing, with the evidence and how it relates to the ground.</documentation></userTask>
+    <exclusiveGateway id="n_112_dg" name="Decision"/>
+    <endEvent id="n_112_deny" name="Written denial with its evidence"><documentation>11.2.5.</documentation></endEvent>
+    <serviceTask id="n_112_perm" name="Issue the permit and state what it authorises"><documentation>11.2.5. A permit that does not say what it authorises cannot be audited at 11.4 or support a claim at 11.4.6.</documentation></serviceTask>
+    <endEvent id="n_112_end" name="Attachment permitted"/>
+    <startEvent id="n_112_ob" name="Design needs a third-party structure"><messageEventDefinition id="n_112_ob_md"/></startEvent>
+    <serviceTask id="n_112_oapp" name="Assemble to the owner's published procedures"><documentation>11.2.6.</documentation></serviceTask>
+    <sendTask id="n_112_osub" name="Submit and track the owner's clock"><documentation>11.2.6. Here the utility is the attacher; 224(a)(5) means the remedy is not symmetric where it is an incumbent local exchange carrier.</documentation></sendTask>
+    <receiveTask id="n_112_oacc" name="Accept the permit and its terms"><documentation>11.2.6.</documentation></receiveTask>
+    <sendTask id="n_112_orent" name="Open the rent obligation at 11.6.4"><documentation>11.2.6.</documentation></sendTask>
+    <endEvent id="n_112_oend" name="Occupancy secured"/>
+    <sequenceFlow id="f_n_112_start_n_112_size" sourceRef="n_112_start" targetRef="n_112_size" name=""/>
+    <sequenceFlow id="f_n_112_size_n_112_comp" sourceRef="n_112_size" targetRef="n_112_comp" name=""/>
+    <sequenceFlow id="f_n_112_comp_n_112_cg" sourceRef="n_112_comp" targetRef="n_112_cg" name=""/>
+    <sequenceFlow id="f_n_112_cg_n_112_inc" sourceRef="n_112_cg" targetRef="n_112_inc" name="incomplete"><conditionExpression xsi:type="tFormalExpression"><![CDATA[complete = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_112_inc_n_112_comp" sourceRef="n_112_inc" targetRef="n_112_comp" name="resubmitted"/>
+    <sequenceFlow id="f_n_112_cg_n_112_clock" sourceRef="n_112_cg" targetRef="n_112_clock" name="complete or deemed complete"/>
+    <sequenceFlow id="f_n_112_clock_n_112_surv" sourceRef="n_112_clock" targetRef="n_112_surv" name=""/>
+    <sequenceFlow id="f_n_112_surv_n_112_risk" sourceRef="n_112_surv" targetRef="n_112_risk" name=""/>
+    <sequenceFlow id="f_n_112_risk_n_112_warn" sourceRef="n_112_risk" targetRef="n_112_warn" name="at risk"><conditionExpression xsi:type="tFormalExpression"><![CDATA[deadlineAtRisk = true]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_112_warn_n_112_dev" sourceRef="n_112_warn" targetRef="n_112_dev" name=""/>
+    <sequenceFlow id="f_n_112_dev_n_112_dec" sourceRef="n_112_dev" targetRef="n_112_dec" name=""/>
+    <sequenceFlow id="f_n_112_risk_n_112_dec" sourceRef="n_112_risk" targetRef="n_112_dec" name="on time"/>
+    <sequenceFlow id="f_n_112_dec_n_112_dg" sourceRef="n_112_dec" targetRef="n_112_dg" name=""/>
+    <sequenceFlow id="f_n_112_dg_n_112_deny" sourceRef="n_112_dg" targetRef="n_112_deny" name="denied"><conditionExpression xsi:type="tFormalExpression"><![CDATA[decision = "deny"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_112_dg_n_112_perm" sourceRef="n_112_dg" targetRef="n_112_perm" name="granted or conditioned"/>
+    <sequenceFlow id="f_n_112_perm_n_112_end" sourceRef="n_112_perm" targetRef="n_112_end" name=""/>
+    <sequenceFlow id="f_n_112_ob_n_112_oapp" sourceRef="n_112_ob" targetRef="n_112_oapp" name=""/>
+    <sequenceFlow id="f_n_112_oapp_n_112_osub" sourceRef="n_112_oapp" targetRef="n_112_osub" name=""/>
+    <sequenceFlow id="f_n_112_osub_n_112_oacc" sourceRef="n_112_osub" targetRef="n_112_oacc" name=""/>
+    <sequenceFlow id="f_n_112_oacc_n_112_orent" sourceRef="n_112_oacc" targetRef="n_112_orent" name=""/>
+    <sequenceFlow id="f_n_112_orent_n_112_oend" sourceRef="n_112_orent" targetRef="n_112_oend" name=""/>
+  </process>
+  <bpmndi:BPMNDiagram id="dg_P_11_2">
+    <bpmndi:BPMNPlane id="pl_P_11_2" bpmnElement="P_11_2">
+      <bpmndi:BPMNShape id="sh_n_112_start" bpmnElement="n_112_start"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_112_size" bpmnElement="n_112_size"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_112_comp" bpmnElement="n_112_comp"><dc:Bounds x="425" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_112_cg" bpmnElement="n_112_cg"><dc:Bounds x="637" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_112_inc" bpmnElement="n_112_inc"><dc:Bounds x="595" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_112_clock" bpmnElement="n_112_clock"><dc:Bounds x="765" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_112_surv" bpmnElement="n_112_surv"><dc:Bounds x="935" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_112_risk" bpmnElement="n_112_risk"><dc:Bounds x="1147" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_112_warn" bpmnElement="n_112_warn"><dc:Bounds x="1105" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_112_dev" bpmnElement="n_112_dev"><dc:Bounds x="1275" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_112_dec" bpmnElement="n_112_dec"><dc:Bounds x="1275" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_112_dg" bpmnElement="n_112_dg"><dc:Bounds x="1487" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_112_deny" bpmnElement="n_112_deny"><dc:Bounds x="1492" y="437" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_112_perm" bpmnElement="n_112_perm"><dc:Bounds x="1615" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_112_end" bpmnElement="n_112_end"><dc:Bounds x="1832" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_112_ob" bpmnElement="n_112_ob"><dc:Bounds x="132" y="767" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_112_oapp" bpmnElement="n_112_oapp"><dc:Bounds x="255" y="750" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_112_osub" bpmnElement="n_112_osub"><dc:Bounds x="425" y="750" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_112_oacc" bpmnElement="n_112_oacc"><dc:Bounds x="595" y="750" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_112_orent" bpmnElement="n_112_orent"><dc:Bounds x="765" y="750" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_112_oend" bpmnElement="n_112_oend"><dc:Bounds x="982" y="767" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ed_f_n_112_start_n_112_size" bpmnElement="f_n_112_start_n_112_size"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_112_size_n_112_comp" bpmnElement="f_n_112_size_n_112_comp"><di:waypoint x="385" y="235"/><di:waypoint x="425" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_112_comp_n_112_cg" bpmnElement="f_n_112_comp_n_112_cg"><di:waypoint x="555" y="235"/><di:waypoint x="637" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_112_cg_n_112_inc" bpmnElement="f_n_112_cg_n_112_inc"><di:waypoint x="683" y="235"/><di:waypoint x="570" y="235"/><di:waypoint x="570" y="455"/><di:waypoint x="595" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_112_inc_n_112_comp" bpmnElement="f_n_112_inc_n_112_comp"><di:waypoint x="725" y="455"/><di:waypoint x="400" y="455"/><di:waypoint x="400" y="235"/><di:waypoint x="425" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_112_cg_n_112_clock" bpmnElement="f_n_112_cg_n_112_clock"><di:waypoint x="683" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_112_clock_n_112_surv" bpmnElement="f_n_112_clock_n_112_surv"><di:waypoint x="895" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_112_surv_n_112_risk" bpmnElement="f_n_112_surv_n_112_risk"><di:waypoint x="1065" y="235"/><di:waypoint x="1147" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_112_risk_n_112_warn" bpmnElement="f_n_112_risk_n_112_warn"><di:waypoint x="1193" y="235"/><di:waypoint x="1080" y="235"/><di:waypoint x="1080" y="455"/><di:waypoint x="1105" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_112_warn_n_112_dev" bpmnElement="f_n_112_warn_n_112_dev"><di:waypoint x="1235" y="455"/><di:waypoint x="1275" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_112_dev_n_112_dec" bpmnElement="f_n_112_dev_n_112_dec"><di:waypoint x="1405" y="455"/><di:waypoint x="1250" y="455"/><di:waypoint x="1250" y="235"/><di:waypoint x="1275" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_112_risk_n_112_dec" bpmnElement="f_n_112_risk_n_112_dec"><di:waypoint x="1193" y="235"/><di:waypoint x="1275" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_112_dec_n_112_dg" bpmnElement="f_n_112_dec_n_112_dg"><di:waypoint x="1405" y="235"/><di:waypoint x="1487" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_112_dg_n_112_deny" bpmnElement="f_n_112_dg_n_112_deny"><di:waypoint x="1533" y="235"/><di:waypoint x="1467" y="235"/><di:waypoint x="1467" y="455"/><di:waypoint x="1492" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_112_dg_n_112_perm" bpmnElement="f_n_112_dg_n_112_perm"><di:waypoint x="1533" y="235"/><di:waypoint x="1615" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_112_perm_n_112_end" bpmnElement="f_n_112_perm_n_112_end"><di:waypoint x="1745" y="235"/><di:waypoint x="1832" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_112_ob_n_112_oapp" bpmnElement="f_n_112_ob_n_112_oapp"><di:waypoint x="168" y="785"/><di:waypoint x="255" y="785"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_112_oapp_n_112_osub" bpmnElement="f_n_112_oapp_n_112_osub"><di:waypoint x="385" y="785"/><di:waypoint x="425" y="785"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_112_osub_n_112_oacc" bpmnElement="f_n_112_osub_n_112_oacc"><di:waypoint x="555" y="785"/><di:waypoint x="595" y="785"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_112_oacc_n_112_orent" bpmnElement="f_n_112_oacc_n_112_orent"><di:waypoint x="725" y="785"/><di:waypoint x="765" y="785"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_112_orent_n_112_oend" bpmnElement="f_n_112_orent_n_112_oend"><di:waypoint x="895" y="785"/><di:waypoint x="982" y="785"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

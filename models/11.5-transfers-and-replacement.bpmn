@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_P_11_5" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <process id="P_11_5" name="11.5 Manage transfers and structure replacement" isExecutable="false">
+    <documentation>11.5.1, 11.5.3, 11.5.4 and 11.5.5 are drawn; the multi-party sequence is a case at 11.5.2. This group exists as its own group because of one sentence: 47 CFR 1.1411(j)(3) says self-help is not available for pole replacements. Everywhere else in this category a missed deadline lets the attacher do the work itself. Here it does not, so the transfer backlog is the utility's problem to run and there is no remedy that routes around it. 47 U.S.C. 224(h) and 47 CFR 1.1403(c) set the notice, and closing a transfer on assertion rather than evidence is how the backlog at 11.5.4 becomes invisible for years.</documentation>
+    <laneSet id="P_11_5_lanes">
+      <lane id="l_115_ju" name="Joint use administration">
+        <flowNodeRef>n_115_start</flowNodeRef>
+        <flowNodeRef>n_115_who</flowNodeRef>
+        <flowNodeRef>n_115_em</flowNodeRef>
+        <flowNodeRef>n_115_not</flowNodeRef>
+        <flowNodeRef>n_115_open</flowNodeRef>
+        <flowNodeRef>n_115_seq</flowNodeRef>
+        <flowNodeRef>n_115_age</flowNodeRef>
+        <flowNodeRef>n_115_ag</flowNodeRef>
+        <flowNodeRef>n_115_esc</flowNodeRef>
+        <flowNodeRef>n_115_chg</flowNodeRef>
+        <flowNodeRef>n_115_ev</flowNodeRef>
+        <flowNodeRef>n_115_clear</flowNodeRef>
+        <flowNodeRef>n_115_dw</flowNodeRef>
+        <flowNodeRef>n_115_end</flowNodeRef>
+        <flowNodeRef>n_115_v</flowNodeRef>
+        <flowNodeRef>n_115_dang</flowNodeRef>
+        <flowNodeRef>n_115_emer</flowNodeRef>
+        <flowNodeRef>n_115_attr</flowNodeRef>
+        <flowNodeRef>n_115_fix</flowNodeRef>
+        <flowNodeRef>n_115_req</flowNodeRef>
+        <flowNodeRef>n_115_vend</flowNodeRef>
+      </lane>
+      <lane id="l_115_con" name="Construction">
+        <flowNodeRef>n_115_rem</flowNodeRef>
+        <flowNodeRef>n_115_own</flowNodeRef>
+        <flowNodeRef>n_115_ver</flowNodeRef>
+      </lane>
+    </laneSet>
+    <startEvent id="n_115_start" name="Structure to be replaced or modified"><messageEventDefinition id="n_115_start_md"/></startEvent>
+    <serviceTask id="n_115_who" name="Identify every attacher of record"><documentation>11.5.1. From 11.4.1. An attacher missed here is a transfer nobody asked for.</documentation></serviceTask>
+    <exclusiveGateway id="n_115_em" name="Emergency"/>
+    <sendTask id="n_115_not" name="Give the 60-day written notice"><documentation>11.5.1. 47 U.S.C. 224(h) and 47 CFR 1.1403(c). Make-ready, routine maintenance and emergency response are outside it.</documentation></sendTask>
+    <serviceTask id="n_115_open" name="Open a transfer obligation per attacher"><documentation>11.5.1.</documentation></serviceTask>
+    <callActivity id="n_115_seq" name="Run the multi-party sequence (11.5.2)"><documentation>11.5.2. Supply sits above the communication worker safety zone, so the order is a safety matter and not an administrative one.</documentation></callActivity>
+    <serviceTask id="n_115_age" name="Age every open obligation against its notice"><documentation>11.5.3.</documentation></serviceTask>
+    <exclusiveGateway id="n_115_ag" name="Overdue"/>
+    <userTask id="n_115_esc" name="Chase and escalate"><documentation>11.5.3.</documentation></userTask>
+    <sendTask id="n_115_chg" name="Refer a chargeable delay to 11.6.5"><documentation>11.5.3.</documentation></sendTask>
+    <userTask id="n_115_ev" name="Close only on evidence the equipment moved"><documentation>11.5.3. Closing on a party's assertion is how a double-wood backlog disappears from the record and not from the field.</documentation></userTask>
+    <exclusiveGateway id="n_115_clear" name="Structure clear"/>
+    <userTask id="n_115_dw" name="Add to the double-wood backlog"><documentation>11.5.4. A stub structure is a live asset: it loads the right-of-way, it is inspected, and it appears in a count somebody bills from.</documentation></userTask>
+    <serviceTask id="n_115_rem" name="Remove the old structure"><documentation>11.5.4. 5.3 posts the retirement; this clears the field condition.</documentation></serviceTask>
+    <endEvent id="n_115_end" name="Structure cleared"/>
+    <startEvent id="n_115_v" name="Clearance or safety violation reported"><messageEventDefinition id="n_115_v_md"/></startEvent>
+    <exclusiveGateway id="n_115_dang" name="Immediate danger"/>
+    <sendTask id="n_115_emer" name="Route to 9.1 as an emergency"><documentation>11.5.5. It returns here afterwards for attribution and recharge.</documentation></sendTask>
+    <userTask id="n_115_attr" name="Attribute the violation to a party"><documentation>11.5.5. Another party's violation is not the new attacher's to fix or fund - 1.1411(e)(4) and 1.1416(b) both say so.</documentation></userTask>
+    <exclusiveGateway id="n_115_fix" name="Who corrects"/>
+    <sendTask id="n_115_req" name="Require the responsible party to correct"><documentation>11.5.5.</documentation></sendTask>
+    <userTask id="n_115_own" name="Correct it and recharge"><documentation>11.5.5.</documentation></userTask>
+    <userTask id="n_115_ver" name="Verify the correction and close on evidence"><documentation>11.5.5.</documentation></userTask>
+    <endEvent id="n_115_vend" name="Violation closed"/>
+    <sequenceFlow id="f_n_115_start_n_115_who" sourceRef="n_115_start" targetRef="n_115_who" name=""/>
+    <sequenceFlow id="f_n_115_who_n_115_em" sourceRef="n_115_who" targetRef="n_115_em" name=""/>
+    <sequenceFlow id="f_n_115_em_n_115_not" sourceRef="n_115_em" targetRef="n_115_not" name="planned"><conditionExpression xsi:type="tFormalExpression"><![CDATA[emergency = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_115_not_n_115_open" sourceRef="n_115_not" targetRef="n_115_open" name=""/>
+    <sequenceFlow id="f_n_115_em_n_115_open" sourceRef="n_115_em" targetRef="n_115_open" name="emergency, outside the notice"/>
+    <sequenceFlow id="f_n_115_open_n_115_seq" sourceRef="n_115_open" targetRef="n_115_seq" name=""/>
+    <sequenceFlow id="f_n_115_seq_n_115_age" sourceRef="n_115_seq" targetRef="n_115_age" name=""/>
+    <sequenceFlow id="f_n_115_age_n_115_ag" sourceRef="n_115_age" targetRef="n_115_ag" name=""/>
+    <sequenceFlow id="f_n_115_ag_n_115_esc" sourceRef="n_115_ag" targetRef="n_115_esc" name="overdue"><conditionExpression xsi:type="tFormalExpression"><![CDATA[overdue = true]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_115_esc_n_115_chg" sourceRef="n_115_esc" targetRef="n_115_chg" name=""/>
+    <sequenceFlow id="f_n_115_chg_n_115_ev" sourceRef="n_115_chg" targetRef="n_115_ev" name=""/>
+    <sequenceFlow id="f_n_115_ag_n_115_ev" sourceRef="n_115_ag" targetRef="n_115_ev" name="within the period"/>
+    <sequenceFlow id="f_n_115_ev_n_115_clear" sourceRef="n_115_ev" targetRef="n_115_clear" name=""/>
+    <sequenceFlow id="f_n_115_clear_n_115_dw" sourceRef="n_115_clear" targetRef="n_115_dw" name="attachments remain"><conditionExpression xsi:type="tFormalExpression"><![CDATA[clear = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_115_dw_n_115_age" sourceRef="n_115_dw" targetRef="n_115_age" name="back to ageing"/>
+    <sequenceFlow id="f_n_115_clear_n_115_rem" sourceRef="n_115_clear" targetRef="n_115_rem" name="clear"/>
+    <sequenceFlow id="f_n_115_rem_n_115_end" sourceRef="n_115_rem" targetRef="n_115_end" name=""/>
+    <sequenceFlow id="f_n_115_v_n_115_dang" sourceRef="n_115_v" targetRef="n_115_dang" name=""/>
+    <sequenceFlow id="f_n_115_dang_n_115_emer" sourceRef="n_115_dang" targetRef="n_115_emer" name="immediate danger"><conditionExpression xsi:type="tFormalExpression"><![CDATA[immediateDanger = true]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_115_emer_n_115_attr" sourceRef="n_115_emer" targetRef="n_115_attr" name=""/>
+    <sequenceFlow id="f_n_115_dang_n_115_attr" sourceRef="n_115_dang" targetRef="n_115_attr" name="no immediate danger"/>
+    <sequenceFlow id="f_n_115_attr_n_115_fix" sourceRef="n_115_attr" targetRef="n_115_fix" name=""/>
+    <sequenceFlow id="f_n_115_fix_n_115_req" sourceRef="n_115_fix" targetRef="n_115_req" name="attributable"><conditionExpression xsi:type="tFormalExpression"><![CDATA[attributable = true]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_115_fix_n_115_own" sourceRef="n_115_fix" targetRef="n_115_own" name="unattributable"/>
+    <sequenceFlow id="f_n_115_req_n_115_ver" sourceRef="n_115_req" targetRef="n_115_ver" name=""/>
+    <sequenceFlow id="f_n_115_own_n_115_ver" sourceRef="n_115_own" targetRef="n_115_ver" name=""/>
+    <sequenceFlow id="f_n_115_ver_n_115_vend" sourceRef="n_115_ver" targetRef="n_115_vend" name=""/>
+  </process>
+  <bpmndi:BPMNDiagram id="dg_P_11_5">
+    <bpmndi:BPMNPlane id="pl_P_11_5" bpmnElement="P_11_5">
+      <bpmndi:BPMNShape id="sh_n_115_start" bpmnElement="n_115_start"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_115_who" bpmnElement="n_115_who"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_115_em" bpmnElement="n_115_em"><dc:Bounds x="467" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_115_not" bpmnElement="n_115_not"><dc:Bounds x="425" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_115_open" bpmnElement="n_115_open"><dc:Bounds x="595" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_115_seq" bpmnElement="n_115_seq"><dc:Bounds x="765" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_115_age" bpmnElement="n_115_age"><dc:Bounds x="935" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_115_ag" bpmnElement="n_115_ag"><dc:Bounds x="1147" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_115_esc" bpmnElement="n_115_esc"><dc:Bounds x="1105" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_115_chg" bpmnElement="n_115_chg"><dc:Bounds x="1275" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_115_ev" bpmnElement="n_115_ev"><dc:Bounds x="1275" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_115_clear" bpmnElement="n_115_clear"><dc:Bounds x="1487" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_115_dw" bpmnElement="n_115_dw"><dc:Bounds x="1445" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_115_rem" bpmnElement="n_115_rem"><dc:Bounds x="1615" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_115_end" bpmnElement="n_115_end"><dc:Bounds x="1832" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_115_v" bpmnElement="n_115_v"><dc:Bounds x="132" y="767" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_115_dang" bpmnElement="n_115_dang"><dc:Bounds x="297" y="762" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_115_emer" bpmnElement="n_115_emer"><dc:Bounds x="255" y="970" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_115_attr" bpmnElement="n_115_attr"><dc:Bounds x="425" y="750" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_115_fix" bpmnElement="n_115_fix"><dc:Bounds x="637" y="762" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_115_req" bpmnElement="n_115_req"><dc:Bounds x="765" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_115_own" bpmnElement="n_115_own"><dc:Bounds x="765" y="860" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_115_ver" bpmnElement="n_115_ver"><dc:Bounds x="935" y="750" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_115_vend" bpmnElement="n_115_vend"><dc:Bounds x="1152" y="767" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ed_f_n_115_start_n_115_who" bpmnElement="f_n_115_start_n_115_who"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_115_who_n_115_em" bpmnElement="f_n_115_who_n_115_em"><di:waypoint x="385" y="235"/><di:waypoint x="467" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_115_em_n_115_not" bpmnElement="f_n_115_em_n_115_not"><di:waypoint x="513" y="235"/><di:waypoint x="400" y="235"/><di:waypoint x="400" y="455"/><di:waypoint x="425" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_115_not_n_115_open" bpmnElement="f_n_115_not_n_115_open"><di:waypoint x="555" y="455"/><di:waypoint x="570" y="455"/><di:waypoint x="570" y="235"/><di:waypoint x="595" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_115_em_n_115_open" bpmnElement="f_n_115_em_n_115_open"><di:waypoint x="513" y="235"/><di:waypoint x="595" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_115_open_n_115_seq" bpmnElement="f_n_115_open_n_115_seq"><di:waypoint x="725" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_115_seq_n_115_age" bpmnElement="f_n_115_seq_n_115_age"><di:waypoint x="895" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_115_age_n_115_ag" bpmnElement="f_n_115_age_n_115_ag"><di:waypoint x="1065" y="235"/><di:waypoint x="1147" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_115_ag_n_115_esc" bpmnElement="f_n_115_ag_n_115_esc"><di:waypoint x="1193" y="235"/><di:waypoint x="1080" y="235"/><di:waypoint x="1080" y="455"/><di:waypoint x="1105" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_115_esc_n_115_chg" bpmnElement="f_n_115_esc_n_115_chg"><di:waypoint x="1235" y="455"/><di:waypoint x="1275" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_115_chg_n_115_ev" bpmnElement="f_n_115_chg_n_115_ev"><di:waypoint x="1405" y="455"/><di:waypoint x="1250" y="455"/><di:waypoint x="1250" y="235"/><di:waypoint x="1275" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_115_ag_n_115_ev" bpmnElement="f_n_115_ag_n_115_ev"><di:waypoint x="1193" y="235"/><di:waypoint x="1275" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_115_ev_n_115_clear" bpmnElement="f_n_115_ev_n_115_clear"><di:waypoint x="1405" y="235"/><di:waypoint x="1487" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_115_clear_n_115_dw" bpmnElement="f_n_115_clear_n_115_dw"><di:waypoint x="1533" y="235"/><di:waypoint x="1420" y="235"/><di:waypoint x="1420" y="455"/><di:waypoint x="1445" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_115_dw_n_115_age" bpmnElement="f_n_115_dw_n_115_age"><di:waypoint x="1575" y="455"/><di:waypoint x="910" y="455"/><di:waypoint x="910" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_115_clear_n_115_rem" bpmnElement="f_n_115_clear_n_115_rem"><di:waypoint x="1533" y="235"/><di:waypoint x="1615" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_115_rem_n_115_end" bpmnElement="f_n_115_rem_n_115_end"><di:waypoint x="1745" y="235"/><di:waypoint x="1832" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_115_v_n_115_dang" bpmnElement="f_n_115_v_n_115_dang"><di:waypoint x="168" y="785"/><di:waypoint x="297" y="785"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_115_dang_n_115_emer" bpmnElement="f_n_115_dang_n_115_emer"><di:waypoint x="343" y="785"/><di:waypoint x="230" y="785"/><di:waypoint x="230" y="1005"/><di:waypoint x="255" y="1005"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_115_emer_n_115_attr" bpmnElement="f_n_115_emer_n_115_attr"><di:waypoint x="385" y="1005"/><di:waypoint x="400" y="1005"/><di:waypoint x="400" y="785"/><di:waypoint x="425" y="785"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_115_dang_n_115_attr" bpmnElement="f_n_115_dang_n_115_attr"><di:waypoint x="343" y="785"/><di:waypoint x="425" y="785"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_115_attr_n_115_fix" bpmnElement="f_n_115_attr_n_115_fix"><di:waypoint x="555" y="785"/><di:waypoint x="637" y="785"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_115_fix_n_115_req" bpmnElement="f_n_115_fix_n_115_req"><di:waypoint x="683" y="785"/><di:waypoint x="740" y="785"/><di:waypoint x="740" y="675"/><di:waypoint x="765" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_115_fix_n_115_own" bpmnElement="f_n_115_fix_n_115_own"><di:waypoint x="683" y="785"/><di:waypoint x="740" y="785"/><di:waypoint x="740" y="895"/><di:waypoint x="765" y="895"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_115_req_n_115_ver" bpmnElement="f_n_115_req_n_115_ver"><di:waypoint x="895" y="675"/><di:waypoint x="910" y="675"/><di:waypoint x="910" y="785"/><di:waypoint x="935" y="785"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_115_own_n_115_ver" bpmnElement="f_n_115_own_n_115_ver"><di:waypoint x="895" y="895"/><di:waypoint x="910" y="895"/><di:waypoint x="910" y="785"/><di:waypoint x="935" y="785"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_115_ver_n_115_vend" bpmnElement="f_n_115_ver_n_115_vend"><di:waypoint x="1065" y="785"/><di:waypoint x="1152" y="785"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

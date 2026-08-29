@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/" id="Attachment_rate" name="11.1.3 Determine attachment rental rates" namespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <description>The rare determination in this reference whose rule can be written from a source. 47 CFR 1.1406(d) publishes the maximum just and reasonable rate: (d)(1) for cable, (d)(2) for telecommunications - the HIGHER of two formulas - and (d)(3) for conduit. 47 U.S.C. 224(d)(1) sets the floor at not less than the additional costs of providing pole attachments.
+
+The table selects the formula and records which rebuttable presumptions were relied on. It does not compute the arithmetic, because the arithmetic is in the rule and belongs in the calculation rather than in a decision table - and because 1.1410 and 1.1409(c) presumptions are CHOICES that an attacher may rebut with evidence, which makes recording them part of the answer.</description>
+  <inputData id="in_regime" name="Governing regime from 11.1.5"><variable id="in_regime_v" name="Governing regime from 11.1.5" typeRef="string"/></inputData>
+  <inputData id="in_attacherClass" name="Attacher class"><variable id="in_attacherClass_v" name="Attacher class" typeRef="string"/></inputData>
+  <inputData id="in_facility" name="Facility type"><variable id="in_facility_v" name="Facility type" typeRef="string"/></inputData>
+  <inputData id="in_measured" name="Measured space and attacher data available"><variable id="in_measured_v" name="Measured space and attacher data available" typeRef="boolean"/></inputData>
+  <inputData id="in_urbanized" name="Urbanized service area"><variable id="in_urbanized_v" name="Urbanized service area" typeRef="boolean"/></inputData>
+  <knowledgeSource id="ks_formula" name="47 CFR 1.1406(d) rate formulas and the 1.1409 and 1.1410 presumptions"><description>1.1410 presumes an attachment occupies 1 ft, usable space 13.5 ft, unusable space 24 ft and pole height 37.5 ft. 1.1409(c) presumes three attaching entities in a non-urbanized service area under 50,000 population and five in an urbanized one. 1.1409(a) apportions unusable space at two-thirds of an equal share. All are rebuttable by evidence and 1.1409(d)(3) says a complete inspection's data displaces the presumptive average.</description></knowledgeSource>
+  <decision id="d_11_1_3" name="Rate formula">
+    <variable id="d_11_1_3_v" name="Rate formula" typeRef="string"/>
+    <informationRequirement id="ir_d_11_1_3_ks_formula"><requiredInput href="#ks_formula"/></informationRequirement>
+    <decisionTable id="d_11_1_3_dt" hitPolicy="FIRST" preferredOrientation="Rule-as-Row">
+      <input id="d_11_1_3_i1" label="Governing regime"><inputExpression id="d_11_1_3_i1_e" typeRef="string"><text>in_regime</text></inputExpression></input>
+      <input id="d_11_1_3_i2" label="Facility type"><inputExpression id="d_11_1_3_i2_e" typeRef="string"><text>in_facility</text></inputExpression></input>
+      <input id="d_11_1_3_i3" label="Attacher class"><inputExpression id="d_11_1_3_i3_e" typeRef="string"><text>in_attacherClass</text></inputExpression></input>
+      <output id="d_11_1_3_o" label="Rate formula" name="Rate formula" typeRef="string"/>
+      <rule id="d_11_1_3_r1">
+        <description>The State's formula governs and this reference does not state it. Returning the federal formula here would be wrong in a way that is recoverable from the utility with interest under 1.1407(a)(3).</description>
+        <inputEntry id="d_11_1_3_r1_ie1"><text>"certifiedState"</text></inputEntry>
+        <inputEntry id="d_11_1_3_r1_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_11_1_3_r1_ie3"><text>-</text></inputEntry>
+        <outputEntry id="d_11_1_3_r1_oe"><text>"stateFormula"</text></outputEntry>
+      </rule>
+      <rule id="d_11_1_3_r2">
+        <description>No statutory formula reaches a municipal or cooperative owner. The rate is the agreement's, and the floor and ceiling that bound it elsewhere do not exist.</description>
+        <inputEntry id="d_11_1_3_r2_ie1"><text>"outsideSection224"</text></inputEntry>
+        <inputEntry id="d_11_1_3_r2_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_11_1_3_r2_ie3"><text>-</text></inputEntry>
+        <outputEntry id="d_11_1_3_r2_oe"><text>"agreementRate"</text></outputEntry>
+      </rule>
+      <rule id="d_11_1_3_r3">
+        <description>47 CFR 1.1406(d)(3). Where no inner-duct is installed, (d)(4) presumes the fraction one duct divided by the number of inner-ducts to be one half.</description>
+        <inputEntry id="d_11_1_3_r3_ie1"><text>"fcc"</text></inputEntry>
+        <inputEntry id="d_11_1_3_r3_ie2"><text>"conduit"</text></inputEntry>
+        <inputEntry id="d_11_1_3_r3_ie3"><text>-</text></inputEntry>
+        <outputEntry id="d_11_1_3_r3_oe"><text>"conduitFormula"</text></outputEntry>
+      </rule>
+      <rule id="d_11_1_3_r4">
+        <description>47 CFR 1.1406(d)(1), the cable formula.</description>
+        <inputEntry id="d_11_1_3_r4_ie1"><text>"fcc"</text></inputEntry>
+        <inputEntry id="d_11_1_3_r4_ie2"><text>"pole"</text></inputEntry>
+        <inputEntry id="d_11_1_3_r4_ie3"><text>"cable"</text></inputEntry>
+        <outputEntry id="d_11_1_3_r4_oe"><text>"cableFormula"</text></outputEntry>
+      </rule>
+      <rule id="d_11_1_3_r5">
+        <description>47 CFR 1.1406(d)(2). The maximum is the HIGHER of the rates yielded by (d)(2)(i) and (d)(2)(ii), so both are computed and the larger taken. Computing only one is the common error.</description>
+        <inputEntry id="d_11_1_3_r5_ie1"><text>"fcc"</text></inputEntry>
+        <inputEntry id="d_11_1_3_r5_ie2"><text>"pole"</text></inputEntry>
+        <inputEntry id="d_11_1_3_r5_ie3"><text>"telecommunications"</text></inputEntry>
+        <outputEntry id="d_11_1_3_r5_oe"><text>"telecomFormulaHigherOfTwo"</text></outputEntry>
+      </rule>
+      <rule id="d_11_1_3_r6">
+        <description>Regime, facility or attacher class not established.</description>
+        <inputEntry id="d_11_1_3_r6_ie1"><text>-</text></inputEntry>
+        <inputEntry id="d_11_1_3_r6_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_11_1_3_r6_ie3"><text>-</text></inputEntry>
+        <outputEntry id="d_11_1_3_r6_oe"><text>"determineManually"</text></outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <decision id="d_11_1_3_pres" name="Presumptions relied on">
+    <variable id="d_11_1_3_pres_v" name="Presumptions relied on" typeRef="string"/>
+    <informationRequirement id="ir_d_11_1_3_pres_ks_formula"><requiredInput href="#ks_formula"/></informationRequirement>
+    <decisionTable id="d_11_1_3_pres_dt" hitPolicy="COLLECT" preferredOrientation="Rule-as-Row">
+      <input id="d_11_1_3_pres_i1" label="Measured data available"><inputExpression id="d_11_1_3_pres_i1_e" typeRef="boolean"><text>in_measured</text></inputExpression></input>
+      <input id="d_11_1_3_pres_i2" label="Urbanized service area"><inputExpression id="d_11_1_3_pres_i2_e" typeRef="boolean"><text>in_urbanized</text></inputExpression></input>
+      <output id="d_11_1_3_pres_o" label="Presumptions relied on" name="Presumptions relied on" typeRef="string"/>
+      <rule id="d_11_1_3_pres_r1">
+        <description>Both presumptions relied on. Recorded so a later rebuttal under 1.1409(d)(3) is answerable rather than a surprise.</description>
+        <inputEntry id="d_11_1_3_pres_r1_ie1"><text>false</text></inputEntry>
+        <inputEntry id="d_11_1_3_pres_r1_ie2"><text>false</text></inputEntry>
+        <outputEntry id="d_11_1_3_pres_r1_oe"><text>"1.1410 space; 1.1409(c) three attachers, non-urbanized"</text></outputEntry>
+      </rule>
+      <rule id="d_11_1_3_pres_r2">
+        <description>Both presumptions relied on, urbanized average.</description>
+        <inputEntry id="d_11_1_3_pres_r2_ie1"><text>false</text></inputEntry>
+        <inputEntry id="d_11_1_3_pres_r2_ie2"><text>true</text></inputEntry>
+        <outputEntry id="d_11_1_3_pres_r2_oe"><text>"1.1410 space; 1.1409(c) five attachers, urbanized"</text></outputEntry>
+      </rule>
+      <rule id="d_11_1_3_pres_r3">
+        <description>Measured space and a counted attacher population. This is the strongest position in a complaint and the audit at 11.4 is what produces it.</description>
+        <inputEntry id="d_11_1_3_pres_r3_ie1"><text>true</text></inputEntry>
+        <inputEntry id="d_11_1_3_pres_r3_ie2"><text>-</text></inputEntry>
+        <outputEntry id="d_11_1_3_pres_r3_oe"><text>"measured data, no presumption relied on"</text></outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram id="drd_Attachment_rate">
+      <dmndi:DMNShape id="sh_in_regime" dmnElementRef="in_regime"><dc:Bounds x="60" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_attacherClass" dmnElementRef="in_attacherClass"><dc:Bounds x="245" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_facility" dmnElementRef="in_facility"><dc:Bounds x="430" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_measured" dmnElementRef="in_measured"><dc:Bounds x="615" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_urbanized" dmnElementRef="in_urbanized"><dc:Bounds x="800" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_d_11_1_3" dmnElementRef="d_11_1_3"><dc:Bounds x="60" y="240" width="180" height="70"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_d_11_1_3_pres" dmnElementRef="d_11_1_3_pres"><dc:Bounds x="260" y="240" width="180" height="70"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_ks_formula" dmnElementRef="ks_formula"><dc:Bounds x="900" y="100" width="160" height="55"/></dmndi:DMNShape>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</definitions>

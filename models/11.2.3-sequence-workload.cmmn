@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/CMMN/20151109/MODEL" xmlns:cmmndi="http://www.omg.org/spec/CMMN/20151109/CMMNDI" xmlns:dc="http://www.omg.org/spec/CMMN/20151109/DC" xmlns:di="http://www.omg.org/spec/CMMN/20151109/DI" id="defs_Sequence_workload" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <case id="Sequence_workload" name="11.2.3 Sequence and batch application workload">
+    <caseFileModel id="Sequence_workload_cfm">
+      <caseFileItem id="cf_live" name="Live applications and their remaining days"/>
+      <caseFileItem id="cf_capacity" name="Survey and make-ready capacity"/>
+      <caseFileItem id="cf_shared" name="Structures shared between applications"/>
+    </caseFileModel>
+    <casePlanModel id="Sequence_workload_plan" name="11.2.3 Sequence and batch application workload" autoComplete="true">
+      <documentation>Two competent coordinators will trade deadline risk, crew availability and shared structures in a different order, which is the CMMN test. What makes this case unusual is that the cost of getting it wrong is not delay but LOSS OF CONTROL: missing a deadline hands the applicant self-help under 47 CFR 1.1411(j), and its contractor then works on your structures. The one exception is 1.1411(j)(3), which withholds self-help on pole replacements - so a replacement that slips stays yours and blocks the applicant entirely.
+
+Warning early is a duty and not a courtesy: 1.1411(d)(3)(i) and (f)(4) require notice within 15 days where you know or should know a date cannot be met.</documentation>
+      <planItem id="pi_t_age" name="Age every live application against its deadline" definitionRef="t_age_def">
+        <itemControl id="ic_t_age">
+          <repetitionRule id="rep_t_age"><condition><![CDATA[true]]></condition></repetitionRule>
+          <requiredRule id="rr_t_age"><condition><![CDATA[true]]></condition></requiredRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_batch" name="Batch applications that share structures or a window" definitionRef="t_batch_def">
+        <itemControl id="ic_t_batch">
+          <requiredRule id="rr_t_batch"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_batch"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_advance" name="Advance an application against the others" definitionRef="t_advance_def">
+        <itemControl id="ic_t_advance">
+          <repetitionRule id="rep_t_advance"><condition><![CDATA[true]]></condition></repetitionRule>
+          <requiredRule id="rr_t_advance"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_advance"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_warn" name="Warn the attacher within 15 days" definitionRef="t_warn_def">
+        <itemControl id="ic_t_warn">
+          <requiredRule id="rr_t_warn"><condition><![CDATA[true]]></condition></requiredRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_deviate" name="Record a deviation with its cause and a new date" definitionRef="t_deviate_def">
+        <itemControl id="ic_t_deviate">
+          <requiredRule id="rr_t_deviate"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_deviate"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_contract" name="Bring in additional survey or make-ready capacity" definitionRef="t_contract_def">
+        <itemControl id="ic_t_contract">
+          <requiredRule id="rr_t_contract"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_contract"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_release" name="Release the sequenced work to 3.4" definitionRef="t_release_def">
+        <itemControl id="ic_t_release">
+          <repetitionRule id="rep_t_release"><condition><![CDATA[true]]></condition></repetitionRule>
+          <requiredRule id="rr_t_release"><condition><![CDATA[true]]></condition></requiredRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_m_sequenced" name="Workload sequenced" definitionRef="m_sequenced_def"/>
+      <planItem id="pi_m_warned" name="At-risk deadlines notified" definitionRef="m_warned_def"/>
+      <planItem id="pi_m_cleared" name="Backlog cleared" definitionRef="m_cleared_def"/>
+      <humanTask id="t_age_def" name="Age every live application against its deadline" isBlocking="true"><documentation>Required and repeating. The remaining days, not the elapsed days, are what sequencing is decided on.</documentation></humanTask>
+      <humanTask id="t_batch_def" name="Batch applications that share structures or a window" isBlocking="true"><documentation>Discretionary. 1.1411(h)(5) allows treating one attacher's requests filed within 30 days as one - but forbids combining size and frequency limits to restrict how many may be sought.</documentation></humanTask>
+      <humanTask id="t_advance_def" name="Advance an application against the others" isBlocking="true"><documentation>Discretionary and repeating. This is the trade the case exists to make.</documentation></humanTask>
+      <humanTask id="t_warn_def" name="Warn the attacher within 15 days" isBlocking="true"><documentation>Required where a deadline is known to be at risk. 1.1411(d)(3)(i) for the survey and (f)(4) for make-ready. Silence forfeits the right to deviate later.</documentation></humanTask>
+      <humanTask id="t_deviate_def" name="Record a deviation with its cause and a new date" isBlocking="true"><documentation>Discretionary. 1.1411(i)(2) permits it for good and sufficient cause, in writing, naming the affected poles.</documentation></humanTask>
+      <humanTask id="t_contract_def" name="Bring in additional survey or make-ready capacity" isBlocking="true"><documentation>Discretionary. 1.1412 governs which contractors may be used and 16.0 qualifies them.</documentation></humanTask>
+      <humanTask id="t_release_def" name="Release the sequenced work to 3.4" isBlocking="true"><documentation>Required. 3.4 places the work; this case decides what becomes work and in what order, and is not a second scheduler.</documentation></humanTask>
+      <milestone id="m_sequenced_def" name="Workload sequenced"><documentation>Every live application has a position and an owner.</documentation></milestone>
+      <milestone id="m_warned_def" name="At-risk deadlines notified"><documentation>Every deadline known to be at risk has been notified within 15 days.</documentation></milestone>
+      <milestone id="m_cleared_def" name="Backlog cleared"><documentation>No application is inside its final period without a plan or a deviation.</documentation></milestone>
+    </casePlanModel>
+  </case>
+  <cmmndi:CMMNDI>
+    <cmmndi:CMMNDiagram id="dg_Sequence_workload">
+      <cmmndi:CMMNShape id="sh_plan" cmmnElementRef="Sequence_workload_plan"><dc:Bounds x="40" y="40" width="1010" height="300"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_age" cmmnElementRef="pi_t_age"><dc:Bounds x="80" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_batch" cmmnElementRef="pi_t_batch"><dc:Bounds x="270" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_advance" cmmnElementRef="pi_t_advance"><dc:Bounds x="460" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_warn" cmmnElementRef="pi_t_warn"><dc:Bounds x="80" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_deviate" cmmnElementRef="pi_t_deviate"><dc:Bounds x="270" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_contract" cmmnElementRef="pi_t_contract"><dc:Bounds x="460" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_release" cmmnElementRef="pi_t_release"><dc:Bounds x="80" y="290" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_m_sequenced" cmmnElementRef="pi_m_sequenced"><dc:Bounds x="270" y="290" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_m_warned" cmmnElementRef="pi_m_warned"><dc:Bounds x="460" y="290" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_m_cleared" cmmnElementRef="pi_m_cleared"><dc:Bounds x="80" y="390" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+    </cmmndi:CMMNDiagram>
+  </cmmndi:CMMNDI>
+</definitions>

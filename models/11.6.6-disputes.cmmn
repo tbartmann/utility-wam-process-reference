@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/CMMN/20151109/MODEL" xmlns:cmmndi="http://www.omg.org/spec/CMMN/20151109/CMMNDI" xmlns:dc="http://www.omg.org/spec/CMMN/20151109/DC" xmlns:di="http://www.omg.org/spec/CMMN/20151109/DI" id="defs_Attachment_disputes" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <case id="Attachment_disputes" name="11.6.6 Manage disputes and regulatory complaints">
+    <caseFileModel id="Attachment_disputes_cfm">
+      <caseFileItem id="cf_dispute" name="The disputed item and its calculation basis"/>
+      <caseFileItem id="cf_regime" name="Governing regime and available forum"/>
+      <caseFileItem id="cf_record" name="Evidence and correspondence"/>
+    </caseFileModel>
+    <casePlanModel id="Attachment_disputes_plan" name="11.6.6 Manage disputes and regulatory complaints" autoComplete="true">
+      <documentation>Negotiation, evidence assembly and escalation run together and two competent counsel sequence them differently. Three federal facts shape the case. 47 CFR 1.1404(f) obliges the utility to hand over its supporting regulatory-report pages and the calculations made from them within 30 days of a reasonable request - BEFORE any complaint is filed, which means the evidence position is set long before the forum is chosen. 1.1415 establishes the Rapid Broadband Assessment Team, and a dispute framed as delaying broadband deployment moves onto a faster track. And 1.1407 lets the Commission prescribe a rate, substitute a term, order a refund WITH INTEREST and order access by a date - so the exposure is not limited to the disputed period.</documentation>
+      <planItem id="pi_t_scope" name="Establish what is disputed and which forum has it" definitionRef="t_scope_def">
+        <itemControl id="ic_t_scope">
+          <requiredRule id="rr_t_scope"><condition><![CDATA[true]]></condition></requiredRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_produce" name="Produce the supporting pages and calculations" definitionRef="t_produce_def">
+        <itemControl id="ic_t_produce">
+          <requiredRule id="rr_t_produce"><condition><![CDATA[true]]></condition></requiredRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_negotiate" name="Negotiate directly" definitionRef="t_negotiate_def">
+        <itemControl id="ic_t_negotiate">
+          <repetitionRule id="rep_t_negotiate"><condition><![CDATA[true]]></condition></repetitionRule>
+          <requiredRule id="rr_t_negotiate"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_negotiate"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_rbat" name="Request RBAT review" definitionRef="t_rbat_def">
+        <itemControl id="ic_t_rbat">
+          <requiredRule id="rr_t_rbat"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_rbat"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_complaint" name="File or answer a formal complaint" definitionRef="t_complaint_def">
+        <itemControl id="ic_t_complaint">
+          <requiredRule id="rr_t_complaint"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_complaint"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_settle" name="Settle on terms" definitionRef="t_settle_def">
+        <itemControl id="ic_t_settle">
+          <requiredRule id="rr_t_settle"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_settle"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_implement" name="Implement the outcome and correct what it changes" definitionRef="t_implement_def">
+        <itemControl id="ic_t_implement">
+          <requiredRule id="rr_t_implement"><condition><![CDATA[true]]></condition></requiredRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_m_evidence" name="Basis produced" definitionRef="m_evidence_def"/>
+      <planItem id="pi_m_resolved" name="Dispute resolved" definitionRef="m_resolved_def"/>
+      <planItem id="pi_m_implemented" name="Outcome implemented" definitionRef="m_implemented_def"/>
+      <humanTask id="t_scope_def" name="Establish what is disputed and which forum has it" isBlocking="true"><documentation>Required. In a certified State the FCC route does not exist and this reference does not state the State's procedure.</documentation></humanTask>
+      <humanTask id="t_produce_def" name="Produce the supporting pages and calculations" isBlocking="true"><documentation>Required within 30 days of a reasonable request under 1.1404(f), and it is owed whether or not a complaint follows. A basis you cannot produce is a rate you cannot defend.</documentation></humanTask>
+      <humanTask id="t_negotiate_def" name="Negotiate directly" isBlocking="true"><documentation>Discretionary and repeating. Most disputes end here and 1.1415(e)(3) counts exhausted settlement opportunities when deciding the Accelerated Docket.</documentation></humanTask>
+      <humanTask id="t_rbat_def" name="Request RBAT review" isBlocking="true"><documentation>Discretionary and available to EITHER party under 1.1415(c) where the dispute is alleged to impede or delay a broadband deployment project.</documentation></humanTask>
+      <humanTask id="t_complaint_def" name="File or answer a formal complaint" isBlocking="true"><documentation>Discretionary. 47 CFR 1.1404(a) puts it under the formal complaint rules at 1.720 to 1.740.</documentation></humanTask>
+      <humanTask id="t_settle_def" name="Settle on terms" isBlocking="true"><documentation>Discretionary at any point, including after a complaint is filed.</documentation></humanTask>
+      <humanTask id="t_implement_def" name="Implement the outcome and correct what it changes" isBlocking="true"><documentation>Required. A rate correction reaches 11.6.1, a count correction reaches 11.4.5, and an access correction reaches 11.2.5. An outcome nobody implements is a second dispute.</documentation></humanTask>
+      <milestone id="m_evidence_def" name="Basis produced"><documentation>The supporting pages and calculations are with the other party.</documentation></milestone>
+      <milestone id="m_resolved_def" name="Dispute resolved"><documentation>Settled, or decided by the forum.</documentation></milestone>
+      <milestone id="m_implemented_def" name="Outcome implemented"><documentation>Rate, count or access corrected, and any refund with interest paid.</documentation></milestone>
+    </casePlanModel>
+  </case>
+  <cmmndi:CMMNDI>
+    <cmmndi:CMMNDiagram id="dg_Attachment_disputes">
+      <cmmndi:CMMNShape id="sh_plan" cmmnElementRef="Attachment_disputes_plan"><dc:Bounds x="40" y="40" width="1010" height="300"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_scope" cmmnElementRef="pi_t_scope"><dc:Bounds x="80" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_produce" cmmnElementRef="pi_t_produce"><dc:Bounds x="270" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_negotiate" cmmnElementRef="pi_t_negotiate"><dc:Bounds x="460" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_rbat" cmmnElementRef="pi_t_rbat"><dc:Bounds x="80" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_complaint" cmmnElementRef="pi_t_complaint"><dc:Bounds x="270" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_settle" cmmnElementRef="pi_t_settle"><dc:Bounds x="460" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_implement" cmmnElementRef="pi_t_implement"><dc:Bounds x="80" y="290" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_m_evidence" cmmnElementRef="pi_m_evidence"><dc:Bounds x="270" y="290" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_m_resolved" cmmnElementRef="pi_m_resolved"><dc:Bounds x="460" y="290" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_m_implemented" cmmnElementRef="pi_m_implemented"><dc:Bounds x="80" y="390" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+    </cmmndi:CMMNDiagram>
+  </cmmndi:CMMNDI>
+</definitions>

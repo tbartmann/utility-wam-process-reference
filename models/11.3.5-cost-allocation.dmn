@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/" id="Make_ready_cost_allocation" name="11.3.5 Allocate make-ready and replacement cost" namespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <description>The federal cost rule for make-ready is three provisions read together and the table is those three. 47 CFR 1.1411(e)(4) forbids charging a new attacher to bring anything into compliance where it was out of compliance because of work by a party OTHER than the new attacher before the new attachment. 47 CFR 1.1408(b) shares modification cost proportionately among all parties that obtain access as a result of the modification and all that directly benefit. 47 U.S.C. 224(i) says an attacher does not bear the cost of rearranging its own attachment where an ADDITIONAL attachment required it.
+
+The first rule is the one that decides most disputes, and it turns entirely on who caused the condition - which is why 11.3.1 attributes existing violations at survey time rather than when the invoice is challenged.</description>
+  <inputData id="in_element" name="Make-ready element"><variable id="in_element_v" name="Make-ready element" typeRef="string"/></inputData>
+  <inputData id="in_preexisting" name="Condition existed before this attachment"><variable id="in_preexisting_v" name="Condition existed before this attachment" typeRef="boolean"/></inputData>
+  <inputData id="in_causedByNew" name="Caused by the new attacher"><variable id="in_causedByNew_v" name="Caused by the new attacher" typeRef="boolean"/></inputData>
+  <inputData id="in_beneficiaries" name="Parties gaining access or directly benefiting"><variable id="in_beneficiaries_v" name="Parties gaining access or directly benefiting" typeRef="number"/></inputData>
+  <inputData id="in_betterment" name="Element betters the structure beyond the requirement"><variable id="in_betterment_v" name="Element betters the structure beyond the requirement" typeRef="boolean"/></inputData>
+  <knowledgeSource id="ks_cost" name="47 CFR 1.1411(e)(4), 47 CFR 1.1408(b) and 47 U.S.C. 224(i)"><description>Read together these are the whole federal cost-allocation rule for make-ready. 47 CFR 1.1416(b) adds that a utility may not block an overlash, or charge the overlasher, because another existing attacher has an unfixed preexisting violation.</description></knowledgeSource>
+  <decision id="d_11_3_5" name="Cost bearer">
+    <variable id="d_11_3_5_v" name="Cost bearer" typeRef="string"/>
+    <informationRequirement id="ir_d_11_3_5_ks_cost"><requiredInput href="#ks_cost"/></informationRequirement>
+    <decisionTable id="d_11_3_5_dt" hitPolicy="FIRST" preferredOrientation="Rule-as-Row">
+      <input id="d_11_3_5_i1" label="Condition preexisting"><inputExpression id="d_11_3_5_i1_e" typeRef="boolean"><text>in_preexisting</text></inputExpression></input>
+      <input id="d_11_3_5_i2" label="Caused by the new attacher"><inputExpression id="d_11_3_5_i2_e" typeRef="boolean"><text>in_causedByNew</text></inputExpression></input>
+      <input id="d_11_3_5_i3" label="Betterment beyond the requirement"><inputExpression id="d_11_3_5_i3_e" typeRef="boolean"><text>in_betterment</text></inputExpression></input>
+      <input id="d_11_3_5_i4" label="Beneficiaries"><inputExpression id="d_11_3_5_i4_e" typeRef="number"><text>in_beneficiaries</text></inputExpression></input>
+      <output id="d_11_3_5_o" label="Cost bearer" name="Cost bearer" typeRef="string"/>
+      <rule id="d_11_3_5_r1">
+        <description>47 CFR 1.1411(e)(4). The condition predates the attachment and somebody else caused it. The new attacher may NOT be charged, and 1.1416(b) says the same for an overlasher. This is the rule that decides most make-ready disputes.</description>
+        <inputEntry id="d_11_3_5_r1_ie1"><text>true</text></inputEntry>
+        <inputEntry id="d_11_3_5_r1_ie2"><text>false</text></inputEntry>
+        <inputEntry id="d_11_3_5_r1_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_11_3_5_r1_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_11_3_5_r1_oe"><text>"causingParty, not the new attacher"</text></outputEntry>
+      </rule>
+      <rule id="d_11_3_5_r2">
+        <description>Preexisting, but caused by this same attacher's earlier work. (e)(4) protects against OTHER parties' non-compliance, not your own.</description>
+        <inputEntry id="d_11_3_5_r2_ie1"><text>true</text></inputEntry>
+        <inputEntry id="d_11_3_5_r2_ie2"><text>true</text></inputEntry>
+        <inputEntry id="d_11_3_5_r2_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_11_3_5_r2_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_11_3_5_r2_oe"><text>"newAttacher"</text></outputEntry>
+      </rule>
+      <rule id="d_11_3_5_r3">
+        <description>Betterment beyond what the attachment requires is the owner's own investment. Charging it to the applicant converts a capital programme into a make-ready bill.</description>
+        <inputEntry id="d_11_3_5_r3_ie1"><text>false</text></inputEntry>
+        <inputEntry id="d_11_3_5_r3_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_11_3_5_r3_ie3"><text>true</text></inputEntry>
+        <inputEntry id="d_11_3_5_r3_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_11_3_5_r3_oe"><text>"structureOwner"</text></outputEntry>
+      </rule>
+      <rule id="d_11_3_5_r4">
+        <description>47 CFR 1.1408(b): more than one party gains access or directly benefits, so the cost is shared proportionately. 47 U.S.C. 224(i) also means an existing attacher does not fund rearranging its own attachment for an additional one.</description>
+        <inputEntry id="d_11_3_5_r4_ie1"><text>false</text></inputEntry>
+        <inputEntry id="d_11_3_5_r4_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_11_3_5_r4_ie3"><text>false</text></inputEntry>
+        <inputEntry id="d_11_3_5_r4_ie4"><text>&gt; 1</text></inputEntry>
+        <outputEntry id="d_11_3_5_r4_oe"><text>"proportionateShare"</text></outputEntry>
+      </rule>
+      <rule id="d_11_3_5_r5">
+        <description>The new attachment alone requires the work and only it benefits.</description>
+        <inputEntry id="d_11_3_5_r5_ie1"><text>false</text></inputEntry>
+        <inputEntry id="d_11_3_5_r5_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_11_3_5_r5_ie3"><text>false</text></inputEntry>
+        <inputEntry id="d_11_3_5_r5_ie4"><text>1</text></inputEntry>
+        <outputEntry id="d_11_3_5_r5_oe"><text>"newAttacher"</text></outputEntry>
+      </rule>
+      <rule id="d_11_3_5_r6">
+        <description>Cause not established. 11.3.1 should have attributed it at survey; a manual determination here is a signal that it did not.</description>
+        <inputEntry id="d_11_3_5_r6_ie1"><text>-</text></inputEntry>
+        <inputEntry id="d_11_3_5_r6_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_11_3_5_r6_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_11_3_5_r6_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_11_3_5_r6_oe"><text>"determineManually"</text></outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram id="drd_Make_ready_cost_allocation">
+      <dmndi:DMNShape id="sh_in_element" dmnElementRef="in_element"><dc:Bounds x="60" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_preexisting" dmnElementRef="in_preexisting"><dc:Bounds x="245" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_causedByNew" dmnElementRef="in_causedByNew"><dc:Bounds x="430" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_beneficiaries" dmnElementRef="in_beneficiaries"><dc:Bounds x="615" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_betterment" dmnElementRef="in_betterment"><dc:Bounds x="800" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_d_11_3_5" dmnElementRef="d_11_3_5"><dc:Bounds x="60" y="240" width="180" height="70"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_ks_cost" dmnElementRef="ks_cost"><dc:Bounds x="900" y="100" width="160" height="55"/></dmndi:DMNShape>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</definitions>

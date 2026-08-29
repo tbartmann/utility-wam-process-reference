@@ -1,0 +1,5665 @@
+{
+  "category": {
+    "uid": 10334,
+    "id": "11.0",
+    "name": "Manage Joint Use and Third-Party Attachments",
+    "band": "Specialised Operations"
+  },
+  "platform": "Claude",
+  "model": "claude-opus-5",
+  "round": 4,
+  "date": "2026-08-29",
+  "schema": "eam/specs/SCHEMA.md",
+  "derivation": "STANDARDS-DERIVED. Every field traces to a standard, a regulation or a recognised industry body per _Collab/SOURCE_AUTHORITY_PACK.md section E, which was obtained for this round because the pack carried nothing for this category. Nothing is generalised from a client programme or a product.",
+  "field_set": "EN 17007:2017 cl. 5.2 maintenance process profile, corroborated by ISO 9001:2015 cl. 4.4.1 a) to h).",
+  "gaps": [
+    "This is the only category in the model that NEITHER public framework reaches. APQC PCF Utilities has no pole attachment process at any level and the GFMAM Asset Management Landscape has no subject for it. The Source Authority Pack accordingly held nothing until section E was written for this round, and every source in this category was obtained here.",
+    "EN 17007 has no process for third parties attaching to your structures. It is a maintenance standard and this is a commercial and regulatory programme conducted on shared plant. Fourteen of the thirty-five anchors are marked as the closest named process rather than a fit - SER.2 for an access licence, BUD.1 for a rate formula, BUD.4 for attachment rental. The stretch is stated on the citation rather than hidden behind a plausible code.",
+    "47 U.S.C. 224(c) is the structural fact that governs the whole category. A State that certifies displaces the FCC entirely, roughly half have, and this reference holds NO State rule. Every process therefore determines the governing regime before applying a number, and 11.1.5 is the determination that does it. What any particular State requires is judgment throughout.",
+    "47 U.S.C. 224(a)(1) does not reach municipally owned or cooperatively owned systems. For those owners neither the FCC timeline nor the FCC rate formulas apply, and the category still has to work.",
+    "The federal rule is procedural and unusually precise, which is unlike the rest of this reference: 47 CFR 1.1411 sets 10 business days to determine completeness, 45 days to survey, 14 to estimate, 30 to make ready in the communications space and 90 above it, with named multipliers for Mid-Sized and Large Orders. Those numbers are quoted from the current eCFR. They are not described, softened or averaged.",
+    "1.1411(j)(3) states that self-help is not available for pole replacements. That single sentence is why 11.5 exists as its own group rather than as a tail on make-ready.",
+    "NESC is paywalled. Rules 235C, 238 and 250B are cited by number and subject only, confirmed from the NRECA joint-use guide which cites the 2023 edition. No clearance dimension or loading figure from their bodies appears anywhere in this category. The 40 in communication worker safety zone is NRECA's figure and is cited as NRECA's.",
+    "11.3.2 structural loading is a determination that passes the DMN test on shape and is SPEC because the arithmetic is NESC Rule 250B, which is unread. Writing that table would invent the numbers.",
+    "No source states an audit cycle, a sample size, an unauthorised-attachment penalty, a back-billing period, a transfer completion period or a double-wood target. All six are contract or operator policy and all six are marked judgment where they appear.",
+    "Joint ownership ratios and net settlement are universal practice and no standard describes them. 11.1.2 and 11.6.3 are judgment on that basis.",
+    "The reference names no transfer notification product. A multi-party notification exchange is the industry norm and naming one would breach product neutrality, so 11.5.1 describes the exchange and not the system.",
+    "Category boundaries held deliberately: 12.1 registers the structure and 11.4.1 carries the joint use overlay on it; 2.0 designs the line and 11.2.6 obtains the right to occupy somebody else's structure so it can be built; 5.3 posts the retirement and 11.5.4 clears the field condition; 16.0 contracts companies to work for you and 11.1.1 licenses another party to attach to you - opposite directions.",
+    "This category applies to electric only in model.json. Gas has no analogue: there is no third-party attachment to a gas main."
+  ],
+  "processes": [
+    {
+      "uid": 10336,
+      "id": "11.1.1",
+      "name": "Establish joint use and licence agreement terms",
+      "group": {
+        "id": "11.1",
+        "name": "Manage joint use agreements and rates",
+        "uid": 10335
+      },
+      "intent": "Put a joint use or licence agreement in place that says who may attach, on what terms.",
+      "activities": [
+        "Establish which regime governs the relationship",
+        "Draft access, make-ready, transfer and billing terms",
+        "Negotiate and execute the agreement",
+        "Publish the terms and procedures the agreement obliges you to publish"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "A counterparty needs an agreement, or an existing one has lapsed.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Counterparty and the structures at issue",
+          "party": "AM",
+          "data": "WorkAsset"
+        },
+        {
+          "what": "Governing regime from 11.1.5",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Standard terms and published procedures",
+          "party": "MAI",
+          "data": "Work"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Executed agreement and its published procedures",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Terms that bind 11.2, 11.3 and 11.6",
+          "party": "FIN",
+          "data": "Work"
+        }
+      ],
+      "systems": [
+        {
+          "component": "MAI",
+          "role": "system of record",
+          "service": "agreement, terms and published procedures"
+        },
+        {
+          "component": "AM",
+          "role": "supplier",
+          "service": "structures and ownership in scope"
+        },
+        {
+          "component": "FIN",
+          "role": "consumer",
+          "service": "rate and billing terms"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "MAI",
+          "to": "FIN",
+          "payload": "WorkRequest",
+          "verb": "create",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Joint use manager",
+          "raci": "R"
+        },
+        {
+          "role": "Legal counsel",
+          "raci": "A"
+        },
+        {
+          "role": "Rates analyst",
+          "raci": "C"
+        },
+        {
+          "role": "Distribution engineering",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkAsset"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "47 U.S.C. 224(f)(1) obliges nondiscriminatory access. An agreement sets terms; it cannot withhold access that 224(f)(2) lets an electric utility deny only in writing, on stated grounds, with the evidence."
+        },
+        {
+          "kind": "regulatory",
+          "text": "47 CFR 1.1411(d)(1) measures completeness against procedures published at the time of submission. An unpublished term cannot make an application incomplete."
+        },
+        {
+          "kind": "operational",
+          "text": "16.0 contracts companies to work for you; this licenses another party to attach to your plant. Opposite directions, and merging them loses the access duty."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Agreement coverage",
+          "definition": "Share of attaching counterparties under a current executed agreement.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.4.7 applied to the agreement rather than the work order"
+        }
+      ],
+      "variants": [
+        "Electric utility as pole owner licensing an attacher",
+        "Two-party joint ownership agreement with ratio and settlement terms",
+        "Utility as attacher on a telephone company or municipal structure"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Draft, negotiate and execute is a known repeating path.",
+        "artifact": "models/11.1-agreements-and-rates.bpmn"
+      },
+      "en17007": {
+        "process": "SER.2",
+        "title": "Contract with external companies",
+        "clause": "6.15"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), SER.2 Contract with external companies, cl. 6.15 - closest named process; EN 17007 has no third-party access process",
+          "status": "verified"
+        },
+        {
+          "for": "access duty",
+          "cite": "47 U.S.C. 224 Pole attachments (f)(1) nondiscriminatory access; (f)(2) the electric utility exception",
+          "status": "regulation"
+        },
+        {
+          "for": "published procedures",
+          "cite": "47 CFR 1.1411 Timeline for access to utility poles (d)(1) application completeness",
+          "status": "regulation"
+        },
+        {
+          "for": "agreement content",
+          "cite": "Joint use agreement content is contract and is not standardised",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "regulation",
+        "primary": "47 U.S.C. 224 Pole attachments"
+      }
+    },
+    {
+      "uid": 10337,
+      "id": "11.1.2",
+      "name": "Maintain pole ownership and joint ownership ratios",
+      "group": {
+        "id": "11.1",
+        "name": "Manage joint use agreements and rates",
+        "uid": 10335
+      },
+      "intent": "Hold who owns which structure, and on what ratio, because every later number needs it.",
+      "activities": [
+        "Record ownership of each structure",
+        "Record the joint ownership ratio where two parties own a line",
+        "Record which party administers attachments on each structure",
+        "Keep the record aligned to 12.1 asset registration"
+      ],
+      "trigger": {
+        "kind": "none",
+        "text": "A standing ownership record, not a bounded instance.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Structure register from 12.1",
+          "party": "AM",
+          "data": "WorkAsset"
+        },
+        {
+          "what": "Agreement ownership and ratio terms",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Field and audit evidence of ownership",
+          "party": "FRD",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Ownership and ratio on each structure",
+          "party": "AM",
+          "data": "WorkAsset"
+        },
+        {
+          "what": "Administering party per structure",
+          "party": "MAI",
+          "data": "Work"
+        }
+      ],
+      "systems": [
+        {
+          "component": "AM",
+          "role": "system of record",
+          "service": "structure ownership and ratio"
+        },
+        {
+          "component": "MAI",
+          "role": "consumer",
+          "service": "administering party and agreement link"
+        },
+        {
+          "component": "GINV",
+          "role": "supplier",
+          "service": "structure location and identity"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "AM",
+          "to": "MAI",
+          "payload": "WorkRequest",
+          "verb": "get",
+          "pattern": "request-reply"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Joint use administrator",
+          "raci": "R"
+        },
+        {
+          "role": "Asset data owner",
+          "raci": "A"
+        },
+        {
+          "role": "Joint use manager",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "WorkAsset",
+        "WorkLocation"
+      ],
+      "controls": [
+        {
+          "kind": "financial",
+          "text": "The ratio drives 11.6.3 net settlement and the pole count drives 11.6.1 rental. An ownership record that disagrees with the counterparty's is a billing dispute waiting at 11.6.6."
+        },
+        {
+          "kind": "operational",
+          "text": "Ownership is not the same as who administers attachments on a structure. Joint use agreements routinely split them and the record must hold both."
+        },
+        {
+          "kind": "operational",
+          "text": "12.1 registers the asset. This record adds the joint use overlay and does not duplicate the register."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Ownership record agreement",
+          "definition": "Share of jointly used structures whose ownership matches the counterparty's record at the last reconciliation.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.3.1 applied to the ownership record"
+        }
+      ],
+      "variants": [
+        "Sole ownership with licensed attachers",
+        "Two-party joint ownership on a stated ratio",
+        "Utility attaching to a structure it does not own"
+      ],
+      "notation": {
+        "class": "SPEC",
+        "why": "A standing ownership record. There is no instance with a start and an end.",
+        "artifact": null
+      },
+      "en17007": {
+        "process": "DTA.1",
+        "title": "Store and validate the raw data in a library and/or a database",
+        "clause": "6.10"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), DTA.1 Store and validate the raw data, cl. 6.10",
+          "status": "verified"
+        },
+        {
+          "for": "attaching entity count",
+          "cite": "47 CFR 1.1409 Allocation of Unusable Space Costs (b) all attaching entities attached to the pole shall be counted for apportioning unusable space",
+          "status": "regulation"
+        },
+        {
+          "for": "ratio practice",
+          "cite": "Joint ownership ratios and which party administers attachments are contract; no standard describes them",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "judgment",
+        "primary": "Ownership overlay on the 12.1 register; no standard supplies it"
+      }
+    },
+    {
+      "uid": 10338,
+      "id": "11.1.3",
+      "name": "Determine attachment rental rates",
+      "group": {
+        "id": "11.1",
+        "name": "Manage joint use agreements and rates",
+        "uid": 10335
+      },
+      "intent": "Determine the rental rate for an attachment, on the formula the governing regime sets.",
+      "activities": [
+        "Establish which regime and which formula apply",
+        "Take the space factor and cost inputs",
+        "Apply the cable, telecommunications or conduit formula",
+        "Return the maximum just and reasonable rate and the basis for it"
+      ],
+      "trigger": {
+        "kind": "timer",
+        "text": "The annual rate is due, or a cost input or attacher count has changed.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Governing regime from 11.1.5",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Rate formula cost inputs from 11.1.4",
+          "party": "FIN",
+          "data": "Work"
+        },
+        {
+          "what": "Attaching entity count and space occupied",
+          "party": "AM",
+          "data": "WorkAsset"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Rate per attachment with its formula and basis",
+          "party": "FIN",
+          "data": "Work"
+        },
+        {
+          "what": "Rate change requiring notice",
+          "party": "MAI",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "FIN",
+          "role": "system of record",
+          "service": "rate calculation and cost inputs"
+        },
+        {
+          "component": "MAI",
+          "role": "consumer",
+          "service": "rate on the agreement and the notice obligation"
+        },
+        {
+          "component": "AM",
+          "role": "supplier",
+          "service": "pole count, attacher count and space"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "FIN",
+          "to": "MAI",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Rates analyst",
+          "raci": "R"
+        },
+        {
+          "role": "Joint use manager",
+          "raci": "A"
+        },
+        {
+          "role": "Regulatory counsel",
+          "raci": "C"
+        },
+        {
+          "role": "Controller",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkAsset"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "47 CFR 1.1406(d) sets the rate ceiling: (d)(1) cable, (d)(2) telecommunications - the higher of two - and (d)(3) conduit. 47 U.S.C. 224(d)(1) sets the floor."
+        },
+        {
+          "kind": "regulatory",
+          "text": "1.1410 presumes 1 ft per attachment, 13.5 ft usable, 24 ft unusable, 37.5 ft pole; 1.1409(c) presumes 3 attachers non-urbanized and 5 urbanized. All rebuttable, so relying on one is recorded as a choice."
+        },
+        {
+          "kind": "regulatory",
+          "text": "In a State certified under 224(c) none of that binds. The State's formula does, and this reference holds none."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Rate basis completeness",
+          "definition": "Share of rate determinations recording formula, inputs and every presumption relied on.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.3.1 applied to the rate record"
+        }
+      ],
+      "variants": [
+        "Cable formula under 1.1406(d)(1)",
+        "Telecommunications formula under 1.1406(d)(2), higher of the two",
+        "Conduit formula under 1.1406(d)(3)",
+        "Certified-State formula, which this reference does not state"
+      ],
+      "notation": {
+        "class": "DMN",
+        "why": "The output is a rate and the formula is published law, which makes this the rare determination in this reference whose rule can be written from a source.",
+        "artifact": "models/11.1.3-attachment-rate.dmn"
+      },
+      "en17007": {
+        "process": "BUD.1",
+        "title": "Define, compile cost elements and calculate or estimate actual costs",
+        "clause": "6.8"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), BUD.1 Define, compile cost elements, cl. 6.8 - closest named process; EN 17007 has no third-party access process",
+          "status": "verified"
+        },
+        {
+          "for": "formulas",
+          "cite": "47 CFR 1.1406 Commission consideration of the complaint (d)(1) cable, (d)(2) telecommunications, (d)(3) conduit",
+          "status": "regulation"
+        },
+        {
+          "for": "presumptions",
+          "cite": "47 CFR 1.1410 Use of presumptions in calculating the space factor; 47 CFR 1.1409 Allocation of Unusable Space Costs (c) presumptive attaching entities",
+          "status": "regulation"
+        },
+        {
+          "for": "rate floor and State regime",
+          "cite": "47 U.S.C. 224 Pole attachments (d)(1) additional costs; (c) State certification removes Commission jurisdiction",
+          "status": "regulation"
+        }
+      ],
+      "provenance": {
+        "basis": "regulation",
+        "primary": "47 CFR 1.1406 Commission consideration of the complaint"
+      }
+    },
+    {
+      "uid": 10339,
+      "id": "11.1.4",
+      "name": "Maintain rate formula cost inputs",
+      "group": {
+        "id": "11.1",
+        "name": "Manage joint use agreements and rates",
+        "uid": 10335
+      },
+      "intent": "Hold the cost inputs the rate formula reads, traceable to the accounts they came from.",
+      "activities": [
+        "Extract the plant and expense accounts the formula names",
+        "Hold pole count, space and attaching entity count",
+        "Record every presumption relied on instead of measured data",
+        "Keep the inputs available to a counterparty that asks for them"
+      ],
+      "trigger": {
+        "kind": "none",
+        "text": "A standing input set, refreshed on the accounting cycle.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Plant and expense accounts",
+          "party": "FIN",
+          "data": "Work"
+        },
+        {
+          "what": "Structure count and space data",
+          "party": "AM",
+          "data": "WorkAsset"
+        },
+        {
+          "what": "Attaching entity counts from 11.4.1",
+          "party": "MAI",
+          "data": "WorkAsset"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Cost inputs with their account references",
+          "party": "FIN",
+          "data": "Work"
+        },
+        {
+          "what": "Presumptions relied on, named as presumptions",
+          "party": "MAI",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "FIN",
+          "role": "system of record",
+          "service": "accounts and rate inputs"
+        },
+        {
+          "component": "AM",
+          "role": "supplier",
+          "service": "structure and space data"
+        },
+        {
+          "component": "MAI",
+          "role": "consumer",
+          "service": "inputs and presumption record"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "FIN",
+          "to": "MAI",
+          "payload": "WorkRequest",
+          "verb": "get",
+          "pattern": "request-reply"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Rates analyst",
+          "raci": "R"
+        },
+        {
+          "role": "Controller",
+          "raci": "A"
+        },
+        {
+          "role": "Joint use administrator",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkAsset"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "47 CFR 1.1404(f) obliges a utility to supply the requesting party the supporting pages from its FERC Form 1 or other regulatory report, and the calculations made from them, on reasonable request. Inputs you cannot produce on request are inputs you cannot defend."
+        },
+        {
+          "kind": "financial",
+          "text": "18 CFR Part 101 is where the plant and expense accounts live. It prescribes the accounts, not the pole attachment rate."
+        },
+        {
+          "kind": "operational",
+          "text": "A presumption under 1.1409(c) or 1.1410 is rebuttable by evidence. Recording which were used is what makes a later rebuttal answerable."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Input traceability",
+          "definition": "Share of formula inputs traceable to a named account or a named presumption.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.3.1 applied to the rate input set"
+        }
+      ],
+      "variants": [
+        "Measured pole and attacher counts",
+        "Regulatory presumptions relied on in place of measurement",
+        "Mixed, with the split recorded input by input"
+      ],
+      "notation": {
+        "class": "SPEC",
+        "why": "A standing input set behind the 11.1.3 determination. No instance boundary.",
+        "artifact": null
+      },
+      "en17007": {
+        "process": "DTA.10",
+        "title": "Save and provide access to data in a data processing system",
+        "clause": "6.10"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), DTA.10 Save and provide access to data, cl. 6.10",
+          "status": "verified"
+        },
+        {
+          "for": "duty to supply",
+          "cite": "47 CFR 1.1404(f) supporting pages from ARMIS, FERC Form 1 or other regulatory report within 30 days of a reasonable request",
+          "status": "regulation"
+        },
+        {
+          "for": "accounts",
+          "cite": "18 CFR Part 101 Uniform System of Accounts prescribes the accounts, not the attachment rate",
+          "status": "regulation"
+        },
+        {
+          "for": "presumptions",
+          "cite": "47 CFR 1.1410 Use of presumptions in calculating the space factor; 47 CFR 1.1409 Allocation of Unusable Space Costs (c)-(d)",
+          "status": "regulation"
+        }
+      ],
+      "provenance": {
+        "basis": "regulation",
+        "primary": "47 CFR 1.1404(f)"
+      }
+    },
+    {
+      "uid": 10340,
+      "id": "11.1.5",
+      "name": "Monitor jurisdictional and regulatory obligations",
+      "group": {
+        "id": "11.1",
+        "name": "Manage joint use agreements and rates",
+        "uid": 10335
+      },
+      "intent": "Decide which regulatory regime governs this structure, before any timeline is applied.",
+      "activities": [
+        "Establish whether the owner is a class the statute reaches",
+        "Establish whether the State has certified under 224(c)",
+        "Return the governing regime and the timeline that goes with it",
+        "Re-test when a certification or an ownership class changes"
+      ],
+      "trigger": {
+        "kind": "conditional",
+        "text": "An application, a rate or a dispute needs a governing regime.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Owner class and State of the structure",
+          "party": "AM",
+          "data": "WorkAsset"
+        },
+        {
+          "what": "State certification status",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Counterparty class",
+          "party": "CS",
+          "data": "Work"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Governing regime and applicable timeline",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Regime change requiring agreement review",
+          "party": "MAI",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "MAI",
+          "role": "system of record",
+          "service": "regime determination and its basis"
+        },
+        {
+          "component": "AM",
+          "role": "supplier",
+          "service": "owner class and location"
+        },
+        {
+          "component": "CS",
+          "role": "supplier",
+          "service": "counterparty class"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "MAI",
+          "to": "SCHD",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Regulatory counsel",
+          "raci": "R"
+        },
+        {
+          "role": "Joint use manager",
+          "raci": "A"
+        },
+        {
+          "role": "Joint use administrator",
+          "raci": "I"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkAsset"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "47 U.S.C. 224(c)(1) removes Commission jurisdiction where a State regulates, and 224(c)(2) requires the State to certify that it does and that it considers subscriber interests. Roughly half the States have certified and this reference holds no State rule."
+        },
+        {
+          "kind": "regulatory",
+          "text": "47 U.S.C. 224(a)(1) defines the utility the section reaches. Municipally owned and cooperatively owned systems sit outside it, which changes the answer before any timeline is considered."
+        },
+        {
+          "kind": "operational",
+          "text": "Get this wrong and every downstream day count is wrong. It is the first determination in the category for that reason."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Regime currency",
+          "definition": "Share of structures whose governing regime has been tested against the current certification list.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.3.1 applied to the regime record"
+        }
+      ],
+      "variants": [
+        "FCC regime under 47 CFR Part 1 Subpart J",
+        "Certified State regime, whose rules this reference does not state",
+        "Owner outside 47 U.S.C. 224 entirely - municipal or cooperative",
+        "Utility as attacher, where the counterparty's regime governs"
+      ],
+      "notation": {
+        "class": "DMN",
+        "why": "The output is which regime governs - a value - and it is determined from the statute rather than from practice.",
+        "artifact": "models/11.1.5-governing-regime.dmn"
+      },
+      "en17007": {
+        "process": "DTA.9",
+        "title": "Monitor methods, technologies, regulations, standards, etc",
+        "clause": "6.10"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), DTA.9 Monitor regulations and standards, cl. 6.10",
+          "status": "verified"
+        },
+        {
+          "for": "reverse preemption",
+          "cite": "47 U.S.C. 224 Pole attachments (c)(1) and (c)(2) State certification",
+          "status": "regulation"
+        },
+        {
+          "for": "who is a utility",
+          "cite": "47 U.S.C. 224 Pole attachments (a)(1) definition of utility",
+          "status": "regulation"
+        },
+        {
+          "for": "State rules",
+          "cite": "No State pole attachment rule is held in the Source Authority Pack. Which State requires what is not stated here",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "regulation",
+        "primary": "47 U.S.C. 224 Pole attachments (c)"
+      }
+    },
+    {
+      "uid": 10341,
+      "id": "11.1.6",
+      "name": "Renew and renegotiate agreements",
+      "group": {
+        "id": "11.1",
+        "name": "Manage joint use agreements and rates",
+        "uid": 10335
+      },
+      "intent": "Renew or renegotiate an agreement without losing access, rate or transfer continuity.",
+      "activities": [
+        "Open the renewal against the expiring terms",
+        "Test the terms against the current regime and rate",
+        "Negotiate, or run the evergreen or holdover provision",
+        "Execute, or escalate to the dispute route"
+      ],
+      "trigger": {
+        "kind": "timer",
+        "text": "An agreement is approaching expiry, or a party has served notice.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Expiring agreement and its performance history",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Current regime and rate from 11.1.5 and 11.1.3",
+          "party": "FIN",
+          "data": "Work"
+        },
+        {
+          "what": "Open disputes and audit findings",
+          "party": "MAI",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Renewed or renegotiated agreement",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Holdover or dispute position",
+          "party": "MAI",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "MAI",
+          "role": "system of record",
+          "service": "agreement lifecycle and negotiation record"
+        },
+        {
+          "component": "FIN",
+          "role": "supplier",
+          "service": "current rate and settlement position"
+        },
+        {
+          "component": "CS",
+          "role": "consumer",
+          "service": "counterparty communication"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "MAI",
+          "to": "FIN",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Joint use manager",
+          "raci": "R"
+        },
+        {
+          "role": "Legal counsel",
+          "raci": "A"
+        },
+        {
+          "role": "Rates analyst",
+          "raci": "C"
+        },
+        {
+          "role": "Regulatory counsel",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "47 CFR 1.1403(c) requires 60 days written notice before a rate increase, whether or not the agreement mentions it."
+        },
+        {
+          "kind": "regulatory",
+          "text": "Access does not lapse with the agreement: 224(f)(1) is statutory and an expired contract is not a 224(f)(2) ground for denial."
+        },
+        {
+          "kind": "operational",
+          "text": "Rate, backlog, unauthorised attachments and audit findings are all live at once and no two negotiators take them in the same order."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Renewal lead time",
+          "definition": "Days between renewal opening and execution or holdover, against the notice the terms require.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.4.7 Work Order Cycle Time"
+        }
+      ],
+      "variants": [
+        "Renewal on existing terms",
+        "Renegotiation with a rate change and its 60-day notice",
+        "Holdover or evergreen continuation",
+        "Failure to agree, escalating to 11.6.6"
+      ],
+      "notation": {
+        "class": "CMMN",
+        "why": "Rate, backlog, unauthorised attachments and audit findings are all live at once and two competent negotiators sequence them differently.",
+        "artifact": "models/11.1.6-renew-and-renegotiate.cmmn"
+      },
+      "en17007": {
+        "process": "SER.3",
+        "title": "Manage contracts and evaluate companies and services",
+        "clause": "6.15"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), SER.3 Manage contracts, cl. 6.15 - closest named process; EN 17007 has no third-party access process",
+          "status": "verified"
+        },
+        {
+          "for": "rate change notice",
+          "cite": "47 CFR 1.1403 Duty to provide access; modifications; notice (c) 60 days written notice before a rate increase",
+          "status": "regulation"
+        },
+        {
+          "for": "access continues",
+          "cite": "47 U.S.C. 224 Pole attachments (f)(1) and (f)(2)",
+          "status": "regulation"
+        },
+        {
+          "for": "negotiation conduct",
+          "cite": "No standard specifies joint use renewal conduct",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "regulation",
+        "primary": "47 CFR 1.1403 Duty to provide access; modifications; notice"
+      }
+    },
+    {
+      "uid": 10343,
+      "id": "11.2.1",
+      "name": "Receive and validate attachment application",
+      "group": {
+        "id": "11.2",
+        "name": "Administer attachment applications and permits",
+        "uid": 10342
+      },
+      "intent": "Take an attachment application and settle whether it is complete, on the clock.",
+      "activities": [
+        "Receive the application and log the receipt date",
+        "Test it against the procedures published at the time of submission",
+        "Notify complete, or notify incomplete with every reason",
+        "Accept a resubmission and re-test only the reasons given"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "An attacher has submitted an application to attach to your structures.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Attachment application and structure list",
+          "party": "CS",
+          "data": "Work"
+        },
+        {
+          "what": "Published application procedures",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Advance notice given for a larger order",
+          "party": "MAI",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Application complete, with the clock started",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Incomplete notice stating every reason",
+          "party": "CS",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "MAI",
+          "role": "system of record",
+          "service": "application, dates and completeness decision"
+        },
+        {
+          "component": "CS",
+          "role": "interface",
+          "service": "attacher correspondence"
+        },
+        {
+          "component": "GINV",
+          "role": "supplier",
+          "service": "structures named in the application"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "CS",
+          "to": "MAI",
+          "payload": "WorkRequest",
+          "verb": "create",
+          "pattern": "event"
+        },
+        {
+          "from": "MAI",
+          "to": "CS",
+          "payload": "WorkRequest",
+          "verb": "reply",
+          "pattern": "request-reply"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Joint use administrator",
+          "raci": "R"
+        },
+        {
+          "role": "Joint use manager",
+          "raci": "A"
+        },
+        {
+          "role": "Distribution engineering",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkLocation"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "47 CFR 1.1411(d)(1)(i) gives 10 business days to determine completeness and notify. No response, or a rejection with no reasons, and the application is DEEMED COMPLETE. The clock runs either way."
+        },
+        {
+          "kind": "regulatory",
+          "text": "1.1411(d)(1)(ii) deems a resubmission complete within 5 business days unless you specify which reasons were not addressed. You may only test the reasons you already gave."
+        },
+        {
+          "kind": "regulatory",
+          "text": "Completeness is measured against procedures 'available in writing publicly at the time of submission' under 1.1411(d)(1). An unpublished requirement cannot make an application incomplete."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Completeness determination timeliness",
+          "definition": "Share of applications determined within 10 business days of receipt.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.4.7 Work Order Cycle Time"
+        }
+      ],
+      "variants": [
+        "Standard order, under 300 poles or 0.5 percent",
+        "Mid-Sized or Large Order with its advance notice",
+        "One-touch make-ready election under 1.1411(k)",
+        "Deemed complete by the utility's own silence"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Receive, test, notify and re-test is a known repeating path on a fixed clock.",
+        "artifact": "models/11.2-applications-and-permits.bpmn"
+      },
+      "en17007": {
+        "process": "COR.1",
+        "title": "Classify the actual events",
+        "clause": "6.4.2"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), COR.1 Classify the actual events, cl. 6.4.2 - closest named process; EN 17007 has no third-party access process",
+          "status": "verified"
+        },
+        {
+          "for": "completeness clock",
+          "cite": "47 CFR 1.1411 Timeline for access to utility poles (d)(1)(i) 10 business days, deemed complete on silence; (d)(1)(ii) 5 business days on resubmission",
+          "status": "regulation"
+        },
+        {
+          "for": "published procedures",
+          "cite": "47 CFR 1.1411 Timeline for access to utility poles (d)(1)",
+          "status": "regulation"
+        },
+        {
+          "for": "intake design",
+          "cite": "Application form content beyond what the rule requires is operator practice",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "regulation",
+        "primary": "47 CFR 1.1411 Timeline for access to utility poles"
+      }
+    },
+    {
+      "uid": 10344,
+      "id": "11.2.2",
+      "name": "Assess application scope and fees",
+      "group": {
+        "id": "11.2",
+        "name": "Administer attachment applications and permits",
+        "uid": 10342
+      },
+      "intent": "Classify the order by size, because the size sets every deadline that follows.",
+      "activities": [
+        "Count the poles against your pole count in that State",
+        "Classify standard, Mid-Sized, Large or above Large",
+        "Test whether the required advance notice was given",
+        "Return the class and the deadlines it carries"
+      ],
+      "trigger": {
+        "kind": "conditional",
+        "text": "A complete application needs its size class before the clock is set.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Pole count in the application",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Utility pole count in that State",
+          "party": "AM",
+          "data": "WorkAsset"
+        },
+        {
+          "what": "Advance notice record",
+          "party": "MAI",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Order class and the deadlines it sets",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Fee basis for the application",
+          "party": "FIN",
+          "data": "Work"
+        }
+      ],
+      "systems": [
+        {
+          "component": "MAI",
+          "role": "system of record",
+          "service": "order class and deadline set"
+        },
+        {
+          "component": "AM",
+          "role": "supplier",
+          "service": "State pole count"
+        },
+        {
+          "component": "FIN",
+          "role": "consumer",
+          "service": "application fee basis"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "MAI",
+          "to": "FIN",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Joint use administrator",
+          "raci": "R"
+        },
+        {
+          "role": "Joint use manager",
+          "raci": "A"
+        },
+        {
+          "role": "Rates analyst",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkAsset"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "1.1411(a)(4): Mid-Sized is above the lesser of 300 poles or 0.5 percent of your State poles, to the lesser of 3,000 or 5 percent. (a)(5): Large runs to the lesser of 6,000 or 10 percent. Above that, (h)(4) requires negotiated timing."
+        },
+        {
+          "kind": "regulatory",
+          "text": "1.1411(h)(5) lets you treat one attacher's requests filed within 30 days as one, but forbids size and frequency limits combined to restrict how many may be sought."
+        },
+        {
+          "kind": "financial",
+          "text": "The application fee is contract and tariff. The class is not: it is arithmetic on the rule and cannot be negotiated."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Classification accuracy",
+          "definition": "Share of orders whose class survived review without reclassification.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.3.1 applied to the order class record"
+        }
+      ],
+      "variants": [
+        "Standard order on the base timeline",
+        "Mid-Sized Order with 15 days advance notice",
+        "Large Order with 60 days notice and a meet-and-confer",
+        "Above Large, timing negotiated under 1.1411(h)(4)"
+      ],
+      "notation": {
+        "class": "DMN",
+        "why": "The output is a size class - a value - and every threshold is stated in the rule rather than inferred.",
+        "artifact": "models/11.2.2-order-size-class.dmn"
+      },
+      "en17007": {
+        "process": "COR.1",
+        "title": "Classify the actual events",
+        "clause": "6.4.2"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), COR.1 Classify the actual events, cl. 6.4.2 - closest named process; EN 17007 has no third-party access process",
+          "status": "verified"
+        },
+        {
+          "for": "thresholds",
+          "cite": "47 CFR 1.1411 Timeline for access to utility poles (a)(4) Mid-Sized, (a)(5) Large, (h)(4) above Large",
+          "status": "regulation"
+        },
+        {
+          "for": "advance notice",
+          "cite": "47 CFR 1.1411 Timeline for access to utility poles (c)(1) 15 and 60 days; (c)(3) meet and confer within 30 days",
+          "status": "regulation"
+        },
+        {
+          "for": "aggregation",
+          "cite": "47 CFR 1.1411 Timeline for access to utility poles (h)(5) multiple requests within 30 days",
+          "status": "regulation"
+        }
+      ],
+      "provenance": {
+        "basis": "regulation",
+        "primary": "47 CFR 1.1411 Timeline for access to utility poles (a)"
+      }
+    },
+    {
+      "uid": 10345,
+      "id": "11.2.3",
+      "name": "Sequence and batch application workload",
+      "group": {
+        "id": "11.2",
+        "name": "Administer attachment applications and permits",
+        "uid": 10342
+      },
+      "intent": "Sequence and batch the application workload without breaching anyone's clock.",
+      "activities": [
+        "Hold the live applications and their remaining days",
+        "Group work that shares structures, crews or an outage window",
+        "Decide what to advance, hold or aggregate",
+        "Warn early where a deadline will be missed"
+      ],
+      "trigger": {
+        "kind": "conditional",
+        "text": "More live applications exist than the survey and make-ready capacity.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Live applications and remaining days",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Survey and make-ready capacity",
+          "party": "SCHD",
+          "data": "Crew"
+        },
+        {
+          "what": "Structures shared between applications",
+          "party": "AM",
+          "data": "WorkAsset"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Sequenced and batched workload",
+          "party": "SCHD",
+          "data": "Work"
+        },
+        {
+          "what": "Early warning where a deadline is at risk",
+          "party": "CS",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "MAI",
+          "role": "supplier",
+          "service": "applications and deadlines"
+        },
+        {
+          "component": "SCHD",
+          "role": "system of record",
+          "service": "sequencing and capacity"
+        },
+        {
+          "component": "CS",
+          "role": "consumer",
+          "service": "attacher notification"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "MAI",
+          "to": "SCHD",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Joint use manager",
+          "raci": "R"
+        },
+        {
+          "role": "Resource scheduler",
+          "raci": "A"
+        },
+        {
+          "role": "Joint use administrator",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "Crew"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "47 CFR 1.1411(d)(3)(i) requires notice within 15 days of a complete application where you know or should know you cannot meet the survey deadline, and (f)(4) within 15 days of payment for make-ready. Warning early is a duty, not courtesy."
+        },
+        {
+          "kind": "regulatory",
+          "text": "Missing a deadline hands the attacher self-help under 1.1411(j) - except for pole replacements, which (j)(3) excludes. Sequencing that quietly sacrifices one application transfers the work to somebody else's contractor."
+        },
+        {
+          "kind": "operational",
+          "text": "3.4 places the resulting work. This process decides which applications become work and in what order; it is not a second scheduler."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Deadline warning lead time",
+          "definition": "Days between knowing a deadline is at risk and notifying the attacher, against the 15 days the rule allows.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.4.7 Work Order Cycle Time"
+        }
+      ],
+      "variants": [
+        "Single application, no contention",
+        "Batched applications sharing structures or a window",
+        "Contended capacity where a deadline must be conceded and notified"
+      ],
+      "notation": {
+        "class": "CMMN",
+        "why": "Two competent coordinators will trade deadline risk, crew availability and shared structures in a different order.",
+        "artifact": "models/11.2.3-sequence-workload.cmmn"
+      },
+      "en17007": {
+        "process": "MAN.5",
+        "title": "Oversee the actions",
+        "clause": "6.2"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), MAN.5 Oversee the actions, cl. 6.2",
+          "status": "verified"
+        },
+        {
+          "for": "early warning duty",
+          "cite": "47 CFR 1.1411 Timeline for access to utility poles (d)(3)(i) and (f)(4) 15-day notice where a deadline cannot be met",
+          "status": "regulation"
+        },
+        {
+          "for": "consequence of delay",
+          "cite": "47 CFR 1.1411 Timeline for access to utility poles (j) self-help; (j)(3) not available for pole replacements",
+          "status": "regulation"
+        },
+        {
+          "for": "batching method",
+          "cite": "No source states a batching or sequencing method",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "regulation",
+        "primary": "47 CFR 1.1411 Timeline for access to utility poles (d)(3)"
+      }
+    },
+    {
+      "uid": 10346,
+      "id": "11.2.4",
+      "name": "Track regulatory application timelines",
+      "group": {
+        "id": "11.2",
+        "name": "Administer attachment applications and permits",
+        "uid": 10342
+      },
+      "intent": "Run the statutory clock on every live application and prove where each one stands.",
+      "activities": [
+        "Start each clock from the date the application became complete",
+        "Track survey, estimate, acceptance and make-ready against their deadlines",
+        "Issue the 15-day warning where a deadline cannot be met",
+        "Record any deviation with its cause and a new date"
+      ],
+      "trigger": {
+        "kind": "timer",
+        "text": "A live application has a deadline approaching or passed.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Complete-date and order class",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Survey, estimate and make-ready progress",
+          "party": "FRD",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Deviation causes",
+          "party": "CON",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Clock position on every live application",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Warning or deviation notice to the attacher",
+          "party": "CS",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "MAI",
+          "role": "system of record",
+          "service": "deadlines, warnings and deviations"
+        },
+        {
+          "component": "FRD",
+          "role": "supplier",
+          "service": "field progress"
+        },
+        {
+          "component": "CS",
+          "role": "interface",
+          "service": "notices to the attacher"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "FRD",
+          "to": "MAI",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        },
+        {
+          "from": "MAI",
+          "to": "CS",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Joint use administrator",
+          "raci": "R"
+        },
+        {
+          "role": "Joint use manager",
+          "raci": "A"
+        },
+        {
+          "role": "Regulatory counsel",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "The deadlines are 47 CFR 1.1411: grant or deny and survey within 45 days, estimate within 14 days of survey, make-ready 30 days in the communications space and 90 days above it. Mid-Sized adds 15 to survey and 45 to make-ready; Large adds 45, 15 and 90."
+        },
+        {
+          "kind": "regulatory",
+          "text": "1.1411(i) permits deviation before an estimate where no agreement sets rates and terms, and during make-ready for good and sufficient cause - with immediate written notice, the affected poles, a detailed reason and a new date."
+        },
+        {
+          "kind": "operational",
+          "text": "A clock that starts from receipt rather than from completeness is wrong in your favour and will be corrected against you."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Deadline compliance",
+          "definition": "Share of statutory deadlines met or deviated from with the notice the rule requires.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.4.3 Schedule Compliance"
+        }
+      ],
+      "variants": [
+        "FCC timeline under 1.1411",
+        "Certified-State timeline, which this reference does not state",
+        "One-touch make-ready timeline under 1.1411(k)",
+        "Negotiated timing for an order above the Large threshold"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "A clock with named milestones, warnings and a deviation branch.",
+        "artifact": "models/11.2-applications-and-permits.bpmn"
+      },
+      "en17007": {
+        "process": "MAN.5",
+        "title": "Oversee the actions",
+        "clause": "6.2"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), MAN.5 Oversee the actions, cl. 6.2",
+          "status": "verified"
+        },
+        {
+          "for": "the timeline",
+          "cite": "47 CFR 1.1411 Timeline for access to utility poles (d)(2), (d)(3)(i), (e), (f)(1)(ii), (f)(2)(ii), (h)",
+          "status": "regulation"
+        },
+        {
+          "for": "deviation",
+          "cite": "47 CFR 1.1411 Timeline for access to utility poles (i)(1) and (i)(2)",
+          "status": "regulation"
+        },
+        {
+          "for": "self-help consequence",
+          "cite": "47 CFR 1.1411 Timeline for access to utility poles (j)",
+          "status": "regulation"
+        }
+      ],
+      "provenance": {
+        "basis": "regulation",
+        "primary": "47 CFR 1.1411 Timeline for access to utility poles"
+      }
+    },
+    {
+      "uid": 10347,
+      "id": "11.2.5",
+      "name": "Issue or condition attachment permit",
+      "group": {
+        "id": "11.2",
+        "name": "Administer attachment applications and permits",
+        "uid": 10342
+      },
+      "intent": "Grant, condition or deny the attachment, in writing and on the evidence.",
+      "activities": [
+        "Take the survey result and the make-ready position",
+        "Grant, grant with conditions, or deny",
+        "State a denial specifically, with all the evidence behind it",
+        "Issue the permit and record what it authorises"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "A surveyed application is ready for a decision.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Survey and loading result",
+          "party": "DGN",
+          "data": "WorkAsset"
+        },
+        {
+          "what": "Make-ready scope and cost",
+          "party": "CON",
+          "data": "Work"
+        },
+        {
+          "what": "Agreement terms and governing regime",
+          "party": "MAI",
+          "data": "Work"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Permit, with any conditions",
+          "party": "CS",
+          "data": "Work"
+        },
+        {
+          "what": "Written denial with its evidence",
+          "party": "CS",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "MAI",
+          "role": "system of record",
+          "service": "permit and decision record"
+        },
+        {
+          "component": "DGN",
+          "role": "supplier",
+          "service": "engineering position"
+        },
+        {
+          "component": "CS",
+          "role": "interface",
+          "service": "decision to the attacher"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "MAI",
+          "to": "CS",
+          "payload": "WorkRequest",
+          "verb": "reply",
+          "pattern": "request-reply"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Joint use manager",
+          "raci": "A"
+        },
+        {
+          "role": "Distribution engineering",
+          "raci": "R"
+        },
+        {
+          "role": "Joint use administrator",
+          "raci": "C"
+        },
+        {
+          "role": "Regulatory counsel",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkAsset"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "47 CFR 1.1403(a) and 47 U.S.C. 224(f)(2) permit denial only for insufficient capacity, safety, reliability or engineering purposes - in writing, with the evidence and how it relates."
+        },
+        {
+          "kind": "regulatory",
+          "text": "1.1411(d)(2) forbids denial on a preexisting violation the new attacher did not cause. Somebody else's violation is not a ground."
+        },
+        {
+          "kind": "operational",
+          "text": "A permit that does not state what it authorises cannot be audited at 11.4 or support a claim at 11.4.6."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Decision timeliness",
+          "definition": "Share of applications granted or denied within the day count the governing regime sets.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.4.3 Schedule Compliance"
+        }
+      ],
+      "variants": [
+        "Grant on the base timeline",
+        "Grant conditional on make-ready completion",
+        "Denial for insufficient capacity, safety, reliability or engineering purposes",
+        "One-touch make-ready grant under 1.1411(k)(2)"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Decide, state and issue is a known repeating path with a denial branch.",
+        "artifact": "models/11.2-applications-and-permits.bpmn"
+      },
+      "en17007": {
+        "process": "MRQ.6",
+        "title": "Participate in the analysis and choice of options and validate the solutions",
+        "clause": "6.12"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), MRQ.6 Analysis and choice of options, cl. 6.12 - closest named process; EN 17007 has no third-party access process",
+          "status": "verified"
+        },
+        {
+          "for": "grounds for denial",
+          "cite": "47 CFR 1.1403 Duty to provide access; modifications; notice (a); 47 U.S.C. 224 Pole attachments (f)(2)",
+          "status": "regulation"
+        },
+        {
+          "for": "preexisting violations",
+          "cite": "47 CFR 1.1411 Timeline for access to utility poles (d)(2)",
+          "status": "regulation"
+        },
+        {
+          "for": "one-touch review",
+          "cite": "47 CFR 1.1411 Timeline for access to utility poles (k)(2) 15 days, 30 Mid-Sized, 45 Large",
+          "status": "regulation"
+        }
+      ],
+      "provenance": {
+        "basis": "regulation",
+        "primary": "47 CFR 1.1403 Duty to provide access; modifications; notice"
+      }
+    },
+    {
+      "uid": 10348,
+      "id": "11.2.6",
+      "name": "Apply for attachment on third-party structures",
+      "group": {
+        "id": "11.2",
+        "name": "Administer attachment applications and permits",
+        "uid": 10342
+      },
+      "intent": "Apply to attach the utility's own plant to somebody else's structure.",
+      "activities": [
+        "Identify the structures and their owner",
+        "Assemble the application to the owner's published procedures",
+        "Track the owner's clock and your own obligations under it",
+        "Accept, and record what you are now licensed to attach"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "Utility plant needs to occupy a structure the utility does not own.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Design requiring third-party structures",
+          "party": "DGN",
+          "data": "WorkAsset"
+        },
+        {
+          "what": "Owner, regime and published procedures",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Estimate and terms offered by the owner",
+          "party": "FIN",
+          "data": "Work"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Accepted permit on the owner's structure",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Rent obligation feeding 11.6.4",
+          "party": "FIN",
+          "data": "Work"
+        }
+      ],
+      "systems": [
+        {
+          "component": "MAI",
+          "role": "system of record",
+          "service": "outbound applications and permits"
+        },
+        {
+          "component": "DGN",
+          "role": "supplier",
+          "service": "design needing the structure"
+        },
+        {
+          "component": "FIN",
+          "role": "consumer",
+          "service": "rent obligation"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "DGN",
+          "to": "MAI",
+          "payload": "WorkRequest",
+          "verb": "create",
+          "pattern": "event"
+        },
+        {
+          "from": "MAI",
+          "to": "FIN",
+          "payload": "WorkRequest",
+          "verb": "create",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Joint use administrator",
+          "raci": "R"
+        },
+        {
+          "role": "Distribution engineering",
+          "raci": "C"
+        },
+        {
+          "role": "Joint use manager",
+          "raci": "A"
+        },
+        {
+          "role": "Rates analyst",
+          "raci": "I"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkAsset"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "Here the utility is the attacher and 224(f)(1) runs the other way - but 224(a)(5) excludes incumbent local exchange carriers from 'telecommunications carrier', and 47 CFR 1.1413 handles their complaints separately."
+        },
+        {
+          "kind": "regulatory",
+          "text": "Your crews on another owner's structure are the contract employer under 29 CFR 1910.269(a)(3), and the exchange runs both ways."
+        },
+        {
+          "kind": "operational",
+          "text": "2.0 designs the line; this obtains the right to occupy somebody else's structure so it can be built."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Outbound permit lead time",
+          "definition": "Days from design need to accepted permit on a third-party structure.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.4.7 Work Order Cycle Time"
+        }
+      ],
+      "variants": [
+        "Attaching to a telephone company structure",
+        "Attaching to a municipal or cooperative structure outside 224",
+        "Attaching under a reciprocal joint use agreement"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Assemble, submit, track and accept is a known repeating path.",
+        "artifact": "models/11.2-applications-and-permits.bpmn"
+      },
+      "en17007": {
+        "process": "SER.4",
+        "title": "Provide external services",
+        "clause": "6.15"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), SER.4 Provide external services, cl. 6.15 - closest named process; EN 17007 has no third-party access process",
+          "status": "verified"
+        },
+        {
+          "for": "access duty running the other way",
+          "cite": "47 U.S.C. 224 Pole attachments (f)(1); (a)(5) incumbent local exchange carriers excluded from 'telecommunications carrier'",
+          "status": "regulation"
+        },
+        {
+          "for": "ILEC complaints",
+          "cite": "47 CFR 1.1413 Complaints by incumbent local exchange carriers",
+          "status": "regulation"
+        },
+        {
+          "for": "host employer duty",
+          "cite": "29 CFR 1910.269(a)(3) host and contract employer information transfer",
+          "status": "regulation"
+        }
+      ],
+      "provenance": {
+        "basis": "regulation",
+        "primary": "47 U.S.C. 224 Pole attachments (a)(5)"
+      }
+    },
+    {
+      "uid": 10350,
+      "id": "11.3.1",
+      "name": "Survey structure and existing attachments",
+      "group": {
+        "id": "11.3",
+        "name": "Engineer and deliver make-ready work",
+        "uid": 10349
+      },
+      "intent": "Survey the structures in the application and record what is already on them.",
+      "activities": [
+        "Give the affected attachers notice of the field inspection",
+        "Record every existing attachment, its owner and its position",
+        "Record condition, existing violations and who caused them",
+        "Return the survey inside the day count the class allows"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "A complete application needs its structures surveyed.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Application structures and order class",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Existing attachment inventory from 11.4.1",
+          "party": "AM",
+          "data": "WorkAsset"
+        },
+        {
+          "what": "Most recent cyclical pole inspection report",
+          "party": "AM",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Survey with attachments, positions and condition",
+          "party": "DGN",
+          "data": "WorkAsset"
+        },
+        {
+          "what": "Preexisting violations, attributed to a cause",
+          "party": "MAI",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "FRD",
+          "role": "system of record",
+          "service": "field survey capture"
+        },
+        {
+          "component": "AM",
+          "role": "supplier",
+          "service": "inventory and inspection history"
+        },
+        {
+          "component": "DGN",
+          "role": "consumer",
+          "service": "survey feeding loading and design"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "FRD",
+          "to": "DGN",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Joint use field surveyor",
+          "raci": "R"
+        },
+        {
+          "role": "Distribution engineering",
+          "raci": "A"
+        },
+        {
+          "role": "Joint use administrator",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "WorkAsset",
+        "WorkLocation",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "47 CFR 1.1411(d)(3)(ii) requires you to permit the new attacher and existing attachers to be present, with commercially reasonable efforts to give not less than 3 business days notice, the date, time, location and the contractor's name."
+        },
+        {
+          "kind": "regulatory",
+          "text": "1.1411(d)(4)(i) requires you to give the new attacher your most recent cyclical pole inspection report for the poles in the application, on written request, within 10 business days - and (ii) to retain those reports until superseded."
+        },
+        {
+          "kind": "operational",
+          "text": "Attributing an existing violation to whoever caused it is what makes 11.3.5 cost allocation defensible. Recorded later, it is an assertion."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Survey timeliness",
+          "definition": "Share of surveys completed inside the day count the order class allows.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.4.3 Schedule Compliance"
+        }
+      ],
+      "variants": [
+        "Utility survey on the base 45-day clock",
+        "Survey conducted by the attacher under self-help at 1.1411(j)(1)",
+        "Attacher survey adopted by the utility under 1.1411(d)(3)(iii)",
+        "One-touch make-ready survey run by the attacher's contractor"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Notify, inspect, record and return is a known repeating path.",
+        "artifact": "models/11.3-make-ready.bpmn"
+      },
+      "en17007": {
+        "process": "DTA.1",
+        "title": "Store and validate the raw data in a library and/or a database",
+        "clause": "6.10"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), DTA.1 Store and validate the raw data, cl. 6.10",
+          "status": "verified"
+        },
+        {
+          "for": "inspection notice",
+          "cite": "47 CFR 1.1411 Timeline for access to utility poles (d)(3)(ii) 3 business days notice and attendance",
+          "status": "regulation"
+        },
+        {
+          "for": "pole inspection reports",
+          "cite": "47 CFR 1.1411 Timeline for access to utility poles (d)(4)(i) within 10 business days of written request; (ii) retention until superseded",
+          "status": "regulation"
+        },
+        {
+          "for": "survey contractors",
+          "cite": "47 CFR 1.1412 Contractors for survey, estimates, and make-ready (b) and (c) minimum qualifications",
+          "status": "regulation"
+        }
+      ],
+      "provenance": {
+        "basis": "regulation",
+        "primary": "47 CFR 1.1411 Timeline for access to utility poles (d)(3)"
+      }
+    },
+    {
+      "uid": 10351,
+      "id": "11.3.2",
+      "name": "Perform structural loading analysis",
+      "group": {
+        "id": "11.3",
+        "name": "Engineer and deliver make-ready work",
+        "uid": 10349
+      },
+      "intent": "Establish whether the structure can carry the proposed attachment as loaded.",
+      "activities": [
+        "Take the structure, its class and every existing attachment",
+        "Analyse loading for the governing loading district",
+        "Return adequate, adequate after make-ready, or replacement required",
+        "Record the analysis so a later party can rebut it"
+      ],
+      "trigger": {
+        "kind": "none",
+        "text": "A standing analytical capability; the run itself has no sourced method here.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Structure class, height and condition",
+          "party": "AM",
+          "data": "WorkAsset"
+        },
+        {
+          "what": "Existing and proposed attachments",
+          "party": "DGN",
+          "data": "WorkAsset"
+        },
+        {
+          "what": "Loading district for the location",
+          "party": "GINV",
+          "data": "WorkLocation"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Adequate, make-ready or replacement disposition",
+          "party": "DGN",
+          "data": "WorkAsset"
+        },
+        {
+          "what": "Analysis record available for rebuttal",
+          "party": "MAI",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "DGN",
+          "role": "system of record",
+          "service": "loading analysis and disposition"
+        },
+        {
+          "component": "AM",
+          "role": "supplier",
+          "service": "structure class and condition"
+        },
+        {
+          "component": "GINV",
+          "role": "supplier",
+          "service": "location and loading district"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "AM",
+          "to": "DGN",
+          "payload": "WorkRequest",
+          "verb": "get",
+          "pattern": "request-reply"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Distribution engineering",
+          "raci": "R"
+        },
+        {
+          "role": "Engineering manager",
+          "raci": "A"
+        },
+        {
+          "role": "Joint use administrator",
+          "raci": "I"
+        }
+      ],
+      "data_objects": [
+        "WorkAsset",
+        "WorkLocation"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "NESC Rule 250B sets the combined ice and wind loading districts. The rule number and subject are confirmed; the body is paywalled and no loading figure from it appears anywhere in this category."
+        },
+        {
+          "kind": "operational",
+          "text": "The output is a disposition, so this passes the DMN test on shape. It is SPEC because writing the table would state loading arithmetic this reference has not read."
+        },
+        {
+          "kind": "operational",
+          "text": "'Replacement required' commits 11.5, and 1.1411(j)(3) removes self-help for pole replacements. This is where the attacher loses its own remedy."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Analysis reproducibility",
+          "definition": "Share of loading analyses recording structure, loading district, attachments and disposition.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.3.1 applied to the analysis record"
+        }
+      ],
+      "variants": [
+        "Existing structure adequate as loaded",
+        "Adequate after make-ready rearrangement",
+        "Replacement required, committing 11.5"
+      ],
+      "notation": {
+        "class": "SPEC",
+        "why": "A determination whose rule is NESC loading, which is paywalled and unread. A decision table here would invent the arithmetic.",
+        "artifact": null
+      },
+      "en17007": {
+        "process": "MRQ.2",
+        "title": "Perform risk analyses",
+        "clause": "6.12"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), MRQ.2 Perform risk analyses, cl. 6.12 - closest named process; EN 17007 has no third-party access process",
+          "status": "verified"
+        },
+        {
+          "for": "loading districts",
+          "cite": "NESC ANSI/IEEE C2-2023 Rule 250B Combined ice and wind loading districts",
+          "status": "clause-verified"
+        },
+        {
+          "for": "no self-help on replacement",
+          "cite": "47 CFR 1.1411 Timeline for access to utility poles (j)(3) self-help is not available for pole replacements",
+          "status": "regulation"
+        },
+        {
+          "for": "analysis method",
+          "cite": "No source in the pack states a loading analysis method or acceptance threshold",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "judgment",
+        "primary": "Disposition is derivable; the arithmetic behind it is not held"
+      }
+    },
+    {
+      "uid": 10352,
+      "id": "11.3.3",
+      "name": "Design make-ready and clearance solution",
+      "group": {
+        "id": "11.3",
+        "name": "Engineer and deliver make-ready work",
+        "uid": 10349
+      },
+      "intent": "Design the make-ready that will create clearance for the new attachment.",
+      "activities": [
+        "Take the loading disposition and the clearance shortfalls",
+        "Design rearrangement, transfer or replacement to resolve each one",
+        "Separate simple make-ready from complex",
+        "Issue a design a contractor can build to"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "A survey and loading analysis show what has to change on the structure.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Survey and existing attachment positions",
+          "party": "DGN",
+          "data": "WorkAsset"
+        },
+        {
+          "what": "Loading disposition from 11.3.2",
+          "party": "DGN",
+          "data": "WorkAsset"
+        },
+        {
+          "what": "Clearance requirements for the structure",
+          "party": "MAI",
+          "data": "Work"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Make-ready design, simple and complex separated",
+          "party": "CON",
+          "data": "Work"
+        },
+        {
+          "what": "Clearance solution per attachment",
+          "party": "DGN",
+          "data": "WorkAsset"
+        }
+      ],
+      "systems": [
+        {
+          "component": "DGN",
+          "role": "system of record",
+          "service": "make-ready design"
+        },
+        {
+          "component": "CON",
+          "role": "consumer",
+          "service": "buildable scope"
+        },
+        {
+          "component": "AM",
+          "role": "supplier",
+          "service": "structure and attachment data"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "DGN",
+          "to": "CON",
+          "payload": "WorkRequest",
+          "verb": "create",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Distribution engineering",
+          "raci": "R"
+        },
+        {
+          "role": "Engineering manager",
+          "raci": "A"
+        },
+        {
+          "role": "Joint use manager",
+          "raci": "C"
+        },
+        {
+          "role": "Field construction supervisor",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "WorkAsset",
+        "Work"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "NESC Rule 235C governs vertical clearances between conductors at poles and Rule 238 supply and communication equipment clearances. Neither body is paraphrased here."
+        },
+        {
+          "kind": "operational",
+          "text": "NRECA's May 2025 guide puts the communication worker safety zone at generally 40 in above the communication space. The figure is NRECA's, not the NESC's."
+        },
+        {
+          "kind": "regulatory",
+          "text": "Simple or complex decides the route, and under 1.1411(k)(2)(ii) the utility's written objection that simple work is complex is determinative."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Design rework rate",
+          "definition": "Share of make-ready designs revised after issue for clearance or loading reasons.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.4.1 Rework"
+        }
+      ],
+      "variants": [
+        "Simple make-ready in the communications space",
+        "Complex make-ready requiring an engineered design",
+        "Make-ready above the communications space",
+        "Replacement design where rearrangement cannot create clearance"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Take the shortfall, design the resolution, classify and issue.",
+        "artifact": "models/11.3-make-ready.bpmn"
+      },
+      "en17007": {
+        "process": "IMP.3",
+        "title": "Establish specifications for the required improvements of the item",
+        "clause": "6.6"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), IMP.3 Establish specifications for improvements, cl. 6.6",
+          "status": "verified"
+        },
+        {
+          "for": "clearance rules",
+          "cite": "NESC ANSI/IEEE C2-2023 Rule 235C Vertical clearances between conductors at poles; NESC ANSI/IEEE C2-2023 Rule 238 Supply and communication equipment clearances",
+          "status": "clause-verified"
+        },
+        {
+          "for": "worker safety zone",
+          "cite": "NRECA Guide for the Application of Clearance Requirements on Joint-Use Poles, Distribution Subcommittee Overhead Work Group, May 2025",
+          "status": "consensus"
+        },
+        {
+          "for": "simple versus complex",
+          "cite": "47 CFR 1.1411 Timeline for access to utility poles (k)(2)(ii) the utility's objection is final and determinative",
+          "status": "regulation"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "NESC ANSI/IEEE C2-2023 Rule 235C Vertical clearances between conductors at poles"
+      }
+    },
+    {
+      "uid": 10353,
+      "id": "11.3.4",
+      "name": "Estimate make-ready cost",
+      "group": {
+        "id": "11.3",
+        "name": "Engineer and deliver make-ready work",
+        "uid": 10349
+      },
+      "intent": "Price the make-ready and present the estimate inside the day count.",
+      "activities": [
+        "Price the designed make-ready structure by structure",
+        "Present an itemised estimate, pole by pole where asked",
+        "Hold the estimate open, or withdraw it once the rule permits",
+        "Invoice the actual cost where it differs from the estimate"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "A make-ready design is ready to price.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Make-ready design and quantities",
+          "party": "CON",
+          "data": "Work"
+        },
+        {
+          "what": "Unit rates and contractor pricing",
+          "party": "FIN",
+          "data": "Work"
+        },
+        {
+          "what": "Cost allocation from 11.3.5",
+          "party": "FIN",
+          "data": "Work"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Itemised estimate to the attacher",
+          "party": "CS",
+          "data": "Work"
+        },
+        {
+          "what": "Final invoice where actual differs",
+          "party": "FIN",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "FIN",
+          "role": "system of record",
+          "service": "estimate and final invoice"
+        },
+        {
+          "component": "CON",
+          "role": "supplier",
+          "service": "scope and quantities"
+        },
+        {
+          "component": "CS",
+          "role": "interface",
+          "service": "estimate to the attacher"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "FIN",
+          "to": "CS",
+          "payload": "WorkRequest",
+          "verb": "reply",
+          "pattern": "request-reply"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Estimator",
+          "raci": "R"
+        },
+        {
+          "role": "Joint use manager",
+          "raci": "A"
+        },
+        {
+          "role": "Rates analyst",
+          "raci": "C"
+        },
+        {
+          "role": "Field construction supervisor",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "47 CFR 1.1411(e) requires a detailed, itemised estimate, pole by pole where requested, within 14 days of completing the survey - 29 days for a Large Order. (e)(1) lets you withdraw it 14 days after presentation and (e)(2) lets the attacher accept any time before withdrawal."
+        },
+        {
+          "kind": "regulatory",
+          "text": "1.1411(e)(3) requires a detailed itemised final invoice of actual charges where the final cost differs from the estimate. An estimate is not a price."
+        },
+        {
+          "kind": "financial",
+          "text": "Where the utility misses the estimate deadline, 1.1411(j)(2) lets the attacher prepare the estimate itself for utility review."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Estimate timeliness",
+          "definition": "Share of estimates presented within the day count from survey completion.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.4.3 Schedule Compliance"
+        }
+      ],
+      "variants": [
+        "Estimate on the base 14-day clock",
+        "Large Order estimate on 29 days",
+        "Attacher-prepared estimate under self-help at 1.1411(j)(2)",
+        "Final invoice reconciling actual to estimate"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Price, present, hold or withdraw, then reconcile.",
+        "artifact": "models/11.3-make-ready.bpmn"
+      },
+      "en17007": {
+        "process": "BUD.3",
+        "title": "Create a budget estimate for infrequent or exceptional maintenance tasks",
+        "clause": "6.8"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), BUD.3 Budget estimate for exceptional maintenance, cl. 6.8 - closest named process; EN 17007 has no third-party access process",
+          "status": "verified"
+        },
+        {
+          "for": "estimate clock",
+          "cite": "47 CFR 1.1411 Timeline for access to utility poles (e) 14 days, 29 for Large; (e)(1) withdrawal after 14 days; (e)(2) acceptance",
+          "status": "regulation"
+        },
+        {
+          "for": "final invoice",
+          "cite": "47 CFR 1.1411 Timeline for access to utility poles (e)(3)",
+          "status": "regulation"
+        },
+        {
+          "for": "self-help estimate",
+          "cite": "47 CFR 1.1411 Timeline for access to utility poles (j)(2)",
+          "status": "regulation"
+        }
+      ],
+      "provenance": {
+        "basis": "regulation",
+        "primary": "47 CFR 1.1411 Timeline for access to utility poles (e)"
+      }
+    },
+    {
+      "uid": 10354,
+      "id": "11.3.5",
+      "name": "Allocate make-ready and replacement cost",
+      "group": {
+        "id": "11.3",
+        "name": "Engineer and deliver make-ready work",
+        "uid": 10349
+      },
+      "intent": "Decide who pays for each element of the make-ready, on the federal cost rule.",
+      "activities": [
+        "Take each make-ready element and what caused it",
+        "Test whether it is a preexisting condition and who caused it",
+        "Apportion between the new attacher, existing parties and the owner",
+        "Return the allocation and the rule it rests on"
+      ],
+      "trigger": {
+        "kind": "conditional",
+        "text": "Priced make-ready needs an allocation before it can be invoiced.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Make-ready elements and their causes",
+          "party": "CON",
+          "data": "Work"
+        },
+        {
+          "what": "Preexisting violations from 11.3.1",
+          "party": "MAI",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Parties benefiting from the modification",
+          "party": "AM",
+          "data": "WorkAsset"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Cost allocation by party and element",
+          "party": "FIN",
+          "data": "Work"
+        },
+        {
+          "what": "Elements the new attacher may not be charged for",
+          "party": "FIN",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "FIN",
+          "role": "system of record",
+          "service": "allocation by party"
+        },
+        {
+          "component": "CON",
+          "role": "supplier",
+          "service": "make-ready elements and causes"
+        },
+        {
+          "component": "MAI",
+          "role": "supplier",
+          "service": "violation attribution"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "CON",
+          "to": "FIN",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Rates analyst",
+          "raci": "R"
+        },
+        {
+          "role": "Joint use manager",
+          "raci": "A"
+        },
+        {
+          "role": "Estimator",
+          "raci": "C"
+        },
+        {
+          "role": "Regulatory counsel",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkAsset"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "1.1411(e)(4) forbids charging a new attacher to fix non-compliance caused by another party before its attachment. Somebody else's violation is not the applicant's bill."
+        },
+        {
+          "kind": "regulatory",
+          "text": "1.1408(b) shares modification cost proportionately among all parties that gain access or directly benefit. 224(i) exempts an attacher from rearranging its own attachment for an ADDITIONAL one."
+        },
+        {
+          "kind": "regulatory",
+          "text": "1.1416(b) forbids blocking or charging an overlasher over another attacher's unfixed violation."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Allocation challenge rate",
+          "definition": "Share of allocations disputed at 11.6.6 and the share sustained.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.4.1 Rework applied to the allocation"
+        }
+      ],
+      "variants": [
+        "New attacher bears its own make-ready",
+        "Proportionate sharing where several parties benefit",
+        "Preexisting violation borne by the party that caused it",
+        "Betterment borne by the structure owner"
+      ],
+      "notation": {
+        "class": "DMN",
+        "why": "The output is who pays for each element - a value - and the rule is federal text rather than practice.",
+        "artifact": "models/11.3.5-cost-allocation.dmn"
+      },
+      "en17007": {
+        "process": "BUD.1",
+        "title": "Define, compile cost elements and calculate or estimate actual costs",
+        "clause": "6.8"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), BUD.1 Define and compile cost elements, cl. 6.8 - closest named process; EN 17007 has no third-party access process",
+          "status": "verified"
+        },
+        {
+          "for": "preexisting condition",
+          "cite": "47 CFR 1.1411 Timeline for access to utility poles (e)(4)",
+          "status": "regulation"
+        },
+        {
+          "for": "proportionate sharing",
+          "cite": "47 CFR 1.1408 Imputation of rates; modification costs (b); 47 U.S.C. 224 Pole attachments (i)",
+          "status": "regulation"
+        },
+        {
+          "for": "overlashing",
+          "cite": "47 CFR 1.1416 Overlashing (b) preexisting violations",
+          "status": "regulation"
+        }
+      ],
+      "provenance": {
+        "basis": "regulation",
+        "primary": "47 CFR 1.1408 Imputation of rates; modification costs (b)"
+      }
+    },
+    {
+      "uid": 10355,
+      "id": "11.3.6",
+      "name": "Execute and inspect make-ready construction",
+      "group": {
+        "id": "11.3",
+        "name": "Engineer and deliver make-ready work",
+        "uid": 10349
+      },
+      "intent": "Build the make-ready and prove it was built to the design.",
+      "activities": [
+        "Notify every affected attacher of what will be done and by when",
+        "Coordinate existing attachers moving their own equipment",
+        "Build the utility's own make-ready to the same dates",
+        "Inspect, record and hand the structure to the new attacher"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "Make-ready payment is received and the work can start.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Make-ready design and paid estimate",
+          "party": "CON",
+          "data": "Work"
+        },
+        {
+          "what": "Affected attachers and their contacts",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Access, permits and any clearance need",
+          "party": "NO",
+          "data": "Work"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Completed and inspected make-ready",
+          "party": "AM",
+          "data": "WorkAsset"
+        },
+        {
+          "what": "Notice to the new attacher that it may attach",
+          "party": "CS",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "CON",
+          "role": "system of record",
+          "service": "make-ready execution"
+        },
+        {
+          "component": "FRD",
+          "role": "supplier",
+          "service": "field completion and inspection"
+        },
+        {
+          "component": "AM",
+          "role": "consumer",
+          "service": "updated attachment positions"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "CON",
+          "to": "FRD",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        },
+        {
+          "from": "FRD",
+          "to": "AM",
+          "payload": "WorkRequest",
+          "verb": "close",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Field construction supervisor",
+          "raci": "R"
+        },
+        {
+          "role": "Joint use manager",
+          "raci": "A"
+        },
+        {
+          "role": "Distribution engineering",
+          "raci": "C"
+        },
+        {
+          "role": "Joint use administrator",
+          "raci": "I"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkAsset",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "1.1411(f) requires immediate written notice to every known affected attacher on payment: where, what, the completion date, their right to move first, and the new attacher's right to finish if the date slips."
+        },
+        {
+          "kind": "regulatory",
+          "text": "1.1411(g) holds you to the dates you set for existing attachers; (f)(2)(iv) allows 15 further days above the communications space."
+        },
+        {
+          "kind": "regulatory",
+          "text": "A contractor here is a contract employer under 1910.269(a)(3), and 47 CFR 1.1412(c)(1) requires your published safety guidelines or, absent those, the NESC."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Make-ready schedule compliance",
+          "definition": "Share of make-ready completed by the date set in the 1.1411(f) notice.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.4.3 Schedule Compliance"
+        }
+      ],
+      "variants": [
+        "Utility-performed make-ready in the communications space",
+        "Make-ready above the communications space with the 15-day right of control",
+        "Attacher self-help make-ready under 1.1411(j)(3)",
+        "One-touch make-ready performed by the attacher's contractor"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Notify, coordinate, build, inspect and hand over is a known repeating path.",
+        "artifact": "models/11.3-make-ready.bpmn"
+      },
+      "en17007": {
+        "process": "IMP.6",
+        "title": "Carry out realization",
+        "clause": "6.6"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), IMP.6 Carry out realization, cl. 6.6",
+          "status": "verified"
+        },
+        {
+          "for": "make-ready notice",
+          "cite": "47 CFR 1.1411 Timeline for access to utility poles (f)(1) and (f)(2); (g) the utility's own dates",
+          "status": "regulation"
+        },
+        {
+          "for": "contractor duty",
+          "cite": "47 CFR 1.1412 Contractors for survey, estimates, and make-ready (c)(1) NESC where no published guidelines; 29 CFR 1910.269(a)(3) host and contract employer information transfer",
+          "status": "consensus"
+        },
+        {
+          "for": "post-work inspection",
+          "cite": "47 CFR 1.1411 Timeline for access to utility poles (j)(3)(iii) 15 days notice, 90 days to inspect, 14 days to report damage",
+          "status": "regulation"
+        }
+      ],
+      "provenance": {
+        "basis": "regulation",
+        "primary": "47 CFR 1.1411 Timeline for access to utility poles (f)"
+      }
+    },
+    {
+      "uid": 10357,
+      "id": "11.4.1",
+      "name": "Maintain attachment inventory on structures",
+      "group": {
+        "id": "11.4",
+        "name": "Manage attachment inventory and audits",
+        "uid": 10356
+      },
+      "intent": "Hold what is attached to every structure, and on whose authority.",
+      "activities": [
+        "Record each attachment, its owner and its position on the structure",
+        "Link each attachment to the permit that authorised it",
+        "Carry the count that 11.6.1 bills and 11.1.3 prices",
+        "Mark attachments with no permit for 11.4.6"
+      ],
+      "trigger": {
+        "kind": "none",
+        "text": "A standing inventory. Individual updates are events on it, not instances.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Permits issued at 11.2.5",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Field capture from 11.4.4 and 11.3.1",
+          "party": "FRD",
+          "data": "WorkAsset"
+        },
+        {
+          "what": "Structure register from 12.1",
+          "party": "AM",
+          "data": "WorkAsset"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Attachment inventory by structure and owner",
+          "party": "AM",
+          "data": "WorkAsset"
+        },
+        {
+          "what": "Attachments with no authorising permit",
+          "party": "MAI",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "AM",
+          "role": "system of record",
+          "service": "attachment inventory"
+        },
+        {
+          "component": "MAI",
+          "role": "supplier",
+          "service": "permits and authority"
+        },
+        {
+          "component": "FIN",
+          "role": "consumer",
+          "service": "billable attachment count"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "AM",
+          "to": "FIN",
+          "payload": "WorkRequest",
+          "verb": "get",
+          "pattern": "request-reply"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Joint use administrator",
+          "raci": "R"
+        },
+        {
+          "role": "Asset data owner",
+          "raci": "A"
+        },
+        {
+          "role": "Joint use manager",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "WorkAsset",
+        "WorkLocation"
+      ],
+      "controls": [
+        {
+          "kind": "financial",
+          "text": "This count is the rental base. 47 CFR 1.1409(b) requires all attaching entities on the pole to be counted for apportioning unusable space, so an inventory that misses attachers understates a cost the rule says they share."
+        },
+        {
+          "kind": "operational",
+          "text": "An attachment with no permit is not automatically unauthorised - the permit may predate the record. 11.4.6 establishes which it is; this record only flags the absence."
+        },
+        {
+          "kind": "operational",
+          "text": "12.1 registers the structure. This holds the joint use overlay on it and does not duplicate the register."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Inventory completeness",
+          "definition": "Share of attachments in the inventory traceable to an authorising permit.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.3.1 applied to the attachment inventory"
+        }
+      ],
+      "variants": [
+        "Overhead pole attachments by owner and position",
+        "Wireless and small-cell attachments with their own envelope",
+        "Overlashed attachments carried on an existing messenger"
+      ],
+      "notation": {
+        "class": "SPEC",
+        "why": "A standing inventory the whole category reads. No instance boundary.",
+        "artifact": null
+      },
+      "en17007": {
+        "process": "DTA.3",
+        "title": "Draw up and maintain an up-to-date list of critical items",
+        "clause": "6.10"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), DTA.3 Maintain an up-to-date list of items, cl. 6.10",
+          "status": "verified"
+        },
+        {
+          "for": "counting duty",
+          "cite": "47 CFR 1.1409 Allocation of Unusable Space Costs (b) all attaching entities shall be counted",
+          "status": "regulation"
+        },
+        {
+          "for": "overlashing visibility",
+          "cite": "47 CFR 1.1416 Overlashing (a) no prior approval for an existing attacher overlashing its own wires",
+          "status": "regulation"
+        },
+        {
+          "for": "inventory content",
+          "cite": "No standard specifies attachment inventory content",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "judgment",
+        "primary": "Joint use overlay on the 12.1 register; no standard supplies it"
+      }
+    },
+    {
+      "uid": 10358,
+      "id": "11.4.2",
+      "name": "Maintain conduit and duct occupancy records",
+      "group": {
+        "id": "11.4",
+        "name": "Manage attachment inventory and audits",
+        "uid": 10356
+      },
+      "intent": "Hold what occupies every duct and inner-duct, because conduit is billed differently.",
+      "activities": [
+        "Record duct and inner-duct occupancy by owner",
+        "Record where no inner-duct is installed",
+        "Carry the occupancy that the conduit formula reads",
+        "Keep manhole and vault access records current"
+      ],
+      "trigger": {
+        "kind": "none",
+        "text": "A standing occupancy record.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Conduit and duct register from 12.1",
+          "party": "AM",
+          "data": "WorkAsset"
+        },
+        {
+          "what": "Conduit permits issued",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Field occupancy observations",
+          "party": "FRD",
+          "data": "WorkAsset"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Duct and inner-duct occupancy by owner",
+          "party": "AM",
+          "data": "WorkAsset"
+        },
+        {
+          "what": "Occupancy input to the conduit rate",
+          "party": "FIN",
+          "data": "Work"
+        }
+      ],
+      "systems": [
+        {
+          "component": "AM",
+          "role": "system of record",
+          "service": "conduit occupancy"
+        },
+        {
+          "component": "GINV",
+          "role": "supplier",
+          "service": "duct network and structures"
+        },
+        {
+          "component": "FIN",
+          "role": "consumer",
+          "service": "conduit rate input"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "AM",
+          "to": "FIN",
+          "payload": "WorkRequest",
+          "verb": "get",
+          "pattern": "request-reply"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Joint use administrator",
+          "raci": "R"
+        },
+        {
+          "role": "Asset data owner",
+          "raci": "A"
+        },
+        {
+          "role": "Rates analyst",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "WorkAsset",
+        "WorkLocation"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "47 CFR 1.1406(d)(3) sets the conduit formula and (d)(4) presumes the fraction 'one duct divided by the number of inner-ducts' to be one half where no inner-duct is installed. Whether inner-duct exists is therefore a rate fact."
+        },
+        {
+          "kind": "operational",
+          "text": "Conduit occupancy is not a pole attachment count and must not be merged into the pole inventory. The formulas differ."
+        },
+        {
+          "kind": "operational",
+          "text": "Access to a manhole is confined-space work. This record holds occupancy; 8.0 holds the entry programme."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Occupancy record currency",
+          "definition": "Share of ducts whose occupancy record was confirmed within the audit cycle.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.3.1 applied to the occupancy record"
+        }
+      ],
+      "variants": [
+        "Duct with installed inner-ducts",
+        "Duct with no inner-duct, taking the one-half presumption",
+        "Shared manhole and vault occupancy"
+      ],
+      "notation": {
+        "class": "SPEC",
+        "why": "A standing occupancy record behind the conduit rate. No instance boundary.",
+        "artifact": null
+      },
+      "en17007": {
+        "process": "DTA.1",
+        "title": "Store and validate the raw data in a library and/or a database",
+        "clause": "6.10"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), DTA.1 Store and validate the raw data, cl. 6.10",
+          "status": "verified"
+        },
+        {
+          "for": "conduit formula",
+          "cite": "47 CFR 1.1406 Commission consideration of the complaint (d)(3); (d)(4) the one-half inner-duct presumption",
+          "status": "regulation"
+        },
+        {
+          "for": "occupancy content",
+          "cite": "No standard specifies conduit occupancy record content",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "regulation",
+        "primary": "47 CFR 1.1406 Commission consideration of the complaint (d)(3)"
+      }
+    },
+    {
+      "uid": 10359,
+      "id": "11.4.3",
+      "name": "Plan and scope joint use audit",
+      "group": {
+        "id": "11.4",
+        "name": "Manage attachment inventory and audits",
+        "uid": 10356
+      },
+      "intent": "Plan an audit that will stand up when it produces a bill or a violation notice.",
+      "activities": [
+        "Set the scope, the population and the sampling basis",
+        "Set what will be captured and to what evidentiary standard",
+        "Give the counterparties the notice the agreement requires",
+        "Release the audit to the field"
+      ],
+      "trigger": {
+        "kind": "timer",
+        "text": "The audit cycle is due, or a reconciliation gap has triggered one.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Structure and attachment population",
+          "party": "AM",
+          "data": "WorkAsset"
+        },
+        {
+          "what": "Agreement audit terms and notice periods",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Prior audit findings and disputes",
+          "party": "MAI",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Audit scope, sample and capture standard",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Notice to counterparties",
+          "party": "CS",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "MAI",
+          "role": "system of record",
+          "service": "audit plan and scope"
+        },
+        {
+          "component": "AM",
+          "role": "supplier",
+          "service": "population to be audited"
+        },
+        {
+          "component": "SCHD",
+          "role": "consumer",
+          "service": "audit field work"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "MAI",
+          "to": "SCHD",
+          "payload": "WorkRequest",
+          "verb": "create",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Joint use manager",
+          "raci": "A"
+        },
+        {
+          "role": "Joint use administrator",
+          "raci": "R"
+        },
+        {
+          "role": "Rates analyst",
+          "raci": "C"
+        },
+        {
+          "role": "Legal counsel",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkAsset"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "No source states an audit cycle, sample size or sampling method. All three are contract and operator judgment, recorded as chosen not required."
+        },
+        {
+          "kind": "financial",
+          "text": "An audit that will back-bill at 11.6.5 must capture to that evidentiary standard first time. Re-visiting to prove a finding costs more."
+        },
+        {
+          "kind": "operational",
+          "text": "Joint audits resolve more findings than unilateral ones and the agreement says which is available. No source held here prescribes either."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Audit coverage",
+          "definition": "Share of the jointly used population audited within the cycle the agreement sets.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.3.1 applied to audit coverage"
+        }
+      ],
+      "variants": [
+        "Full-population audit",
+        "Sampled audit with a stated basis",
+        "Joint audit conducted with the counterparty",
+        "Targeted audit triggered by a billing reconciliation gap"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Scope, sample, notify and release is a known repeating path.",
+        "artifact": "models/11.4-inventory-and-audits.bpmn"
+      },
+      "en17007": {
+        "process": "MAN.5",
+        "title": "Oversee the actions",
+        "clause": "6.2"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), MAN.5 Oversee the actions, cl. 6.2",
+          "status": "verified"
+        },
+        {
+          "for": "counting basis",
+          "cite": "47 CFR 1.1409 Allocation of Unusable Space Costs (b) and (d)(3) challenge to a presumptive attacher average by inspection",
+          "status": "regulation"
+        },
+        {
+          "for": "audit cycle and sampling",
+          "cite": "No source in the Source Authority Pack states an audit cycle, sample size or sampling method",
+          "status": "judgment"
+        },
+        {
+          "for": "notice",
+          "cite": "Audit notice periods are agreement terms",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "judgment",
+        "primary": "Audit design is contract and operator practice"
+      }
+    },
+    {
+      "uid": 10360,
+      "id": "11.4.4",
+      "name": "Capture and validate field attachment data",
+      "group": {
+        "id": "11.4",
+        "name": "Manage attachment inventory and audits",
+        "uid": 10356
+      },
+      "intent": "Capture what is actually on the structure, to a standard a bill can rest on.",
+      "activities": [
+        "Identify the structure unambiguously in the field",
+        "Capture every attachment, its owner and its position",
+        "Capture clearance and condition observations with evidence",
+        "Validate the capture before it reaches the record"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "An audit or a survey requires field capture on a structure.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Audit scope and capture standard",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Current inventory for the structure",
+          "party": "AM",
+          "data": "WorkAsset"
+        },
+        {
+          "what": "Structure identity and location",
+          "party": "GINV",
+          "data": "WorkLocation"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Validated field attachment data",
+          "party": "AM",
+          "data": "WorkAsset"
+        },
+        {
+          "what": "Unidentified or disputed attachments",
+          "party": "MAI",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "FRD",
+          "role": "system of record",
+          "service": "field capture"
+        },
+        {
+          "component": "GINV",
+          "role": "supplier",
+          "service": "structure identity and location"
+        },
+        {
+          "component": "AM",
+          "role": "consumer",
+          "service": "validated inventory update"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "FRD",
+          "to": "AM",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "batch"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Joint use field surveyor",
+          "raci": "R"
+        },
+        {
+          "role": "Joint use administrator",
+          "raci": "A"
+        },
+        {
+          "role": "Asset data owner",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "WorkAsset",
+        "WorkLocation",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "An attachment nobody can attribute to an owner is a finding, not a gap. Recording it as unidentified keeps it visible to 11.4.6 instead of quietly dropping it from the count."
+        },
+        {
+          "kind": "regulatory",
+          "text": "Field work on your structures still takes 29 CFR 1910.269; a communications contractor doing capture works to 29 CFR 1910.268. The two standards cover different workers on the same pole."
+        },
+        {
+          "kind": "operational",
+          "text": "Capture that cannot be tied to a structure identity is worthless. The identity is captured first for that reason."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Capture validation rate",
+          "definition": "Share of field captures accepted into the record without rework.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.4.1 Rework"
+        }
+      ],
+      "variants": [
+        "Ground-based visual audit",
+        "Measured audit capturing clearances",
+        "Joint capture walked with the counterparty",
+        "Remote or imagery-assisted capture, validated in the field"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Identify, capture, validate and post is a known repeating path.",
+        "artifact": "models/11.4-inventory-and-audits.bpmn"
+      },
+      "en17007": {
+        "process": "DTA.1",
+        "title": "Store and validate the raw data in a library and/or a database",
+        "clause": "6.10"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), DTA.1 Store and validate the raw data, cl. 6.10",
+          "status": "verified"
+        },
+        {
+          "for": "worker standards",
+          "cite": "29 CFR 1910.268 Telecommunications; 29 CFR 1910.269(a)(2) qualified employee",
+          "status": "regulation"
+        },
+        {
+          "for": "attacher counting",
+          "cite": "47 CFR 1.1409 Allocation of Unusable Space Costs (d)(3) inspection to challenge a presumptive average",
+          "status": "regulation"
+        },
+        {
+          "for": "capture standard",
+          "cite": "No source states a field capture standard for attachments",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "judgment",
+        "primary": "Capture method is operator practice"
+      }
+    },
+    {
+      "uid": 10361,
+      "id": "11.4.5",
+      "name": "Reconcile audit findings to billing records",
+      "group": {
+        "id": "11.4",
+        "name": "Manage attachment inventory and audits",
+        "uid": 10356
+      },
+      "intent": "Reconcile what the audit found against what is permitted and what is billed.",
+      "activities": [
+        "Match each found attachment to a permit and a billing line",
+        "Classify matched, unpermitted, unbilled and vanished",
+        "Correct the inventory and the billing base",
+        "Hand the unpermitted findings to 11.4.6"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "Validated audit capture is ready to reconcile.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Validated audit capture",
+          "party": "AM",
+          "data": "WorkAsset"
+        },
+        {
+          "what": "Permit record from 11.2.5",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Billing base from 11.6.1",
+          "party": "FIN",
+          "data": "Work"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Corrected inventory and billing base",
+          "party": "FIN",
+          "data": "Work"
+        },
+        {
+          "what": "Unpermitted findings for pursuit",
+          "party": "MAI",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "MAI",
+          "role": "system of record",
+          "service": "reconciliation and findings"
+        },
+        {
+          "component": "AM",
+          "role": "supplier",
+          "service": "audited inventory"
+        },
+        {
+          "component": "FIN",
+          "role": "consumer",
+          "service": "billing base correction"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "MAI",
+          "to": "FIN",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "batch"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Joint use administrator",
+          "raci": "R"
+        },
+        {
+          "role": "Rates analyst",
+          "raci": "A"
+        },
+        {
+          "role": "Joint use manager",
+          "raci": "C"
+        },
+        {
+          "role": "Controller",
+          "raci": "I"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkAsset"
+      ],
+      "controls": [
+        {
+          "kind": "financial",
+          "text": "Four outcomes, not two: permitted, unpermitted, billed but absent, and permitted but never built. The last two reduce the bill and a revenue-seeking audit misses them."
+        },
+        {
+          "kind": "operational",
+          "text": "A billing correction that runs before the counterparty has seen the finding is a dispute at 11.6.6 rather than a settlement."
+        },
+        {
+          "kind": "regulatory",
+          "text": "1.1409(d)(3) lets an attacher challenge a presumptive average, and a complete inspection's data then governs. An audit is that evidence."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Reconciliation closure",
+          "definition": "Share of audit findings closed to a permit, a billing correction or a pursuit case.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.4.7 Work Order Cycle Time"
+        }
+      ],
+      "variants": [
+        "Found and permitted, no action",
+        "Found and unpermitted, referred to 11.4.6",
+        "Billed but not found, reducing the bill",
+        "Permitted but never built, releasing the permit"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Match, classify, correct and refer is a known repeating path.",
+        "artifact": "models/11.4-inventory-and-audits.bpmn"
+      },
+      "en17007": {
+        "process": "DTA.4",
+        "title": "Evaluate and analyse maintenance data and HSE data",
+        "clause": "6.10"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), DTA.4 Evaluate and analyse data, cl. 6.10",
+          "status": "verified"
+        },
+        {
+          "for": "challenge evidence",
+          "cite": "47 CFR 1.1409 Allocation of Unusable Space Costs (d)(3) and (d)(4) successful challenge changes the presumptive number",
+          "status": "regulation"
+        },
+        {
+          "for": "billing base",
+          "cite": "47 CFR 1.1406 Commission consideration of the complaint (d) the formulas the corrected count feeds",
+          "status": "regulation"
+        },
+        {
+          "for": "reconciliation method",
+          "cite": "No source states a reconciliation method or tolerance",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "regulation",
+        "primary": "47 CFR 1.1409 Allocation of Unusable Space Costs (d)"
+      }
+    },
+    {
+      "uid": 10362,
+      "id": "11.4.6",
+      "name": "Identify and pursue unauthorised attachments",
+      "group": {
+        "id": "11.4",
+        "name": "Manage attachment inventory and audits",
+        "uid": 10356
+      },
+      "intent": "Establish whether an unpermitted attachment is unauthorised, and pursue it if so.",
+      "activities": [
+        "Test the finding against permits, agreements and history",
+        "Identify and notify the owner where one can be established",
+        "Regularise, remove or escalate",
+        "Record the disposition and any amount to bill"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "An attachment has been found with no permit behind it.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Unpermitted findings from 11.4.5",
+          "party": "MAI",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Permit and agreement history",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Ownership evidence from the field",
+          "party": "FRD",
+          "data": "WorkAsset"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Regularised, removed or escalated disposition",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Amount and period referred to 11.6.5",
+          "party": "FIN",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "MAI",
+          "role": "system of record",
+          "service": "pursuit case and disposition"
+        },
+        {
+          "component": "CS",
+          "role": "interface",
+          "service": "notice to the owner"
+        },
+        {
+          "component": "FIN",
+          "role": "consumer",
+          "service": "back-bill referral"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "MAI",
+          "to": "CS",
+          "payload": "WorkRequest",
+          "verb": "create",
+          "pattern": "event"
+        },
+        {
+          "from": "MAI",
+          "to": "FIN",
+          "payload": "WorkRequest",
+          "verb": "create",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Joint use manager",
+          "raci": "A"
+        },
+        {
+          "role": "Joint use administrator",
+          "raci": "R"
+        },
+        {
+          "role": "Legal counsel",
+          "raci": "C"
+        },
+        {
+          "role": "Rates analyst",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkAsset",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "Removal is not a first step: 1.1403(c) requires 60 days notice, and an attachment the owner will regularise is a billing matter, not a safety one."
+        },
+        {
+          "kind": "regulatory",
+          "text": "1.1416(a) requires no prior approval for an existing attacher overlashing its own wires or a permitted third party. An unapproved overlash is not by itself unauthorised."
+        },
+        {
+          "kind": "operational",
+          "text": "Notification, negotiation, back-billing and removal are ordered differently depending on who the owner proves to be."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Pursuit closure",
+          "definition": "Share of unauthorised-attachment cases closed to regularisation, removal or a recorded write-off.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.4.7 Work Order Cycle Time"
+        }
+      ],
+      "variants": [
+        "Regularised by a retrospective permit",
+        "Unattributable attachment with no owner to pursue",
+        "Overlash requiring no prior approval under 1.1416(a)",
+        "Removal after the 60-day notice"
+      ],
+      "notation": {
+        "class": "CMMN",
+        "why": "Attribution, notification, negotiation and removal are all available and their order depends on who the owner proves to be.",
+        "artifact": "models/11.4.6-unauthorised-attachments.cmmn"
+      },
+      "en17007": {
+        "process": "MAN.5",
+        "title": "Oversee the actions",
+        "clause": "6.2"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), MAN.5 Oversee the actions, cl. 6.2",
+          "status": "verified"
+        },
+        {
+          "for": "removal notice",
+          "cite": "47 CFR 1.1403 Duty to provide access; modifications; notice (c) 60 days written notice before removal",
+          "status": "regulation"
+        },
+        {
+          "for": "overlashing",
+          "cite": "47 CFR 1.1416 Overlashing (a) no prior approval; (c) no more than 15 days advance notice",
+          "status": "regulation"
+        },
+        {
+          "for": "penalty basis",
+          "cite": "Unauthorised attachment penalties and back-billing periods are contract and tariff; none is in the pack",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "regulation",
+        "primary": "47 CFR 1.1403 Duty to provide access; modifications; notice (c)"
+      }
+    },
+    {
+      "uid": 10364,
+      "id": "11.5.1",
+      "name": "Notify attachers of transfer obligation",
+      "group": {
+        "id": "11.5",
+        "name": "Manage transfers and structure replacement",
+        "uid": 10363
+      },
+      "intent": "Tell every attacher that a structure is changing and what they must move.",
+      "activities": [
+        "Identify every attacher on the structure and their contacts",
+        "State what is changing, what must move and by when",
+        "Give the notice period the rule and the agreement require",
+        "Record delivery, because the clock runs from it"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "A structure is to be replaced, relocated or modified.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Replacement or modification scope",
+          "party": "CON",
+          "data": "Work"
+        },
+        {
+          "what": "Attachers on the structure from 11.4.1",
+          "party": "AM",
+          "data": "WorkAsset"
+        },
+        {
+          "what": "Notice periods from the agreement and the rule",
+          "party": "MAI",
+          "data": "Work"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Transfer notice to each attacher",
+          "party": "CS",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Transfer obligations opened for tracking",
+          "party": "MAI",
+          "data": "Work"
+        }
+      ],
+      "systems": [
+        {
+          "component": "MAI",
+          "role": "system of record",
+          "service": "notices and transfer obligations"
+        },
+        {
+          "component": "AM",
+          "role": "supplier",
+          "service": "attachers on the structure"
+        },
+        {
+          "component": "CS",
+          "role": "interface",
+          "service": "notice delivery"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "CON",
+          "to": "MAI",
+          "payload": "WorkRequest",
+          "verb": "create",
+          "pattern": "event"
+        },
+        {
+          "from": "MAI",
+          "to": "CS",
+          "payload": "WorkRequest",
+          "verb": "create",
+          "pattern": "batch"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Joint use administrator",
+          "raci": "R"
+        },
+        {
+          "role": "Joint use manager",
+          "raci": "A"
+        },
+        {
+          "role": "Field construction supervisor",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkAsset"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "47 U.S.C. 224(h) requires written notification where the owner intends to modify or alter a pole, duct, conduit or right-of-way. 47 CFR 1.1403(c) sets no less than 60 days written notice before a modification other than make-ready, routine maintenance or an emergency response."
+        },
+        {
+          "kind": "regulatory",
+          "text": "47 U.S.C. 224(i) means an attacher does not bear the cost of rearranging its attachment where an ADDITIONAL attachment required it. Who pays is settled at 11.3.5, not in the notice."
+        },
+        {
+          "kind": "operational",
+          "text": "The reference names no notification product. A multi-party transfer notification exchange is the norm and naming one would breach product neutrality."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Notice completeness",
+          "definition": "Share of transfers where every attacher of record was notified before work started.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.3.1 applied to the notice record"
+        }
+      ],
+      "variants": [
+        "Planned replacement with the full notice period",
+        "Emergency replacement, outside the 1.1403(c) notice",
+        "Relocation driven by a road authority",
+        "Modification prompted by a new attachment, where 224(i) applies"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Identify, notify and open the obligation is a known repeating path.",
+        "artifact": "models/11.5-transfers-and-replacement.bpmn"
+      },
+      "en17007": {
+        "process": "DOC.6",
+        "title": "Manage the way in which operational documentation is made available",
+        "clause": "6.9"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), DOC.6 Manage how documentation is made available, cl. 6.9",
+          "status": "verified"
+        },
+        {
+          "for": "statutory notice",
+          "cite": "47 U.S.C. 224 Pole attachments (h) notification of intended modification",
+          "status": "regulation"
+        },
+        {
+          "for": "notice period",
+          "cite": "47 CFR 1.1403 Duty to provide access; modifications; notice (c) 60 days, excluding make-ready, routine maintenance and emergency response",
+          "status": "regulation"
+        },
+        {
+          "for": "rearrangement cost",
+          "cite": "47 U.S.C. 224 Pole attachments (i)",
+          "status": "regulation"
+        }
+      ],
+      "provenance": {
+        "basis": "regulation",
+        "primary": "47 U.S.C. 224 Pole attachments (h)"
+      }
+    },
+    {
+      "uid": 10365,
+      "id": "11.5.2",
+      "name": "Sequence multi-party transfer work",
+      "group": {
+        "id": "11.5",
+        "name": "Manage transfers and structure replacement",
+        "uid": 10363
+      },
+      "intent": "Get several independent parties to move their equipment in the right order.",
+      "activities": [
+        "Establish the order the transfers must happen in",
+        "Coordinate each attacher against that order",
+        "Escalate a party that is holding the sequence",
+        "Release the structure once the last party has moved"
+      ],
+      "trigger": {
+        "kind": "conditional",
+        "text": "A structure has more than one attacher who must transfer.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Transfer obligations and their order",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Attacher progress and commitments",
+          "party": "CS",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Utility's own transfer work",
+          "party": "CON",
+          "data": "Work"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Completed transfer sequence",
+          "party": "AM",
+          "data": "WorkAsset"
+        },
+        {
+          "what": "Blocking party and escalation record",
+          "party": "MAI",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "MAI",
+          "role": "system of record",
+          "service": "sequence and blocking record"
+        },
+        {
+          "component": "SCHD",
+          "role": "consumer",
+          "service": "utility transfer work"
+        },
+        {
+          "component": "CS",
+          "role": "interface",
+          "service": "attacher coordination"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "MAI",
+          "to": "SCHD",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Joint use administrator",
+          "raci": "R"
+        },
+        {
+          "role": "Joint use manager",
+          "raci": "A"
+        },
+        {
+          "role": "Field construction supervisor",
+          "raci": "C"
+        },
+        {
+          "role": "Distribution engineering",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkAsset"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "Order is a safety matter. Supply sits above the communication worker safety zone, so supply and communication transfers are not interchangeable. NESC Rules 235C and 238 govern the clearances."
+        },
+        {
+          "kind": "operational",
+          "text": "One party that will not move holds everyone behind it and the structure stays double-wooded. That backlog is 11.5.4."
+        },
+        {
+          "kind": "operational",
+          "text": "Chasing, escalating and re-sequencing run in a different order depending on which party is blocking."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Transfer sequence duration",
+          "definition": "Elapsed days from first notice to the last attacher clearing the structure.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.4.7 Work Order Cycle Time"
+        }
+      ],
+      "variants": [
+        "Single attacher transfer",
+        "Multi-party sequence in the communications space",
+        "Sequence crossing the communication worker safety zone into supply",
+        "Sequence blocked by one non-responding party"
+      ],
+      "notation": {
+        "class": "CMMN",
+        "why": "Which party to chase, escalate or work around depends on who is blocking, and two coordinators will not choose the same order.",
+        "artifact": "models/11.5.2-multi-party-transfers.cmmn"
+      },
+      "en17007": {
+        "process": "ACT.3",
+        "title": "Set in order the tasks",
+        "clause": "6.5.4"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), ACT.3 Set in order the tasks, cl. 6.5.4",
+          "status": "verified"
+        },
+        {
+          "for": "clearances",
+          "cite": "NESC ANSI/IEEE C2-2023 Rule 235C Vertical clearances between conductors at poles; NESC ANSI/IEEE C2-2023 Rule 238 Supply and communication equipment clearances",
+          "status": "clause-verified"
+        },
+        {
+          "for": "worker safety zone",
+          "cite": "NRECA Guide for the Application of Clearance Requirements on Joint-Use Poles, Distribution Subcommittee Overhead Work Group, May 2025",
+          "status": "consensus"
+        },
+        {
+          "for": "sequencing method",
+          "cite": "No source states a multi-party transfer sequencing method",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "NESC ANSI/IEEE C2-2023 Rule 238 Supply and communication equipment clearances"
+      }
+    },
+    {
+      "uid": 10366,
+      "id": "11.5.3",
+      "name": "Track transfer completion and ageing",
+      "group": {
+        "id": "11.5",
+        "name": "Manage transfers and structure replacement",
+        "uid": 10363
+      },
+      "intent": "Know how old every outstanding transfer is and who owes it.",
+      "activities": [
+        "Hold every open transfer obligation with its owner and its date",
+        "Age them against the period the notice set",
+        "Chase and escalate on the ageing",
+        "Close only on evidence that the equipment moved"
+      ],
+      "trigger": {
+        "kind": "timer",
+        "text": "The transfer ageing review is due.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Open transfer obligations",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Field evidence of completion",
+          "party": "FRD",
+          "data": "WorkAsset"
+        },
+        {
+          "what": "Agreement escalation terms",
+          "party": "MAI",
+          "data": "Work"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Aged transfer position by party",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Escalations and referrals to 11.6.5",
+          "party": "FIN",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "MAI",
+          "role": "system of record",
+          "service": "transfer ageing"
+        },
+        {
+          "component": "FRD",
+          "role": "supplier",
+          "service": "completion evidence"
+        },
+        {
+          "component": "FIN",
+          "role": "consumer",
+          "service": "charge referral"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "FRD",
+          "to": "MAI",
+          "payload": "WorkRequest",
+          "verb": "close",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Joint use administrator",
+          "raci": "R"
+        },
+        {
+          "role": "Joint use manager",
+          "raci": "A"
+        },
+        {
+          "role": "Rates analyst",
+          "raci": "I"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "Closing a transfer on a party's assertion rather than on evidence is how a double-wood backlog becomes invisible. 11.5.4 then finds it again years later."
+        },
+        {
+          "kind": "financial",
+          "text": "Where the agreement provides for a charge on an overdue transfer, that is 11.6.5. This process establishes the fact and the ageing; it does not bill."
+        },
+        {
+          "kind": "operational",
+          "text": "No source states a transfer completion period or an ageing threshold. Both are agreement terms and are recorded as such."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Transfer ageing",
+          "definition": "Distribution of open transfer obligations by age against the period the notice set.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.4.3 Schedule Compliance"
+        }
+      ],
+      "variants": [
+        "Transfer completed within the notice period",
+        "Overdue transfer under escalation",
+        "Transfer disputed as not owed",
+        "Transfer completed by the owner at the attacher's cost"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Age, chase, escalate and close on evidence is a known repeating path.",
+        "artifact": "models/11.5-transfers-and-replacement.bpmn"
+      },
+      "en17007": {
+        "process": "MAN.5",
+        "title": "Oversee the actions",
+        "clause": "6.2"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), MAN.5 Oversee the actions, cl. 6.2",
+          "status": "verified"
+        },
+        {
+          "for": "notice basis",
+          "cite": "47 CFR 1.1403 Duty to provide access; modifications; notice (c); 47 U.S.C. 224 Pole attachments (h)",
+          "status": "regulation"
+        },
+        {
+          "for": "completion evidence",
+          "cite": "No source states transfer completion evidence or an ageing threshold",
+          "status": "judgment"
+        },
+        {
+          "for": "measurement",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.4.3 Schedule Compliance",
+          "status": "consensus"
+        }
+      ],
+      "provenance": {
+        "basis": "judgment",
+        "primary": "Ageing thresholds are agreement terms"
+      }
+    },
+    {
+      "uid": 10367,
+      "id": "11.5.4",
+      "name": "Reduce double-wood and stub structure backlog",
+      "group": {
+        "id": "11.5",
+        "name": "Manage transfers and structure replacement",
+        "uid": 10363
+      },
+      "intent": "Clear the structures that were replaced but never fully vacated.",
+      "activities": [
+        "Identify structures carrying attachments after replacement",
+        "Attribute each remaining attachment to a party",
+        "Run a campaign to clear them, party by party",
+        "Remove the old structure once it is clear"
+      ],
+      "trigger": {
+        "kind": "timer",
+        "text": "The double-wood and stub-structure review is due.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Structures with an unremoved predecessor",
+          "party": "AM",
+          "data": "WorkAsset"
+        },
+        {
+          "what": "Open transfer obligations from 11.5.3",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Field confirmation of what remains",
+          "party": "FRD",
+          "data": "WorkAsset"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Cleared and removed structures",
+          "party": "AM",
+          "data": "WorkAsset"
+        },
+        {
+          "what": "Remaining backlog by party and age",
+          "party": "MAI",
+          "data": "Work"
+        }
+      ],
+      "systems": [
+        {
+          "component": "AM",
+          "role": "system of record",
+          "service": "structure and backlog position"
+        },
+        {
+          "component": "MAI",
+          "role": "supplier",
+          "service": "outstanding obligations"
+        },
+        {
+          "component": "SCHD",
+          "role": "consumer",
+          "service": "removal work"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "MAI",
+          "to": "SCHD",
+          "payload": "WorkRequest",
+          "verb": "create",
+          "pattern": "batch"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Joint use manager",
+          "raci": "A"
+        },
+        {
+          "role": "Joint use administrator",
+          "raci": "R"
+        },
+        {
+          "role": "Field construction supervisor",
+          "raci": "C"
+        },
+        {
+          "role": "Asset data owner",
+          "raci": "I"
+        }
+      ],
+      "data_objects": [
+        "WorkAsset",
+        "Work"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "A stub or double-wood structure is a live asset: it loads the right-of-way, it is inspected, and it appears in a count somebody bills from. It is not a cosmetic problem."
+        },
+        {
+          "kind": "financial",
+          "text": "The predecessor structure stays on the plant record until it is retired, and 5.3 unitisation retires it. This process clears the field condition; it does not post the retirement."
+        },
+        {
+          "kind": "operational",
+          "text": "No source states a double-wood target or a clearance period. Both are the operator's and are recorded as chosen."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Backlog reduction",
+          "definition": "Change in the count and age of structures awaiting removal over the campaign.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.4.3 Schedule Compliance"
+        }
+      ],
+      "variants": [
+        "Backlog attributable to a single attacher",
+        "Backlog with an unattributable remaining attachment",
+        "Backlog cleared by the owner and recharged",
+        "Structure retained deliberately for a future attachment"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Identify, attribute, clear and remove is a known repeating campaign path.",
+        "artifact": "models/11.5-transfers-and-replacement.bpmn"
+      },
+      "en17007": {
+        "process": "DTA.3",
+        "title": "Draw up and maintain an up-to-date list of critical items",
+        "clause": "6.10"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), DTA.3 Maintain an up-to-date list of items, cl. 6.10",
+          "status": "verified"
+        },
+        {
+          "for": "removal notice",
+          "cite": "47 CFR 1.1403 Duty to provide access; modifications; notice (c) 60 days before removing facilities",
+          "status": "regulation"
+        },
+        {
+          "for": "retirement boundary",
+          "cite": "18 CFR Part 101 Uniform System of Accounts continuing plant inventory is the property record and the retirement is posted at 5.3",
+          "status": "regulation"
+        },
+        {
+          "for": "backlog target",
+          "cite": "No source states a double-wood target or clearance period",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "judgment",
+        "primary": "Backlog targets are operator policy"
+      }
+    },
+    {
+      "uid": 10368,
+      "id": "11.5.5",
+      "name": "Resolve clearance and safety violations",
+      "group": {
+        "id": "11.5",
+        "name": "Manage transfers and structure replacement",
+        "uid": 10363
+      },
+      "intent": "Resolve a clearance or safety violation on a shared structure.",
+      "activities": [
+        "Record the violation, the structure and what is out of clearance",
+        "Attribute it to the party whose equipment caused it",
+        "Require correction, or correct it and recharge",
+        "Verify the correction and close on evidence"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "A survey, audit or field report shows a clearance or safety violation.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Violation observation and evidence",
+          "party": "FRD",
+          "data": "WorkAsset"
+        },
+        {
+          "what": "Attachment inventory and permit history",
+          "party": "AM",
+          "data": "WorkAsset"
+        },
+        {
+          "what": "Clearance requirement for the structure",
+          "party": "DGN",
+          "data": "Work"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Corrected structure and closure evidence",
+          "party": "AM",
+          "data": "WorkAsset"
+        },
+        {
+          "what": "Attribution and any recharge",
+          "party": "FIN",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "MAI",
+          "role": "system of record",
+          "service": "violation and correction record"
+        },
+        {
+          "component": "DGN",
+          "role": "supplier",
+          "service": "clearance requirement"
+        },
+        {
+          "component": "FIN",
+          "role": "consumer",
+          "service": "recharge"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "FRD",
+          "to": "MAI",
+          "payload": "WorkRequest",
+          "verb": "create",
+          "pattern": "event"
+        },
+        {
+          "from": "MAI",
+          "to": "FIN",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Distribution engineering",
+          "raci": "A"
+        },
+        {
+          "role": "Joint use administrator",
+          "raci": "R"
+        },
+        {
+          "role": "Field construction supervisor",
+          "raci": "C"
+        },
+        {
+          "role": "Joint use manager",
+          "raci": "I"
+        }
+      ],
+      "data_objects": [
+        "WorkAsset",
+        "Work",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "NESC Rules 235C and 238 are the requirements at issue and no figure from their bodies appears here. NRECA puts the communication worker safety zone at generally 40 in."
+        },
+        {
+          "kind": "regulatory",
+          "text": "Another party's violation is not the new attacher's to fix or fund - 1.1411(e)(4) and 1.1416(b) both say so. Attribution is the substance here."
+        },
+        {
+          "kind": "operational",
+          "text": "An immediate danger goes to 9.1 as an emergency first, and returns here for attribution and recharge."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Violation closure time",
+          "definition": "Days from violation recorded to correction verified.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.4.7 Work Order Cycle Time"
+        }
+      ],
+      "variants": [
+        "Violation attributable to a named attacher",
+        "Violation attributable to the structure owner",
+        "Unattributable violation corrected by the owner",
+        "Immediate danger routed to 9.1 first"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Record, attribute, require or correct, then verify.",
+        "artifact": "models/11.5-transfers-and-replacement.bpmn"
+      },
+      "en17007": {
+        "process": "COR.2",
+        "title": "Diagnose the state of the items in question",
+        "clause": "6.4.3"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), COR.2 Diagnose the state of the items, cl. 6.4.3",
+          "status": "verified"
+        },
+        {
+          "for": "clearance rules",
+          "cite": "NESC ANSI/IEEE C2-2023 Rule 235C Vertical clearances between conductors at poles; NESC ANSI/IEEE C2-2023 Rule 238 Supply and communication equipment clearances",
+          "status": "clause-verified"
+        },
+        {
+          "for": "cost of another party's violation",
+          "cite": "47 CFR 1.1411 Timeline for access to utility poles (e)(4); 47 CFR 1.1416 Overlashing (b)",
+          "status": "regulation"
+        },
+        {
+          "for": "worker safety zone",
+          "cite": "NRECA Guide for the Application of Clearance Requirements on Joint-Use Poles, Distribution Subcommittee Overhead Work Group, May 2025",
+          "status": "consensus"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "NESC ANSI/IEEE C2-2023 Rule 235C Vertical clearances between conductors at poles"
+      }
+    },
+    {
+      "uid": 10370,
+      "id": "11.6.1",
+      "name": "Calculate periodic attachment rental",
+      "group": {
+        "id": "11.6",
+        "name": "Bill, settle and resolve attachment disputes",
+        "uid": 10369
+      },
+      "intent": "Work out what each attacher owes for the period, on the count and the rate.",
+      "activities": [
+        "Take the billable attachment count at the billing date",
+        "Take the rate from 11.1.3 for each attachment class",
+        "Calculate the rental per attacher, per structure class",
+        "Hold the calculation so an attacher can check it"
+      ],
+      "trigger": {
+        "kind": "timer",
+        "text": "The billing period has closed.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Attachment count from 11.4.1 and 11.4.2",
+          "party": "AM",
+          "data": "WorkAsset"
+        },
+        {
+          "what": "Rate and formula from 11.1.3",
+          "party": "FIN",
+          "data": "Work"
+        },
+        {
+          "what": "Agreement billing terms",
+          "party": "MAI",
+          "data": "Work"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Rental due per attacher",
+          "party": "FIN",
+          "data": "Work"
+        },
+        {
+          "what": "Calculation basis available on request",
+          "party": "MAI",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "FIN",
+          "role": "system of record",
+          "service": "rental calculation"
+        },
+        {
+          "component": "AM",
+          "role": "supplier",
+          "service": "billable counts"
+        },
+        {
+          "component": "MAI",
+          "role": "supplier",
+          "service": "agreement terms"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "AM",
+          "to": "FIN",
+          "payload": "WorkRequest",
+          "verb": "get",
+          "pattern": "request-reply"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Rates analyst",
+          "raci": "R"
+        },
+        {
+          "role": "Controller",
+          "raci": "A"
+        },
+        {
+          "role": "Joint use administrator",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkAsset"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "The rate ceiling is 47 CFR 1.1406(d) and the floor is 47 U.S.C. 224(d)(1). A calculation above the ceiling is recoverable from you at 1.1407(a)(3) with interest, so the ceiling test belongs in the calculation and not in a review."
+        },
+        {
+          "kind": "regulatory",
+          "text": "47 CFR 1.1404(f) obliges you to supply the supporting regulatory-report pages and the calculations made from them within 30 days of a reasonable request. A calculation you cannot produce is one you cannot bill."
+        },
+        {
+          "kind": "financial",
+          "text": "Count at a stated date, not an average, unless the agreement says otherwise. An undated count cannot be reconciled to an audit."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Billing accuracy",
+          "definition": "Share of rental lines unchanged after attacher review or audit reconciliation.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.3.1 applied to the rental calculation"
+        }
+      ],
+      "variants": [
+        "Cable rate on the 1.1406(d)(1) formula",
+        "Telecommunications rate on the 1.1406(d)(2) formula",
+        "Conduit rate on the 1.1406(d)(3) formula",
+        "Certified-State rate, which this reference does not state"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Count, rate, calculate and retain the basis is a known repeating cycle.",
+        "artifact": "models/11.6-billing-and-disputes.bpmn"
+      },
+      "en17007": {
+        "process": "BUD.4",
+        "title": "Extract budgeted and actual expenditures",
+        "clause": "6.8"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), BUD.4 Extract budgeted and actual expenditures, cl. 6.8 - closest named process; EN 17007 has no third-party access process",
+          "status": "verified"
+        },
+        {
+          "for": "rate ceiling and floor",
+          "cite": "47 CFR 1.1406 Commission consideration of the complaint (d); 47 U.S.C. 224 Pole attachments (d)(1)",
+          "status": "regulation"
+        },
+        {
+          "for": "duty to supply the basis",
+          "cite": "47 CFR 1.1404(f) within 30 days of a reasonable request",
+          "status": "regulation"
+        },
+        {
+          "for": "refund exposure",
+          "cite": "47 CFR 1.1407 Remedies (a)(3) refund or payment with interest",
+          "status": "regulation"
+        }
+      ],
+      "provenance": {
+        "basis": "regulation",
+        "primary": "47 CFR 1.1406 Commission consideration of the complaint (d)"
+      }
+    },
+    {
+      "uid": 10371,
+      "id": "11.6.2",
+      "name": "Invoice attachers and joint owners",
+      "group": {
+        "id": "11.6",
+        "name": "Bill, settle and resolve attachment disputes",
+        "uid": 10369
+      },
+      "intent": "Issue the invoices and give the notice a rate increase requires.",
+      "activities": [
+        "Issue the rental invoice to each attacher and joint owner",
+        "Give 60 days written notice before any rate increase takes effect",
+        "Record delivery and the notice date",
+        "Age receivables and refer non-payment"
+      ],
+      "trigger": {
+        "kind": "timer",
+        "text": "Calculated rental is ready to invoice.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Calculated rental from 11.6.1",
+          "party": "FIN",
+          "data": "Work"
+        },
+        {
+          "what": "Counterparty billing contacts",
+          "party": "CS",
+          "data": "Work"
+        },
+        {
+          "what": "Rate changes requiring notice",
+          "party": "MAI",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Issued invoice and notice record",
+          "party": "FIN",
+          "data": "Work"
+        },
+        {
+          "what": "Aged receivable and non-payment referral",
+          "party": "FIN",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "FIN",
+          "role": "system of record",
+          "service": "invoice and receivable"
+        },
+        {
+          "component": "CS",
+          "role": "interface",
+          "service": "delivery to the counterparty"
+        },
+        {
+          "component": "MAI",
+          "role": "supplier",
+          "service": "notice obligations"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "FIN",
+          "to": "CS",
+          "payload": "WorkRequest",
+          "verb": "create",
+          "pattern": "batch"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Controller",
+          "raci": "A"
+        },
+        {
+          "role": "Rates analyst",
+          "raci": "R"
+        },
+        {
+          "role": "Joint use administrator",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "47 CFR 1.1403(c) requires no less than 60 days written notice before an increase in attachment rates. Billing an increase without it does not make the increase effective."
+        },
+        {
+          "kind": "financial",
+          "text": "An invoice that does not carry the count and the rate it was built from generates a dispute the utility then has to reconstruct the basis for."
+        },
+        {
+          "kind": "operational",
+          "text": "Non-payment is a contract matter and is not a ground for denying access under 47 U.S.C. 224(f)(2), which lists insufficient capacity, safety, reliability and generally applicable engineering purposes and nothing else."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Invoice cycle time",
+          "definition": "Days from period close to invoice issued.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.4.7 Work Order Cycle Time"
+        }
+      ],
+      "variants": [
+        "Rental invoice on unchanged terms",
+        "Invoice following a rate increase with its 60-day notice",
+        "Joint owner invoice netted at 11.6.3",
+        "Invoice reissued after an audit correction"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Issue, notify, record and age is a known repeating cycle.",
+        "artifact": "models/11.6-billing-and-disputes.bpmn"
+      },
+      "en17007": {
+        "process": "BUD.4",
+        "title": "Extract budgeted and actual expenditures",
+        "clause": "6.8"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), BUD.4 Extract budgeted and actual expenditures, cl. 6.8 - closest named process; EN 17007 has no third-party access process",
+          "status": "verified"
+        },
+        {
+          "for": "rate increase notice",
+          "cite": "47 CFR 1.1403 Duty to provide access; modifications; notice (c) 60 days",
+          "status": "regulation"
+        },
+        {
+          "for": "access is not a payment lever",
+          "cite": "47 U.S.C. 224 Pole attachments (f)(2)",
+          "status": "regulation"
+        },
+        {
+          "for": "invoice content",
+          "cite": "Invoice content is contract; no standard specifies it",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "regulation",
+        "primary": "47 CFR 1.1403 Duty to provide access; modifications; notice (c)"
+      }
+    },
+    {
+      "uid": 10372,
+      "id": "11.6.3",
+      "name": "Settle joint ownership and net balances",
+      "group": {
+        "id": "11.6",
+        "name": "Bill, settle and resolve attachment disputes",
+        "uid": 10369
+      },
+      "intent": "Settle what two joint owners owe each other, net, on the agreed ratio.",
+      "activities": [
+        "Take each party's structure count and the agreed ratio",
+        "Calculate each party's position",
+        "Net the positions to a single settlement",
+        "Agree the settlement or refer the difference"
+      ],
+      "trigger": {
+        "kind": "timer",
+        "text": "The joint ownership settlement period has closed.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Structure counts and ownership ratio",
+          "party": "AM",
+          "data": "WorkAsset"
+        },
+        {
+          "what": "Counterparty's own count",
+          "party": "CS",
+          "data": "Work"
+        },
+        {
+          "what": "Agreement settlement terms",
+          "party": "MAI",
+          "data": "Work"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Net settlement position",
+          "party": "FIN",
+          "data": "Work"
+        },
+        {
+          "what": "Counted difference referred to 11.6.6",
+          "party": "MAI",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "FIN",
+          "role": "system of record",
+          "service": "settlement position"
+        },
+        {
+          "component": "AM",
+          "role": "supplier",
+          "service": "structure counts and ratio"
+        },
+        {
+          "component": "CS",
+          "role": "interface",
+          "service": "counterparty exchange"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "CS",
+          "to": "FIN",
+          "payload": "WorkRequest",
+          "verb": "get",
+          "pattern": "request-reply"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Rates analyst",
+          "raci": "R"
+        },
+        {
+          "role": "Controller",
+          "raci": "A"
+        },
+        {
+          "role": "Joint use manager",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkAsset"
+      ],
+      "controls": [
+        {
+          "kind": "financial",
+          "text": "Netting is the point. Two parties invoicing each other gross on the same poles doubles the reconciliation work and hides the difference that matters, which is the count."
+        },
+        {
+          "kind": "operational",
+          "text": "A difference in count is not a dispute until both parties have reconciled from the same audit. 11.4.5 is where that happens."
+        },
+        {
+          "kind": "operational",
+          "text": "No standard describes joint ownership settlement. Ratios, periods and netting rules are all agreement terms."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Settlement difference",
+          "definition": "Structure-count difference between the parties at settlement, as a share of the jointly owned population.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.3.1 applied to the settlement count"
+        }
+      ],
+      "variants": [
+        "Net settlement on an agreed ratio",
+        "Gross settlement where the agreement requires it",
+        "Settlement held pending a joint audit",
+        "Difference referred to dispute resolution"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Count, calculate, net and agree is a known repeating cycle.",
+        "artifact": "models/11.6-billing-and-disputes.bpmn"
+      },
+      "en17007": {
+        "process": "BUD.5",
+        "title": "Analyse, explain and, if applicable, take corrective actions",
+        "clause": "6.8"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), BUD.5 Analyse, explain and take corrective actions, cl. 6.8 - closest named process; EN 17007 has no third-party access process",
+          "status": "verified"
+        },
+        {
+          "for": "counting basis",
+          "cite": "47 CFR 1.1409 Allocation of Unusable Space Costs (b) all attaching entities counted",
+          "status": "regulation"
+        },
+        {
+          "for": "settlement terms",
+          "cite": "Joint ownership ratios, settlement periods and netting are contract; no standard describes them",
+          "status": "judgment"
+        },
+        {
+          "for": "measurement",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.3.1",
+          "status": "consensus"
+        }
+      ],
+      "provenance": {
+        "basis": "judgment",
+        "primary": "Joint ownership settlement is contract"
+      }
+    },
+    {
+      "uid": 10373,
+      "id": "11.6.4",
+      "name": "Verify and pay rent on third-party structures",
+      "group": {
+        "id": "11.6",
+        "name": "Bill, settle and resolve attachment disputes",
+        "uid": 10369
+      },
+      "intent": "Check and pay what the utility owes for its own attachments on other structures.",
+      "activities": [
+        "Take the invoice against the utility's outbound permits",
+        "Verify the count against the utility's own record",
+        "Dispute or accept, then pay",
+        "Keep the paid position reconcilable to 11.2.6"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "A structure owner has invoiced the utility for its attachments.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Counterparty invoice",
+          "party": "FIN",
+          "data": "Work"
+        },
+        {
+          "what": "Outbound permits from 11.2.6",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Utility attachments on third-party structures",
+          "party": "AM",
+          "data": "WorkAsset"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Verified and paid rent",
+          "party": "FIN",
+          "data": "Work"
+        },
+        {
+          "what": "Disputed line referred to 11.6.6",
+          "party": "MAI",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "FIN",
+          "role": "system of record",
+          "service": "payable and payment"
+        },
+        {
+          "component": "MAI",
+          "role": "supplier",
+          "service": "outbound permit record"
+        },
+        {
+          "component": "AM",
+          "role": "supplier",
+          "service": "utility attachments on others' structures"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "FIN",
+          "to": "MAI",
+          "payload": "WorkRequest",
+          "verb": "get",
+          "pattern": "request-reply"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Controller",
+          "raci": "A"
+        },
+        {
+          "role": "Joint use administrator",
+          "raci": "R"
+        },
+        {
+          "role": "Rates analyst",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkAsset"
+      ],
+      "controls": [
+        {
+          "kind": "financial",
+          "text": "Paying an invoice the utility cannot reconcile to its own permits is how a utility ends up renting attachments it removed years ago. The permit record at 11.2.6 is the control."
+        },
+        {
+          "kind": "regulatory",
+          "text": "Where the utility is an incumbent local exchange carrier, 47 CFR 1.1413 is the route for its own complaints and 47 U.S.C. 224(a)(5) excludes it from 'telecommunications carrier' for this section. The remedy is not symmetric."
+        },
+        {
+          "kind": "operational",
+          "text": "13.4.4 pays a goods supplier and 16.4.3 pays a contractor. This pays rent for occupying somebody else's plant. Three different objects."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Rent verification rate",
+          "definition": "Share of invoiced attachments reconciled to an outbound permit before payment.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.3.1 applied to the payable"
+        }
+      ],
+      "variants": [
+        "Rent on a telephone company structure",
+        "Rent on a municipal or cooperative structure outside 224",
+        "Reciprocal joint use netted at 11.6.3",
+        "Disputed count withheld pending reconciliation"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Receive, verify, dispute or accept, then pay.",
+        "artifact": "models/11.6-billing-and-disputes.bpmn"
+      },
+      "en17007": {
+        "process": "BUD.4",
+        "title": "Extract budgeted and actual expenditures",
+        "clause": "6.8"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), BUD.4 Extract budgeted and actual expenditures, cl. 6.8 - closest named process; EN 17007 has no third-party access process",
+          "status": "verified"
+        },
+        {
+          "for": "asymmetric remedy",
+          "cite": "47 CFR 1.1413 Complaints by incumbent local exchange carriers; 47 U.S.C. 224 Pole attachments (a)(5)",
+          "status": "regulation"
+        },
+        {
+          "for": "rate ceiling applies to the owner",
+          "cite": "47 CFR 1.1406 Commission consideration of the complaint (d)",
+          "status": "regulation"
+        },
+        {
+          "for": "verification method",
+          "cite": "No standard specifies rent verification",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "regulation",
+        "primary": "47 CFR 1.1413"
+      }
+    },
+    {
+      "uid": 10374,
+      "id": "11.6.5",
+      "name": "Back-bill and penalise unauthorised attachments",
+      "group": {
+        "id": "11.6",
+        "name": "Bill, settle and resolve attachment disputes",
+        "uid": 10369
+      },
+      "intent": "Decide how an unauthorised attachment is charged for, and for how long.",
+      "activities": [
+        "Take the disposition and evidence from 11.4.6",
+        "Establish the period the attachment can be evidenced for",
+        "Return the treatment: regularise, back-bill, penalise or write off",
+        "Record the basis, because it is contract and not law"
+      ],
+      "trigger": {
+        "kind": "conditional",
+        "text": "An unauthorised attachment has a disposition and needs a charge.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Disposition and evidence from 11.4.6",
+          "party": "MAI",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Agreement penalty and back-bill terms",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Evidenced period of attachment",
+          "party": "AM",
+          "data": "WorkAsset"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Charge treatment and period",
+          "party": "FIN",
+          "data": "Work"
+        },
+        {
+          "what": "Write-off with its reason",
+          "party": "FIN",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "FIN",
+          "role": "system of record",
+          "service": "charge and write-off"
+        },
+        {
+          "component": "MAI",
+          "role": "supplier",
+          "service": "disposition and evidence"
+        },
+        {
+          "component": "CS",
+          "role": "interface",
+          "service": "notice to the attacher"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "MAI",
+          "to": "FIN",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Rates analyst",
+          "raci": "R"
+        },
+        {
+          "role": "Joint use manager",
+          "raci": "A"
+        },
+        {
+          "role": "Legal counsel",
+          "raci": "C"
+        },
+        {
+          "role": "Controller",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "financial",
+          "text": "No federal rule sets an unauthorised attachment penalty or a back-billing period. Both are contract and, in a certified State, possibly State rule. The decision therefore returns a treatment and names the authority behind it, in the same way 11.1.5 names the regime."
+        },
+        {
+          "kind": "operational",
+          "text": "The period is bounded by what can be evidenced, not by what can be asserted. An audit that captured a date supports a period; one that did not does not."
+        },
+        {
+          "kind": "regulatory",
+          "text": "An overlash needing no prior approval under 47 CFR 1.1416(a) is not an unauthorised attachment and cannot be charged as one."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Recovery on findings",
+          "definition": "Share of unauthorised-attachment findings converted to a billed charge or a recorded write-off.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.4.7 Work Order Cycle Time"
+        }
+      ],
+      "variants": [
+        "Regularised with rental from the evidenced date",
+        "Back-billed for the evidenced period under the agreement",
+        "Penalty applied where the agreement provides one",
+        "Written off where the period cannot be evidenced"
+      ],
+      "notation": {
+        "class": "DMN",
+        "why": "The output is a charge treatment - a value - and the table names which authority sets it rather than asserting a period.",
+        "artifact": "models/11.6.5-unauthorised-charge.dmn"
+      },
+      "en17007": {
+        "process": "BUD.1",
+        "title": "Define, compile cost elements and calculate or estimate actual costs",
+        "clause": "6.8"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), BUD.1 Define and compile cost elements, cl. 6.8 - closest named process; EN 17007 has no third-party access process",
+          "status": "verified"
+        },
+        {
+          "for": "overlash is not unauthorised",
+          "cite": "47 CFR 1.1416 Overlashing (a)",
+          "status": "regulation"
+        },
+        {
+          "for": "no federal penalty",
+          "cite": "No federal rule sets an unauthorised attachment penalty or back-billing period; both are contract and possibly State rule",
+          "status": "judgment"
+        },
+        {
+          "for": "rate basis for the period",
+          "cite": "47 CFR 1.1406 Commission consideration of the complaint (d)",
+          "status": "regulation"
+        }
+      ],
+      "provenance": {
+        "basis": "judgment",
+        "primary": "Penalties and back-bill periods are contract"
+      }
+    },
+    {
+      "uid": 10375,
+      "id": "11.6.6",
+      "name": "Manage disputes and regulatory complaints",
+      "group": {
+        "id": "11.6",
+        "name": "Bill, settle and resolve attachment disputes",
+        "uid": 10369
+      },
+      "intent": "Work a dispute to a settlement, or to the forum that will decide it.",
+      "activities": [
+        "Establish what is disputed and which forum has it",
+        "Assemble the record the forum will require",
+        "Negotiate, mediate or escalate",
+        "Implement the outcome and correct what it changes"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "A counterparty has disputed a rate, a term, a charge or an access decision.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Disputed item and its calculation basis",
+          "party": "FIN",
+          "data": "Work"
+        },
+        {
+          "what": "Governing regime and forum from 11.1.5",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Agreement dispute terms",
+          "party": "MAI",
+          "data": "Work"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Settlement or forum outcome",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Corrections to rate, count or access",
+          "party": "FIN",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "MAI",
+          "role": "system of record",
+          "service": "dispute case and outcome"
+        },
+        {
+          "component": "FIN",
+          "role": "supplier",
+          "service": "calculation basis"
+        },
+        {
+          "component": "CS",
+          "role": "interface",
+          "service": "counterparty and forum correspondence"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "MAI",
+          "to": "FIN",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Regulatory counsel",
+          "raci": "A"
+        },
+        {
+          "role": "Joint use manager",
+          "raci": "R"
+        },
+        {
+          "role": "Rates analyst",
+          "raci": "C"
+        },
+        {
+          "role": "Legal counsel",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "1.1404 puts complaints under the formal complaint rules, and 1.1404(f) obliges you to supply the supporting report pages and calculations within 30 days of a reasonable request."
+        },
+        {
+          "kind": "regulatory",
+          "text": "1.1415 establishes the Rapid Broadband Assessment Team, which prioritises disputes alleged to delay broadband and can route them to the Accelerated Docket."
+        },
+        {
+          "kind": "regulatory",
+          "text": "1.1407 lets the Commission set a rate, substitute a term, order a refund with interest and order access by a date. Exposure is not limited to the disputed period."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Dispute resolution time",
+          "definition": "Days from dispute raised to settlement or forum outcome.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.4.7 Work Order Cycle Time"
+        }
+      ],
+      "variants": [
+        "Negotiated settlement between the parties",
+        "FCC formal complaint under 47 CFR 1.1404",
+        "RBAT review and the Accelerated Docket under 1.1415",
+        "Certified-State forum, whose procedure this reference does not state"
+      ],
+      "notation": {
+        "class": "CMMN",
+        "why": "Negotiation, evidence assembly and escalation run together and two competent counsel sequence them differently.",
+        "artifact": "models/11.6.6-disputes.cmmn"
+      },
+      "en17007": {
+        "process": "SER.3",
+        "title": "Manage contracts and evaluate companies and services",
+        "clause": "6.15"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), SER.3 Manage contracts and evaluate services, cl. 6.15 - closest named process; EN 17007 has no third-party access process",
+          "status": "verified"
+        },
+        {
+          "for": "complaint route",
+          "cite": "47 CFR 1.1404(a) formal complaint rules; (f) 30 days to supply the supporting pages",
+          "status": "regulation"
+        },
+        {
+          "for": "broadband escalation",
+          "cite": "47 CFR 1.1415 Dispute resolution procedures for pole attachment disputes that impede or delay broadband deployment",
+          "status": "regulation"
+        },
+        {
+          "for": "remedies",
+          "cite": "47 CFR 1.1407 Remedies (a) and (b)",
+          "status": "regulation"
+        }
+      ],
+      "provenance": {
+        "basis": "regulation",
+        "primary": "47 CFR 1.1404 Pole attachment complaint proceedings"
+      }
+    }
+  ]
+}

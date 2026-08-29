@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/CMMN/20151109/MODEL" xmlns:cmmndi="http://www.omg.org/spec/CMMN/20151109/CMMNDI" xmlns:dc="http://www.omg.org/spec/CMMN/20151109/DC" xmlns:di="http://www.omg.org/spec/CMMN/20151109/DI" id="defs_Renew_and_renegotiate" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <case id="Renew_and_renegotiate" name="11.1.6 Renew and renegotiate agreements">
+    <caseFileModel id="Renew_and_renegotiate_cfm">
+      <caseFileItem id="cf_agreement" name="Expiring agreement and its performance history"/>
+      <caseFileItem id="cf_position" name="Current rate, regime and settlement position"/>
+      <caseFileItem id="cf_open" name="Open disputes, audit findings and transfer backlog"/>
+    </caseFileModel>
+    <casePlanModel id="Renew_and_renegotiate_plan" name="11.1.6 Renew and renegotiate agreements" autoComplete="true">
+      <documentation>Rate, transfer backlog, unauthorised attachments and audit findings are all live at once in a renewal, and no two negotiators take them in the same order - which is the CMMN test. One thing does not move: access does not lapse with the agreement. 47 U.S.C. 224(f)(1) is a statutory duty and an expired contract is not one of the 224(f)(2) grounds an electric utility may deny on. A renewal that raises the rate carries 47 CFR 1.1403(c)'s 60 days written notice whether or not the agreement mentions it. Camunda 8 dropped CMMN, so a runtime for this file means Flowable or an equivalent.</documentation>
+      <planItem id="pi_t_regime" name="Re-test the governing regime" definitionRef="t_regime_def">
+        <itemControl id="ic_t_regime">
+          <requiredRule id="rr_t_regime"><condition><![CDATA[true]]></condition></requiredRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_rate" name="Bring the rate to the current formula" definitionRef="t_rate_def">
+        <itemControl id="ic_t_rate">
+          <requiredRule id="rr_t_rate"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_rate"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_backlog" name="Settle the transfer and double-wood backlog" definitionRef="t_backlog_def">
+        <itemControl id="ic_t_backlog">
+          <requiredRule id="rr_t_backlog"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_backlog"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_unauth" name="Settle outstanding unauthorised attachments" definitionRef="t_unauth_def">
+        <itemControl id="ic_t_unauth">
+          <requiredRule id="rr_t_unauth"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_unauth"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_audit" name="Settle open audit findings" definitionRef="t_audit_def">
+        <itemControl id="ic_t_audit">
+          <requiredRule id="rr_t_audit"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_audit"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_terms" name="Revise access, make-ready and transfer terms" definitionRef="t_terms_def">
+        <itemControl id="ic_t_terms">
+          <requiredRule id="rr_t_terms"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_terms"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_notice" name="Serve the 60-day rate increase notice" definitionRef="t_notice_def">
+        <itemControl id="ic_t_notice">
+          <requiredRule id="rr_t_notice"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_notice"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_escalate" name="Escalate to the dispute route" definitionRef="t_escalate_def">
+        <itemControl id="ic_t_escalate">
+          <requiredRule id="rr_t_escalate"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_escalate"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_close" name="Execute, or record the holdover position" definitionRef="t_close_def">
+        <itemControl id="ic_t_close">
+          <requiredRule id="rr_t_close"><condition><![CDATA[true]]></condition></requiredRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_m_terms" name="Terms agreed" definitionRef="m_terms_def"/>
+      <planItem id="pi_m_executed" name="Agreement executed" definitionRef="m_executed_def"/>
+      <planItem id="pi_m_holdover" name="Holdover recorded" definitionRef="m_holdover_def"/>
+      <humanTask id="t_regime_def" name="Re-test the governing regime" isBlocking="true"><documentation>Required. A State may have certified since the agreement was written, which changes the formula and the timeline before anything is negotiated.</documentation></humanTask>
+      <humanTask id="t_rate_def" name="Bring the rate to the current formula" isBlocking="true"><documentation>Discretionary in sequence. If it rises, the 60-day notice starts running independently of the negotiation.</documentation></humanTask>
+      <humanTask id="t_backlog_def" name="Settle the transfer and double-wood backlog" isBlocking="true"><documentation>Discretionary. Often the real subject of the renewal, and the item most likely to be traded against rate.</documentation></humanTask>
+      <humanTask id="t_unauth_def" name="Settle outstanding unauthorised attachments" isBlocking="true"><documentation>Discretionary. 11.6.5 has the treatment; this is where a portfolio of them gets settled at once.</documentation></humanTask>
+      <humanTask id="t_audit_def" name="Settle open audit findings" isBlocking="true"><documentation>Discretionary. Findings neither party has accepted are the reason settlements stall.</documentation></humanTask>
+      <humanTask id="t_terms_def" name="Revise access, make-ready and transfer terms" isBlocking="true"><documentation>Discretionary. Terms that were never published cannot reject an application under 1.1411(d)(1), so publishing is part of revising.</documentation></humanTask>
+      <humanTask id="t_notice_def" name="Serve the 60-day rate increase notice" isBlocking="true"><documentation>Discretionary only in timing. 47 CFR 1.1403(c) makes it a condition of the increase being effective at all.</documentation></humanTask>
+      <humanTask id="t_escalate_def" name="Escalate to the dispute route" isBlocking="true"><documentation>Discretionary. 11.6.6, which may mean the RBAT route at 1.1415 where broadband deployment is being delayed.</documentation></humanTask>
+      <humanTask id="t_close_def" name="Execute, or record the holdover position" isBlocking="true"><documentation>Required. A renewal that quietly lapses without a recorded position leaves both parties operating on terms neither has agreed.</documentation></humanTask>
+      <milestone id="m_terms_def" name="Terms agreed"><documentation>Rate, access and transfer terms settled between the parties.</documentation></milestone>
+      <milestone id="m_executed_def" name="Agreement executed"><documentation>Signed and its procedures published.</documentation></milestone>
+      <milestone id="m_holdover_def" name="Holdover recorded"><documentation>A legitimate ending. Access continues under 224(f)(1) either way, and saying so in the record is what stops it becoming an access dispute.</documentation></milestone>
+    </casePlanModel>
+  </case>
+  <cmmndi:CMMNDI>
+    <cmmndi:CMMNDiagram id="dg_Renew_and_renegotiate">
+      <cmmndi:CMMNShape id="sh_plan" cmmnElementRef="Renew_and_renegotiate_plan"><dc:Bounds x="40" y="40" width="1200" height="300"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_regime" cmmnElementRef="pi_t_regime"><dc:Bounds x="80" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_rate" cmmnElementRef="pi_t_rate"><dc:Bounds x="270" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_backlog" cmmnElementRef="pi_t_backlog"><dc:Bounds x="460" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_unauth" cmmnElementRef="pi_t_unauth"><dc:Bounds x="80" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_audit" cmmnElementRef="pi_t_audit"><dc:Bounds x="270" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_terms" cmmnElementRef="pi_t_terms"><dc:Bounds x="460" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_notice" cmmnElementRef="pi_t_notice"><dc:Bounds x="80" y="290" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_escalate" cmmnElementRef="pi_t_escalate"><dc:Bounds x="270" y="290" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_close" cmmnElementRef="pi_t_close"><dc:Bounds x="460" y="290" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_m_terms" cmmnElementRef="pi_m_terms"><dc:Bounds x="80" y="390" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_m_executed" cmmnElementRef="pi_m_executed"><dc:Bounds x="270" y="390" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_m_holdover" cmmnElementRef="pi_m_holdover"><dc:Bounds x="460" y="390" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+    </cmmndi:CMMNDiagram>
+  </cmmndi:CMMNDI>
+</definitions>

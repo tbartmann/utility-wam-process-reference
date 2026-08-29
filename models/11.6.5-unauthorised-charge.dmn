@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/" id="Unauthorised_attachment_charge" name="11.6.5 Back-bill and penalise unauthorised attachments" namespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <description>No federal rule sets an unauthorised attachment penalty or a back-billing period. Both are contract, and in a certified State possibly State rule. So this table returns a TREATMENT and names the authority behind it, exactly as 11.1.5 returns the regime and 10.4.4 returns who sets a disconnection protection. It states no period and no multiplier.
+
+The rule it does carry is federal and negative: 47 CFR 1.1416(a) requires no prior approval for an existing attacher overlashing its own wires or for a permitted third party overlashing with that attacher's permission. An unapproved overlash is therefore not an unauthorised attachment and cannot be charged as one - a common and expensive error.</description>
+  <inputData id="in_isOverlash" name="Attachment is an overlash"><variable id="in_isOverlash_v" name="Attachment is an overlash" typeRef="boolean"/></inputData>
+  <inputData id="in_ownerIdentified" name="Owner identified"><variable id="in_ownerIdentified_v" name="Owner identified" typeRef="boolean"/></inputData>
+  <inputData id="in_periodEvidenced" name="Period of attachment evidenced"><variable id="in_periodEvidenced_v" name="Period of attachment evidenced" typeRef="boolean"/></inputData>
+  <inputData id="in_regularising" name="Owner will regularise"><variable id="in_regularising_v" name="Owner will regularise" typeRef="boolean"/></inputData>
+  <inputData id="in_authority" name="Authority for the charge"><variable id="in_authority_v" name="Authority for the charge" typeRef="string"/></inputData>
+  <knowledgeSource id="ks_charge" name="The agreement, and the State rule where one governs"><description>Penalties, back-billing periods and multipliers live here. This reference holds none, and the table names which instrument supplies the number rather than supplying one.</description></knowledgeSource>
+  <decision id="d_11_6_5" name="Charge treatment">
+    <variable id="d_11_6_5_v" name="Charge treatment" typeRef="string"/>
+    <informationRequirement id="ir_d_11_6_5_ks_charge"><requiredInput href="#ks_charge"/></informationRequirement>
+    <decisionTable id="d_11_6_5_dt" hitPolicy="FIRST" preferredOrientation="Rule-as-Row">
+      <input id="d_11_6_5_i1" label="Attachment is an overlash"><inputExpression id="d_11_6_5_i1_e" typeRef="boolean"><text>in_isOverlash</text></inputExpression></input>
+      <input id="d_11_6_5_i2" label="Owner identified"><inputExpression id="d_11_6_5_i2_e" typeRef="boolean"><text>in_ownerIdentified</text></inputExpression></input>
+      <input id="d_11_6_5_i3" label="Period evidenced"><inputExpression id="d_11_6_5_i3_e" typeRef="boolean"><text>in_periodEvidenced</text></inputExpression></input>
+      <input id="d_11_6_5_i4" label="Owner will regularise"><inputExpression id="d_11_6_5_i4_e" typeRef="boolean"><text>in_regularising</text></inputExpression></input>
+      <output id="d_11_6_5_o" label="Charge treatment" name="Charge treatment" typeRef="string"/>
+      <rule id="d_11_6_5_r1">
+        <description>47 CFR 1.1416(a). An existing attacher overlashing its own wires, or a permitted third party, needs no prior approval. It is not unauthorised and charging it as such is a rule breach, not an oversight.</description>
+        <inputEntry id="d_11_6_5_r1_ie1"><text>true</text></inputEntry>
+        <inputEntry id="d_11_6_5_r1_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_11_6_5_r1_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_11_6_5_r1_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_11_6_5_r1_oe"><text>"noCharge: overlash needs no prior approval"</text></outputEntry>
+      </rule>
+      <rule id="d_11_6_5_r2">
+        <description>An unattributable attachment. It stays in the inventory as a finding and it does not become somebody's bill because a bill has to be sent to someone.</description>
+        <inputEntry id="d_11_6_5_r2_ie1"><text>false</text></inputEntry>
+        <inputEntry id="d_11_6_5_r2_ie2"><text>false</text></inputEntry>
+        <inputEntry id="d_11_6_5_r2_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_11_6_5_r2_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_11_6_5_r2_oe"><text>"writeOff: no owner to pursue"</text></outputEntry>
+      </rule>
+      <rule id="d_11_6_5_r3">
+        <description>The owner is known but the period cannot be evidenced. Rental runs from discovery forward. An asserted period is not an evidenced one, and 11.4.3 is where the difference is designed in.</description>
+        <inputEntry id="d_11_6_5_r3_ie1"><text>false</text></inputEntry>
+        <inputEntry id="d_11_6_5_r3_ie2"><text>true</text></inputEntry>
+        <inputEntry id="d_11_6_5_r3_ie3"><text>false</text></inputEntry>
+        <inputEntry id="d_11_6_5_r3_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_11_6_5_r3_oe"><text>"regulariseFromDiscovery"</text></outputEntry>
+      </rule>
+      <rule id="d_11_6_5_r4">
+        <description>Owner known, period evidenced, and willing to regularise. Back-bill the evidenced period at the ordinary rate under the agreement's terms.</description>
+        <inputEntry id="d_11_6_5_r4_ie1"><text>false</text></inputEntry>
+        <inputEntry id="d_11_6_5_r4_ie2"><text>true</text></inputEntry>
+        <inputEntry id="d_11_6_5_r4_ie3"><text>true</text></inputEntry>
+        <inputEntry id="d_11_6_5_r4_ie4"><text>true</text></inputEntry>
+        <outputEntry id="d_11_6_5_r4_oe"><text>"regulariseAndBackBillEvidencedPeriod"</text></outputEntry>
+      </rule>
+      <rule id="d_11_6_5_r5">
+        <description>Owner known and period evidenced but not regularising. Whatever penalty applies is the agreement's or the State's; this reference states none. Removal remains subject to 47 CFR 1.1403(c)'s 60-day notice.</description>
+        <inputEntry id="d_11_6_5_r5_ie1"><text>false</text></inputEntry>
+        <inputEntry id="d_11_6_5_r5_ie2"><text>true</text></inputEntry>
+        <inputEntry id="d_11_6_5_r5_ie3"><text>true</text></inputEntry>
+        <inputEntry id="d_11_6_5_r5_ie4"><text>false</text></inputEntry>
+        <outputEntry id="d_11_6_5_r5_oe"><text>"backBillAndPursueUnderAgreement"</text></outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <decision id="d_11_6_5_auth" name="Authority for the charge">
+    <variable id="d_11_6_5_auth_v" name="Authority for the charge" typeRef="string"/>
+    <informationRequirement id="ir_d_11_6_5_auth_ks_charge"><requiredInput href="#ks_charge"/></informationRequirement>
+    <decisionTable id="d_11_6_5_auth_dt" hitPolicy="UNIQUE" preferredOrientation="Rule-as-Row">
+      <input id="d_11_6_5_auth_i1" label="Authority"><inputExpression id="d_11_6_5_auth_i1_e" typeRef="string"><text>in_authority</text></inputExpression></input>
+      <output id="d_11_6_5_auth_o" label="Authority for the charge" name="Authority for the charge" typeRef="string"/>
+      <rule id="d_11_6_5_auth_r1">
+        <description>The usual case. Periods and multipliers are contract terms.</description>
+        <inputEntry id="d_11_6_5_auth_r1_ie1"><text>"agreement"</text></inputEntry>
+        <outputEntry id="d_11_6_5_auth_r1_oe"><text>"the joint use or licence agreement"</text></outputEntry>
+      </rule>
+      <rule id="d_11_6_5_auth_r2">
+        <description>Where a State has certified under 47 U.S.C. 224(c), its rule may set or cap the charge. This reference states no State rule.</description>
+        <inputEntry id="d_11_6_5_auth_r2_ie1"><text>"statePUC"</text></inputEntry>
+        <outputEntry id="d_11_6_5_auth_r2_oe"><text>"a certified State commission rule"</text></outputEntry>
+      </rule>
+      <rule id="d_11_6_5_auth_r3">
+        <description>Charging with no instrument behind it is a finding, not a configuration detail. It is the position most likely to be reversed at 11.6.6.</description>
+        <inputEntry id="d_11_6_5_auth_r3_ie1"><text>"none"</text></inputEntry>
+        <outputEntry id="d_11_6_5_auth_r3_oe"><text>"no instrument identified"</text></outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram id="drd_Unauthorised_attachment_charge">
+      <dmndi:DMNShape id="sh_in_isOverlash" dmnElementRef="in_isOverlash"><dc:Bounds x="60" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_ownerIdentified" dmnElementRef="in_ownerIdentified"><dc:Bounds x="245" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_periodEvidenced" dmnElementRef="in_periodEvidenced"><dc:Bounds x="430" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_regularising" dmnElementRef="in_regularising"><dc:Bounds x="615" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_authority" dmnElementRef="in_authority"><dc:Bounds x="800" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_d_11_6_5" dmnElementRef="d_11_6_5"><dc:Bounds x="60" y="240" width="180" height="70"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_d_11_6_5_auth" dmnElementRef="d_11_6_5_auth"><dc:Bounds x="260" y="240" width="180" height="70"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_ks_charge" dmnElementRef="ks_charge"><dc:Bounds x="900" y="100" width="160" height="55"/></dmndi:DMNShape>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</definitions>

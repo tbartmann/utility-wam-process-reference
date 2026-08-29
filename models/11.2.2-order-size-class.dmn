@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/" id="Order_size_class" name="11.2.2 Assess application scope and fees" namespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <description>Every deadline in 11.2 and 11.3 is set by this one value, and every threshold in it is stated in 47 CFR 1.1411(a)(4) and (a)(5) rather than inferred from practice. Note the thresholds are the LESSER of an absolute pole count and a percentage of the utility's poles in that State, which means the same 500-pole application is a Mid-Sized Order for a large utility and a Large Order for a small one. Getting the denominator wrong changes the survey deadline by 30 days and the make-ready deadline by 90.</description>
+  <inputData id="in_poles" name="Poles in the application"><variable id="in_poles_v" name="Poles in the application" typeRef="number"/></inputData>
+  <inputData id="in_statePoles" name="Utility poles in that State"><variable id="in_statePoles_v" name="Utility poles in that State" typeRef="number"/></inputData>
+  <inputData id="in_advanceNotice" name="Required advance notice given"><variable id="in_advanceNotice_v" name="Required advance notice given" typeRef="boolean"/></inputData>
+  <inputData id="in_sizeBand" name="Size band against the 1.1411(a) thresholds"><variable id="in_sizeBand_v" name="Size band against the 1.1411(a) thresholds" typeRef="string"/></inputData>
+  <knowledgeSource id="ks_size" name="47 CFR 1.1411(a)(4), (a)(5) and (h)"><description>A Mid-Sized Order is greater than the LESSER of 300 poles or 0.5 percent of the utility's poles in a state, up to the LESSER of 3,000 or 5 percent. A Large Order runs from there to the LESSER of 6,000 or 10 percent. (h)(5) permits treating one attacher's requests filed within 30 days as one, while forbidding size limits combined with frequency limits that restrict how many attachments may be sought.</description></knowledgeSource>
+  <decision id="d_11_2_2" name="Order class and deadlines">
+    <variable id="d_11_2_2_v" name="Order class and deadlines" typeRef="string"/>
+    <informationRequirement id="ir_d_11_2_2_ks_size"><requiredInput href="#ks_size"/></informationRequirement>
+    <decisionTable id="d_11_2_2_dt" hitPolicy="FIRST" preferredOrientation="Rule-as-Row">
+      <input id="d_11_2_2_i1" label="Size band against 1.1411(a)"><inputExpression id="d_11_2_2_i1_e" typeRef="string"><text>in_sizeBand</text></inputExpression></input>
+      <input id="d_11_2_2_i2" label="Required advance notice given"><inputExpression id="d_11_2_2_i2_e" typeRef="boolean"><text>in_advanceNotice</text></inputExpression></input>
+      <output id="d_11_2_2_o" label="Order class and deadlines" name="Order class and deadlines" typeRef="string"/>
+      <rule id="d_11_2_2_r1">
+        <description>At or below the lesser of 300 poles or 0.5 percent. 1.1411(h)(1) applies the base timeline: 45 days to grant or deny and to survey, 14 days to estimate, 30 days to make ready in the communications space and 90 days above it.</description>
+        <inputEntry id="d_11_2_2_r1_ie1"><text>"standard"</text></inputEntry>
+        <inputEntry id="d_11_2_2_r1_ie2"><text>-</text></inputEntry>
+        <outputEntry id="d_11_2_2_r1_oe"><text>"standard: survey 45, estimate 14, MR 30 / 90"</text></outputEntry>
+      </rule>
+      <rule id="d_11_2_2_r2">
+        <description>1.1411(h)(2) adds 15 days to survey and 45 to make-ready. Advance notice of 15 days was given, so the clock runs.</description>
+        <inputEntry id="d_11_2_2_r2_ie1"><text>"midSized"</text></inputEntry>
+        <inputEntry id="d_11_2_2_r2_ie2"><text>true</text></inputEntry>
+        <outputEntry id="d_11_2_2_r2_oe"><text>"midSized: survey 60, estimate 14, MR 75 / 135"</text></outputEntry>
+      </rule>
+      <rule id="d_11_2_2_r3">
+        <description>1.1411(c)(2) lets the utility treat the application itself as the 15-day advance notice, on prompt notice to the attacher - and the timeline does not begin to run until that period ends.</description>
+        <inputEntry id="d_11_2_2_r3_ie1"><text>"midSized"</text></inputEntry>
+        <inputEntry id="d_11_2_2_r3_ie2"><text>false</text></inputEntry>
+        <outputEntry id="d_11_2_2_r3_oe"><text>"midSized: advance notice not given"</text></outputEntry>
+      </rule>
+      <rule id="d_11_2_2_r4">
+        <description>1.1411(h)(3) adds 45 days to survey, 15 to estimate and 90 to make-ready. Advance notice of 60 days was given and (c)(3) requires a meet and confer within 30 days of it.</description>
+        <inputEntry id="d_11_2_2_r4_ie1"><text>"large"</text></inputEntry>
+        <inputEntry id="d_11_2_2_r4_ie2"><text>true</text></inputEntry>
+        <outputEntry id="d_11_2_2_r4_oe"><text>"large: survey 90, estimate 29, MR 120 / 180"</text></outputEntry>
+      </rule>
+      <rule id="d_11_2_2_r5">
+        <description>Same treatment as a Mid-Sized Order without notice, on the 60-day period.</description>
+        <inputEntry id="d_11_2_2_r5_ie1"><text>"large"</text></inputEntry>
+        <inputEntry id="d_11_2_2_r5_ie2"><text>false</text></inputEntry>
+        <outputEntry id="d_11_2_2_r5_oe"><text>"large: advance notice not given"</text></outputEntry>
+      </rule>
+      <rule id="d_11_2_2_r6">
+        <description>Above the lesser of 6,000 poles or 10 percent. 1.1411(h)(4) requires good-faith negotiation of the timing and NO fixed day count applies. Asserting the Large Order deadlines here is not the rule.</description>
+        <inputEntry id="d_11_2_2_r6_ie1"><text>"aboveLarge"</text></inputEntry>
+        <inputEntry id="d_11_2_2_r6_ie2"><text>-</text></inputEntry>
+        <outputEntry id="d_11_2_2_r6_oe"><text>"negotiate timing under 1.1411(h)(4)"</text></outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram id="drd_Order_size_class">
+      <dmndi:DMNShape id="sh_in_poles" dmnElementRef="in_poles"><dc:Bounds x="60" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_statePoles" dmnElementRef="in_statePoles"><dc:Bounds x="245" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_advanceNotice" dmnElementRef="in_advanceNotice"><dc:Bounds x="430" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_sizeBand" dmnElementRef="in_sizeBand"><dc:Bounds x="615" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_d_11_2_2" dmnElementRef="d_11_2_2"><dc:Bounds x="60" y="240" width="180" height="70"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_ks_size" dmnElementRef="ks_size"><dc:Bounds x="900" y="100" width="160" height="55"/></dmndi:DMNShape>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</definitions>

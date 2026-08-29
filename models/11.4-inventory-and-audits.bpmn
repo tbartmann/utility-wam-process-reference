@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_P_11_4" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <process id="P_11_4" name="11.4 Manage attachment inventory and audits" isExecutable="false">
+    <documentation>11.4.3, 11.4.4 and 11.4.5 are drawn; the inventories are standing records and pursuit is a case at 11.4.6. The reconciliation has FOUR outcomes and the fourth is the one that gets skipped: found and permitted, found and unpermitted, billed but not found, and permitted but never built. The last two reduce the bill, and an audit designed to find revenue will not look for them. 47 CFR 1.1409(d)(3) is what makes the audit worth doing either way - a complete inspection's data displaces the presumptive attacher average, in whichever direction it points.</documentation>
+    <laneSet id="P_11_4_lanes">
+      <lane id="l_114_ju" name="Joint use administration">
+        <flowNodeRef>n_114_t</flowNodeRef>
+        <flowNodeRef>n_114_scope</flowNodeRef>
+        <flowNodeRef>n_114_not</flowNodeRef>
+        <flowNodeRef>n_114_match</flowNodeRef>
+        <flowNodeRef>n_114_cls</flowNodeRef>
+        <flowNodeRef>n_114_ok</flowNodeRef>
+        <flowNodeRef>n_114_unp</flowNodeRef>
+        <flowNodeRef>n_114_down</flowNodeRef>
+        <flowNodeRef>n_114_corr</flowNodeRef>
+        <flowNodeRef>n_114_end</flowNodeRef>
+      </lane>
+      <lane id="l_114_frd" name="Field capture">
+        <flowNodeRef>n_114_id</flowNodeRef>
+        <flowNodeRef>n_114_cap</flowNodeRef>
+        <flowNodeRef>n_114_vg</flowNodeRef>
+        <flowNodeRef>n_114_rew</flowNodeRef>
+        <flowNodeRef>n_114_post</flowNodeRef>
+      </lane>
+    </laneSet>
+    <startEvent id="n_114_t" name="Audit cycle due"><timerEventDefinition id="n_114_t_td"/></startEvent>
+    <userTask id="n_114_scope" name="Set scope, sample and capture standard"><documentation>11.4.3. No source states a cycle, a sample size or a method. All three are recorded as chosen.</documentation></userTask>
+    <sendTask id="n_114_not" name="Notify the counterparties"><documentation>11.4.3.</documentation></sendTask>
+    <userTask id="n_114_id" name="Identify the structure in the field"><documentation>11.4.4. Capture that cannot be tied to a structure identity is worthless, so the identity is captured first.</documentation></userTask>
+    <userTask id="n_114_cap" name="Capture attachments, owners, positions and condition"><documentation>11.4.4.</documentation></userTask>
+    <exclusiveGateway id="n_114_vg" name="Capture validates"/>
+    <userTask id="n_114_rew" name="Return the capture for rework"><documentation>11.4.4.</documentation></userTask>
+    <serviceTask id="n_114_post" name="Post the validated capture"><documentation>11.4.4.</documentation></serviceTask>
+    <serviceTask id="n_114_match" name="Match each attachment to a permit and a bill"><documentation>11.4.5.</documentation></serviceTask>
+    <exclusiveGateway id="n_114_cls" name="Reconciliation outcome"/>
+    <endEvent id="n_114_ok" name="Found and permitted, no action"><documentation>11.4.5.</documentation></endEvent>
+    <sendTask id="n_114_unp" name="Refer the unpermitted finding to 11.4.6"><documentation>11.4.5. Not automatically unauthorised - the permit may simply predate the record. 11.4.6 establishes which.</documentation></sendTask>
+    <serviceTask id="n_114_down" name="Reduce the bill where nothing was found"><documentation>11.4.5. Billed but not found, and permitted but never built. Both cut revenue and both are findings.</documentation></serviceTask>
+    <serviceTask id="n_114_corr" name="Correct the inventory and the billing base"><documentation>11.4.5. After the counterparty has seen the finding, or it becomes a dispute at 11.6.6 rather than a settlement.</documentation></serviceTask>
+    <endEvent id="n_114_end" name="Reconciled"/>
+    <sequenceFlow id="f_n_114_t_n_114_scope" sourceRef="n_114_t" targetRef="n_114_scope" name=""/>
+    <sequenceFlow id="f_n_114_scope_n_114_not" sourceRef="n_114_scope" targetRef="n_114_not" name=""/>
+    <sequenceFlow id="f_n_114_not_n_114_id" sourceRef="n_114_not" targetRef="n_114_id" name=""/>
+    <sequenceFlow id="f_n_114_id_n_114_cap" sourceRef="n_114_id" targetRef="n_114_cap" name=""/>
+    <sequenceFlow id="f_n_114_cap_n_114_vg" sourceRef="n_114_cap" targetRef="n_114_vg" name=""/>
+    <sequenceFlow id="f_n_114_vg_n_114_rew" sourceRef="n_114_vg" targetRef="n_114_rew" name="does not validate"><conditionExpression xsi:type="tFormalExpression"><![CDATA[captureValid = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_114_rew_n_114_cap" sourceRef="n_114_rew" targetRef="n_114_cap" name=""/>
+    <sequenceFlow id="f_n_114_vg_n_114_post" sourceRef="n_114_vg" targetRef="n_114_post" name="validates"/>
+    <sequenceFlow id="f_n_114_post_n_114_match" sourceRef="n_114_post" targetRef="n_114_match" name=""/>
+    <sequenceFlow id="f_n_114_match_n_114_cls" sourceRef="n_114_match" targetRef="n_114_cls" name=""/>
+    <sequenceFlow id="f_n_114_cls_n_114_ok" sourceRef="n_114_cls" targetRef="n_114_ok" name="found and permitted"/>
+    <sequenceFlow id="f_n_114_cls_n_114_unp" sourceRef="n_114_cls" targetRef="n_114_unp" name="found, no permit"><conditionExpression xsi:type="tFormalExpression"><![CDATA[permitted = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_114_cls_n_114_down" sourceRef="n_114_cls" targetRef="n_114_down" name="billed or permitted, not found"/>
+    <sequenceFlow id="f_n_114_unp_n_114_corr" sourceRef="n_114_unp" targetRef="n_114_corr" name=""/>
+    <sequenceFlow id="f_n_114_down_n_114_corr" sourceRef="n_114_down" targetRef="n_114_corr" name=""/>
+    <sequenceFlow id="f_n_114_corr_n_114_end" sourceRef="n_114_corr" targetRef="n_114_end" name=""/>
+  </process>
+  <bpmndi:BPMNDiagram id="dg_P_11_4">
+    <bpmndi:BPMNPlane id="pl_P_11_4" bpmnElement="P_11_4">
+      <bpmndi:BPMNShape id="sh_n_114_t" bpmnElement="n_114_t"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_114_scope" bpmnElement="n_114_scope"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_114_not" bpmnElement="n_114_not"><dc:Bounds x="425" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_114_id" bpmnElement="n_114_id"><dc:Bounds x="595" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_114_cap" bpmnElement="n_114_cap"><dc:Bounds x="765" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_114_vg" bpmnElement="n_114_vg"><dc:Bounds x="977" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_114_rew" bpmnElement="n_114_rew"><dc:Bounds x="935" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_114_post" bpmnElement="n_114_post"><dc:Bounds x="1105" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_114_match" bpmnElement="n_114_match"><dc:Bounds x="1275" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_114_cls" bpmnElement="n_114_cls"><dc:Bounds x="1487" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_114_ok" bpmnElement="n_114_ok"><dc:Bounds x="1492" y="107" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_114_unp" bpmnElement="n_114_unp"><dc:Bounds x="1615" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_114_down" bpmnElement="n_114_down"><dc:Bounds x="1615" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_114_corr" bpmnElement="n_114_corr"><dc:Bounds x="1785" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_114_end" bpmnElement="n_114_end"><dc:Bounds x="2002" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ed_f_n_114_t_n_114_scope" bpmnElement="f_n_114_t_n_114_scope"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_114_scope_n_114_not" bpmnElement="f_n_114_scope_n_114_not"><di:waypoint x="385" y="235"/><di:waypoint x="425" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_114_not_n_114_id" bpmnElement="f_n_114_not_n_114_id"><di:waypoint x="555" y="235"/><di:waypoint x="595" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_114_id_n_114_cap" bpmnElement="f_n_114_id_n_114_cap"><di:waypoint x="725" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_114_cap_n_114_vg" bpmnElement="f_n_114_cap_n_114_vg"><di:waypoint x="895" y="235"/><di:waypoint x="977" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_114_vg_n_114_rew" bpmnElement="f_n_114_vg_n_114_rew"><di:waypoint x="1023" y="235"/><di:waypoint x="910" y="235"/><di:waypoint x="910" y="455"/><di:waypoint x="935" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_114_rew_n_114_cap" bpmnElement="f_n_114_rew_n_114_cap"><di:waypoint x="1065" y="455"/><di:waypoint x="740" y="455"/><di:waypoint x="740" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_114_vg_n_114_post" bpmnElement="f_n_114_vg_n_114_post"><di:waypoint x="1023" y="235"/><di:waypoint x="1105" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_114_post_n_114_match" bpmnElement="f_n_114_post_n_114_match"><di:waypoint x="1235" y="235"/><di:waypoint x="1275" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_114_match_n_114_cls" bpmnElement="f_n_114_match_n_114_cls"><di:waypoint x="1405" y="235"/><di:waypoint x="1487" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_114_cls_n_114_ok" bpmnElement="f_n_114_cls_n_114_ok"><di:waypoint x="1533" y="235"/><di:waypoint x="1467" y="235"/><di:waypoint x="1467" y="125"/><di:waypoint x="1492" y="125"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_114_cls_n_114_unp" bpmnElement="f_n_114_cls_n_114_unp"><di:waypoint x="1533" y="235"/><di:waypoint x="1590" y="235"/><di:waypoint x="1590" y="455"/><di:waypoint x="1615" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_114_cls_n_114_down" bpmnElement="f_n_114_cls_n_114_down"><di:waypoint x="1533" y="235"/><di:waypoint x="1615" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_114_unp_n_114_corr" bpmnElement="f_n_114_unp_n_114_corr"><di:waypoint x="1745" y="455"/><di:waypoint x="1760" y="455"/><di:waypoint x="1760" y="235"/><di:waypoint x="1785" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_114_down_n_114_corr" bpmnElement="f_n_114_down_n_114_corr"><di:waypoint x="1745" y="235"/><di:waypoint x="1785" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_114_corr_n_114_end" bpmnElement="f_n_114_corr_n_114_end"><di:waypoint x="1915" y="235"/><di:waypoint x="2002" y="235"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

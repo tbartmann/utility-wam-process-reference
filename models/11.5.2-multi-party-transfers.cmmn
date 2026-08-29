@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/CMMN/20151109/MODEL" xmlns:cmmndi="http://www.omg.org/spec/CMMN/20151109/CMMNDI" xmlns:dc="http://www.omg.org/spec/CMMN/20151109/DC" xmlns:di="http://www.omg.org/spec/CMMN/20151109/DI" id="defs_Multi_party_transfers" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <case id="Multi_party_transfers" name="11.5.2 Sequence multi-party transfer work">
+    <caseFileModel id="Multi_party_transfers_cfm">
+      <caseFileItem id="cf_obligations" name="Transfer obligations and their required order"/>
+      <caseFileItem id="cf_progress" name="Each attacher's progress and commitments"/>
+      <caseFileItem id="cf_own" name="The utility's own transfer work"/>
+    </caseFileModel>
+    <casePlanModel id="Multi_party_transfers_plan" name="11.5.2 Sequence multi-party transfer work" autoComplete="true">
+      <documentation>The hardest coordination problem in the category and the reason double-wood backlogs exist. Several independent companies must each move their own equipment, in an order that is a SAFETY matter rather than an administrative one - the supply space sits above the communication worker safety zone, so a communication transfer and a supply transfer are not interchangeable in sequence. NESC Rules 235C and 238 govern the resulting clearances and their bodies are unread here; NRECA puts the safety zone at generally 40 in.
+
+One party that will not move holds every party behind it, and the utility has no self-help remedy of its own: 47 CFR 1.1411(j) gives self-help to the ATTACHER when the utility is late, not the other way round. That asymmetry is why this is a case and not a schedule.</documentation>
+      <planItem id="pi_t_order" name="Establish the order the transfers must happen in" definitionRef="t_order_def">
+        <itemControl id="ic_t_order">
+          <requiredRule id="rr_t_order"><condition><![CDATA[true]]></condition></requiredRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_commit" name="Obtain a date from each attacher" definitionRef="t_commit_def">
+        <itemControl id="ic_t_commit">
+          <repetitionRule id="rep_t_commit"><condition><![CDATA[true]]></condition></repetitionRule>
+          <requiredRule id="rr_t_commit"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_commit"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_own" name="Complete the utility's own transfer in sequence" definitionRef="t_own_def">
+        <itemControl id="ic_t_own">
+          <requiredRule id="rr_t_own"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_own"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_chase" name="Chase the party holding the sequence" definitionRef="t_chase_def">
+        <itemControl id="ic_t_chase">
+          <repetitionRule id="rep_t_chase"><condition><![CDATA[true]]></condition></repetitionRule>
+          <requiredRule id="rr_t_chase"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_chase"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_escalate" name="Escalate under the agreement" definitionRef="t_escalate_def">
+        <itemControl id="ic_t_escalate">
+          <requiredRule id="rr_t_escalate"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_escalate"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_do" name="Transfer the equipment and recharge, where the agreement allows" definitionRef="t_do_def">
+        <itemControl id="ic_t_do">
+          <requiredRule id="rr_t_do"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_do"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_resequence" name="Re-sequence around a blocked party" definitionRef="t_resequence_def">
+        <itemControl id="ic_t_resequence">
+          <requiredRule id="rr_t_resequence"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_resequence"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_release" name="Release the structure once the last party has moved" definitionRef="t_release_def">
+        <itemControl id="ic_t_release">
+          <requiredRule id="rr_t_release"><condition><![CDATA[true]]></condition></requiredRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_m_ordered" name="Sequence established" definitionRef="m_ordered_def"/>
+      <planItem id="pi_m_comms" name="Communication space cleared" definitionRef="m_comms_def"/>
+      <planItem id="pi_m_released" name="Structure released" definitionRef="m_released_def"/>
+      <humanTask id="t_order_def" name="Establish the order the transfers must happen in" isBlocking="true"><documentation>Required and first. Determined by position on the structure and by the communication worker safety zone, not by who responded first.</documentation></humanTask>
+      <humanTask id="t_commit_def" name="Obtain a date from each attacher" isBlocking="true"><documentation>Discretionary and repeating.</documentation></humanTask>
+      <humanTask id="t_own_def" name="Complete the utility's own transfer in sequence" isBlocking="true"><documentation>Discretionary in timing. The utility is one of the parties in the order and not outside it.</documentation></humanTask>
+      <humanTask id="t_chase_def" name="Chase the party holding the sequence" isBlocking="true"><documentation>Discretionary and repeating. Which party is blocking changes as the sequence advances, and so does the right way to move them.</documentation></humanTask>
+      <humanTask id="t_escalate_def" name="Escalate under the agreement" isBlocking="true"><documentation>Discretionary. What escalation is available is the agreement's; no source held here prescribes one.</documentation></humanTask>
+      <humanTask id="t_do_def" name="Transfer the equipment and recharge, where the agreement allows" isBlocking="true"><documentation>Discretionary and not always available. Moving another company's equipment is a contract right, not a federal one, and 1.1411(j) self-help runs the other way.</documentation></humanTask>
+      <humanTask id="t_resequence_def" name="Re-sequence around a blocked party" isBlocking="true"><documentation>Discretionary, and constrained: any re-sequencing still has to leave every clearance correct at every intermediate step.</documentation></humanTask>
+      <humanTask id="t_release_def" name="Release the structure once the last party has moved" isBlocking="true"><documentation>Required. Until this happens 11.5.4 carries the structure as backlog.</documentation></humanTask>
+      <milestone id="m_ordered_def" name="Sequence established"><documentation>Every party has a position and a date.</documentation></milestone>
+      <milestone id="m_comms_def" name="Communication space cleared"><documentation>The lower half of the structure is transferred.</documentation></milestone>
+      <milestone id="m_released_def" name="Structure released"><documentation>Every party has moved and 11.5.4 can remove the old structure.</documentation></milestone>
+    </casePlanModel>
+  </case>
+  <cmmndi:CMMNDI>
+    <cmmndi:CMMNDiagram id="dg_Multi_party_transfers">
+      <cmmndi:CMMNShape id="sh_plan" cmmnElementRef="Multi_party_transfers_plan"><dc:Bounds x="40" y="40" width="1010" height="300"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_order" cmmnElementRef="pi_t_order"><dc:Bounds x="80" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_commit" cmmnElementRef="pi_t_commit"><dc:Bounds x="270" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_own" cmmnElementRef="pi_t_own"><dc:Bounds x="460" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_chase" cmmnElementRef="pi_t_chase"><dc:Bounds x="80" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_escalate" cmmnElementRef="pi_t_escalate"><dc:Bounds x="270" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_do" cmmnElementRef="pi_t_do"><dc:Bounds x="460" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_resequence" cmmnElementRef="pi_t_resequence"><dc:Bounds x="80" y="290" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_release" cmmnElementRef="pi_t_release"><dc:Bounds x="270" y="290" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_m_ordered" cmmnElementRef="pi_m_ordered"><dc:Bounds x="460" y="290" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_m_comms" cmmnElementRef="pi_m_comms"><dc:Bounds x="80" y="390" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_m_released" cmmnElementRef="pi_m_released"><dc:Bounds x="270" y="390" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+    </cmmndi:CMMNDiagram>
+  </cmmndi:CMMNDI>
+</definitions>
