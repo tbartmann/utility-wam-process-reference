@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/" id="Prescribe_method" name="7.2.4 Prescribe work method and specification" namespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <description>The output is a method and a finish specification - a value the crew and the auditor both work to. ANSI A300 Part 7 is the industry specification for method and finish; it is ANSI-accredited consensus and is incorporated by reference into no federal rule, so it is cited as consensus and binds only where a state or a contract adopts it.</description>
+  <inputData id="in_classification" name="Span or tree classification"><variable id="in_classification_v" name="Span or tree classification" typeRef="string"/></inputData>
+  <inputData id="in_accessPosition" name="Access position"><variable id="in_accessPosition_v" name="Access position" typeRef="string"/></inputData>
+  <inputData id="in_corridorTreatment" name="Corridor treatment required"><variable id="in_corridorTreatment_v" name="Corridor treatment required" typeRef="boolean"/></inputData>
+  <inputData id="in_speciesCompatible" name="Compatible species"><variable id="in_speciesCompatible_v" name="Compatible species" typeRef="boolean"/></inputData>
+  <knowledgeSource id="ks_a300" name="ANSI A300 Part 7 Integrated Vegetation Management (2018); ANSI Z133 (2017)"><description>A300 gives method and finish; Z133 gives arboricultural worker safety. Both are ANSI-accredited consensus published with TCIA as secretariat, and neither is incorporated by reference into 29 CFR 1910.269. The federal rule is 1910.269(r).</description></knowledgeSource>
+  <decision id="d_7_2_4" name="Prescribed method">
+    <description>7.2.4. The finish specification the audit at 7.5.1 compares against is set here. A prescription without a stated finish cannot be audited, only inspected.</description>
+    <variable id="d_7_2_4_v" name="Prescribed method" typeRef="string"/>
+    <informationRequirement id="ir_d_7_2_4_in_classification"><requiredInput href="#in_classification"/></informationRequirement>
+    <informationRequirement id="ir_d_7_2_4_in_corridorTreatment"><requiredInput href="#in_corridorTreatment"/></informationRequirement>
+    <informationRequirement id="ir_d_7_2_4_in_speciesCompatible"><requiredInput href="#in_speciesCompatible"/></informationRequirement>
+    <informationRequirement id="ir_d_7_2_4_in_accessPosition"><requiredInput href="#in_accessPosition"/></informationRequirement>
+    <authorityRequirement id="ar_d_7_2_4"><requiredAuthority href="#ks_a300"/></authorityRequirement>
+    <decisionTable id="d_7_2_4_dt" hitPolicy="FIRST" preferredOrientation="Rule-as-Row">
+      <input id="d_7_2_4_i1" label="Span or tree classification"><inputExpression id="d_7_2_4_i1_e" typeRef="string"><text>in_classification</text></inputExpression></input>
+      <input id="d_7_2_4_i2" label="Corridor treatment required"><inputExpression id="d_7_2_4_i2_e" typeRef="boolean"><text>in_corridorTreatment</text></inputExpression></input>
+      <input id="d_7_2_4_i3" label="Compatible species"><inputExpression id="d_7_2_4_i3_e" typeRef="boolean"><text>in_speciesCompatible</text></inputExpression></input>
+      <input id="d_7_2_4_i4" label="Access position"><inputExpression id="d_7_2_4_i4_e" typeRef="string"><text>in_accessPosition</text></inputExpression></input>
+      <output id="d_7_2_4_o" label="Prescribed method" name="Prescribed method" typeRef="string"/>
+      <rule id="d_7_2_4_r1">
+        <description>A hazard tree is removed, not pruned. Pruning a structurally defective tree leaves the failure mode in place.</description>
+        <inputEntry id="d_7_2_4_r1_ie1"><text>"hazardTreeRemove","dangerTreeOffRow"</text></inputEntry>
+        <inputEntry id="d_7_2_4_r1_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_7_2_4_r1_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_7_2_4_r1_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_7_2_4_r1_oe"><text>"wholeTreeRemoval"</text></outputEntry>
+      </rule>
+      <rule id="d_7_2_4_r2">
+        <inputEntry id="d_7_2_4_r2_ie1"><text>"limbRemoval"</text></inputEntry>
+        <inputEntry id="d_7_2_4_r2_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_7_2_4_r2_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_7_2_4_r2_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_7_2_4_r2_oe"><text>"overheadLimbRemoval"</text></outputEntry>
+      </rule>
+      <rule id="d_7_2_4_r3">
+        <description>Incompatible species in the corridor floor. A300 Part 7 integrated vegetation management. Herbicide law is state and is not in scope here.</description>
+        <inputEntry id="d_7_2_4_r3_ie1"><text>-</text></inputEntry>
+        <inputEntry id="d_7_2_4_r3_ie2"><text>true</text></inputEntry>
+        <inputEntry id="d_7_2_4_r3_ie3"><text>false</text></inputEntry>
+        <inputEntry id="d_7_2_4_r3_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_7_2_4_r3_oe"><text>"mechanicalOrHerbicideFloor"</text></outputEntry>
+      </rule>
+      <rule id="d_7_2_4_r4">
+        <description>Compatible species retained and encouraged - the treatment that reduces the next cycle rather than repeating it.</description>
+        <inputEntry id="d_7_2_4_r4_ie1"><text>-</text></inputEntry>
+        <inputEntry id="d_7_2_4_r4_ie2"><text>true</text></inputEntry>
+        <inputEntry id="d_7_2_4_r4_ie3"><text>true</text></inputEntry>
+        <inputEntry id="d_7_2_4_r4_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_7_2_4_r4_oe"><text>"compatibleSpeciesConversion"</text></outputEntry>
+      </rule>
+      <rule id="d_7_2_4_r5">
+        <description>Side prune to the finish distance the operator's standard states.</description>
+        <inputEntry id="d_7_2_4_r5_ie1"><text>"clearanceFail"</text></inputEntry>
+        <inputEntry id="d_7_2_4_r5_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_7_2_4_r5_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_7_2_4_r5_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_7_2_4_r5_oe"><text>"sidePruneToFinish"</text></outputEntry>
+      </rule>
+      <rule id="d_7_2_4_r6">
+        <inputEntry id="d_7_2_4_r6_ie1"><text>-</text></inputEntry>
+        <inputEntry id="d_7_2_4_r6_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_7_2_4_r6_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_7_2_4_r6_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_7_2_4_r6_oe"><text>"prescribeManually"</text></outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram id="drd_Prescribe_method">
+      <dmndi:DMNShape id="sh_in_classification" dmnElementRef="in_classification"><dc:Bounds x="60" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_accessPosition" dmnElementRef="in_accessPosition"><dc:Bounds x="245" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_corridorTreatment" dmnElementRef="in_corridorTreatment"><dc:Bounds x="430" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_speciesCompatible" dmnElementRef="in_speciesCompatible"><dc:Bounds x="615" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_d_7_2_4" dmnElementRef="d_7_2_4"><dc:Bounds x="60" y="240" width="180" height="70"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_ks_a300" dmnElementRef="ks_a300"><dc:Bounds x="900" y="100" width="160" height="55"/></dmndi:DMNShape>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</definitions>

@@ -1,0 +1,3610 @@
+{
+  "category": {
+    "uid": 10181,
+    "id": "7.0",
+    "name": "Manage Vegetation",
+    "band": "Specialised Operations"
+  },
+  "platform": "Grok",
+  "model": "grok-4.6",
+  "round": 2,
+  "date": "2026-08-29",
+  "schema": "eam/specs/SCHEMA.md",
+  "derivation": "STANDARDS-DERIVED. Every field traces to a standard, a regulation or a recognised industry body per campaign/SOURCE_AUTHORITY_PACK.md. Citation statuses observe source_status_ceiling in vocabulary.json. Nothing is generalised from a client programme or a product.",
+  "field_set": "EN 17007:2017 cl. 5.2 maintenance process profile, corroborated by ISO 9001:2015 cl. 4.4.1 a) to h).",
+  "gaps": [
+    "ANSI A300 (tree care operations, including Part 7 IVM) and ANSI Z133 (arboricultural safety) are the usual industry specifications for method and finish. Neither is in the Source Authority Pack, so neither is cited. Prescription finish, IVM method and pruning practice are therefore judgment.",
+    "No federal distribution vegetation clearance distance exists. 16 U.S.C. 824o excludes local distribution from the ERO. NERC FAC-003 MVCD is transmission. OSHA 1910.269 Tables R-5 to R-8 are worker minimum approach distances, not vegetation-to-conductor clearances. NESC Rule 218 Vegetation management is cited by title only; its body is paywalled and is not paraphrased into a distance or a cycle.",
+    "The pack's Pennsylvania line 'vegetation 8yr' is imprecise. 52 Pa. Code sec. 57.198(n)(1) is a 4-to-8-year inspection and treatment cycle plus a condition-based plan. That is the text used here.",
+    "California vegetation clearances live in CPUC GO 95 Rule 35, which is not in the pack. The pack lists GO 165 (inspection of facilities). GO 95 is not cited.",
+    "APQC PCF Utilities v7.2.1 has no vegetation-management process. The only touch is 10.4.5 waste and hazardous goods (pcf_id 16970), which this model covers only as 7.4.4 debris. A whole specialised category with no APQC home is a taxonomy finding, not a missing group to add.",
+    "GFMAM 6.5 Maintenance Delivery is mapped in the crosswalk to 1.0-5.0 and 8.0 and does not list 7.0. Vegetation is maintenance delivery. The crosswalk is thin here, not the category.",
+    "Hazard tree / danger tree has no definition in the pack. Identification criteria at 7.2.3 are judgment.",
+    "Remote survey (LiDAR, satellite, drone), growth modelling, notice content, refusal handling, completion-evidence content, audit sample size and vegetation cause-codes are not standardised in the pack.",
+    "IEC 61968-6 cl. 4.2 has no component for document management, health and safety, or remote sensing. Notices sit on CS, evidence on MAI, clearances on NO, survey capture on FRD.",
+    "ISA Certified Arborist and 'qualified line-clearance arborist' are industry terms. OSHA's defined terms are line-clearance tree trimmer and qualified employee. This specification uses the OSHA terms.",
+    "Herbicide and pesticide law is not in the pack. 7.4.3 records that constraint as operator and state, not as a federal IVM standard.",
+    "EN 15341 individual O&S names remain paywalled and are cited by group only."
+  ],
+  "processes": [
+    {
+      "uid": 10183,
+      "id": "7.1.1",
+      "name": "Define cycle-based and risk-based strategy",
+      "group": {
+        "id": "7.1",
+        "name": "Plan the vegetation programme",
+        "uid": 10182
+      },
+      "intent": "State whether the programme runs on a cycle, on risk, or on both, and on what evidence.",
+      "activities": [
+        "Name the strategy for each voltage class and territory",
+        "State the evidence that would move a span off the cycle",
+        "Bind the strategy to the applicable state interval where one exists",
+        "Publish the strategy as the rule 7.1.4 and 7.2 will apply"
+      ],
+      "trigger": {
+        "kind": "manual",
+        "text": "The vegetation programme strategy is due for issue or revision.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Applicable state interval and plan duty",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Vegetation interruption history",
+          "party": "AM",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Network geography by voltage and territory",
+          "party": "GINV",
+          "data": "WorkLocation"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Published cycle or risk strategy",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Spans held out of the default cycle",
+          "party": "MAI",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "MAI",
+          "role": "owning",
+          "service": "Vegetation programme strategy"
+        },
+        {
+          "component": "AM",
+          "role": "reference",
+          "service": "Interruption and condition history"
+        },
+        {
+          "component": "GINV",
+          "role": "reference",
+          "service": "Circuit and span geography"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "AM",
+          "to": "MAI",
+          "payload": "WorkRequest",
+          "verb": "get",
+          "pattern": "batch"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Vegetation programme manager",
+          "raci": "A"
+        },
+        {
+          "role": "Reliability engineer",
+          "raci": "C"
+        },
+        {
+          "role": "Maintenance manager",
+          "raci": "I"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkLocation",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "52 Pa. Code sec. 57.198(n)(1) requires a condition-based plan and a 4-to-8-year distribution cycle. There is no federal distribution interval. 16 U.S.C. 824o keeps NERC FAC-003 off local distribution."
+        },
+        {
+          "kind": "operational",
+          "text": "NESC Rule 218 is Vegetation management. The body is paywalled; it is not used here as a cycle length or a clearance table."
+        }
+      ],
+      "measures": [
+        {
+          "name": "PM Compliance",
+          "definition": "SMRP 5.4.14. The cycle this process sets is the one later scored.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "SAIDI",
+          "definition": "IEEE 1366-2022. Vegetation-caused duration is why a risk overlay exists.",
+          "cite": "IEEE 1366-2022"
+        }
+      ],
+      "variants": [
+        "Fixed cycle for the territory",
+        "Risk overlay on a cycle",
+        "Hotspot-only off-cycle work"
+      ],
+      "notation": {
+        "class": "DMN",
+        "why": "The output is a strategy value - cycle, risk, or mixed - not a state change of a span.",
+        "artifact": "models/7.1.1-vegetation-strategy.dmn"
+      },
+      "en17007": {
+        "process": "MAN.1",
+        "title": "Establish the maintenance policy, strategy and development actions",
+        "clause": "6.2"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.2 MAN.1",
+          "status": "verified"
+        },
+        {
+          "for": "state cycle",
+          "cite": "52 Pa. Code sec. 57.198(f) and (n)(1) - statewide vegetation inspection and treatment cycle between 4 and 8 years for distribution; condition-based plan required",
+          "status": "regulation"
+        },
+        {
+          "for": "federal exclusion",
+          "cite": "16 U.S.C. 824o - local distribution excluded from the bulk-power reliability regime",
+          "status": "regulation"
+        },
+        {
+          "for": "NESC title",
+          "cite": "NESC (ANSI/IEEE C2-2023) Rule 218 Vegetation management",
+          "status": "clause-verified"
+        },
+        {
+          "for": "landscape",
+          "cite": "GFMAM Asset Management Landscape 3rd ed. v3.0, 2024-06, subject 6.5 Maintenance Delivery",
+          "status": "verified"
+        },
+        {
+          "for": "activities",
+          "cite": "How cycle and risk are combined is operator judgment",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "regulation",
+        "primary": "52 Pa. Code sec. 57.198(f) and (n)(1) - statewide vegetation inspection and treatment cycle between 4 and 8 years for distribution; condition-based plan required"
+      }
+    },
+    {
+      "uid": 10184,
+      "id": "7.1.2",
+      "name": "Capture remote survey data",
+      "group": {
+        "id": "7.1",
+        "name": "Plan the vegetation programme",
+        "uid": 10182
+      },
+      "intent": "Bring a remote survey of spans into the programme as a usable clearance and canopy record.",
+      "activities": [
+        "Receive the survey for a named territory and date",
+        "Bind each return to a span, circuit and conductor",
+        "Flag returns that cannot be bound",
+        "Store the bound survey for ranking and patrol"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "A remote survey of vegetation against the network has been delivered.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Remote survey returns",
+          "party": "FRD",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Span and conductor geography",
+          "party": "GINV",
+          "data": "WorkLocation"
+        },
+        {
+          "what": "Asset identity of the line",
+          "party": "AM",
+          "data": "WorkAsset"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Bound survey on the span",
+          "party": "MAI",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Unbound return held as exception",
+          "party": "GINV",
+          "data": "WorkLocation"
+        }
+      ],
+      "systems": [
+        {
+          "component": "FRD",
+          "role": "originating",
+          "service": "Remote survey capture"
+        },
+        {
+          "component": "GINV",
+          "role": "reference",
+          "service": "Span binding"
+        },
+        {
+          "component": "MAI",
+          "role": "receiving",
+          "service": "Survey as programme data"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "FRD",
+          "to": "MAI",
+          "payload": "WorkRequest",
+          "verb": "create",
+          "pattern": "batch"
+        },
+        {
+          "from": "MAI",
+          "to": "GINV",
+          "payload": "WorkRequest",
+          "verb": "get",
+          "pattern": "request-reply"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Vegetation programme manager",
+          "raci": "A"
+        },
+        {
+          "role": "Reliability engineer",
+          "raci": "R"
+        },
+        {
+          "role": "Geospatial technician",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "WorkLocation",
+        "WorkAsset",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "No standard specifies LiDAR, satellite or drone survey for distribution vegetation. Method, accuracy and flight rules are operator judgment."
+        },
+        {
+          "kind": "operational",
+          "text": "IEC 61968-6 cl. 4.2 has no remote-sensing component. Capture sits on FRD; the span sits on GINV."
+        }
+      ],
+      "measures": [
+        {
+          "name": "PM Compliance",
+          "definition": "SMRP 5.4.14. A cycle that is not surveyed cannot be shown as done.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Planning and Control indicators",
+          "definition": "EN 15341 cl. 12 O&S9-O&S22 applied to whether survey fed the plan.",
+          "cite": "EN 15341:2019+A1:2022 Maintenance KPIs, cl. 12 O&S9-O&S22 Planning and Control"
+        }
+      ],
+      "variants": [
+        "Aerial LiDAR",
+        "Satellite canopy",
+        "Unmanned aerial photogrammetry"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "A delivered survey is bound or excepted on a repeating path.",
+        "artifact": "models/7.1-plan-the-vegetation-programme.bpmn"
+      },
+      "en17007": {
+        "process": "DTA.1",
+        "title": "Store and validate the raw data in a library and/or a database",
+        "clause": "6.10"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.10 DTA.1",
+          "status": "verified"
+        },
+        {
+          "for": "interfaces",
+          "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 message payloads; Annex A verbs",
+          "status": "clause-verified"
+        },
+        {
+          "for": "data_objects",
+          "cite": "IEC 61968-11:2013 CIM extensions for distribution, Work package",
+          "status": "clause-verified"
+        },
+        {
+          "for": "survey method",
+          "cite": "Remote vegetation survey method is not standardised",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "EN 17007:2017 cl. 6.10 DTA.1"
+      }
+    },
+    {
+      "uid": 10185,
+      "id": "7.1.3",
+      "name": "Score and rank spans, circuits and segments",
+      "group": {
+        "id": "7.1",
+        "name": "Plan the vegetation programme",
+        "uid": 10182
+      },
+      "intent": "Turn survey, patrol and interruption evidence into an ordered list of where to work.",
+      "activities": [
+        "Gather survey, patrol and vegetation-caused interruption evidence",
+        "Score each span or segment against the published strategy",
+        "Rank the list for the planning period",
+        "Hand the ranked list to budget and territory planning"
+      ],
+      "trigger": {
+        "kind": "conditional",
+        "text": "New survey, patrol or interruption evidence is ready to rank.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Bound survey on the span",
+          "party": "MAI",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Patrol findings",
+          "party": "FRD",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Vegetation-caused interruption events",
+          "party": "AM",
+          "data": "Work"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Ranked work list for the period",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Unscored span held out of the rank",
+          "party": "MAI",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "MAI",
+          "role": "owning",
+          "service": "Ranked vegetation list"
+        },
+        {
+          "component": "AM",
+          "role": "reference",
+          "service": "Interruption events"
+        },
+        {
+          "component": "FRD",
+          "role": "reference",
+          "service": "Patrol findings"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "FRD",
+          "to": "MAI",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "batch"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Vegetation programme manager",
+          "raci": "A"
+        },
+        {
+          "role": "Reliability engineer",
+          "raci": "R"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkLocation",
+        "Priority",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "EN 17007 ACT.1 ranks events. The scoring weights are not in any standard in the pack. ANSI A300 is not in the pack and is not used."
+        },
+        {
+          "kind": "operational",
+          "text": "A rank that ignores off-ROW leaners will miss the interruptions IEEE 1366 later counts."
+        }
+      ],
+      "measures": [
+        {
+          "name": "SAIFI",
+          "definition": "IEEE 1366-2022. Rank should move toward spans that have been interrupting.",
+          "cite": "IEEE 1366-2022"
+        },
+        {
+          "name": "Backlog",
+          "definition": "SMRP 5.4.8/5.4.9. The unworked tail of the ranked list.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Span-level score",
+        "Circuit-level rank",
+        "Segment hotspot inside a circuit"
+      ],
+      "notation": {
+        "class": "DMN",
+        "why": "The output is a rank, a value, not a change of work state.",
+        "artifact": "models/7.1.3-score-and-rank.dmn"
+      },
+      "en17007": {
+        "process": "ACT.1",
+        "title": "Rank the events",
+        "clause": "6.5.2"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.5.2 ACT.1",
+          "status": "verified"
+        },
+        {
+          "for": "reliability indices",
+          "cite": "IEEE 1366-2022",
+          "status": "clause-verified"
+        },
+        {
+          "for": "data_objects",
+          "cite": "IEC 61968-11:2013 CIM extensions for distribution, Work package",
+          "status": "clause-verified"
+        },
+        {
+          "for": "weights",
+          "cite": "Scoring weights are operator judgment; ANSI A300 is not in the Source Authority Pack",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "EN 17007:2017 cl. 6.5.2 ACT.1"
+      }
+    },
+    {
+      "uid": 10186,
+      "id": "7.1.4",
+      "name": "Plan budget, cycle and territory",
+      "group": {
+        "id": "7.1",
+        "name": "Plan the vegetation programme",
+        "uid": 10182
+      },
+      "intent": "Turn the ranked list into a funded cycle of territories the crews will work.",
+      "activities": [
+        "Take the ranked list and the remaining cycle miles",
+        "Cut a territory and period the budget can fund",
+        "Leave unfunded rank visible as backlog",
+        "Release the funded tranche to inspect and prescribe"
+      ],
+      "trigger": {
+        "kind": "timer",
+        "text": "The vegetation budget and cycle for the next period are due.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Ranked work list",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Budget available for the period",
+          "party": "FIN",
+          "data": "Work"
+        },
+        {
+          "what": "Remaining cycle miles and due dates",
+          "party": "MAI",
+          "data": "WorkTimeSchedule"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Funded territory and period",
+          "party": "SCHD",
+          "data": "Work"
+        },
+        {
+          "what": "Unfunded rank held as backlog",
+          "party": "MAI",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "MAI",
+          "role": "owning",
+          "service": "Cycle and territory cut"
+        },
+        {
+          "component": "FIN",
+          "role": "reference",
+          "service": "Programme budget"
+        },
+        {
+          "component": "SCHD",
+          "role": "receiving",
+          "service": "Funded tranche"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "MAI",
+          "to": "SCHD",
+          "payload": "WorkRequest",
+          "verb": "create",
+          "pattern": "event"
+        },
+        {
+          "from": "FIN",
+          "to": "MAI",
+          "payload": "WorkRequest",
+          "verb": "get",
+          "pattern": "request-reply"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Vegetation programme manager",
+          "raci": "A"
+        },
+        {
+          "role": "Resource planner",
+          "raci": "R"
+        },
+        {
+          "role": "Finance controller",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkTimeSchedule",
+        "WorkLocation"
+      ],
+      "controls": [
+        {
+          "kind": "financial",
+          "text": "EN 17007 BUD.2 is a budget estimate for regular maintenance. There is no EN 17007 approval process for the cut itself."
+        },
+        {
+          "kind": "regulatory",
+          "text": "A PA 57.198 cycle that is unfunded is still due. Under-funding is not a change of the interval."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Backlog",
+          "definition": "SMRP 5.4.8/5.4.9. Miles ranked and not funded.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "PM Compliance",
+          "definition": "SMRP 5.4.14. Funded miles versus miles the cycle required.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Annual funded tranche",
+        "Multi-year cycle map",
+        "Storm-recovery overlay on the cycle"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "A planning period produces a funded cut on a repeating path.",
+        "artifact": "models/7.1-plan-the-vegetation-programme.bpmn"
+      },
+      "en17007": {
+        "process": "BUD.2",
+        "title": "Create a budget estimate for regular maintenance",
+        "clause": "6.8"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.8 BUD.2",
+          "status": "verified"
+        },
+        {
+          "for": "state cycle",
+          "cite": "52 Pa. Code sec. 57.198(f) and (n)(1) - statewide vegetation inspection and treatment cycle between 4 and 8 years for distribution; condition-based plan required",
+          "status": "regulation"
+        },
+        {
+          "for": "resources",
+          "cite": "ANSI/ASTM/ISO 55001-2024 cl. 8.1 operational planning and control; cl. 7.1 resources",
+          "status": "clause-verified"
+        },
+        {
+          "for": "interfaces",
+          "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 message payloads; Annex A verbs",
+          "status": "clause-verified"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "EN 17007:2017 cl. 6.8 BUD.2"
+      }
+    },
+    {
+      "uid": 10187,
+      "id": "7.1.5",
+      "name": "Model growth and encroachment rates",
+      "group": {
+        "id": "7.1",
+        "name": "Plan the vegetation programme",
+        "uid": 10182
+      },
+      "intent": "Estimate how fast vegetation will close the clearance, so the cycle and the rank stay honest.",
+      "activities": [
+        "Take species, last-cut date and measured clearance",
+        "Estimate growth and encroachment over the cycle",
+        "Flag spans that will not hold until the next cycle",
+        "Feed the flags into rank and into strategy review"
+      ],
+      "trigger": {
+        "kind": "conditional",
+        "text": "A span has a last-cut date and a measured clearance to project from.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Last-cut date and method",
+          "party": "MAI",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Measured clearance",
+          "party": "FRD",
+          "data": "WorkLocation"
+        },
+        {
+          "what": "Species or cover type where known",
+          "party": "AM",
+          "data": "WorkAsset"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Projected encroachment over the cycle",
+          "party": "MAI",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Span that will not hold until next cycle",
+          "party": "MAI",
+          "data": "Priority"
+        }
+      ],
+      "systems": [
+        {
+          "component": "MAI",
+          "role": "owning",
+          "service": "Growth projection"
+        },
+        {
+          "component": "FRD",
+          "role": "reference",
+          "service": "Measured clearance"
+        },
+        {
+          "component": "AM",
+          "role": "reference",
+          "service": "Cover type"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "FRD",
+          "to": "MAI",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "batch"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Reliability engineer",
+          "raci": "R"
+        },
+        {
+          "role": "Vegetation programme manager",
+          "raci": "A"
+        }
+      ],
+      "data_objects": [
+        "WorkLocation",
+        "WorkActivityRecord",
+        "Priority"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "No standard in the pack specifies a growth or encroachment model. Species tables and LiDAR deltas are operator judgment."
+        },
+        {
+          "kind": "operational",
+          "text": "NESC Rule 218 is not used as a growth rate. Projecting a distance the body was not read to supply would be a paraphrase."
+        }
+      ],
+      "measures": [
+        {
+          "name": "PM Compliance",
+          "definition": "SMRP 5.4.14. Spans that will not hold are the ones a fixed cycle will miss.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "SAIDI",
+          "definition": "IEEE 1366-2022. Grow-in is a duration driver if the projection is ignored.",
+          "cite": "IEEE 1366-2022"
+        }
+      ],
+      "variants": [
+        "Species growth table",
+        "Re-growth measured from the last cycle",
+        "Off-ROW tree encroaching into the corridor"
+      ],
+      "notation": {
+        "class": "SPEC",
+        "why": "A standing projection capability; two analysts will not run the same model."
+      },
+      "en17007": {
+        "process": "PRV.1",
+        "title": "Characterize the undesirable events",
+        "clause": "6.3.2"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.3.2 PRV.1",
+          "status": "verified"
+        },
+        {
+          "for": "NESC title",
+          "cite": "NESC (ANSI/IEEE C2-2023) Rule 218 Vegetation management",
+          "status": "clause-verified"
+        },
+        {
+          "for": "measures",
+          "cite": "IEEE 1366-2022",
+          "status": "clause-verified"
+        },
+        {
+          "for": "model",
+          "cite": "Growth and encroachment modelling is not standardised in the pack",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "judgment",
+        "primary": "EN 17007:2017 cl. 6.3.2 PRV.1"
+      }
+    },
+    {
+      "uid": 10189,
+      "id": "7.2.1",
+      "name": "Perform ground and aerial patrol",
+      "group": {
+        "id": "7.2",
+        "name": "Inspect and prescribe vegetation work",
+        "uid": 10188
+      },
+      "intent": "Walk or fly the territory and record what the cycle and the rank need to see.",
+      "activities": [
+        "Take the funded territory and the spans still due",
+        "Patrol on the ground or from the air",
+        "Record clearance, access and obvious defects",
+        "Hand the patrol record to measurement and prescription"
+      ],
+      "trigger": {
+        "kind": "timer",
+        "text": "A funded territory is due for patrol in this cycle.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Funded territory and due spans",
+          "party": "SCHD",
+          "data": "Work"
+        },
+        {
+          "what": "Last survey and last-cut record",
+          "party": "MAI",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Span geography",
+          "party": "GINV",
+          "data": "WorkLocation"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Patrol record against the span",
+          "party": "FRD",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Span that could not be patrolled",
+          "party": "MAI",
+          "data": "Work"
+        }
+      ],
+      "systems": [
+        {
+          "component": "SCHD",
+          "role": "originating",
+          "service": "Patrol assignment"
+        },
+        {
+          "component": "FRD",
+          "role": "owning",
+          "service": "Patrol capture"
+        },
+        {
+          "component": "GINV",
+          "role": "reference",
+          "service": "Span geography"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "SCHD",
+          "to": "FRD",
+          "payload": "MaintenanceOrder",
+          "verb": "create",
+          "pattern": "event"
+        },
+        {
+          "from": "FRD",
+          "to": "MAI",
+          "payload": "MaintenanceOrder",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Patrol inspector",
+          "raci": "R"
+        },
+        {
+          "role": "Vegetation programme manager",
+          "raci": "A"
+        },
+        {
+          "role": "Scheduler",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkLocation",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "29 CFR 1910.269(c) job briefing before the patrol if it is line-clearance tree trimming under (a)(1)(i)(E). Aerial patrol has no separate OSHA paragraph in 1910.269."
+        },
+        {
+          "kind": "operational",
+          "text": "PA 57.198(n)(1) is a cycle, not a patrol method. Ground versus aerial is operator judgment."
+        }
+      ],
+      "measures": [
+        {
+          "name": "PM Compliance",
+          "definition": "SMRP 5.4.14. Patrol is how the cycle is shown as inspected.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Schedule Compliance",
+          "definition": "SMRP 5.4.3/5.4.4. Patrol miles placed versus patrol miles done.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Ground foot patrol",
+        "Manned aerial patrol",
+        "Unmanned aerial patrol"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "A due territory is patrolled or recorded as missed on a repeating path.",
+        "artifact": "models/7.2-inspect-and-prescribe.bpmn"
+      },
+      "en17007": {
+        "process": "PRV.2",
+        "title": "Use and update the Maintenance Plans",
+        "clause": "6.3.3"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.3.3 PRV.2",
+          "status": "verified"
+        },
+        {
+          "for": "job briefing",
+          "cite": "29 CFR 1910.269(c) job briefing; (a)(3) host and contract employer information transfer",
+          "status": "regulation"
+        },
+        {
+          "for": "state cycle",
+          "cite": "52 Pa. Code sec. 57.198(f) and (n)(1) - statewide vegetation inspection and treatment cycle between 4 and 8 years for distribution; condition-based plan required",
+          "status": "regulation"
+        },
+        {
+          "for": "interfaces",
+          "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 message payloads; Annex A verbs",
+          "status": "clause-verified"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "EN 17007:2017 cl. 6.3.3 PRV.2"
+      }
+    },
+    {
+      "uid": 10190,
+      "id": "7.2.2",
+      "name": "Measure clearance against required distance",
+      "group": {
+        "id": "7.2",
+        "name": "Inspect and prescribe vegetation work",
+        "uid": 10188
+      },
+      "intent": "Compare the measured clearance with the distance this span is required to hold.",
+      "activities": [
+        "Take the patrol or survey measurement at the span",
+        "Apply the required distance that applies to this span",
+        "Record pass, fail, or cannot-determine",
+        "Hand fails to hazard identification and prescription"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "A patrol or survey has a clearance measurement for a span.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Measured clearance at the span",
+          "party": "FRD",
+          "data": "WorkLocation"
+        },
+        {
+          "what": "Required distance rule for this span",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Voltage class and location",
+          "party": "AM",
+          "data": "WorkAsset"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Pass, fail or cannot-determine on the span",
+          "party": "MAI",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Failed span to prescribe",
+          "party": "MAI",
+          "data": "Work"
+        }
+      ],
+      "systems": [
+        {
+          "component": "FRD",
+          "role": "originating",
+          "service": "Measured clearance"
+        },
+        {
+          "component": "MAI",
+          "role": "owning",
+          "service": "Required-distance comparison"
+        },
+        {
+          "component": "AM",
+          "role": "reference",
+          "service": "Voltage class"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "FRD",
+          "to": "MAI",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Patrol inspector",
+          "raci": "R"
+        },
+        {
+          "role": "Vegetation programme manager",
+          "raci": "A"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkLocation",
+        "WorkAsset",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "There is no federal distribution clearance distance. FAC-003 MVCD is transmission. OSHA tables in 1910.269(r) are worker approach distances, not vegetation-to-conductor clearances. The required distance is state or operator."
+        },
+        {
+          "kind": "operational",
+          "text": "NESC Rule 218 title is Vegetation management. Its body is paywalled and is not paraphrased into a distance."
+        }
+      ],
+      "measures": [
+        {
+          "name": "PM Compliance",
+          "definition": "SMRP 5.4.14. A fail that is not prescribed is a cycle miss in waiting.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "SAIDI",
+          "definition": "IEEE 1366-2022. Grow-in past the required distance is a duration event.",
+          "cite": "IEEE 1366-2022"
+        }
+      ],
+      "variants": [
+        "At-rest clearance",
+        "Allowance for combined movement",
+        "Midspan versus at-structure"
+      ],
+      "notation": {
+        "class": "DMN",
+        "why": "The output is pass, fail or cannot-determine - a value.",
+        "artifact": "models/7.2.2-clearance-distance.dmn"
+      },
+      "en17007": {
+        "process": "COR.2",
+        "title": "Diagnose the state of the items in question",
+        "clause": "6.4.3"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.4.3 COR.2",
+          "status": "verified"
+        },
+        {
+          "for": "no federal distribution distance",
+          "cite": "16 U.S.C. 824o - local distribution excluded from the bulk-power reliability regime",
+          "status": "regulation"
+        },
+        {
+          "for": "OSHA MAD is worker distance",
+          "cite": "29 CFR 1910.269(a)(1)(i)(E) and (r) Line-clearance tree trimming; (x) definitions of line-clearance tree trimmer and line-clearance tree trimming",
+          "status": "regulation"
+        },
+        {
+          "for": "NESC title",
+          "cite": "NESC (ANSI/IEEE C2-2023) Rule 218 Vegetation management",
+          "status": "clause-verified"
+        },
+        {
+          "for": "transmission contrast",
+          "cite": "NERC FAC-003 Transmission Vegetation Management - bulk-power transmission only; not a distribution rule",
+          "status": "clause-verified"
+        }
+      ],
+      "provenance": {
+        "basis": "regulation",
+        "primary": "16 U.S.C. 824o - local distribution excluded from the bulk-power reliability regime"
+      }
+    },
+    {
+      "uid": 10191,
+      "id": "7.2.3",
+      "name": "Identify hazard and danger trees",
+      "group": {
+        "id": "7.2",
+        "name": "Inspect and prescribe vegetation work",
+        "uid": 10188
+      },
+      "intent": "Name the trees that can fail into the line whether or not they currently encroach.",
+      "activities": [
+        "Inspect on-ROW and off-ROW trees that can reach the conductor",
+        "Record the defect that makes the tree a hazard",
+        "Separate hazard trees from cycle-trim units",
+        "Raise follow-on work for each named tree"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "Patrol or survey has found a tree that can fail into the line.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Patrol or survey observation",
+          "party": "FRD",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Span and land ownership",
+          "party": "GINV",
+          "data": "WorkLocation"
+        },
+        {
+          "what": "Clearance fail or pass on the span",
+          "party": "MAI",
+          "data": "Work"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Named hazard tree with defect",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Cycle-trim unit without a hazard flag",
+          "party": "MAI",
+          "data": "WorkTask"
+        }
+      ],
+      "systems": [
+        {
+          "component": "FRD",
+          "role": "originating",
+          "service": "Tree observation"
+        },
+        {
+          "component": "MAI",
+          "role": "owning",
+          "service": "Hazard-tree work"
+        },
+        {
+          "component": "GINV",
+          "role": "reference",
+          "service": "On-ROW or off-ROW"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "FRD",
+          "to": "MAI",
+          "payload": "WorkRequest",
+          "verb": "create",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Patrol inspector",
+          "raci": "R"
+        },
+        {
+          "role": "Vegetation programme manager",
+          "raci": "A"
+        },
+        {
+          "role": "Line-clearance tree trimmer",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkLocation",
+        "WorkTask",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "No standard in the pack defines hazard tree or danger tree. Identification criteria are operator judgment. ANSI A300 is not in the pack."
+        },
+        {
+          "kind": "operational",
+          "text": "Off-ROW leaners cause interruptions the cycle trim will not prevent. They must remain distinguishable from in-growth."
+        }
+      ],
+      "measures": [
+        {
+          "name": "SAIFI",
+          "definition": "IEEE 1366-2022. Hazard-tree failures are a frequency driver.",
+          "cite": "IEEE 1366-2022"
+        },
+        {
+          "name": "Reactive Work",
+          "definition": "SMRP 5.4.1. Unnamed hazard trees arrive as trouble work.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Dead or dying on the ROW",
+        "Off-ROW leaner that can reach",
+        "Defective limb over the conductor"
+      ],
+      "notation": {
+        "class": "DMN",
+        "why": "The output is a classification - hazard or cycle-trim - a value.",
+        "artifact": "models/7.2.3-hazard-trees.dmn"
+      },
+      "en17007": {
+        "process": "COR.1",
+        "title": "Classify the actual events",
+        "clause": "6.4.2"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.4.2 COR.1",
+          "status": "verified"
+        },
+        {
+          "for": "reliability indices",
+          "cite": "IEEE 1366-2022",
+          "status": "clause-verified"
+        },
+        {
+          "for": "interfaces",
+          "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 message payloads; Annex A verbs",
+          "status": "clause-verified"
+        },
+        {
+          "for": "definition",
+          "cite": "Hazard-tree criteria are not in the Source Authority Pack",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "EN 17007:2017 cl. 6.4.2 COR.1"
+      }
+    },
+    {
+      "uid": 10192,
+      "id": "7.2.4",
+      "name": "Prescribe work method and specification",
+      "group": {
+        "id": "7.2",
+        "name": "Inspect and prescribe vegetation work",
+        "uid": 10188
+      },
+      "intent": "State the method and the finish the crew must leave on this span or this tree.",
+      "activities": [
+        "Take the fail, the hazard tree and the access position",
+        "Choose prune, remove, brush or an integrated method",
+        "State the finish specification the audit will use",
+        "Release the prescription as ready to access and schedule"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "A span or tree has been classified and needs a method.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Failed clearance or named hazard tree",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Access and land-ownership constraints",
+          "party": "GINV",
+          "data": "WorkLocation"
+        },
+        {
+          "what": "Crew method capability",
+          "party": "HR",
+          "data": "Crew"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Prescription and finish specification",
+          "party": "MAI",
+          "data": "WorkTask"
+        },
+        {
+          "what": "Work ready to access",
+          "party": "SCHD",
+          "data": "Work"
+        }
+      ],
+      "systems": [
+        {
+          "component": "MAI",
+          "role": "owning",
+          "service": "Prescription"
+        },
+        {
+          "component": "SCHD",
+          "role": "receiving",
+          "service": "Ready vegetation work"
+        },
+        {
+          "component": "HR",
+          "role": "reference",
+          "service": "Method the crew can perform"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "MAI",
+          "to": "SCHD",
+          "payload": "MaintenanceOrder",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Vegetation programme manager",
+          "raci": "A"
+        },
+        {
+          "role": "Patrol inspector",
+          "raci": "R"
+        },
+        {
+          "role": "Line-clearance tree trimmer",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkTask",
+        "Crew",
+        "WorkLocation"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "29 CFR 1910.269(r)(1)(iv) requires insulating equipment to remove branches in the MAD. The prescription must not send an unqualified method at an energised conductor."
+        },
+        {
+          "kind": "operational",
+          "text": "ANSI A300 pruning practice is not in the pack and is not used as the specification. Finish criteria are operator judgment, later audited at 7.5.1."
+        }
+      ],
+      "measures": [
+        {
+          "name": "PM Compliance",
+          "definition": "SMRP 5.4.14. The specification is what compliance will be scored against.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Rework",
+          "definition": "SMRP 4.1. Prescriptions that cannot be left as specified come back.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Side prune to a finish distance",
+        "Overhead limb removal",
+        "Whole-tree removal",
+        "Brush cut or herbicide floor"
+      ],
+      "notation": {
+        "class": "DMN",
+        "why": "The output is a method and a finish value, not execution.",
+        "artifact": "models/7.2.4-prescribe-method.dmn"
+      },
+      "en17007": {
+        "process": "ACT.2",
+        "title": "Prepare for the maintenance tasks",
+        "clause": "6.5.3"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.5.3 ACT.2",
+          "status": "verified"
+        },
+        {
+          "for": "insulating equipment",
+          "cite": "29 CFR 1910.269(a)(1)(i)(E) and (r) Line-clearance tree trimming; (x) definitions of line-clearance tree trimmer and line-clearance tree trimming",
+          "status": "regulation"
+        },
+        {
+          "for": "interfaces",
+          "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 message payloads; Annex A verbs",
+          "status": "clause-verified"
+        },
+        {
+          "for": "finish spec",
+          "cite": "Prescription content is not standardised in the pack",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "EN 17007:2017 cl. 6.5.3 ACT.2"
+      }
+    },
+    {
+      "uid": 10194,
+      "id": "7.3.1",
+      "name": "Notify customer, landowner and community",
+      "group": {
+        "id": "7.3",
+        "name": "Obtain access and consent",
+        "uid": 10193
+      },
+      "intent": "Tell the people who own or occupy the land that vegetation work is coming.",
+      "activities": [
+        "Identify customer, landowner and any community notice duty",
+        "Issue the notice with the span, window and method",
+        "Record who was notified and how",
+        "Hold the work until the notice window has run, if one applies"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "Prescribed vegetation work needs notice before access.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Prescription and span",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Premise, landowner and occupancy",
+          "party": "CS",
+          "data": "WorkLocation"
+        },
+        {
+          "what": "Easement or public-ROW flag",
+          "party": "GINV",
+          "data": "WorkLocation"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Notice record on the work",
+          "party": "CS",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Work held for the notice window",
+          "party": "SCHD",
+          "data": "WorkTimeSchedule"
+        }
+      ],
+      "systems": [
+        {
+          "component": "CS",
+          "role": "owning",
+          "service": "Customer and landowner notice"
+        },
+        {
+          "component": "MAI",
+          "role": "reference",
+          "service": "Prescription to describe"
+        },
+        {
+          "component": "SCHD",
+          "role": "receiving",
+          "service": "Notice-window hold"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "MAI",
+          "to": "CS",
+          "payload": "WorkRequest",
+          "verb": "create",
+          "pattern": "event"
+        },
+        {
+          "from": "CS",
+          "to": "SCHD",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Customer service representative",
+          "raci": "R"
+        },
+        {
+          "role": "Vegetation programme manager",
+          "raci": "A"
+        },
+        {
+          "role": "Scheduler",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkLocation",
+        "WorkActivityRecord",
+        "WorkTimeSchedule"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "No federal notice content or waiting window for distribution vegetation. CGA covers 811 locates, not tree work. Notice rules are easement, tariff or municipal."
+        },
+        {
+          "kind": "operational",
+          "text": "IEC 61968-6 cl. 4.2 has no document component. The notice record sits on CS; the work sits on MAI."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Work Order Cycle Time",
+          "definition": "SMRP 5.4.7. Notice to access is a principal wait.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Schedule Compliance",
+          "definition": "SMRP 5.4.3/5.4.4. Work dispatched inside a required notice window will fail.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Occupied premise",
+        "Absentee landowner",
+        "Municipal or public ROW"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Notice then hold or release is a repeating path.",
+        "artifact": "models/7.3-obtain-access-and-consent.bpmn"
+      },
+      "en17007": {
+        "process": "DOC.6",
+        "title": "Manage the way in which operational documentation is made available",
+        "clause": "6.9"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.9 DOC.6",
+          "status": "verified"
+        },
+        {
+          "for": "interfaces",
+          "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 message payloads; Annex A verbs",
+          "status": "clause-verified"
+        },
+        {
+          "for": "measures",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management",
+          "status": "consensus"
+        },
+        {
+          "for": "notice content",
+          "cite": "Vegetation notice content is not federally standardised",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "EN 17007:2017 cl. 6.9 DOC.6"
+      }
+    },
+    {
+      "uid": 10195,
+      "id": "7.3.2",
+      "name": "Obtain permission, permit and easement access",
+      "group": {
+        "id": "7.3",
+        "name": "Obtain access and consent",
+        "uid": 10193
+      },
+      "intent": "Secure the right to enter and to cut, as distinct from a network clearance.",
+      "activities": [
+        "Determine whether easement, landowner permission or a permit is required",
+        "Request the instrument and record its conditions",
+        "Refuse to release the work if the instrument is not held",
+        "Keep expiry and conditions visible to dispatch"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "Prescribed work needs a right of entry or a cutting permission.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Prescription and land status",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Easement or ownership record",
+          "party": "GINV",
+          "data": "WorkLocation"
+        },
+        {
+          "what": "External permit where required",
+          "party": "MAI",
+          "data": "Work"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Access instrument held, with conditions",
+          "party": "MAI",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Work released as accessible, or held",
+          "party": "SCHD",
+          "data": "Work"
+        }
+      ],
+      "systems": [
+        {
+          "component": "MAI",
+          "role": "owning",
+          "service": "Access instrument"
+        },
+        {
+          "component": "GINV",
+          "role": "reference",
+          "service": "Land and easement"
+        },
+        {
+          "component": "SCHD",
+          "role": "receiving",
+          "service": "Accessible work"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "MAI",
+          "to": "SCHD",
+          "payload": "MaintenanceOrder",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Vegetation programme manager",
+          "raci": "A"
+        },
+        {
+          "role": "Permit coordinator",
+          "raci": "R"
+        },
+        {
+          "role": "Scheduler",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkLocation",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "A permit is issued by an external authority. A clearance is issued at 18.4.4 under 29 CFR 1910.269(m). This process obtains the permit or easement, not the clearance. MUTCD Part 6 applies when the work occupies the highway."
+        },
+        {
+          "kind": "operational",
+          "text": "No consensus practice exists for permit management as a process. USACE NWP 3 may apply if debris or cutting is in jurisdictional waters; it is not a land-access instrument."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Work Order Cycle Time",
+          "definition": "SMRP 5.4.7. Access wait is often the long pole.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Schedule Compliance",
+          "definition": "SMRP 5.4.3/5.4.4. Dispatch without the instrument is a miss waiting to happen.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Recorded easement",
+        "Landowner permission off easement",
+        "Highway or railroad permit"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Request, hold or release against an instrument is a known path.",
+        "artifact": "models/7.3-obtain-access-and-consent.bpmn"
+      },
+      "en17007": {
+        "process": "ACT.2",
+        "title": "Prepare for the maintenance tasks",
+        "clause": "6.5.3"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.5.3 ACT.2",
+          "status": "verified"
+        },
+        {
+          "for": "clearance contrast",
+          "cite": "29 CFR 1910.269(m) Deenergizing lines and equipment for employee protection; clearance produced by 18.4.4 against a plan approved at 18.2.2",
+          "status": "regulation"
+        },
+        {
+          "for": "highway work",
+          "cite": "MUTCD 11th Edition with Revision 1, Part 6 Temporary Traffic Control",
+          "status": "regulation"
+        },
+        {
+          "for": "waters",
+          "cite": "USACE Nationwide Permit 3 maintenance, effective 2026-03-15",
+          "status": "regulation"
+        },
+        {
+          "for": "permit process",
+          "cite": "Permit management as a process is not standardised",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "regulation",
+        "primary": "29 CFR 1910.269(m) Deenergizing lines and equipment for employee protection; clearance produced by 18.4.4 against a plan approved at 18.2.2"
+      }
+    },
+    {
+      "uid": 10196,
+      "id": "7.3.3",
+      "name": "Manage refusal and agree alternate method",
+      "group": {
+        "id": "7.3",
+        "name": "Obtain access and consent",
+        "uid": 10193
+      },
+      "intent": "When access or the prescribed cut is refused, record it and agree what will be done instead.",
+      "activities": [
+        "Record the refusal and who made it",
+        "Test whether easement rights allow the original cut",
+        "Agree an alternate method, a deferral, or an enforcement path",
+        "Keep the span visible until the risk is closed"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "A landowner or occupant has refused access or the prescribed method.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Prescription that was refused",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Notice and access record",
+          "party": "CS",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Easement rights on the span",
+          "party": "GINV",
+          "data": "WorkLocation"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Alternate method or enforcement path",
+          "party": "MAI",
+          "data": "WorkTask"
+        },
+        {
+          "what": "Span still carrying uncleared risk",
+          "party": "MAI",
+          "data": "Priority"
+        }
+      ],
+      "systems": [
+        {
+          "component": "CS",
+          "role": "originating",
+          "service": "Refusal"
+        },
+        {
+          "component": "MAI",
+          "role": "owning",
+          "service": "Alternate method"
+        },
+        {
+          "component": "GINV",
+          "role": "reference",
+          "service": "Easement rights"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "CS",
+          "to": "MAI",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        },
+        {
+          "from": "MAI",
+          "to": "SCHD",
+          "payload": "MaintenanceOrder",
+          "verb": "cancel",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Vegetation programme manager",
+          "raci": "A"
+        },
+        {
+          "role": "Customer service representative",
+          "raci": "R"
+        },
+        {
+          "role": "Permit coordinator",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkTask",
+        "WorkLocation",
+        "Priority"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "No standard specifies vegetation-access refusal. Easement enforcement is property law, not in the pack. Two competent programme managers will not sequence this the same way."
+        },
+        {
+          "kind": "operational",
+          "text": "A refused span that leaves the ranked list is a silent reliability hole. IEEE 1366 will still count the interruption."
+        }
+      ],
+      "measures": [
+        {
+          "name": "SAIDI",
+          "definition": "IEEE 1366-2022. Refused spans that later fail show up here.",
+          "cite": "IEEE 1366-2022"
+        },
+        {
+          "name": "Work Order Aging",
+          "definition": "SMRP 5.4.6. Time spent in refusal.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Soften the spec in place",
+        "Defer to the next cycle with the risk named",
+        "Escalate on the easement"
+      ],
+      "notation": {
+        "class": "CMMN",
+        "why": "Two competent people will sequence refusal differently. CMMN is justified; Camunda 8 dropped it, so a runtime means Flowable.",
+        "artifact": "models/7.3.3-refusal-and-alternate.cmmn"
+      },
+      "en17007": {
+        "process": "MAN.5",
+        "title": "Oversee the actions",
+        "clause": "6.2"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.2 MAN.5",
+          "status": "verified"
+        },
+        {
+          "for": "measures",
+          "cite": "IEEE 1366-2022",
+          "status": "clause-verified"
+        },
+        {
+          "for": "interfaces",
+          "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 message payloads; Annex A verbs",
+          "status": "clause-verified"
+        },
+        {
+          "for": "refusal path",
+          "cite": "Vegetation refusal handling is not standardised",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "judgment",
+        "primary": "EN 17007:2017 cl. 6.2 MAN.5"
+      }
+    },
+    {
+      "uid": 10197,
+      "id": "7.3.4",
+      "name": "Reschedule constrained work",
+      "group": {
+        "id": "7.3",
+        "name": "Obtain access and consent",
+        "uid": 10193
+      },
+      "intent": "Move work that cannot proceed, without dropping it from the cycle.",
+      "activities": [
+        "Take work held for notice, permit, refusal or weather",
+        "Find the next window the constraint allows",
+        "Place it back on the vegetation schedule",
+        "Keep the original due date visible"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "Vegetation work cannot proceed on the current date.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Held vegetation work and the constraint",
+          "party": "SCHD",
+          "data": "Work"
+        },
+        {
+          "what": "Remaining crew capacity",
+          "party": "SCHD",
+          "data": "Crew"
+        },
+        {
+          "what": "Original cycle due date",
+          "party": "MAI",
+          "data": "WorkTimeSchedule"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Re-placed vegetation work",
+          "party": "SCHD",
+          "data": "WorkTimeSchedule"
+        },
+        {
+          "what": "Still-blocked work with the constraint named",
+          "party": "MAI",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "SCHD",
+          "role": "owning",
+          "service": "Re-placement"
+        },
+        {
+          "component": "MAI",
+          "role": "reference",
+          "service": "Cycle due date"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "MAI",
+          "to": "SCHD",
+          "payload": "MaintenanceOrder",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Scheduler",
+          "raci": "R"
+        },
+        {
+          "role": "Vegetation programme manager",
+          "raci": "A"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkTimeSchedule",
+        "Crew",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "29 CFR 1910.269(r)(1)(vi) forbids line-clearance tree trimming when adverse weather makes the work hazardous. Weather is a hard reschedule, not a preference."
+        },
+        {
+          "kind": "operational",
+          "text": "This is vegetation-schedule movement, not the general 3.4.4 rebuild. The cycle due date does not move with the crew date."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Schedule Compliance",
+          "definition": "SMRP 5.4.3/5.4.4. Score against the new placement, keep the cycle date for PM.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "PM Compliance",
+          "definition": "SMRP 5.4.14. A reschedule that overruns the cycle is a miss.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Hold for access",
+        "Move to the next span in the territory",
+        "Wait out a weather window"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Held work is re-placed or left blocked on a repeating path.",
+        "artifact": "models/7.3-obtain-access-and-consent.bpmn"
+      },
+      "en17007": {
+        "process": "ACT.4",
+        "title": "Schedule the tasks",
+        "clause": "6.5.5"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.5.5 ACT.4",
+          "status": "verified"
+        },
+        {
+          "for": "adverse weather",
+          "cite": "29 CFR 1910.269(a)(1)(i)(E) and (r) Line-clearance tree trimming; (x) definitions of line-clearance tree trimmer and line-clearance tree trimming",
+          "status": "regulation"
+        },
+        {
+          "for": "interfaces",
+          "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 message payloads; Annex A verbs",
+          "status": "clause-verified"
+        },
+        {
+          "for": "measures",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management",
+          "status": "consensus"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "EN 17007:2017 cl. 6.5.5 ACT.4"
+      }
+    },
+    {
+      "uid": 10199,
+      "id": "7.4.1",
+      "name": "Dispatch vegetation crew",
+      "group": {
+        "id": "7.4",
+        "name": "Execute vegetation work",
+        "uid": 10198
+      },
+      "intent": "Send a crew that is allowed to do this cut, on this span, today.",
+      "activities": [
+        "Confirm the prescription, access instrument and weather",
+        "Confirm the crew meets 1910.269 line-clearance rules for this job",
+        "Issue the dispatch to the crew",
+        "Hold if a clearance from 18.4.4 is required and is not held"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "Accessible, prescribed vegetation work is ready to send.",
+        "cim": "MaintenanceOrder.change"
+      },
+      "inputs": [
+        {
+          "what": "Ready vegetation work with prescription",
+          "party": "SCHD",
+          "data": "Work"
+        },
+        {
+          "what": "Crew qualification and size",
+          "party": "HR",
+          "data": "Crew"
+        },
+        {
+          "what": "Clearance if the cut requires deenergizing",
+          "party": "NO",
+          "data": "Work"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Dispatched vegetation work",
+          "party": "FRD",
+          "data": "Work"
+        },
+        {
+          "what": "Hold for qualification, weather or clearance",
+          "party": "SCHD",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "SCHD",
+          "role": "owning",
+          "service": "Vegetation dispatch"
+        },
+        {
+          "component": "HR",
+          "role": "reference",
+          "service": "Line-clearance qualification"
+        },
+        {
+          "component": "NO",
+          "role": "reference",
+          "service": "Clearance from 18.4.4"
+        },
+        {
+          "component": "FRD",
+          "role": "receiving",
+          "service": "Work on the crew"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "SCHD",
+          "to": "FRD",
+          "payload": "MaintenanceOrder",
+          "verb": "change",
+          "pattern": "event"
+        },
+        {
+          "from": "NO",
+          "to": "SCHD",
+          "payload": "WorkRequest",
+          "verb": "get",
+          "pattern": "request-reply"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Scheduler",
+          "raci": "R"
+        },
+        {
+          "role": "Vegetation programme manager",
+          "raci": "A"
+        },
+        {
+          "role": "Dispatcher",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "Crew",
+        "WorkTimeSchedule",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "Qualified employees take all of 1910.269 except (r)(1). Line-clearance tree trimmers who are not qualified employees take (a)(2),(a)(3),(b),(c),(g),(k),(p) and (r). (r)(1)(ii) requires a second trimmer within voice range in the stated cases."
+        },
+        {
+          "kind": "regulatory",
+          "text": "A clearance is not a permit. If the cut needs the line deenergized, 18.4.4 issues it under 1910.269(m). (c) job briefing and (a)(3) contractor information transfer gate dispatch."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Schedule Compliance",
+          "definition": "SMRP 5.4.3/5.4.4. Dispatched versus placed.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Wrench Time",
+          "definition": "SMRP 5.6.1. Holds at dispatch are lost field time.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Qualified-employee crew",
+        "Line-clearance tree trimmer crew, not 269-qualified",
+        "Two-person crew required by (r)(1)(ii)"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Ready work is sent or held against a named gate.",
+        "artifact": "models/7.4-execute-vegetation-work.bpmn"
+      },
+      "en17007": {
+        "process": "ACT.5",
+        "title": "Start the scheduled tasks",
+        "clause": "6.5.6"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.5.6 ACT.5",
+          "status": "verified"
+        },
+        {
+          "for": "line-clearance scope",
+          "cite": "29 CFR 1910.269(a)(1)(i)(E) and (r) Line-clearance tree trimming; (x) definitions of line-clearance tree trimmer and line-clearance tree trimming",
+          "status": "regulation"
+        },
+        {
+          "for": "qualified versus trimmer",
+          "cite": "29 CFR 1910.269(a)(2) qualified employee; (a)(2)(iii) training of line-clearance tree trimmers who are not qualified employees",
+          "status": "regulation"
+        },
+        {
+          "for": "briefing and contractor",
+          "cite": "29 CFR 1910.269(c) job briefing; (a)(3) host and contract employer information transfer",
+          "status": "regulation"
+        },
+        {
+          "for": "clearance",
+          "cite": "29 CFR 1910.269(m) Deenergizing lines and equipment for employee protection; clearance produced by 18.4.4 against a plan approved at 18.2.2",
+          "status": "regulation"
+        },
+        {
+          "for": "external crews",
+          "cite": "EN 17007:2017 cl. 6.15 SER.4 Provide external services",
+          "status": "verified"
+        }
+      ],
+      "provenance": {
+        "basis": "regulation",
+        "primary": "29 CFR 1910.269(a)(1)(i)(E) and (r) Line-clearance tree trimming; (x) definitions of line-clearance tree trimmer and line-clearance tree trimming"
+      }
+    },
+    {
+      "uid": 10200,
+      "id": "7.4.2",
+      "name": "Perform pruning, trimming and removal",
+      "group": {
+        "id": "7.4",
+        "name": "Execute vegetation work",
+        "uid": 10198
+      },
+      "intent": "Do the prescribed cut and leave the span in the specified finish.",
+      "activities": [
+        "Confirm voltage and MAD before climbing or entering the tree",
+        "Perform the prescribed prune, trim or removal",
+        "Use insulating equipment where 1910.269(r)(1)(iv) requires it",
+        "Stop and re-brief if the condition of the tree or the line changes"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "The vegetation crew is on the span and the prescription is in force.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Prescription and finish specification",
+          "party": "FRD",
+          "data": "WorkTask"
+        },
+        {
+          "what": "Nominal voltage of lines posing a hazard",
+          "party": "NO",
+          "data": "WorkAsset"
+        },
+        {
+          "what": "Access instrument and any clearance held",
+          "party": "MAI",
+          "data": "Work"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Cut performed against the prescription",
+          "party": "FRD",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Exception where the finish could not be left",
+          "party": "MAI",
+          "data": "Work"
+        }
+      ],
+      "systems": [
+        {
+          "component": "FRD",
+          "role": "owning",
+          "service": "Field execution"
+        },
+        {
+          "component": "NO",
+          "role": "reference",
+          "service": "Voltage and clearance"
+        },
+        {
+          "component": "MAI",
+          "role": "receiving",
+          "service": "Exception to prescription"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "FRD",
+          "to": "MAI",
+          "payload": "MaintenanceOrder",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Line-clearance tree trimmer",
+          "raci": "R"
+        },
+        {
+          "role": "Vegetation programme manager",
+          "raci": "A"
+        },
+        {
+          "role": "Network operator",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkTask",
+        "WorkAsset",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "1910.269(r)(1)(i) requires a voltage determination before climbing or working around the tree. (r)(1)(iii) MAD from Tables R-5 to R-8. (r)(1)(v) aerial devices. (r)(1) does not apply to qualified employees."
+        },
+        {
+          "kind": "operational",
+          "text": "ANSI A300 and ANSI Z133 are not in the pack. Method beyond OSHA and the operator specification is judgment."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Schedule Compliance",
+          "definition": "SMRP 5.4.3/5.4.4. Cut done on the day it was dispatched.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Rework",
+          "definition": "SMRP 4.1. Finish not left as specified.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Energised, MAD observed",
+        "Under a clearance from 18.4.4",
+        "Ground-only brush, not in MAD"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "On-span cut against a prescription is a repeating path.",
+        "artifact": "models/7.4-execute-vegetation-work.bpmn"
+      },
+      "en17007": {
+        "process": "ACT.6",
+        "title": "Perform the maintenance tasks",
+        "clause": "6.5.7"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.5.7 ACT.6",
+          "status": "verified"
+        },
+        {
+          "for": "electrical hazards",
+          "cite": "29 CFR 1910.269(a)(1)(i)(E) and (r) Line-clearance tree trimming; (x) definitions of line-clearance tree trimmer and line-clearance tree trimming",
+          "status": "regulation"
+        },
+        {
+          "for": "interfaces",
+          "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 message payloads; Annex A verbs",
+          "status": "clause-verified"
+        },
+        {
+          "for": "pruning practice",
+          "cite": "ANSI A300 and Z133 are not in the Source Authority Pack",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "regulation",
+        "primary": "29 CFR 1910.269(a)(1)(i)(E) and (r) Line-clearance tree trimming; (x) definitions of line-clearance tree trimmer and line-clearance tree trimming"
+      }
+    },
+    {
+      "uid": 10201,
+      "id": "7.4.3",
+      "name": "Apply integrated vegetation management method",
+      "group": {
+        "id": "7.4",
+        "name": "Execute vegetation work",
+        "uid": 10198
+      },
+      "intent": "Treat the corridor so incompatible growth is reduced, not only cut back this cycle.",
+      "activities": [
+        "Select the corridor treatment the prescription named",
+        "Apply mechanical, herbicide or conversion work on the floor and edge",
+        "Record what was applied and where",
+        "Feed the result into the growth model and the next cycle"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "The prescription calls for corridor treatment beyond a tree prune.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Corridor prescription",
+          "party": "MAI",
+          "data": "WorkTask"
+        },
+        {
+          "what": "Cover type and last treatment",
+          "party": "AM",
+          "data": "WorkAsset"
+        },
+        {
+          "what": "Land-use and water constraints",
+          "party": "GINV",
+          "data": "WorkLocation"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Treatment record on the corridor",
+          "party": "FRD",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Updated cover type for the next cycle",
+          "party": "AM",
+          "data": "WorkAsset"
+        }
+      ],
+      "systems": [
+        {
+          "component": "FRD",
+          "role": "owning",
+          "service": "Corridor treatment"
+        },
+        {
+          "component": "AM",
+          "role": "receiving",
+          "service": "Cover-type update"
+        },
+        {
+          "component": "MAI",
+          "role": "reference",
+          "service": "Prescription"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "FRD",
+          "to": "AM",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        },
+        {
+          "from": "FRD",
+          "to": "MAI",
+          "payload": "MaintenanceOrder",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Vegetation programme manager",
+          "raci": "A"
+        },
+        {
+          "role": "Line-clearance tree trimmer",
+          "raci": "R"
+        }
+      ],
+      "data_objects": [
+        "WorkTask",
+        "WorkAsset",
+        "WorkLocation",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "Integrated vegetation management is not a named process in the pack. ANSI A300 Part 7 is the usual industry reference and is not in the pack, so it is not cited."
+        },
+        {
+          "kind": "regulatory",
+          "text": "Herbicide use is pesticide law, not in the pack. USACE NWP 3 may apply in waters. Record the chemical constraint as operator and state, not as a federal vegetation-management standard."
+        }
+      ],
+      "measures": [
+        {
+          "name": "PM Compliance",
+          "definition": "SMRP 5.4.14. Corridor treatment is how some cycles are actually met.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Proactive Work",
+          "definition": "SMRP 5.4.2. Conversion work is proactive if it prevents the next prune.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Mechanical floor cut",
+        "Selective herbicide",
+        "Compatible-species conversion"
+      ],
+      "notation": {
+        "class": "SPEC",
+        "why": "Standing corridor method with no single instance boundary; applied when the prescription names it."
+      },
+      "en17007": {
+        "process": "PRV.2",
+        "title": "Use and update the Maintenance Plans",
+        "clause": "6.3.3"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.3.3 PRV.2",
+          "status": "verified"
+        },
+        {
+          "for": "waters",
+          "cite": "USACE Nationwide Permit 3 maintenance, effective 2026-03-15",
+          "status": "regulation"
+        },
+        {
+          "for": "data_objects",
+          "cite": "IEC 61968-11:2013 CIM extensions for distribution, Work package",
+          "status": "clause-verified"
+        },
+        {
+          "for": "IVM method",
+          "cite": "IVM method is not in the Source Authority Pack; ANSI A300 Part 7 is not cited",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "judgment",
+        "primary": "EN 17007:2017 cl. 6.3.3 PRV.2"
+      }
+    },
+    {
+      "uid": 10202,
+      "id": "7.4.4",
+      "name": "Dispose of debris and restore site",
+      "group": {
+        "id": "7.4",
+        "name": "Execute vegetation work",
+        "uid": 10198
+      },
+      "intent": "Remove or leave the debris as agreed, and leave the site safe to occupy.",
+      "activities": [
+        "Account for chips, logs and brush from the cut",
+        "Dispose, haul or leave in place per the prescription and landowner terms",
+        "Restore access, fences and the highway if occupied",
+        "Record what left the span"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "The cut is done and debris is on the span or the highway.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Completed cut and debris on site",
+          "party": "FRD",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Landowner or permit disposal terms",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Highway occupancy if any",
+          "party": "GINV",
+          "data": "WorkLocation"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Disposal and restoration record",
+          "party": "FRD",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Site returned to occupiable condition",
+          "party": "MAI",
+          "data": "Work"
+        }
+      ],
+      "systems": [
+        {
+          "component": "FRD",
+          "role": "owning",
+          "service": "Debris and restoration"
+        },
+        {
+          "component": "MM",
+          "role": "receiving",
+          "service": "Hauled material"
+        },
+        {
+          "component": "MAI",
+          "role": "reference",
+          "service": "Disposal terms"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "FRD",
+          "to": "MAI",
+          "payload": "MaintenanceOrder",
+          "verb": "change",
+          "pattern": "event"
+        },
+        {
+          "from": "FRD",
+          "to": "MM",
+          "payload": "WorkRequest",
+          "verb": "create",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Line-clearance tree trimmer",
+          "raci": "R"
+        },
+        {
+          "role": "Vegetation programme manager",
+          "raci": "A"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkLocation",
+        "WorkActivityRecord",
+        "MaterialItem"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "APQC 10.4.5 waste and hazardous goods (pcf_id 16970) is otherwise absent. This process is the model's only debris disposal. It does not cover PCB, oil, asbestos or spoil."
+        },
+        {
+          "kind": "regulatory",
+          "text": "40 CFR 122.26(b)(15)(i) excludes routine maintenance that keeps original line and grade from small-construction stormwater. MUTCD Part 6 applies while the highway is occupied. USACE NWP 3 if in waters."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Work Order Cycle Time",
+          "definition": "SMRP 5.4.7. The job is not done while debris is on the span.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Planning and Control indicators",
+          "definition": "EN 15341 cl. 12 O&S9-O&S22 applied to completion including site restore.",
+          "cite": "EN 15341:2019+A1:2022 Maintenance KPIs, cl. 12 O&S9-O&S22 Planning and Control"
+        }
+      ],
+      "variants": [
+        "Chip on site",
+        "Haul to a facility",
+        "Leave in woods per landowner terms"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Debris is disposed and the site restored on a repeating path.",
+        "artifact": "models/7.4-execute-vegetation-work.bpmn"
+      },
+      "en17007": {
+        "process": "ACT.7",
+        "title": "Finish the tasks",
+        "clause": "6.5.8"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.5.8 ACT.7",
+          "status": "verified"
+        },
+        {
+          "for": "APQC waste",
+          "cite": "APQC PCF Utilities v7.2.1 10.4.5 (pcf_id 16970) - this process is the model's only debris disposal",
+          "status": "consensus"
+        },
+        {
+          "for": "stormwater exclusion",
+          "cite": "40 CFR 122.26(b)(15)(i)",
+          "status": "regulation"
+        },
+        {
+          "for": "highway",
+          "cite": "MUTCD 11th Edition with Revision 1, Part 6 Temporary Traffic Control",
+          "status": "regulation"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "EN 17007:2017 cl. 6.5.8 ACT.7"
+      }
+    },
+    {
+      "uid": 10203,
+      "id": "7.4.5",
+      "name": "Capture completion evidence",
+      "group": {
+        "id": "7.4",
+        "name": "Execute vegetation work",
+        "uid": 10198
+      },
+      "intent": "Record what was cut, where, and that the finish was left, before the crew leaves.",
+      "activities": [
+        "Capture the span, method and finish as left",
+        "Attach photo or geospatial evidence the audit can use",
+        "Record remaining hazards the prescription did not close",
+        "Close the field record to the programme"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "The crew is leaving the span and the cut is claimed complete.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Cut and disposal as performed",
+          "party": "FRD",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Prescription being closed against",
+          "party": "MAI",
+          "data": "WorkTask"
+        },
+        {
+          "what": "Span geography",
+          "party": "GINV",
+          "data": "WorkLocation"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Completion evidence on the work",
+          "party": "MAI",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Remaining hazard raised as follow-on",
+          "party": "MAI",
+          "data": "Work"
+        }
+      ],
+      "systems": [
+        {
+          "component": "FRD",
+          "role": "owning",
+          "service": "Field completion capture"
+        },
+        {
+          "component": "MAI",
+          "role": "receiving",
+          "service": "Evidence on the work"
+        },
+        {
+          "component": "GINV",
+          "role": "reference",
+          "service": "Span identity"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "FRD",
+          "to": "MAI",
+          "payload": "MaintenanceOrder",
+          "verb": "close",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Line-clearance tree trimmer",
+          "raci": "R"
+        },
+        {
+          "role": "Vegetation programme manager",
+          "raci": "A"
+        },
+        {
+          "role": "Patrol inspector",
+          "raci": "I"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkTask",
+        "WorkLocation",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "No standard specifies vegetation completion evidence. Photo, GPS polygon and exception flags are operator judgment. IEC 61968-6 FRD is the component, not the content."
+        },
+        {
+          "kind": "operational",
+          "text": "Evidence that only says 'done' cannot support 7.5.1 or a regulator request at 7.5.4."
+        }
+      ],
+      "measures": [
+        {
+          "name": "PM Compliance",
+          "definition": "SMRP 5.4.14. Evidence is what makes the cycle auditable.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Work Order Cycle Time",
+          "definition": "SMRP 5.4.7. Capture to programme close.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Photo at the span",
+        "Work-done geospatial polygon",
+        "Exception photo of remaining hazard"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Leaving the span with a closed field record is a repeating path.",
+        "artifact": "models/7.4-execute-vegetation-work.bpmn"
+      },
+      "en17007": {
+        "process": "DTA.1",
+        "title": "Store and validate the raw data in a library and/or a database",
+        "clause": "6.10"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.10 DTA.1",
+          "status": "verified"
+        },
+        {
+          "for": "FRD component",
+          "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 message payloads; Annex A verbs",
+          "status": "clause-verified"
+        },
+        {
+          "for": "measures",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management",
+          "status": "consensus"
+        },
+        {
+          "for": "evidence content",
+          "cite": "Completion-evidence content is not standardised",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "EN 17007:2017 cl. 6.10 DTA.1"
+      }
+    },
+    {
+      "uid": 10205,
+      "id": "7.5.1",
+      "name": "Perform post-work audit and quality inspection",
+      "group": {
+        "id": "7.5",
+        "name": "Audit and report vegetation compliance",
+        "uid": 10204
+      },
+      "intent": "Check a completed span against the prescription and send failures back.",
+      "activities": [
+        "Select completed spans for audit",
+        "Compare the finish left with the prescription",
+        "Record pass or fail with the defect",
+        "Raise rework or close the audit"
+      ],
+      "trigger": {
+        "kind": "timer",
+        "text": "Completed vegetation work is due for sample or full-circuit audit.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Completion evidence",
+          "party": "MAI",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Prescription and finish specification",
+          "party": "MAI",
+          "data": "WorkTask"
+        },
+        {
+          "what": "Span geography",
+          "party": "GINV",
+          "data": "WorkLocation"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Audit pass or fail",
+          "party": "MAI",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Rework on a failed span",
+          "party": "SCHD",
+          "data": "Work"
+        }
+      ],
+      "systems": [
+        {
+          "component": "MAI",
+          "role": "owning",
+          "service": "Vegetation audit"
+        },
+        {
+          "component": "FRD",
+          "role": "originating",
+          "service": "Audit observation"
+        },
+        {
+          "component": "SCHD",
+          "role": "receiving",
+          "service": "Rework"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "FRD",
+          "to": "MAI",
+          "payload": "WorkRequest",
+          "verb": "create",
+          "pattern": "event"
+        },
+        {
+          "from": "MAI",
+          "to": "SCHD",
+          "payload": "MaintenanceOrder",
+          "verb": "create",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Patrol inspector",
+          "raci": "R"
+        },
+        {
+          "role": "Vegetation programme manager",
+          "raci": "A"
+        },
+        {
+          "role": "Contractor coordinator",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkTask",
+        "WorkActivityRecord",
+        "WorkLocation"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "GFMAM 2.3 assurance is partial: audit exists per programme. There is no pack standard for sample size or pass criteria. 49 CFR 192.605(b)(8) is gas and does not bind this electric process."
+        },
+        {
+          "kind": "operational",
+          "text": "Contractor QA is still this process. Qualification of the contractor is 16.1; the cut quality is 7.5.1."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Rework",
+          "definition": "SMRP 4.1. Failed audits.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "PM Compliance",
+          "definition": "SMRP 5.4.14. A fail that is not reworked is a false complete.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Sample of completed spans",
+        "Full-circuit post-work patrol",
+        "Contractor ride-along QA"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Select, compare, pass or rework is a repeating path.",
+        "artifact": "models/7.5-audit-and-report.bpmn"
+      },
+      "en17007": {
+        "process": "MAN.5",
+        "title": "Oversee the actions",
+        "clause": "6.2"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.2 MAN.5",
+          "status": "verified"
+        },
+        {
+          "for": "assurance",
+          "cite": "GFMAM Asset Management Landscape 3rd ed. subject 2.3 Asset Management Assurance and Audit",
+          "status": "verified"
+        },
+        {
+          "for": "interfaces",
+          "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 message payloads; Annex A verbs",
+          "status": "clause-verified"
+        },
+        {
+          "for": "sample size",
+          "cite": "Audit sampling is not standardised in the pack",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "EN 17007:2017 cl. 6.2 MAN.5"
+      }
+    },
+    {
+      "uid": 10206,
+      "id": "7.5.2",
+      "name": "Maintain clearance compliance evidence",
+      "group": {
+        "id": "7.5",
+        "name": "Audit and report vegetation compliance",
+        "uid": 10204
+      },
+      "intent": "Keep the file that shows the cycle was inspected and treated, and what was excepted.",
+      "activities": [
+        "File completion and audit records against the span and the cycle",
+        "Keep exception and refusal records with the same file",
+        "Retain for the period the state plan requires",
+        "Produce the file when 7.5.4 must report"
+      ],
+      "trigger": {
+        "kind": "none",
+        "text": "Standing file of vegetation-cycle evidence.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Completion evidence",
+          "party": "MAI",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Audit results",
+          "party": "MAI",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Refusal and exception records",
+          "party": "CS",
+          "data": "Work"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Cycle evidence file",
+          "party": "MAI",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Gaps in the file for a due span",
+          "party": "MAI",
+          "data": "Work"
+        }
+      ],
+      "systems": [
+        {
+          "component": "MAI",
+          "role": "owning",
+          "service": "Vegetation evidence file"
+        },
+        {
+          "component": "CS",
+          "role": "reference",
+          "service": "Refusal records"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "CS",
+          "to": "MAI",
+          "payload": "WorkRequest",
+          "verb": "get",
+          "pattern": "batch"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Vegetation programme manager",
+          "raci": "A"
+        },
+        {
+          "role": "Records administrator",
+          "raci": "R"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkActivityRecord",
+        "WorkLocation"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "PA 57.198 requires a filed plan; it does not set a federal-style retention table. There is no federal vegetation-record duty for distribution. NESC sets no record-keeping duty."
+        },
+        {
+          "kind": "operational",
+          "text": "IEC 61968-6 cl. 4.2 has no document component. The file sits on MAI."
+        }
+      ],
+      "measures": [
+        {
+          "name": "PM Compliance",
+          "definition": "SMRP 5.4.14. The file is how compliance is shown.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Planning and Control indicators",
+          "definition": "EN 15341 cl. 12 O&S9-O&S22 applied to whether evidence exists.",
+          "cite": "EN 15341:2019+A1:2022 Maintenance KPIs, cl. 12 O&S9-O&S22 Planning and Control"
+        }
+      ],
+      "variants": [
+        "Cycle-completion file",
+        "Span exception file",
+        "Package assembled for a regulator request"
+      ],
+      "notation": {
+        "class": "SPEC",
+        "why": "Standing file with no instance boundary."
+      },
+      "en17007": {
+        "process": "DOC.5",
+        "title": "Ensure access to necessary information at all times",
+        "clause": "6.9"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.9 DOC.5",
+          "status": "verified"
+        },
+        {
+          "for": "state plan",
+          "cite": "52 Pa. Code sec. 57.198(f) and (n)(1) - statewide vegetation inspection and treatment cycle between 4 and 8 years for distribution; condition-based plan required",
+          "status": "regulation"
+        },
+        {
+          "for": "no federal record duty",
+          "cite": "16 U.S.C. 824o - local distribution excluded from the bulk-power reliability regime",
+          "status": "regulation"
+        },
+        {
+          "for": "retention",
+          "cite": "Vegetation-record retention is not federally specified",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "EN 17007:2017 cl. 6.9 DOC.5"
+      }
+    },
+    {
+      "uid": 10207,
+      "id": "7.5.3",
+      "name": "Measure vegetation-caused interruptions (IEEE 1366)",
+      "group": {
+        "id": "7.5",
+        "name": "Audit and report vegetation compliance",
+        "uid": 10204
+      },
+      "intent": "Count the interruptions vegetation caused, using IEEE 1366 definitions.",
+      "activities": [
+        "Classify interruption events as vegetation-caused",
+        "Compute the IEEE 1366 indices on that subset",
+        "Separate major-event days from the day-to-day set",
+        "Feed the result to strategy, rank and the regulator report"
+      ],
+      "trigger": {
+        "kind": "timer",
+        "text": "The reliability period is closed and events are ready to classify.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Interruption events for the period",
+          "party": "AM",
+          "data": "Work"
+        },
+        {
+          "what": "Cause coding on each event",
+          "party": "AM",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Major-event-day flags",
+          "party": "AM",
+          "data": "Work"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Vegetation-caused IEEE 1366 indices",
+          "party": "MAI",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Spans driving the vegetation SAIDI/SAIFI",
+          "party": "GINV",
+          "data": "WorkLocation"
+        }
+      ],
+      "systems": [
+        {
+          "component": "AM",
+          "role": "originating",
+          "service": "Interruption events"
+        },
+        {
+          "component": "MAI",
+          "role": "owning",
+          "service": "Vegetation reliability indices"
+        },
+        {
+          "component": "GINV",
+          "role": "reference",
+          "service": "Span of the event"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "AM",
+          "to": "MAI",
+          "payload": "WorkRequest",
+          "verb": "get",
+          "pattern": "batch"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Reliability engineer",
+          "raci": "R"
+        },
+        {
+          "role": "Vegetation programme manager",
+          "raci": "A"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkLocation",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "IEEE 1366-2022 defines SAIFI, SAIDI, CAIDI and the 2.5-beta major-event-day method. It is voluntary federally. The body is paywalled; index names are taken from the pack, not from a paraphrase of the clauses."
+        },
+        {
+          "kind": "operational",
+          "text": "IEEE 1782 is the interruption-event information standard. Cause-code lists are not in the pack; vegetation as a cause is operator coding unless a state requires one."
+        }
+      ],
+      "measures": [
+        {
+          "name": "SAIDI",
+          "definition": "IEEE 1366-2022. Vegetation-caused duration.",
+          "cite": "IEEE 1366-2022"
+        },
+        {
+          "name": "SAIFI",
+          "definition": "IEEE 1366-2022. Vegetation-caused frequency.",
+          "cite": "IEEE 1366-2022"
+        }
+      ],
+      "variants": [
+        "Day-to-day vegetation SAIDI/SAIFI",
+        "Major-event-day vegetation subset",
+        "Grow-in versus tree-out-of-ROW split where coded"
+      ],
+      "notation": {
+        "class": "SPEC",
+        "why": "Standing measurement; no work-instance boundary."
+      },
+      "en17007": {
+        "process": "DTA.11",
+        "title": "Calculate, save and provide access to performance and monitoring indicators",
+        "clause": "6.10"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.10 DTA.11",
+          "status": "verified"
+        },
+        {
+          "for": "indices",
+          "cite": "IEEE 1366-2022",
+          "status": "clause-verified"
+        },
+        {
+          "for": "event information",
+          "cite": "IEEE 1782-2022 Collecting and categorising distribution interruption event information",
+          "status": "clause-verified"
+        },
+        {
+          "for": "cause codes",
+          "cite": "Vegetation cause-code lists are not in the pack",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "IEEE 1366-2022"
+      }
+    },
+    {
+      "uid": 10208,
+      "id": "7.5.4",
+      "name": "Report to regulator and applicable reliability entity",
+      "group": {
+        "id": "7.5",
+        "name": "Audit and report vegetation compliance",
+        "uid": 10204
+      },
+      "intent": "Send the vegetation plan, cycle evidence and interruption result to whoever is owed them.",
+      "activities": [
+        "Assemble the plan, cycle evidence and vegetation indices",
+        "Send the state PUC filing the plan requires",
+        "Send FAC-003 evidence only for in-scope transmission",
+        "Record what was sent and when"
+      ],
+      "trigger": {
+        "kind": "timer",
+        "text": "A vegetation filing or reliability report is due.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Cycle evidence file",
+          "party": "MAI",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Vegetation-caused IEEE 1366 indices",
+          "party": "MAI",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Filed vegetation plan",
+          "party": "MAI",
+          "data": "Work"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Filing record",
+          "party": "MAI",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Exception where evidence could not support the filing",
+          "party": "MAI",
+          "data": "Work"
+        }
+      ],
+      "systems": [
+        {
+          "component": "MAI",
+          "role": "owning",
+          "service": "Vegetation filing"
+        },
+        {
+          "component": "AM",
+          "role": "reference",
+          "service": "Reliability indices"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "AM",
+          "to": "MAI",
+          "payload": "WorkRequest",
+          "verb": "get",
+          "pattern": "batch"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Vegetation programme manager",
+          "raci": "A"
+        },
+        {
+          "role": "Regulatory analyst",
+          "raci": "R"
+        },
+        {
+          "role": "Reliability engineer",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "Distribution reports to the state. PA 57.198 is a biennial plan. 16 U.S.C. 824o keeps local distribution out of the ERO. NERC FAC-003 is transmission only and is not a distribution vegetation report."
+        },
+        {
+          "kind": "operational",
+          "text": "EIA-861 lets non-calculating entities skip IEEE 1366. Do not imply a national vegetation filing."
+        }
+      ],
+      "measures": [
+        {
+          "name": "SAIDI",
+          "definition": "IEEE 1366-2022. What the reliability report carries.",
+          "cite": "IEEE 1366-2022"
+        },
+        {
+          "name": "PM Compliance",
+          "definition": "SMRP 5.4.14. What the plan-versus-actual filing carries.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "State PUC vegetation plan and reliability report",
+        "NERC FAC-003 evidence for in-scope transmission only",
+        "Internal board pack, not a filing"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "A due filing is assembled and sent, or excepted, on a repeating path.",
+        "artifact": "models/7.5-audit-and-report.bpmn"
+      },
+      "en17007": {
+        "process": "MAN.6",
+        "title": "Define, select, analyse and communicate the information",
+        "clause": "6.2"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.2 MAN.6",
+          "status": "verified"
+        },
+        {
+          "for": "state plan",
+          "cite": "52 Pa. Code sec. 57.198(f) and (n)(1) - statewide vegetation inspection and treatment cycle between 4 and 8 years for distribution; condition-based plan required",
+          "status": "regulation"
+        },
+        {
+          "for": "distribution exclusion",
+          "cite": "16 U.S.C. 824o - local distribution excluded from the bulk-power reliability regime",
+          "status": "regulation"
+        },
+        {
+          "for": "transmission vegetation",
+          "cite": "NERC FAC-003 Transmission Vegetation Management - bulk-power transmission only; not a distribution rule",
+          "status": "clause-verified"
+        },
+        {
+          "for": "IEEE 1366 voluntary federally",
+          "cite": "IEEE 1366-2022",
+          "status": "clause-verified"
+        }
+      ],
+      "provenance": {
+        "basis": "regulation",
+        "primary": "16 U.S.C. 824o - local distribution excluded from the bulk-power reliability regime"
+      }
+    }
+  ],
+  "merge_corrections": [
+    {
+      "date": "2026-08-29",
+      "by": "Claude",
+      "what": "NO CORRECTION NEEDED. Every citation status was already at its ceiling and no EN 17007 citation was under-claimed. This is the first submission in the campaign to need nothing changed at merge.",
+      "accepted_from_submitter": [
+        "52 Pa. Code 57.198(n)(1) is a 4-to-8 year statewide minimum inspection and treatment cycle for distribution, not a fixed 8 years, and (f) requires a plan including a clearance programme. The Source Authority Pack said 8 years. Verified against the regulation and corrected.",
+        "CPUC GO 95 Rule 35 Vegetation Management was missing from the pack, which carried GO 165 inspection only. Verified and added, with Table 1 Cases 13, 14, 13E and 14E and Appendix E.",
+        "ANSI A300 Part 7 Integrated Vegetation Management and ANSI Z133 were absent entirely. Added as pack section D-quater, cited as consensus because neither is incorporated by reference into 29 CFR 1910.269.",
+        "GFMAM subject 6.5 Maintenance Delivery did not list 7.0. Vegetation IS maintenance delivery; the crosswalk was thin, not the category. Corrected.",
+        "Using OSHA's defined terms - line-clearance tree trimmer and qualified employee - rather than the industry's ISA Certified Arborist or qualified line-clearance arborist. Correct, and now recorded in the pack so the next platform does the same.",
+        "NERC FAC-003 cited only as a negative, paired with 16 U.S.C. 824o. Exactly the discipline the pack asks for and the first time a platform has done it unprompted."
+      ],
+      "models_built_here": "Eleven artifacts, 5 BPMN, 5 DMN, 1 CMMN. Grok specified them and cannot build them; only this side has the generator."
+    }
+  ]
+}

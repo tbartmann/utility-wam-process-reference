@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/" id="Vegetation_strategy" name="7.1.1 Define cycle-based and risk-based strategy" namespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <description>The output is the strategy that governs everything downstream - a value, not a state change. Bound to the state interval where one exists, because there is no federal distribution vegetation rule at all.</description>
+  <inputData id="in_voltageClass" name="Voltage class"><variable id="in_voltageClass_v" name="Voltage class" typeRef="string"/></inputData>
+  <inputData id="in_territoryType" name="Territory type"><variable id="in_territoryType_v" name="Territory type" typeRef="string"/></inputData>
+  <inputData id="in_stateInterval" name="State interval applies"><variable id="in_stateInterval_v" name="State interval applies" typeRef="boolean"/></inputData>
+  <inputData id="in_riskEvidence" name="Risk evidence available"><variable id="in_riskEvidence_v" name="Risk evidence available" typeRef="boolean"/></inputData>
+  <inputData id="in_fireRiskTier" name="Fire risk tier"><variable id="in_fireRiskTier_v" name="Fire risk tier" typeRef="string"/></inputData>
+  <knowledgeSource id="ks_state" name="State commission vegetation rules"><description>This is where distribution vegetation obligation actually lives. 52 Pa. Code 57.198(n)(1) sets a 4-to-8 year statewide minimum inspection and treatment cycle for distribution and (f) requires a plan including a clearance programme; CPUC GO 95 Rule 35 sets radial clearances at Table 1 Cases 13, 14, 13E and 14E. There is no federal equivalent: 16 U.S.C. 824o excludes local distribution.</description></knowledgeSource>
+  <decision id="d_7_1_1" name="Vegetation strategy">
+    <description>7.1.1. Hotspot-only off-cycle work is a variant of the risk overlay rather than a strategy in its own right.</description>
+    <variable id="d_7_1_1_v" name="Vegetation strategy" typeRef="string"/>
+    <informationRequirement id="ir_d_7_1_1_in_fireRiskTier"><requiredInput href="#in_fireRiskTier"/></informationRequirement>
+    <informationRequirement id="ir_d_7_1_1_in_stateInterval"><requiredInput href="#in_stateInterval"/></informationRequirement>
+    <informationRequirement id="ir_d_7_1_1_in_riskEvidence"><requiredInput href="#in_riskEvidence"/></informationRequirement>
+    <informationRequirement id="ir_d_7_1_1_in_voltageClass"><requiredInput href="#in_voltageClass"/></informationRequirement>
+    <informationRequirement id="ir_d_7_1_1_in_territoryType"><requiredInput href="#in_territoryType"/></informationRequirement>
+    <authorityRequirement id="ar_d_7_1_1"><requiredAuthority href="#ks_state"/></authorityRequirement>
+    <decisionTable id="d_7_1_1_dt" hitPolicy="FIRST" preferredOrientation="Rule-as-Row">
+      <input id="d_7_1_1_i1" label="Fire risk tier"><inputExpression id="d_7_1_1_i1_e" typeRef="string"><text>in_fireRiskTier</text></inputExpression></input>
+      <input id="d_7_1_1_i2" label="State interval applies"><inputExpression id="d_7_1_1_i2_e" typeRef="boolean"><text>in_stateInterval</text></inputExpression></input>
+      <input id="d_7_1_1_i3" label="Risk evidence available"><inputExpression id="d_7_1_1_i3_e" typeRef="boolean"><text>in_riskEvidence</text></inputExpression></input>
+      <input id="d_7_1_1_i4" label="Voltage class"><inputExpression id="d_7_1_1_i4_e" typeRef="string"><text>in_voltageClass</text></inputExpression></input>
+      <output id="d_7_1_1_o" label="Vegetation strategy" name="Vegetation strategy" typeRef="string"/>
+      <rule id="d_7_1_1_r1">
+        <description>A designated fire-risk tier overrides the ordinary cycle. The tier and its map are the state's, not this reference's.</description>
+        <inputEntry id="d_7_1_1_r1_ie1"><text>"elevated","extreme"</text></inputEntry>
+        <inputEntry id="d_7_1_1_r1_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_7_1_1_r1_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_7_1_1_r1_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_7_1_1_r1_oe"><text>"riskOverlayOnCycle"</text></outputEntry>
+      </rule>
+      <rule id="d_7_1_1_r2">
+        <description>State cycle as the floor, risk evidence to bring spans forward. The cycle is a MINIMUM and risk may only shorten it, never extend it.</description>
+        <inputEntry id="d_7_1_1_r2_ie1"><text>-</text></inputEntry>
+        <inputEntry id="d_7_1_1_r2_ie2"><text>true</text></inputEntry>
+        <inputEntry id="d_7_1_1_r2_ie3"><text>true</text></inputEntry>
+        <inputEntry id="d_7_1_1_r2_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_7_1_1_r2_oe"><text>"riskOverlayOnCycle"</text></outputEntry>
+      </rule>
+      <rule id="d_7_1_1_r3">
+        <description>State interval with no risk evidence to overlay. Pennsylvania's 4-to-8 year band is the exemplar, and the operator chooses where in the band it sits.</description>
+        <inputEntry id="d_7_1_1_r3_ie1"><text>-</text></inputEntry>
+        <inputEntry id="d_7_1_1_r3_ie2"><text>true</text></inputEntry>
+        <inputEntry id="d_7_1_1_r3_ie3"><text>false</text></inputEntry>
+        <inputEntry id="d_7_1_1_r3_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_7_1_1_r3_oe"><text>"fixedStateCycle"</text></outputEntry>
+      </rule>
+      <rule id="d_7_1_1_r4">
+        <description>No state interval - New Jersey requires a programme and sets no interval at all - so the whole cycle is the operator's, evidenced by risk.</description>
+        <inputEntry id="d_7_1_1_r4_ie1"><text>-</text></inputEntry>
+        <inputEntry id="d_7_1_1_r4_ie2"><text>false</text></inputEntry>
+        <inputEntry id="d_7_1_1_r4_ie3"><text>true</text></inputEntry>
+        <inputEntry id="d_7_1_1_r4_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_7_1_1_r4_oe"><text>"riskBasedOnly"</text></outputEntry>
+      </rule>
+      <rule id="d_7_1_1_r5">
+        <description>Neither a state interval nor risk evidence. The cycle is asserted by the operator and that should be visible as such.</description>
+        <inputEntry id="d_7_1_1_r5_ie1"><text>-</text></inputEntry>
+        <inputEntry id="d_7_1_1_r5_ie2"><text>false</text></inputEntry>
+        <inputEntry id="d_7_1_1_r5_ie3"><text>false</text></inputEntry>
+        <inputEntry id="d_7_1_1_r5_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_7_1_1_r5_oe"><text>"operatorCycle"</text></outputEntry>
+      </rule>
+      <rule id="d_7_1_1_r6">
+        <inputEntry id="d_7_1_1_r6_ie1"><text>-</text></inputEntry>
+        <inputEntry id="d_7_1_1_r6_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_7_1_1_r6_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_7_1_1_r6_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_7_1_1_r6_oe"><text>"defineManually"</text></outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram id="drd_Vegetation_strategy">
+      <dmndi:DMNShape id="sh_in_voltageClass" dmnElementRef="in_voltageClass"><dc:Bounds x="60" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_territoryType" dmnElementRef="in_territoryType"><dc:Bounds x="245" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_stateInterval" dmnElementRef="in_stateInterval"><dc:Bounds x="430" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_riskEvidence" dmnElementRef="in_riskEvidence"><dc:Bounds x="615" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_fireRiskTier" dmnElementRef="in_fireRiskTier"><dc:Bounds x="800" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_d_7_1_1" dmnElementRef="d_7_1_1"><dc:Bounds x="60" y="240" width="180" height="70"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_ks_state" dmnElementRef="ks_state"><dc:Bounds x="900" y="100" width="160" height="55"/></dmndi:DMNShape>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</definitions>

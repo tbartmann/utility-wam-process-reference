@@ -286,8 +286,8 @@
    "group": "Delivery",
    "name": "Maintenance Delivery",
    "status": "covered",
-   "model_groups": "1.0-5.0, 8.0",
-   "note": "This is the model's centre of gravity and it is the most complete subject in it."
+   "model_groups": "1.0-5.0, 7.0, 8.0",
+   "note": "The model's centre of gravity and its most complete subject. 7.0 vegetation was missing from this row until Grok pointed out that vegetation IS maintenance delivery - the crosswalk was thin, not the category."
   },
   {
    "subject": "6.6",

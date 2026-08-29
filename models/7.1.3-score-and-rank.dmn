@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/" id="Vegetation_ranking" name="7.1.3 Score and rank spans, circuits and segments" namespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <description>The output is a rank - a value. Scoring WEIGHTS are operator judgment and are deliberately not in this table; what is reference here is which evidence is admissible and how the bands are named.</description>
+  <inputData id="in_clearanceStatus" name="Clearance measurement status"><variable id="in_clearanceStatus_v" name="Clearance measurement status" typeRef="string"/></inputData>
+  <inputData id="in_hazardTreePresent" name="Hazard tree present"><variable id="in_hazardTreePresent_v" name="Hazard tree present" typeRef="boolean"/></inputData>
+  <inputData id="in_vegetationInterruptions" name="Vegetation-caused interruptions"><variable id="in_vegetationInterruptions_v" name="Vegetation-caused interruptions" typeRef="number"/></inputData>
+  <inputData id="in_cycleOverdue" name="Overdue against the cycle"><variable id="in_cycleOverdue_v" name="Overdue against the cycle" typeRef="boolean"/></inputData>
+  <inputData id="in_growthProjection" name="Projected to breach before next cycle"><variable id="in_growthProjection_v" name="Projected to breach before next cycle" typeRef="boolean"/></inputData>
+  <knowledgeSource id="ks_1366" name="IEEE 1366-2022"><description>The indices that make vegetation-caused interruption evidence comparable. Note the major-event-day segmentation: a storm day left in the day-to-day set will dominate the ranking and hide the spans that fail in ordinary weather.</description></knowledgeSource>
+  <decision id="d_7_1_3" name="Vegetation rank">
+    <description>7.1.3. Bands are the shared rank vocabulary - immediate, scheduled, routine - so vegetation work ranks on the same scale as everything else. Weights are an operator specialization keyed on this decision's uid.</description>
+    <variable id="d_7_1_3_v" name="Vegetation rank" typeRef="string"/>
+    <informationRequirement id="ir_d_7_1_3_in_clearanceStatus"><requiredInput href="#in_clearanceStatus"/></informationRequirement>
+    <informationRequirement id="ir_d_7_1_3_in_hazardTreePresent"><requiredInput href="#in_hazardTreePresent"/></informationRequirement>
+    <informationRequirement id="ir_d_7_1_3_in_cycleOverdue"><requiredInput href="#in_cycleOverdue"/></informationRequirement>
+    <informationRequirement id="ir_d_7_1_3_in_vegetationInterruptions"><requiredInput href="#in_vegetationInterruptions"/></informationRequirement>
+    <informationRequirement id="ir_d_7_1_3_in_growthProjection"><requiredInput href="#in_growthProjection"/></informationRequirement>
+    <authorityRequirement id="ar_d_7_1_3"><requiredAuthority href="#ks_1366"/></authorityRequirement>
+    <decisionTable id="d_7_1_3_dt" hitPolicy="PRIORITY" preferredOrientation="Rule-as-Row">
+      <input id="d_7_1_3_i1" label="Clearance measurement status"><inputExpression id="d_7_1_3_i1_e" typeRef="string"><text>in_clearanceStatus</text></inputExpression></input>
+      <input id="d_7_1_3_i2" label="Hazard tree present"><inputExpression id="d_7_1_3_i2_e" typeRef="boolean"><text>in_hazardTreePresent</text></inputExpression></input>
+      <input id="d_7_1_3_i3" label="Overdue against the cycle"><inputExpression id="d_7_1_3_i3_e" typeRef="boolean"><text>in_cycleOverdue</text></inputExpression></input>
+      <input id="d_7_1_3_i4" label="Vegetation-caused interruptions"><inputExpression id="d_7_1_3_i4_e" typeRef="number"><text>in_vegetationInterruptions</text></inputExpression></input>
+      <input id="d_7_1_3_i5" label="Projected to breach before next cycle"><inputExpression id="d_7_1_3_i5_e" typeRef="boolean"><text>in_growthProjection</text></inputExpression></input>
+      <output id="d_7_1_3_o" label="Vegetation rank" name="Vegetation rank" typeRef="string"/>
+      <rule id="d_7_1_3_r1">
+        <description>A tree that can fail into the conductor outranks everything. PRIORITY hit policy so this wins wherever it also matches a lower band.</description>
+        <inputEntry id="d_7_1_3_r1_ie1"><text>-</text></inputEntry>
+        <inputEntry id="d_7_1_3_r1_ie2"><text>true</text></inputEntry>
+        <inputEntry id="d_7_1_3_r1_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_7_1_3_r1_ie4"><text>-</text></inputEntry>
+        <inputEntry id="d_7_1_3_r1_ie5"><text>-</text></inputEntry>
+        <outputEntry id="d_7_1_3_r1_oe"><text>"immediate"</text></outputEntry>
+      </rule>
+      <rule id="d_7_1_3_r2">
+        <description>Measured inside the required distance.</description>
+        <inputEntry id="d_7_1_3_r2_ie1"><text>"fail"</text></inputEntry>
+        <inputEntry id="d_7_1_3_r2_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_7_1_3_r2_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_7_1_3_r2_ie4"><text>-</text></inputEntry>
+        <inputEntry id="d_7_1_3_r2_ie5"><text>-</text></inputEntry>
+        <outputEntry id="d_7_1_3_r2_oe"><text>"immediate"</text></outputEntry>
+      </rule>
+      <rule id="d_7_1_3_r3">
+        <description>Overdue and already causing interruptions.</description>
+        <inputEntry id="d_7_1_3_r3_ie1"><text>-</text></inputEntry>
+        <inputEntry id="d_7_1_3_r3_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_7_1_3_r3_ie3"><text>true</text></inputEntry>
+        <inputEntry id="d_7_1_3_r3_ie4"><text>&gt; 0</text></inputEntry>
+        <inputEntry id="d_7_1_3_r3_ie5"><text>-</text></inputEntry>
+        <outputEntry id="d_7_1_3_r3_oe"><text>"scheduled"</text></outputEntry>
+      </rule>
+      <rule id="d_7_1_3_r4">
+        <description>Overdue against the cycle.</description>
+        <inputEntry id="d_7_1_3_r4_ie1"><text>-</text></inputEntry>
+        <inputEntry id="d_7_1_3_r4_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_7_1_3_r4_ie3"><text>true</text></inputEntry>
+        <inputEntry id="d_7_1_3_r4_ie4"><text>-</text></inputEntry>
+        <inputEntry id="d_7_1_3_r4_ie5"><text>-</text></inputEntry>
+        <outputEntry id="d_7_1_3_r4_oe"><text>"scheduled"</text></outputEntry>
+      </rule>
+      <rule id="d_7_1_3_r5">
+        <description>Projected to breach before the next cycle reaches it. This is what the growth model at 7.1.5 is for.</description>
+        <inputEntry id="d_7_1_3_r5_ie1"><text>-</text></inputEntry>
+        <inputEntry id="d_7_1_3_r5_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_7_1_3_r5_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_7_1_3_r5_ie4"><text>-</text></inputEntry>
+        <inputEntry id="d_7_1_3_r5_ie5"><text>true</text></inputEntry>
+        <outputEntry id="d_7_1_3_r5_oe"><text>"scheduled"</text></outputEntry>
+      </rule>
+      <rule id="d_7_1_3_r6">
+        <description>A span that could not be measured is scheduled for patrol, not assumed to pass.</description>
+        <inputEntry id="d_7_1_3_r6_ie1"><text>"cannotDetermine"</text></inputEntry>
+        <inputEntry id="d_7_1_3_r6_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_7_1_3_r6_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_7_1_3_r6_ie4"><text>-</text></inputEntry>
+        <inputEntry id="d_7_1_3_r6_ie5"><text>-</text></inputEntry>
+        <outputEntry id="d_7_1_3_r6_oe"><text>"scheduled"</text></outputEntry>
+      </rule>
+      <rule id="d_7_1_3_r7">
+        <inputEntry id="d_7_1_3_r7_ie1"><text>-</text></inputEntry>
+        <inputEntry id="d_7_1_3_r7_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_7_1_3_r7_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_7_1_3_r7_ie4"><text>&gt; 0</text></inputEntry>
+        <inputEntry id="d_7_1_3_r7_ie5"><text>-</text></inputEntry>
+        <outputEntry id="d_7_1_3_r7_oe"><text>"routine"</text></outputEntry>
+      </rule>
+      <rule id="d_7_1_3_r8">
+        <inputEntry id="d_7_1_3_r8_ie1"><text>-</text></inputEntry>
+        <inputEntry id="d_7_1_3_r8_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_7_1_3_r8_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_7_1_3_r8_ie4"><text>-</text></inputEntry>
+        <inputEntry id="d_7_1_3_r8_ie5"><text>-</text></inputEntry>
+        <outputEntry id="d_7_1_3_r8_oe"><text>"routine"</text></outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram id="drd_Vegetation_ranking">
+      <dmndi:DMNShape id="sh_in_clearanceStatus" dmnElementRef="in_clearanceStatus"><dc:Bounds x="60" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_hazardTreePresent" dmnElementRef="in_hazardTreePresent"><dc:Bounds x="245" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_vegetationInterruptions" dmnElementRef="in_vegetationInterruptions"><dc:Bounds x="430" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_cycleOverdue" dmnElementRef="in_cycleOverdue"><dc:Bounds x="615" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_growthProjection" dmnElementRef="in_growthProjection"><dc:Bounds x="800" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_d_7_1_3" dmnElementRef="d_7_1_3"><dc:Bounds x="60" y="240" width="180" height="70"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_ks_1366" dmnElementRef="ks_1366"><dc:Bounds x="900" y="100" width="160" height="55"/></dmndi:DMNShape>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</definitions>

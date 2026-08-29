@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_P_7_1" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <process id="P_7_1" name="7.1 Plan the vegetation programme" isExecutable="false">
+    <documentation>Tier-4 activities under 7.1.2 and 7.1.4. Strategy 7.1.1 and ranking 7.1.3 are determinations and are in their own DMN files; growth modelling 7.1.5 is specified without a model because the method is not standardised.</documentation>
+    <startEvent id="n_71_s" name="Remote survey delivered for a territory"><messageEventDefinition id="n_71_s_md"/></startEvent>
+    <serviceTask id="n_71_bind" name="Bind each return to a span, circuit and conductor"><documentation>7.1.2. Aerial LiDAR, satellite canopy or unmanned photogrammetry.</documentation></serviceTask>
+    <userTask id="n_71_unb" name="Flag returns that cannot be bound"><documentation>7.1.2. An unbound return is not evidence about any span, and treating it as one puts noise into the ranking.</documentation></userTask>
+    <serviceTask id="n_71_store" name="Store the bound survey"><documentation>7.1.2.</documentation></serviceTask>
+    <businessRuleTask id="n_71_rank" name="Score and rank"><documentation>7.1.3. Calls decision Vegetation_ranking.</documentation></businessRuleTask>
+    <startEvent id="n_71_t" name="Budget and cycle due for the next period"><timerEventDefinition id="n_71_t_td"/></startEvent>
+    <userTask id="n_71_cut" name="Cut a territory and period the budget can fund"><documentation>7.1.4. Against the ranked list and the remaining cycle miles.</documentation></userTask>
+    <serviceTask id="n_71_back" name="Leave unfunded rank visible as backlog"><documentation>7.1.4. Visible, or the programme reports completion against what it chose to fund rather than against what the cycle requires.</documentation></serviceTask>
+    <sendTask id="n_71_rel" name="Release the funded tranche to inspect and prescribe"><documentation>7.1.4.</documentation></sendTask>
+    <endEvent id="n_71_e" name="Tranche released"/>
+    <sequenceFlow id="f_n_71_s_n_71_bind" sourceRef="n_71_s" targetRef="n_71_bind" name=""/>
+    <sequenceFlow id="f_n_71_bind_n_71_unb" sourceRef="n_71_bind" targetRef="n_71_unb" name="cannot be bound"><conditionExpression xsi:type="tFormalExpression"><![CDATA[spanBound = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_71_bind_n_71_store" sourceRef="n_71_bind" targetRef="n_71_store" name="bound"/>
+    <sequenceFlow id="f_n_71_store_n_71_rank" sourceRef="n_71_store" targetRef="n_71_rank" name=""/>
+    <sequenceFlow id="f_n_71_t_n_71_cut" sourceRef="n_71_t" targetRef="n_71_cut" name=""/>
+    <sequenceFlow id="f_n_71_rank_n_71_cut" sourceRef="n_71_rank" targetRef="n_71_cut" name=""/>
+    <sequenceFlow id="f_n_71_cut_n_71_back" sourceRef="n_71_cut" targetRef="n_71_back" name=""/>
+    <sequenceFlow id="f_n_71_cut_n_71_rel" sourceRef="n_71_cut" targetRef="n_71_rel" name=""/>
+    <sequenceFlow id="f_n_71_rel_n_71_e" sourceRef="n_71_rel" targetRef="n_71_e" name=""/>
+  </process>
+  <bpmndi:BPMNDiagram id="dg_P_7_1">
+    <bpmndi:BPMNPlane id="pl_P_7_1" bpmnElement="P_7_1">
+      <bpmndi:BPMNShape id="sh_n_71_s" bpmnElement="n_71_s"><dc:Bounds x="132" y="107" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_71_bind" bpmnElement="n_71_bind"><dc:Bounds x="255" y="90" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_71_unb" bpmnElement="n_71_unb"><dc:Bounds x="425" y="310" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_71_store" bpmnElement="n_71_store"><dc:Bounds x="425" y="90" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_71_rank" bpmnElement="n_71_rank"><dc:Bounds x="595" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_71_t" bpmnElement="n_71_t"><dc:Bounds x="642" y="437" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_71_cut" bpmnElement="n_71_cut"><dc:Bounds x="765" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_71_back" bpmnElement="n_71_back"><dc:Bounds x="935" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_71_rel" bpmnElement="n_71_rel"><dc:Bounds x="935" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_71_e" bpmnElement="n_71_e"><dc:Bounds x="1152" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ed_f_n_71_s_n_71_bind" bpmnElement="f_n_71_s_n_71_bind"><di:waypoint x="168" y="125"/><di:waypoint x="255" y="125"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_71_bind_n_71_unb" bpmnElement="f_n_71_bind_n_71_unb"><di:waypoint x="385" y="125"/><di:waypoint x="400" y="125"/><di:waypoint x="400" y="345"/><di:waypoint x="425" y="345"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_71_bind_n_71_store" bpmnElement="f_n_71_bind_n_71_store"><di:waypoint x="385" y="125"/><di:waypoint x="425" y="125"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_71_store_n_71_rank" bpmnElement="f_n_71_store_n_71_rank"><di:waypoint x="555" y="125"/><di:waypoint x="570" y="125"/><di:waypoint x="570" y="235"/><di:waypoint x="595" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_71_t_n_71_cut" bpmnElement="f_n_71_t_n_71_cut"><di:waypoint x="678" y="455"/><di:waypoint x="740" y="455"/><di:waypoint x="740" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_71_rank_n_71_cut" bpmnElement="f_n_71_rank_n_71_cut"><di:waypoint x="725" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_71_cut_n_71_back" bpmnElement="f_n_71_cut_n_71_back"><di:waypoint x="895" y="235"/><di:waypoint x="910" y="235"/><di:waypoint x="910" y="455"/><di:waypoint x="935" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_71_cut_n_71_rel" bpmnElement="f_n_71_cut_n_71_rel"><di:waypoint x="895" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_71_rel_n_71_e" bpmnElement="f_n_71_rel_n_71_e"><di:waypoint x="1065" y="235"/><di:waypoint x="1152" y="235"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

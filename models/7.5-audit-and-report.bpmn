@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_P_7_5" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <process id="P_7_5" name="7.5 Audit and report vegetation compliance" isExecutable="false">
+    <documentation>Tier-4 activities under 7.5.1 and 7.5.4. Evidence filing 7.5.2 and the IEEE 1366 measurement 7.5.3 are standing capabilities and are specified rather than drawn. The reporting split matters: a state PUC filing and NERC FAC-003 evidence are different obligations on different systems, and FAC-003 evidence is sent only for in-scope BULK TRANSMISSION.</documentation>
+    <startEvent id="n_75_s" name="Completed work due for audit"><timerEventDefinition id="n_75_s_td"/></startEvent>
+    <serviceTask id="n_75_sel" name="Select spans for audit"><documentation>7.5.1. Sample, full-circuit post-work patrol, or contractor ride-along. Sample size is not standardised and is the operator's.</documentation></serviceTask>
+    <userTask id="n_75_cmp" name="Compare the finish left with the prescription"><documentation>7.5.1. Against the finish specification set at 7.2.4. A prescription without a stated finish can only be inspected, not audited.</documentation></userTask>
+    <exclusiveGateway id="n_75_g" name="Audit result"/>
+    <sendTask id="n_75_rw" name="Raise rework against the original span"><documentation>7.5.1. Linked to the original, so the rework rate stays measurable.</documentation></sendTask>
+    <serviceTask id="n_75_pass" name="Record the pass and close the audit"><documentation>7.5.1.</documentation></serviceTask>
+    <startEvent id="n_75_t" name="Vegetation filing or reliability report due"><timerEventDefinition id="n_75_t_td"/></startEvent>
+    <serviceTask id="n_75_asm" name="Assemble plan, cycle evidence and indices"><documentation>7.5.4. From the standing file at 7.5.2 and the IEEE 1366 measurement at 7.5.3.</documentation></serviceTask>
+    <exclusiveGateway id="n_75_split" name="Reporting obligation"/>
+    <sendTask id="n_75_puc" name="Send the state PUC filing"><documentation>7.5.4. The plan the state rule requires - 52 Pa. Code 57.198(f) is the exemplar.</documentation></sendTask>
+    <sendTask id="n_75_nerc" name="Send FAC-003 evidence"><documentation>7.5.4. In-scope bulk transmission ONLY. 16 U.S.C. 824o excludes local distribution, so no distribution span is ever reported here.</documentation></sendTask>
+    <serviceTask id="n_75_rec" name="Record what was sent and when"><documentation>7.5.4.</documentation></serviceTask>
+    <endEvent id="n_75_e" name="Audited and reported"/>
+    <endEvent id="n_75_ea" name="Audit closed"/>
+    <sequenceFlow id="f_n_75_s_n_75_sel" sourceRef="n_75_s" targetRef="n_75_sel" name=""/>
+    <sequenceFlow id="f_n_75_sel_n_75_cmp" sourceRef="n_75_sel" targetRef="n_75_cmp" name=""/>
+    <sequenceFlow id="f_n_75_cmp_n_75_g" sourceRef="n_75_cmp" targetRef="n_75_g" name=""/>
+    <sequenceFlow id="f_n_75_g_n_75_rw" sourceRef="n_75_g" targetRef="n_75_rw" name="fail"><conditionExpression xsi:type="tFormalExpression"><![CDATA[auditResult = "fail"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_75_rw_n_75_pass" sourceRef="n_75_rw" targetRef="n_75_pass" name="rework raised"/>
+    <sequenceFlow id="f_n_75_g_n_75_pass" sourceRef="n_75_g" targetRef="n_75_pass" name="pass"/>
+    <sequenceFlow id="f_n_75_pass_n_75_ea" sourceRef="n_75_pass" targetRef="n_75_ea" name=""/>
+    <sequenceFlow id="f_n_75_t_n_75_asm" sourceRef="n_75_t" targetRef="n_75_asm" name=""/>
+    <sequenceFlow id="f_n_75_asm_n_75_split" sourceRef="n_75_asm" targetRef="n_75_split" name=""/>
+    <sequenceFlow id="f_n_75_split_n_75_puc" sourceRef="n_75_split" targetRef="n_75_puc" name="state filing"><conditionExpression xsi:type="tFormalExpression"><![CDATA[reportScope = "statePuc"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_75_split_n_75_nerc" sourceRef="n_75_split" targetRef="n_75_nerc" name="in-scope bulk transmission"><conditionExpression xsi:type="tFormalExpression"><![CDATA[reportScope = "bulkTransmission"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_75_puc_n_75_rec" sourceRef="n_75_puc" targetRef="n_75_rec" name=""/>
+    <sequenceFlow id="f_n_75_nerc_n_75_rec" sourceRef="n_75_nerc" targetRef="n_75_rec" name=""/>
+    <sequenceFlow id="f_n_75_rec_n_75_e" sourceRef="n_75_rec" targetRef="n_75_e" name=""/>
+  </process>
+  <bpmndi:BPMNDiagram id="dg_P_7_5">
+    <bpmndi:BPMNPlane id="pl_P_7_5" bpmnElement="P_7_5">
+      <bpmndi:BPMNShape id="sh_n_75_s" bpmnElement="n_75_s"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_75_sel" bpmnElement="n_75_sel"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_75_cmp" bpmnElement="n_75_cmp"><dc:Bounds x="425" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_75_g" bpmnElement="n_75_g"><dc:Bounds x="637" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_75_rw" bpmnElement="n_75_rw"><dc:Bounds x="595" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_75_pass" bpmnElement="n_75_pass"><dc:Bounds x="765" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_75_t" bpmnElement="n_75_t"><dc:Bounds x="812" y="547" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_75_asm" bpmnElement="n_75_asm"><dc:Bounds x="935" y="530" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_75_split" bpmnElement="n_75_split"><dc:Bounds x="1147" y="542" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_75_puc" bpmnElement="n_75_puc"><dc:Bounds x="1105" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_75_nerc" bpmnElement="n_75_nerc"><dc:Bounds x="1105" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_75_rec" bpmnElement="n_75_rec"><dc:Bounds x="1275" y="530" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_75_e" bpmnElement="n_75_e"><dc:Bounds x="1492" y="547" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_75_ea" bpmnElement="n_75_ea"><dc:Bounds x="982" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ed_f_n_75_s_n_75_sel" bpmnElement="f_n_75_s_n_75_sel"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_75_sel_n_75_cmp" bpmnElement="f_n_75_sel_n_75_cmp"><di:waypoint x="385" y="235"/><di:waypoint x="425" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_75_cmp_n_75_g" bpmnElement="f_n_75_cmp_n_75_g"><di:waypoint x="555" y="235"/><di:waypoint x="637" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_75_g_n_75_rw" bpmnElement="f_n_75_g_n_75_rw"><di:waypoint x="683" y="235"/><di:waypoint x="570" y="235"/><di:waypoint x="570" y="455"/><di:waypoint x="595" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_75_rw_n_75_pass" bpmnElement="f_n_75_rw_n_75_pass"><di:waypoint x="725" y="455"/><di:waypoint x="740" y="455"/><di:waypoint x="740" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_75_g_n_75_pass" bpmnElement="f_n_75_g_n_75_pass"><di:waypoint x="683" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_75_pass_n_75_ea" bpmnElement="f_n_75_pass_n_75_ea"><di:waypoint x="895" y="235"/><di:waypoint x="982" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_75_t_n_75_asm" bpmnElement="f_n_75_t_n_75_asm"><di:waypoint x="848" y="565"/><di:waypoint x="935" y="565"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_75_asm_n_75_split" bpmnElement="f_n_75_asm_n_75_split"><di:waypoint x="1065" y="565"/><di:waypoint x="1147" y="565"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_75_split_n_75_puc" bpmnElement="f_n_75_split_n_75_puc"><di:waypoint x="1193" y="565"/><di:waypoint x="1080" y="565"/><di:waypoint x="1080" y="455"/><di:waypoint x="1105" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_75_split_n_75_nerc" bpmnElement="f_n_75_split_n_75_nerc"><di:waypoint x="1193" y="565"/><di:waypoint x="1080" y="565"/><di:waypoint x="1080" y="675"/><di:waypoint x="1105" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_75_puc_n_75_rec" bpmnElement="f_n_75_puc_n_75_rec"><di:waypoint x="1235" y="455"/><di:waypoint x="1250" y="455"/><di:waypoint x="1250" y="565"/><di:waypoint x="1275" y="565"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_75_nerc_n_75_rec" bpmnElement="f_n_75_nerc_n_75_rec"><di:waypoint x="1235" y="675"/><di:waypoint x="1250" y="675"/><di:waypoint x="1250" y="565"/><di:waypoint x="1275" y="565"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_75_rec_n_75_e" bpmnElement="f_n_75_rec_n_75_e"><di:waypoint x="1405" y="565"/><di:waypoint x="1492" y="565"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

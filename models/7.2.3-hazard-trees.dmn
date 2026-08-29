@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/" id="Hazard_tree" name="7.2.3 Identify hazard and danger trees" namespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <description>The output is a classification. Grok's specification records that hazard-tree criteria have no definition in the Source Authority Pack, so the DEFECTS below are named as the common ones and the threshold is explicitly the operator's - this table is structure, not a standard.</description>
+  <inputData id="in_defect" name="Observed defect"><variable id="in_defect_v" name="Observed defect" typeRef="string"/></inputData>
+  <inputData id="in_canReachConductor" name="Can reach the conductor"><variable id="in_canReachConductor_v" name="Can reach the conductor" typeRef="boolean"/></inputData>
+  <inputData id="in_location" name="On or off the right of way"><variable id="in_location_v" name="On or off the right of way" typeRef="string"/></inputData>
+  <inputData id="in_leanTowardLine" name="Leaning toward the line"><variable id="in_leanTowardLine_v" name="Leaning toward the line" typeRef="boolean"/></inputData>
+  <decision id="d_7_2_3" name="Hazard tree classification">
+    <description>7.2.3. Hazard and danger tree have no standard definition. The defect list is the common industry one and the threshold at which a defect qualifies is the operator's - a specialization keyed on this decision's uid.</description>
+    <variable id="d_7_2_3_v" name="Hazard tree classification" typeRef="string"/>
+    <informationRequirement id="ir_d_7_2_3_in_canReachConductor"><requiredInput href="#in_canReachConductor"/></informationRequirement>
+    <informationRequirement id="ir_d_7_2_3_in_defect"><requiredInput href="#in_defect"/></informationRequirement>
+    <informationRequirement id="ir_d_7_2_3_in_location"><requiredInput href="#in_location"/></informationRequirement>
+    <informationRequirement id="ir_d_7_2_3_in_leanTowardLine"><requiredInput href="#in_leanTowardLine"/></informationRequirement>
+    <decisionTable id="d_7_2_3_dt" hitPolicy="FIRST" preferredOrientation="Rule-as-Row">
+      <input id="d_7_2_3_i1" label="Can reach the conductor"><inputExpression id="d_7_2_3_i1_e" typeRef="boolean"><text>in_canReachConductor</text></inputExpression></input>
+      <input id="d_7_2_3_i2" label="Observed defect"><inputExpression id="d_7_2_3_i2_e" typeRef="string"><text>in_defect</text></inputExpression></input>
+      <input id="d_7_2_3_i3" label="On or off the right of way"><inputExpression id="d_7_2_3_i3_e" typeRef="string"><text>in_location</text></inputExpression></input>
+      <input id="d_7_2_3_i4" label="Leaning toward the line"><inputExpression id="d_7_2_3_i4_e" typeRef="boolean"><text>in_leanTowardLine</text></inputExpression></input>
+      <output id="d_7_2_3_o" label="Hazard tree classification" name="Hazard tree classification" typeRef="string"/>
+      <rule id="d_7_2_3_r1">
+        <description>A tree that cannot reach the conductor is not a hazard tree however poor its condition. Reach is the first test, not the defect.</description>
+        <inputEntry id="d_7_2_3_r1_ie1"><text>false</text></inputEntry>
+        <inputEntry id="d_7_2_3_r1_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_7_2_3_r1_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_7_2_3_r1_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_7_2_3_r1_oe"><text>"notAHazard"</text></outputEntry>
+      </rule>
+      <rule id="d_7_2_3_r2">
+        <description>Dead or dying on the right of way, able to reach. The clearest case and the one the cycle trim does not address.</description>
+        <inputEntry id="d_7_2_3_r2_ie1"><text>true</text></inputEntry>
+        <inputEntry id="d_7_2_3_r2_ie2"><text>"dead","dying"</text></inputEntry>
+        <inputEntry id="d_7_2_3_r2_ie3"><text>"onRightOfWay"</text></inputEntry>
+        <inputEntry id="d_7_2_3_r2_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_7_2_3_r2_oe"><text>"hazardTreeRemove"</text></outputEntry>
+      </rule>
+      <rule id="d_7_2_3_r3">
+        <description>Off-ROW and able to reach. Removal usually needs a landowner instrument that a cycle trim does not, which is why it is classified separately - see 7.3.2.</description>
+        <inputEntry id="d_7_2_3_r3_ie1"><text>true</text></inputEntry>
+        <inputEntry id="d_7_2_3_r3_ie2"><text>"dead","dying","structural"</text></inputEntry>
+        <inputEntry id="d_7_2_3_r3_ie3"><text>"offRightOfWay"</text></inputEntry>
+        <inputEntry id="d_7_2_3_r3_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_7_2_3_r3_oe"><text>"dangerTreeOffRow"</text></outputEntry>
+      </rule>
+      <rule id="d_7_2_3_r4">
+        <description>Structural defect plus lean toward the line.</description>
+        <inputEntry id="d_7_2_3_r4_ie1"><text>true</text></inputEntry>
+        <inputEntry id="d_7_2_3_r4_ie2"><text>"structural","decay","cavity"</text></inputEntry>
+        <inputEntry id="d_7_2_3_r4_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_7_2_3_r4_ie4"><text>true</text></inputEntry>
+        <outputEntry id="d_7_2_3_r4_oe"><text>"hazardTreeRemove"</text></outputEntry>
+      </rule>
+      <rule id="d_7_2_3_r5">
+        <description>A defective limb over the conductor is a prescription, not a whole-tree removal.</description>
+        <inputEntry id="d_7_2_3_r5_ie1"><text>true</text></inputEntry>
+        <inputEntry id="d_7_2_3_r5_ie2"><text>"defectiveLimb"</text></inputEntry>
+        <inputEntry id="d_7_2_3_r5_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_7_2_3_r5_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_7_2_3_r5_oe"><text>"limbRemoval"</text></outputEntry>
+      </rule>
+      <rule id="d_7_2_3_r6">
+        <description>Able to reach, no qualifying defect. Recorded and looked at again rather than forgotten.</description>
+        <inputEntry id="d_7_2_3_r6_ie1"><text>true</text></inputEntry>
+        <inputEntry id="d_7_2_3_r6_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_7_2_3_r6_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_7_2_3_r6_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_7_2_3_r6_oe"><text>"monitorNextCycle"</text></outputEntry>
+      </rule>
+      <rule id="d_7_2_3_r7">
+        <inputEntry id="d_7_2_3_r7_ie1"><text>-</text></inputEntry>
+        <inputEntry id="d_7_2_3_r7_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_7_2_3_r7_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_7_2_3_r7_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_7_2_3_r7_oe"><text>"assessManually"</text></outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram id="drd_Hazard_tree">
+      <dmndi:DMNShape id="sh_in_defect" dmnElementRef="in_defect"><dc:Bounds x="60" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_canReachConductor" dmnElementRef="in_canReachConductor"><dc:Bounds x="245" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_location" dmnElementRef="in_location"><dc:Bounds x="430" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_leanTowardLine" dmnElementRef="in_leanTowardLine"><dc:Bounds x="615" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_d_7_2_3" dmnElementRef="d_7_2_3"><dc:Bounds x="60" y="240" width="180" height="70"/></dmndi:DMNShape>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</definitions>

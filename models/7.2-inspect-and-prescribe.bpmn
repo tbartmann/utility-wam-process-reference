@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_P_7_2" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <process id="P_7_2" name="7.2 Inspect and prescribe vegetation work" isExecutable="false">
+    <documentation>Tier-4 activities under 7.2.1. The three determinations - clearance authority, hazard classification and method - are each in their own DMN, because each is the part a regulator or a landowner asks to see and none of them changes the state of the work.</documentation>
+    <startEvent id="n_72_s" name="Funded territory due for patrol"><timerEventDefinition id="n_72_s_td"/></startEvent>
+    <userTask id="n_72_p" name="Patrol on the ground or from the air"><documentation>7.2.1. Ground foot patrol, manned aerial, or unmanned aerial.</documentation></userTask>
+    <serviceTask id="n_72_rec" name="Record clearance, access and obvious defects"><documentation>7.2.1.</documentation></serviceTask>
+    <businessRuleTask id="n_72_meas" name="Determine the required distance authority"><documentation>7.2.2. Calls decision Clearance_distance. Returns which authority sets the distance, never a distance.</documentation></businessRuleTask>
+    <exclusiveGateway id="n_72_g" name="Clearance result"/>
+    <userTask id="n_72_cd" name="Schedule re-patrol"><documentation>7.2.2. Cannot-determine is scheduled, never assumed to pass.</documentation></userTask>
+    <businessRuleTask id="n_72_haz" name="Classify hazard and danger trees"><documentation>7.2.3. Calls decision Hazard_tree. Reach is tested before defect.</documentation></businessRuleTask>
+    <businessRuleTask id="n_72_pre" name="Prescribe the method and finish"><documentation>7.2.4. Calls decision Prescribe_method.</documentation></businessRuleTask>
+    <sendTask id="n_72_rel" name="Release the prescription to access and scheduling"><documentation>7.2.4.</documentation></sendTask>
+    <endEvent id="n_72_e" name="Prescription released"/>
+    <endEvent id="n_72_ok" name="Span passes - no work prescribed"/>
+    <sequenceFlow id="f_n_72_s_n_72_p" sourceRef="n_72_s" targetRef="n_72_p" name=""/>
+    <sequenceFlow id="f_n_72_p_n_72_rec" sourceRef="n_72_p" targetRef="n_72_rec" name=""/>
+    <sequenceFlow id="f_n_72_rec_n_72_meas" sourceRef="n_72_rec" targetRef="n_72_meas" name=""/>
+    <sequenceFlow id="f_n_72_meas_n_72_g" sourceRef="n_72_meas" targetRef="n_72_g" name=""/>
+    <sequenceFlow id="f_n_72_g_n_72_cd" sourceRef="n_72_g" targetRef="n_72_cd" name="cannot determine"><conditionExpression xsi:type="tFormalExpression"><![CDATA[clearanceResult = "cannotDetermine"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_72_cd_n_72_p" sourceRef="n_72_cd" targetRef="n_72_p" name="re-patrolled"/>
+    <sequenceFlow id="f_n_72_g_n_72_ok" sourceRef="n_72_g" targetRef="n_72_ok" name="pass and no hazard tree"><conditionExpression xsi:type="tFormalExpression"><![CDATA[clearanceResult = "pass" and hazardTreePresent = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_72_g_n_72_haz" sourceRef="n_72_g" targetRef="n_72_haz" name="fail or hazard tree present"/>
+    <sequenceFlow id="f_n_72_haz_n_72_pre" sourceRef="n_72_haz" targetRef="n_72_pre" name=""/>
+    <sequenceFlow id="f_n_72_pre_n_72_rel" sourceRef="n_72_pre" targetRef="n_72_rel" name=""/>
+    <sequenceFlow id="f_n_72_rel_n_72_e" sourceRef="n_72_rel" targetRef="n_72_e" name=""/>
+  </process>
+  <bpmndi:BPMNDiagram id="dg_P_7_2">
+    <bpmndi:BPMNPlane id="pl_P_7_2" bpmnElement="P_7_2">
+      <bpmndi:BPMNShape id="sh_n_72_s" bpmnElement="n_72_s"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_72_p" bpmnElement="n_72_p"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_72_rec" bpmnElement="n_72_rec"><dc:Bounds x="425" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_72_meas" bpmnElement="n_72_meas"><dc:Bounds x="595" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_72_g" bpmnElement="n_72_g"><dc:Bounds x="807" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_72_cd" bpmnElement="n_72_cd"><dc:Bounds x="765" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_72_haz" bpmnElement="n_72_haz"><dc:Bounds x="935" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_72_pre" bpmnElement="n_72_pre"><dc:Bounds x="1105" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_72_rel" bpmnElement="n_72_rel"><dc:Bounds x="1275" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_72_e" bpmnElement="n_72_e"><dc:Bounds x="1492" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_72_ok" bpmnElement="n_72_ok"><dc:Bounds x="982" y="107" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ed_f_n_72_s_n_72_p" bpmnElement="f_n_72_s_n_72_p"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_72_p_n_72_rec" bpmnElement="f_n_72_p_n_72_rec"><di:waypoint x="385" y="235"/><di:waypoint x="425" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_72_rec_n_72_meas" bpmnElement="f_n_72_rec_n_72_meas"><di:waypoint x="555" y="235"/><di:waypoint x="595" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_72_meas_n_72_g" bpmnElement="f_n_72_meas_n_72_g"><di:waypoint x="725" y="235"/><di:waypoint x="807" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_72_g_n_72_cd" bpmnElement="f_n_72_g_n_72_cd"><di:waypoint x="853" y="235"/><di:waypoint x="740" y="235"/><di:waypoint x="740" y="455"/><di:waypoint x="765" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_72_cd_n_72_p" bpmnElement="f_n_72_cd_n_72_p"><di:waypoint x="895" y="455"/><di:waypoint x="230" y="455"/><di:waypoint x="230" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_72_g_n_72_ok" bpmnElement="f_n_72_g_n_72_ok"><di:waypoint x="853" y="235"/><di:waypoint x="957" y="235"/><di:waypoint x="957" y="125"/><di:waypoint x="982" y="125"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_72_g_n_72_haz" bpmnElement="f_n_72_g_n_72_haz"><di:waypoint x="853" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_72_haz_n_72_pre" bpmnElement="f_n_72_haz_n_72_pre"><di:waypoint x="1065" y="235"/><di:waypoint x="1105" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_72_pre_n_72_rel" bpmnElement="f_n_72_pre_n_72_rel"><di:waypoint x="1235" y="235"/><di:waypoint x="1275" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_72_rel_n_72_e" bpmnElement="f_n_72_rel_n_72_e"><di:waypoint x="1405" y="235"/><di:waypoint x="1492" y="235"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

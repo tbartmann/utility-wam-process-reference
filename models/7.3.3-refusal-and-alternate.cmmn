@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/CMMN/20151109/MODEL" xmlns:cmmndi="http://www.omg.org/spec/CMMN/20151109/CMMNDI" xmlns:dc="http://www.omg.org/spec/CMMN/20151109/DC" xmlns:di="http://www.omg.org/spec/CMMN/20151109/DI" id="defs_Vegetation_refusal" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <case id="Vegetation_refusal" name="7.3.3 Manage refusal and agree alternate method">
+    <caseFileModel id="Vegetation_refusal_cfm">
+      <caseFileItem id="cf_refusal" name="The refusal and who made it"/>
+      <caseFileItem id="cf_easement" name="Easement rights at the span"/>
+      <caseFileItem id="cf_prescription" name="The prescribed method and finish"/>
+    </caseFileModel>
+    <casePlanModel id="Vegetation_refusal_plan" name="7.3.3 Manage refusal and agree alternate method" autoComplete="true">
+      <documentation>CMMN because a refusal is worked in whatever order the case allows - sometimes the easement is checked first, sometimes the conversation happens first and the easement is never mentioned. Grok's specification records that refusal handling is not standardised anywhere, which is exactly when case management is the honest notation rather than a flow that pretends to a sequence.</documentation>
+      <planItem id="pi_t_733_record" name="Record the refusal and who made it" definitionRef="t_733_record_def">
+        <itemControl id="ic_t_733_record">
+          <requiredRule id="rr_t_733_record"><condition><![CDATA[true]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_733_record"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_733_rights" name="Test whether easement rights allow the original cut" definitionRef="t_733_rights_def">
+        <itemControl id="ic_t_733_rights">
+          <requiredRule id="rr_t_733_rights"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_733_rights"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_733_alt" name="Agree an alternate method" definitionRef="t_733_alt_def">
+        <itemControl id="ic_t_733_alt">
+          <repetitionRule id="rep_t_733_alt"><condition><![CDATA[true]]></condition></repetitionRule>
+          <requiredRule id="rr_t_733_alt"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_733_alt"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_733_defer" name="Defer to the next cycle with the risk named" definitionRef="t_733_defer_def">
+        <itemControl id="ic_t_733_defer">
+          <requiredRule id="rr_t_733_defer"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_733_defer"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_733_escalate" name="Escalate on the easement" definitionRef="t_733_escalate_def">
+        <itemControl id="ic_t_733_escalate">
+          <requiredRule id="rr_t_733_escalate"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_733_escalate"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_733_visible" name="Keep the span visible until the risk is closed" definitionRef="t_733_visible_def">
+        <itemControl id="ic_t_733_visible">
+          <requiredRule id="rr_t_733_visible"><condition><![CDATA[true]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_733_visible"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_m_733_closed" name="Access resolved or the risk recorded and visible" definitionRef="m_733_closed_def"/>
+      <humanTask id="t_733_record_def" name="Record the refusal and who made it" isBlocking="true"><documentation>Required. An unrecorded refusal becomes an unexplained gap in the cycle, and at the next audit nobody can tell it from work that was simply missed.</documentation></humanTask>
+      <humanTask id="t_733_rights_def" name="Test whether easement rights allow the original cut" isBlocking="true"><documentation>Rights may already permit it. Establishing that changes the conversation and is usually worth doing before proposing an alternate.</documentation></humanTask>
+      <humanTask id="t_733_alt_def" name="Agree an alternate method" isBlocking="true"><documentation>Repeats where several are tried. A softened specification is a real outcome and must go back through 7.2.4 so the audit compares against what was actually agreed.</documentation></humanTask>
+      <humanTask id="t_733_defer_def" name="Defer to the next cycle with the risk named" isBlocking="true"><documentation>Legitimate, and only with the risk stated. A deferral with no named risk is indistinguishable from an omission.</documentation></humanTask>
+      <humanTask id="t_733_escalate_def" name="Escalate on the easement" isBlocking="true"><documentation>The enforcement path. Slow, and the reason the alternate is usually tried first.</documentation></humanTask>
+      <humanTask id="t_733_visible_def" name="Keep the span visible until the risk is closed" isBlocking="true"><documentation>Required, and the point of the whole case. A refused span that leaves the programme's view is the failure mode this process exists to prevent.</documentation></humanTask>
+      <milestone id="m_733_closed_def" name="Access resolved or the risk recorded and visible"></milestone>
+    </casePlanModel>
+  </case>
+  <cmmndi:CMMNDI>
+    <cmmndi:CMMNDiagram id="dg_Vegetation_refusal">
+      <cmmndi:CMMNShape id="sh_plan" cmmnElementRef="Vegetation_refusal_plan"><dc:Bounds x="40" y="40" width="820" height="300"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_733_record" cmmnElementRef="pi_t_733_record"><dc:Bounds x="80" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_733_rights" cmmnElementRef="pi_t_733_rights"><dc:Bounds x="270" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_733_alt" cmmnElementRef="pi_t_733_alt"><dc:Bounds x="460" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_733_defer" cmmnElementRef="pi_t_733_defer"><dc:Bounds x="80" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_733_escalate" cmmnElementRef="pi_t_733_escalate"><dc:Bounds x="270" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_733_visible" cmmnElementRef="pi_t_733_visible"><dc:Bounds x="460" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_m_733_closed" cmmnElementRef="pi_m_733_closed"><dc:Bounds x="80" y="290" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+    </cmmndi:CMMNDiagram>
+  </cmmndi:CMMNDI>
+</definitions>

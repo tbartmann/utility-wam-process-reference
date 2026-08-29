@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_P_7_3" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <process id="P_7_3" name="7.3 Obtain access and consent" isExecutable="false">
+    <documentation>Tier-4 activities under 7.3.1, 7.3.2 and 7.3.4. Refusal is case-managed in 7.3.3-refusal-and-alternate.cmmn. Notice content is not federally standardised - Grok recorded that - so this flow requires that notice be given and recorded without specifying what it says.</documentation>
+    <startEvent id="n_73_s" name="Prescribed work needs notice before access"><messageEventDefinition id="n_73_s_md"/></startEvent>
+    <serviceTask id="n_73_who" name="Identify customer, landowner and community duty"><documentation>7.3.1.</documentation></serviceTask>
+    <sendTask id="n_73_not" name="Issue the notice with span, window and method"><documentation>7.3.1.</documentation></sendTask>
+    <receiveTask id="n_73_wait" name="Wait out the notice window"><documentation>7.3.1. Where one applies. The window is state or tariff, not federal.</documentation></receiveTask>
+    <userTask id="n_73_inst" name="Determine and obtain the access instrument"><documentation>7.3.2. Recorded easement, landowner permission off easement, or a highway or railroad permit.</documentation></userTask>
+    <exclusiveGateway id="n_73_g" name="Access obtained"/>
+    <callActivity id="n_73_ref" name="Handle the refusal"><documentation>7.3.3. Case-managed; see 7.3.3-refusal-and-alternate.cmmn.</documentation></callActivity>
+    <userTask id="n_73_hold" name="Hold and find the next window the constraint allows"><documentation>7.3.4. Keeping the original due date visible, or the cycle silently slips.</documentation></userTask>
+    <serviceTask id="n_73_ok" name="Record the instrument, its conditions and expiry"><documentation>7.3.2. Visible to dispatch, because an expired instrument is no instrument.</documentation></serviceTask>
+    <sendTask id="n_73_sched" name="Place on the vegetation schedule"><documentation>7.3.4.</documentation></sendTask>
+    <endEvent id="n_73_e" name="Access held and work schedulable"/>
+    <sequenceFlow id="f_n_73_s_n_73_who" sourceRef="n_73_s" targetRef="n_73_who" name=""/>
+    <sequenceFlow id="f_n_73_who_n_73_not" sourceRef="n_73_who" targetRef="n_73_not" name=""/>
+    <sequenceFlow id="f_n_73_not_n_73_wait" sourceRef="n_73_not" targetRef="n_73_wait" name=""/>
+    <sequenceFlow id="f_n_73_wait_n_73_inst" sourceRef="n_73_wait" targetRef="n_73_inst" name=""/>
+    <sequenceFlow id="f_n_73_inst_n_73_g" sourceRef="n_73_inst" targetRef="n_73_g" name=""/>
+    <sequenceFlow id="f_n_73_g_n_73_ref" sourceRef="n_73_g" targetRef="n_73_ref" name="refused"><conditionExpression xsi:type="tFormalExpression"><![CDATA[accessGranted = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_73_ref_n_73_hold" sourceRef="n_73_ref" targetRef="n_73_hold" name="alternate or deferral agreed"/>
+    <sequenceFlow id="f_n_73_ref_n_73_inst" sourceRef="n_73_ref" targetRef="n_73_inst" name="resolved on the easement"/>
+    <sequenceFlow id="f_n_73_hold_n_73_sched" sourceRef="n_73_hold" targetRef="n_73_sched" name=""/>
+    <sequenceFlow id="f_n_73_g_n_73_ok" sourceRef="n_73_g" targetRef="n_73_ok" name="granted"/>
+    <sequenceFlow id="f_n_73_ok_n_73_sched" sourceRef="n_73_ok" targetRef="n_73_sched" name=""/>
+    <sequenceFlow id="f_n_73_sched_n_73_e" sourceRef="n_73_sched" targetRef="n_73_e" name=""/>
+  </process>
+  <bpmndi:BPMNDiagram id="dg_P_7_3">
+    <bpmndi:BPMNPlane id="pl_P_7_3" bpmnElement="P_7_3">
+      <bpmndi:BPMNShape id="sh_n_73_s" bpmnElement="n_73_s"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_73_who" bpmnElement="n_73_who"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_73_not" bpmnElement="n_73_not"><dc:Bounds x="425" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_73_wait" bpmnElement="n_73_wait"><dc:Bounds x="595" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_73_inst" bpmnElement="n_73_inst"><dc:Bounds x="765" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_73_g" bpmnElement="n_73_g"><dc:Bounds x="977" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_73_ref" bpmnElement="n_73_ref"><dc:Bounds x="935" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_73_hold" bpmnElement="n_73_hold"><dc:Bounds x="1105" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_73_ok" bpmnElement="n_73_ok"><dc:Bounds x="1105" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_73_sched" bpmnElement="n_73_sched"><dc:Bounds x="1275" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_73_e" bpmnElement="n_73_e"><dc:Bounds x="1492" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ed_f_n_73_s_n_73_who" bpmnElement="f_n_73_s_n_73_who"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_73_who_n_73_not" bpmnElement="f_n_73_who_n_73_not"><di:waypoint x="385" y="235"/><di:waypoint x="425" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_73_not_n_73_wait" bpmnElement="f_n_73_not_n_73_wait"><di:waypoint x="555" y="235"/><di:waypoint x="595" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_73_wait_n_73_inst" bpmnElement="f_n_73_wait_n_73_inst"><di:waypoint x="725" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_73_inst_n_73_g" bpmnElement="f_n_73_inst_n_73_g"><di:waypoint x="895" y="235"/><di:waypoint x="977" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_73_g_n_73_ref" bpmnElement="f_n_73_g_n_73_ref"><di:waypoint x="1023" y="235"/><di:waypoint x="910" y="235"/><di:waypoint x="910" y="455"/><di:waypoint x="935" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_73_ref_n_73_hold" bpmnElement="f_n_73_ref_n_73_hold"><di:waypoint x="1065" y="455"/><di:waypoint x="1105" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_73_ref_n_73_inst" bpmnElement="f_n_73_ref_n_73_inst"><di:waypoint x="1065" y="455"/><di:waypoint x="740" y="455"/><di:waypoint x="740" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_73_hold_n_73_sched" bpmnElement="f_n_73_hold_n_73_sched"><di:waypoint x="1235" y="455"/><di:waypoint x="1250" y="455"/><di:waypoint x="1250" y="235"/><di:waypoint x="1275" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_73_g_n_73_ok" bpmnElement="f_n_73_g_n_73_ok"><di:waypoint x="1023" y="235"/><di:waypoint x="1105" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_73_ok_n_73_sched" bpmnElement="f_n_73_ok_n_73_sched"><di:waypoint x="1235" y="235"/><di:waypoint x="1275" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_73_sched_n_73_e" bpmnElement="f_n_73_sched_n_73_e"><di:waypoint x="1405" y="235"/><di:waypoint x="1492" y="235"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

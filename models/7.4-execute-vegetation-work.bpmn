@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_P_7_4" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <process id="P_7_4" name="7.4 Execute vegetation work" isExecutable="false">
+    <documentation>Tier-4 activities under 7.4.1, 7.4.2, 7.4.4 and 7.4.5. Integrated vegetation management 7.4.3 is specified without a model because the method is A300 consensus rather than a sequence, and herbicide law is state. The safety constraints here are federal and real: 29 CFR 1910.269(r) line-clearance tree trimming, (r)(1)(ii) second employee, (r)(1)(iv) insulating equipment, and the minimum approach distance at (l). OSHA's terms are line-clearance tree trimmer and qualified employee.</documentation>
+    <startEvent id="n_74_s" name="Accessible prescribed work ready to send"><messageEventDefinition id="n_74_s_md"/></startEvent>
+    <serviceTask id="n_74_chk" name="Confirm prescription, access instrument and weather"><documentation>7.4.1.</documentation></serviceTask>
+    <businessRuleTask id="n_74_q" name="Confirm the crew meets 1910.269(r) for this job"><documentation>7.4.1. Qualified employee, or line-clearance tree trimmer who is not 269-qualified and may not approach as closely.</documentation></businessRuleTask>
+    <exclusiveGateway id="n_74_cl" name="Clearance required"/>
+    <receiveTask id="n_74_hold" name="Hold for the clearance from 18.4.4"><documentation>7.4.1. Issued by network operations against a switching plan approved at 18.2.2, under 29 CFR 1910.269(m). Held, not worked around.</documentation></receiveTask>
+    <sendTask id="n_74_disp" name="Issue the dispatch"><documentation>7.4.1.</documentation></sendTask>
+    <userTask id="n_74_mad" name="Confirm voltage and minimum approach distance"><documentation>7.4.2. Before climbing or entering the tree, every time.</documentation></userTask>
+    <userTask id="n_74_cut" name="Perform the prescribed prune, trim or removal"><documentation>7.4.2. Insulating equipment where 1910.269(r)(1)(iv) requires it.</documentation></userTask>
+    <userTask id="n_74_stop" name="Stop and re-brief"><documentation>7.4.2. Where the condition of the tree or the line changes. A job briefing is required by 1910.269(c) and a changed condition is a new job.</documentation></userTask>
+    <serviceTask id="n_74_deb" name="Dispose of debris and restore the site"><documentation>7.4.4. Chip on site, haul, or leave per landowner terms - and restore access, fences and the highway if occupied.</documentation></serviceTask>
+    <userTask id="n_74_ev" name="Capture completion evidence"><documentation>7.4.5. Span, method and finish as left, with photo or geospatial evidence the audit at 7.5.1 can actually use.</documentation></userTask>
+    <serviceTask id="n_74_rem" name="Record remaining hazards the prescription did not close"><documentation>7.4.5. These feed 7.1.3 and are how a partly-closed span stays visible.</documentation></serviceTask>
+    <sendTask id="n_74_cls" name="Close the field record to the programme"><documentation>7.4.5.</documentation></sendTask>
+    <endEvent id="n_74_e" name="Span complete"/>
+    <sequenceFlow id="f_n_74_s_n_74_chk" sourceRef="n_74_s" targetRef="n_74_chk" name=""/>
+    <sequenceFlow id="f_n_74_chk_n_74_q" sourceRef="n_74_chk" targetRef="n_74_q" name=""/>
+    <sequenceFlow id="f_n_74_q_n_74_cl" sourceRef="n_74_q" targetRef="n_74_cl" name=""/>
+    <sequenceFlow id="f_n_74_cl_n_74_hold" sourceRef="n_74_cl" targetRef="n_74_hold" name="clearance required"><conditionExpression xsi:type="tFormalExpression"><![CDATA[clearanceRequired = true]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_74_hold_n_74_disp" sourceRef="n_74_hold" targetRef="n_74_disp" name="clearance issued"/>
+    <sequenceFlow id="f_n_74_cl_n_74_disp" sourceRef="n_74_cl" targetRef="n_74_disp" name="no clearance required"/>
+    <sequenceFlow id="f_n_74_disp_n_74_mad" sourceRef="n_74_disp" targetRef="n_74_mad" name=""/>
+    <sequenceFlow id="f_n_74_mad_n_74_cut" sourceRef="n_74_mad" targetRef="n_74_cut" name=""/>
+    <sequenceFlow id="f_n_74_cut_n_74_stop" sourceRef="n_74_cut" targetRef="n_74_stop" name="condition changed"><conditionExpression xsi:type="tFormalExpression"><![CDATA[conditionChanged = true]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_74_stop_n_74_mad" sourceRef="n_74_stop" targetRef="n_74_mad" name="re-briefed"/>
+    <sequenceFlow id="f_n_74_cut_n_74_deb" sourceRef="n_74_cut" targetRef="n_74_deb" name=""/>
+    <sequenceFlow id="f_n_74_deb_n_74_ev" sourceRef="n_74_deb" targetRef="n_74_ev" name=""/>
+    <sequenceFlow id="f_n_74_ev_n_74_rem" sourceRef="n_74_ev" targetRef="n_74_rem" name=""/>
+    <sequenceFlow id="f_n_74_ev_n_74_cls" sourceRef="n_74_ev" targetRef="n_74_cls" name=""/>
+    <sequenceFlow id="f_n_74_cls_n_74_e" sourceRef="n_74_cls" targetRef="n_74_e" name=""/>
+  </process>
+  <bpmndi:BPMNDiagram id="dg_P_7_4">
+    <bpmndi:BPMNPlane id="pl_P_7_4" bpmnElement="P_7_4">
+      <bpmndi:BPMNShape id="sh_n_74_s" bpmnElement="n_74_s"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_74_chk" bpmnElement="n_74_chk"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_74_q" bpmnElement="n_74_q"><dc:Bounds x="425" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_74_cl" bpmnElement="n_74_cl"><dc:Bounds x="637" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_74_hold" bpmnElement="n_74_hold"><dc:Bounds x="595" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_74_disp" bpmnElement="n_74_disp"><dc:Bounds x="765" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_74_mad" bpmnElement="n_74_mad"><dc:Bounds x="935" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_74_cut" bpmnElement="n_74_cut"><dc:Bounds x="1105" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_74_stop" bpmnElement="n_74_stop"><dc:Bounds x="1105" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_74_deb" bpmnElement="n_74_deb"><dc:Bounds x="1275" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_74_ev" bpmnElement="n_74_ev"><dc:Bounds x="1445" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_74_rem" bpmnElement="n_74_rem"><dc:Bounds x="1615" y="90" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_74_cls" bpmnElement="n_74_cls"><dc:Bounds x="1615" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_74_e" bpmnElement="n_74_e"><dc:Bounds x="1832" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ed_f_n_74_s_n_74_chk" bpmnElement="f_n_74_s_n_74_chk"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_74_chk_n_74_q" bpmnElement="f_n_74_chk_n_74_q"><di:waypoint x="385" y="235"/><di:waypoint x="425" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_74_q_n_74_cl" bpmnElement="f_n_74_q_n_74_cl"><di:waypoint x="555" y="235"/><di:waypoint x="637" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_74_cl_n_74_hold" bpmnElement="f_n_74_cl_n_74_hold"><di:waypoint x="683" y="235"/><di:waypoint x="570" y="235"/><di:waypoint x="570" y="455"/><di:waypoint x="595" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_74_hold_n_74_disp" bpmnElement="f_n_74_hold_n_74_disp"><di:waypoint x="725" y="455"/><di:waypoint x="740" y="455"/><di:waypoint x="740" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_74_cl_n_74_disp" bpmnElement="f_n_74_cl_n_74_disp"><di:waypoint x="683" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_74_disp_n_74_mad" bpmnElement="f_n_74_disp_n_74_mad"><di:waypoint x="895" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_74_mad_n_74_cut" bpmnElement="f_n_74_mad_n_74_cut"><di:waypoint x="1065" y="235"/><di:waypoint x="1105" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_74_cut_n_74_stop" bpmnElement="f_n_74_cut_n_74_stop"><di:waypoint x="1235" y="235"/><di:waypoint x="1080" y="235"/><di:waypoint x="1080" y="455"/><di:waypoint x="1105" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_74_stop_n_74_mad" bpmnElement="f_n_74_stop_n_74_mad"><di:waypoint x="1235" y="455"/><di:waypoint x="910" y="455"/><di:waypoint x="910" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_74_cut_n_74_deb" bpmnElement="f_n_74_cut_n_74_deb"><di:waypoint x="1235" y="235"/><di:waypoint x="1275" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_74_deb_n_74_ev" bpmnElement="f_n_74_deb_n_74_ev"><di:waypoint x="1405" y="235"/><di:waypoint x="1445" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_74_ev_n_74_rem" bpmnElement="f_n_74_ev_n_74_rem"><di:waypoint x="1575" y="235"/><di:waypoint x="1590" y="235"/><di:waypoint x="1590" y="125"/><di:waypoint x="1615" y="125"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_74_ev_n_74_cls" bpmnElement="f_n_74_ev_n_74_cls"><di:waypoint x="1575" y="235"/><di:waypoint x="1615" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_74_cls_n_74_e" bpmnElement="f_n_74_cls_n_74_e"><di:waypoint x="1745" y="235"/><di:waypoint x="1832" y="235"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/" id="Clearance_distance" name="7.2.2 Measure clearance against required distance" namespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <description>This table returns WHICH AUTHORITY sets the required distance, never a distance. There is no federal distribution vegetation clearance: 16 U.S.C. 824o excludes local distribution, NERC FAC-003 is bulk transmission, and 29 CFR 1910.269 Tables R-5 to R-8 are WORKER minimum approach distances and must never be quoted as vegetation clearances. The number is a specialization; the authority is the reference.</description>
+  <inputData id="in_jurisdiction" name="Jurisdiction"><variable id="in_jurisdiction_v" name="Jurisdiction" typeRef="string"/></inputData>
+  <inputData id="in_systemScope" name="System scope"><variable id="in_systemScope_v" name="System scope" typeRef="string"/></inputData>
+  <inputData id="in_measurementBasis" name="Measurement basis"><variable id="in_measurementBasis_v" name="Measurement basis" typeRef="string"/></inputData>
+  <inputData id="in_measured" name="Measurement obtained"><variable id="in_measured_v" name="Measurement obtained" typeRef="boolean"/></inputData>
+  <knowledgeSource id="ks_authority" name="State commission rules; NERC FAC-003 for bulk transmission only"><description>CPUC GO 95 Rule 35 Table 1 Cases 13, 14, 13E and 14E is the clearest state exemplar. 52 Pa. Code 57.198 sets a cycle rather than a distance. FAC-003 sets the MVCD for the bulk electric system and applies to no distribution facility.</description></knowledgeSource>
+  <decision id="d_7_2_2" name="Required distance authority">
+    <description>7.2.2. The measurement basis - at-rest, with allowance for combined movement of conductor and vegetation, midspan or at-structure - changes what the same number means, so it is an input and must travel with the result.</description>
+    <variable id="d_7_2_2_v" name="Required distance authority" typeRef="string"/>
+    <informationRequirement id="ir_d_7_2_2_in_measured"><requiredInput href="#in_measured"/></informationRequirement>
+    <informationRequirement id="ir_d_7_2_2_in_systemScope"><requiredInput href="#in_systemScope"/></informationRequirement>
+    <informationRequirement id="ir_d_7_2_2_in_jurisdiction"><requiredInput href="#in_jurisdiction"/></informationRequirement>
+    <informationRequirement id="ir_d_7_2_2_in_measurementBasis"><requiredInput href="#in_measurementBasis"/></informationRequirement>
+    <authorityRequirement id="ar_d_7_2_2"><requiredAuthority href="#ks_authority"/></authorityRequirement>
+    <decisionTable id="d_7_2_2_dt" hitPolicy="FIRST" preferredOrientation="Rule-as-Row">
+      <input id="d_7_2_2_i1" label="Measurement obtained"><inputExpression id="d_7_2_2_i1_e" typeRef="boolean"><text>in_measured</text></inputExpression></input>
+      <input id="d_7_2_2_i2" label="System scope"><inputExpression id="d_7_2_2_i2_e" typeRef="string"><text>in_systemScope</text></inputExpression></input>
+      <input id="d_7_2_2_i3" label="Jurisdiction"><inputExpression id="d_7_2_2_i3_e" typeRef="string"><text>in_jurisdiction</text></inputExpression></input>
+      <input id="d_7_2_2_i4" label="Measurement basis"><inputExpression id="d_7_2_2_i4_e" typeRef="string"><text>in_measurementBasis</text></inputExpression></input>
+      <output id="d_7_2_2_o" label="Required distance authority" name="Required distance authority" typeRef="string"/>
+      <rule id="d_7_2_2_r1">
+        <description>No measurement. Recorded as cannot-determine and scheduled for patrol, never defaulted to a pass.</description>
+        <inputEntry id="d_7_2_2_r1_ie1"><text>false</text></inputEntry>
+        <inputEntry id="d_7_2_2_r1_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_7_2_2_r1_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_7_2_2_r1_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_7_2_2_r1_oe"><text>"cannotDetermine"</text></outputEntry>
+      </rule>
+      <rule id="d_7_2_2_r2">
+        <description>In-scope bulk electric system only. The minimum vegetation clearance distance is FAC-003's and applies to nothing on distribution.</description>
+        <inputEntry id="d_7_2_2_r2_ie1"><text>-</text></inputEntry>
+        <inputEntry id="d_7_2_2_r2_ie2"><text>"bulkTransmission"</text></inputEntry>
+        <inputEntry id="d_7_2_2_r2_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_7_2_2_r2_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_7_2_2_r2_oe"><text>"nercMvcd"</text></outputEntry>
+      </rule>
+      <rule id="d_7_2_2_r3">
+        <description>A state that sets a radial distance, of which CPUC GO 95 Rule 35 is the exemplar.</description>
+        <inputEntry id="d_7_2_2_r3_ie1"><text>-</text></inputEntry>
+        <inputEntry id="d_7_2_2_r3_ie2"><text>"distribution"</text></inputEntry>
+        <inputEntry id="d_7_2_2_r3_ie3"><text>"stateRuleWithDistance"</text></inputEntry>
+        <inputEntry id="d_7_2_2_r3_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_7_2_2_r3_oe"><text>"stateClearanceRule"</text></outputEntry>
+      </rule>
+      <rule id="d_7_2_2_r4">
+        <description>A state that sets a cycle but no distance - Pennsylvania - so the distance is the operator's published standard and should be visible as such.</description>
+        <inputEntry id="d_7_2_2_r4_ie1"><text>-</text></inputEntry>
+        <inputEntry id="d_7_2_2_r4_ie2"><text>"distribution"</text></inputEntry>
+        <inputEntry id="d_7_2_2_r4_ie3"><text>"stateRuleCycleOnly"</text></inputEntry>
+        <inputEntry id="d_7_2_2_r4_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_7_2_2_r4_oe"><text>"operatorStandard"</text></outputEntry>
+      </rule>
+      <rule id="d_7_2_2_r5">
+        <description>No state rule. The distance is entirely the operator's.</description>
+        <inputEntry id="d_7_2_2_r5_ie1"><text>-</text></inputEntry>
+        <inputEntry id="d_7_2_2_r5_ie2"><text>"distribution"</text></inputEntry>
+        <inputEntry id="d_7_2_2_r5_ie3"><text>"noStateRule"</text></inputEntry>
+        <inputEntry id="d_7_2_2_r5_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_7_2_2_r5_oe"><text>"operatorStandard"</text></outputEntry>
+      </rule>
+      <rule id="d_7_2_2_r6">
+        <inputEntry id="d_7_2_2_r6_ie1"><text>-</text></inputEntry>
+        <inputEntry id="d_7_2_2_r6_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_7_2_2_r6_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_7_2_2_r6_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_7_2_2_r6_oe"><text>"determineManually"</text></outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram id="drd_Clearance_distance">
+      <dmndi:DMNShape id="sh_in_jurisdiction" dmnElementRef="in_jurisdiction"><dc:Bounds x="60" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_systemScope" dmnElementRef="in_systemScope"><dc:Bounds x="245" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_measurementBasis" dmnElementRef="in_measurementBasis"><dc:Bounds x="430" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_measured" dmnElementRef="in_measured"><dc:Bounds x="615" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_d_7_2_2" dmnElementRef="d_7_2_2"><dc:Bounds x="60" y="240" width="180" height="70"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_ks_authority" dmnElementRef="ks_authority"><dc:Bounds x="900" y="100" width="160" height="55"/></dmndi:DMNShape>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</definitions>

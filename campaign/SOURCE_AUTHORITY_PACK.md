@@ -443,6 +443,29 @@ accounting side is heavily prescribed and the field-record side is barely prescr
    that additions and retirements must be recorded; how a completed job is broken into
    units against actual cost is an operator method.
 
+## D-quater. Vegetation management — added Round 2, 2026-08-29
+
+Found missing when Grok specified category 7.0. The pack had the state inspection
+intervals and nothing on method, finish or worker safety.
+
+| Source | Edition | Use it for | Status |
+|---|---|---|---|
+| **ANSI A300** *Tree Care Operations — Tree, Shrub, and Other Woody Plant Management — Standard Practices* | multi-part; **Part 7 Integrated Vegetation Management, 2018** | The industry specification for METHOD and FINISH: pruning, IVM, and what a prescription means. ANSI-accredited, TCIA secretariat. **Not incorporated by reference into any federal rule** — it is consensus, not law, and binding only where a state or a contract adopts it. | `consensus` |
+| **ANSI Z133** *Arboricultural Operations — Safety Requirements* | **2017** | Worker safety for tree work. Same status: ANSI-accredited consensus, not federally incorporated. | `consensus` |
+| **29 CFR 1910.269(r)** *Line-clearance tree trimming operations* | current | The FEDERAL rule, and the one that actually binds. Note OSHA's defined terms are **line-clearance tree trimmer** and **qualified employee** — not "ISA Certified Arborist" or "qualified line-clearance arborist", which are industry terms. Use OSHA's words in a specification. | `regulation` |
+| **29 CFR 1910.269 Tables R-5 to R-8** | current | Worker minimum approach distances. **These are not vegetation clearance distances** and must never be quoted as though they were. | `regulation` |
+| **NERC FAC-003** *Transmission Vegetation Management* | current | Cite it only to say what it is NOT. It applies to the bulk electric system; 16 U.S.C. 824o excludes local distribution. There is **no federal distribution vegetation clearance distance at all**. | `clause-verified` |
+
+**What is genuinely not standardised.** Hazard-tree and danger-tree identification criteria;
+remote survey by LiDAR, satellite or drone; growth and encroachment modelling; notice
+content to landowners; refusal handling; completion-evidence content; audit sample size;
+and vegetation cause codes. Herbicide and pesticide law is state and is outside this pack.
+Say so rather than inventing a practice.
+
+**APQC has no vegetation management process.** The only touch in the whole framework is
+10.4.5 waste and hazardous goods (pcf_id 16970). A specialised category with no APQC
+counterpart is a finding about APQC's coverage of utilities, not about this model.
+
 ## E. The gas / electric asymmetry — the most important thing in this pack
 
 The common assumption is that electric is better standardised. **It is the reverse for
@@ -510,7 +533,7 @@ courses covering 49 CFR 192/195 and ASME B31Q), NGA, SGA.
 | **IEEE 1366** | **2022** | SAIFI, SAIDI, CAIDI and the Major Event Day 2.5-beta method. The definitional authority for distribution reliability. **Voluntary federally** — EIA-861 lets non-calculating entities skip the schedule. | `clause-verified` |
 | **NESC — ANSI/IEEE C2** | **2023** (published 2022-08-01) | Construction, clearance and safety for supply and communication lines. Governs joint-use pole space. **Rule 214A2 is the inspection provision and is deliberately non-prescriptive.** | `verified` for Rule 214A2 |
 | **NERC** | current | FAC, PRC and TPL families. **Bulk power system only** — largely out of scope for distribution work, except where a utility's transmission assets are in scope. CIP-013 supply chain risk for 16.0. | `clause-verified` |
-| **State inspection rules** | — | This is where electric distribution intervals actually live, and the variation is dramatic. **California CPUC GO 165** (adopted 1997-03-31, revised 2017-12-14 by D.17-12-024) — Table 1 intervals by facility type and urban/rural, wood poles intrusive 10 years. **Pennsylvania 52 Pa. Code § 57.198** — vegetation 8yr, poles 12yr, OH lines 2yr, substations 5 weeks. **Ohio OAC 4901:1-10-27** (eff. 2024-04-08) — distribution once every 5 years, substations 12×/yr at ≤40 days. **New Jersey N.J.A.C. 14:5-8.6** — requires a programme but **sets no intervals at all.** Name the state exemplar; never imply a national rule. | `regulation` |
+| **State inspection rules** | — | This is where electric distribution intervals actually live, and the variation is dramatic. **California CPUC GO 165** (adopted 1997-03-31, revised 2017-12-14 by D.17-12-024) — Table 1 intervals by facility type and urban/rural, wood poles intrusive 10 years. **California CPUC GO 95 Rule 35** *Vegetation Management* is the separate and equally important one — radial clearances at Table 1 Cases 13 and 14, mature tree exemptions at 13E and 14E, guidelines at Appendix E. GO 165 is inspection; GO 95 Rule 35 is clearance. *Added 2026-08-29 — Grok found the omission.* **Pennsylvania 52 Pa. Code § 57.198** — vegetation is a **4-to-8 year** statewide minimum inspection and treatment cycle for distribution facilities at (n)(1), NOT a fixed 8 years, plus a plan under (f) that must include a programme for maintaining clearances; poles 12yr, OH lines 2yr, substations 5 weeks. *Corrected 2026-08-29 — Grok found this reading the regulation for category 7.0.* **Ohio OAC 4901:1-10-27** (eff. 2024-04-08) — distribution once every 5 years, substations 12×/yr at ≤40 days. **New Jersey N.J.A.C. 14:5-8.6** — requires a programme but **sets no intervals at all.** Name the state exemplar; never imply a national rule. | `regulation` |
 | **FERC Uniform System of Accounts / Form 1** | current | Capital versus expense treatment and unitisation. Relevant to 5.0. | `clause-verified` |
 | **IEEE 1782** | 2022 | Collecting and categorising distribution interruption event information. Relevant to 9.0. | `clause-verified` |
 | **IEEE 1808** | 2024 | Transmission line inspection and maintenance data. **Transmission only — no distribution equivalent exists.** | `clause-verified` |
