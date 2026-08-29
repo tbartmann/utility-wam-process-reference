@@ -167,6 +167,49 @@ against one of the two frameworks that recommendation named. It did not come thr
 clean.
 
 
+## The other direction, and the one that sells the reference
+
+Both crosswalks were authored framework-to-model: for every APQC process and every GFMAM
+subject, where does it live here. That direction answers "have we missed anything they
+have". It cannot answer the question a buyer actually asks, which is what this reference
+carries that the free frameworks do not name at all.
+
+Computing it from the same rows — a category is reached when any crosswalk row names it —
+gives this:
+
+| | reaches | absent |
+|---|---|---|
+| APQC PCF Utilities, categories 10 and 14 | 15 of 19 | 7.0, 11.0, 14.0, 16.0 |
+| GFMAM Asset Management Landscape 3rd ed. | 18 of 19 | 11.0 |
+
+Two of APQC's four absences are artefacts of scope rather than real gaps, and saying so is
+the honest reading. **14.0 Manage Workforce and Time** and **16.0 Manage Contractors and
+Partners** both have counterparts in APQC's *cross-industry* categories — 7 Develop and
+Manage Human Capital, and 4.2.4 Manage suppliers. The extraction here covers categories 10
+and 14 only, because those are the two that carry utility content, and cross-industry
+manufacturing supply chain is not field-crew contracting. So the finding for these two is
+narrower than "absent": APQC has nothing *utility-specific* to say about either.
+
+The other two are real.
+
+**7.0 Manage Vegetation** has no APQC process at any level. It is the single largest
+recurring distribution maintenance programme in the United States by spend, it is the
+subject of state commission rules with mandatory cycles, and the framework does not name
+it. GFMAM reaches it only through the general 6.5 Maintenance Delivery.
+
+**11.0 Manage Joint Use and Third-Party Attachments** is absent from *both* frameworks.
+It is not a small domain: pole attachment rates and access are governed by 47 U.S.C. 224
+and the FCC rules under it, the physical arrangement by NESC Rules 235 and 238, and the
+work itself — inventories, make-ready, unauthorised-attachment audits, transfer chases —
+is real programme work that utilities staff and litigate over. Neither APQC nor the GFMAM
+Landscape has a home for it.
+
+That is the argument for this reference existing, and it should be made in exactly these
+terms: not that the frameworks are wrong, but that they are organised on an asset axis for
+an audience that is not doing the work, and two whole domains of utility work fall through
+the gap. The reverse section is written into both crosswalk JSON files by their
+generators, so the claim stays computed rather than asserted.
+
 ## Licence — this matters for a commercial deliverable
 
 The Utilities PCF is **jointly developed by APQC and IBM**, and its licence is more

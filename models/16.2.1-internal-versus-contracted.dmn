@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/" id="Delivery_route" name="16.2.1 Determine internal versus contracted delivery" namespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <description>The output is a deliveryRoute value, and it is the SAME rule set as 1.3.4. vocabulary.json names the variable so the two cannot drift; 3.2.3 commits the roster split at the plan level and this decides the individual work item. Three processes, one determination. EN 17007 cl. 6.2 MAN.2 identifies the resources the maintenance activities need, which is the process that owns the question. ANSI/ASTM/ISO 55001-2024 cl. 8.3 Outsourcing is the control on whatever this returns as external - it is not itself the decision, and reading it as one is how a management-system clause ends up doing a planner's job.</description>
+  <inputData id="in_workType" name="Work type"><variable id="in_workType_v" name="Work type" typeRef="string"/></inputData>
+  <inputData id="in_qualificationHeld" name="Internal qualification held for the covered task"><variable id="in_qualificationHeld_v" name="Internal qualification held for the covered task" typeRef="boolean"/></inputData>
+  <inputData id="in_internalCapacity" name="Internal capacity in the window"><variable id="in_internalCapacity_v" name="Internal capacity in the window" typeRef="boolean"/></inputData>
+  <inputData id="in_namedPool" name="Work type is committed to a named pool"><variable id="in_namedPool_v" name="Work type is committed to a named pool" typeRef="boolean"/></inputData>
+  <inputData id="in_stormEvent" name="Event or mutual-aid conditions"><variable id="in_stormEvent_v" name="Event or mutual-aid conditions" typeRef="boolean"/></inputData>
+  <knowledgeSource id="ks_man2" name="EN 17007:2017 cl. 6.2 MAN.2 Identify the resources needed"><description>The named process. It establishes that the determination exists and belongs to management of the maintenance function. The rule set itself is the operator's sourcing strategy and its contracts.</description></knowledgeSource>
+  <decision id="d_16_2_1" name="Delivery route">
+    <variable id="d_16_2_1_v" name="Delivery route" typeRef="string"/>
+    <informationRequirement id="ir_d_16_2_1_ks_man2"><requiredInput href="#ks_man2"/></informationRequirement>
+    <decisionTable id="d_16_2_1_dt" hitPolicy="FIRST" preferredOrientation="Rule-as-Row">
+      <input id="d_16_2_1_i1" label="Work type committed to a named pool"><inputExpression id="d_16_2_1_i1_e" typeRef="boolean"><text>in_namedPool</text></inputExpression></input>
+      <input id="d_16_2_1_i2" label="Internal qualification held"><inputExpression id="d_16_2_1_i2_e" typeRef="boolean"><text>in_qualificationHeld</text></inputExpression></input>
+      <input id="d_16_2_1_i3" label="Internal capacity in the window"><inputExpression id="d_16_2_1_i3_e" typeRef="boolean"><text>in_internalCapacity</text></inputExpression></input>
+      <input id="d_16_2_1_i4" label="Event or mutual-aid conditions"><inputExpression id="d_16_2_1_i4_e" typeRef="boolean"><text>in_stormEvent</text></inputExpression></input>
+      <output id="d_16_2_1_o" label="Delivery route" name="Delivery route" typeRef="string"/>
+      <rule id="d_16_2_1_r1">
+        <description>A standing commitment settles it before capacity is even looked at. Overriding a committed pool because a crew happens to be free is how a contract minimum gets paid for work nobody sent.</description>
+        <inputEntry id="d_16_2_1_r1_ie1"><text>true</text></inputEntry>
+        <inputEntry id="d_16_2_1_r1_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_16_2_1_r1_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_16_2_1_r1_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_16_2_1_r1_oe"><text>"namedPool"</text></outputEntry>
+      </rule>
+      <rule id="d_16_2_1_r2">
+        <description>The qualification is not held internally. 49 CFR 192.805 for a gas covered task and 1910.269(a)(2) for electric are not preferences; the work cannot be assigned internally at all.</description>
+        <inputEntry id="d_16_2_1_r2_ie1"><text>false</text></inputEntry>
+        <inputEntry id="d_16_2_1_r2_ie2"><text>false</text></inputEntry>
+        <inputEntry id="d_16_2_1_r2_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_16_2_1_r2_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_16_2_1_r2_oe"><text>"externalService"</text></outputEntry>
+      </rule>
+      <rule id="d_16_2_1_r3">
+        <description>No internal capacity under event conditions. This is the mutual-aid and storm case, and it is external by circumstance rather than by strategy.</description>
+        <inputEntry id="d_16_2_1_r3_ie1"><text>false</text></inputEntry>
+        <inputEntry id="d_16_2_1_r3_ie2"><text>true</text></inputEntry>
+        <inputEntry id="d_16_2_1_r3_ie3"><text>false</text></inputEntry>
+        <inputEntry id="d_16_2_1_r3_ie4"><text>true</text></inputEntry>
+        <outputEntry id="d_16_2_1_r3_oe"><text>"externalService"</text></outputEntry>
+      </rule>
+      <rule id="d_16_2_1_r4">
+        <description>No internal capacity in the window. 3.2.3 has already committed the roster split; this is the individual item falling outside it.</description>
+        <inputEntry id="d_16_2_1_r4_ie1"><text>false</text></inputEntry>
+        <inputEntry id="d_16_2_1_r4_ie2"><text>true</text></inputEntry>
+        <inputEntry id="d_16_2_1_r4_ie3"><text>false</text></inputEntry>
+        <inputEntry id="d_16_2_1_r4_ie4"><text>false</text></inputEntry>
+        <outputEntry id="d_16_2_1_r4_oe"><text>"externalService"</text></outputEntry>
+      </rule>
+      <rule id="d_16_2_1_r5">
+        <description>Qualified and available. The work leaves this category for 3.4 and 4.0.</description>
+        <inputEntry id="d_16_2_1_r5_ie1"><text>false</text></inputEntry>
+        <inputEntry id="d_16_2_1_r5_ie2"><text>true</text></inputEntry>
+        <inputEntry id="d_16_2_1_r5_ie3"><text>true</text></inputEntry>
+        <inputEntry id="d_16_2_1_r5_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_16_2_1_r5_oe"><text>"internal"</text></outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram id="drd_Delivery_route">
+      <dmndi:DMNShape id="sh_in_workType" dmnElementRef="in_workType"><dc:Bounds x="60" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_qualificationHeld" dmnElementRef="in_qualificationHeld"><dc:Bounds x="245" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_internalCapacity" dmnElementRef="in_internalCapacity"><dc:Bounds x="430" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_namedPool" dmnElementRef="in_namedPool"><dc:Bounds x="615" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_stormEvent" dmnElementRef="in_stormEvent"><dc:Bounds x="800" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_d_16_2_1" dmnElementRef="d_16_2_1"><dc:Bounds x="60" y="240" width="180" height="70"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_ks_man2" dmnElementRef="ks_man2"><dc:Bounds x="900" y="100" width="160" height="55"/></dmndi:DMNShape>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</definitions>

@@ -337,5 +337,105 @@
    "model_groups": "15.2",
    "note": ""
   }
- ]
+ ],
+ "reverse": {
+  "_note": "Model categories this framework does not reach, computed from the rows above rather than asserted. A category is reached when any row names it in model_groups.",
+  "rows": [
+   {
+    "id": "1.0",
+    "name": "Identify and Qualify Work Demand",
+    "status": "reached"
+   },
+   {
+    "id": "2.0",
+    "name": "Plan, Design and Estimate Work",
+    "status": "reached"
+   },
+   {
+    "id": "3.0",
+    "name": "Plan Resources and Schedule Work",
+    "status": "reached"
+   },
+   {
+    "id": "4.0",
+    "name": "Dispatch and Execute Field Work",
+    "status": "reached"
+   },
+   {
+    "id": "5.0",
+    "name": "Close Work, Settle Cost and Update Records",
+    "status": "reached"
+   },
+   {
+    "id": "6.0",
+    "name": "Manage Metering and Measurement Operations",
+    "status": "reached"
+   },
+   {
+    "id": "7.0",
+    "name": "Manage Vegetation",
+    "status": "reached"
+   },
+   {
+    "id": "8.0",
+    "name": "Manage Compliance, Integrity and Safety",
+    "status": "reached"
+   },
+   {
+    "id": "9.0",
+    "name": "Manage Outages and Emergencies",
+    "status": "reached"
+   },
+   {
+    "id": "10.0",
+    "name": "Serve Customers in the Field",
+    "status": "reached"
+   },
+   {
+    "id": "11.0",
+    "name": "Manage Joint Use and Third-Party Attachments",
+    "status": "absent"
+   },
+   {
+    "id": "12.0",
+    "name": "Manage Assets and Asset Information",
+    "status": "reached"
+   },
+   {
+    "id": "13.0",
+    "name": "Manage Materials and Supply Chain",
+    "status": "reached"
+   },
+   {
+    "id": "14.0",
+    "name": "Manage Workforce and Time",
+    "status": "reached"
+   },
+   {
+    "id": "15.0",
+    "name": "Manage Performance, Information and Integration",
+    "status": "reached"
+   },
+   {
+    "id": "16.0",
+    "name": "Manage Contractors and Partners",
+    "status": "reached"
+   },
+   {
+    "id": "17.0",
+    "name": "Plan the Network and Capital Programme",
+    "status": "reached"
+   },
+   {
+    "id": "18.0",
+    "name": "Operate the Network for Planned Work",
+    "status": "reached"
+   },
+   {
+    "id": "19.0",
+    "name": "Commission, Decommission and Dispose of Assets",
+    "status": "reached"
+   }
+  ]
+ }
 }

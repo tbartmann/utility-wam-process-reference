@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_P_16_1" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <process id="P_16_1" name="16.1 Qualify and onboard contractors" isExecutable="false">
+    <documentation>Tier-4 activities under 16.1.1 to 16.1.4. EN 17007 cl. 6.15 SER.1 is the process. Two federal duties shape it and neither is a certificate list: 49 CFR 192.805 requires an individual performing a covered task to be qualified or directed and observed by somebody who is, and 49 CFR Part 199 requires drug and alcohol testing of covered employees, contractors included where they perform those functions. The insurance and certificate content itself is contract, and no standard in the pack supplies it.</documentation>
+    <laneSet id="P_16_1_lanes">
+      <lane id="l_161_mai" name="Contractor register">
+        <flowNodeRef>n_161_start</flowNodeRef>
+        <flowNodeRef>n_161_org</flowNodeRef>
+        <flowNodeRef>n_161_og</flowNodeRef>
+        <flowNodeRef>n_161_rej</flowNodeRef>
+        <flowNodeRef>n_161_crew</flowNodeRef>
+        <flowNodeRef>n_161_not</flowNodeRef>
+        <flowNodeRef>n_161_pap</flowNodeRef>
+        <flowNodeRef>n_161_ver</flowNodeRef>
+        <flowNodeRef>n_161_199</flowNodeRef>
+        <flowNodeRef>n_161_pg</flowNodeRef>
+        <flowNodeRef>n_161_hold</flowNodeRef>
+        <flowNodeRef>n_161_live</flowNodeRef>
+        <flowNodeRef>n_161_pub</flowNodeRef>
+        <flowNodeRef>n_161_end</flowNodeRef>
+        <flowNodeRef>n_161_t</flowNodeRef>
+        <flowNodeRef>n_161_watch</flowNodeRef>
+        <flowNodeRef>n_161_sg</flowNodeRef>
+        <flowNodeRef>n_161_susp</flowNodeRef>
+        <flowNodeRef>n_161_rein</flowNodeRef>
+      </lane>
+      <lane id="l_161_hr" name="Crews and credentials">
+        <flowNodeRef>n_161_skill</flowNodeRef>
+        <flowNodeRef>n_161_plant</flowNodeRef>
+      </lane>
+    </laneSet>
+    <startEvent id="n_161_start" name="Organisation or crew presented"><messageEventDefinition id="n_161_start_md"/></startEvent>
+    <serviceTask id="n_161_org" name="Capture the organisation identity"><documentation>16.1.1.</documentation></serviceTask>
+    <exclusiveGateway id="n_161_og" name="Crew has an organisation"/>
+    <endEvent id="n_161_rej" name="Registration refused"><documentation>16.1.1. A crew with no organisation behind it has nobody to exchange the 1910.269(a)(3) information with.</documentation></endEvent>
+    <serviceTask id="n_161_crew" name="Register named crews and bind both contacts"><documentation>16.1.1. A home contact and a host-employer contact, because the duty runs both ways.</documentation></serviceTask>
+    <userTask id="n_161_skill" name="Capture skills and covered-task qualifications"><documentation>16.1.2. Gas covered tasks are 49 CFR 192.805; electric is 1910.269(a)(2) qualified employee. 14.2 holds the operator's own qualification record - this is the contractor's, and merging them loses the boundary the host duty rests on.</documentation></userTask>
+    <serviceTask id="n_161_plant" name="Capture the plant and equipment they bring"><documentation>16.1.2.</documentation></serviceTask>
+    <sendTask id="n_161_not" name="Flag work types they must not be awarded"><documentation>16.1.2. 2.5.2 says what a JOB needs. This says what a CONTRACTOR can supply.</documentation></sendTask>
+    <userTask id="n_161_pap" name="Collect insurance, licence and programme certificates"><documentation>16.1.3.</documentation></userTask>
+    <userTask id="n_161_ver" name="Verify currency and cover for the work type"><documentation>16.1.3. ISO 55001:2024 cl. 8.3 Outsourcing requires control of what is outsourced; the certificate list is operator and contract.</documentation></userTask>
+    <serviceTask id="n_161_199" name="Record Part 199 status for gas covered employees"><documentation>16.1.3. 49 CFR Part 199 reaches contractors where they perform operations, maintenance or emergency-response functions.</documentation></serviceTask>
+    <exclusiveGateway id="n_161_pg" name="Papers pass"/>
+    <userTask id="n_161_hold" name="Hold the register row"><documentation>16.1.3. Held, not quietly awarded around.</documentation></userTask>
+    <serviceTask id="n_161_live" name="Set the row live"><documentation>16.1.3.</documentation></serviceTask>
+    <startEvent id="n_161_t" name="Certificate or covered-task date due"><timerEventDefinition id="n_161_t_td"/></startEvent>
+    <serviceTask id="n_161_watch" name="Watch expiry of papers and covered-task dates"><documentation>16.1.4. 49 CFR 192.805(g) leaves the requalification interval to the operator. A lapse still suspends award whatever the interval is.</documentation></serviceTask>
+    <exclusiveGateway id="n_161_sg" name="Lapse, incident or host instruction"/>
+    <serviceTask id="n_161_susp" name="Suspend the row"><documentation>16.1.4. 14.2.4 restricts assignment on a lapsed operator qualification; this is the contractor side of the same control.</documentation></serviceTask>
+    <userTask id="n_161_rein" name="Reinstate only after 16.1.3 passes again"><documentation>16.1.4.</documentation></userTask>
+    <sendTask id="n_161_pub" name="Publish the live status to award and dispatch"><documentation>16.1.4. A suspension dispatch cannot see is not a suspension. 16.2.2 must consume this.</documentation></sendTask>
+    <endEvent id="n_161_end" name="Contractor status published"/>
+    <sequenceFlow id="f_n_161_start_n_161_org" sourceRef="n_161_start" targetRef="n_161_org" name=""/>
+    <sequenceFlow id="f_n_161_org_n_161_og" sourceRef="n_161_org" targetRef="n_161_og" name=""/>
+    <sequenceFlow id="f_n_161_og_n_161_rej" sourceRef="n_161_og" targetRef="n_161_rej" name="no organisation"><conditionExpression xsi:type="tFormalExpression"><![CDATA[hasOrganisation = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_161_og_n_161_crew" sourceRef="n_161_og" targetRef="n_161_crew" name="organisation present"/>
+    <sequenceFlow id="f_n_161_crew_n_161_skill" sourceRef="n_161_crew" targetRef="n_161_skill" name=""/>
+    <sequenceFlow id="f_n_161_skill_n_161_plant" sourceRef="n_161_skill" targetRef="n_161_plant" name=""/>
+    <sequenceFlow id="f_n_161_plant_n_161_not" sourceRef="n_161_plant" targetRef="n_161_not" name="exclusions found"/>
+    <sequenceFlow id="f_n_161_plant_n_161_pap" sourceRef="n_161_plant" targetRef="n_161_pap" name=""/>
+    <sequenceFlow id="f_n_161_pap_n_161_ver" sourceRef="n_161_pap" targetRef="n_161_ver" name=""/>
+    <sequenceFlow id="f_n_161_ver_n_161_199" sourceRef="n_161_ver" targetRef="n_161_199" name=""/>
+    <sequenceFlow id="f_n_161_199_n_161_pg" sourceRef="n_161_199" targetRef="n_161_pg" name=""/>
+    <sequenceFlow id="f_n_161_pg_n_161_hold" sourceRef="n_161_pg" targetRef="n_161_hold" name="not current or not covering"><conditionExpression xsi:type="tFormalExpression"><![CDATA[papersPass = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_161_hold_n_161_pap" sourceRef="n_161_hold" targetRef="n_161_pap" name="papers returned"/>
+    <sequenceFlow id="f_n_161_pg_n_161_live" sourceRef="n_161_pg" targetRef="n_161_live" name="pass"/>
+    <sequenceFlow id="f_n_161_live_n_161_pub" sourceRef="n_161_live" targetRef="n_161_pub" name=""/>
+    <sequenceFlow id="f_n_161_pub_n_161_end" sourceRef="n_161_pub" targetRef="n_161_end" name=""/>
+    <sequenceFlow id="f_n_161_t_n_161_watch" sourceRef="n_161_t" targetRef="n_161_watch" name=""/>
+    <sequenceFlow id="f_n_161_watch_n_161_sg" sourceRef="n_161_watch" targetRef="n_161_sg" name=""/>
+    <sequenceFlow id="f_n_161_sg_n_161_susp" sourceRef="n_161_sg" targetRef="n_161_susp" name="lapse, incident or instruction"><conditionExpression xsi:type="tFormalExpression"><![CDATA[suspend = true]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_161_sg_n_161_pub" sourceRef="n_161_sg" targetRef="n_161_pub" name="still current"/>
+    <sequenceFlow id="f_n_161_susp_n_161_rein" sourceRef="n_161_susp" targetRef="n_161_rein" name=""/>
+    <sequenceFlow id="f_n_161_rein_n_161_pap" sourceRef="n_161_rein" targetRef="n_161_pap" name=""/>
+    <sequenceFlow id="f_n_161_susp_n_161_pub" sourceRef="n_161_susp" targetRef="n_161_pub" name="publish the suspension"/>
+  </process>
+  <bpmndi:BPMNDiagram id="dg_P_16_1">
+    <bpmndi:BPMNPlane id="pl_P_16_1" bpmnElement="P_16_1">
+      <bpmndi:BPMNShape id="sh_n_161_start" bpmnElement="n_161_start"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_161_org" bpmnElement="n_161_org"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_161_og" bpmnElement="n_161_og"><dc:Bounds x="467" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_161_rej" bpmnElement="n_161_rej"><dc:Bounds x="472" y="437" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_161_crew" bpmnElement="n_161_crew"><dc:Bounds x="595" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_161_skill" bpmnElement="n_161_skill"><dc:Bounds x="765" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_161_plant" bpmnElement="n_161_plant"><dc:Bounds x="935" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_161_not" bpmnElement="n_161_not"><dc:Bounds x="1105" y="90" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_161_pap" bpmnElement="n_161_pap"><dc:Bounds x="1105" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_161_ver" bpmnElement="n_161_ver"><dc:Bounds x="1275" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_161_199" bpmnElement="n_161_199"><dc:Bounds x="1445" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_161_pg" bpmnElement="n_161_pg"><dc:Bounds x="1657" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_161_hold" bpmnElement="n_161_hold"><dc:Bounds x="1615" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_161_live" bpmnElement="n_161_live"><dc:Bounds x="1785" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_161_t" bpmnElement="n_161_t"><dc:Bounds x="812" y="767" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_161_watch" bpmnElement="n_161_watch"><dc:Bounds x="935" y="750" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_161_sg" bpmnElement="n_161_sg"><dc:Bounds x="1147" y="762" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_161_susp" bpmnElement="n_161_susp"><dc:Bounds x="1275" y="750" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_161_rein" bpmnElement="n_161_rein"><dc:Bounds x="1445" y="860" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_161_pub" bpmnElement="n_161_pub"><dc:Bounds x="1955" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_161_end" bpmnElement="n_161_end"><dc:Bounds x="2172" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ed_f_n_161_start_n_161_org" bpmnElement="f_n_161_start_n_161_org"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_161_org_n_161_og" bpmnElement="f_n_161_org_n_161_og"><di:waypoint x="385" y="235"/><di:waypoint x="467" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_161_og_n_161_rej" bpmnElement="f_n_161_og_n_161_rej"><di:waypoint x="513" y="235"/><di:waypoint x="447" y="235"/><di:waypoint x="447" y="455"/><di:waypoint x="472" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_161_og_n_161_crew" bpmnElement="f_n_161_og_n_161_crew"><di:waypoint x="513" y="235"/><di:waypoint x="595" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_161_crew_n_161_skill" bpmnElement="f_n_161_crew_n_161_skill"><di:waypoint x="725" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_161_skill_n_161_plant" bpmnElement="f_n_161_skill_n_161_plant"><di:waypoint x="895" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_161_plant_n_161_not" bpmnElement="f_n_161_plant_n_161_not"><di:waypoint x="1065" y="235"/><di:waypoint x="1080" y="235"/><di:waypoint x="1080" y="125"/><di:waypoint x="1105" y="125"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_161_plant_n_161_pap" bpmnElement="f_n_161_plant_n_161_pap"><di:waypoint x="1065" y="235"/><di:waypoint x="1105" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_161_pap_n_161_ver" bpmnElement="f_n_161_pap_n_161_ver"><di:waypoint x="1235" y="235"/><di:waypoint x="1275" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_161_ver_n_161_199" bpmnElement="f_n_161_ver_n_161_199"><di:waypoint x="1405" y="235"/><di:waypoint x="1445" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_161_199_n_161_pg" bpmnElement="f_n_161_199_n_161_pg"><di:waypoint x="1575" y="235"/><di:waypoint x="1657" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_161_pg_n_161_hold" bpmnElement="f_n_161_pg_n_161_hold"><di:waypoint x="1703" y="235"/><di:waypoint x="1590" y="235"/><di:waypoint x="1590" y="455"/><di:waypoint x="1615" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_161_hold_n_161_pap" bpmnElement="f_n_161_hold_n_161_pap"><di:waypoint x="1745" y="455"/><di:waypoint x="1080" y="455"/><di:waypoint x="1080" y="235"/><di:waypoint x="1105" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_161_pg_n_161_live" bpmnElement="f_n_161_pg_n_161_live"><di:waypoint x="1703" y="235"/><di:waypoint x="1785" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_161_live_n_161_pub" bpmnElement="f_n_161_live_n_161_pub"><di:waypoint x="1915" y="235"/><di:waypoint x="1955" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_161_pub_n_161_end" bpmnElement="f_n_161_pub_n_161_end"><di:waypoint x="2085" y="235"/><di:waypoint x="2172" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_161_t_n_161_watch" bpmnElement="f_n_161_t_n_161_watch"><di:waypoint x="848" y="785"/><di:waypoint x="935" y="785"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_161_watch_n_161_sg" bpmnElement="f_n_161_watch_n_161_sg"><di:waypoint x="1065" y="785"/><di:waypoint x="1147" y="785"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_161_sg_n_161_susp" bpmnElement="f_n_161_sg_n_161_susp"><di:waypoint x="1193" y="785"/><di:waypoint x="1275" y="785"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_161_sg_n_161_pub" bpmnElement="f_n_161_sg_n_161_pub"><di:waypoint x="1193" y="785"/><di:waypoint x="1930" y="785"/><di:waypoint x="1930" y="235"/><di:waypoint x="1955" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_161_susp_n_161_rein" bpmnElement="f_n_161_susp_n_161_rein"><di:waypoint x="1405" y="785"/><di:waypoint x="1420" y="785"/><di:waypoint x="1420" y="895"/><di:waypoint x="1445" y="895"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_161_rein_n_161_pap" bpmnElement="f_n_161_rein_n_161_pap"><di:waypoint x="1575" y="895"/><di:waypoint x="1080" y="895"/><di:waypoint x="1080" y="235"/><di:waypoint x="1105" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_161_susp_n_161_pub" bpmnElement="f_n_161_susp_n_161_pub"><di:waypoint x="1405" y="785"/><di:waypoint x="1930" y="785"/><di:waypoint x="1930" y="235"/><di:waypoint x="1955" y="235"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_P_16_3" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <process id="P_16_3" name="16.3 Oversee contractor execution" isExecutable="false">
+    <documentation>Tier-4 activities under 16.3.1 to 16.3.4. This is the operational half of the category; 16.5 is the interface half, and 16.5.3 delivers into 16.3.1 and 16.3.2 rather than duplicating them. EN 17007 cl. 6.15 SER.4 supplies the acceptance of an external service. Two failures are drawn as paths rather than left to a warning: silence past a committed date is an exception and not a green status, and a completion claim with no evidence is not a completion.</documentation>
+    <laneSet id="P_16_3_lanes">
+      <lane id="l_163_frd" name="Contractor feed">
+        <flowNodeRef>n_163_prog</flowNodeRef>
+        <flowNodeRef>n_163_tr</flowNodeRef>
+        <flowNodeRef>n_163_t</flowNodeRef>
+        <flowNodeRef>n_163_exc</flowNodeRef>
+        <flowNodeRef>n_163_claim</flowNodeRef>
+        <flowNodeRef>n_163_ev</flowNodeRef>
+        <flowNodeRef>n_163_eg</flowNodeRef>
+        <flowNodeRef>n_163_ehold</flowNodeRef>
+      </lane>
+      <lane id="l_163_mai" name="Oversight">
+        <flowNodeRef>n_163_sched</flowNodeRef>
+        <flowNodeRef>n_163_insp</flowNodeRef>
+        <flowNodeRef>n_163_dg</flowNodeRef>
+        <flowNodeRef>n_163_acc</flowNodeRef>
+        <flowNodeRef>n_163_pl</flowNodeRef>
+        <flowNodeRef>n_163_rej</flowNodeRef>
+        <flowNodeRef>n_163_rw</flowNodeRef>
+        <flowNodeRef>n_163_hold2</flowNodeRef>
+        <flowNodeRef>n_163_re</flowNodeRef>
+        <flowNodeRef>n_163_settle</flowNodeRef>
+        <flowNodeRef>n_163_end</flowNodeRef>
+      </lane>
+    </laneSet>
+    <startEvent id="n_163_prog" name="Contractor progress received"><messageEventDefinition id="n_163_prog_md"/></startEvent>
+    <serviceTask id="n_163_tr" name="Translate to the operator's status set"><documentation>16.3.1. IEC 61968-6 standardises the exchange, not the progress codes, so the translation table is the operator's.</documentation></serviceTask>
+    <sendTask id="n_163_sched" name="Update the schedule"><documentation>16.3.1. The same schedule 4.1.4 updates for internal work. One schedule.</documentation></sendTask>
+    <startEvent id="n_163_t" name="Committed date passed with no progress"><timerEventDefinition id="n_163_t_td"/></startEvent>
+    <userTask id="n_163_exc" name="Raise the silence exception"><documentation>16.3.1. Silence past the committed date is an exception. Treating it as green is how a contractor's slip becomes the operator's surprise.</documentation></userTask>
+    <startEvent id="n_163_claim" name="Contractor claims the work complete"><messageEventDefinition id="n_163_claim_md"/></startEvent>
+    <serviceTask id="n_163_ev" name="Check the evidence attached to the claim"><documentation>16.3.2. No standard specifies contractor completion-evidence content.</documentation></serviceTask>
+    <exclusiveGateway id="n_163_eg" name="Evidence attached"/>
+    <userTask id="n_163_ehold" name="Hold the claim for missing evidence"><documentation>16.3.2. As-built that belongs on 5.4 still has to arrive here first if the contractor produced it.</documentation></userTask>
+    <userTask id="n_163_insp" name="Inspect against the issued package"><documentation>16.3.3. 7 CFR 1724.32 inspection of work-order construction binds RUS borrowers and is a variant, not the general rule.</documentation></userTask>
+    <exclusiveGateway id="n_163_dg" name="Inspection result"/>
+    <serviceTask id="n_163_acc" name="Accept and write the result on the work"><documentation>16.3.3. 5.1.1 verifies operator work; this accepts contractor work. Do not close 5.1 on a reject from here.</documentation></serviceTask>
+    <userTask id="n_163_pl" name="Accept with punchlist"><documentation>16.3.3.</documentation></userTask>
+    <userTask id="n_163_rej" name="Reject"><documentation>16.3.3.</documentation></userTask>
+    <serviceTask id="n_163_rw" name="Raise rework against the same award"><documentation>16.3.4. Against the same award, or the rework rate stops meaning anything. SMRP Best Practices Pillar 5 4.1 Rework is the measure.</documentation></serviceTask>
+    <sendTask id="n_163_hold2" name="Hold settlement on the defective portion"><documentation>16.3.4. Paying punchlist work as complete is a 16.4.3 failure that starts here.</documentation></sendTask>
+    <exclusiveGateway id="n_163_re" name="Rework accepted later"/>
+    <sendTask id="n_163_settle" name="Release to settlement"><documentation>16.4.1 counts it.</documentation></sendTask>
+    <endEvent id="n_163_end" name="Contracted work accepted"/>
+    <sequenceFlow id="f_n_163_prog_n_163_tr" sourceRef="n_163_prog" targetRef="n_163_tr" name=""/>
+    <sequenceFlow id="f_n_163_tr_n_163_sched" sourceRef="n_163_tr" targetRef="n_163_sched" name=""/>
+    <sequenceFlow id="f_n_163_t_n_163_exc" sourceRef="n_163_t" targetRef="n_163_exc" name=""/>
+    <sequenceFlow id="f_n_163_exc_n_163_sched" sourceRef="n_163_exc" targetRef="n_163_sched" name=""/>
+    <sequenceFlow id="f_n_163_claim_n_163_ev" sourceRef="n_163_claim" targetRef="n_163_ev" name=""/>
+    <sequenceFlow id="f_n_163_ev_n_163_eg" sourceRef="n_163_ev" targetRef="n_163_eg" name=""/>
+    <sequenceFlow id="f_n_163_eg_n_163_ehold" sourceRef="n_163_eg" targetRef="n_163_ehold" name="no evidence"><conditionExpression xsi:type="tFormalExpression"><![CDATA[evidenceAttached = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_163_ehold_n_163_ev" sourceRef="n_163_ehold" targetRef="n_163_ev" name="evidence supplied"/>
+    <sequenceFlow id="f_n_163_eg_n_163_insp" sourceRef="n_163_eg" targetRef="n_163_insp" name="evidence attached"/>
+    <sequenceFlow id="f_n_163_insp_n_163_dg" sourceRef="n_163_insp" targetRef="n_163_dg" name=""/>
+    <sequenceFlow id="f_n_163_dg_n_163_pl" sourceRef="n_163_dg" targetRef="n_163_pl" name="punchlist"><conditionExpression xsi:type="tFormalExpression"><![CDATA[result = "punchlist"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_163_dg_n_163_rej" sourceRef="n_163_dg" targetRef="n_163_rej" name="reject"><conditionExpression xsi:type="tFormalExpression"><![CDATA[result = "reject"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_163_dg_n_163_acc" sourceRef="n_163_dg" targetRef="n_163_acc" name="accept"/>
+    <sequenceFlow id="f_n_163_pl_n_163_rw" sourceRef="n_163_pl" targetRef="n_163_rw" name=""/>
+    <sequenceFlow id="f_n_163_rej_n_163_rw" sourceRef="n_163_rej" targetRef="n_163_rw" name=""/>
+    <sequenceFlow id="f_n_163_rw_n_163_hold2" sourceRef="n_163_rw" targetRef="n_163_hold2" name=""/>
+    <sequenceFlow id="f_n_163_hold2_n_163_re" sourceRef="n_163_hold2" targetRef="n_163_re" name=""/>
+    <sequenceFlow id="f_n_163_re_n_163_insp" sourceRef="n_163_re" targetRef="n_163_insp" name="reinspect"/>
+    <sequenceFlow id="f_n_163_acc_n_163_settle" sourceRef="n_163_acc" targetRef="n_163_settle" name=""/>
+    <sequenceFlow id="f_n_163_settle_n_163_end" sourceRef="n_163_settle" targetRef="n_163_end" name=""/>
+  </process>
+  <bpmndi:BPMNDiagram id="dg_P_16_3">
+    <bpmndi:BPMNPlane id="pl_P_16_3" bpmnElement="P_16_3">
+      <bpmndi:BPMNShape id="sh_n_163_prog" bpmnElement="n_163_prog"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_163_tr" bpmnElement="n_163_tr"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_163_sched" bpmnElement="n_163_sched"><dc:Bounds x="425" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_163_t" bpmnElement="n_163_t"><dc:Bounds x="132" y="437" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_163_exc" bpmnElement="n_163_exc"><dc:Bounds x="255" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_163_claim" bpmnElement="n_163_claim"><dc:Bounds x="132" y="767" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_163_ev" bpmnElement="n_163_ev"><dc:Bounds x="255" y="750" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_163_eg" bpmnElement="n_163_eg"><dc:Bounds x="467" y="762" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_163_ehold" bpmnElement="n_163_ehold"><dc:Bounds x="425" y="970" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_163_insp" bpmnElement="n_163_insp"><dc:Bounds x="595" y="750" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_163_dg" bpmnElement="n_163_dg"><dc:Bounds x="807" y="762" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_163_acc" bpmnElement="n_163_acc"><dc:Bounds x="935" y="750" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_163_pl" bpmnElement="n_163_pl"><dc:Bounds x="935" y="970" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_163_rej" bpmnElement="n_163_rej"><dc:Bounds x="935" y="1080" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_163_rw" bpmnElement="n_163_rw"><dc:Bounds x="1105" y="970" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_163_hold2" bpmnElement="n_163_hold2"><dc:Bounds x="1275" y="970" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_163_re" bpmnElement="n_163_re"><dc:Bounds x="1487" y="982" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_163_settle" bpmnElement="n_163_settle"><dc:Bounds x="1105" y="750" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_163_end" bpmnElement="n_163_end"><dc:Bounds x="1322" y="767" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ed_f_n_163_prog_n_163_tr" bpmnElement="f_n_163_prog_n_163_tr"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_163_tr_n_163_sched" bpmnElement="f_n_163_tr_n_163_sched"><di:waypoint x="385" y="235"/><di:waypoint x="425" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_163_t_n_163_exc" bpmnElement="f_n_163_t_n_163_exc"><di:waypoint x="168" y="455"/><di:waypoint x="255" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_163_exc_n_163_sched" bpmnElement="f_n_163_exc_n_163_sched"><di:waypoint x="385" y="455"/><di:waypoint x="400" y="455"/><di:waypoint x="400" y="235"/><di:waypoint x="425" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_163_claim_n_163_ev" bpmnElement="f_n_163_claim_n_163_ev"><di:waypoint x="168" y="785"/><di:waypoint x="255" y="785"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_163_ev_n_163_eg" bpmnElement="f_n_163_ev_n_163_eg"><di:waypoint x="385" y="785"/><di:waypoint x="467" y="785"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_163_eg_n_163_ehold" bpmnElement="f_n_163_eg_n_163_ehold"><di:waypoint x="513" y="785"/><di:waypoint x="400" y="785"/><di:waypoint x="400" y="1005"/><di:waypoint x="425" y="1005"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_163_ehold_n_163_ev" bpmnElement="f_n_163_ehold_n_163_ev"><di:waypoint x="555" y="1005"/><di:waypoint x="230" y="1005"/><di:waypoint x="230" y="785"/><di:waypoint x="255" y="785"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_163_eg_n_163_insp" bpmnElement="f_n_163_eg_n_163_insp"><di:waypoint x="513" y="785"/><di:waypoint x="595" y="785"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_163_insp_n_163_dg" bpmnElement="f_n_163_insp_n_163_dg"><di:waypoint x="725" y="785"/><di:waypoint x="807" y="785"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_163_dg_n_163_pl" bpmnElement="f_n_163_dg_n_163_pl"><di:waypoint x="853" y="785"/><di:waypoint x="910" y="785"/><di:waypoint x="910" y="1005"/><di:waypoint x="935" y="1005"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_163_dg_n_163_rej" bpmnElement="f_n_163_dg_n_163_rej"><di:waypoint x="853" y="785"/><di:waypoint x="910" y="785"/><di:waypoint x="910" y="1115"/><di:waypoint x="935" y="1115"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_163_dg_n_163_acc" bpmnElement="f_n_163_dg_n_163_acc"><di:waypoint x="853" y="785"/><di:waypoint x="935" y="785"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_163_pl_n_163_rw" bpmnElement="f_n_163_pl_n_163_rw"><di:waypoint x="1065" y="1005"/><di:waypoint x="1105" y="1005"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_163_rej_n_163_rw" bpmnElement="f_n_163_rej_n_163_rw"><di:waypoint x="1065" y="1115"/><di:waypoint x="1080" y="1115"/><di:waypoint x="1080" y="1005"/><di:waypoint x="1105" y="1005"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_163_rw_n_163_hold2" bpmnElement="f_n_163_rw_n_163_hold2"><di:waypoint x="1235" y="1005"/><di:waypoint x="1275" y="1005"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_163_hold2_n_163_re" bpmnElement="f_n_163_hold2_n_163_re"><di:waypoint x="1405" y="1005"/><di:waypoint x="1487" y="1005"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_163_re_n_163_insp" bpmnElement="f_n_163_re_n_163_insp"><di:waypoint x="1533" y="1005"/><di:waypoint x="570" y="1005"/><di:waypoint x="570" y="785"/><di:waypoint x="595" y="785"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_163_acc_n_163_settle" bpmnElement="f_n_163_acc_n_163_settle"><di:waypoint x="1065" y="785"/><di:waypoint x="1105" y="785"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_163_settle_n_163_end" bpmnElement="f_n_163_settle_n_163_end"><di:waypoint x="1235" y="785"/><di:waypoint x="1322" y="785"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

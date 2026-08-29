@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/" id="Contract_rate_validation" name="16.4.2 Validate against contract rates and terms" namespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <description>The output is payable, hold or reject - a value, not a payment. The one rule that matters most is the one that returns nothing: where no awarded rate covers the line, the answer is hold. A payable amount with no awarded rate behind it has not been validated, it has been asserted, and 16.4.3 will pay it. EN 17007 cl. 6.8 BUD.4 extracts budgeted and actual expenditures and is not an invoice-match standard; rate tables are the contract's, and EN 13269 is cited by title with nothing paraphrased from its body.</description>
+  <inputData id="in_rateExists" name="An awarded rate covers this line"><variable id="in_rateExists_v" name="An awarded rate covers this line" typeRef="boolean"/></inputData>
+  <inputData id="in_quantityWithinAward" name="Quantity within the awarded amount"><variable id="in_quantityWithinAward_v" name="Quantity within the awarded amount" typeRef="boolean"/></inputData>
+  <inputData id="in_accepted" name="Work accepted at 16.3.3"><variable id="in_accepted_v" name="Work accepted at 16.3.3" typeRef="boolean"/></inputData>
+  <inputData id="in_reworkHold" name="Open rework hold on the line"><variable id="in_reworkHold_v" name="Open rework hold on the line" typeRef="boolean"/></inputData>
+  <inputData id="in_termsSatisfied" name="Contract terms satisfied"><variable id="in_termsSatisfied_v" name="Contract terms satisfied" typeRef="boolean"/></inputData>
+  <decision id="d_16_4_2" name="Line outcome">
+    <variable id="d_16_4_2_v" name="Line outcome" typeRef="string"/>
+    <decisionTable id="d_16_4_2_dt" hitPolicy="FIRST" preferredOrientation="Rule-as-Row">
+      <input id="d_16_4_2_i1" label="Work accepted"><inputExpression id="d_16_4_2_i1_e" typeRef="boolean"><text>in_accepted</text></inputExpression></input>
+      <input id="d_16_4_2_i2" label="An awarded rate covers the line"><inputExpression id="d_16_4_2_i2_e" typeRef="boolean"><text>in_rateExists</text></inputExpression></input>
+      <input id="d_16_4_2_i3" label="Open rework hold"><inputExpression id="d_16_4_2_i3_e" typeRef="boolean"><text>in_reworkHold</text></inputExpression></input>
+      <input id="d_16_4_2_i4" label="Quantity within the award"><inputExpression id="d_16_4_2_i4_e" typeRef="boolean"><text>in_quantityWithinAward</text></inputExpression></input>
+      <input id="d_16_4_2_i5" label="Contract terms satisfied"><inputExpression id="d_16_4_2_i5_e" typeRef="boolean"><text>in_termsSatisfied</text></inputExpression></input>
+      <output id="d_16_4_2_o" label="Line outcome" name="Line outcome" typeRef="string"/>
+      <rule id="d_16_4_2_r1">
+        <description>Not accepted at 16.3.3. There is nothing to price.</description>
+        <inputEntry id="d_16_4_2_r1_ie1"><text>false</text></inputEntry>
+        <inputEntry id="d_16_4_2_r1_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_16_4_2_r1_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_16_4_2_r1_ie4"><text>-</text></inputEntry>
+        <inputEntry id="d_16_4_2_r1_ie5"><text>-</text></inputEntry>
+        <outputEntry id="d_16_4_2_r1_oe"><text>"reject"</text></outputEntry>
+      </rule>
+      <rule id="d_16_4_2_r2">
+        <description>No awarded rate covers the line. Hold - do not invent a rate, and do not let a contractor's own rate become the operator's by arriving on an invoice.</description>
+        <inputEntry id="d_16_4_2_r2_ie1"><text>-</text></inputEntry>
+        <inputEntry id="d_16_4_2_r2_ie2"><text>false</text></inputEntry>
+        <inputEntry id="d_16_4_2_r2_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_16_4_2_r2_ie4"><text>-</text></inputEntry>
+        <inputEntry id="d_16_4_2_r2_ie5"><text>-</text></inputEntry>
+        <outputEntry id="d_16_4_2_r2_oe"><text>"hold"</text></outputEntry>
+      </rule>
+      <rule id="d_16_4_2_r3">
+        <description>An open rework hold from 16.3.4. The defective portion is not payable while the defect is open, and 16.4.3 enforces the same test again before it pays.</description>
+        <inputEntry id="d_16_4_2_r3_ie1"><text>-</text></inputEntry>
+        <inputEntry id="d_16_4_2_r3_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_16_4_2_r3_ie3"><text>true</text></inputEntry>
+        <inputEntry id="d_16_4_2_r3_ie4"><text>-</text></inputEntry>
+        <inputEntry id="d_16_4_2_r3_ie5"><text>-</text></inputEntry>
+        <outputEntry id="d_16_4_2_r3_oe"><text>"hold"</text></outputEntry>
+      </rule>
+      <rule id="d_16_4_2_r4">
+        <description>Quantity beyond the award. It becomes payable through a change, not through a settlement run.</description>
+        <inputEntry id="d_16_4_2_r4_ie1"><text>-</text></inputEntry>
+        <inputEntry id="d_16_4_2_r4_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_16_4_2_r4_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_16_4_2_r4_ie4"><text>false</text></inputEntry>
+        <inputEntry id="d_16_4_2_r4_ie5"><text>-</text></inputEntry>
+        <outputEntry id="d_16_4_2_r4_oe"><text>"hold"</text></outputEntry>
+      </rule>
+      <rule id="d_16_4_2_r5">
+        <description>A term of the contract is not satisfied - evidence, certification currency, a retention condition. Held against the named term.</description>
+        <inputEntry id="d_16_4_2_r5_ie1"><text>-</text></inputEntry>
+        <inputEntry id="d_16_4_2_r5_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_16_4_2_r5_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_16_4_2_r5_ie4"><text>-</text></inputEntry>
+        <inputEntry id="d_16_4_2_r5_ie5"><text>false</text></inputEntry>
+        <outputEntry id="d_16_4_2_r5_oe"><text>"hold"</text></outputEntry>
+      </rule>
+      <rule id="d_16_4_2_r6">
+        <description>Accepted work, an awarded rate, no hold, within the award and on terms. This is the only combination that produces a payable line.</description>
+        <inputEntry id="d_16_4_2_r6_ie1"><text>true</text></inputEntry>
+        <inputEntry id="d_16_4_2_r6_ie2"><text>true</text></inputEntry>
+        <inputEntry id="d_16_4_2_r6_ie3"><text>false</text></inputEntry>
+        <inputEntry id="d_16_4_2_r6_ie4"><text>true</text></inputEntry>
+        <inputEntry id="d_16_4_2_r6_ie5"><text>true</text></inputEntry>
+        <outputEntry id="d_16_4_2_r6_oe"><text>"payable"</text></outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram id="drd_Contract_rate_validation">
+      <dmndi:DMNShape id="sh_in_rateExists" dmnElementRef="in_rateExists"><dc:Bounds x="60" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_quantityWithinAward" dmnElementRef="in_quantityWithinAward"><dc:Bounds x="245" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_accepted" dmnElementRef="in_accepted"><dc:Bounds x="430" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_reworkHold" dmnElementRef="in_reworkHold"><dc:Bounds x="615" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_termsSatisfied" dmnElementRef="in_termsSatisfied"><dc:Bounds x="800" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_d_16_4_2" dmnElementRef="d_16_4_2"><dc:Bounds x="60" y="240" width="180" height="70"/></dmndi:DMNShape>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</definitions>

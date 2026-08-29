@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_P_16_2" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <process id="P_16_2" name="16.2 Award and assign contracted work" isExecutable="false">
+    <documentation>Tier-4 activities under 16.2.2, 16.2.3 and 16.2.4. The routing decision is 16.2.1 and is called. EN 17007 cl. 6.15 SER.2 is contract with external companies and SER.4 is provide external services, whose acceptance is one of only two approvals named in clause 6. EN 13269 is cited by title for contract preparation and its body is paywalled, so no package content, rate table or acceptance test is paraphrased from it. What the path does draw is the OSHA duty: 1910.269(a)(3) information transfer is owed at award, and the package is held until it is complete.</documentation>
+    <laneSet id="P_16_2_lanes">
+      <lane id="l_162_schd" name="Award and schedule">
+        <flowNodeRef>n_162_start</flowNodeRef>
+        <flowNodeRef>n_162_route</flowNodeRef>
+        <flowNodeRef>n_162_rg</flowNodeRef>
+        <flowNodeRef>n_162_int</flowNodeRef>
+        <flowNodeRef>n_162_sel</flowNodeRef>
+        <flowNodeRef>n_162_sg</flowNodeRef>
+        <flowNodeRef>n_162_ref</flowNodeRef>
+        <flowNodeRef>n_162_aw</flowNodeRef>
+        <flowNodeRef>n_162_date</flowNodeRef>
+        <flowNodeRef>n_162_end</flowNodeRef>
+        <flowNodeRef>n_162_back</flowNodeRef>
+      </lane>
+      <lane id="l_162_hse" name="Host employer duty">
+        <flowNodeRef>n_162_xfer</flowNodeRef>
+        <flowNodeRef>n_162_xg</flowNodeRef>
+        <flowNodeRef>n_162_hold</flowNodeRef>
+      </lane>
+      <lane id="l_162_mai" name="Work package">
+        <flowNodeRef>n_162_pack</flowNodeRef>
+        <flowNodeRef>n_162_haz</flowNodeRef>
+        <flowNodeRef>n_162_iss</flowNodeRef>
+        <flowNodeRef>n_162_acc</flowNodeRef>
+        <flowNodeRef>n_162_ag</flowNodeRef>
+      </lane>
+    </laneSet>
+    <startEvent id="n_162_start" name="Work ready to assign, route not yet set"><conditionalEventDefinition id="n_162_start_cd"><condition/></conditionalEventDefinition></startEvent>
+    <businessRuleTask id="n_162_route" name="Determine internal versus contracted (16.2.1)"><documentation>16.2.1 returns the shared deliveryRoute value. 1.3.4 is the same rule set and 3.2.3 commits the roster split; three processes, one determination.</documentation></businessRuleTask>
+    <exclusiveGateway id="n_162_rg" name="Delivery route"/>
+    <endEvent id="n_162_int" name="Internal delivery, leaves this category"><documentation>16.2.1. Internal work goes to 3.4 and 4.0.</documentation></endEvent>
+    <userTask id="n_162_sel" name="Select a live, capable contractor"><documentation>16.2.2. Live means 16.1.4 has not suspended them.</documentation></userTask>
+    <exclusiveGateway id="n_162_sg" name="Contractor live and capable"/>
+    <endEvent id="n_162_ref" name="Award refused, contractor suspended"><documentation>16.2.2. Awarding covered-task gas work to a suspended crew is the failure this gate exists to prevent.</documentation></endEvent>
+    <serviceTask id="n_162_aw" name="Record the award and the commercial terms used"><documentation>16.2.2. Work award, not a goods purchase order - 13.4.2 is that.</documentation></serviceTask>
+    <userTask id="n_162_xfer" name="Complete the host and contract employer transfer"><documentation>16.2.2 and 16.2.3. 29 CFR 1910.269(a)(3) requires each employer to inform the other - characteristics of the installation, known hazards, conditions the other employer will encounter. Owed at award, not after the crew is on site.</documentation></userTask>
+    <serviceTask id="n_162_pack" name="Assemble the package from 2.5"><documentation>16.2.3. No standard specifies work-package content; 7 CFR 1724.53(b)(1) binds RUS borrowers only.</documentation></serviceTask>
+    <serviceTask id="n_162_haz" name="Add hazards, access notes and any clearance need"><documentation>16.2.3. A clearance is NOT in the package. 18.4.4 issues it against a switching plan approved at 18.2.2; the package says whether one is required.</documentation></serviceTask>
+    <exclusiveGateway id="n_162_xg" name="Transfer complete"/>
+    <userTask id="n_162_hold" name="Hold the package"><documentation>16.2.3. Held for incomplete hazard transfer, which is a safety hold and not an administrative one.</documentation></userTask>
+    <sendTask id="n_162_iss" name="Issue the package to the awarded contractor"><documentation>16.2.3. Through 16.5.2.</documentation></sendTask>
+    <receiveTask id="n_162_acc" name="Receive accept, reject or a date change"><documentation>16.2.4. Issuing without acceptance is a send, not a commitment.</documentation></receiveTask>
+    <exclusiveGateway id="n_162_ag" name="Acceptance"/>
+    <sendTask id="n_162_back" name="Return rejected work to routing"><documentation>16.2.4. Back to 16.2.1, not into a hole. A reject is not a silent miss.</documentation></sendTask>
+    <serviceTask id="n_162_date" name="Write the committed date onto the schedule"><documentation>16.2.4. A committed date 3.4 cannot see is not a commitment.</documentation></serviceTask>
+    <endEvent id="n_162_end" name="Work awarded and committed"/>
+    <sequenceFlow id="f_n_162_start_n_162_route" sourceRef="n_162_start" targetRef="n_162_route" name=""/>
+    <sequenceFlow id="f_n_162_route_n_162_rg" sourceRef="n_162_route" targetRef="n_162_rg" name=""/>
+    <sequenceFlow id="f_n_162_rg_n_162_int" sourceRef="n_162_rg" targetRef="n_162_int" name="internal"><conditionExpression xsi:type="tFormalExpression"><![CDATA[deliveryRoute = "internal"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_162_rg_n_162_sel" sourceRef="n_162_rg" targetRef="n_162_sel" name="external service or named pool"/>
+    <sequenceFlow id="f_n_162_sel_n_162_sg" sourceRef="n_162_sel" targetRef="n_162_sg" name=""/>
+    <sequenceFlow id="f_n_162_sg_n_162_ref" sourceRef="n_162_sg" targetRef="n_162_ref" name="suspended or not capable"><conditionExpression xsi:type="tFormalExpression"><![CDATA[contractorLive = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_162_sg_n_162_aw" sourceRef="n_162_sg" targetRef="n_162_aw" name="live and capable"/>
+    <sequenceFlow id="f_n_162_aw_n_162_xfer" sourceRef="n_162_aw" targetRef="n_162_xfer" name=""/>
+    <sequenceFlow id="f_n_162_xfer_n_162_pack" sourceRef="n_162_xfer" targetRef="n_162_pack" name=""/>
+    <sequenceFlow id="f_n_162_pack_n_162_haz" sourceRef="n_162_pack" targetRef="n_162_haz" name=""/>
+    <sequenceFlow id="f_n_162_haz_n_162_xg" sourceRef="n_162_haz" targetRef="n_162_xg" name=""/>
+    <sequenceFlow id="f_n_162_xg_n_162_hold" sourceRef="n_162_xg" targetRef="n_162_hold" name="transfer incomplete"><conditionExpression xsi:type="tFormalExpression"><![CDATA[informationTransfer = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_162_hold_n_162_xfer" sourceRef="n_162_hold" targetRef="n_162_xfer" name="transfer completed"/>
+    <sequenceFlow id="f_n_162_xg_n_162_iss" sourceRef="n_162_xg" targetRef="n_162_iss" name="complete"/>
+    <sequenceFlow id="f_n_162_iss_n_162_acc" sourceRef="n_162_iss" targetRef="n_162_acc" name=""/>
+    <sequenceFlow id="f_n_162_acc_n_162_ag" sourceRef="n_162_acc" targetRef="n_162_ag" name=""/>
+    <sequenceFlow id="f_n_162_ag_n_162_back" sourceRef="n_162_ag" targetRef="n_162_back" name="rejected"><conditionExpression xsi:type="tFormalExpression"><![CDATA[acceptance = "reject"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_162_back_n_162_route" sourceRef="n_162_back" targetRef="n_162_route" name=""/>
+    <sequenceFlow id="f_n_162_ag_n_162_date" sourceRef="n_162_ag" targetRef="n_162_date" name="accepted, with or without a new date"/>
+    <sequenceFlow id="f_n_162_date_n_162_end" sourceRef="n_162_date" targetRef="n_162_end" name=""/>
+  </process>
+  <bpmndi:BPMNDiagram id="dg_P_16_2">
+    <bpmndi:BPMNPlane id="pl_P_16_2" bpmnElement="P_16_2">
+      <bpmndi:BPMNShape id="sh_n_162_start" bpmnElement="n_162_start"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_162_route" bpmnElement="n_162_route"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_162_rg" bpmnElement="n_162_rg"><dc:Bounds x="467" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_162_int" bpmnElement="n_162_int"><dc:Bounds x="472" y="437" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_162_sel" bpmnElement="n_162_sel"><dc:Bounds x="595" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_162_sg" bpmnElement="n_162_sg"><dc:Bounds x="807" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_162_ref" bpmnElement="n_162_ref"><dc:Bounds x="812" y="437" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_162_aw" bpmnElement="n_162_aw"><dc:Bounds x="935" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_162_xfer" bpmnElement="n_162_xfer"><dc:Bounds x="1105" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_162_pack" bpmnElement="n_162_pack"><dc:Bounds x="1275" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_162_haz" bpmnElement="n_162_haz"><dc:Bounds x="1445" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_162_xg" bpmnElement="n_162_xg"><dc:Bounds x="1657" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_162_hold" bpmnElement="n_162_hold"><dc:Bounds x="1615" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_162_iss" bpmnElement="n_162_iss"><dc:Bounds x="1785" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_162_acc" bpmnElement="n_162_acc"><dc:Bounds x="1955" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_162_ag" bpmnElement="n_162_ag"><dc:Bounds x="2167" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_162_back" bpmnElement="n_162_back"><dc:Bounds x="2125" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_162_date" bpmnElement="n_162_date"><dc:Bounds x="2295" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_162_end" bpmnElement="n_162_end"><dc:Bounds x="2512" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ed_f_n_162_start_n_162_route" bpmnElement="f_n_162_start_n_162_route"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_162_route_n_162_rg" bpmnElement="f_n_162_route_n_162_rg"><di:waypoint x="385" y="235"/><di:waypoint x="467" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_162_rg_n_162_int" bpmnElement="f_n_162_rg_n_162_int"><di:waypoint x="513" y="235"/><di:waypoint x="447" y="235"/><di:waypoint x="447" y="455"/><di:waypoint x="472" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_162_rg_n_162_sel" bpmnElement="f_n_162_rg_n_162_sel"><di:waypoint x="513" y="235"/><di:waypoint x="595" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_162_sel_n_162_sg" bpmnElement="f_n_162_sel_n_162_sg"><di:waypoint x="725" y="235"/><di:waypoint x="807" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_162_sg_n_162_ref" bpmnElement="f_n_162_sg_n_162_ref"><di:waypoint x="853" y="235"/><di:waypoint x="787" y="235"/><di:waypoint x="787" y="455"/><di:waypoint x="812" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_162_sg_n_162_aw" bpmnElement="f_n_162_sg_n_162_aw"><di:waypoint x="853" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_162_aw_n_162_xfer" bpmnElement="f_n_162_aw_n_162_xfer"><di:waypoint x="1065" y="235"/><di:waypoint x="1105" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_162_xfer_n_162_pack" bpmnElement="f_n_162_xfer_n_162_pack"><di:waypoint x="1235" y="235"/><di:waypoint x="1275" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_162_pack_n_162_haz" bpmnElement="f_n_162_pack_n_162_haz"><di:waypoint x="1405" y="235"/><di:waypoint x="1445" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_162_haz_n_162_xg" bpmnElement="f_n_162_haz_n_162_xg"><di:waypoint x="1575" y="235"/><di:waypoint x="1657" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_162_xg_n_162_hold" bpmnElement="f_n_162_xg_n_162_hold"><di:waypoint x="1703" y="235"/><di:waypoint x="1590" y="235"/><di:waypoint x="1590" y="455"/><di:waypoint x="1615" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_162_hold_n_162_xfer" bpmnElement="f_n_162_hold_n_162_xfer"><di:waypoint x="1745" y="455"/><di:waypoint x="1080" y="455"/><di:waypoint x="1080" y="235"/><di:waypoint x="1105" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_162_xg_n_162_iss" bpmnElement="f_n_162_xg_n_162_iss"><di:waypoint x="1703" y="235"/><di:waypoint x="1785" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_162_iss_n_162_acc" bpmnElement="f_n_162_iss_n_162_acc"><di:waypoint x="1915" y="235"/><di:waypoint x="1955" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_162_acc_n_162_ag" bpmnElement="f_n_162_acc_n_162_ag"><di:waypoint x="2085" y="235"/><di:waypoint x="2167" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_162_ag_n_162_back" bpmnElement="f_n_162_ag_n_162_back"><di:waypoint x="2213" y="235"/><di:waypoint x="2100" y="235"/><di:waypoint x="2100" y="455"/><di:waypoint x="2125" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_162_back_n_162_route" bpmnElement="f_n_162_back_n_162_route"><di:waypoint x="2255" y="455"/><di:waypoint x="230" y="455"/><di:waypoint x="230" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_162_ag_n_162_date" bpmnElement="f_n_162_ag_n_162_date"><di:waypoint x="2213" y="235"/><di:waypoint x="2295" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_162_date_n_162_end" bpmnElement="f_n_162_date_n_162_end"><di:waypoint x="2425" y="235"/><di:waypoint x="2512" y="235"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

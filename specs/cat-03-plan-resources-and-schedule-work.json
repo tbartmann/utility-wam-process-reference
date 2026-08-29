@@ -692,7 +692,7 @@
         },
         {
           "for": "planning of changes",
-          "cite": "ANSI/ASTM/ISO 55001-2024 cl. 6.3 planning of changes; cl. 8.3 externally provided processes",
+          "cite": "ANSI/ASTM/ISO 55001-2024 cl. 6.3 planning of changes; cl. 8.3 Outsourcing",
           "status": "clause-verified"
         },
         {
@@ -3491,6 +3491,12 @@
       "date": "2026-08-29",
       "by": "Claude",
       "what": "citation form: a status may not claim more than the citation string supports. 'clause-verified' without a clause dropped to 'consensus'; an asserted absence dropped to 'judgment'.",
+      "count": 1
+    },
+    {
+      "date": "2026-08-29",
+      "by": "Claude",
+      "what": "ISO 55001:2024 cl. 8.3 was cited with ISO 9001's wording. The clause number is right; its title is Outsourcing. 'Control of externally provided processes, products and services' is ISO 9001:2015 cl. 8.4. A status of clause-verified asserts the clause number AND its title, so a borrowed title is an unearned status.",
       "count": 1
     }
   ]

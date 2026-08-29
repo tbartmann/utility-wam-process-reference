@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/CMMN/20151109/MODEL" xmlns:cmmndi="http://www.omg.org/spec/CMMN/20151109/CMMNDI" xmlns:dc="http://www.omg.org/spec/CMMN/20151109/DC" xmlns:di="http://www.omg.org/spec/CMMN/20151109/DI" id="defs_Contractor_exception_reconciliation" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <case id="Contractor_exception_reconciliation" name="16.5.6 Reconcile contractor data exceptions">
+    <caseFileModel id="Contractor_exception_reconciliation_cfm">
+      <caseFileItem id="cf_quar" name="Quarantined interface records"/>
+      <caseFileItem id="cf_award" name="Open awards and their quantities"/>
+      <caseFileItem id="cf_reg" name="Contractor register, crews and credentials"/>
+    </caseFileModel>
+    <casePlanModel id="Contractor_exception_reconciliation_plan" name="16.5.6 Reconcile contractor data exceptions" autoComplete="true">
+      <documentation>Two competent people will not sequence match, return and discard the same way, which is the CMMN test. EN 17007 cl. 6.10 DTA.1 store and validate the raw data is the closest named process and there is no pack standard for interface-exception handling at all. The case exists to stop one specific failure: a forced match that 16.4 then pays. That is a settlement failure, and it starts here, in a queue somebody wanted to clear. Camunda 8 dropped CMMN, so a runtime for this file means Flowable or an equivalent.</documentation>
+      <planItem id="pi_t_triage" name="Triage the quarantine" definitionRef="t_triage_def">
+        <itemControl id="ic_t_triage">
+          <repetitionRule id="rep_t_triage"><condition><![CDATA[true]]></condition></repetitionRule>
+          <requiredRule id="rr_t_triage"><condition><![CDATA[true]]></condition></requiredRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_match" name="Match the record to an award" definitionRef="t_match_def">
+        <itemControl id="ic_t_match">
+          <requiredRule id="rr_t_match"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_match"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_person" name="Resolve an unmatched person against the register" definitionRef="t_person_def">
+        <itemControl id="ic_t_person">
+          <requiredRule id="rr_t_person"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_person"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_qty" name="Reconcile a quantity mismatch against the counted units" definitionRef="t_qty_def">
+        <itemControl id="ic_t_qty">
+          <requiredRule id="rr_t_qty"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_qty"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_return" name="Return the record to the sender with a reason" definitionRef="t_return_def">
+        <itemControl id="ic_t_return">
+          <requiredRule id="rr_t_return"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_return"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_discard" name="Discard with a recorded reason" definitionRef="t_discard_def">
+        <itemControl id="ic_t_discard">
+          <requiredRule id="rr_t_discard"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_discard"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_replay" name="Replay the corrected message into 16.5.2 to 16.5.5" definitionRef="t_replay_def">
+        <itemControl id="ic_t_replay">
+          <requiredRule id="rr_t_replay"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_replay"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_m_cleared" name="Exception cleared" definitionRef="m_cleared_def"/>
+      <planItem id="pi_m_returned" name="Returned to the contractor" definitionRef="m_returned_def"/>
+      <planItem id="pi_m_discarded" name="Discarded with a reason" definitionRef="m_discarded_def"/>
+      <humanTask id="t_triage_def" name="Triage the quarantine" isBlocking="true"><documentation>Required and repeating. Quarantined messages, quantity mismatches and unmatched people are three different problems arriving in one queue.</documentation></humanTask>
+      <humanTask id="t_match_def" name="Match the record to an award" isBlocking="true"><documentation>Discretionary. Only where the evidence supports it - a forced match is the failure this case is built to prevent.</documentation></humanTask>
+      <humanTask id="t_person_def" name="Resolve an unmatched person against the register" isBlocking="true"><documentation>Discretionary. Usually a crew 16.1.1 never registered, which means the 1910.269(a)(3) transfer never reached them either. Worth knowing.</documentation></humanTask>
+      <humanTask id="t_qty_def" name="Reconcile a quantity mismatch against the counted units" isBlocking="true"><documentation>Discretionary. 16.4.1 counted; the contractor claimed. Neither number is automatically right.</documentation></humanTask>
+      <humanTask id="t_return_def" name="Return the record to the sender with a reason" isBlocking="true"><documentation>Discretionary and often correct. A record only the contractor can fix should go back to the contractor rather than be guessed at here.</documentation></humanTask>
+      <humanTask id="t_discard_def" name="Discard with a recorded reason" isBlocking="true"><documentation>Discretionary. Discarding is legitimate; discarding silently is not.</documentation></humanTask>
+      <humanTask id="t_replay_def" name="Replay the corrected message into 16.5.2 to 16.5.5" isBlocking="true"><documentation>Discretionary. The corrected record re-enters through the interface it came from, so the exchange record stays true.</documentation></humanTask>
+      <milestone id="m_cleared_def" name="Exception cleared"><documentation>Matched or reconciled on evidence, and replayed.</documentation></milestone>
+      <milestone id="m_returned_def" name="Returned to the contractor"><documentation>Out of the operator's queue and into the party that can fix it.</documentation></milestone>
+      <milestone id="m_discarded_def" name="Discarded with a reason"><documentation>A recorded ending. An exception that simply ages out of a queue is neither of the other two and cannot be audited as either.</documentation></milestone>
+    </casePlanModel>
+  </case>
+  <cmmndi:CMMNDI>
+    <cmmndi:CMMNDiagram id="dg_Contractor_exception_reconciliation">
+      <cmmndi:CMMNShape id="sh_plan" cmmnElementRef="Contractor_exception_reconciliation_plan"><dc:Bounds x="40" y="40" width="1010" height="300"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_triage" cmmnElementRef="pi_t_triage"><dc:Bounds x="80" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_match" cmmnElementRef="pi_t_match"><dc:Bounds x="270" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_person" cmmnElementRef="pi_t_person"><dc:Bounds x="460" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_qty" cmmnElementRef="pi_t_qty"><dc:Bounds x="80" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_return" cmmnElementRef="pi_t_return"><dc:Bounds x="270" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_discard" cmmnElementRef="pi_t_discard"><dc:Bounds x="460" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_replay" cmmnElementRef="pi_t_replay"><dc:Bounds x="80" y="290" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_m_cleared" cmmnElementRef="pi_m_cleared"><dc:Bounds x="270" y="290" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_m_returned" cmmnElementRef="pi_m_returned"><dc:Bounds x="460" y="290" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_m_discarded" cmmnElementRef="pi_m_discarded"><dc:Bounds x="80" y="390" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+    </cmmndi:CMMNDiagram>
+  </cmmndi:CMMNDI>
+</definitions>

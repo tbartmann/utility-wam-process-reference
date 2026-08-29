@@ -2943,7 +2943,7 @@
         },
         {
           "for": "externally provided",
-          "cite": "ANSI/ASTM/ISO 55001-2024 cl. 8.3 externally provided processes",
+          "cite": "ANSI/ASTM/ISO 55001-2024 cl. 8.3 Outsourcing",
           "status": "clause-verified"
         }
       ],
@@ -4737,7 +4737,7 @@
         },
         {
           "for": "externally provided",
-          "cite": "ANSI/ASTM/ISO 55001-2024 cl. 8.3 externally provided processes",
+          "cite": "ANSI/ASTM/ISO 55001-2024 cl. 8.3 Outsourcing",
           "status": "clause-verified"
         },
         {
@@ -4834,7 +4834,7 @@
       "controls": [
         {
           "kind": "operational",
-          "text": "16.1 qualifies contractors who do field work. This process qualifies goods suppliers. EN 17007 SER.1 is external maintenance services - not this. SPP.5 is the goods-contract process. ISO 55001 cl. 8.3 is externally provided processes."
+          "text": "16.1 qualifies contractors who do field work. This process qualifies goods suppliers. EN 17007 SER.1 is external maintenance services - not this. SPP.5 is the goods-contract process. ISO 55001 cl. 8.3 is Outsourcing."
         },
         {
           "kind": "regulatory",
@@ -4876,7 +4876,7 @@
         },
         {
           "for": "externally provided",
-          "cite": "ANSI/ASTM/ISO 55001-2024 cl. 8.3 externally provided processes",
+          "cite": "ANSI/ASTM/ISO 55001-2024 cl. 8.3 Outsourcing",
           "status": "clause-verified"
         },
         {
@@ -5748,6 +5748,12 @@
       "by": "Claude",
       "what": "notation.why on six SPEC processes said 'standing' where the work is a determination. The class is right and unchanged; the reason was not. Five of them produce a value - a forecast, a stock level, an allocation, a criticality class, a supplier score - and pass the DMN test on shape. They are SPEC because no source states the rule, and inventing one would breach the derivation rule. SCHEMA.md now carries that as the second SPEC case.",
       "count": 6
+    },
+    {
+      "date": "2026-08-29",
+      "by": "Claude",
+      "what": "ISO 55001:2024 cl. 8.3 was cited with ISO 9001's wording. The clause number is right; its title is Outsourcing. 'Control of externally provided processes, products and services' is ISO 9001:2015 cl. 8.4. A status of clause-verified asserts the clause number AND its title, so a borrowed title is an unearned status.",
+      "count": 4
     }
   ]
 }
