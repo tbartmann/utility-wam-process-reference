@@ -13,6 +13,34 @@ consensus method depends on the platforms disagreeing about *findings*, not abou
 
 ## 0. How to cite
 
+### The status ceiling — added 2026-08-29, and it is enforced
+
+A citation status is a claim about what somebody actually read. Until 2026-08-29 nothing
+checked whether the claim was earned, and all three specification files carried `verified`
+against standards this project does not hold — **24 in category 1.0, 18 in 2.0, 32 in the
+3.0 submission.** Claude wrote the first ones and the pack, asserting `verified` for
+ISO 55001, ISO 9001 and IEC 61968, taught the other platforms to do the same.
+
+`build/eam/vocabulary.json` now carries `source_status_ceiling`, and no source may be cited
+above its ceiling:
+
+| Group | Ceiling | What is in it |
+|---|---|---|
+| **Held in full** | `verified` | EN 17007, APQC PCF, the GFMAM Landscape — obtained, or free and read |
+| **Public law** | `regulation` | CFR, U.S.C., MUTCD, USACE nationwide permits, state codes |
+| **Member-gated** | `consensus` | SMRP, AACE, CGA, EPRI, API RP, IAM, GPTC, MultiSpeak |
+| **Paywalled** | `clause-verified` | Every ISO, IEC, EN, ASTM, ANSI, IEEE, ASME, ASCE standard |
+
+Anything unlisted defaults to `clause-verified`. **`clause-verified` forbids paraphrasing
+content you have not read** — cite the clause number and title, and say what you are
+inferring rather than presenting it as the standard's words.
+
+`build/eam/sources.py` implements the lookup once. The generators clamp as they write, so
+an over-claim cannot be authored; `validate_spec.py` rejects, so one cannot be merged.
+**A ceiling is raised only by obtaining the text** — put the document in `Tim Evidence/`,
+register it with its sha256, and change the entry in the same commit. Never by argument.
+
+
 Every field in a specification carries a `sources` entry with a status. Never upgrade a
 status, and never reproduce a paywalled clause's content from a paraphrase found online.
 
@@ -54,13 +82,13 @@ document). EN 15221-3 and -5 (withdrawn; -5 superseded by EN 15221-8:2025).
 
 | Source | Edition | Use it for | Status |
 |---|---|---|---|
-| **ISO 55001** — cite as **ANSI/ASTM/ISO 55001-2024** for a US audience | **2024-07, Ed. 2** | Cl. 8.1 operational planning and control **including life cycle management** — the lifecycle is enumerated here; cl. 6.2.2 asset management planning; cl. 6.3 planning of changes; cl. 8.2 control of change; cl. 8.3 externally provided processes. There is no cl. 8.4. Genuinely commodity-neutral. **ASTM International adopted it as an American National Standard**, so for US utilities the ANSI/ASTM designation is the stronger citation. | `verified` |
+| **ISO 55001** — cite as **ANSI/ASTM/ISO 55001-2024** for a US audience | **2024-07, Ed. 2** | Cl. 8.1 operational planning and control **including life cycle management** — the lifecycle is enumerated here; cl. 6.2.2 asset management planning; cl. 6.3 planning of changes; cl. 8.2 control of change; cl. 8.3 externally provided processes. There is no cl. 8.4. Genuinely commodity-neutral. **ASTM International adopted it as an American National Standard**, so for US utilities the ANSI/ASTM designation is the stronger citation. | `clause-verified` |
 | **ISO 55000 / 55002** | 2024 / 2018 | Vocabulary; application guidance. ISO 55002 cl. 8.1.2 decision-making criteria, 8.1.3 operational planning processes. ISO/CD 55002 revision in progress. | `clause-verified` |
 | **GFMAM Asset Management Landscape** | **3rd ed. v3.0, 2024-06**, ISBN 978-1-7774676-8-5 | **7 subject groups, 40 subjects — the definition of the discipline, and free.** Group 6 Delivery is the asset lifecycle: 6.2 Asset Creation & Acquisition, 6.4 Asset Operation, 6.5 Maintenance Delivery, 6.6 Incident Management and Response, 6.7 Asset Repurposing or Disposal, 6.8 Supply Chain Management. Group 3 carries 3.2 Demand Analysis, 3.4 Planning, 3.6 Life cycle Value Realization, **3.8 Shutdown and Outage Strategy and Planning**. Crosswalked in `build/eam/gfmam_crosswalk.json`. | `verified` |
 | **IAM Asset Management — An Anatomy** | **v4, 2024-07-01** | Corroboration only. v4 moved to a **10-box capability model** and **defers to the GFMAM Landscape 3rd ed. for the subjects** — so cite GFMAM for subjects, not the Anatomy. There is **no North America–specific edition**, and the widely repeated "39 subjects" figure is the Landscape's **second** edition. | `consensus` |
 | **IAM SSG 15 & 17** *Maintenance Delivery and Asset Operations* | v1.0, 2019-04 | Industry-body corroboration only. Member PDF. | `consensus` |
 | **EPRI** | programme-based, no single framework | Member-gated. There is no public EPRI process reference comparable to EN 17007 or the GFMAM Landscape; the retrievable material is programme analytics (Program 34 Transmission Asset Management Analytics, the Distribution portfolio) and older reports such as *Power Delivery Asset Management Decision Making Process* (1016834, 2008), whose generic framework is set goals → assess performance → identify gaps → develop options → evaluate and optimise → implement → monitor. **Useful for method, not for process structure. Do not cite EPRI for a process the model needs to name.** | `consensus`, member-gated |
-| **ISO 9001** | 2015 (**6th edition due 2026-09-16**) | Cl. 4.4.1 a)–h) as the management-system corroboration of the EN 17007 field set. Cite the clause, not the year; re-check on publication. | `verified` |
+| **ISO 9001** | 2015 (**6th edition due 2026-09-16**) | Cl. 4.4.1 a)–h) as the management-system corroboration of the EN 17007 field set. Cite the clause, not the year; re-check on publication. | `clause-verified` |
 
 ### A3. Process framework structure — convention only, no asset management authority
 
@@ -242,7 +270,7 @@ If anyone tells you the process spine is a conformity-assessment standard, this 
 
 | Source | Edition | Scope and honest limit | Status |
 |---|---|---|---|
-| **IEC 61968-6** *Interfaces for maintenance and construction* | **2015-07, Ed. 1.0** | **The only standardised work/maintenance information model in either commodity.** Cl. 4.2 reference components — GINV MAI CON DGN **SCHD** FRD AM SIM NE TCM MR&C CS HR MM FIN — are the product-neutral system vocabulary. Cl. 5 payloads: WorkRequest, ServiceOrder, MaintenanceOrder. Annex A verbs. **Limit: it standardises what is exchanged between systems, not how work is scheduled or executed.** | Scope and cl. 4 `verified` |
+| **IEC 61968-6** *Interfaces for maintenance and construction* | **2015-07, Ed. 1.0** | **The only standardised work/maintenance information model in either commodity.** Cl. 4.2 reference components — GINV MAI CON DGN **SCHD** FRD AM SIM NE TCM MR&C CS HR MM FIN — are the product-neutral system vocabulary. Cl. 5 payloads: WorkRequest, ServiceOrder, MaintenanceOrder. Annex A verbs. **Limit: it standardises what is exchanged between systems, not how work is scheduled or executed.** | Scope and cl. 4 `clause-verified` |
 | **IEC 61968-11** CIM extensions for distribution | 2013, Ed. 2.0 | The `Work` package: `BaseWork`, `Work`, `WorkTask`, `WorkActivityRecord`, `WorkAsset`, `WorkLocation`, `MaterialItem`, `Tool`, `Vehicle`, and the WorkKind/WorkStatusKind/WorkTaskKind enums. **There is no `WorkOrder` class** — it is `Work` plus `workOrderNumber`. | `verified` from published CIM renderings |
 | **IEC 61968-4 / -9 / -3 / -1** | 2019 / **2024 Ed.3** / 2021 / 2020 | Records and asset management; meter reading and control (Ed. 3 extends to gas and water metering, and is retitled *Enterprise business function interfaces for utility operations*); network operations; interface architecture. | `clause-verified` |
 | **PODS** Pipeline Open Data Standard | PODS 7 / **7.03 Utility Network + APR, 2024-04-15** | Gas asset data model. Covers distribution as well as transmission. Has ACTIVITY, INSPECTION_RANGE, PHYSICAL_INSPECTION, REPAIR. **No work order, work task, maintenance or crew entities** — it records work done, it does not model the work item. | `verified` from the PODS 7 conceptual diagram |
@@ -298,7 +326,7 @@ TSIA except as named subscription research with a date, AFSMI (status unconfirme
 | **EPRI** | The electric research body. Program 224 integrated asset management; Utility Digital Worker Collaborative; historic work-management reports (e.g. TR-109734). Largely member-gated. **EPRI has NOT published a work-identification taxonomy** — its public capability model defines Work Management in one sentence about estimating, scheduling and dispatching crews. | `consensus`, member-gated |
 | **EPRI Utility Business Capability Model** | Public HTML browser, 18 capability classes. A *capability* model, not a process model. Useful as a cross-reference axis. | `consensus` |
 | **Common Ground Alliance Best Practices** | **v21.0 verified** (v22.0 announced, date unconfirmed). ~164 practices. The 811 one-call process. **Genuinely cross-commodity**, and CGA BP 3-16 is the only publicly available consensus-defined minimum content set for a work-demand record in this whole space. Relevant to 1.0 and 8.0. | `consensus` |
-| **ISO 55001:2024** | The only commodity-neutral asset management anchor. | `verified` |
+| **ISO 55001:2024** | The only commodity-neutral asset management anchor. | `clause-verified` |
 
 ---
 
