@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/CMMN/20151109/MODEL" xmlns:cmmndi="http://www.omg.org/spec/CMMN/20151109/CMMNDI" xmlns:dc="http://www.omg.org/spec/CMMN/20151109/DC" xmlns:di="http://www.omg.org/spec/CMMN/20151109/DI" id="defs_Validate_failure_analysis" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <case id="Validate_failure_analysis" name="12.4.2 Validate failure mode, mechanism, cause and consequence">
+    <caseFileModel id="Validate_failure_analysis_cfm">
+      <caseFileItem id="cf_event" name="The failure, repeated defect or material condition finding"/>
+      <caseFileItem id="cf_item" name="Item, its environment and its maintenance history"/>
+      <caseFileItem id="cf_evidence" name="Physical evidence, test results and operating data"/>
+    </caseFileModel>
+    <casePlanModel id="Validate_failure_analysis_plan" name="12.4.2 Validate failure mode, mechanism, cause and consequence" autoComplete="true">
+      <documentation>ISO 14224 cl. 9.5 gives the failure data structure and cl. 9.6 the maintenance data; neither gives an investigation sequence, and there is not one to give. Which evidence is available decides where an investigation starts, and two competent analysts will order the same case differently and reach the same conclusion. That is the CMMN test.
+
+The required items are the two that make the conclusion usable rather than merely recorded. Evidence about the ITEM, ITS ENVIRONMENT AND THE EVENT is collected before explanations are tested, because an explanation formed first selects its own evidence. And the conclusion carries its UNCERTAINTY, because 12.4.3 scores health on it, 12.5.2 sets condition triggers from it and 12.6.2 weighs consequence with it - and none of the three can recover a confidence level that was never written down. Camunda 8 dropped CMMN, so a runtime for this file means Flowable or an equivalent.</documentation>
+      <planItem id="pi_t_collect" name="Collect item, environment and event evidence" definitionRef="t_collect_def">
+        <itemControl id="ic_t_collect">
+          <requiredRule id="rr_t_collect"><condition><![CDATA[true]]></condition></requiredRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_mode" name="Test candidate failure modes" definitionRef="t_mode_def">
+        <itemControl id="ic_t_mode">
+          <requiredRule id="rr_t_mode"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_mode"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_mech" name="Test candidate mechanisms" definitionRef="t_mech_def">
+        <itemControl id="ic_t_mech">
+          <requiredRule id="rr_t_mech"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_mech"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_cause" name="Test candidate causes" definitionRef="t_cause_def">
+        <itemControl id="ic_t_cause">
+          <requiredRule id="rr_t_cause"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_cause"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_repeat" name="Test whether this is one of a population" definitionRef="t_repeat_def">
+        <itemControl id="ic_t_repeat">
+          <requiredRule id="rr_t_repeat"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_repeat"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_conseq" name="Assess the consequence of the failure" definitionRef="t_conseq_def">
+        <itemControl id="ic_t_conseq">
+          <requiredRule id="rr_t_conseq"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_conseq"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_record" name="Record supported conclusions and their uncertainty" definitionRef="t_record_def">
+        <itemControl id="ic_t_record">
+          <requiredRule id="rr_t_record"><condition><![CDATA[true]]></condition></requiredRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_m_evidence" name="Evidence complete or exhausted" definitionRef="m_evidence_def"/>
+      <planItem id="pi_m_concluded" name="Conclusions recorded" definitionRef="m_concluded_def"/>
+      <humanTask id="t_collect_def" name="Collect item, environment and event evidence" isBlocking="true"><documentation>Required, and before explanations are tested. An explanation formed first chooses the evidence that supports it.</documentation></humanTask>
+      <humanTask id="t_mode_def" name="Test candidate failure modes" isBlocking="true"><documentation>Discretionary. ISO 14224 cl. 9.5 gives the data structure for recording the answer, not a method for reaching it.</documentation></humanTask>
+      <humanTask id="t_mech_def" name="Test candidate mechanisms" isBlocking="true"><documentation>Discretionary. Often the step that needs a laboratory result nobody has yet, which is exactly why the order cannot be fixed.</documentation></humanTask>
+      <humanTask id="t_cause_def" name="Test candidate causes" isBlocking="true"><documentation>Discretionary. Including causes outside the item - installation, operation, and a maintenance task done as specified on a specification that was wrong.</documentation></humanTask>
+      <humanTask id="t_repeat_def" name="Test whether this is one of a population" isBlocking="true"><documentation>Discretionary. A repeated defect changes the consequence and the response, and 12.4.4 holds the population evidence.</documentation></humanTask>
+      <humanTask id="t_conseq_def" name="Assess the consequence of the failure" isBlocking="true"><documentation>Discretionary. 12.6.2 owns the risk determination; this supplies what it weighs.</documentation></humanTask>
+      <humanTask id="t_record_def" name="Record supported conclusions and their uncertainty" isBlocking="true"><documentation>Required. Supported - an unsupported conclusion recorded as a cause becomes a maintenance strategy at 12.5 and a threshold at 12.5.2.</documentation></humanTask>
+      <milestone id="m_evidence_def" name="Evidence complete or exhausted"><documentation>Exhausted is a real state and is recorded as one.</documentation></milestone>
+      <milestone id="m_concluded_def" name="Conclusions recorded"><documentation>Mode, mechanism, cause and consequence, each with what supports it.</documentation></milestone>
+    </casePlanModel>
+  </case>
+  <cmmndi:CMMNDI>
+    <cmmndi:CMMNDiagram id="dg_Validate_failure_analysis">
+      <cmmndi:CMMNShape id="sh_plan" cmmnElementRef="Validate_failure_analysis_plan"><dc:Bounds x="40" y="40" width="1010" height="300"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_collect" cmmnElementRef="pi_t_collect"><dc:Bounds x="80" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_mode" cmmnElementRef="pi_t_mode"><dc:Bounds x="270" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_mech" cmmnElementRef="pi_t_mech"><dc:Bounds x="460" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_cause" cmmnElementRef="pi_t_cause"><dc:Bounds x="80" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_repeat" cmmnElementRef="pi_t_repeat"><dc:Bounds x="270" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_conseq" cmmnElementRef="pi_t_conseq"><dc:Bounds x="460" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_record" cmmnElementRef="pi_t_record"><dc:Bounds x="80" y="290" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_m_evidence" cmmnElementRef="pi_m_evidence"><dc:Bounds x="270" y="290" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_m_concluded" cmmnElementRef="pi_m_concluded"><dc:Bounds x="460" y="290" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+    </cmmndi:CMMNDiagram>
+  </cmmndi:CMMNDI>
+</definitions>

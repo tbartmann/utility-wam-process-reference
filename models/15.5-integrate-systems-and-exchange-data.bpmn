@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_P_15_5" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <process id="P_15_5" name="15.5 Exchange information between components" isExecutable="false">
+    <documentation>15.5.1, 15.5.2, 15.5.3, 15.5.4 and 15.5.6 are drawn on ONE path, because they are one path: validate, map through an approved mapping, deliver, record the status, and confirm acceptance or route an exception. What differs between work information, asset and spatial information, time and cost, document content, and procurement and ledger transactions is the payload and the identifiers validated - not the sequence. Drawing five near-identical files would have claimed a difference that is not there.
+
+The vocabulary is borrowed rather than invented: IEC 61968-6 cl. 4.2 components, cl. 5 payloads and Annex A verbs. The reference holds no asset-change payload, and category 12 says so rather than minting one.
+
+THE ACKNOWLEDGEMENT GATE IS THE ONE THAT MATTERS. A transport acknowledgement says the message arrived. It does not say the receiving record passed its semantic and authority checks, and treating the two as one is how a register ends up confidently holding a value the sending system already retracted.</documentation>
+    <laneSet id="P_15_5_lanes">
+      <lane id="l_155_int" name="Integration">
+        <flowNodeRef>n_155_start</flowNodeRef>
+        <flowNodeRef>n_155_kind</flowNodeRef>
+        <flowNodeRef>n_155_w</flowNodeRef>
+        <flowNodeRef>n_155_a</flowNodeRef>
+        <flowNodeRef>n_155_f</flowNodeRef>
+        <flowNodeRef>n_155_d</flowNodeRef>
+        <flowNodeRef>n_155_p</flowNodeRef>
+        <flowNodeRef>n_155_map</flowNodeRef>
+        <flowNodeRef>n_155_del</flowNodeRef>
+        <flowNodeRef>n_155_ack</flowNodeRef>
+        <flowNodeRef>n_155_exc</flowNodeRef>
+        <flowNodeRef>n_155_end</flowNodeRef>
+      </lane>
+    </laneSet>
+    <startEvent id="n_155_start" name="An exchange event occurs"><documentation>15.5.1, 15.5.2, 15.5.3, 15.5.4 or 15.5.6, by payload.</documentation><messageEventDefinition id="n_155_start_md"/></startEvent>
+    <exclusiveGateway id="n_155_kind" name="Payload class"/>
+    <serviceTask id="n_155_w" name="Validate work identifiers and verb"><documentation>15.5.1. IEC 61968-6 cl. 5 payloads and Annex A verbs.</documentation></serviceTask>
+    <serviceTask id="n_155_a" name="Validate asset identity, authority and location"><documentation>15.5.2. Source authority, because 12.2.1 decides which system owns which class.</documentation></serviceTask>
+    <serviceTask id="n_155_f" name="Validate work, person, material and financial keys"><documentation>15.5.3.</documentation></serviceTask>
+    <serviceTask id="n_155_d" name="Validate work linkage, revision and access"><documentation>15.5.4. Access, because a controlled document exchanged past its access rule is not a delivery problem.</documentation></serviceTask>
+    <serviceTask id="n_155_p" name="Validate supplier, material and financial references"><documentation>15.5.6.</documentation></serviceTask>
+    <serviceTask id="n_155_map" name="Transform through an approved mapping only"><documentation>All five. An ad-hoc transformation is an undocumented interface, and nobody can reconcile against it later.</documentation></serviceTask>
+    <sendTask id="n_155_del" name="Deliver and record the exchange status"><documentation>All five.</documentation></sendTask>
+    <exclusiveGateway id="n_155_ack" name="Accepted by the receiving record"><documentation>Accepted, not merely acknowledged. 15.5.5 exists for the difference.</documentation></exclusiveGateway>
+    <sendTask id="n_155_exc" name="Route an exception to 15.5.5"><documentation>15.5.5 is a case: transport, mapping, authority and data causes are investigated in an order that depends on which it turns out to be.</documentation></sendTask>
+    <endEvent id="n_155_end" name="Exchange accepted"/>
+    <sequenceFlow id="f_n_155_start_n_155_kind" sourceRef="n_155_start" targetRef="n_155_kind" name=""/>
+    <sequenceFlow id="f_n_155_kind_n_155_w" sourceRef="n_155_kind" targetRef="n_155_w" name="work and activity"><conditionExpression xsi:type="tFormalExpression"><![CDATA[payload = "work"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_155_kind_n_155_a" sourceRef="n_155_kind" targetRef="n_155_a" name="asset and spatial"><conditionExpression xsi:type="tFormalExpression"><![CDATA[payload = "asset"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_155_kind_n_155_f" sourceRef="n_155_kind" targetRef="n_155_f" name="time, cost and financial"><conditionExpression xsi:type="tFormalExpression"><![CDATA[payload = "cost"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_155_kind_n_155_d" sourceRef="n_155_kind" targetRef="n_155_d" name="document and attachment"><conditionExpression xsi:type="tFormalExpression"><![CDATA[payload = "document"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_155_kind_n_155_p" sourceRef="n_155_kind" targetRef="n_155_p" name="procurement, invoice and ledger"><conditionExpression xsi:type="tFormalExpression"><![CDATA[payload = "supply"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_155_w_n_155_map" sourceRef="n_155_w" targetRef="n_155_map" name=""/>
+    <sequenceFlow id="f_n_155_a_n_155_map" sourceRef="n_155_a" targetRef="n_155_map" name=""/>
+    <sequenceFlow id="f_n_155_f_n_155_map" sourceRef="n_155_f" targetRef="n_155_map" name=""/>
+    <sequenceFlow id="f_n_155_d_n_155_map" sourceRef="n_155_d" targetRef="n_155_map" name=""/>
+    <sequenceFlow id="f_n_155_p_n_155_map" sourceRef="n_155_p" targetRef="n_155_map" name=""/>
+    <sequenceFlow id="f_n_155_map_n_155_del" sourceRef="n_155_map" targetRef="n_155_del" name=""/>
+    <sequenceFlow id="f_n_155_del_n_155_ack" sourceRef="n_155_del" targetRef="n_155_ack" name=""/>
+    <sequenceFlow id="f_n_155_ack_n_155_exc" sourceRef="n_155_ack" targetRef="n_155_exc" name="rejected, duplicate or inconsistent"><conditionExpression xsi:type="tFormalExpression"><![CDATA[accepted = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_155_ack_n_155_end" sourceRef="n_155_ack" targetRef="n_155_end" name="accepted"/>
+  </process>
+  <bpmndi:BPMNDiagram id="dg_P_15_5">
+    <bpmndi:BPMNPlane id="pl_P_15_5" bpmnElement="P_15_5">
+      <bpmndi:BPMNShape id="sh_n_155_start" bpmnElement="n_155_start"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_155_kind" bpmnElement="n_155_kind"><dc:Bounds x="297" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_155_w" bpmnElement="n_155_w"><dc:Bounds x="425" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_155_a" bpmnElement="n_155_a"><dc:Bounds x="425" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_155_f" bpmnElement="n_155_f"><dc:Bounds x="425" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_155_d" bpmnElement="n_155_d"><dc:Bounds x="425" y="860" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_155_p" bpmnElement="n_155_p"><dc:Bounds x="425" y="1080" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_155_map" bpmnElement="n_155_map"><dc:Bounds x="595" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_155_del" bpmnElement="n_155_del"><dc:Bounds x="765" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_155_ack" bpmnElement="n_155_ack"><dc:Bounds x="977" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_155_exc" bpmnElement="n_155_exc"><dc:Bounds x="935" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_155_end" bpmnElement="n_155_end"><dc:Bounds x="1152" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ed_f_n_155_start_n_155_kind" bpmnElement="f_n_155_start_n_155_kind"><di:waypoint x="168" y="235"/><di:waypoint x="297" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_155_kind_n_155_w" bpmnElement="f_n_155_kind_n_155_w"><di:waypoint x="343" y="235"/><di:waypoint x="425" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_155_kind_n_155_a" bpmnElement="f_n_155_kind_n_155_a"><di:waypoint x="343" y="235"/><di:waypoint x="400" y="235"/><di:waypoint x="400" y="455"/><di:waypoint x="425" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_155_kind_n_155_f" bpmnElement="f_n_155_kind_n_155_f"><di:waypoint x="343" y="235"/><di:waypoint x="400" y="235"/><di:waypoint x="400" y="675"/><di:waypoint x="425" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_155_kind_n_155_d" bpmnElement="f_n_155_kind_n_155_d"><di:waypoint x="343" y="235"/><di:waypoint x="400" y="235"/><di:waypoint x="400" y="895"/><di:waypoint x="425" y="895"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_155_kind_n_155_p" bpmnElement="f_n_155_kind_n_155_p"><di:waypoint x="343" y="235"/><di:waypoint x="400" y="235"/><di:waypoint x="400" y="1115"/><di:waypoint x="425" y="1115"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_155_w_n_155_map" bpmnElement="f_n_155_w_n_155_map"><di:waypoint x="555" y="235"/><di:waypoint x="595" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_155_a_n_155_map" bpmnElement="f_n_155_a_n_155_map"><di:waypoint x="555" y="455"/><di:waypoint x="570" y="455"/><di:waypoint x="570" y="235"/><di:waypoint x="595" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_155_f_n_155_map" bpmnElement="f_n_155_f_n_155_map"><di:waypoint x="555" y="675"/><di:waypoint x="570" y="675"/><di:waypoint x="570" y="235"/><di:waypoint x="595" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_155_d_n_155_map" bpmnElement="f_n_155_d_n_155_map"><di:waypoint x="555" y="895"/><di:waypoint x="570" y="895"/><di:waypoint x="570" y="235"/><di:waypoint x="595" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_155_p_n_155_map" bpmnElement="f_n_155_p_n_155_map"><di:waypoint x="555" y="1115"/><di:waypoint x="570" y="1115"/><di:waypoint x="570" y="235"/><di:waypoint x="595" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_155_map_n_155_del" bpmnElement="f_n_155_map_n_155_del"><di:waypoint x="725" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_155_del_n_155_ack" bpmnElement="f_n_155_del_n_155_ack"><di:waypoint x="895" y="235"/><di:waypoint x="977" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_155_ack_n_155_exc" bpmnElement="f_n_155_ack_n_155_exc"><di:waypoint x="1023" y="235"/><di:waypoint x="910" y="235"/><di:waypoint x="910" y="455"/><di:waypoint x="935" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_155_ack_n_155_end" bpmnElement="f_n_155_ack_n_155_end"><di:waypoint x="1023" y="235"/><di:waypoint x="1152" y="235"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

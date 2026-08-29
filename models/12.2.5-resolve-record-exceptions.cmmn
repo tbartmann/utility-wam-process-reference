@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/CMMN/20151109/MODEL" xmlns:cmmndi="http://www.omg.org/spec/CMMN/20151109/CMMNDI" xmlns:dc="http://www.omg.org/spec/CMMN/20151109/DC" xmlns:di="http://www.omg.org/spec/CMMN/20151109/DI" id="defs_Resolve_record_exceptions" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <case id="Resolve_record_exceptions" name="12.2.5 Resolve orphaned, duplicate and mismatched records">
+    <caseFileModel id="Resolve_record_exceptions_cfm">
+      <caseFileItem id="cf_conflict" name="The conflicting records and the reconciliation that found them"/>
+      <caseFileItem id="cf_history" name="Source history, identifiers and prior corrections"/>
+      <caseFileItem id="cf_authority" name="Which system holds authority for each affected field"/>
+    </caseFileModel>
+    <casePlanModel id="Resolve_record_exceptions_plan" name="12.2.5 Resolve orphaned, duplicate and mismatched records" autoComplete="true">
+      <documentation>An orphan, a duplicate and a mismatch present the same way - two records that should agree and do not - and two competent stewards will investigate the same conflict in a different order. That is the CMMN test.
+
+What makes this a case rather than a rule is that the disposition is not derivable from the conflict. The same duplicate can be a merge, a retirement, or a retained exception where both records are correct about different things, and which one it is depends on evidence nobody has when the conflict is detected.
+
+A retained exception is a legitimate outcome and is drawn as one. Forcing every conflict to a correction is how a register acquires confident wrong values; recording that two systems disagree, with the rationale, is more use to the next reader than a silent merge. Camunda 8 dropped CMMN, so a runtime for this file means Flowable or an equivalent.</documentation>
+      <planItem id="pi_t_open" name="Open the case with the conflicting evidence" definitionRef="t_open_def">
+        <itemControl id="ic_t_open">
+          <requiredRule id="rr_t_open"><condition><![CDATA[true]]></condition></requiredRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_ident" name="Investigate identities and identifier history" definitionRef="t_ident_def">
+        <itemControl id="ic_t_ident">
+          <requiredRule id="rr_t_ident"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_ident"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_rel" name="Investigate relationships and dependent records" definitionRef="t_rel_def">
+        <itemControl id="ic_t_rel">
+          <requiredRule id="rr_t_rel"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_rel"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_auth" name="Establish which system holds authority" definitionRef="t_auth_def">
+        <itemControl id="ic_t_auth">
+          <requiredRule id="rr_t_auth"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_auth"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_merge" name="Merge, correct or retire" definitionRef="t_merge_def">
+        <itemControl id="ic_t_merge">
+          <requiredRule id="rr_t_merge"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_merge"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_keep" name="Retain the exception with its rationale" definitionRef="t_keep_def">
+        <itemControl id="ic_t_keep">
+          <requiredRule id="rr_t_keep"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_keep"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_apply" name="Apply the disposition and record the rationale" definitionRef="t_apply_def">
+        <itemControl id="ic_t_apply">
+          <requiredRule id="rr_t_apply"><condition><![CDATA[true]]></condition></requiredRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_m_understood" name="Conflict understood" definitionRef="m_understood_def"/>
+      <planItem id="pi_m_disposed" name="Disposition applied" definitionRef="m_disposed_def"/>
+      <humanTask id="t_open_def" name="Open the case with the conflicting evidence" isBlocking="true"><documentation>Required. The evidence as found, before anybody edits either record - otherwise the investigation is into a state that no longer exists.</documentation></humanTask>
+      <humanTask id="t_ident_def" name="Investigate identities and identifier history" isBlocking="true"><documentation>Discretionary. Most duplicates are an identifier that changed and a match that was made on something else.</documentation></humanTask>
+      <humanTask id="t_rel_def" name="Investigate relationships and dependent records" isBlocking="true"><documentation>Discretionary. What hangs off each record usually decides which one survives a merge, and that is not visible from the two records alone.</documentation></humanTask>
+      <humanTask id="t_auth_def" name="Establish which system holds authority" isBlocking="true"><documentation>Discretionary. 12.2.1 answers it at class level. Where it does not, this is a finding against 12.2.1 rather than a decision to take here.</documentation></humanTask>
+      <humanTask id="t_merge_def" name="Merge, correct or retire" isBlocking="true"><documentation>Discretionary. The three dispositions that change a record.</documentation></humanTask>
+      <humanTask id="t_keep_def" name="Retain the exception with its rationale" isBlocking="true"><documentation>Discretionary, and a real outcome. Two systems that disagree for a reason are better recorded than reconciled by preference.</documentation></humanTask>
+      <humanTask id="t_apply_def" name="Apply the disposition and record the rationale" isBlocking="true"><documentation>Required. The rationale, because the next steward meets the same pair and needs to know it was looked at.</documentation></humanTask>
+      <milestone id="m_understood_def" name="Conflict understood"><documentation>Identity, relationships and authority established.</documentation></milestone>
+      <milestone id="m_disposed_def" name="Disposition applied"><documentation>Merged, corrected, retired, or retained with a reason.</documentation></milestone>
+    </casePlanModel>
+  </case>
+  <cmmndi:CMMNDI>
+    <cmmndi:CMMNDiagram id="dg_Resolve_record_exceptions">
+      <cmmndi:CMMNShape id="sh_plan" cmmnElementRef="Resolve_record_exceptions_plan"><dc:Bounds x="40" y="40" width="1010" height="300"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_open" cmmnElementRef="pi_t_open"><dc:Bounds x="80" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_ident" cmmnElementRef="pi_t_ident"><dc:Bounds x="270" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_rel" cmmnElementRef="pi_t_rel"><dc:Bounds x="460" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_auth" cmmnElementRef="pi_t_auth"><dc:Bounds x="80" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_merge" cmmnElementRef="pi_t_merge"><dc:Bounds x="270" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_keep" cmmnElementRef="pi_t_keep"><dc:Bounds x="460" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_apply" cmmnElementRef="pi_t_apply"><dc:Bounds x="80" y="290" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_m_understood" cmmnElementRef="pi_m_understood"><dc:Bounds x="270" y="290" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_m_disposed" cmmnElementRef="pi_m_disposed"><dc:Bounds x="460" y="290" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+    </cmmndi:CMMNDiagram>
+  </cmmndi:CMMNDI>
+</definitions>

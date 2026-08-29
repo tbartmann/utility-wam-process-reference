@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_P_15_4" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <process id="P_15_4" name="15.4 Remediate a data-quality defect" isExecutable="false">
+    <documentation>Only 15.4.2 is drawn. 15.4.1 ownership and standards, 15.4.3 reference data and code sets, and 15.4.4 scoping and visibility rules are standing governance with no instance boundary of their own - a code set is a specification, and a change to one runs through this same path.
+
+Correction at the AUTHORITATIVE SOURCE rather than in the consuming record is the whole of the process. A defect fixed where it was noticed reappears on the next exchange, which is then logged at 15.5.5 as an interface exception and corrected there too, and the pair can run for years.</documentation>
+    <laneSet id="P_15_4_lanes">
+      <lane id="l_154" name="Data governance">
+        <flowNodeRef>n_154_start</flowNodeRef>
+        <flowNodeRef>n_154_cls</flowNodeRef>
+        <flowNodeRef>n_154_own</flowNodeRef>
+        <flowNodeRef>n_154_src</flowNodeRef>
+        <flowNodeRef>n_154_esc</flowNodeRef>
+        <flowNodeRef>n_154_fix</flowNodeRef>
+        <flowNodeRef>n_154_ver</flowNodeRef>
+        <flowNodeRef>n_154_ok</flowNodeRef>
+        <flowNodeRef>n_154_end</flowNodeRef>
+      </lane>
+    </laneSet>
+    <startEvent id="n_154_start" name="A material data defect is detected"><documentation>15.4.2. From a scheduled check or from a consuming process that could not use the record.</documentation><conditionalEventDefinition id="n_154_start_cd"><condition/></conditionalEventDefinition></startEvent>
+    <serviceTask id="n_154_cls" name="Classify by domain, severity and affected use"><documentation>15.4.2. Affected use is what makes a defect material; a wrong field nothing reads is a different problem.</documentation></serviceTask>
+    <serviceTask id="n_154_own" name="Assign it to the accountable steward"><documentation>15.4.2. Ownership comes from 15.4.1, which is standing.</documentation></serviceTask>
+    <exclusiveGateway id="n_154_src" name="Authoritative source identified"/>
+    <sendTask id="n_154_esc" name="Escalate the authority conflict"><documentation>15.4.2. Two systems each believing they own the field is not a data defect and is not fixed by correcting either one.</documentation></sendTask>
+    <userTask id="n_154_fix" name="Correct the authoritative record or its source process"><documentation>15.4.2. The source PROCESS where the defect is systematic - otherwise the same correction is made again next month.</documentation></userTask>
+    <userTask id="n_154_ver" name="Verify the correction downstream"><documentation>15.4.2. Downstream, because the consuming registers are where the defect was visible.</documentation></userTask>
+    <exclusiveGateway id="n_154_ok" name="Verified"/>
+    <endEvent id="n_154_end" name="Defect closed"/>
+    <sequenceFlow id="f_n_154_start_n_154_cls" sourceRef="n_154_start" targetRef="n_154_cls" name=""/>
+    <sequenceFlow id="f_n_154_cls_n_154_own" sourceRef="n_154_cls" targetRef="n_154_own" name=""/>
+    <sequenceFlow id="f_n_154_own_n_154_src" sourceRef="n_154_own" targetRef="n_154_src" name=""/>
+    <sequenceFlow id="f_n_154_src_n_154_esc" sourceRef="n_154_src" targetRef="n_154_esc" name="authority disputed"><conditionExpression xsi:type="tFormalExpression"><![CDATA[authorityClear = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_154_esc_n_154_fix" sourceRef="n_154_esc" targetRef="n_154_fix" name=""/>
+    <sequenceFlow id="f_n_154_src_n_154_fix" sourceRef="n_154_src" targetRef="n_154_fix" name="authority clear"/>
+    <sequenceFlow id="f_n_154_fix_n_154_ver" sourceRef="n_154_fix" targetRef="n_154_ver" name=""/>
+    <sequenceFlow id="f_n_154_ver_n_154_ok" sourceRef="n_154_ver" targetRef="n_154_ok" name=""/>
+    <sequenceFlow id="f_n_154_ok_n_154_fix" sourceRef="n_154_ok" targetRef="n_154_fix" name="not verified"><conditionExpression xsi:type="tFormalExpression"><![CDATA[verified = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_154_ok_n_154_end" sourceRef="n_154_ok" targetRef="n_154_end" name="verified"/>
+  </process>
+  <bpmndi:BPMNDiagram id="dg_P_15_4">
+    <bpmndi:BPMNPlane id="pl_P_15_4" bpmnElement="P_15_4">
+      <bpmndi:BPMNShape id="sh_n_154_start" bpmnElement="n_154_start"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_154_cls" bpmnElement="n_154_cls"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_154_own" bpmnElement="n_154_own"><dc:Bounds x="425" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_154_src" bpmnElement="n_154_src"><dc:Bounds x="637" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_154_esc" bpmnElement="n_154_esc"><dc:Bounds x="595" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_154_fix" bpmnElement="n_154_fix"><dc:Bounds x="765" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_154_ver" bpmnElement="n_154_ver"><dc:Bounds x="935" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_154_ok" bpmnElement="n_154_ok"><dc:Bounds x="1147" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_154_end" bpmnElement="n_154_end"><dc:Bounds x="1322" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ed_f_n_154_start_n_154_cls" bpmnElement="f_n_154_start_n_154_cls"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_154_cls_n_154_own" bpmnElement="f_n_154_cls_n_154_own"><di:waypoint x="385" y="235"/><di:waypoint x="425" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_154_own_n_154_src" bpmnElement="f_n_154_own_n_154_src"><di:waypoint x="555" y="235"/><di:waypoint x="637" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_154_src_n_154_esc" bpmnElement="f_n_154_src_n_154_esc"><di:waypoint x="683" y="235"/><di:waypoint x="570" y="235"/><di:waypoint x="570" y="455"/><di:waypoint x="595" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_154_esc_n_154_fix" bpmnElement="f_n_154_esc_n_154_fix"><di:waypoint x="725" y="455"/><di:waypoint x="740" y="455"/><di:waypoint x="740" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_154_src_n_154_fix" bpmnElement="f_n_154_src_n_154_fix"><di:waypoint x="683" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_154_fix_n_154_ver" bpmnElement="f_n_154_fix_n_154_ver"><di:waypoint x="895" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_154_ver_n_154_ok" bpmnElement="f_n_154_ver_n_154_ok"><di:waypoint x="1065" y="235"/><di:waypoint x="1147" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_154_ok_n_154_fix" bpmnElement="f_n_154_ok_n_154_fix"><di:waypoint x="1193" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_154_ok_n_154_end" bpmnElement="f_n_154_ok_n_154_end"><di:waypoint x="1193" y="235"/><di:waypoint x="1322" y="235"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

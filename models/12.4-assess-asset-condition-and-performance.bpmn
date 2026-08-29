@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_P_12_4" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <process id="P_12_4" name="12.4 Assess asset condition and performance" isExecutable="false">
+    <documentation>12.4.1 and 12.4.4 are drawn. 12.4.2 is a case with its own file, and 12.4.3 health and criticality scoring is specified without a model - section I of the Source Authority Pack records distribution asset condition assessment and health indexing as not standardised in either commodity, so a table here would be a threshold minted by this reference and dressed as a standard.
+
+The method is selected before the evidence is collected, and the gateway says so. Evidence gathered first and then fitted to whichever method it happens to support is how a condition record acquires a confidence it has not earned. What the process records alongside the condition is the UNCERTAINTY, which is the part a scoring model built on top of it needs and almost never gets.</documentation>
+    <laneSet id="P_12_4_lanes">
+      <lane id="l_124" name="Asset condition and performance">
+        <flowNodeRef>n_124_t</flowNodeRef>
+        <flowNodeRef>n_124_scope</flowNodeRef>
+        <flowNodeRef>n_124_meth</flowNodeRef>
+        <flowNodeRef>n_124_coll</flowNodeRef>
+        <flowNodeRef>n_124_ev</flowNodeRef>
+        <flowNodeRef>n_124_rec</flowNodeRef>
+        <flowNodeRef>n_124_gw</flowNodeRef>
+        <flowNodeRef>n_124_case</flowNodeRef>
+        <flowNodeRef>n_124_e1</flowNodeRef>
+        <flowNodeRef>n_124_pt</flowNodeRef>
+        <flowNodeRef>n_124_pop</flowNodeRef>
+        <flowNodeRef>n_124_asm</flowNodeRef>
+        <flowNodeRef>n_124_calc</flowNodeRef>
+        <flowNodeRef>n_124_route</flowNodeRef>
+        <flowNodeRef>n_124_e2</flowNodeRef>
+      </lane>
+    </laneSet>
+    <startEvent id="n_124_t" name="Scheduled assessment, new finding or material operating event"><timerEventDefinition id="n_124_t_td"/></startEvent>
+    <userTask id="n_124_scope" name="Define the asset and assessment scope"><documentation>12.4.1.</documentation></userTask>
+    <userTask id="n_124_meth" name="Select the assessment method"><documentation>12.4.1. Before collection. No source states a method for distribution condition assessment, so which one is used is recorded rather than assumed.</documentation></userTask>
+    <serviceTask id="n_124_coll" name="Collect inspection, test and operating evidence"><documentation>12.4.1. Including what 12.3.4 recorded by segment on linear plant.</documentation></serviceTask>
+    <userTask id="n_124_ev" name="Evaluate against the selected method"><documentation>12.4.1.</documentation></userTask>
+    <serviceTask id="n_124_rec" name="Record condition, uncertainty and follow-up"><documentation>12.4.1. Uncertainty is part of the record. 12.4.3 scores on this and cannot invent it later.</documentation></serviceTask>
+    <exclusiveGateway id="n_124_gw" name="Failure or material finding"/>
+    <callActivity id="n_124_case" name="Validate mode, mechanism and cause (12.4.2)"><documentation>12.4.2. A case: investigations use different evidence and tests, and two competent analysts sequence the same one differently.</documentation></callActivity>
+    <endEvent id="n_124_e1" name="Condition recorded"/>
+    <startEvent id="n_124_pt" name="Performance review, or an adverse trend"><timerEventDefinition id="n_124_pt_td"/></startEvent>
+    <userTask id="n_124_pop" name="Define population, period and the question"><documentation>12.4.4. The question first - a population chosen after the answer is known is not a population.</documentation></userTask>
+    <serviceTask id="n_124_asm" name="Assemble failure, maintenance and service evidence"><documentation>12.4.4.</documentation></serviceTask>
+    <serviceTask id="n_124_calc" name="Calculate the selected indicators"><documentation>12.4.4. EN 15341 names the indicators; the formulas are behind the standard and are not reproduced in this reference.</documentation></serviceTask>
+    <sendTask id="n_124_route" name="Record findings and route supported needs"><documentation>12.4.4. To 12.5 for strategy, 12.6 for risk, and 17.1.5 where the finding is a capacity or reliability shortfall rather than an asset one.</documentation></sendTask>
+    <endEvent id="n_124_e2" name="Performance analysed"/>
+    <sequenceFlow id="f_n_124_t_n_124_scope" sourceRef="n_124_t" targetRef="n_124_scope" name=""/>
+    <sequenceFlow id="f_n_124_scope_n_124_meth" sourceRef="n_124_scope" targetRef="n_124_meth" name=""/>
+    <sequenceFlow id="f_n_124_meth_n_124_coll" sourceRef="n_124_meth" targetRef="n_124_coll" name=""/>
+    <sequenceFlow id="f_n_124_coll_n_124_ev" sourceRef="n_124_coll" targetRef="n_124_ev" name=""/>
+    <sequenceFlow id="f_n_124_ev_n_124_rec" sourceRef="n_124_ev" targetRef="n_124_rec" name=""/>
+    <sequenceFlow id="f_n_124_rec_n_124_gw" sourceRef="n_124_rec" targetRef="n_124_gw" name=""/>
+    <sequenceFlow id="f_n_124_gw_n_124_case" sourceRef="n_124_gw" targetRef="n_124_case" name="failure or material finding"><conditionExpression xsi:type="tFormalExpression"><![CDATA[materialFinding = true]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_124_case_n_124_e1" sourceRef="n_124_case" targetRef="n_124_e1" name=""/>
+    <sequenceFlow id="f_n_124_gw_n_124_e1" sourceRef="n_124_gw" targetRef="n_124_e1" name="condition only"/>
+    <sequenceFlow id="f_n_124_pt_n_124_pop" sourceRef="n_124_pt" targetRef="n_124_pop" name=""/>
+    <sequenceFlow id="f_n_124_pop_n_124_asm" sourceRef="n_124_pop" targetRef="n_124_asm" name=""/>
+    <sequenceFlow id="f_n_124_asm_n_124_calc" sourceRef="n_124_asm" targetRef="n_124_calc" name=""/>
+    <sequenceFlow id="f_n_124_calc_n_124_route" sourceRef="n_124_calc" targetRef="n_124_route" name=""/>
+    <sequenceFlow id="f_n_124_route_n_124_e2" sourceRef="n_124_route" targetRef="n_124_e2" name=""/>
+  </process>
+  <bpmndi:BPMNDiagram id="dg_P_12_4">
+    <bpmndi:BPMNPlane id="pl_P_12_4" bpmnElement="P_12_4">
+      <bpmndi:BPMNShape id="sh_n_124_t" bpmnElement="n_124_t"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_124_scope" bpmnElement="n_124_scope"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_124_meth" bpmnElement="n_124_meth"><dc:Bounds x="425" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_124_coll" bpmnElement="n_124_coll"><dc:Bounds x="595" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_124_ev" bpmnElement="n_124_ev"><dc:Bounds x="765" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_124_rec" bpmnElement="n_124_rec"><dc:Bounds x="935" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_124_gw" bpmnElement="n_124_gw"><dc:Bounds x="1147" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_124_case" bpmnElement="n_124_case"><dc:Bounds x="1105" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_124_e1" bpmnElement="n_124_e1"><dc:Bounds x="1322" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_124_pt" bpmnElement="n_124_pt"><dc:Bounds x="132" y="657" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_124_pop" bpmnElement="n_124_pop"><dc:Bounds x="255" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_124_asm" bpmnElement="n_124_asm"><dc:Bounds x="425" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_124_calc" bpmnElement="n_124_calc"><dc:Bounds x="595" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_124_route" bpmnElement="n_124_route"><dc:Bounds x="765" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_124_e2" bpmnElement="n_124_e2"><dc:Bounds x="982" y="657" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ed_f_n_124_t_n_124_scope" bpmnElement="f_n_124_t_n_124_scope"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_124_scope_n_124_meth" bpmnElement="f_n_124_scope_n_124_meth"><di:waypoint x="385" y="235"/><di:waypoint x="425" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_124_meth_n_124_coll" bpmnElement="f_n_124_meth_n_124_coll"><di:waypoint x="555" y="235"/><di:waypoint x="595" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_124_coll_n_124_ev" bpmnElement="f_n_124_coll_n_124_ev"><di:waypoint x="725" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_124_ev_n_124_rec" bpmnElement="f_n_124_ev_n_124_rec"><di:waypoint x="895" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_124_rec_n_124_gw" bpmnElement="f_n_124_rec_n_124_gw"><di:waypoint x="1065" y="235"/><di:waypoint x="1147" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_124_gw_n_124_case" bpmnElement="f_n_124_gw_n_124_case"><di:waypoint x="1193" y="235"/><di:waypoint x="1080" y="235"/><di:waypoint x="1080" y="455"/><di:waypoint x="1105" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_124_case_n_124_e1" bpmnElement="f_n_124_case_n_124_e1"><di:waypoint x="1235" y="455"/><di:waypoint x="1297" y="455"/><di:waypoint x="1297" y="235"/><di:waypoint x="1322" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_124_gw_n_124_e1" bpmnElement="f_n_124_gw_n_124_e1"><di:waypoint x="1193" y="235"/><di:waypoint x="1322" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_124_pt_n_124_pop" bpmnElement="f_n_124_pt_n_124_pop"><di:waypoint x="168" y="675"/><di:waypoint x="255" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_124_pop_n_124_asm" bpmnElement="f_n_124_pop_n_124_asm"><di:waypoint x="385" y="675"/><di:waypoint x="425" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_124_asm_n_124_calc" bpmnElement="f_n_124_asm_n_124_calc"><di:waypoint x="555" y="675"/><di:waypoint x="595" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_124_calc_n_124_route" bpmnElement="f_n_124_calc_n_124_route"><di:waypoint x="725" y="675"/><di:waypoint x="765" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_124_route_n_124_e2" bpmnElement="f_n_124_route_n_124_e2"><di:waypoint x="895" y="675"/><di:waypoint x="982" y="675"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

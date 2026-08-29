@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/CMMN/20151109/MODEL" xmlns:cmmndi="http://www.omg.org/spec/CMMN/20151109/CMMNDI" xmlns:dc="http://www.omg.org/spec/CMMN/20151109/DC" xmlns:di="http://www.omg.org/spec/CMMN/20151109/DI" id="defs_Manage_warranty_claim" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <case id="Manage_warranty_claim" name="12.5.5 Manage warranty and claims">
+    <caseFileModel id="Manage_warranty_claim_cfm">
+      <caseFileItem id="cf_defect" name="The defect, failure or repair that may be covered"/>
+      <caseFileItem id="cf_cover" name="Warranty terms, supplier agreement and coverage evidence"/>
+      <caseFileItem id="cf_records" name="Work, material, batch and cost records supporting the claim"/>
+    </caseFileModel>
+    <casePlanModel id="Manage_warranty_claim_plan" name="12.5.5 Manage warranty and claims" autoComplete="true">
+      <documentation>Coverage evidence, supplier responses and requests for more information arrive in an order the handler does not control, and two competent handlers will sequence the same claim differently. That is the CMMN test.
+
+PRESERVATION IS REQUIRED AND IT IS REQUIRED EARLY. The defect part, the work record, the material batch and the cost are the claim; once the part is scrapped or the work order closed and settled at 5.0, the claim is an assertion. Almost every warranty recovery that fails, fails here rather than on coverage.
+
+Rejection and closure are drawn as outcomes rather than failures. A claim correctly refused, recorded with its reason, is what stops the same defect being claimed again next quarter - and it is evidence for 16.0 when the supplier agreement is next negotiated. Camunda 8 dropped CMMN, so a runtime for this file means Flowable or an equivalent.</documentation>
+      <planItem id="pi_t_preserve" name="Preserve the defect, work, material and cost records" definitionRef="t_preserve_def">
+        <itemControl id="ic_t_preserve">
+          <requiredRule id="rr_t_preserve"><condition><![CDATA[true]]></condition></requiredRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_cover" name="Verify coverage against the terms" definitionRef="t_cover_def">
+        <itemControl id="ic_t_cover">
+          <requiredRule id="rr_t_cover"><condition><![CDATA[true]]></condition></requiredRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_submit" name="Submit the claim" definitionRef="t_submit_def">
+        <itemControl id="ic_t_submit">
+          <requiredRule id="rr_t_submit"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_submit"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_respond" name="Answer requests for further evidence" definitionRef="t_respond_def">
+        <itemControl id="ic_t_respond">
+          <repetitionRule id="rep_t_respond"><condition><![CDATA[true]]></condition></repetitionRule>
+          <requiredRule id="rr_t_respond"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_respond"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_escalate" name="Escalate through the supplier agreement" definitionRef="t_escalate_def">
+        <itemControl id="ic_t_escalate">
+          <requiredRule id="rr_t_escalate"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_escalate"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_recover" name="Record acceptance and recovery" definitionRef="t_recover_def">
+        <itemControl id="ic_t_recover">
+          <requiredRule id="rr_t_recover"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_recover"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_close" name="Record rejection or closure with the reason" definitionRef="t_close_def">
+        <itemControl id="ic_t_close">
+          <requiredRule id="rr_t_close"><condition><![CDATA[true]]></condition></requiredRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_m_covered" name="Coverage established" definitionRef="m_covered_def"/>
+      <planItem id="pi_m_settled" name="Claim settled" definitionRef="m_settled_def"/>
+      <humanTask id="t_preserve_def" name="Preserve the defect, work, material and cost records" isBlocking="true"><documentation>Required, and first. The part, the batch and the work record are the claim; after settlement at 5.0 they are a recollection.</documentation></humanTask>
+      <humanTask id="t_cover_def" name="Verify coverage against the terms" isBlocking="true"><documentation>Required. 16.0 holds the agreement; this establishes whether it reaches this defect before anybody is asked for money.</documentation></humanTask>
+      <humanTask id="t_submit_def" name="Submit the claim" isBlocking="true"><documentation>Discretionary in timing. A claim submitted before the evidence is assembled starts a clock the handler then loses.</documentation></humanTask>
+      <humanTask id="t_respond_def" name="Answer requests for further evidence" isBlocking="true"><documentation>Discretionary and repeating. This is the item that makes the case a case.</documentation></humanTask>
+      <humanTask id="t_escalate_def" name="Escalate through the supplier agreement" isBlocking="true"><documentation>Discretionary. Through 16.0's relationship rather than around it.</documentation></humanTask>
+      <humanTask id="t_recover_def" name="Record acceptance and recovery" isBlocking="true"><documentation>Discretionary. The recovery is a credit against the work or the asset, and 5.0 settles it.</documentation></humanTask>
+      <humanTask id="t_close_def" name="Record rejection or closure with the reason" isBlocking="true"><documentation>Required whichever way it ends. A refused claim with its reason recorded is evidence at the next contract review; one that simply stops is not.</documentation></humanTask>
+      <milestone id="m_covered_def" name="Coverage established"><documentation>Or established as absent, which ends the claim honestly.</documentation></milestone>
+      <milestone id="m_settled_def" name="Claim settled"><documentation>Recovered, rejected or withdrawn - with the reason recorded.</documentation></milestone>
+    </casePlanModel>
+  </case>
+  <cmmndi:CMMNDI>
+    <cmmndi:CMMNDiagram id="dg_Manage_warranty_claim">
+      <cmmndi:CMMNShape id="sh_plan" cmmnElementRef="Manage_warranty_claim_plan"><dc:Bounds x="40" y="40" width="1010" height="300"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_preserve" cmmnElementRef="pi_t_preserve"><dc:Bounds x="80" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_cover" cmmnElementRef="pi_t_cover"><dc:Bounds x="270" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_submit" cmmnElementRef="pi_t_submit"><dc:Bounds x="460" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_respond" cmmnElementRef="pi_t_respond"><dc:Bounds x="80" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_escalate" cmmnElementRef="pi_t_escalate"><dc:Bounds x="270" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_recover" cmmnElementRef="pi_t_recover"><dc:Bounds x="460" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_close" cmmnElementRef="pi_t_close"><dc:Bounds x="80" y="290" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_m_covered" cmmnElementRef="pi_m_covered"><dc:Bounds x="270" y="290" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_m_settled" cmmnElementRef="pi_m_settled"><dc:Bounds x="460" y="290" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+    </cmmndi:CMMNDiagram>
+  </cmmndi:CMMNDI>
+</definitions>

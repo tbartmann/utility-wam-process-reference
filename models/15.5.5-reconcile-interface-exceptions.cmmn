@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/CMMN/20151109/MODEL" xmlns:cmmndi="http://www.omg.org/spec/CMMN/20151109/CMMNDI" xmlns:dc="http://www.omg.org/spec/CMMN/20151109/DC" xmlns:di="http://www.omg.org/spec/CMMN/20151109/DI" id="defs_Reconcile_interface_exceptions" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <case id="Reconcile_interface_exceptions" name="15.5.5 Monitor interface health and reconcile exceptions">
+    <caseFileModel id="Reconcile_interface_exceptions_cfm">
+      <caseFileItem id="cf_exception" name="The failed or inconsistent exchange and its payload"/>
+      <caseFileItem id="cf_state" name="Last accepted state on both sides"/>
+      <caseFileItem id="cf_authority" name="Which component holds authority for the affected fields"/>
+    </caseFileModel>
+    <casePlanModel id="Reconcile_interface_exceptions_plan" name="15.5.5 Monitor interface health and reconcile exceptions" autoComplete="true">
+      <documentation>Transport, mapping, authority and data causes present identically - a record that does not agree with its counterpart - and two competent engineers will test them in a different order. That is the CMMN test, and it is why this is a case rather than the exception branch of 15.5.
+
+One item is required and it is the first one: establish the last accepted state and which side holds authority, BEFORE replaying or correcting anything. A replay against an unknown baseline can duplicate a state change, and a correction applied on the non-authoritative side is reverted by the next exchange and logged again as the same exception.
+
+A conflicting authority is escalated and never resolved by overwrite. If two systems each believe they own a field, one of them is wrong about the model and that belongs to 12.2.1 and 15.4.1, not to whoever is on call. Camunda 8 dropped CMMN, so a runtime for this file means Flowable or an equivalent.</documentation>
+      <planItem id="pi_t_baseline" name="Establish the last accepted state and the authoritative source" definitionRef="t_baseline_def">
+        <itemControl id="ic_t_baseline">
+          <requiredRule id="rr_t_baseline"><condition><![CDATA[true]]></condition></requiredRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_transport" name="Test transport and delivery" definitionRef="t_transport_def">
+        <itemControl id="ic_t_transport">
+          <requiredRule id="rr_t_transport"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_transport"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_mapping" name="Test the mapping and the payload against the approved definition" definitionRef="t_mapping_def">
+        <itemControl id="ic_t_mapping">
+          <requiredRule id="rr_t_mapping"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_mapping"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_replay" name="Replay under controlled conditions" definitionRef="t_replay_def">
+        <itemControl id="ic_t_replay">
+          <requiredRule id="rr_t_replay"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_replay"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_correct" name="Correct at the authoritative source" definitionRef="t_correct_def">
+        <itemControl id="ic_t_correct">
+          <requiredRule id="rr_t_correct"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_correct"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_escalate" name="Escalate a conflicting authority" definitionRef="t_escalate_def">
+        <itemControl id="ic_t_escalate">
+          <requiredRule id="rr_t_escalate"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_escalate"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_verify" name="Verify both sides agree, and close or escalate" definitionRef="t_verify_def">
+        <itemControl id="ic_t_verify">
+          <requiredRule id="rr_t_verify"><condition><![CDATA[true]]></condition></requiredRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_m_cause" name="Cause established" definitionRef="m_cause_def"/>
+      <planItem id="pi_m_agreed" name="Both sides agree" definitionRef="m_agreed_def"/>
+      <humanTask id="t_baseline_def" name="Establish the last accepted state and the authoritative source" isBlocking="true"><documentation>Required, and required first. Everything else in this case can duplicate a state change or be reverted if this is not settled.</documentation></humanTask>
+      <humanTask id="t_transport_def" name="Test transport and delivery" isBlocking="true"><documentation>Discretionary. The cheapest test and often the answer, which is why it is also the one that gets assumed rather than made.</documentation></humanTask>
+      <humanTask id="t_mapping_def" name="Test the mapping and the payload against the approved definition" isBlocking="true"><documentation>Discretionary. A mapping that changed without the interface being reissued produces a semantic mismatch that looks exactly like bad data.</documentation></humanTask>
+      <humanTask id="t_replay_def" name="Replay under controlled conditions" isBlocking="true"><documentation>Discretionary. Only against a known baseline, and only where a duplicate would be retained once rather than applied twice.</documentation></humanTask>
+      <humanTask id="t_correct_def" name="Correct at the authoritative source" isBlocking="true"><documentation>Discretionary. Where the defect is in the record rather than the exchange, 15.4.2 owns the correction and this case follows it.</documentation></humanTask>
+      <humanTask id="t_escalate_def" name="Escalate a conflicting authority" isBlocking="true"><documentation>Discretionary. Never resolved here by overwrite - the model is wrong, and 12.2.1 and 15.4.1 hold it.</documentation></humanTask>
+      <humanTask id="t_verify_def" name="Verify both sides agree, and close or escalate" isBlocking="true"><documentation>Required. Both sides. An exception closed on the evidence of the side that raised it is a exception that will be raised again.</documentation></humanTask>
+      <milestone id="m_cause_def" name="Cause established"><documentation>Transport, mapping, authority or data - and recorded as which.</documentation></milestone>
+      <milestone id="m_agreed_def" name="Both sides agree"><documentation>The only condition on which this case closes.</documentation></milestone>
+    </casePlanModel>
+  </case>
+  <cmmndi:CMMNDI>
+    <cmmndi:CMMNDiagram id="dg_Reconcile_interface_exceptions">
+      <cmmndi:CMMNShape id="sh_plan" cmmnElementRef="Reconcile_interface_exceptions_plan"><dc:Bounds x="40" y="40" width="1010" height="300"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_baseline" cmmnElementRef="pi_t_baseline"><dc:Bounds x="80" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_transport" cmmnElementRef="pi_t_transport"><dc:Bounds x="270" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_mapping" cmmnElementRef="pi_t_mapping"><dc:Bounds x="460" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_replay" cmmnElementRef="pi_t_replay"><dc:Bounds x="80" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_correct" cmmnElementRef="pi_t_correct"><dc:Bounds x="270" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_escalate" cmmnElementRef="pi_t_escalate"><dc:Bounds x="460" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_verify" cmmnElementRef="pi_t_verify"><dc:Bounds x="80" y="290" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_m_cause" cmmnElementRef="pi_m_cause"><dc:Bounds x="270" y="290" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_m_agreed" cmmnElementRef="pi_m_agreed"><dc:Bounds x="460" y="290" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+    </cmmndi:CMMNDiagram>
+  </cmmndi:CMMNDI>
+</definitions>

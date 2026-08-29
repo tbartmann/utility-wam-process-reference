@@ -1,0 +1,3755 @@
+{
+ "category": {
+  "uid": 10486,
+  "id": "15.0",
+  "name": "Manage Performance, Information and Integration",
+  "band": "Foundations and Enabling"
+ },
+ "platform": "ChatGPT",
+ "model": "GPT-5",
+ "round": 5,
+ "date": "2026-08-29",
+ "merge_corrections": [
+  {
+   "date": "2026-08-29",
+   "by": "Claude",
+   "what": "NO CORRECTION NEEDED. Zero errors and zero warnings on the gate, including the two checks added in the previous 24 hours that this platform's other files failed: control text is unique on all twenty processes, and no judgment citation is shared by more than one. This is the second submission in the campaign to need nothing changed at merge, and the first from this platform.",
+   "accepted_from_submitter": [
+    "15.3.2 keeps the commodity asymmetry straight in both directions: gas distribution integrity reporting is a federal duty under 49 CFR 192.1007(e) and (g) and 191.11, and IEEE 1366 is named as a method that is NOT a federal filing mandate. Getting the negative right is harder than getting the citation right.",
+    "15.3.3 separates 18 CFR 125.3's continuing-plant-inventory retention from the shorter periods for work and authorisation records, and confines 49 CFR 192.709(a) service-life retention to transmission pipe rather than spreading it over the distribution record set.",
+    "Six SPEC processes, each justified either as a standing capability with no instance boundary or as a measure family whose formulas are member-gated and were not reproduced. 15.2.1 to 15.2.3 name EN 15341 and SMRP metrics by number and refuse to print the arithmetic, which is exactly what the ceiling requires.",
+    "15.5.5 draws the distinction that makes an interface model worth having: a transport acknowledgement is not evidence that the receiving record passed semantic and authority checks."
+   ],
+   "models_built_here": "Seven artifacts, 5 BPMN and 2 CMMN. The specification names them; only this side has the generator."
+  }
+ ],
+ "derivation": "STANDARDS-DERIVED. Every field traces to a standard, a regulation, a recognised industry body or an explicit judgment. No client programme or product practice enters this specification.",
+ "field_set": "EN 17007:2017 cl. 5.2 maintenance process profile, corroborated by ISO 9001:2015 cl. 4.4.1 a) to h).",
+ "gaps": [
+  "No permitted source defines one operational-reporting semantic model, issue calendar, ad-hoc analysis method or self-service governance model for gas and electric distribution. Report routes, populations and publication controls are judgment.",
+  "EN 15341 indicator names and SMRP metric numbers are available, but the relevant formulas are paywalled or member-gated. This specification names them without reproducing calculation logic; each operator must control its executable definitions.",
+  "No permitted source defines first-time-fix or a cross-commodity rule for linking repeat intervention to rework. Process 15.2.3 therefore remains SPEC rather than inventing a decision model.",
+  "Federal reporting is asymmetric. 49 CFR 192.1007(e) and (g) and 191.11 prescribe gas distribution integrity reporting; IEEE 1366 supplies an electric reliability method but not a federal filing duty for local distribution.",
+  "No permitted source supplies a complete retention schedule for every report, work record, attachment and audit record. 18 CFR 125.3 and 49 CFR 192.709 cover named records with different scopes and periods; the remaining schedule is unresolved here.",
+  "GFMAM subjects 5.1 to 5.4 establish data strategy, standards, management and systems as capabilities but do not prescribe master-data ownership, stewardship, quality thresholds, reference-code life cycle, organisational scope or access-review methods.",
+  "IEC 61968-6 standardises electric work interfaces only. There is no gas work or work-task information model, and no cross-commodity contract for asset, spatial, time, cost, document, procurement, invoice or ledger content.",
+  "IEC 61968-6 cl. 4.2 has no component for document management, procurement or an integration service. Documentation and interface coordination are placed on MAI and supply transactions on MM without inventing component codes.",
+  "No permitted source prescribes interface-health measures, delivery guarantees, retry, duplicate handling, idempotency, semantic reconciliation or exception-aging rules. Process 15.5.5 is judgment beyond the named exchange structures.",
+  "GFMAM subject 2.3 Asset Management Assurance and Audit remains partial: this category retains reporting evidence but has no process that assures the asset management system as a whole.",
+  "GFMAM subject 7.1 Outcomes and Impacts remains partial: operational measures are reported, but the taxonomy has no distinct process for tracing asset-management outcomes and impacts to stakeholder value.",
+  "APQC PCF Utilities v7.2.1 14.1.3 Perform operations performance management (pcf_id 11268) includes activity 19273 Plan and manage control room operations, which has no group here. It may belong at the Category 18 network-operations boundary rather than in performance reporting.",
+  "The boundary between 15.1 operational reporting and 15.3 obligation reporting is audience-based, while EN 17007 DTA.11 treats calculation, storage and access as one process. Shared calculations must not fork across the two groups.",
+  "Processes 15.5.4 and 15.5.6 combine domain ownership with interface transport. EN 17007 places documentation in DOC and spare-parts purchasing in SPP, while this taxonomy places both exchanges under integration; ownership must remain with the source domain."
+ ],
+ "processes": [
+  {
+   "uid": 10488,
+   "id": "15.1.1",
+   "name": "Produce standard operational reporting",
+   "group": {
+    "id": "15.1",
+    "name": "Report operational performance",
+    "uid": 10487
+   },
+   "intent": "Issue repeatable operational reports from governed measures, periods and reporting scopes.",
+   "activities": [
+    "Open the scheduled reporting period",
+    "Collect approved measures and reporting scope",
+    "Reconcile missing or late source records",
+    "Compile and review the standard report",
+    "Publish the report and retain its issue record"
+   ],
+   "trigger": {
+    "kind": "timer",
+    "text": "The reporting calendar opens a standard reporting period.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Approved measure definitions and reporting scope",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Work status and completion records",
+     "party": "MAI",
+     "data": "Work"
+    },
+    {
+     "what": "Resource and schedule records",
+     "party": "SCHD",
+     "data": "Crew"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Issued standard operational report",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Reporting exception list",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "systems": [
+    {
+     "component": "MAI",
+     "role": "owning",
+     "service": "Operational report and issue record"
+    },
+    {
+     "component": "SCHD",
+     "role": "contributing",
+     "service": "Schedule and resource measures"
+    },
+    {
+     "component": "FRD",
+     "role": "contributing",
+     "service": "Field completion records"
+    },
+    {
+     "component": "AM",
+     "role": "reference",
+     "service": "Asset reporting scope"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "MAI",
+     "to": "SCHD",
+     "payload": "MaintenanceOrder",
+     "verb": "get",
+     "pattern": "batch"
+    },
+    {
+     "from": "MAI",
+     "to": "FRD",
+     "payload": "MaintenanceOrder",
+     "verb": "get",
+     "pattern": "batch"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Performance analyst",
+     "raci": "R"
+    },
+    {
+     "role": "Operations manager",
+     "raci": "A"
+    },
+    {
+     "role": "Data steward",
+     "raci": "C"
+    },
+    {
+     "role": "Field operations supervisor",
+     "raci": "I"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkActivityRecord",
+    "Crew",
+    "WorkTimeSchedule"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "Issue the report against the approved measure definition, reporting period and organisational scope; identify an incomplete source population."
+    },
+    {
+     "kind": "operational",
+     "text": "Retain the issue, source period and review status so a later reader can reproduce the reporting context."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Planned Work",
+     "definition": "Use SMRP 7th Edition metric 5.3.1; the member-gated formula is not reproduced.",
+     "cite": "SMRP Best Practices 7th Edition, metric 5.3.1"
+    },
+    {
+     "name": "Schedule Compliance",
+     "definition": "Use SMRP 7th Edition metrics 5.4.3 and 5.4.4; formulas are not reproduced.",
+     "cite": "SMRP Best Practices 7th Edition, metrics 5.4.3 and 5.4.4"
+    }
+   ],
+   "variants": [
+    "Daily operating dashboard issued on a fixed cut-off",
+    "Period-close report reconciled before issue",
+    "Exception report issued when a control limit is crossed"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "A scheduled collect, reconcile, review and issue sequence has a known happy path.",
+    "artifact": "models/15.1-report-operational-performance.bpmn"
+   },
+   "en17007": {
+    "process": "DTA.11",
+    "title": "Calculate, save and provide access to performance and monitoring indicators",
+    "clause": "6.10"
+   },
+   "sources": [
+    {
+     "for": "process and EN 17007 correspondence",
+     "cite": "EN 17007:2017 cl. 6.10 DTA.11 Calculate, save and provide access to performance and monitoring indicators",
+     "status": "verified"
+    },
+    {
+     "for": "asset-management capability",
+     "cite": "GFMAM Asset Management Landscape 3rd ed. v3.0, subject 7.2 Monitoring",
+     "status": "verified"
+    },
+    {
+     "for": "indicator families",
+     "cite": "EN 15341:2019+A1:2022 cl. 12 O&S9-O&S28 Planning, Control and Productivity Effectiveness indicators",
+     "status": "clause-verified"
+    },
+    {
+     "for": "named measures",
+     "cite": "SMRP Best Practices 7th Edition, metrics 5.3.1, 5.4.3 and 5.4.4",
+     "status": "consensus"
+    },
+    {
+     "for": "uncodified method and variants",
+     "cite": "No permitted authority prescribes a utility operational-report production workflow or issue calendar",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "standard",
+    "primary": "EN 17007:2017 cl. 6.10 DTA.11 and GFMAM subject 7.2"
+   }
+  },
+  {
+   "uid": 10489,
+   "id": "15.1.2",
+   "name": "Produce ad-hoc and self-service analysis",
+   "group": {
+    "id": "15.1",
+    "name": "Report operational performance",
+    "uid": 10487
+   },
+   "intent": "Answer an authorised operational question with traceable data, scope and interpretation.",
+   "activities": [
+    "Frame the operational question and intended decision",
+    "Confirm access and define the analysis population",
+    "Gather and test relevant records",
+    "Analyse the evidence and resolve anomalies",
+    "Publish the result with scope and limitations"
+   ],
+   "trigger": {
+    "kind": "message",
+    "text": "An authorised user submits an operational analysis question.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Operational question and intended use",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Work and activity history",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Asset, location and organisational scope",
+     "party": "AM",
+     "data": "WorkAsset"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Analysis result with scope and limitations",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Data exception or follow-up question",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "systems": [
+    {
+     "component": "MAI",
+     "role": "owning",
+     "service": "Operational analysis record"
+    },
+    {
+     "component": "AM",
+     "role": "reference",
+     "service": "Asset population and attributes"
+    },
+    {
+     "component": "GINV",
+     "role": "reference",
+     "service": "Spatial population and boundaries"
+    },
+    {
+     "component": "FIN",
+     "role": "reference",
+     "service": "Authorised cost evidence"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "MAI",
+     "to": "AM",
+     "payload": "WorkRequest",
+     "verb": "get",
+     "pattern": "request-reply"
+    },
+    {
+     "from": "MAI",
+     "to": "GINV",
+     "payload": "WorkRequest",
+     "verb": "get",
+     "pattern": "request-reply"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Operational analyst",
+     "raci": "R"
+    },
+    {
+     "role": "Information owner",
+     "raci": "A"
+    },
+    {
+     "role": "Data steward",
+     "raci": "C"
+    },
+    {
+     "role": "Requesting manager",
+     "raci": "I"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkActivityRecord",
+    "WorkAsset",
+    "WorkLocation"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "State the population, period, exclusions and data limitations with the result; do not present a scoped analysis as a complete operating record."
+    },
+    {
+     "kind": "operational",
+     "text": "Apply the approved visibility rules before retrieving work, asset, location or cost records."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Work Order Cycle Time",
+     "definition": "Use SMRP 7th Edition metric 5.4.7 when cycle time is the question; its formula is not reproduced.",
+     "cite": "SMRP Best Practices 7th Edition, metric 5.4.7"
+    },
+    {
+     "name": "Work Order Aging",
+     "definition": "Use SMRP 7th Edition metric 5.4.6 when aging is the question; its formula is not reproduced.",
+     "cite": "SMRP Best Practices 7th Edition, metric 5.4.6"
+    }
+   ],
+   "variants": [
+    "Single-question analysis against a defined population",
+    "Drill-down from an issued operational report",
+    "Root-cause inquiry with successive evidence requests"
+   ],
+   "notation": {
+    "class": "CMMN",
+    "why": "Two competent analysts may sequence evidence gathering differently while preserving scope and authority controls.",
+    "artifact": "models/15.1.2-ad-hoc-analysis.cmmn"
+   },
+   "en17007": {
+    "process": "DTA.4",
+    "title": "Evaluate and analyse maintenance data and HSE data",
+    "clause": "6.10"
+   },
+   "sources": [
+    {
+     "for": "process and EN 17007 correspondence",
+     "cite": "EN 17007:2017 cl. 6.10 DTA.4 Evaluate and analyse maintenance data and HSE data",
+     "status": "verified"
+    },
+    {
+     "for": "asset-management capability",
+     "cite": "GFMAM Asset Management Landscape 3rd ed. v3.0, subjects 5.3 Asset Management Data & Information Management and 7.2 Monitoring",
+     "status": "verified"
+    },
+    {
+     "for": "maintenance data and reporting locator",
+     "cite": "ISO 14224:2016 cl. 9.6 Maintenance data, including cl. 9.6.3 reporting",
+     "status": "clause-verified"
+    },
+    {
+     "for": "named measures",
+     "cite": "SMRP Best Practices 7th Edition, metrics 5.4.6 and 5.4.7",
+     "status": "consensus"
+    },
+    {
+     "for": "uncodified method and variants",
+     "cite": "No permitted authority prescribes an ad-hoc or self-service utility analysis method",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "standard",
+    "primary": "EN 17007:2017 cl. 6.10 DTA.4 and GFMAM subjects 5.3 and 7.2"
+   }
+  },
+  {
+   "uid": 10490,
+   "id": "15.1.3",
+   "name": "Provide field and supervisory reporting",
+   "group": {
+    "id": "15.1",
+    "name": "Report operational performance",
+    "uid": 10487
+   },
+   "intent": "Give field supervisors a current, scoped view of work progress, exceptions and resource position.",
+   "activities": [
+    "Open the shift or supervisory reporting cut-off",
+    "Collect current field, work and crew status",
+    "Separate completed, active, delayed and exception work",
+    "Review the scoped view with the responsible supervisor",
+    "Issue the view and record follow-up actions"
+   ],
+   "trigger": {
+    "kind": "timer",
+    "text": "A shift, crew or supervisory reporting cut-off is reached.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Current field activity records",
+     "party": "FRD",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Assigned and active work",
+     "party": "SCHD",
+     "data": "Work"
+    },
+    {
+     "what": "Crew status and schedule",
+     "party": "SCHD",
+     "data": "Crew"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Field and supervisory status report",
+     "party": "SCHD",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Exception and follow-up action list",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "systems": [
+    {
+     "component": "FRD",
+     "role": "originating",
+     "service": "Field status and completion evidence"
+    },
+    {
+     "component": "SCHD",
+     "role": "owning",
+     "service": "Crew and work status view"
+    },
+    {
+     "component": "MAI",
+     "role": "receiving",
+     "service": "Exception follow-up"
+    },
+    {
+     "component": "NO",
+     "role": "reference",
+     "service": "Network operating constraints"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "FRD",
+     "to": "SCHD",
+     "payload": "MaintenanceOrder",
+     "verb": "change",
+     "pattern": "publish-subscribe"
+    },
+    {
+     "from": "SCHD",
+     "to": "MAI",
+     "payload": "WorkRequest",
+     "verb": "change",
+     "pattern": "event"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Field operations supervisor",
+     "raci": "R"
+    },
+    {
+     "role": "Operations manager",
+     "raci": "A"
+    },
+    {
+     "role": "Dispatcher",
+     "raci": "C"
+    },
+    {
+     "role": "Crew leader",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkTask",
+    "WorkActivityRecord",
+    "Crew",
+    "WorkTimeSchedule"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "Separate last confirmed field status from inferred progress, and show the reporting cut-off for every supervisory view."
+    },
+    {
+     "kind": "operational",
+     "text": "Send safety, access and network-control exceptions to their owning process; reporting does not resolve them."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Schedule Compliance",
+     "definition": "Use SMRP 7th Edition metrics 5.4.3 and 5.4.4 for the reported schedule period.",
+     "cite": "SMRP Best Practices 7th Edition, metrics 5.4.3 and 5.4.4"
+    },
+    {
+     "name": "Work Order Aging",
+     "definition": "Use SMRP 7th Edition metric 5.4.6 for work held beyond the reporting cut-off.",
+     "cite": "SMRP Best Practices 7th Edition, metric 5.4.6"
+    }
+   ],
+   "variants": [
+    "Crew shift report at handover",
+    "Supervisor work-centre report for active assignments",
+    "Exception briefing for delayed, blocked or returned work"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "A repeatable cut-off, collect, classify, review and issue sequence supports field supervision.",
+    "artifact": "models/15.1-report-operational-performance.bpmn"
+   },
+   "en17007": {
+    "process": "MAN.6",
+    "title": "Define, select, analyse and communicate the information",
+    "clause": "6.2"
+   },
+   "sources": [
+    {
+     "for": "process and EN 17007 correspondence",
+     "cite": "EN 17007:2017 cl. 6.2 MAN.6 Define, select, analyse and communicate the information",
+     "status": "verified"
+    },
+    {
+     "for": "asset-management capability",
+     "cite": "GFMAM Asset Management Landscape 3rd ed. v3.0, subject 7.2 Monitoring",
+     "status": "verified"
+    },
+    {
+     "for": "field and scheduling exchange",
+     "cite": "IEC 61968-6:2015 cl. 4.2 SCHD and FRD reference components, cl. 5.3-5.5 payloads and Annex A verbs",
+     "status": "clause-verified"
+    },
+    {
+     "for": "named measures",
+     "cite": "SMRP Best Practices 7th Edition, metrics 5.4.3, 5.4.4 and 5.4.6",
+     "status": "consensus"
+    },
+    {
+     "for": "uncodified method and variants",
+     "cite": "No permitted authority prescribes a field or supervisory reporting workflow",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "standard",
+    "primary": "EN 17007:2017 cl. 6.2 MAN.6 and GFMAM subject 7.2"
+   }
+  },
+  {
+   "uid": 10492,
+   "id": "15.2.1",
+   "name": "Measure productivity and resource utilisation",
+   "group": {
+    "id": "15.2",
+    "name": "Measure and improve performance",
+    "uid": 10491
+   },
+   "intent": "Maintain approved productivity and resource-use measures from comparable work and labour populations.",
+   "activities": [
+    "Define the measure, population and reporting period",
+    "Collect work, schedule and labour records",
+    "Apply the approved calculation and exclusions",
+    "Test the result for completeness and comparability",
+    "Publish the measure with its definition and period"
+   ],
+   "trigger": {
+    "kind": "timer",
+    "text": "The productivity measurement period closes.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Completed work and activity records",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Crew schedule and assignment records",
+     "party": "SCHD",
+     "data": "Crew"
+    },
+    {
+     "what": "Labour time records",
+     "party": "HR",
+     "data": "WorkTimeSchedule"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Productivity and resource-use measures",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Measure-quality exception record",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "systems": [
+    {
+     "component": "MAI",
+     "role": "owning",
+     "service": "Measure definition and result"
+    },
+    {
+     "component": "SCHD",
+     "role": "contributing",
+     "service": "Assignment and schedule evidence"
+    },
+    {
+     "component": "HR",
+     "role": "contributing",
+     "service": "Labour and availability evidence"
+    },
+    {
+     "component": "FRD",
+     "role": "reference",
+     "service": "Field activity evidence"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "MAI",
+     "to": "SCHD",
+     "payload": "MaintenanceOrder",
+     "verb": "get",
+     "pattern": "batch"
+    },
+    {
+     "from": "MAI",
+     "to": "HR",
+     "payload": "WorkRequest",
+     "verb": "get",
+     "pattern": "batch"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Performance analyst",
+     "raci": "R"
+    },
+    {
+     "role": "Operations manager",
+     "raci": "A"
+    },
+    {
+     "role": "Resource planner",
+     "raci": "C"
+    },
+    {
+     "role": "Data steward",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkActivityRecord",
+    "Crew",
+    "WorkTimeSchedule"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "Use one approved measure definition, population and exclusion set for every compared period."
+    },
+    {
+     "kind": "operational",
+     "text": "The authority pack names metric families but does not expose their formulas; calculation rules remain controlled operator content."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Wrench Time",
+     "definition": "Use SMRP 7th Edition metric 5.6.1; the member-gated definition and formula are not reproduced.",
+     "cite": "SMRP Best Practices 7th Edition, metric 5.6.1"
+    },
+    {
+     "name": "Productivity Effectiveness indicators",
+     "definition": "Use the applicable EN 15341 O&S23-O&S28 indicator; formulas are not reproduced.",
+     "cite": "EN 15341:2019+A1:2022 cl. 12 O&S23-O&S28"
+    }
+   ],
+   "variants": [
+    "Productivity measured by completed standard work units",
+    "Resource use measured against scheduled crew time",
+    "Direct work share measured from classified labour time"
+   ],
+   "notation": {
+    "class": "SPEC",
+    "why": "This is a standing measure definition and calculation capability, not a case with a start and end; formulas are not available to encode.",
+    "artifact": null
+   },
+   "en17007": {
+    "process": "DTA.11",
+    "title": "Calculate, save and provide access to performance and monitoring indicators",
+    "clause": "6.10"
+   },
+   "sources": [
+    {
+     "for": "process and EN 17007 correspondence",
+     "cite": "EN 17007:2017 cl. 6.10 DTA.11 Calculate, save and provide access to performance and monitoring indicators",
+     "status": "verified"
+    },
+    {
+     "for": "asset-management capability",
+     "cite": "GFMAM Asset Management Landscape 3rd ed. v3.0, subjects 7.2 Monitoring and 7.3 Continuous Improvement",
+     "status": "verified"
+    },
+    {
+     "for": "productivity indicators",
+     "cite": "EN 15341:2019+A1:2022 cl. 12 O&S23-O&S28 Productivity Effectiveness indicators",
+     "status": "clause-verified"
+    },
+    {
+     "for": "named productivity measures",
+     "cite": "SMRP Best Practices 7th Edition, metrics 5.5.x resourcing ratios and 5.6.1 Wrench Time",
+     "status": "consensus"
+    },
+    {
+     "for": "uncodified method and variants",
+     "cite": "The permitted sources do not expose a cross-commodity productivity calculation or resource-population rule",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "standard",
+    "primary": "EN 17007:2017 cl. 6.10 DTA.11"
+   }
+  },
+  {
+   "uid": 10493,
+   "id": "15.2.2",
+   "name": "Measure service level and backlog",
+   "group": {
+    "id": "15.2",
+    "name": "Measure and improve performance",
+    "uid": 10491
+   },
+   "intent": "Maintain service-level, aging, overdue and backlog measures against approved clocks and work populations.",
+   "activities": [
+    "Define the service clock and eligible work population",
+    "Collect demand, due-date and completion records",
+    "Calculate backlog, aging and service attainment",
+    "Reconcile exclusions and unresolved work states",
+    "Publish the measures with their period and basis"
+   ],
+   "trigger": {
+    "kind": "timer",
+    "text": "The service-level and backlog measurement period closes.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Work demand, due dates and priorities",
+     "party": "MAI",
+     "data": "Work"
+    },
+    {
+     "what": "Completion and closure records",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Schedule dates and service windows",
+     "party": "SCHD",
+     "data": "WorkTimeSchedule"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Service-level and backlog measures",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Unresolved clock or population exception",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "systems": [
+    {
+     "component": "MAI",
+     "role": "owning",
+     "service": "Service measure and work population"
+    },
+    {
+     "component": "SCHD",
+     "role": "contributing",
+     "service": "Due dates and schedule windows"
+    },
+    {
+     "component": "CS",
+     "role": "reference",
+     "service": "Customer commitment dates"
+    },
+    {
+     "component": "FRD",
+     "role": "reference",
+     "service": "Completion evidence"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "MAI",
+     "to": "SCHD",
+     "payload": "WorkRequest",
+     "verb": "get",
+     "pattern": "batch"
+    },
+    {
+     "from": "MAI",
+     "to": "CS",
+     "payload": "ServiceOrder",
+     "verb": "get",
+     "pattern": "batch"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Performance analyst",
+     "raci": "R"
+    },
+    {
+     "role": "Service delivery manager",
+     "raci": "A"
+    },
+    {
+     "role": "Scheduler",
+     "raci": "C"
+    },
+    {
+     "role": "Data steward",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkActivityRecord",
+    "WorkTimeSchedule",
+    "Priority"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "Define when each service clock starts, stops and pauses; the permitted sources name measures but do not set utility service clocks."
+    },
+    {
+     "kind": "operational",
+     "text": "Keep closed, cancelled, deferred and held work visible as separate populations instead of removing them without explanation."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Backlog",
+     "definition": "Use SMRP 7th Edition metrics 5.4.8 and 5.4.9; member-gated formulas are not reproduced.",
+     "cite": "SMRP Best Practices 7th Edition, metrics 5.4.8 and 5.4.9"
+    },
+    {
+     "name": "Overdue Work",
+     "definition": "Use SMRP 7th Edition metric 5.4.11 against the approved due-date basis.",
+     "cite": "SMRP Best Practices 7th Edition, metric 5.4.11"
+    },
+    {
+     "name": "Work Order Aging",
+     "definition": "Use SMRP 7th Edition metric 5.4.6; its formula is not reproduced.",
+     "cite": "SMRP Best Practices 7th Edition, metric 5.4.6"
+    }
+   ],
+   "variants": [
+    "Backlog measured as count and estimated labour by work class",
+    "Aging measured in bands from the approved clock start",
+    "Service attainment measured against statutory or customer due dates"
+   ],
+   "notation": {
+    "class": "SPEC",
+    "why": "This is a standing family of governed measure definitions; the source pack does not provide executable service-clock rules.",
+    "artifact": null
+   },
+   "en17007": {
+    "process": "DTA.11",
+    "title": "Calculate, save and provide access to performance and monitoring indicators",
+    "clause": "6.10"
+   },
+   "sources": [
+    {
+     "for": "process and EN 17007 correspondence",
+     "cite": "EN 17007:2017 cl. 6.10 DTA.11 Calculate, save and provide access to performance and monitoring indicators",
+     "status": "verified"
+    },
+    {
+     "for": "asset-management capability",
+     "cite": "GFMAM Asset Management Landscape 3rd ed. v3.0, subject 7.2 Monitoring",
+     "status": "verified"
+    },
+    {
+     "for": "planning and control indicators",
+     "cite": "EN 15341:2019+A1:2022 cl. 12 O&S9-O&S22 Planning and Control indicators",
+     "status": "clause-verified"
+    },
+    {
+     "for": "named backlog measures",
+     "cite": "SMRP Best Practices 7th Edition, metrics 5.4.6, 5.4.8, 5.4.9 and 5.4.11",
+     "status": "consensus"
+    },
+    {
+     "for": "uncodified method and variants",
+     "cite": "No permitted authority defines a cross-commodity service clock, pause rule or backlog population",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "standard",
+    "primary": "EN 17007:2017 cl. 6.10 DTA.11"
+   }
+  },
+  {
+   "uid": 10494,
+   "id": "15.2.3",
+   "name": "Measure first-time-fix, rework and quality",
+   "group": {
+    "id": "15.2",
+    "name": "Measure and improve performance",
+    "uid": 10491
+   },
+   "intent": "Measure accepted completion, repeat intervention and rework from linked work and quality evidence.",
+   "activities": [
+    "Define accepted completion and repeat-work linkage rules",
+    "Collect completed, returned and follow-on work records",
+    "Link repeat interventions to original work where supported",
+    "Calculate quality, yield and rework measures",
+    "Publish results with unresolved linkage exceptions"
+   ],
+   "trigger": {
+    "kind": "timer",
+    "text": "The work-quality measurement period closes.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Completed and returned work",
+     "party": "MAI",
+     "data": "Work"
+    },
+    {
+     "what": "Completion and quality evidence",
+     "party": "FRD",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Asset and location linkage",
+     "party": "AM",
+     "data": "WorkAsset"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "First completion, yield and rework measures",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Unresolved repeat-work linkage exception",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "systems": [
+    {
+     "component": "MAI",
+     "role": "owning",
+     "service": "Quality measure and work linkage"
+    },
+    {
+     "component": "FRD",
+     "role": "contributing",
+     "service": "Completion and acceptance evidence"
+    },
+    {
+     "component": "AM",
+     "role": "reference",
+     "service": "Asset linkage"
+    },
+    {
+     "component": "CS",
+     "role": "reference",
+     "service": "Repeat service contact"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "MAI",
+     "to": "FRD",
+     "payload": "MaintenanceOrder",
+     "verb": "get",
+     "pattern": "batch"
+    },
+    {
+     "from": "MAI",
+     "to": "AM",
+     "payload": "WorkRequest",
+     "verb": "get",
+     "pattern": "request-reply"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Quality analyst",
+     "raci": "R"
+    },
+    {
+     "role": "Maintenance manager",
+     "raci": "A"
+    },
+    {
+     "role": "Field operations supervisor",
+     "raci": "C"
+    },
+    {
+     "role": "Data steward",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkTask",
+    "WorkActivityRecord",
+    "WorkAsset",
+    "WorkLocation"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "Define the asset, location, work type and time-window evidence required before linking a repeat intervention to earlier work."
+    },
+    {
+     "kind": "operational",
+     "text": "Do not classify every later intervention as rework; retain an unresolved class when the causal link is not supported."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Rework",
+     "definition": "Use SMRP 7th Edition metric 4.1; the member-gated formula is not reproduced.",
+     "cite": "SMRP Best Practices 7th Edition, metric 4.1"
+    },
+    {
+     "name": "Yield",
+     "definition": "Use SMRP 7th Edition metric 5.4.12; its formula is not reproduced.",
+     "cite": "SMRP Best Practices 7th Edition, metric 5.4.12"
+    }
+   ],
+   "variants": [
+    "Completion accepted without a repeat intervention",
+    "Work returned before acceptance for correction",
+    "Later intervention linked to the original as rework",
+    "Later intervention retained as unrelated or unresolved"
+   ],
+   "notation": {
+    "class": "SPEC",
+    "why": "This is a standing measure and linkage specification; no permitted source provides rules precise enough for a decision model.",
+    "artifact": null
+   },
+   "en17007": {
+    "process": "DTA.11",
+    "title": "Calculate, save and provide access to performance and monitoring indicators",
+    "clause": "6.10"
+   },
+   "sources": [
+    {
+     "for": "process and EN 17007 correspondence",
+     "cite": "EN 17007:2017 cl. 6.10 DTA.11 Calculate, save and provide access to performance and monitoring indicators",
+     "status": "verified"
+    },
+    {
+     "for": "asset-management capability",
+     "cite": "GFMAM Asset Management Landscape 3rd ed. v3.0, subjects 7.2 Monitoring and 7.3 Continuous Improvement",
+     "status": "verified"
+    },
+    {
+     "for": "maintenance reporting data",
+     "cite": "ISO 14224:2016 cl. 9.6 Maintenance data, including cl. 9.6.3 reporting",
+     "status": "clause-verified"
+    },
+    {
+     "for": "named quality measures",
+     "cite": "SMRP Best Practices 7th Edition, metrics 4.1 Rework and 5.4.12 Yield",
+     "status": "consensus"
+    },
+    {
+     "for": "uncodified method and variants",
+     "cite": "No permitted authority defines first-time-fix or a cross-commodity repeat-work linkage method",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "standard",
+    "primary": "EN 17007:2017 cl. 6.10 DTA.11"
+   }
+  },
+  {
+   "uid": 10495,
+   "id": "15.2.4",
+   "name": "Identify and act on improvement opportunity",
+   "group": {
+    "id": "15.2",
+    "name": "Measure and improve performance",
+    "uid": 10491
+   },
+   "intent": "Turn a supported performance gap into an owned improvement action and verify the resulting change.",
+   "activities": [
+    "Identify a sustained gap or adverse trend",
+    "Analyse causes and define the improvement opportunity",
+    "Prioritise the opportunity against other candidates",
+    "Assign and carry out the approved action",
+    "Measure the result and close or revise the action"
+   ],
+   "trigger": {
+    "kind": "signal",
+    "text": "Monitoring identifies a sustained performance gap or adverse trend.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Performance trend and comparison evidence",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Work, failure and rework records",
+     "party": "MAI",
+     "data": "Work"
+    },
+    {
+     "what": "Resource and cost evidence",
+     "party": "FIN",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Prioritised improvement action",
+     "party": "MAI",
+     "data": "Work"
+    },
+    {
+     "what": "Verified result or revised action",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "systems": [
+    {
+     "component": "MAI",
+     "role": "owning",
+     "service": "Improvement action and result"
+    },
+    {
+     "component": "AM",
+     "role": "contributing",
+     "service": "Asset performance evidence"
+    },
+    {
+     "component": "FIN",
+     "role": "contributing",
+     "service": "Cost evidence"
+    },
+    {
+     "component": "SCHD",
+     "role": "receiving",
+     "service": "Approved operational change"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "AM",
+     "to": "MAI",
+     "payload": "WorkRequest",
+     "verb": "create",
+     "pattern": "event"
+    },
+    {
+     "from": "MAI",
+     "to": "SCHD",
+     "payload": "MaintenanceOrder",
+     "verb": "change",
+     "pattern": "event"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Continuous improvement lead",
+     "raci": "R"
+    },
+    {
+     "role": "Operations manager",
+     "raci": "A"
+    },
+    {
+     "role": "Maintenance engineer",
+     "raci": "C"
+    },
+    {
+     "role": "Performance analyst",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkTask",
+    "WorkActivityRecord",
+    "WorkAsset"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "Tie the action to a stated performance gap, owner, expected result and review date."
+    },
+    {
+     "kind": "operational",
+     "text": "A change to an item, maintenance plan or controlled procedure returns to its owning process; this process tracks the result."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Continuous Improvement Hours",
+     "definition": "Use SMRP 7th Edition metric 5.7.1; the member-gated formula is not reproduced.",
+     "cite": "SMRP Best Practices 7th Edition, metric 5.7.1"
+    },
+    {
+     "name": "Rework",
+     "definition": "Use SMRP 7th Edition metric 4.1 when the opportunity addresses repeat correction.",
+     "cite": "SMRP Best Practices 7th Edition, metric 4.1"
+    }
+   ],
+   "variants": [
+    "Corrective change to an operating process",
+    "Revision to maintenance strategy or task content",
+    "Data-quality or interface correction",
+    "Opportunity closed after evidence does not support action"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "A supported gap moves through analysis, priority, action and result review on a repeatable path.",
+    "artifact": "models/15.2-measure-and-improve-performance.bpmn"
+   },
+   "en17007": {
+    "process": "OPT.1",
+    "title": "Determine the areas of improvement",
+    "clause": "6.13"
+   },
+   "sources": [
+    {
+     "for": "process and EN 17007 correspondence",
+     "cite": "EN 17007:2017 cl. 6.13 OPT.1 Determine the areas of improvement",
+     "status": "verified"
+    },
+    {
+     "for": "asset-management capability",
+     "cite": "GFMAM Asset Management Landscape 3rd ed. v3.0, subject 7.3 Continuous Improvement",
+     "status": "verified"
+    },
+    {
+     "for": "failure and maintenance data",
+     "cite": "ISO 14224:2016 cl. 9.5 Failure data and cl. 9.6 Maintenance data",
+     "status": "clause-verified"
+    },
+    {
+     "for": "named improvement measures",
+     "cite": "SMRP Best Practices 7th Edition, metrics 5.7.1 and 4.1",
+     "status": "consensus"
+    },
+    {
+     "for": "uncodified method and variants",
+     "cite": "No permitted authority prescribes the approval, ownership or closure method for a utility improvement action",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "standard",
+    "primary": "EN 17007:2017 cl. 6.13 OPT.1 and GFMAM subject 7.3"
+   }
+  },
+  {
+   "uid": 10497,
+   "id": "15.3.1",
+   "name": "Produce regulatory and compliance reporting",
+   "group": {
+    "id": "15.3",
+    "name": "Meet reporting obligations",
+    "uid": 10496
+   },
+   "intent": "Compile, approve and submit required regulatory or compliance information with traceable supporting evidence.",
+   "activities": [
+    "Open the reporting obligation and filing period",
+    "Collect required records and declarations",
+    "Reconcile the population and resolve reportable exceptions",
+    "Approve and submit the required report",
+    "Retain the submission, acknowledgement and evidence"
+   ],
+   "trigger": {
+    "kind": "timer",
+    "text": "A statutory filing period or compliance reporting deadline opens.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Reporting obligation and filing period",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Regulated work and inspection records",
+     "party": "MAI",
+     "data": "Work"
+    },
+    {
+     "what": "Asset and event population",
+     "party": "AM",
+     "data": "WorkAsset"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Approved regulatory or compliance submission",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Submission acknowledgement and exception record",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "systems": [
+    {
+     "component": "MAI",
+     "role": "owning",
+     "service": "Compliance report and evidence"
+    },
+    {
+     "component": "AM",
+     "role": "contributing",
+     "service": "Regulated asset population"
+    },
+    {
+     "component": "FRD",
+     "role": "contributing",
+     "service": "Inspection and field evidence"
+    },
+    {
+     "component": "FIN",
+     "role": "reference",
+     "service": "Financial filing evidence"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "MAI",
+     "to": "AM",
+     "payload": "MaintenanceOrder",
+     "verb": "get",
+     "pattern": "batch"
+    },
+    {
+     "from": "MAI",
+     "to": "FRD",
+     "payload": "MaintenanceOrder",
+     "verb": "get",
+     "pattern": "batch"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Regulatory reporting analyst",
+     "raci": "R"
+    },
+    {
+     "role": "Compliance officer",
+     "raci": "A"
+    },
+    {
+     "role": "Operations manager",
+     "raci": "C"
+    },
+    {
+     "role": "Records custodian",
+     "raci": "I"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkActivityRecord",
+    "WorkAsset",
+    "WorkLocation"
+   ],
+   "controls": [
+    {
+     "kind": "regulatory",
+     "text": "For gas distribution integrity management, report the required performance results under 49 CFR 192.1007(e) and (g) through the required federal reporting route."
+    },
+    {
+     "kind": "operational",
+     "text": "Record the obligation, period, population, approval and regulator acknowledgement with the filed result."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Planning and Control indicators",
+     "definition": "Use the applicable EN 15341 O&S9-O&S22 indicator; formulas are not reproduced.",
+     "cite": "EN 15341:2019+A1:2022 cl. 12 O&S9-O&S22 Planning and Control"
+    },
+    {
+     "name": "Overdue Work",
+     "definition": "Use SMRP 5.4.11 for reporting work past its due date; formula not reproduced.",
+     "cite": "SMRP Best Practices 7th Edition, metric 5.4.11"
+    }
+   ],
+   "variants": [
+    "Periodic mandatory submission on a fixed calendar",
+    "Event-triggered filing after a reportable condition",
+    "Corrected or supplemental submission requested by the regulator"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "A due obligation moves through evidence collection, reconciliation, approval, submission and retention.",
+    "artifact": "models/15.3-meet-reporting-obligations.bpmn"
+   },
+   "en17007": {
+    "process": "MAN.6",
+    "title": "Define, select, analyse and communicate the information",
+    "clause": "6.2"
+   },
+   "sources": [
+    {
+     "for": "process and EN 17007 correspondence",
+     "cite": "EN 17007:2017 cl. 6.2 MAN.6 Define, select, analyse and communicate the information",
+     "status": "verified"
+    },
+    {
+     "for": "asset-management capability",
+     "cite": "GFMAM Asset Management Landscape 3rd ed. v3.0, subjects 2.3 Asset Management Assurance and Audit and 7.1 Outcomes and Impacts",
+     "status": "verified"
+    },
+    {
+     "for": "gas distribution integrity reporting duty",
+     "cite": "49 CFR 192.1007(e) and (g); 49 CFR 191.11 Distribution system annual report",
+     "status": "regulation"
+    },
+    {
+     "for": "maintenance reporting data",
+     "cite": "ISO 14224:2016 cl. 9.6.3 Maintenance reporting",
+     "status": "clause-verified"
+    },
+    {
+     "for": "uncodified method and variants",
+     "cite": "No permitted authority supplies one reporting workflow spanning all gas and electric obligations",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "regulation",
+    "primary": "49 CFR 192.1007(e) and (g); 49 CFR 191.11"
+   }
+  },
+  {
+   "uid": 10498,
+   "id": "15.3.2",
+   "name": "Produce reliability and safety reporting",
+   "group": {
+    "id": "15.3",
+    "name": "Meet reporting obligations",
+    "uid": 10496
+   },
+   "intent": "Produce reliability and safety results under the applicable commodity method and reporting obligation.",
+   "activities": [
+    "Identify the applicable reporting method and period",
+    "Collect interruption, incident and integrity records",
+    "Classify events and reconcile the reporting population",
+    "Calculate and review required results",
+    "Issue the report and retain its supporting record"
+   ],
+   "trigger": {
+    "kind": "timer",
+    "text": "A reliability or safety reporting period closes.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Interruption and event records",
+     "party": "NO",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Safety and integrity work records",
+     "party": "MAI",
+     "data": "Work"
+    },
+    {
+     "what": "Affected asset and service locations",
+     "party": "AM",
+     "data": "WorkAsset"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Reliability or safety report",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Classified event and calculation evidence",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "systems": [
+    {
+     "component": "NO",
+     "role": "originating",
+     "service": "Interruption event evidence"
+    },
+    {
+     "component": "MAI",
+     "role": "owning",
+     "service": "Reliability and safety report"
+    },
+    {
+     "component": "AM",
+     "role": "reference",
+     "service": "Asset and service population"
+    },
+    {
+     "component": "CS",
+     "role": "reference",
+     "service": "Affected service record"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "MAI",
+     "to": "NO",
+     "payload": "ServiceOrder",
+     "verb": "get",
+     "pattern": "batch"
+    },
+    {
+     "from": "MAI",
+     "to": "AM",
+     "payload": "WorkRequest",
+     "verb": "get",
+     "pattern": "batch"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Reliability analyst",
+     "raci": "R"
+    },
+    {
+     "role": "Safety and compliance manager",
+     "raci": "A"
+    },
+    {
+     "role": "Network operator",
+     "raci": "C"
+    },
+    {
+     "role": "Integrity engineer",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkActivityRecord",
+    "WorkAsset",
+    "WorkLocation"
+   ],
+   "controls": [
+    {
+     "kind": "regulatory",
+     "text": "Gas distribution integrity reporting follows 49 CFR 192.1007(e) and (g) and 191.11; the federal duty is not transferred to electric distribution."
+    },
+    {
+     "kind": "operational",
+     "text": "Electric reliability measures use the applicable IEEE 1366 method and jurisdictional filing rule; IEEE 1366 is not a federal filing mandate."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Electric distribution reliability indices",
+     "definition": "Calculate the applicable reliability index under IEEE 1366-2022; the paywalled formulas are not reproduced.",
+     "cite": "IEEE 1366-2022"
+    },
+    {
+     "name": "Health, safety and environment indicators",
+     "definition": "Use the applicable EN 15341 HSE1-HSE22 indicator; formulas are not reproduced.",
+     "cite": "EN 15341:2019+A1:2022 cl. 12 HSE1-HSE22"
+    }
+   ],
+   "variants": [
+    "Routine electric reliability report for a reporting period",
+    "Major-event reliability report with applicable event treatment",
+    "Gas distribution integrity performance report",
+    "Safety report for a defined event or programme"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "A defined method and period drive collection, classification, calculation, review and issue.",
+    "artifact": "models/15.3-meet-reporting-obligations.bpmn"
+   },
+   "en17007": {
+    "process": "DTA.11",
+    "title": "Calculate, save and provide access to performance and monitoring indicators",
+    "clause": "6.10"
+   },
+   "sources": [
+    {
+     "for": "process and EN 17007 correspondence",
+     "cite": "EN 17007:2017 cl. 6.10 DTA.11 Calculate, save and provide access to performance and monitoring indicators",
+     "status": "verified"
+    },
+    {
+     "for": "asset-management capability",
+     "cite": "GFMAM Asset Management Landscape 3rd ed. v3.0, subjects 7.1 Outcomes and Impacts and 7.2 Monitoring",
+     "status": "verified"
+    },
+    {
+     "for": "electric reliability method",
+     "cite": "IEEE 1366-2022 Guide for Electric Power Distribution Reliability Indices",
+     "status": "consensus"
+    },
+    {
+     "for": "distribution interruption event information",
+     "cite": "IEEE 1782-2022, distribution interruption event information",
+     "status": "consensus"
+    },
+    {
+     "for": "gas distribution integrity reporting",
+     "cite": "49 CFR 192.1007(e) and (g); 49 CFR 191.11",
+     "status": "regulation"
+    },
+    {
+     "for": "uncodified method and variants",
+     "cite": "No permitted authority prescribes one reliability and safety reporting workflow for both commodities",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "regulation",
+    "primary": "49 CFR 192.1007(e) and (g), with IEEE 1366-2022 for electric reliability method"
+   }
+  },
+  {
+   "uid": 10499,
+   "id": "15.3.3",
+   "name": "Retain evidence and audit records",
+   "group": {
+    "id": "15.3",
+    "name": "Meet reporting obligations",
+    "uid": 10496
+   },
+   "intent": "Retain reporting and work evidence for applicable legal, asset-life and audit periods, then dispose under authority.",
+   "activities": [
+    "Classify the record and governing retention obligation",
+    "Bind the record to its work, asset and reporting context",
+    "Preserve access and integrity through the retention period",
+    "Apply an audit hold or longer obligation when required",
+    "Dispose or retain the record when the period ends"
+   ],
+   "trigger": {
+    "kind": "message",
+    "text": "A completed work, filing or audit event produces a record requiring retention.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Completed work and reporting evidence",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Asset and plant-record linkage",
+     "party": "AM",
+     "data": "WorkAsset"
+    },
+    {
+     "what": "Financial record classification",
+     "party": "FIN",
+     "data": "Work"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Retained evidence with disposition date or asset-life link",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Disposition or continuing-hold record",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "systems": [
+    {
+     "component": "MAI",
+     "role": "owning",
+     "service": "Evidence retention and access"
+    },
+    {
+     "component": "AM",
+     "role": "reference",
+     "service": "Asset-life and plant linkage"
+    },
+    {
+     "component": "FIN",
+     "role": "contributing",
+     "service": "Financial retention classification"
+    },
+    {
+     "component": "FRD",
+     "role": "originating",
+     "service": "Field evidence"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "FRD",
+     "to": "MAI",
+     "payload": "MaintenanceOrder",
+     "verb": "close",
+     "pattern": "event"
+    },
+    {
+     "from": "FIN",
+     "to": "MAI",
+     "payload": "WorkRequest",
+     "verb": "change",
+     "pattern": "event"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Records custodian",
+     "raci": "R"
+    },
+    {
+     "role": "Compliance officer",
+     "raci": "A"
+    },
+    {
+     "role": "Finance records owner",
+     "raci": "C"
+    },
+    {
+     "role": "Asset information owner",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkActivityRecord",
+    "WorkAsset",
+    "WorkLocation"
+   ],
+   "controls": [
+    {
+     "kind": "regulatory",
+     "text": "Under 18 CFR 125.3, continuing plant inventory records are retained 25 years, while specified work and authorisation records may be retained 5 years after plant-account clearance."
+    },
+    {
+     "kind": "regulatory",
+     "text": "49 CFR 192.709(a) service-life repair retention applies to transmission pipe; other cited records have the periods in 192.709(b) and (c)."
+    },
+    {
+     "kind": "operational",
+     "text": "Do not dispose a record while a longer applicable obligation or documented audit hold remains in force."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Planning and Control indicators",
+     "definition": "Use the applicable EN 15341 O&S9-O&S22 indicator; formulas are not reproduced.",
+     "cite": "EN 15341:2019+A1:2022 cl. 12 O&S9-O&S22 Planning and Control"
+    },
+    {
+     "name": "Work Order Aging",
+     "definition": "Use SMRP 5.4.6 for records awaiting disposition; formula not reproduced.",
+     "cite": "SMRP Best Practices 7th Edition, metric 5.4.6"
+    }
+   ],
+   "variants": [
+    "Fixed-term retention followed by disposition review",
+    "Asset-life retention tied to the plant or pipe record",
+    "Audit or legal hold extending the normal disposition date"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "A record moves through classification, preservation, hold review and authorised disposition on a defined path.",
+    "artifact": "models/15.3-meet-reporting-obligations.bpmn"
+   },
+   "en17007": {
+    "process": "DTA.10",
+    "title": "Save and provide access to data in a data processing system",
+    "clause": "6.10"
+   },
+   "sources": [
+    {
+     "for": "process and EN 17007 correspondence",
+     "cite": "EN 17007:2017 cl. 6.10 DTA.10 Save and provide access to data in a data processing system",
+     "status": "verified"
+    },
+    {
+     "for": "asset-management capability",
+     "cite": "GFMAM Asset Management Landscape 3rd ed. v3.0, subjects 2.3 Asset Management Assurance and Audit and 5.3 Asset Management Data & Information Management",
+     "status": "verified"
+    },
+    {
+     "for": "electric plant and work-record retention",
+     "cite": "18 CFR 125.3 Item 16(b) continuing plant inventory records and Item 17(a)-(c) work and authorisation records",
+     "status": "regulation"
+    },
+    {
+     "for": "gas transmission repair and inspection retention",
+     "cite": "49 CFR 192.709(a)-(c)",
+     "status": "regulation"
+    },
+    {
+     "for": "uncodified method and variants",
+     "cite": "No permitted authority supplies one retention schedule or audit-hold workflow spanning every record in this category",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "regulation",
+    "primary": "18 CFR 125.3 Items 16(b) and 17(a)-(c); 49 CFR 192.709"
+   }
+  },
+  {
+   "uid": 10501,
+   "id": "15.4.1",
+   "name": "Define master data ownership and standards",
+   "group": {
+    "id": "15.4",
+    "name": "Manage data quality and master data",
+    "uid": 10500
+   },
+   "intent": "Assign accountable owners and approved definitions for shared asset, work, location and organisational data.",
+   "activities": [
+    "Identify the shared data domain and its consumers",
+    "Assign accountable ownership and stewardship",
+    "Define the authoritative source, identity and required attributes",
+    "Approve quality, change and issue-resolution rules",
+    "Publish the data standard and ownership record"
+   ],
+   "trigger": {
+    "kind": "signal",
+    "text": "A shared data domain is created or lacks an approved owner and standard.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Data domain and consumer requirements",
+     "party": "AM",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Asset, work and location definitions",
+     "party": "AM",
+     "data": "Asset"
+    },
+    {
+     "what": "Organisational accountability record",
+     "party": "HR",
+     "data": "Crew"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Approved master data standard and ownership record",
+     "party": "AM",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Assigned stewardship and issue route",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "systems": [
+    {
+     "component": "AM",
+     "role": "owning",
+     "service": "Master data standard and ownership"
+    },
+    {
+     "component": "MAI",
+     "role": "contributing",
+     "service": "Work-data requirements"
+    },
+    {
+     "component": "GINV",
+     "role": "contributing",
+     "service": "Location and network requirements"
+    },
+    {
+     "component": "HR",
+     "role": "reference",
+     "service": "Organisational accountability"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "AM",
+     "to": "MAI",
+     "payload": "WorkRequest",
+     "verb": "reply",
+     "pattern": "publish-subscribe"
+    },
+    {
+     "from": "AM",
+     "to": "GINV",
+     "payload": "WorkRequest",
+     "verb": "reply",
+     "pattern": "publish-subscribe"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Asset information owner",
+     "raci": "A"
+    },
+    {
+     "role": "Data steward",
+     "raci": "R"
+    },
+    {
+     "role": "Maintenance data owner",
+     "raci": "C"
+    },
+    {
+     "role": "Spatial data owner",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Asset",
+    "Work",
+    "WorkAsset",
+    "WorkLocation",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "Name one accountable owner, the authoritative source, identity rule, required attributes and issue route for each governed domain."
+    },
+    {
+     "kind": "operational",
+     "text": "GFMAM names data strategy and standards as capabilities but does not prescribe a utility master-data operating model."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Information and communication technology indicators",
+     "definition": "Use the applicable EN 15341 ICTi indicator; formulas are not reproduced.",
+     "cite": "EN 15341:2019+A1:2022 cl. 12 ICTi"
+    },
+    {
+     "name": "Criticality Coverage",
+     "definition": "Use SMRP 7th Edition metric 3.1 where the domain carries asset criticality; its formula is not reproduced.",
+     "cite": "SMRP Best Practices 7th Edition, metric 3.1"
+    }
+   ],
+   "variants": [
+    "Single accountable owner for an enterprise data domain",
+    "Federated ownership with one approved common definition",
+    "Shared reference master governed jointly by named domain owners"
+   ],
+   "notation": {
+    "class": "SPEC",
+    "why": "Ownership and standards are standing governance commitments, not instances with a process start and end.",
+    "artifact": null
+   },
+   "en17007": {
+    "process": "MAN.3",
+    "title": "Determine the organization, job profiles and responsibilities",
+    "clause": "6.2"
+   },
+   "sources": [
+    {
+     "for": "process and EN 17007 correspondence",
+     "cite": "EN 17007:2017 cl. 6.2 MAN.3 Determine the organization, job profiles and responsibilities",
+     "status": "verified"
+    },
+    {
+     "for": "asset-management capability",
+     "cite": "GFMAM Asset Management Landscape 3rd ed. v3.0, subjects 5.1 Asset Management Data & Information Strategy and 5.2 Asset Management Data & Information Standards",
+     "status": "verified"
+    },
+    {
+     "for": "shared work and asset vocabulary",
+     "cite": "IEC 61968-11:2013 Work and Asset UML packages",
+     "status": "consensus"
+    },
+    {
+     "for": "criticality measure",
+     "cite": "SMRP Best Practices 7th Edition, metric 3.1 Criticality Coverage",
+     "status": "consensus"
+    },
+    {
+     "for": "uncodified method and variants",
+     "cite": "No permitted authority prescribes master-data ownership, stewardship or domain approval for a utility",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "standard",
+    "primary": "GFMAM subjects 5.1 and 5.2; EN 17007:2017 cl. 6.2 MAN.3"
+   }
+  },
+  {
+   "uid": 10502,
+   "id": "15.4.2",
+   "name": "Monitor and remediate data quality",
+   "group": {
+    "id": "15.4",
+    "name": "Manage data quality and master data",
+    "uid": 10500
+   },
+   "intent": "Detect material data defects, assign correction, and verify the authoritative record after remediation.",
+   "activities": [
+    "Run the approved data-quality checks",
+    "Classify defects by domain, severity and affected use",
+    "Assign each defect to the accountable steward",
+    "Correct the authoritative record or its source process",
+    "Verify the correction and close or escalate the defect"
+   ],
+   "trigger": {
+    "kind": "conditional",
+    "text": "A scheduled check or consuming process detects a material data defect.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Approved data-quality rules and thresholds",
+     "party": "AM",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Asset, work and location records",
+     "party": "AM",
+     "data": "Asset"
+    },
+    {
+     "what": "Consumer exception and affected use",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Corrected authoritative record",
+     "party": "AM",
+     "data": "Asset"
+    },
+    {
+     "what": "Verified defect closure or escalation",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "systems": [
+    {
+     "component": "AM",
+     "role": "owning",
+     "service": "Authoritative record and defect correction"
+    },
+    {
+     "component": "MAI",
+     "role": "coordinating",
+     "service": "Defect record and affected work"
+    },
+    {
+     "component": "GINV",
+     "role": "contributing",
+     "service": "Location and network correction"
+    },
+    {
+     "component": "FRD",
+     "role": "contributing",
+     "service": "Field verification evidence"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "MAI",
+     "to": "AM",
+     "payload": "WorkRequest",
+     "verb": "change",
+     "pattern": "event"
+    },
+    {
+     "from": "FRD",
+     "to": "AM",
+     "payload": "MaintenanceOrder",
+     "verb": "change",
+     "pattern": "event"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Data steward",
+     "raci": "R"
+    },
+    {
+     "role": "Asset information owner",
+     "raci": "A"
+    },
+    {
+     "role": "Source process owner",
+     "raci": "C"
+    },
+    {
+     "role": "Field verifier",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Asset",
+    "Work",
+    "WorkAsset",
+    "WorkLocation",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "Correct the authoritative source or the process that created the defect; do not mask it only in a downstream report."
+    },
+    {
+     "kind": "operational",
+     "text": "Record the affected use, correction evidence and verification result before closing a material defect."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Information and communication technology indicators",
+     "definition": "Use the applicable EN 15341 ICTi indicator; formulas are not reproduced.",
+     "cite": "EN 15341:2019+A1:2022 cl. 12 ICTi"
+    },
+    {
+     "name": "Rework",
+     "definition": "Use SMRP 4.1 for repeated corrective work; formula not reproduced.",
+     "cite": "SMRP Best Practices 7th Edition, metric 4.1"
+    }
+   ],
+   "variants": [
+    "Rule breach corrected in the authoritative record",
+    "Cross-register mismatch resolved by reconciliation",
+    "Field verification requested where records cannot resolve the defect",
+    "Repeated defect escalated to the source process owner"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "A defect follows detection, classification, ownership, correction and verification with a defined escalation path.",
+    "artifact": "models/15.4-manage-data-quality-and-master-data.bpmn"
+   },
+   "en17007": {
+    "process": "DTA.1",
+    "title": "Store and validate the raw data in a library and/or a database",
+    "clause": "6.10"
+   },
+   "sources": [
+    {
+     "for": "process and EN 17007 correspondence",
+     "cite": "EN 17007:2017 cl. 6.10 DTA.1 Store and validate the raw data in a library and/or a database",
+     "status": "verified"
+    },
+    {
+     "for": "asset-management capability",
+     "cite": "GFMAM Asset Management Landscape 3rd ed. v3.0, subjects 5.2 Asset Management Data & Information Standards and 5.3 Asset Management Data & Information Management",
+     "status": "verified"
+    },
+    {
+     "for": "work and asset data structures",
+     "cite": "IEC 61968-11:2013 Work and Asset UML packages",
+     "status": "consensus"
+    },
+    {
+     "for": "uncodified method and variants",
+     "cite": "No permitted authority prescribes a utility data-quality rule catalogue, severity scale or remediation workflow",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "standard",
+    "primary": "EN 17007:2017 cl. 6.10 DTA.1 and GFMAM subjects 5.2 and 5.3"
+   }
+  },
+  {
+   "uid": 10503,
+   "id": "15.4.3",
+   "name": "Manage reference data and code sets",
+   "group": {
+    "id": "15.4",
+    "name": "Manage data quality and master data",
+    "uid": 10500
+   },
+   "intent": "Maintain approved codes, meanings, effective dates and crosswalks used across operational records.",
+   "activities": [
+    "Receive a request to add, change or retire a code",
+    "Assess meaning, ownership and affected consumers",
+    "Approve the code, effective date and transition rule",
+    "Publish the controlled code set and crosswalk",
+    "Monitor adoption and resolve obsolete or conflicting use"
+   ],
+   "trigger": {
+    "kind": "message",
+    "text": "A governed code requires addition, change, retirement or crosswalk.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Reference-data change request",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Current code set and definitions",
+     "party": "AM",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Affected work and asset uses",
+     "party": "MAI",
+     "data": "Work"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Approved code set and effective dates",
+     "party": "AM",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Transition crosswalk and consumer notice",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "systems": [
+    {
+     "component": "AM",
+     "role": "owning",
+     "service": "Reference code and definition"
+    },
+    {
+     "component": "MAI",
+     "role": "contributing",
+     "service": "Work-code use and change request"
+    },
+    {
+     "component": "GINV",
+     "role": "receiving",
+     "service": "Location and network codes"
+    },
+    {
+     "component": "FIN",
+     "role": "receiving",
+     "service": "Financial crosswalk"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "AM",
+     "to": "MAI",
+     "payload": "WorkRequest",
+     "verb": "change",
+     "pattern": "publish-subscribe"
+    },
+    {
+     "from": "AM",
+     "to": "FIN",
+     "payload": "WorkRequest",
+     "verb": "change",
+     "pattern": "publish-subscribe"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Reference data steward",
+     "raci": "R"
+    },
+    {
+     "role": "Information owner",
+     "raci": "A"
+    },
+    {
+     "role": "Application data owner",
+     "raci": "C"
+    },
+    {
+     "role": "Operations representative",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "Asset",
+    "WorkKind",
+    "WorkStatusKind",
+    "WorkTaskKind",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "Publish one meaning, owner, effective date and retirement rule for each code; retain the crosswalk needed to interpret earlier records."
+    },
+    {
+     "kind": "operational",
+     "text": "Do not reuse a retired code for a different meaning."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Information and communication technology indicators",
+     "definition": "Use the applicable EN 15341 ICTi indicator; formulas are not reproduced.",
+     "cite": "EN 15341:2019+A1:2022 cl. 12 ICTi"
+    },
+    {
+     "name": "Rework",
+     "definition": "Use SMRP 4.1 for repeated corrective work; formula not reproduced.",
+     "cite": "SMRP Best Practices 7th Edition, metric 4.1"
+    }
+   ],
+   "variants": [
+    "New controlled code introduced with an effective date",
+    "Existing code meaning changed through a versioned transition",
+    "Code retired with a replacement crosswalk",
+    "External and internal code sets mapped without changing either source"
+   ],
+   "notation": {
+    "class": "SPEC",
+    "why": "The controlled code set is a standing specification; individual changes may use the group workflow without a separate model.",
+    "artifact": null
+   },
+   "en17007": {
+    "process": "DOC.2",
+    "title": "Classify and structure the documentation",
+    "clause": "6.9"
+   },
+   "sources": [
+    {
+     "for": "process and EN 17007 correspondence",
+     "cite": "EN 17007:2017 cl. 6.9 DOC.2 Classify and structure the documentation",
+     "status": "verified"
+    },
+    {
+     "for": "asset-management capability",
+     "cite": "GFMAM Asset Management Landscape 3rd ed. v3.0, subject 5.2 Asset Management Data & Information Standards",
+     "status": "verified"
+    },
+    {
+     "for": "named work code sets",
+     "cite": "IEC 61968-11:2013 Work UML package, including WorkKind, WorkStatusKind and WorkTaskKind",
+     "status": "clause-verified"
+    },
+    {
+     "for": "uncodified method and variants",
+     "cite": "No permitted authority prescribes utility reference-data approval, effective dating or crosswalk management",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "standard",
+    "primary": "GFMAM subject 5.2 and EN 17007:2017 cl. 6.9 DOC.2"
+   }
+  },
+  {
+   "uid": 10504,
+   "id": "15.4.4",
+   "name": "Maintain organisational scoping and data visibility rules",
+   "group": {
+    "id": "15.4",
+    "name": "Manage data quality and master data",
+    "uid": 10500
+   },
+   "intent": "Maintain approved organisational, territorial and role scopes that govern access to operational information.",
+   "activities": [
+    "Identify the organisational scope and protected information",
+    "Define role, territory and responsibility boundaries",
+    "Approve access and visibility rules",
+    "Publish the rules to affected information services",
+    "Review changes and remove obsolete access"
+   ],
+   "trigger": {
+    "kind": "signal",
+    "text": "An organisational, territorial or responsibility boundary changes.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Organisation, role and responsibility definitions",
+     "party": "HR",
+     "data": "Crew"
+    },
+    {
+     "what": "Asset and territory boundaries",
+     "party": "GINV",
+     "data": "WorkLocation"
+    },
+    {
+     "what": "Information ownership and access requirements",
+     "party": "AM",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Approved scoping and visibility rules",
+     "party": "AM",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Access change and review record",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "systems": [
+    {
+     "component": "HR",
+     "role": "originating",
+     "service": "Organisation and role definitions"
+    },
+    {
+     "component": "GINV",
+     "role": "contributing",
+     "service": "Territory and network boundaries"
+    },
+    {
+     "component": "AM",
+     "role": "owning",
+     "service": "Information visibility rule"
+    },
+    {
+     "component": "MAI",
+     "role": "receiving",
+     "service": "Operational access scope"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "HR",
+     "to": "AM",
+     "payload": "WorkRequest",
+     "verb": "change",
+     "pattern": "event"
+    },
+    {
+     "from": "GINV",
+     "to": "AM",
+     "payload": "WorkRequest",
+     "verb": "change",
+     "pattern": "event"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Information owner",
+     "raci": "A"
+    },
+    {
+     "role": "Access administrator",
+     "raci": "R"
+    },
+    {
+     "role": "Organisational data owner",
+     "raci": "C"
+    },
+    {
+     "role": "Operations manager",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Crew",
+    "WorkLocation",
+    "WorkAsset",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "Grant visibility from an approved role, territory or responsibility rule, and retain the approval and effective period."
+    },
+    {
+     "kind": "operational",
+     "text": "Review affected access when a person, organisation or territory changes; remove obsolete scope rather than carrying it forward."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Information and communication technology indicators",
+     "definition": "Use the applicable EN 15341 ICTi indicator; formulas are not reproduced.",
+     "cite": "EN 15341:2019+A1:2022 cl. 12 ICTi"
+    },
+    {
+     "name": "Work Order Aging",
+     "definition": "Use SMRP 5.4.6 for work awaiting disposition; formula not reproduced.",
+     "cite": "SMRP Best Practices 7th Edition, metric 5.4.6"
+    }
+   ],
+   "variants": [
+    "Territory-based visibility for an operating area",
+    "Role-based visibility for a work or asset responsibility",
+    "Temporary project or contractor scope with an end date",
+    "Cross-organisational view approved for shared operations"
+   ],
+   "notation": {
+    "class": "SPEC",
+    "why": "Scoping and visibility rules are standing controls; their change approvals do not require a separate process model here.",
+    "artifact": null
+   },
+   "en17007": {
+    "process": "DOC.1",
+    "title": "Define and manage rights to the documentation",
+    "clause": "6.9"
+   },
+   "sources": [
+    {
+     "for": "process and EN 17007 correspondence",
+     "cite": "EN 17007:2017 cl. 6.9 DOC.1 Define and manage rights to the documentation",
+     "status": "verified"
+    },
+    {
+     "for": "asset-management capability",
+     "cite": "GFMAM Asset Management Landscape 3rd ed. v3.0, subjects 5.1 Asset Management Data & Information Strategy and 5.2 Asset Management Data & Information Standards",
+     "status": "verified"
+    },
+    {
+     "for": "component and data context",
+     "cite": "IEC 61968-6:2015 cl. 4.2 reference components; IEC 61968-11:2013 Work and Asset UML packages",
+     "status": "clause-verified"
+    },
+    {
+     "for": "uncodified method and variants",
+     "cite": "No permitted authority prescribes organisational scoping, territorial visibility or access-review rules for utility work data",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "standard",
+    "primary": "EN 17007:2017 cl. 6.9 DOC.1 and GFMAM subjects 5.1 and 5.2"
+   }
+  },
+  {
+   "uid": 10506,
+   "id": "15.5.1",
+   "name": "Exchange work and activity information",
+   "group": {
+    "id": "15.5",
+    "name": "Integrate systems and exchange data",
+    "uid": 10505
+   },
+   "intent": "Exchange work requests, orders, tasks and activity records between authorised operational components.",
+   "activities": [
+    "Receive or detect a work-information exchange event",
+    "Validate the source, verb and required identifiers",
+    "Transform only through an approved mapping",
+    "Deliver the payload and record its exchange status",
+    "Confirm acceptance or route an exception for reconciliation"
+   ],
+   "trigger": {
+    "kind": "message",
+    "text": "A component creates, changes, cancels, closes or requests work information.",
+    "cim": "WorkRequest.change"
+   },
+   "inputs": [
+    {
+     "what": "Source work payload and exchange verb",
+     "party": "MAI",
+     "data": "Work"
+    },
+    {
+     "what": "Work task and activity context",
+     "party": "FRD",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Approved interface mapping and identifiers",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Accepted work or activity payload",
+     "party": "SCHD",
+     "data": "Work"
+    },
+    {
+     "what": "Exchange acknowledgement or exception",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "systems": [
+    {
+     "component": "MAI",
+     "role": "originating",
+     "service": "Work and maintenance record"
+    },
+    {
+     "component": "SCHD",
+     "role": "receiving",
+     "service": "Work scheduling and dispatch"
+    },
+    {
+     "component": "FRD",
+     "role": "contributing",
+     "service": "Field activity record"
+    },
+    {
+     "component": "CON",
+     "role": "participating",
+     "service": "Construction work exchange"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "MAI",
+     "to": "SCHD",
+     "payload": "WorkRequest",
+     "verb": "change",
+     "pattern": "event"
+    },
+    {
+     "from": "FRD",
+     "to": "MAI",
+     "payload": "MaintenanceOrder",
+     "verb": "change",
+     "pattern": "event"
+    },
+    {
+     "from": "CON",
+     "to": "MAI",
+     "payload": "WorkRequest",
+     "verb": "create",
+     "pattern": "event"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Integration operator",
+     "raci": "R"
+    },
+    {
+     "role": "Work information owner",
+     "raci": "A"
+    },
+    {
+     "role": "Application data owner",
+     "raci": "C"
+    },
+    {
+     "role": "Dispatcher",
+     "raci": "I"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkTask",
+    "WorkActivityRecord",
+    "WorkAsset",
+    "WorkLocation"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "Preserve the work identity, source component, verb and exchange result so duplicate or rejected messages differ from accepted changes."
+    },
+    {
+     "kind": "operational",
+     "text": "IEC 61968-6 standardises exchange structures and verbs, not the internal work process or a gas work-item model."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Information and communication technology indicators",
+     "definition": "Use the applicable EN 15341 ICTi indicator; formulas are not reproduced.",
+     "cite": "EN 15341:2019+A1:2022 cl. 12 ICTi"
+    },
+    {
+     "name": "Work Order Cycle Time",
+     "definition": "Use SMRP 5.4.7 for completed work; formula not reproduced.",
+     "cite": "SMRP Best Practices 7th Edition, metric 5.4.7"
+    }
+   ],
+   "variants": [
+    "Create a new work request in the receiving component",
+    "Change an existing work or task record",
+    "Cancel work before execution",
+    "Close work and publish the final activity record"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "A message follows validation, mapping, delivery and acknowledgement with a defined exception route.",
+    "artifact": "models/15.5-integrate-systems-and-exchange-data.bpmn"
+   },
+   "en17007": {
+    "process": "DTA.10",
+    "title": "Save and provide access to data in a data processing system",
+    "clause": "6.10"
+   },
+   "sources": [
+    {
+     "for": "process and EN 17007 correspondence",
+     "cite": "EN 17007:2017 cl. 6.10 DTA.10 Save and provide access to data in a data processing system",
+     "status": "verified"
+    },
+    {
+     "for": "asset-management capability",
+     "cite": "GFMAM Asset Management Landscape 3rd ed. v3.0, subject 5.4 Asset Management Data & Information Systems",
+     "status": "verified"
+    },
+    {
+     "for": "components, payloads and verbs",
+     "cite": "IEC 61968-6:2015 cl. 4.2 reference components, cl. 5.3-5.5 payloads and Annex A verbs",
+     "status": "clause-verified"
+    },
+    {
+     "for": "work data objects",
+     "cite": "IEC 61968-11:2013 Work UML package",
+     "status": "clause-verified"
+    },
+    {
+     "for": "cooperative integration profile",
+     "cite": "MultiSpeak v5.0 work management interfaces for electric cooperative integration",
+     "status": "consensus"
+    },
+    {
+     "for": "uncodified method and variants",
+     "cite": "The permitted sources do not prescribe delivery guarantees, duplicate handling or exception resolution",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "standard",
+    "primary": "IEC 61968-6:2015 cl. 4.2, cl. 5.3-5.5 and Annex A"
+   }
+  },
+  {
+   "uid": 10507,
+   "id": "15.5.2",
+   "name": "Exchange asset and spatial information",
+   "group": {
+    "id": "15.5",
+    "name": "Integrate systems and exchange data",
+    "uid": 10505
+   },
+   "intent": "Exchange asset identity, attributes, location and spatial relationships while preserving source authority.",
+   "activities": [
+    "Receive the asset or spatial change event",
+    "Validate identity, source authority and location reference",
+    "Map approved asset and spatial fields",
+    "Deliver the change to the consuming register",
+    "Reconcile acceptance, rejection or conflicting authority"
+   ],
+   "trigger": {
+    "kind": "message",
+    "text": "An authorised asset or spatial record is created, changed or retired.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Authoritative asset identity and attributes",
+     "party": "AM",
+     "data": "Asset"
+    },
+    {
+     "what": "Location and network position",
+     "party": "GINV",
+     "data": "WorkLocation"
+    },
+    {
+     "what": "Originating work and field evidence",
+     "party": "FRD",
+     "data": "WorkAsset"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Accepted asset and spatial change",
+     "party": "AM",
+     "data": "WorkAsset"
+    },
+    {
+     "what": "Identity, location or authority exception",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "systems": [
+    {
+     "component": "AM",
+     "role": "owning",
+     "service": "Asset identity and attributes"
+    },
+    {
+     "component": "GINV",
+     "role": "owning",
+     "service": "Spatial position and network relationship"
+    },
+    {
+     "component": "FRD",
+     "role": "originating",
+     "service": "Field-recorded change"
+    },
+    {
+     "component": "MAI",
+     "role": "coordinating",
+     "service": "Work and exception linkage"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "FRD",
+     "to": "AM",
+     "payload": "MaintenanceOrder",
+     "verb": "change",
+     "pattern": "event"
+    },
+    {
+     "from": "AM",
+     "to": "GINV",
+     "payload": "WorkRequest",
+     "verb": "change",
+     "pattern": "event"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Asset integration steward",
+     "raci": "R"
+    },
+    {
+     "role": "Asset information owner",
+     "raci": "A"
+    },
+    {
+     "role": "Spatial data owner",
+     "raci": "C"
+    },
+    {
+     "role": "Field records coordinator",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Asset",
+    "WorkAsset",
+    "WorkLocation",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "Preserve the authoritative identity and source for each attribute; a consuming register does not overwrite a governed source without an approved correction."
+    },
+    {
+     "kind": "operational",
+     "text": "Keep asset identity and spatial position linked to the work or field evidence that changed them."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Information and communication technology indicators",
+     "definition": "Use the applicable EN 15341 ICTi indicator; formulas are not reproduced.",
+     "cite": "EN 15341:2019+A1:2022 cl. 12 ICTi"
+    },
+    {
+     "name": "Rework",
+     "definition": "Use SMRP 4.1 for repeated corrective work; formula not reproduced.",
+     "cite": "SMRP Best Practices 7th Edition, metric 4.1"
+    }
+   ],
+   "variants": [
+    "New asset and location published after acceptance",
+    "Attribute change propagated without a location change",
+    "Spatial change propagated without asset replacement",
+    "Retired asset removed from active views but retained in history"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "An authorised asset change follows validation, mapping, delivery and reconciliation on a known path.",
+    "artifact": "models/15.5-integrate-systems-and-exchange-data.bpmn"
+   },
+   "en17007": {
+    "process": "DTA.10",
+    "title": "Save and provide access to data in a data processing system",
+    "clause": "6.10"
+   },
+   "sources": [
+    {
+     "for": "process and EN 17007 correspondence",
+     "cite": "EN 17007:2017 cl. 6.10 DTA.10 Save and provide access to data in a data processing system",
+     "status": "verified"
+    },
+    {
+     "for": "asset-management capability",
+     "cite": "GFMAM Asset Management Landscape 3rd ed. v3.0, subject 5.4 Asset Management Data & Information Systems",
+     "status": "verified"
+    },
+    {
+     "for": "records and asset interfaces",
+     "cite": "IEC 61968-4:2019 records and asset management interfaces",
+     "status": "consensus"
+    },
+    {
+     "for": "asset and work data objects",
+     "cite": "IEC 61968-11:2013 Asset and Work UML packages",
+     "status": "consensus"
+    },
+    {
+     "for": "gas asset data structures",
+     "cite": "PODS 7.03 Utility Network and APR conceptual model; UPDM 2026 release notes",
+     "status": "consensus"
+    },
+    {
+     "for": "uncodified method and variants",
+     "cite": "No permitted authority prescribes cross-commodity asset and spatial reconciliation or attribute authority",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "standard",
+    "primary": "GFMAM subject 5.4 and IEC 61968-11 Asset and Work UML packages"
+   }
+  },
+  {
+   "uid": 10508,
+   "id": "15.5.3",
+   "name": "Exchange time, cost and financial information",
+   "group": {
+    "id": "15.5",
+    "name": "Integrate systems and exchange data",
+    "uid": 10505
+   },
+   "intent": "Exchange approved labour time, material cost and financial coding against the correct work and plant records.",
+   "activities": [
+    "Receive approved time or cost information",
+    "Validate work, person, material and financial identifiers",
+    "Apply the approved accounting and interface mapping",
+    "Deliver the transaction to the receiving component",
+    "Record acceptance or route a reconciliation exception"
+   ],
+   "trigger": {
+    "kind": "message",
+    "text": "Approved time, material or cost information is ready for financial exchange.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Approved labour time by work",
+     "party": "HR",
+     "data": "WorkTimeSchedule"
+    },
+    {
+     "what": "Issued material and cost record",
+     "party": "MM",
+     "data": "MaterialItem"
+    },
+    {
+     "what": "Work and financial coding",
+     "party": "MAI",
+     "data": "Work"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Accepted time or cost transaction",
+     "party": "FIN",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Financial mapping or reconciliation exception",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "systems": [
+    {
+     "component": "HR",
+     "role": "originating",
+     "service": "Approved labour time"
+    },
+    {
+     "component": "MM",
+     "role": "originating",
+     "service": "Material issue and cost"
+    },
+    {
+     "component": "MAI",
+     "role": "reference",
+     "service": "Work identity and coding"
+    },
+    {
+     "component": "FIN",
+     "role": "receiving",
+     "service": "Financial transaction and plant record"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "HR",
+     "to": "FIN",
+     "payload": "MaintenanceOrder",
+     "verb": "change",
+     "pattern": "batch"
+    },
+    {
+     "from": "MM",
+     "to": "FIN",
+     "payload": "MaintenanceOrder",
+     "verb": "change",
+     "pattern": "batch"
+    },
+    {
+     "from": "MAI",
+     "to": "FIN",
+     "payload": "WorkRequest",
+     "verb": "change",
+     "pattern": "event"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Financial integration analyst",
+     "raci": "R"
+    },
+    {
+     "role": "Finance process owner",
+     "raci": "A"
+    },
+    {
+     "role": "Time administrator",
+     "raci": "C"
+    },
+    {
+     "role": "Materials accountant",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkTimeSchedule",
+    "MaterialItem",
+    "WorkActivityRecord",
+    "WorkAsset"
+   ],
+   "controls": [
+    {
+     "kind": "financial",
+     "text": "Preserve the work identity, approved source, account mapping and acceptance result for each exchanged time or cost transaction."
+    },
+    {
+     "kind": "financial",
+     "text": "For regulated plant accounting, retain the work and plant linkage required by 18 CFR 101 and supporting records under 18 CFR 125.3."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Information and communication technology indicators",
+     "definition": "Use the applicable EN 15341 ICTi indicator; formulas are not reproduced.",
+     "cite": "EN 15341:2019+A1:2022 cl. 12 ICTi"
+    },
+    {
+     "name": "Work Order Cycle Time",
+     "definition": "Use SMRP 5.4.7 for completed work; formula not reproduced.",
+     "cite": "SMRP Best Practices 7th Edition, metric 5.4.7"
+    }
+   ],
+   "variants": [
+    "Approved labour time posted to work",
+    "Material issue or return posted with cost",
+    "Contract or service cost applied to completed work",
+    "Financial coding exception returned for correction"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "Approved transactions follow validation, mapping, delivery and reconciliation on a repeatable path.",
+    "artifact": "models/15.5-integrate-systems-and-exchange-data.bpmn"
+   },
+   "en17007": {
+    "process": "BUD.4",
+    "title": "Extract budgeted and actual expenditures",
+    "clause": "6.8"
+   },
+   "sources": [
+    {
+     "for": "process and EN 17007 correspondence",
+     "cite": "EN 17007:2017 cl. 6.8 BUD.4 Extract budgeted and actual expenditures",
+     "status": "verified"
+    },
+    {
+     "for": "asset-management capability",
+     "cite": "GFMAM Asset Management Landscape 3rd ed. v3.0, subject 5.4 Asset Management Data & Information Systems",
+     "status": "verified"
+    },
+    {
+     "for": "financial component and work exchange",
+     "cite": "IEC 61968-6:2015 cl. 4.2 FIN, HR, MM and MAI components, cl. 5.3-5.5 payloads and Annex A verbs",
+     "status": "clause-verified"
+    },
+    {
+     "for": "work, time and material objects",
+     "cite": "IEC 61968-11:2013 Work UML package, including WorkTimeSchedule and MaterialItem",
+     "status": "clause-verified"
+    },
+    {
+     "for": "regulated work and plant records",
+     "cite": "18 CFR 101 Electric Plant Instruction 11 and Definition 8; 18 CFR 125.3 Items 16(b) and 17(a)-(c)",
+     "status": "regulation"
+    },
+    {
+     "for": "uncodified method and variants",
+     "cite": "No permitted authority specifies cross-commodity time and cost mappings or rejection classes",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "regulation",
+    "primary": "18 CFR 101 Electric Plant Instruction 11 and 18 CFR 125.3"
+   }
+  },
+  {
+   "uid": 10509,
+   "id": "15.5.4",
+   "name": "Exchange document and attachment content",
+   "group": {
+    "id": "15.5",
+    "name": "Integrate systems and exchange data",
+    "uid": 10505
+   },
+   "intent": "Exchange controlled document references and attachments with their work, revision and access context intact.",
+   "activities": [
+    "Receive the document or attachment exchange request",
+    "Validate work linkage, revision, content type and access",
+    "Transmit the content or controlled reference",
+    "Record receipt, rejection and version context",
+    "Reconcile missing, superseded or unauthorised content"
+   ],
+   "trigger": {
+    "kind": "message",
+    "text": "A work process publishes or requests a controlled document or attachment.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Document content or controlled reference",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Work, revision and access context",
+     "party": "MAI",
+     "data": "Work"
+    },
+    {
+     "what": "Field attachment and capture evidence",
+     "party": "FRD",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Accepted document or attachment with linkage",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Content, revision or access exception",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "systems": [
+    {
+     "component": "MAI",
+     "role": "owning",
+     "service": "Document linkage and operational access"
+    },
+    {
+     "component": "FRD",
+     "role": "originating",
+     "service": "Field attachment content"
+    },
+    {
+     "component": "DGN",
+     "role": "contributing",
+     "service": "Released design reference"
+    },
+    {
+     "component": "SCHD",
+     "role": "receiving",
+     "service": "Work-package access"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "FRD",
+     "to": "MAI",
+     "payload": "MaintenanceOrder",
+     "verb": "change",
+     "pattern": "event"
+    },
+    {
+     "from": "DGN",
+     "to": "MAI",
+     "payload": "WorkRequest",
+     "verb": "change",
+     "pattern": "event"
+    },
+    {
+     "from": "MAI",
+     "to": "SCHD",
+     "payload": "MaintenanceOrder",
+     "verb": "reply",
+     "pattern": "request-reply"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Document control coordinator",
+     "raci": "R"
+    },
+    {
+     "role": "Work information owner",
+     "raci": "A"
+    },
+    {
+     "role": "Field records coordinator",
+     "raci": "C"
+    },
+    {
+     "role": "Design records owner",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkTask",
+    "WorkActivityRecord",
+    "WorkAsset"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "Preserve the work link, revision, source, content type and access decision with every exchanged document or attachment."
+    },
+    {
+     "kind": "operational",
+     "text": "IEC 61968-6 has no document-management component or document-content payload; MAI carries the operational linkage without implying a content model."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Information and communication technology indicators",
+     "definition": "Use the applicable EN 15341 ICTi indicator; formulas are not reproduced.",
+     "cite": "EN 15341:2019+A1:2022 cl. 12 ICTi"
+    },
+    {
+     "name": "Rework",
+     "definition": "Use SMRP 4.1 for repeated corrective work; formula not reproduced.",
+     "cite": "SMRP Best Practices 7th Edition, metric 4.1"
+    }
+   ],
+   "variants": [
+    "Controlled document reference exchanged without copying content",
+    "Attachment content exchanged and linked to a work activity",
+    "Superseded revision rejected and current revision requested",
+    "Access-restricted content withheld with an exception record"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "A content request follows validation, transmission, receipt and reconciliation on a known path.",
+    "artifact": "models/15.5-integrate-systems-and-exchange-data.bpmn"
+   },
+   "en17007": {
+    "process": "DOC.6",
+    "title": "Manage the way in which operational documentation is made available",
+    "clause": "6.9"
+   },
+   "sources": [
+    {
+     "for": "process and EN 17007 correspondence",
+     "cite": "EN 17007:2017 cl. 6.9 DOC.6 Manage the way in which operational documentation is made available",
+     "status": "verified"
+    },
+    {
+     "for": "asset-management capability",
+     "cite": "GFMAM Asset Management Landscape 3rd ed. v3.0, subject 5.4 Asset Management Data & Information Systems",
+     "status": "verified"
+    },
+    {
+     "for": "work component and payload limit",
+     "cite": "IEC 61968-6:2015 cl. 4.2 reference components and cl. 5.3-5.5 work payloads",
+     "status": "clause-verified"
+    },
+    {
+     "for": "work linkage data",
+     "cite": "IEC 61968-11:2013 Work UML package",
+     "status": "clause-verified"
+    },
+    {
+     "for": "uncodified method and variants",
+     "cite": "IEC 61968-6 cl. 4.2 has no document-management component and its work payloads do not define a document-content contract",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "standard",
+    "primary": "EN 17007:2017 cl. 6.9 DOC.6 and GFMAM subject 5.4"
+   }
+  },
+  {
+   "uid": 10510,
+   "id": "15.5.5",
+   "name": "Monitor interface health and reconcile exceptions",
+   "group": {
+    "id": "15.5",
+    "name": "Integrate systems and exchange data",
+    "uid": 10505
+   },
+   "intent": "Detect failed or inconsistent exchanges, determine their disposition, and restore agreement between affected records.",
+   "activities": [
+    "Detect an unavailable, rejected, duplicate or inconsistent exchange",
+    "Establish affected records and the last accepted state",
+    "Investigate transport, mapping, authority and data causes",
+    "Correct, replay, supersede or reject under approved authority",
+    "Verify both sides and close or escalate the exception"
+   ],
+   "trigger": {
+    "kind": "error",
+    "text": "An interface monitor or consuming component reports a failed or inconsistent exchange.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Interface event, status and diagnostic evidence",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Source and target work or asset records",
+     "party": "AM",
+     "data": "WorkAsset"
+    },
+    {
+     "what": "Approved mapping and last accepted state",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Reconciled records and verified exchange state",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Escalated unresolved interface exception",
+     "party": "MAI",
+     "data": "Work"
+    }
+   ],
+   "systems": [
+    {
+     "component": "MAI",
+     "role": "coordinating",
+     "service": "Interface exception and resolution record"
+    },
+    {
+     "component": "AM",
+     "role": "participating",
+     "service": "Asset record reconciliation"
+    },
+    {
+     "component": "FIN",
+     "role": "participating",
+     "service": "Financial transaction reconciliation"
+    },
+    {
+     "component": "SCHD",
+     "role": "participating",
+     "service": "Work and schedule reconciliation"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "AM",
+     "to": "MAI",
+     "payload": "WorkRequest",
+     "verb": "reply",
+     "pattern": "request-reply"
+    },
+    {
+     "from": "FIN",
+     "to": "MAI",
+     "payload": "MaintenanceOrder",
+     "verb": "reply",
+     "pattern": "request-reply"
+    },
+    {
+     "from": "SCHD",
+     "to": "MAI",
+     "payload": "WorkRequest",
+     "verb": "reply",
+     "pattern": "request-reply"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Integration support analyst",
+     "raci": "R"
+    },
+    {
+     "role": "Information services owner",
+     "raci": "A"
+    },
+    {
+     "role": "Source data owner",
+     "raci": "C"
+    },
+    {
+     "role": "Receiving data owner",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkActivityRecord",
+    "WorkAsset",
+    "WorkStatusKind"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "Establish the last accepted state and authoritative source before replaying or correcting an exchange."
+    },
+    {
+     "kind": "operational",
+     "text": "Do not treat a transport acknowledgement as evidence that the receiving record passed semantic and authority checks."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Information and communication technology indicators",
+     "definition": "Use the applicable EN 15341 ICTi indicator; formulas are not reproduced.",
+     "cite": "EN 15341:2019+A1:2022 cl. 12 ICTi"
+    },
+    {
+     "name": "Rework",
+     "definition": "Use SMRP 4.1 for repeated corrective work; formula not reproduced.",
+     "cite": "SMRP Best Practices 7th Edition, metric 4.1"
+    }
+   ],
+   "variants": [
+    "Transient delivery failure corrected by controlled replay",
+    "Duplicate exchange retained once without a second state change",
+    "Semantic mismatch corrected at the authoritative source",
+    "Conflicting authority escalated without automatic overwrite"
+   ],
+   "notation": {
+    "class": "CMMN",
+    "why": "Cause, evidence and correction order vary legitimately across transport, mapping, authority and data exceptions.",
+    "artifact": "models/15.5.5-reconcile-interface-exceptions.cmmn"
+   },
+   "en17007": {
+    "process": "DTA.1",
+    "title": "Store and validate the raw data in a library and/or a database",
+    "clause": "6.10"
+   },
+   "sources": [
+    {
+     "for": "process and EN 17007 correspondence",
+     "cite": "EN 17007:2017 cl. 6.10 DTA.1 Store and validate the raw data in a library and/or a database",
+     "status": "verified"
+    },
+    {
+     "for": "asset-management capability",
+     "cite": "GFMAM Asset Management Landscape 3rd ed. v3.0, subject 5.4 Asset Management Data & Information Systems",
+     "status": "verified"
+    },
+    {
+     "for": "exchange vocabulary and boundaries",
+     "cite": "IEC 61968-6:2015 cl. 4.2 reference components, cl. 5.3-5.5 payloads and Annex A verbs",
+     "status": "clause-verified"
+    },
+    {
+     "for": "uncodified method and variants",
+     "cite": "No permitted authority prescribes interface health, retry, duplicate handling, semantic reconciliation or exception-aging rules",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "standard",
+    "primary": "EN 17007:2017 cl. 6.10 DTA.1 and GFMAM subject 5.4"
+   }
+  },
+  {
+   "uid": 10511,
+   "id": "15.5.6",
+   "name": "Exchange procurement, invoice and ledger transactions",
+   "group": {
+    "id": "15.5",
+    "name": "Integrate systems and exchange data",
+    "uid": 10505
+   },
+   "intent": "Exchange approved supply, invoice and ledger transactions while preserving work, material and financial references.",
+   "activities": [
+    "Receive an approved supply or financial transaction",
+    "Validate supplier, material, work and financial references",
+    "Map the transaction to the receiving record",
+    "Deliver and record the acceptance result",
+    "Return rejection or mismatch for correction and reconciliation"
+   ],
+   "trigger": {
+    "kind": "message",
+    "text": "An approved purchase, receipt, invoice or ledger transaction is ready for exchange.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Approved material or service transaction",
+     "party": "MM",
+     "data": "MaterialItem"
+    },
+    {
+     "what": "Work and receipt reference",
+     "party": "MAI",
+     "data": "Work"
+    },
+    {
+     "what": "Financial account and plant reference",
+     "party": "FIN",
+     "data": "WorkAsset"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Accepted procurement, invoice or ledger transaction",
+     "party": "FIN",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Reference or matching exception",
+     "party": "MM",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "systems": [
+    {
+     "component": "MM",
+     "role": "originating",
+     "service": "Purchase, receipt and material reference"
+    },
+    {
+     "component": "MAI",
+     "role": "reference",
+     "service": "Work and service acceptance"
+    },
+    {
+     "component": "FIN",
+     "role": "receiving",
+     "service": "Invoice and ledger transaction"
+    },
+    {
+     "component": "AM",
+     "role": "reference",
+     "service": "Plant and asset linkage"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "MM",
+     "to": "FIN",
+     "payload": "MaintenanceOrder",
+     "verb": "change",
+     "pattern": "batch"
+    },
+    {
+     "from": "MAI",
+     "to": "FIN",
+     "payload": "ServiceOrder",
+     "verb": "close",
+     "pattern": "event"
+    },
+    {
+     "from": "FIN",
+     "to": "MM",
+     "payload": "MaintenanceOrder",
+     "verb": "reply",
+     "pattern": "request-reply"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Transaction integration analyst",
+     "raci": "R"
+    },
+    {
+     "role": "Finance process owner",
+     "raci": "A"
+    },
+    {
+     "role": "Materials manager",
+     "raci": "C"
+    },
+    {
+     "role": "Accounts payable analyst",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "MaterialItem",
+    "WorkAsset",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "financial",
+     "text": "Preserve the supplier, material or service, receipt, work, account and acceptance references needed to trace the transaction."
+    },
+    {
+     "kind": "financial",
+     "text": "IEC 61968-6 has MM and FIN components but no procurement, invoice or ledger payload; a work payload is not a transaction standard."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Information and communication technology indicators",
+     "definition": "Use the applicable EN 15341 ICTi indicator; formulas are not reproduced.",
+     "cite": "EN 15341:2019+A1:2022 cl. 12 ICTi"
+    },
+    {
+     "name": "Work Order Cycle Time",
+     "definition": "Use SMRP 5.4.7 for completed work; formula not reproduced.",
+     "cite": "SMRP Best Practices 7th Edition, metric 5.4.7"
+    }
+   ],
+   "variants": [
+    "Purchase or service commitment sent for financial recording",
+    "Receipt or service acceptance matched to originating work",
+    "Invoice matched and accepted for posting",
+    "Ledger transaction rejected for a missing or conflicting reference"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "An approved transaction follows validation, mapping, delivery, matching and exception return on a repeatable path.",
+    "artifact": "models/15.5-integrate-systems-and-exchange-data.bpmn"
+   },
+   "en17007": {
+    "process": "DTA.10",
+    "title": "Save and provide access to data in a data processing system",
+    "clause": "6.10"
+   },
+   "sources": [
+    {
+     "for": "process and EN 17007 correspondence",
+     "cite": "EN 17007:2017 cl. 6.10 DTA.10 Save and provide access to data in a data processing system",
+     "status": "verified"
+    },
+    {
+     "for": "asset-management capability",
+     "cite": "GFMAM Asset Management Landscape 3rd ed. v3.0, subjects 5.4 Asset Management Data & Information Systems and 6.8 Supply Chain Management",
+     "status": "verified"
+    },
+    {
+     "for": "component and work-message boundary",
+     "cite": "IEC 61968-6:2015 cl. 4.2 MM, FIN and MAI components and cl. 5.3-5.5 work payloads",
+     "status": "clause-verified"
+    },
+    {
+     "for": "material and work references",
+     "cite": "IEC 61968-11:2013 Work UML package, including MaterialItem and WorkAsset",
+     "status": "clause-verified"
+    },
+    {
+     "for": "work and plant accounting linkage",
+     "cite": "18 CFR 101 Electric Plant Instruction 11 and Definition 8; 18 CFR 125.3 Items 16(b) and 17(a)-(c)",
+     "status": "regulation"
+    },
+    {
+     "for": "uncodified method and variants",
+     "cite": "No permitted authority supplies a procurement, invoice or ledger payload or matching workflow for this reference",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "regulation",
+    "primary": "18 CFR 101 Electric Plant Instruction 11, with GFMAM subjects 5.4 and 6.8"
+   }
+  }
+ ]
+}

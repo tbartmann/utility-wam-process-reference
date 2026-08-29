@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_P_15_1" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <process id="P_15_1" name="15.1 Report operational performance" isExecutable="false">
+    <documentation>15.1.1 and 15.1.3 are drawn; 15.1.2 is a case and has its own file. Two entries, both timers, because a reporting calendar and a shift cut-off are different clocks with different tolerances: a standard report waits for a late source record, and a supervisory view issues without it and says what is missing.
+
+The reconciliation step is drawn rather than assumed. A report compiled over an incomplete population is not a report with a caveat, it is a different number, and 15.1.1 resolves or declares the gap before it compiles.</documentation>
+    <laneSet id="P_15_1_lanes">
+      <lane id="l_151_rep" name="Performance reporting">
+        <flowNodeRef>n_151_t</flowNodeRef>
+        <flowNodeRef>n_151_scope</flowNodeRef>
+        <flowNodeRef>n_151_rec</flowNodeRef>
+        <flowNodeRef>n_151_gap</flowNodeRef>
+        <flowNodeRef>n_151_dec</flowNodeRef>
+        <flowNodeRef>n_151_comp</flowNodeRef>
+        <flowNodeRef>n_151_pub</flowNodeRef>
+        <flowNodeRef>n_151_end</flowNodeRef>
+      </lane>
+      <lane id="l_151_field" name="Field supervision">
+        <flowNodeRef>n_151_st</flowNodeRef>
+        <flowNodeRef>n_151_coll</flowNodeRef>
+        <flowNodeRef>n_151_cls</flowNodeRef>
+        <flowNodeRef>n_151_rev</flowNodeRef>
+        <flowNodeRef>n_151_iss</flowNodeRef>
+        <flowNodeRef>n_151_send</flowNodeRef>
+      </lane>
+    </laneSet>
+    <startEvent id="n_151_t" name="Standard reporting period opens"><timerEventDefinition id="n_151_t_td"/></startEvent>
+    <serviceTask id="n_151_scope" name="Collect approved measures and scope"><documentation>15.1.1. The measures are the standing definitions at 15.2.1 to 15.2.3; this process applies them and does not define them.</documentation></serviceTask>
+    <userTask id="n_151_rec" name="Reconcile missing or late source records"><documentation>15.1.1. Resolve or declare. An unreconciled population makes the number mean something other than what the measure says it means.</documentation></userTask>
+    <exclusiveGateway id="n_151_gap" name="Population complete"/>
+    <userTask id="n_151_dec" name="Declare the gap with the report"><documentation>15.1.1.</documentation></userTask>
+    <userTask id="n_151_comp" name="Compile and review the report"><documentation>15.1.1.</documentation></userTask>
+    <sendTask id="n_151_pub" name="Publish and retain the issue record"><documentation>15.1.1. The issue record is what 15.3.3 retains and what an audit asks for.</documentation></sendTask>
+    <endEvent id="n_151_end" name="Standard report issued"/>
+    <startEvent id="n_151_st" name="Shift or supervisory cut-off"><timerEventDefinition id="n_151_st_td"/></startEvent>
+    <serviceTask id="n_151_coll" name="Collect field, work and crew status"><documentation>15.1.3.</documentation></serviceTask>
+    <serviceTask id="n_151_cls" name="Separate completed, active, delayed and exception work"><documentation>15.1.3. The exception set is the reason a supervisor reads this at all.</documentation></serviceTask>
+    <userTask id="n_151_rev" name="Review the scoped view with the supervisor"><documentation>15.1.3. Scoped: this is a supervisory view and not an operating record.</documentation></userTask>
+    <sendTask id="n_151_iss" name="Issue the view and record follow-up"><documentation>15.1.3.</documentation></sendTask>
+    <endEvent id="n_151_send" name="Supervisory view issued"/>
+    <sequenceFlow id="f_n_151_t_n_151_scope" sourceRef="n_151_t" targetRef="n_151_scope" name=""/>
+    <sequenceFlow id="f_n_151_scope_n_151_rec" sourceRef="n_151_scope" targetRef="n_151_rec" name=""/>
+    <sequenceFlow id="f_n_151_rec_n_151_gap" sourceRef="n_151_rec" targetRef="n_151_gap" name=""/>
+    <sequenceFlow id="f_n_151_gap_n_151_dec" sourceRef="n_151_gap" targetRef="n_151_dec" name="records still missing"><conditionExpression xsi:type="tFormalExpression"><![CDATA[complete = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_151_dec_n_151_comp" sourceRef="n_151_dec" targetRef="n_151_comp" name=""/>
+    <sequenceFlow id="f_n_151_gap_n_151_comp" sourceRef="n_151_gap" targetRef="n_151_comp" name="complete"/>
+    <sequenceFlow id="f_n_151_comp_n_151_pub" sourceRef="n_151_comp" targetRef="n_151_pub" name=""/>
+    <sequenceFlow id="f_n_151_pub_n_151_end" sourceRef="n_151_pub" targetRef="n_151_end" name=""/>
+    <sequenceFlow id="f_n_151_st_n_151_coll" sourceRef="n_151_st" targetRef="n_151_coll" name=""/>
+    <sequenceFlow id="f_n_151_coll_n_151_cls" sourceRef="n_151_coll" targetRef="n_151_cls" name=""/>
+    <sequenceFlow id="f_n_151_cls_n_151_rev" sourceRef="n_151_cls" targetRef="n_151_rev" name=""/>
+    <sequenceFlow id="f_n_151_rev_n_151_iss" sourceRef="n_151_rev" targetRef="n_151_iss" name=""/>
+    <sequenceFlow id="f_n_151_iss_n_151_send" sourceRef="n_151_iss" targetRef="n_151_send" name=""/>
+  </process>
+  <bpmndi:BPMNDiagram id="dg_P_15_1">
+    <bpmndi:BPMNPlane id="pl_P_15_1" bpmnElement="P_15_1">
+      <bpmndi:BPMNShape id="sh_n_151_t" bpmnElement="n_151_t"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_151_scope" bpmnElement="n_151_scope"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_151_rec" bpmnElement="n_151_rec"><dc:Bounds x="425" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_151_gap" bpmnElement="n_151_gap"><dc:Bounds x="637" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_151_dec" bpmnElement="n_151_dec"><dc:Bounds x="595" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_151_comp" bpmnElement="n_151_comp"><dc:Bounds x="765" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_151_pub" bpmnElement="n_151_pub"><dc:Bounds x="935" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_151_end" bpmnElement="n_151_end"><dc:Bounds x="1152" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_151_st" bpmnElement="n_151_st"><dc:Bounds x="132" y="657" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_151_coll" bpmnElement="n_151_coll"><dc:Bounds x="255" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_151_cls" bpmnElement="n_151_cls"><dc:Bounds x="425" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_151_rev" bpmnElement="n_151_rev"><dc:Bounds x="595" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_151_iss" bpmnElement="n_151_iss"><dc:Bounds x="765" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_151_send" bpmnElement="n_151_send"><dc:Bounds x="982" y="657" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ed_f_n_151_t_n_151_scope" bpmnElement="f_n_151_t_n_151_scope"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_151_scope_n_151_rec" bpmnElement="f_n_151_scope_n_151_rec"><di:waypoint x="385" y="235"/><di:waypoint x="425" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_151_rec_n_151_gap" bpmnElement="f_n_151_rec_n_151_gap"><di:waypoint x="555" y="235"/><di:waypoint x="637" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_151_gap_n_151_dec" bpmnElement="f_n_151_gap_n_151_dec"><di:waypoint x="683" y="235"/><di:waypoint x="570" y="235"/><di:waypoint x="570" y="455"/><di:waypoint x="595" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_151_dec_n_151_comp" bpmnElement="f_n_151_dec_n_151_comp"><di:waypoint x="725" y="455"/><di:waypoint x="740" y="455"/><di:waypoint x="740" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_151_gap_n_151_comp" bpmnElement="f_n_151_gap_n_151_comp"><di:waypoint x="683" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_151_comp_n_151_pub" bpmnElement="f_n_151_comp_n_151_pub"><di:waypoint x="895" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_151_pub_n_151_end" bpmnElement="f_n_151_pub_n_151_end"><di:waypoint x="1065" y="235"/><di:waypoint x="1152" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_151_st_n_151_coll" bpmnElement="f_n_151_st_n_151_coll"><di:waypoint x="168" y="675"/><di:waypoint x="255" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_151_coll_n_151_cls" bpmnElement="f_n_151_coll_n_151_cls"><di:waypoint x="385" y="675"/><di:waypoint x="425" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_151_cls_n_151_rev" bpmnElement="f_n_151_cls_n_151_rev"><di:waypoint x="555" y="675"/><di:waypoint x="595" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_151_rev_n_151_iss" bpmnElement="f_n_151_rev_n_151_iss"><di:waypoint x="725" y="675"/><di:waypoint x="765" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_151_iss_n_151_send" bpmnElement="f_n_151_iss_n_151_send"><di:waypoint x="895" y="675"/><di:waypoint x="982" y="675"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/CMMN/20151109/MODEL" xmlns:cmmndi="http://www.omg.org/spec/CMMN/20151109/CMMNDI" xmlns:dc="http://www.omg.org/spec/CMMN/20151109/DC" xmlns:di="http://www.omg.org/spec/CMMN/20151109/DI" id="defs_Ad_hoc_analysis" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <case id="Ad_hoc_analysis" name="15.1.2 Produce ad-hoc and self-service analysis">
+    <caseFileModel id="Ad_hoc_analysis_cfm">
+      <caseFileItem id="cf_question" name="The question and the decision it is meant to inform"/>
+      <caseFileItem id="cf_scope" name="Population, period and exclusions"/>
+      <caseFileItem id="cf_rules" name="Approved visibility and access rules"/>
+    </caseFileModel>
+    <casePlanModel id="Ad_hoc_analysis_plan" name="15.1.2 Produce ad-hoc and self-service analysis" autoComplete="true">
+      <documentation>Two competent analysts will gather evidence in a different order and reach the same defensible answer, which is the CMMN test. What does not vary is the pair of controls the specification puts on it, and both are required items here.
+
+Visibility rules are applied BEFORE retrieval, not after. A result assembled from records the analyst was not entitled to see cannot be un-seen by filtering the output. And the population, period, exclusions and limitations travel with the result, because a scoped analysis presented as a complete operating record is how a number that was true of eleven depots becomes a statement about the business. Camunda 8 dropped CMMN, so a runtime for this file means Flowable or an equivalent.</documentation>
+      <planItem id="pi_t_frame" name="Frame the question and the decision behind it" definitionRef="t_frame_def">
+        <itemControl id="ic_t_frame">
+          <requiredRule id="rr_t_frame"><condition><![CDATA[true]]></condition></requiredRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_access" name="Apply the approved visibility rules before retrieving" definitionRef="t_access_def">
+        <itemControl id="ic_t_access">
+          <requiredRule id="rr_t_access"><condition><![CDATA[true]]></condition></requiredRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_gather" name="Gather and test the relevant records" definitionRef="t_gather_def">
+        <itemControl id="ic_t_gather">
+          <requiredRule id="rr_t_gather"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_gather"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_anom" name="Resolve anomalies against the authoritative source" definitionRef="t_anom_def">
+        <itemControl id="ic_t_anom">
+          <requiredRule id="rr_t_anom"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_anom"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_deep" name="Drill down from an issued report" definitionRef="t_deep_def">
+        <itemControl id="ic_t_deep">
+          <requiredRule id="rr_t_deep"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_deep"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_pub" name="Publish with population, period, exclusions and limitations" definitionRef="t_pub_def">
+        <itemControl id="ic_t_pub">
+          <requiredRule id="rr_t_pub"><condition><![CDATA[true]]></condition></requiredRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_m_scoped" name="Scope and authority settled" definitionRef="m_scoped_def"/>
+      <planItem id="pi_m_answered" name="Question answered" definitionRef="m_answered_def"/>
+      <humanTask id="t_frame_def" name="Frame the question and the decision behind it" isBlocking="true"><documentation>Required. An analysis with no decision behind it has no basis on which to choose a population, and the population is the answer.</documentation></humanTask>
+      <humanTask id="t_access_def" name="Apply the approved visibility rules before retrieving" isBlocking="true"><documentation>Required, and required first. 15.4.4 holds the rules; this case applies them.</documentation></humanTask>
+      <humanTask id="t_gather_def" name="Gather and test the relevant records" isBlocking="true"><documentation>Discretionary in order. Which source is opened first is exactly what two analysts do differently.</documentation></humanTask>
+      <humanTask id="t_anom_def" name="Resolve anomalies against the authoritative source" isBlocking="true"><documentation>Discretionary. An anomaly that turns out to be real belongs to 15.4.2 as a data-quality defect, not to this result as a footnote.</documentation></humanTask>
+      <humanTask id="t_deep_def" name="Drill down from an issued report" isBlocking="true"><documentation>Discretionary. A drill-down inherits the issued report's scope, and saying so is what stops two numbers being compared that were never comparable.</documentation></humanTask>
+      <humanTask id="t_pub_def" name="Publish with population, period, exclusions and limitations" isBlocking="true"><documentation>Required. The limitations are part of the result and not a disclaimer attached to it.</documentation></humanTask>
+      <milestone id="m_scoped_def" name="Scope and authority settled"><documentation>Population, period and access agreed before retrieval.</documentation></milestone>
+      <milestone id="m_answered_def" name="Question answered"><documentation>With its limits stated, or with a statement that it cannot be answered from the records held.</documentation></milestone>
+    </casePlanModel>
+  </case>
+  <cmmndi:CMMNDI>
+    <cmmndi:CMMNDiagram id="dg_Ad_hoc_analysis">
+      <cmmndi:CMMNShape id="sh_plan" cmmnElementRef="Ad_hoc_analysis_plan"><dc:Bounds x="40" y="40" width="820" height="300"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_frame" cmmnElementRef="pi_t_frame"><dc:Bounds x="80" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_access" cmmnElementRef="pi_t_access"><dc:Bounds x="270" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_gather" cmmnElementRef="pi_t_gather"><dc:Bounds x="460" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_anom" cmmnElementRef="pi_t_anom"><dc:Bounds x="80" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_deep" cmmnElementRef="pi_t_deep"><dc:Bounds x="270" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_pub" cmmnElementRef="pi_t_pub"><dc:Bounds x="460" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_m_scoped" cmmnElementRef="pi_m_scoped"><dc:Bounds x="80" y="290" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_m_answered" cmmnElementRef="pi_m_answered"><dc:Bounds x="270" y="290" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+    </cmmndi:CMMNDiagram>
+  </cmmndi:CMMNDI>
+</definitions>

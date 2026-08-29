@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_P_12_5" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <process id="P_12_5" name="12.5 Define the maintenance programme and its job plans" isExecutable="false">
+    <documentation>12.5.1 and 12.5.4 are drawn. 12.5.5 is a case with its own file. 12.5.2 condition-based triggers and 12.5.3 predictive and prescriptive strategy are specified without models: no source in the pack supplies a threshold or an executable analytical rule, and inventing either would put this reference's number behind a standard's name.
+
+The two drawn paths are deliberately separate. A programme decides WHAT is maintained and on what recurrence; a job plan decides HOW a task is done. They change on different clocks and by different authority, and a model that merged them would make every task-wording correction a programme change.
+
+WITHDRAWAL IS DRAWN. A superseded job plan left published is the one the field will use, because it is the one somebody has a link to. 12.5.4 publishes the new version and withdraws the old in the same path rather than treating withdrawal as housekeeping.</documentation>
+    <laneSet id="P_12_5_lanes">
+      <lane id="l_125_str" name="Maintenance strategy">
+        <flowNodeRef>n_125_m</flowNodeRef>
+        <flowNodeRef>n_125_sel</flowNodeRef>
+        <flowNodeRef>n_125_route</flowNodeRef>
+        <flowNodeRef>n_125_set</flowNodeRef>
+        <flowNodeRef>n_125_app</flowNodeRef>
+        <flowNodeRef>n_125_pub</flowNodeRef>
+        <flowNodeRef>n_125_e1</flowNodeRef>
+      </lane>
+      <lane id="l_125_plan" name="Job plans and task libraries">
+        <flowNodeRef>n_125_j</flowNodeRef>
+        <flowNodeRef>n_125_draft</flowNodeRef>
+        <flowNodeRef>n_125_val</flowNodeRef>
+        <flowNodeRef>n_125_rev</flowNodeRef>
+        <flowNodeRef>n_125_ok</flowNodeRef>
+        <flowNodeRef>n_125_jpub</flowNodeRef>
+        <flowNodeRef>n_125_wd</flowNodeRef>
+        <flowNodeRef>n_125_e2</flowNodeRef>
+      </lane>
+    </laneSet>
+    <startEvent id="n_125_m" name="New asset class, risk review or programme review"><documentation>12.5.1. Manual: a programme decision is taken, not triggered.</documentation></startEvent>
+    <userTask id="n_125_sel" name="Select eligible asset classes and failure risks"><documentation>12.5.1. From 12.4.2's supported causes and 12.6.2's risk, so the programme addresses failures that happen rather than tasks that exist.</documentation></userTask>
+    <userTask id="n_125_route" name="Choose the approved maintenance route"><documentation>12.5.1. Time-based, condition-based via 12.5.2, or none - and none is a decision that gets recorded.</documentation></userTask>
+    <userTask id="n_125_set" name="Set recurrence, evidence and exception requirements"><documentation>12.5.1. The evidence requirement is what makes completion checkable at 5.0.</documentation></userTask>
+    <userTask id="n_125_app" name="Approve the programme"><documentation>12.5.1.</documentation></userTask>
+    <sendTask id="n_125_pub" name="Publish for work generation"><documentation>12.5.1. Into 1.0, which is where the recurrence becomes demand.</documentation></sendTask>
+    <endEvent id="n_125_e1" name="Programme in force"/>
+    <startEvent id="n_125_j" name="New plan, improvement or field feedback"><messageEventDefinition id="n_125_j_md"/></startEvent>
+    <userTask id="n_125_draft" name="Draft or revise the plan version"><documentation>12.5.4.</documentation></userTask>
+    <userTask id="n_125_val" name="Validate scope, prerequisites, tasks and evidence"><documentation>12.5.4. Prerequisites include whether the work needs an isolation, which 18.1.1 determines and 16.2.3 carries into the package.</documentation></userTask>
+    <userTask id="n_125_rev" name="Review and approve the version"><documentation>12.5.4.</documentation></userTask>
+    <exclusiveGateway id="n_125_ok" name="Approved"/>
+    <sendTask id="n_125_jpub" name="Publish for work preparation"><documentation>12.5.4.</documentation></sendTask>
+    <serviceTask id="n_125_wd" name="Withdraw the superseded version"><documentation>12.5.4. In the same path. A superseded plan left published is the one that gets used.</documentation></serviceTask>
+    <endEvent id="n_125_e2" name="Job plan current"/>
+    <sequenceFlow id="f_n_125_m_n_125_sel" sourceRef="n_125_m" targetRef="n_125_sel" name=""/>
+    <sequenceFlow id="f_n_125_sel_n_125_route" sourceRef="n_125_sel" targetRef="n_125_route" name=""/>
+    <sequenceFlow id="f_n_125_route_n_125_set" sourceRef="n_125_route" targetRef="n_125_set" name=""/>
+    <sequenceFlow id="f_n_125_set_n_125_app" sourceRef="n_125_set" targetRef="n_125_app" name=""/>
+    <sequenceFlow id="f_n_125_app_n_125_pub" sourceRef="n_125_app" targetRef="n_125_pub" name=""/>
+    <sequenceFlow id="f_n_125_pub_n_125_e1" sourceRef="n_125_pub" targetRef="n_125_e1" name=""/>
+    <sequenceFlow id="f_n_125_j_n_125_draft" sourceRef="n_125_j" targetRef="n_125_draft" name=""/>
+    <sequenceFlow id="f_n_125_draft_n_125_val" sourceRef="n_125_draft" targetRef="n_125_val" name=""/>
+    <sequenceFlow id="f_n_125_val_n_125_rev" sourceRef="n_125_val" targetRef="n_125_rev" name=""/>
+    <sequenceFlow id="f_n_125_rev_n_125_ok" sourceRef="n_125_rev" targetRef="n_125_ok" name=""/>
+    <sequenceFlow id="f_n_125_ok_n_125_draft" sourceRef="n_125_ok" targetRef="n_125_draft" name="returned"><conditionExpression xsi:type="tFormalExpression"><![CDATA[approved = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_125_ok_n_125_jpub" sourceRef="n_125_ok" targetRef="n_125_jpub" name="approved"/>
+    <sequenceFlow id="f_n_125_jpub_n_125_wd" sourceRef="n_125_jpub" targetRef="n_125_wd" name=""/>
+    <sequenceFlow id="f_n_125_wd_n_125_e2" sourceRef="n_125_wd" targetRef="n_125_e2" name=""/>
+  </process>
+  <bpmndi:BPMNDiagram id="dg_P_12_5">
+    <bpmndi:BPMNPlane id="pl_P_12_5" bpmnElement="P_12_5">
+      <bpmndi:BPMNShape id="sh_n_125_m" bpmnElement="n_125_m"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_125_sel" bpmnElement="n_125_sel"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_125_route" bpmnElement="n_125_route"><dc:Bounds x="425" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_125_set" bpmnElement="n_125_set"><dc:Bounds x="595" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_125_app" bpmnElement="n_125_app"><dc:Bounds x="765" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_125_pub" bpmnElement="n_125_pub"><dc:Bounds x="935" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_125_e1" bpmnElement="n_125_e1"><dc:Bounds x="1152" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_125_j" bpmnElement="n_125_j"><dc:Bounds x="132" y="657" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_125_draft" bpmnElement="n_125_draft"><dc:Bounds x="255" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_125_val" bpmnElement="n_125_val"><dc:Bounds x="425" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_125_rev" bpmnElement="n_125_rev"><dc:Bounds x="595" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_125_ok" bpmnElement="n_125_ok"><dc:Bounds x="807" y="652" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_125_jpub" bpmnElement="n_125_jpub"><dc:Bounds x="935" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_125_wd" bpmnElement="n_125_wd"><dc:Bounds x="1105" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_125_e2" bpmnElement="n_125_e2"><dc:Bounds x="1322" y="657" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ed_f_n_125_m_n_125_sel" bpmnElement="f_n_125_m_n_125_sel"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_125_sel_n_125_route" bpmnElement="f_n_125_sel_n_125_route"><di:waypoint x="385" y="235"/><di:waypoint x="425" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_125_route_n_125_set" bpmnElement="f_n_125_route_n_125_set"><di:waypoint x="555" y="235"/><di:waypoint x="595" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_125_set_n_125_app" bpmnElement="f_n_125_set_n_125_app"><di:waypoint x="725" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_125_app_n_125_pub" bpmnElement="f_n_125_app_n_125_pub"><di:waypoint x="895" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_125_pub_n_125_e1" bpmnElement="f_n_125_pub_n_125_e1"><di:waypoint x="1065" y="235"/><di:waypoint x="1152" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_125_j_n_125_draft" bpmnElement="f_n_125_j_n_125_draft"><di:waypoint x="168" y="675"/><di:waypoint x="255" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_125_draft_n_125_val" bpmnElement="f_n_125_draft_n_125_val"><di:waypoint x="385" y="675"/><di:waypoint x="425" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_125_val_n_125_rev" bpmnElement="f_n_125_val_n_125_rev"><di:waypoint x="555" y="675"/><di:waypoint x="595" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_125_rev_n_125_ok" bpmnElement="f_n_125_rev_n_125_ok"><di:waypoint x="725" y="675"/><di:waypoint x="807" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_125_ok_n_125_draft" bpmnElement="f_n_125_ok_n_125_draft"><di:waypoint x="853" y="675"/><di:waypoint x="255" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_125_ok_n_125_jpub" bpmnElement="f_n_125_ok_n_125_jpub"><di:waypoint x="853" y="675"/><di:waypoint x="935" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_125_jpub_n_125_wd" bpmnElement="f_n_125_jpub_n_125_wd"><di:waypoint x="1065" y="675"/><di:waypoint x="1105" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_125_wd_n_125_e2" bpmnElement="f_n_125_wd_n_125_e2"><di:waypoint x="1235" y="675"/><di:waypoint x="1322" y="675"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

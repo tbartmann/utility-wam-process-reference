@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_P_12_1" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <process id="P_12_1" name="12.1 Establish and maintain the asset register" isExecutable="false">
+    <documentation>12.1.1, 12.1.2, 12.1.3, 12.1.5 and 12.1.6 are drawn. 12.1.4 is the organisational hierarchy and is standing - it has no instance of its own, and each change to it is made by the process that approves it.
+
+All five drawn processes share one shape - receive accepted evidence, validate identity, apply the change, publish to dependent registers - and they are drawn on one path rather than five because the shape IS the register's discipline. What differs is which evidence is accepted and what identity has to hold: a relationship change validates every referenced asset, a location change validates the spatial reference, an attribute change retains the predecessor value, and a retirement end-dates relationships and maintenance eligibility instead of deleting anything.
+
+THE FIRST GATE IS THE ONE THAT KEEPS THE REGISTER TRUE. Evidence is ACCEPTED before it reaches here - from commissioning, from an as-built at 5.4, from an approved correction. A register that takes unaccepted evidence is a register that has to be reconciled, and 12.2.2 and 12.2.5 are what that costs.</documentation>
+    <laneSet id="P_12_1_lanes">
+      <lane id="l_121_reg" name="Asset register">
+        <flowNodeRef>n_121_start</flowNodeRef>
+        <flowNodeRef>n_121_kind</flowNodeRef>
+        <flowNodeRef>n_121_new</flowNodeRef>
+        <flowNodeRef>n_121_core</flowNodeRef>
+        <flowNodeRef>n_121_relw</flowNodeRef>
+        <flowNodeRef>n_121_locw</flowNodeRef>
+        <flowNodeRef>n_121_attw</flowNodeRef>
+        <flowNodeRef>n_121_retw</flowNodeRef>
+        <flowNodeRef>n_121_join</flowNodeRef>
+        <flowNodeRef>n_121_pub</flowNodeRef>
+        <flowNodeRef>n_121_end</flowNodeRef>
+      </lane>
+      <lane id="l_121_val" name="Validation">
+        <flowNodeRef>n_121_rel</flowNodeRef>
+        <flowNodeRef>n_121_loc</flowNodeRef>
+        <flowNodeRef>n_121_att</flowNodeRef>
+        <flowNodeRef>n_121_ret</flowNodeRef>
+      </lane>
+    </laneSet>
+    <startEvent id="n_121_start" name="Accepted asset evidence arrives"><messageEventDefinition id="n_121_start_md"/></startEvent>
+    <exclusiveGateway id="n_121_kind" name="What the evidence changes"/>
+    <serviceTask id="n_121_new" name="Assign a persistent identity and asset class"><documentation>12.1.1. Persistent, because every relationship, measure point and work record drawn elsewhere in this model hangs off it.</documentation></serviceTask>
+    <serviceTask id="n_121_core" name="Record ownership, status and core attributes"><documentation>12.1.1.</documentation></serviceTask>
+    <userTask id="n_121_rel" name="Validate every referenced asset identity"><documentation>12.1.2. Every one. A relationship to an identity that does not resolve is how a hierarchy silently loses a subtree.</documentation></userTask>
+    <serviceTask id="n_121_relw" name="Add, end or replace the relationship"><documentation>12.1.2. End rather than delete, so history stays answerable.</documentation></serviceTask>
+    <userTask id="n_121_loc" name="Validate the asset and spatial reference"><documentation>12.1.3.</documentation></userTask>
+    <serviceTask id="n_121_locw" name="Update physical, service and network positions"><documentation>12.1.3. Three positions, not one. 12.3.6 depends on the network position being separable from where the plant physically sits.</documentation></serviceTask>
+    <userTask id="n_121_att" name="Validate the attribute and its effective date"><documentation>12.1.5. The effective date is what makes a historical query answerable.</documentation></userTask>
+    <serviceTask id="n_121_attw" name="Update the value and retain its predecessor"><documentation>12.1.5. Retain. An overwritten attribute takes every measurement made against it with it.</documentation></serviceTask>
+    <userTask id="n_121_ret" name="Validate physical and financial disposition"><documentation>12.1.6. Both. A record retired physically but not financially is what 5.0 finds at settlement.</documentation></userTask>
+    <serviceTask id="n_121_retw" name="End-date relationships and maintenance eligibility"><documentation>12.1.6. Eligibility, so 12.5's programme stops generating work against plant that has gone.</documentation></serviceTask>
+    <exclusiveGateway id="n_121_join" name="Change applied"/>
+    <sendTask id="n_121_pub" name="Publish to dependent registers"><documentation>All five. 12.2.3 carries it to the spatial network model; a change published nowhere is a change only this register knows about.</documentation></sendTask>
+    <endEvent id="n_121_end" name="Register updated and published"/>
+    <sequenceFlow id="f_n_121_start_n_121_kind" sourceRef="n_121_start" targetRef="n_121_kind" name=""/>
+    <sequenceFlow id="f_n_121_kind_n_121_new" sourceRef="n_121_kind" targetRef="n_121_new" name="new asset"><conditionExpression xsi:type="tFormalExpression"><![CDATA[change = "create"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_121_kind_n_121_rel" sourceRef="n_121_kind" targetRef="n_121_rel" name="relationship"><conditionExpression xsi:type="tFormalExpression"><![CDATA[change = "relationship"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_121_kind_n_121_loc" sourceRef="n_121_kind" targetRef="n_121_loc" name="location or network position"><conditionExpression xsi:type="tFormalExpression"><![CDATA[change = "location"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_121_kind_n_121_att" sourceRef="n_121_kind" targetRef="n_121_att" name="specification or attribute"><conditionExpression xsi:type="tFormalExpression"><![CDATA[change = "attribute"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_121_kind_n_121_ret" sourceRef="n_121_kind" targetRef="n_121_ret" name="left active service"><conditionExpression xsi:type="tFormalExpression"><![CDATA[change = "retire"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_121_new_n_121_core" sourceRef="n_121_new" targetRef="n_121_core" name=""/>
+    <sequenceFlow id="f_n_121_core_n_121_join" sourceRef="n_121_core" targetRef="n_121_join" name=""/>
+    <sequenceFlow id="f_n_121_rel_n_121_relw" sourceRef="n_121_rel" targetRef="n_121_relw" name=""/>
+    <sequenceFlow id="f_n_121_relw_n_121_join" sourceRef="n_121_relw" targetRef="n_121_join" name=""/>
+    <sequenceFlow id="f_n_121_loc_n_121_locw" sourceRef="n_121_loc" targetRef="n_121_locw" name=""/>
+    <sequenceFlow id="f_n_121_locw_n_121_join" sourceRef="n_121_locw" targetRef="n_121_join" name=""/>
+    <sequenceFlow id="f_n_121_att_n_121_attw" sourceRef="n_121_att" targetRef="n_121_attw" name=""/>
+    <sequenceFlow id="f_n_121_attw_n_121_join" sourceRef="n_121_attw" targetRef="n_121_join" name=""/>
+    <sequenceFlow id="f_n_121_ret_n_121_retw" sourceRef="n_121_ret" targetRef="n_121_retw" name=""/>
+    <sequenceFlow id="f_n_121_retw_n_121_join" sourceRef="n_121_retw" targetRef="n_121_join" name=""/>
+    <sequenceFlow id="f_n_121_join_n_121_pub" sourceRef="n_121_join" targetRef="n_121_pub" name=""/>
+    <sequenceFlow id="f_n_121_pub_n_121_end" sourceRef="n_121_pub" targetRef="n_121_end" name=""/>
+  </process>
+  <bpmndi:BPMNDiagram id="dg_P_12_1">
+    <bpmndi:BPMNPlane id="pl_P_12_1" bpmnElement="P_12_1">
+      <bpmndi:BPMNShape id="sh_n_121_start" bpmnElement="n_121_start"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_121_kind" bpmnElement="n_121_kind"><dc:Bounds x="297" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_121_new" bpmnElement="n_121_new"><dc:Bounds x="425" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_121_core" bpmnElement="n_121_core"><dc:Bounds x="595" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_121_rel" bpmnElement="n_121_rel"><dc:Bounds x="425" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_121_relw" bpmnElement="n_121_relw"><dc:Bounds x="595" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_121_loc" bpmnElement="n_121_loc"><dc:Bounds x="425" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_121_locw" bpmnElement="n_121_locw"><dc:Bounds x="595" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_121_att" bpmnElement="n_121_att"><dc:Bounds x="425" y="860" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_121_attw" bpmnElement="n_121_attw"><dc:Bounds x="595" y="860" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_121_ret" bpmnElement="n_121_ret"><dc:Bounds x="425" y="1080" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_121_retw" bpmnElement="n_121_retw"><dc:Bounds x="595" y="1080" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_121_join" bpmnElement="n_121_join"><dc:Bounds x="807" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_121_pub" bpmnElement="n_121_pub"><dc:Bounds x="935" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_121_end" bpmnElement="n_121_end"><dc:Bounds x="1152" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ed_f_n_121_start_n_121_kind" bpmnElement="f_n_121_start_n_121_kind"><di:waypoint x="168" y="235"/><di:waypoint x="297" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_121_kind_n_121_new" bpmnElement="f_n_121_kind_n_121_new"><di:waypoint x="343" y="235"/><di:waypoint x="425" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_121_kind_n_121_rel" bpmnElement="f_n_121_kind_n_121_rel"><di:waypoint x="343" y="235"/><di:waypoint x="400" y="235"/><di:waypoint x="400" y="455"/><di:waypoint x="425" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_121_kind_n_121_loc" bpmnElement="f_n_121_kind_n_121_loc"><di:waypoint x="343" y="235"/><di:waypoint x="400" y="235"/><di:waypoint x="400" y="675"/><di:waypoint x="425" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_121_kind_n_121_att" bpmnElement="f_n_121_kind_n_121_att"><di:waypoint x="343" y="235"/><di:waypoint x="400" y="235"/><di:waypoint x="400" y="895"/><di:waypoint x="425" y="895"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_121_kind_n_121_ret" bpmnElement="f_n_121_kind_n_121_ret"><di:waypoint x="343" y="235"/><di:waypoint x="400" y="235"/><di:waypoint x="400" y="1115"/><di:waypoint x="425" y="1115"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_121_new_n_121_core" bpmnElement="f_n_121_new_n_121_core"><di:waypoint x="555" y="235"/><di:waypoint x="595" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_121_core_n_121_join" bpmnElement="f_n_121_core_n_121_join"><di:waypoint x="725" y="235"/><di:waypoint x="807" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_121_rel_n_121_relw" bpmnElement="f_n_121_rel_n_121_relw"><di:waypoint x="555" y="455"/><di:waypoint x="595" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_121_relw_n_121_join" bpmnElement="f_n_121_relw_n_121_join"><di:waypoint x="725" y="455"/><di:waypoint x="782" y="455"/><di:waypoint x="782" y="235"/><di:waypoint x="807" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_121_loc_n_121_locw" bpmnElement="f_n_121_loc_n_121_locw"><di:waypoint x="555" y="675"/><di:waypoint x="595" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_121_locw_n_121_join" bpmnElement="f_n_121_locw_n_121_join"><di:waypoint x="725" y="675"/><di:waypoint x="782" y="675"/><di:waypoint x="782" y="235"/><di:waypoint x="807" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_121_att_n_121_attw" bpmnElement="f_n_121_att_n_121_attw"><di:waypoint x="555" y="895"/><di:waypoint x="595" y="895"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_121_attw_n_121_join" bpmnElement="f_n_121_attw_n_121_join"><di:waypoint x="725" y="895"/><di:waypoint x="782" y="895"/><di:waypoint x="782" y="235"/><di:waypoint x="807" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_121_ret_n_121_retw" bpmnElement="f_n_121_ret_n_121_retw"><di:waypoint x="555" y="1115"/><di:waypoint x="595" y="1115"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_121_retw_n_121_join" bpmnElement="f_n_121_retw_n_121_join"><di:waypoint x="725" y="1115"/><di:waypoint x="782" y="1115"/><di:waypoint x="782" y="235"/><di:waypoint x="807" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_121_join_n_121_pub" bpmnElement="f_n_121_join_n_121_pub"><di:waypoint x="853" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_121_pub_n_121_end" bpmnElement="f_n_121_pub_n_121_end"><di:waypoint x="1065" y="235"/><di:waypoint x="1152" y="235"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

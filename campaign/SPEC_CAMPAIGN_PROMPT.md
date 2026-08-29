@@ -8,24 +8,28 @@ rounds; only the category assignment does.
 Category 1.0 is the **worked example** — read it before starting.
 
 **Rounds 1 to 5 are closed. This is the replan of 2026-08-29, and it supersedes the
-round table.** Eleven categories are in the reference; 224 processes remain across eight.
+round table.** Fourteen categories are in the reference; 146 processes remain across five.
 
 | Platform | Categories | Processes | Nature |
 |---|---|---|---|
-| **ChatGPT** | 4.0, 6.0, 12.0, 15.0 | 110 | **Rework only.** All four are filed and rejected on mechanical rules. No new category until they merge. |
-| **Grok** | 17.0, 19.0 | 47 | New. Two of the three Asset Lifecycle categories. |
-| **Claude** | 8.0, 14.0 | 67 | New, plus merging everything that arrives. 18.0 done. |
+| **ChatGPT** | 4.0, 6.0 | 58 | **Rework only.** Both are filed and rejected on mechanical rules. 12.0 and 15.0 are merged. |
+| **Grok** | 19.0 | 21 | New. The last of the Asset Lifecycle band. 17.0 is merged. |
+| **Claude** | 8.0, 14.0 | 67 | New, plus merging everything that arrives. 11.0 and 18.0 are merged. |
 
-In the reference already: 1.0, 2.0, 5.0, 11.0 and 18.0 (Claude); 9.0 (ChatGPT); 3.0, 7.0,
-10.0, 13.0 and 16.0 (Grok). 282 of 506 processes, 56%.
+In the reference already: 1.0, 2.0, 5.0, 11.0 and 18.0 (Claude); 9.0, 12.0 and 15.0
+(ChatGPT); 3.0, 7.0, 10.0, 13.0, 16.0 and 17.0 (Grok). 360 of 506 processes, 71%.
 
-**18.0 is merged, 2026-08-29.** It was taken first because twenty-four references to 18.4.4
-and twelve to 18.2.2 already existed in six merged categories, all of them about the
-difference between a clearance, a permit and an emergency isolation, and all nine of those
-cross-references now resolve. Read `cat-18-operate-the-network-for-planned-work.json` before
-writing anything that touches an isolation: **a clearance is issued at 18.4.4 by the system
-operator and by no other process in this model**, a permit comes from an external authority
-at 7.3.2, emergency isolation is 9.3.2, and a gas isolation is not a clearance at all.
+**18.0 is merged, 2026-08-29.** Read
+`cat-18-operate-the-network-for-planned-work.json` before writing anything that touches an
+isolation: **a clearance is issued at 18.4.4 by the system operator and by no other process
+in this model**, a permit comes from an external authority at 7.3.2, emergency isolation is
+9.3.2, and a gas isolation is not a clearance at all.
+
+**17.0 is merged, 2026-08-29, and 8.0 depends on it.** Group 17.3's four DMN tables return
+a regulatory class AND ITS AUTHORITY, never a list of obligations. 8.0 consumes those
+classes and must not re-derive them - in particular 17.3.3 returns `dimpDistribution` under
+49 CFR 192.1001 for a distribution main, so Subpart O high-consequence-area obligations
+never reach one.
 
 **Take assigned categories only.** A category specified twice is not a contribution, it is
 a reconciliation job — and it has already happened once, on 11.0.
@@ -232,12 +236,22 @@ rejected a submission.
 - [ ] **`sources` is what the process content derives from.** Not why you chose a
       notation - `notation.why` carries that - and never this campaign's own prompt or
       `vocabulary.json`, which would make the reference evidence for itself.
-- [ ] **No control text appears on more than two processes.** Ten merged categories
-      carry 279 processes between them and not one control text repeats. A control
+- [ ] **No control text appears on more than two processes.** Fourteen merged categories
+      carry 360 processes between them and not one control text repeats. A control
       repeated verbatim is a header, not a constraint on any of the processes it sits
       on. Three occurrences is an error. The same test applies by eye to outputs,
       measures and role sets: if a line is true of every process in the model, it is
       not telling a reader anything about this one.
+- [ ] **A judgment citation says what THIS process infers.** Across the fourteen merged
+      categories the most any single judgment citation is shared by is three processes
+      out of eighteen, and twelve of the fourteen never exceed one. A single line such as
+      "the cited authorities do not prescribe a utility workflow" repeated on every
+      process in a category is a disclaimer wearing a citation's clothes: it is honest,
+      nothing in it is false, and a reader who wants to know what is inferred in one
+      particular process learns nothing from it. Name the thing - the interval nobody
+      publishes, the threshold no source states, the register whose terms are the
+      operator's. Warning, not error, because it is a rewrite of citation strings rather
+      than of the category.
 - [ ] **A regulation citation names the subdivision that actually bites.** Listing
       seven subsections and adding "as applicable" identifies nothing. 1910.269(c) is
       a briefing that gates the start of work; (l) is a minimum approach distance that

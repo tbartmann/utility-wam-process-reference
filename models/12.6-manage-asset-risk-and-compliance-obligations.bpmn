@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_P_12_6" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <process id="P_12_6" name="12.6 Manage obligations and technical change" isExecutable="false">
+    <documentation>12.6.1 and 12.6.4 are drawn. 12.6.2 asset risk and consequence of failure and 12.6.3 replacement and renewal planning are specified without models: the pack supplies no likelihood or consequence rule and no portfolio ranking, and both are recorded in section I as not standardised.
+
+The obligation path ends in a SUPERSESSION and that is not bookkeeping. 49 CFR 192.13(c) requires a gas operator to maintain, modify as appropriate and FOLLOW the plans and procedures Part 192 requires; an obligation register carrying a requirement that has been replaced is a register that will be followed into a finding. The electric side has no equivalent federal layer - NESC Rule 214A2 is the exemplar and is deliberately non-prescriptive - so the register is where the State rule is held.
+
+12.6.4 verifies AT CLOSURE rather than at implementation. A technical change implemented through authorised work is not finished until the records, the communication and the effective configuration agree - which is exactly what the reconciliation at 12.2.2 keeps finding when it does not happen.</documentation>
+    <laneSet id="P_12_6_lanes">
+      <lane id="l_126_obl" name="Obligations and compliance">
+        <flowNodeRef>n_126_o</flowNodeRef>
+        <flowNodeRef>n_126_scope</flowNodeRef>
+        <flowNodeRef>n_126_own</flowNodeRef>
+        <flowNodeRef>n_126_pub</flowNodeRef>
+        <flowNodeRef>n_126_sup</flowNodeRef>
+        <flowNodeRef>n_126_gw</flowNodeRef>
+        <flowNodeRef>n_126_raise</flowNodeRef>
+        <flowNodeRef>n_126_e1</flowNodeRef>
+      </lane>
+      <lane id="l_126_chg" name="Technical change control">
+        <flowNodeRef>n_126_c</flowNodeRef>
+        <flowNodeRef>n_126_reg</flowNodeRef>
+        <flowNodeRef>n_126_ass</flowNodeRef>
+        <flowNodeRef>n_126_dec</flowNodeRef>
+        <flowNodeRef>n_126_no</flowNodeRef>
+        <flowNodeRef>n_126_impl</flowNodeRef>
+        <flowNodeRef>n_126_ver</flowNodeRef>
+        <flowNodeRef>n_126_e2</flowNodeRef>
+      </lane>
+    </laneSet>
+    <startEvent id="n_126_o" name="A regulation, code, permit condition or standard changes"><messageEventDefinition id="n_126_o_md"/></startEvent>
+    <userTask id="n_126_scope" name="Determine affected assets, territories and dates"><documentation>12.6.1. Territories, because a State rule reaches part of the estate and a federal one reaches all of it.</documentation></userTask>
+    <serviceTask id="n_126_own" name="Assign evidence, action and review ownership"><documentation>12.6.1. Evidence ownership is the part that decides whether the obligation is demonstrable a year later.</documentation></serviceTask>
+    <sendTask id="n_126_pub" name="Publish the obligation"><documentation>12.6.1.</documentation></sendTask>
+    <serviceTask id="n_126_sup" name="Retire the superseded requirement"><documentation>12.6.1. 49 CFR 192.13(c) requires the operator to follow the required plans and procedures; a register holding a replaced requirement is followed into a finding.</documentation></serviceTask>
+    <exclusiveGateway id="n_126_gw" name="Work needed to comply"/>
+    <sendTask id="n_126_raise" name="Raise the compliance work into 1.0"><documentation>12.6.1. With the obligation's date as the constraint - the same shape 17.3.5 uses for a classification clock.</documentation></sendTask>
+    <endEvent id="n_126_e1" name="Obligation register current"/>
+    <startEvent id="n_126_c" name="A technical change is proposed"><messageEventDefinition id="n_126_c_md"/></startEvent>
+    <serviceTask id="n_126_reg" name="Register the change, its reason and affected assets"><documentation>12.6.4. Temporary changes registered too - a temporary change nobody recorded is a permanent one.</documentation></serviceTask>
+    <userTask id="n_126_ass" name="Assess technical, risk, work and operating implications"><documentation>12.6.4. Operating implications reach 18.1.5, where an abnormal condition intended to persist beyond the work becomes a network state.</documentation></userTask>
+    <exclusiveGateway id="n_126_dec" name="Decision"/>
+    <endEvent id="n_126_no" name="Not approved, recorded with the reason"><documentation>12.6.4.</documentation></endEvent>
+    <serviceTask id="n_126_impl" name="Implement through authorised work"><documentation>12.6.4. Through 1.0 and the work lifecycle, not directly against the record.</documentation></serviceTask>
+    <userTask id="n_126_ver" name="Verify records, communication and configuration"><documentation>12.6.4. All three at closure. Two out of three is what 12.2.2 finds later.</documentation></userTask>
+    <endEvent id="n_126_e2" name="Change closed and verified"/>
+    <sequenceFlow id="f_n_126_o_n_126_scope" sourceRef="n_126_o" targetRef="n_126_scope" name=""/>
+    <sequenceFlow id="f_n_126_scope_n_126_own" sourceRef="n_126_scope" targetRef="n_126_own" name=""/>
+    <sequenceFlow id="f_n_126_own_n_126_pub" sourceRef="n_126_own" targetRef="n_126_pub" name=""/>
+    <sequenceFlow id="f_n_126_pub_n_126_sup" sourceRef="n_126_pub" targetRef="n_126_sup" name=""/>
+    <sequenceFlow id="f_n_126_sup_n_126_gw" sourceRef="n_126_sup" targetRef="n_126_gw" name=""/>
+    <sequenceFlow id="f_n_126_gw_n_126_raise" sourceRef="n_126_gw" targetRef="n_126_raise" name="work needed"><conditionExpression xsi:type="tFormalExpression"><![CDATA[workNeeded = true]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_126_raise_n_126_e1" sourceRef="n_126_raise" targetRef="n_126_e1" name=""/>
+    <sequenceFlow id="f_n_126_gw_n_126_e1" sourceRef="n_126_gw" targetRef="n_126_e1" name="no work needed"/>
+    <sequenceFlow id="f_n_126_c_n_126_reg" sourceRef="n_126_c" targetRef="n_126_reg" name=""/>
+    <sequenceFlow id="f_n_126_reg_n_126_ass" sourceRef="n_126_reg" targetRef="n_126_ass" name=""/>
+    <sequenceFlow id="f_n_126_ass_n_126_dec" sourceRef="n_126_ass" targetRef="n_126_dec" name=""/>
+    <sequenceFlow id="f_n_126_dec_n_126_no" sourceRef="n_126_dec" targetRef="n_126_no" name="not approved"><conditionExpression xsi:type="tFormalExpression"><![CDATA[approved = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_126_dec_n_126_impl" sourceRef="n_126_dec" targetRef="n_126_impl" name="approved"/>
+    <sequenceFlow id="f_n_126_impl_n_126_ver" sourceRef="n_126_impl" targetRef="n_126_ver" name=""/>
+    <sequenceFlow id="f_n_126_ver_n_126_e2" sourceRef="n_126_ver" targetRef="n_126_e2" name=""/>
+  </process>
+  <bpmndi:BPMNDiagram id="dg_P_12_6">
+    <bpmndi:BPMNPlane id="pl_P_12_6" bpmnElement="P_12_6">
+      <bpmndi:BPMNShape id="sh_n_126_o" bpmnElement="n_126_o"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_126_scope" bpmnElement="n_126_scope"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_126_own" bpmnElement="n_126_own"><dc:Bounds x="425" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_126_pub" bpmnElement="n_126_pub"><dc:Bounds x="595" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_126_sup" bpmnElement="n_126_sup"><dc:Bounds x="765" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_126_gw" bpmnElement="n_126_gw"><dc:Bounds x="977" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_126_raise" bpmnElement="n_126_raise"><dc:Bounds x="935" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_126_e1" bpmnElement="n_126_e1"><dc:Bounds x="1152" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_126_c" bpmnElement="n_126_c"><dc:Bounds x="132" y="657" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_126_reg" bpmnElement="n_126_reg"><dc:Bounds x="255" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_126_ass" bpmnElement="n_126_ass"><dc:Bounds x="425" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_126_dec" bpmnElement="n_126_dec"><dc:Bounds x="637" y="652" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_126_no" bpmnElement="n_126_no"><dc:Bounds x="642" y="877" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_126_impl" bpmnElement="n_126_impl"><dc:Bounds x="765" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_126_ver" bpmnElement="n_126_ver"><dc:Bounds x="935" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_126_e2" bpmnElement="n_126_e2"><dc:Bounds x="1152" y="657" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ed_f_n_126_o_n_126_scope" bpmnElement="f_n_126_o_n_126_scope"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_126_scope_n_126_own" bpmnElement="f_n_126_scope_n_126_own"><di:waypoint x="385" y="235"/><di:waypoint x="425" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_126_own_n_126_pub" bpmnElement="f_n_126_own_n_126_pub"><di:waypoint x="555" y="235"/><di:waypoint x="595" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_126_pub_n_126_sup" bpmnElement="f_n_126_pub_n_126_sup"><di:waypoint x="725" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_126_sup_n_126_gw" bpmnElement="f_n_126_sup_n_126_gw"><di:waypoint x="895" y="235"/><di:waypoint x="977" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_126_gw_n_126_raise" bpmnElement="f_n_126_gw_n_126_raise"><di:waypoint x="1023" y="235"/><di:waypoint x="910" y="235"/><di:waypoint x="910" y="455"/><di:waypoint x="935" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_126_raise_n_126_e1" bpmnElement="f_n_126_raise_n_126_e1"><di:waypoint x="1065" y="455"/><di:waypoint x="1127" y="455"/><di:waypoint x="1127" y="235"/><di:waypoint x="1152" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_126_gw_n_126_e1" bpmnElement="f_n_126_gw_n_126_e1"><di:waypoint x="1023" y="235"/><di:waypoint x="1152" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_126_c_n_126_reg" bpmnElement="f_n_126_c_n_126_reg"><di:waypoint x="168" y="675"/><di:waypoint x="255" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_126_reg_n_126_ass" bpmnElement="f_n_126_reg_n_126_ass"><di:waypoint x="385" y="675"/><di:waypoint x="425" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_126_ass_n_126_dec" bpmnElement="f_n_126_ass_n_126_dec"><di:waypoint x="555" y="675"/><di:waypoint x="637" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_126_dec_n_126_no" bpmnElement="f_n_126_dec_n_126_no"><di:waypoint x="683" y="675"/><di:waypoint x="617" y="675"/><di:waypoint x="617" y="895"/><di:waypoint x="642" y="895"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_126_dec_n_126_impl" bpmnElement="f_n_126_dec_n_126_impl"><di:waypoint x="683" y="675"/><di:waypoint x="765" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_126_impl_n_126_ver" bpmnElement="f_n_126_impl_n_126_ver"><di:waypoint x="895" y="675"/><di:waypoint x="935" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_126_ver_n_126_e2" bpmnElement="f_n_126_ver_n_126_e2"><di:waypoint x="1065" y="675"/><di:waypoint x="1152" y="675"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_P_12_3" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <process id="P_12_3" name="12.3 Manage linear and network assets" isExecutable="false">
+    <documentation>12.3.2, 12.3.3, 12.3.4, 12.3.5 and 12.3.6 are drawn. 12.3.1 defines the linear assets and their measure basis and is standing - a definition, not an instance.
+
+NO STANDARD IN THE SOURCE AUTHORITY PACK DEFINES LINEAR REFERENCING OR DYNAMIC SEGMENTATION. IEC 61968 is electric-scoped and has no linear model; PODS supplies gas linear and inspection entities - ACTIVITY, INSPECTION_RANGE, PHYSICAL_INSPECTION, REPAIR - and models the record of work done rather than the work item. So this group is drawn from the specification's own vocabulary with PODS cited for the entities, and it says so rather than borrowing an electric standard to cover a gas main.
+
+THE MEASURE BASIS IS CARRIED WITH EVERY EVENT AND THAT IS THE WHOLE DISCIPLINE. A stationing basis changes when a route is re-measured, split or merged, and an event recorded without the basis effective at the time cannot be placed again afterwards. 12.3.5 is the process that makes this concrete: it reattaches history and publishes what it could not reattach, rather than quietly dropping events that no longer resolve.</documentation>
+    <laneSet id="P_12_3_lanes">
+      <lane id="l_123_lin" name="Linear asset records">
+        <flowNodeRef>n_123_e</flowNodeRef>
+        <flowNodeRef>n_123_route</flowNodeRef>
+        <flowNodeRef>n_123_meas</flowNodeRef>
+        <flowNodeRef>n_123_val</flowNodeRef>
+        <flowNodeRef>n_123_rej</flowNodeRef>
+        <flowNodeRef>n_123_pub</flowNodeRef>
+        <flowNodeRef>n_123_rec</flowNodeRef>
+        <flowNodeRef>n_123_e1</flowNodeRef>
+        <flowNodeRef>n_123_v</flowNodeRef>
+        <flowNodeRef>n_123_ord</flowNodeRef>
+        <flowNodeRef>n_123_seg</flowNodeRef>
+        <flowNodeRef>n_123_spub</flowNodeRef>
+        <flowNodeRef>n_123_e2</flowNodeRef>
+        <flowNodeRef>n_123_g</flowNodeRef>
+        <flowNodeRef>n_123_gk</flowNodeRef>
+        <flowNodeRef>n_123_tr</flowNodeRef>
+        <flowNodeRef>n_123_re</flowNodeRef>
+        <flowNodeRef>n_123_orph</flowNodeRef>
+        <flowNodeRef>n_123_e3</flowNodeRef>
+      </lane>
+      <lane id="l_123_net" name="Network connectivity">
+        <flowNodeRef>n_123_conn</flowNodeRef>
+        <flowNodeRef>n_123_cw</flowNodeRef>
+        <flowNodeRef>n_123_cpub</flowNodeRef>
+      </lane>
+    </laneSet>
+    <startEvent id="n_123_e" name="An event needs a position on a linear asset"><messageEventDefinition id="n_123_e_md"/></startEvent>
+    <serviceTask id="n_123_route" name="Resolve the route and effective measure basis"><documentation>12.3.2. Effective when the event occurred, not the basis in force today.</documentation></serviceTask>
+    <serviceTask id="n_123_meas" name="Calculate or capture the measure"><documentation>12.3.2.</documentation></serviceTask>
+    <exclusiveGateway id="n_123_val" name="On the route and tied to a valid identity"/>
+    <endEvent id="n_123_rej" name="Rejected: off route or no valid linear identity"><documentation>12.3.2. Rejected rather than approximated. A point placed on the nearest route is worse than a point that is missing, because it will be believed.</documentation></endEvent>
+    <sendTask id="n_123_pub" name="Publish the measured point"><documentation>12.3.2.</documentation></sendTask>
+    <serviceTask id="n_123_rec" name="Record condition, defect or work at the point or range"><documentation>12.3.4. With dates and source, so 12.4 and 8.0 can use it as evidence rather than as an assertion.</documentation></serviceTask>
+    <endEvent id="n_123_e1" name="Event placed on the asset"/>
+    <startEvent id="n_123_v" name="A segmented view is requested"><messageEventDefinition id="n_123_v_md"/></startEvent>
+    <serviceTask id="n_123_ord" name="Order event boundaries along the route"><documentation>12.3.3.</documentation></serviceTask>
+    <serviceTask id="n_123_seg" name="Derive segments for the requested attribute"><documentation>12.3.3. Derived, not stored. A stored segmentation is out of date the moment the next event lands.</documentation></serviceTask>
+    <sendTask id="n_123_spub" name="Publish segments with their source references"><documentation>12.3.3. The references are what let a reader see which events produced a boundary.</documentation></sendTask>
+    <endEvent id="n_123_e2" name="Segmented view published"/>
+    <startEvent id="n_123_g" name="Accepted geometry or connectivity change"><messageEventDefinition id="n_123_g_md"/></startEvent>
+    <exclusiveGateway id="n_123_gk" name="Boundary change or connectivity change"/>
+    <serviceTask id="n_123_tr" name="Split, merge or re-measure with effective dates"><documentation>12.3.5. Effective dates, because both the old and the new basis stay answerable.</documentation></serviceTask>
+    <userTask id="n_123_re" name="Reattach history to the new geometry"><documentation>12.3.5.</documentation></userTask>
+    <sendTask id="n_123_orph" name="Publish what could not be reattached"><documentation>12.3.5. Published as a reconciliation exception into 12.2.5. Events that no longer resolve are a finding, not a rounding error.</documentation></sendTask>
+    <userTask id="n_123_conn" name="Validate endpoints, device identity and state"><documentation>12.3.6.</documentation></userTask>
+    <serviceTask id="n_123_cw" name="Add, end or correct network relationships"><documentation>12.3.6. End rather than delete, so a trace as at a past date still works.</documentation></serviceTask>
+    <sendTask id="n_123_cpub" name="Publish connectivity to operating and maintenance users"><documentation>12.3.6. 18.5.5 keeps the as-operated state; this is the recorded network the plan is written against.</documentation></sendTask>
+    <endEvent id="n_123_e3" name="Linear and network records updated"/>
+    <sequenceFlow id="f_n_123_e_n_123_route" sourceRef="n_123_e" targetRef="n_123_route" name=""/>
+    <sequenceFlow id="f_n_123_route_n_123_meas" sourceRef="n_123_route" targetRef="n_123_meas" name=""/>
+    <sequenceFlow id="f_n_123_meas_n_123_val" sourceRef="n_123_meas" targetRef="n_123_val" name=""/>
+    <sequenceFlow id="f_n_123_val_n_123_rej" sourceRef="n_123_val" targetRef="n_123_rej" name="off route or invalid"><conditionExpression xsi:type="tFormalExpression"><![CDATA[valid = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_123_val_n_123_pub" sourceRef="n_123_val" targetRef="n_123_pub" name="valid"/>
+    <sequenceFlow id="f_n_123_pub_n_123_rec" sourceRef="n_123_pub" targetRef="n_123_rec" name=""/>
+    <sequenceFlow id="f_n_123_rec_n_123_e1" sourceRef="n_123_rec" targetRef="n_123_e1" name=""/>
+    <sequenceFlow id="f_n_123_v_n_123_ord" sourceRef="n_123_v" targetRef="n_123_ord" name=""/>
+    <sequenceFlow id="f_n_123_ord_n_123_seg" sourceRef="n_123_ord" targetRef="n_123_seg" name=""/>
+    <sequenceFlow id="f_n_123_seg_n_123_spub" sourceRef="n_123_seg" targetRef="n_123_spub" name=""/>
+    <sequenceFlow id="f_n_123_spub_n_123_e2" sourceRef="n_123_spub" targetRef="n_123_e2" name=""/>
+    <sequenceFlow id="f_n_123_g_n_123_gk" sourceRef="n_123_g" targetRef="n_123_gk" name=""/>
+    <sequenceFlow id="f_n_123_gk_n_123_tr" sourceRef="n_123_gk" targetRef="n_123_tr" name="boundary or measure"><conditionExpression xsi:type="tFormalExpression"><![CDATA[change = "geometry"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_123_gk_n_123_conn" sourceRef="n_123_gk" targetRef="n_123_conn" name="connectivity"><conditionExpression xsi:type="tFormalExpression"><![CDATA[change = "connectivity"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_123_tr_n_123_re" sourceRef="n_123_tr" targetRef="n_123_re" name=""/>
+    <sequenceFlow id="f_n_123_re_n_123_orph" sourceRef="n_123_re" targetRef="n_123_orph" name=""/>
+    <sequenceFlow id="f_n_123_orph_n_123_e3" sourceRef="n_123_orph" targetRef="n_123_e3" name=""/>
+    <sequenceFlow id="f_n_123_conn_n_123_cw" sourceRef="n_123_conn" targetRef="n_123_cw" name=""/>
+    <sequenceFlow id="f_n_123_cw_n_123_cpub" sourceRef="n_123_cw" targetRef="n_123_cpub" name=""/>
+    <sequenceFlow id="f_n_123_cpub_n_123_e3" sourceRef="n_123_cpub" targetRef="n_123_e3" name=""/>
+  </process>
+  <bpmndi:BPMNDiagram id="dg_P_12_3">
+    <bpmndi:BPMNPlane id="pl_P_12_3" bpmnElement="P_12_3">
+      <bpmndi:BPMNShape id="sh_n_123_e" bpmnElement="n_123_e"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_123_route" bpmnElement="n_123_route"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_123_meas" bpmnElement="n_123_meas"><dc:Bounds x="425" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_123_val" bpmnElement="n_123_val"><dc:Bounds x="637" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_123_rej" bpmnElement="n_123_rej"><dc:Bounds x="642" y="437" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_123_pub" bpmnElement="n_123_pub"><dc:Bounds x="765" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_123_rec" bpmnElement="n_123_rec"><dc:Bounds x="935" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_123_e1" bpmnElement="n_123_e1"><dc:Bounds x="1152" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_123_v" bpmnElement="n_123_v"><dc:Bounds x="132" y="657" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_123_ord" bpmnElement="n_123_ord"><dc:Bounds x="255" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_123_seg" bpmnElement="n_123_seg"><dc:Bounds x="425" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_123_spub" bpmnElement="n_123_spub"><dc:Bounds x="595" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_123_e2" bpmnElement="n_123_e2"><dc:Bounds x="812" y="657" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_123_g" bpmnElement="n_123_g"><dc:Bounds x="132" y="877" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_123_gk" bpmnElement="n_123_gk"><dc:Bounds x="297" y="872" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_123_tr" bpmnElement="n_123_tr"><dc:Bounds x="425" y="860" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_123_re" bpmnElement="n_123_re"><dc:Bounds x="595" y="860" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_123_orph" bpmnElement="n_123_orph"><dc:Bounds x="765" y="860" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_123_conn" bpmnElement="n_123_conn"><dc:Bounds x="425" y="1080" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_123_cw" bpmnElement="n_123_cw"><dc:Bounds x="595" y="1080" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_123_cpub" bpmnElement="n_123_cpub"><dc:Bounds x="765" y="1080" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_123_e3" bpmnElement="n_123_e3"><dc:Bounds x="982" y="877" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ed_f_n_123_e_n_123_route" bpmnElement="f_n_123_e_n_123_route"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_123_route_n_123_meas" bpmnElement="f_n_123_route_n_123_meas"><di:waypoint x="385" y="235"/><di:waypoint x="425" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_123_meas_n_123_val" bpmnElement="f_n_123_meas_n_123_val"><di:waypoint x="555" y="235"/><di:waypoint x="637" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_123_val_n_123_rej" bpmnElement="f_n_123_val_n_123_rej"><di:waypoint x="683" y="235"/><di:waypoint x="617" y="235"/><di:waypoint x="617" y="455"/><di:waypoint x="642" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_123_val_n_123_pub" bpmnElement="f_n_123_val_n_123_pub"><di:waypoint x="683" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_123_pub_n_123_rec" bpmnElement="f_n_123_pub_n_123_rec"><di:waypoint x="895" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_123_rec_n_123_e1" bpmnElement="f_n_123_rec_n_123_e1"><di:waypoint x="1065" y="235"/><di:waypoint x="1152" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_123_v_n_123_ord" bpmnElement="f_n_123_v_n_123_ord"><di:waypoint x="168" y="675"/><di:waypoint x="255" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_123_ord_n_123_seg" bpmnElement="f_n_123_ord_n_123_seg"><di:waypoint x="385" y="675"/><di:waypoint x="425" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_123_seg_n_123_spub" bpmnElement="f_n_123_seg_n_123_spub"><di:waypoint x="555" y="675"/><di:waypoint x="595" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_123_spub_n_123_e2" bpmnElement="f_n_123_spub_n_123_e2"><di:waypoint x="725" y="675"/><di:waypoint x="812" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_123_g_n_123_gk" bpmnElement="f_n_123_g_n_123_gk"><di:waypoint x="168" y="895"/><di:waypoint x="297" y="895"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_123_gk_n_123_tr" bpmnElement="f_n_123_gk_n_123_tr"><di:waypoint x="343" y="895"/><di:waypoint x="425" y="895"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_123_gk_n_123_conn" bpmnElement="f_n_123_gk_n_123_conn"><di:waypoint x="343" y="895"/><di:waypoint x="400" y="895"/><di:waypoint x="400" y="1115"/><di:waypoint x="425" y="1115"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_123_tr_n_123_re" bpmnElement="f_n_123_tr_n_123_re"><di:waypoint x="555" y="895"/><di:waypoint x="595" y="895"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_123_re_n_123_orph" bpmnElement="f_n_123_re_n_123_orph"><di:waypoint x="725" y="895"/><di:waypoint x="765" y="895"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_123_orph_n_123_e3" bpmnElement="f_n_123_orph_n_123_e3"><di:waypoint x="895" y="895"/><di:waypoint x="982" y="895"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_123_conn_n_123_cw" bpmnElement="f_n_123_conn_n_123_cw"><di:waypoint x="555" y="1115"/><di:waypoint x="595" y="1115"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_123_cw_n_123_cpub" bpmnElement="f_n_123_cw_n_123_cpub"><di:waypoint x="725" y="1115"/><di:waypoint x="765" y="1115"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_123_cpub_n_123_e3" bpmnElement="f_n_123_cpub_n_123_e3"><di:waypoint x="895" y="1115"/><di:waypoint x="957" y="1115"/><di:waypoint x="957" y="895"/><di:waypoint x="982" y="895"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

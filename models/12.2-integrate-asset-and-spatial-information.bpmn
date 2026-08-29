@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_P_12_2" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <process id="P_12_2" name="12.2 Integrate asset and spatial information" isExecutable="false">
+    <documentation>12.2.2, 12.2.3 and 12.2.4 are drawn. 12.2.1 system of record, 12.2.6 identification standards and 12.2.7 distributed data across territories are standing, and 12.2.5 is a case with its own file.
+
+THE TWO PUBLICATION PATHS RUN IN OPPOSITE DIRECTIONS AND BOTH ARE DRAWN, because that is where the authority question lives. 12.2.3 pushes an accepted asset change into the spatial network model; 12.2.4 consumes a change the spatial authority published. Which of the two applies to a given field is 12.2.1's answer, and it is standing precisely because it is a model decision rather than something settled per instance.
+
+The reconciliation loop closes into a case rather than into a correction. An orphan, a duplicate or an authority conflict is not fixed by a rule - it is investigated, and 12.2.5 is where.</documentation>
+    <laneSet id="P_12_2_lanes">
+      <lane id="l_122_rec" name="Asset records">
+        <flowNodeRef>n_122_t</flowNodeRef>
+        <flowNodeRef>n_122_scope</flowNodeRef>
+        <flowNodeRef>n_122_match</flowNodeRef>
+        <flowNodeRef>n_122_cmp</flowNodeRef>
+        <flowNodeRef>n_122_gw</flowNodeRef>
+        <flowNodeRef>n_122_fix</flowNodeRef>
+        <flowNodeRef>n_122_case</flowNodeRef>
+        <flowNodeRef>n_122_e1</flowNodeRef>
+        <flowNodeRef>n_122_p</flowNodeRef>
+        <flowNodeRef>n_122_c</flowNodeRef>
+        <flowNodeRef>n_122_cres</flowNodeRef>
+        <flowNodeRef>n_122_cupd</flowNodeRef>
+        <flowNodeRef>n_122_cack</flowNodeRef>
+        <flowNodeRef>n_122_e3</flowNodeRef>
+      </lane>
+      <lane id="l_122_gis" name="Spatial network model">
+        <flowNodeRef>n_122_res</flowNodeRef>
+        <flowNodeRef>n_122_app</flowNodeRef>
+        <flowNodeRef>n_122_ok</flowNodeRef>
+        <flowNodeRef>n_122_exc</flowNodeRef>
+        <flowNodeRef>n_122_e2</flowNodeRef>
+      </lane>
+    </laneSet>
+    <startEvent id="n_122_t" name="Scheduled reconciliation, or an accepted change"><timerEventDefinition id="n_122_t_td"/></startEvent>
+    <serviceTask id="n_122_scope" name="Select records and comparison scope"><documentation>12.2.2.</documentation></serviceTask>
+    <serviceTask id="n_122_match" name="Match by governed identifiers"><documentation>12.2.2. Governed, from 12.2.6. Matching on a name is what creates the duplicates this process is looking for.</documentation></serviceTask>
+    <serviceTask id="n_122_cmp" name="Compare identity, status, location and relationships"><documentation>12.2.2.</documentation></serviceTask>
+    <exclusiveGateway id="n_122_gw" name="Difference authorised to correct"/>
+    <serviceTask id="n_122_fix" name="Apply the authorised correction"><documentation>12.2.2.</documentation></serviceTask>
+    <callActivity id="n_122_case" name="Raise a reconciliation case (12.2.5)"><documentation>12.2.5. Orphan, duplicate, mismatch or authority conflict.</documentation></callActivity>
+    <endEvent id="n_122_e1" name="Records agree"/>
+    <startEvent id="n_122_p" name="Accepted asset change affects the network model"><messageEventDefinition id="n_122_p_md"/></startEvent>
+    <serviceTask id="n_122_res" name="Determine affected spatial objects"><documentation>12.2.3.</documentation></serviceTask>
+    <serviceTask id="n_122_app" name="Apply the authorised create, change or retirement"><documentation>12.2.3.</documentation></serviceTask>
+    <exclusiveGateway id="n_122_ok" name="Applied"/>
+    <sendTask id="n_122_exc" name="Return an exception to the asset record"><documentation>12.2.3. Back to the record that asked, so the asset register knows its published change did not land.</documentation></sendTask>
+    <endEvent id="n_122_e2" name="Spatial model updated"/>
+    <startEvent id="n_122_c" name="Spatial authority publishes a change"><messageEventDefinition id="n_122_c_md"/></startEvent>
+    <serviceTask id="n_122_cres" name="Resolve affected asset identities"><documentation>12.2.4.</documentation></serviceTask>
+    <serviceTask id="n_122_cupd" name="Update dependent location and network references"><documentation>12.2.4.</documentation></serviceTask>
+    <sendTask id="n_122_cack" name="Acknowledge, or raise an exception"><documentation>12.2.4.</documentation></sendTask>
+    <endEvent id="n_122_e3" name="Update consumed"/>
+    <sequenceFlow id="f_n_122_t_n_122_scope" sourceRef="n_122_t" targetRef="n_122_scope" name=""/>
+    <sequenceFlow id="f_n_122_scope_n_122_match" sourceRef="n_122_scope" targetRef="n_122_match" name=""/>
+    <sequenceFlow id="f_n_122_match_n_122_cmp" sourceRef="n_122_match" targetRef="n_122_cmp" name=""/>
+    <sequenceFlow id="f_n_122_cmp_n_122_gw" sourceRef="n_122_cmp" targetRef="n_122_gw" name=""/>
+    <sequenceFlow id="f_n_122_gw_n_122_case" sourceRef="n_122_gw" targetRef="n_122_case" name="orphan, duplicate or authority conflict"><conditionExpression xsi:type="tFormalExpression"><![CDATA[authorisedCorrection = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_122_gw_n_122_fix" sourceRef="n_122_gw" targetRef="n_122_fix" name="authorised correction"/>
+    <sequenceFlow id="f_n_122_case_n_122_e1" sourceRef="n_122_case" targetRef="n_122_e1" name=""/>
+    <sequenceFlow id="f_n_122_fix_n_122_e1" sourceRef="n_122_fix" targetRef="n_122_e1" name=""/>
+    <sequenceFlow id="f_n_122_p_n_122_res" sourceRef="n_122_p" targetRef="n_122_res" name=""/>
+    <sequenceFlow id="f_n_122_res_n_122_app" sourceRef="n_122_res" targetRef="n_122_app" name=""/>
+    <sequenceFlow id="f_n_122_app_n_122_ok" sourceRef="n_122_app" targetRef="n_122_ok" name=""/>
+    <sequenceFlow id="f_n_122_ok_n_122_exc" sourceRef="n_122_ok" targetRef="n_122_exc" name="not applied"><conditionExpression xsi:type="tFormalExpression"><![CDATA[applied = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_122_exc_n_122_e2" sourceRef="n_122_exc" targetRef="n_122_e2" name=""/>
+    <sequenceFlow id="f_n_122_ok_n_122_e2" sourceRef="n_122_ok" targetRef="n_122_e2" name="applied"/>
+    <sequenceFlow id="f_n_122_c_n_122_cres" sourceRef="n_122_c" targetRef="n_122_cres" name=""/>
+    <sequenceFlow id="f_n_122_cres_n_122_cupd" sourceRef="n_122_cres" targetRef="n_122_cupd" name=""/>
+    <sequenceFlow id="f_n_122_cupd_n_122_cack" sourceRef="n_122_cupd" targetRef="n_122_cack" name=""/>
+    <sequenceFlow id="f_n_122_cack_n_122_e3" sourceRef="n_122_cack" targetRef="n_122_e3" name=""/>
+  </process>
+  <bpmndi:BPMNDiagram id="dg_P_12_2">
+    <bpmndi:BPMNPlane id="pl_P_12_2" bpmnElement="P_12_2">
+      <bpmndi:BPMNShape id="sh_n_122_t" bpmnElement="n_122_t"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_122_scope" bpmnElement="n_122_scope"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_122_match" bpmnElement="n_122_match"><dc:Bounds x="425" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_122_cmp" bpmnElement="n_122_cmp"><dc:Bounds x="595" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_122_gw" bpmnElement="n_122_gw"><dc:Bounds x="807" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_122_fix" bpmnElement="n_122_fix"><dc:Bounds x="935" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_122_case" bpmnElement="n_122_case"><dc:Bounds x="765" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_122_e1" bpmnElement="n_122_e1"><dc:Bounds x="1152" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_122_p" bpmnElement="n_122_p"><dc:Bounds x="132" y="657" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_122_res" bpmnElement="n_122_res"><dc:Bounds x="255" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_122_app" bpmnElement="n_122_app"><dc:Bounds x="425" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_122_ok" bpmnElement="n_122_ok"><dc:Bounds x="637" y="652" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_122_exc" bpmnElement="n_122_exc"><dc:Bounds x="595" y="860" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_122_e2" bpmnElement="n_122_e2"><dc:Bounds x="812" y="657" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_122_c" bpmnElement="n_122_c"><dc:Bounds x="132" y="1097" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_122_cres" bpmnElement="n_122_cres"><dc:Bounds x="255" y="1080" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_122_cupd" bpmnElement="n_122_cupd"><dc:Bounds x="425" y="1080" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_122_cack" bpmnElement="n_122_cack"><dc:Bounds x="595" y="1080" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_122_e3" bpmnElement="n_122_e3"><dc:Bounds x="812" y="1097" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ed_f_n_122_t_n_122_scope" bpmnElement="f_n_122_t_n_122_scope"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_122_scope_n_122_match" bpmnElement="f_n_122_scope_n_122_match"><di:waypoint x="385" y="235"/><di:waypoint x="425" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_122_match_n_122_cmp" bpmnElement="f_n_122_match_n_122_cmp"><di:waypoint x="555" y="235"/><di:waypoint x="595" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_122_cmp_n_122_gw" bpmnElement="f_n_122_cmp_n_122_gw"><di:waypoint x="725" y="235"/><di:waypoint x="807" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_122_gw_n_122_case" bpmnElement="f_n_122_gw_n_122_case"><di:waypoint x="853" y="235"/><di:waypoint x="740" y="235"/><di:waypoint x="740" y="455"/><di:waypoint x="765" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_122_gw_n_122_fix" bpmnElement="f_n_122_gw_n_122_fix"><di:waypoint x="853" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_122_case_n_122_e1" bpmnElement="f_n_122_case_n_122_e1"><di:waypoint x="895" y="455"/><di:waypoint x="1127" y="455"/><di:waypoint x="1127" y="235"/><di:waypoint x="1152" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_122_fix_n_122_e1" bpmnElement="f_n_122_fix_n_122_e1"><di:waypoint x="1065" y="235"/><di:waypoint x="1152" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_122_p_n_122_res" bpmnElement="f_n_122_p_n_122_res"><di:waypoint x="168" y="675"/><di:waypoint x="255" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_122_res_n_122_app" bpmnElement="f_n_122_res_n_122_app"><di:waypoint x="385" y="675"/><di:waypoint x="425" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_122_app_n_122_ok" bpmnElement="f_n_122_app_n_122_ok"><di:waypoint x="555" y="675"/><di:waypoint x="637" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_122_ok_n_122_exc" bpmnElement="f_n_122_ok_n_122_exc"><di:waypoint x="683" y="675"/><di:waypoint x="570" y="675"/><di:waypoint x="570" y="895"/><di:waypoint x="595" y="895"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_122_exc_n_122_e2" bpmnElement="f_n_122_exc_n_122_e2"><di:waypoint x="725" y="895"/><di:waypoint x="787" y="895"/><di:waypoint x="787" y="675"/><di:waypoint x="812" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_122_ok_n_122_e2" bpmnElement="f_n_122_ok_n_122_e2"><di:waypoint x="683" y="675"/><di:waypoint x="812" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_122_c_n_122_cres" bpmnElement="f_n_122_c_n_122_cres"><di:waypoint x="168" y="1115"/><di:waypoint x="255" y="1115"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_122_cres_n_122_cupd" bpmnElement="f_n_122_cres_n_122_cupd"><di:waypoint x="385" y="1115"/><di:waypoint x="425" y="1115"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_122_cupd_n_122_cack" bpmnElement="f_n_122_cupd_n_122_cack"><di:waypoint x="555" y="1115"/><di:waypoint x="595" y="1115"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_122_cack_n_122_e3" bpmnElement="f_n_122_cack_n_122_e3"><di:waypoint x="725" y="1115"/><di:waypoint x="812" y="1115"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>
