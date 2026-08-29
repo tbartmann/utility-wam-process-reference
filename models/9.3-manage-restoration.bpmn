@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_P_9_3" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <process id="P_9_3" name="9.3 Manage restoration" isExecutable="false">
+    <documentation>9.3.2 to 9.3.5 are drawn; prioritisation at 9.3.1 is a determination with no stated cross-commodity ranking rule and is specified rather than modelled. The isolation path branches by commodity on purpose. For electric transmission and distribution, deenergizing for employee protection is 29 CFR 1910.269(m) and complying with 29 CFR 1910.147 does not satisfy it; for gas, emergency action may be shutdown, valve shut-off or pressure reduction under 49 CFR 192.615(a)(6), and 1910.147 applies where its own scope is met. One rule drawn over both would be wrong twice. And this is emergency isolation: the planned-work clearance is issued at 18.4.4 against a plan approved at 18.2.2, and the two must not be confused in either direction.</documentation>
+    <laneSet id="P_9_3_lanes">
+      <lane id="l_93_no" name="Network operations">
+        <flowNodeRef>n_93_start</flowNodeRef>
+        <flowNodeRef>n_93_who</flowNodeRef>
+        <flowNodeRef>n_93_com</flowNodeRef>
+        <flowNodeRef>n_93_e</flowNodeRef>
+        <flowNodeRef>n_93_g</flowNodeRef>
+        <flowNodeRef>n_93_conf</flowNodeRef>
+        <flowNodeRef>n_93_rdy</flowNodeRef>
+        <flowNodeRef>n_93_rel</flowNodeRef>
+        <flowNodeRef>n_93_recon</flowNodeRef>
+        <flowNodeRef>n_93_final</flowNodeRef>
+        <flowNodeRef>n_93_close</flowNodeRef>
+        <flowNodeRef>n_93_end</flowNodeRef>
+      </lane>
+      <lane id="l_93_frd" name="Restoration crews">
+        <flowNodeRef>n_93_track</flowNodeRef>
+        <flowNodeRef>n_93_upd</flowNodeRef>
+        <flowNodeRef>n_93_cmp</flowNodeRef>
+        <flowNodeRef>n_93_sg</flowNodeRef>
+        <flowNodeRef>n_93_blk</flowNodeRef>
+        <flowNodeRef>n_93_bg</flowNodeRef>
+        <flowNodeRef>n_93_rebrief</flowNodeRef>
+        <flowNodeRef>n_93_done</flowNodeRef>
+        <flowNodeRef>n_93_ver</flowNodeRef>
+        <flowNodeRef>n_93_relight</flowNodeRef>
+        <flowNodeRef>n_93_rout</flowNodeRef>
+      </lane>
+    </laneSet>
+    <startEvent id="n_93_start" name="Prioritised work needs isolation"><messageEventDefinition id="n_93_start_md"/></startEvent>
+    <userTask id="n_93_who" name="Identify operator, employee in charge and crews"><documentation>9.3.2.</documentation></userTask>
+    <exclusiveGateway id="n_93_com" name="Commodity"/>
+    <userTask id="n_93_e" name="Deenergize under 1910.269(m)"><documentation>9.3.2. Electric T&amp;D employee protection. 1910.147 is not a substitute for it.</documentation></userTask>
+    <userTask id="n_93_g" name="Shut down, close valve or reduce pressure"><documentation>9.3.2. 49 CFR 192.615(a)(6). 1910.147 applies where its scope is met.</documentation></userTask>
+    <serviceTask id="n_93_conf" name="Confirm deenergized, grounded or isolated status"><documentation>9.3.2.</documentation></serviceTask>
+    <sendTask id="n_93_rdy" name="Communicate work-ready status to affected crews"><documentation>9.3.2.</documentation></sendTask>
+    <receiveTask id="n_93_track" name="Receive crew acceptance, start, hold, completion"><documentation>9.3.3.</documentation></receiveTask>
+    <serviceTask id="n_93_upd" name="Update task state and timestamps"><documentation>9.3.3.</documentation></serviceTask>
+    <serviceTask id="n_93_cmp" name="Compare progress with sequence and forecast"><documentation>9.3.3.</documentation></serviceTask>
+    <exclusiveGateway id="n_93_sg" name="Blocked, stale or materially changed"/>
+    <sendTask id="n_93_blk" name="Publish the block and trigger reassessment"><documentation>9.3.3. Into 9.2.5. Stale or incomplete crew status is not work completion and not network restoration.</documentation></sendTask>
+    <exclusiveGateway id="n_93_bg" name="Safety-related change"/>
+    <userTask id="n_93_rebrief" name="Hold an additional job briefing"><documentation>9.3.3. 29 CFR 1910.269(c)(3)(ii) requires one where there is a significant change with safety implications.</documentation></userTask>
+    <receiveTask id="n_93_done" name="Receive completion and network restoration reports"><documentation>9.3.4.</documentation></receiveTask>
+    <userTask id="n_93_ver" name="Verify hazards controlled and service restored"><documentation>9.3.4.</documentation></userTask>
+    <exclusiveGateway id="n_93_rel" name="Gas customer service affected"/>
+    <userTask id="n_93_relight" name="Restore and relight customer service"><documentation>9.3.5. Confirm the emergency isolation is released before relight. 49 CFR 192.615(a)(9) requires safely restoring any service outage, and the work is a covered task under 49 CFR 192 Subpart N.</documentation></userTask>
+    <serviceTask id="n_93_rout" name="Record restored, no-access or unsafe-to-restore"><documentation>9.3.5. All three are outcomes. Only one of them is a restoration.</documentation></serviceTask>
+    <serviceTask id="n_93_recon" name="Reconcile open tasks and affected locations"><documentation>9.3.4.</documentation></serviceTask>
+    <serviceTask id="n_93_final" name="Record final interruption and restoration data"><documentation>9.3.4. IEEE 1366-2022 and IEEE 1782-2022 are what this record later feeds; neither prescribes the process.</documentation></serviceTask>
+    <sendTask id="n_93_close" name="Close the event and issue final status"><documentation>9.3.4.</documentation></sendTask>
+    <endEvent id="n_93_end" name="Event closed"/>
+    <sequenceFlow id="f_n_93_start_n_93_who" sourceRef="n_93_start" targetRef="n_93_who" name=""/>
+    <sequenceFlow id="f_n_93_who_n_93_com" sourceRef="n_93_who" targetRef="n_93_com" name=""/>
+    <sequenceFlow id="f_n_93_com_n_93_e" sourceRef="n_93_com" targetRef="n_93_e" name="electric"><conditionExpression xsi:type="tFormalExpression"><![CDATA[commodity = "electric"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_93_com_n_93_g" sourceRef="n_93_com" targetRef="n_93_g" name="gas"><conditionExpression xsi:type="tFormalExpression"><![CDATA[commodity = "gas"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_93_e_n_93_conf" sourceRef="n_93_e" targetRef="n_93_conf" name=""/>
+    <sequenceFlow id="f_n_93_g_n_93_conf" sourceRef="n_93_g" targetRef="n_93_conf" name=""/>
+    <sequenceFlow id="f_n_93_conf_n_93_rdy" sourceRef="n_93_conf" targetRef="n_93_rdy" name=""/>
+    <sequenceFlow id="f_n_93_rdy_n_93_track" sourceRef="n_93_rdy" targetRef="n_93_track" name=""/>
+    <sequenceFlow id="f_n_93_track_n_93_upd" sourceRef="n_93_track" targetRef="n_93_upd" name=""/>
+    <sequenceFlow id="f_n_93_upd_n_93_cmp" sourceRef="n_93_upd" targetRef="n_93_cmp" name=""/>
+    <sequenceFlow id="f_n_93_cmp_n_93_sg" sourceRef="n_93_cmp" targetRef="n_93_sg" name=""/>
+    <sequenceFlow id="f_n_93_sg_n_93_blk" sourceRef="n_93_sg" targetRef="n_93_blk" name="blocked or stale"><conditionExpression xsi:type="tFormalExpression"><![CDATA[progressClean = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_93_blk_n_93_bg" sourceRef="n_93_blk" targetRef="n_93_bg" name=""/>
+    <sequenceFlow id="f_n_93_bg_n_93_rebrief" sourceRef="n_93_bg" targetRef="n_93_rebrief" name="safety implications"><conditionExpression xsi:type="tFormalExpression"><![CDATA[safetyChange = true]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_93_rebrief_n_93_track" sourceRef="n_93_rebrief" targetRef="n_93_track" name=""/>
+    <sequenceFlow id="f_n_93_bg_n_93_track" sourceRef="n_93_bg" targetRef="n_93_track" name="no safety change"/>
+    <sequenceFlow id="f_n_93_sg_n_93_done" sourceRef="n_93_sg" targetRef="n_93_done" name="progressing"/>
+    <sequenceFlow id="f_n_93_done_n_93_ver" sourceRef="n_93_done" targetRef="n_93_ver" name=""/>
+    <sequenceFlow id="f_n_93_ver_n_93_rel" sourceRef="n_93_ver" targetRef="n_93_rel" name=""/>
+    <sequenceFlow id="f_n_93_rel_n_93_relight" sourceRef="n_93_rel" targetRef="n_93_relight" name="gas premises affected"><conditionExpression xsi:type="tFormalExpression"><![CDATA[gasCustomersAffected = true]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_93_relight_n_93_rout" sourceRef="n_93_relight" targetRef="n_93_rout" name=""/>
+    <sequenceFlow id="f_n_93_rout_n_93_recon" sourceRef="n_93_rout" targetRef="n_93_recon" name=""/>
+    <sequenceFlow id="f_n_93_rel_n_93_recon" sourceRef="n_93_rel" targetRef="n_93_recon" name="no customer relight"/>
+    <sequenceFlow id="f_n_93_recon_n_93_final" sourceRef="n_93_recon" targetRef="n_93_final" name=""/>
+    <sequenceFlow id="f_n_93_final_n_93_close" sourceRef="n_93_final" targetRef="n_93_close" name=""/>
+    <sequenceFlow id="f_n_93_close_n_93_end" sourceRef="n_93_close" targetRef="n_93_end" name=""/>
+  </process>
+  <bpmndi:BPMNDiagram id="dg_P_9_3">
+    <bpmndi:BPMNPlane id="pl_P_9_3" bpmnElement="P_9_3">
+      <bpmndi:BPMNShape id="sh_n_93_start" bpmnElement="n_93_start"><dc:Bounds x="132" y="327" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_93_who" bpmnElement="n_93_who"><dc:Bounds x="255" y="310" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_93_com" bpmnElement="n_93_com"><dc:Bounds x="467" y="322" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_93_e" bpmnElement="n_93_e"><dc:Bounds x="425" y="90" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_93_g" bpmnElement="n_93_g"><dc:Bounds x="425" y="530" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_93_conf" bpmnElement="n_93_conf"><dc:Bounds x="595" y="310" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_93_rdy" bpmnElement="n_93_rdy"><dc:Bounds x="765" y="310" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_93_track" bpmnElement="n_93_track"><dc:Bounds x="935" y="310" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_93_upd" bpmnElement="n_93_upd"><dc:Bounds x="1105" y="310" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_93_cmp" bpmnElement="n_93_cmp"><dc:Bounds x="1275" y="310" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_93_sg" bpmnElement="n_93_sg"><dc:Bounds x="1487" y="322" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_93_blk" bpmnElement="n_93_blk"><dc:Bounds x="1445" y="530" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_93_bg" bpmnElement="n_93_bg"><dc:Bounds x="1657" y="542" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_93_rebrief" bpmnElement="n_93_rebrief"><dc:Bounds x="1785" y="530" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_93_done" bpmnElement="n_93_done"><dc:Bounds x="1615" y="310" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_93_ver" bpmnElement="n_93_ver"><dc:Bounds x="1785" y="310" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_93_rel" bpmnElement="n_93_rel"><dc:Bounds x="1997" y="322" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_93_relight" bpmnElement="n_93_relight"><dc:Bounds x="1955" y="750" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_93_rout" bpmnElement="n_93_rout"><dc:Bounds x="2125" y="750" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_93_recon" bpmnElement="n_93_recon"><dc:Bounds x="2125" y="310" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_93_final" bpmnElement="n_93_final"><dc:Bounds x="2295" y="310" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_93_close" bpmnElement="n_93_close"><dc:Bounds x="2465" y="310" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_93_end" bpmnElement="n_93_end"><dc:Bounds x="2682" y="327" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ed_f_n_93_start_n_93_who" bpmnElement="f_n_93_start_n_93_who"><di:waypoint x="168" y="345"/><di:waypoint x="255" y="345"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_93_who_n_93_com" bpmnElement="f_n_93_who_n_93_com"><di:waypoint x="385" y="345"/><di:waypoint x="467" y="345"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_93_com_n_93_e" bpmnElement="f_n_93_com_n_93_e"><di:waypoint x="513" y="345"/><di:waypoint x="400" y="345"/><di:waypoint x="400" y="125"/><di:waypoint x="425" y="125"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_93_com_n_93_g" bpmnElement="f_n_93_com_n_93_g"><di:waypoint x="513" y="345"/><di:waypoint x="400" y="345"/><di:waypoint x="400" y="565"/><di:waypoint x="425" y="565"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_93_e_n_93_conf" bpmnElement="f_n_93_e_n_93_conf"><di:waypoint x="555" y="125"/><di:waypoint x="570" y="125"/><di:waypoint x="570" y="345"/><di:waypoint x="595" y="345"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_93_g_n_93_conf" bpmnElement="f_n_93_g_n_93_conf"><di:waypoint x="555" y="565"/><di:waypoint x="570" y="565"/><di:waypoint x="570" y="345"/><di:waypoint x="595" y="345"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_93_conf_n_93_rdy" bpmnElement="f_n_93_conf_n_93_rdy"><di:waypoint x="725" y="345"/><di:waypoint x="765" y="345"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_93_rdy_n_93_track" bpmnElement="f_n_93_rdy_n_93_track"><di:waypoint x="895" y="345"/><di:waypoint x="935" y="345"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_93_track_n_93_upd" bpmnElement="f_n_93_track_n_93_upd"><di:waypoint x="1065" y="345"/><di:waypoint x="1105" y="345"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_93_upd_n_93_cmp" bpmnElement="f_n_93_upd_n_93_cmp"><di:waypoint x="1235" y="345"/><di:waypoint x="1275" y="345"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_93_cmp_n_93_sg" bpmnElement="f_n_93_cmp_n_93_sg"><di:waypoint x="1405" y="345"/><di:waypoint x="1487" y="345"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_93_sg_n_93_blk" bpmnElement="f_n_93_sg_n_93_blk"><di:waypoint x="1533" y="345"/><di:waypoint x="1420" y="345"/><di:waypoint x="1420" y="565"/><di:waypoint x="1445" y="565"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_93_blk_n_93_bg" bpmnElement="f_n_93_blk_n_93_bg"><di:waypoint x="1575" y="565"/><di:waypoint x="1657" y="565"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_93_bg_n_93_rebrief" bpmnElement="f_n_93_bg_n_93_rebrief"><di:waypoint x="1703" y="565"/><di:waypoint x="1785" y="565"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_93_rebrief_n_93_track" bpmnElement="f_n_93_rebrief_n_93_track"><di:waypoint x="1915" y="565"/><di:waypoint x="910" y="565"/><di:waypoint x="910" y="345"/><di:waypoint x="935" y="345"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_93_bg_n_93_track" bpmnElement="f_n_93_bg_n_93_track"><di:waypoint x="1703" y="565"/><di:waypoint x="910" y="565"/><di:waypoint x="910" y="345"/><di:waypoint x="935" y="345"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_93_sg_n_93_done" bpmnElement="f_n_93_sg_n_93_done"><di:waypoint x="1533" y="345"/><di:waypoint x="1615" y="345"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_93_done_n_93_ver" bpmnElement="f_n_93_done_n_93_ver"><di:waypoint x="1745" y="345"/><di:waypoint x="1785" y="345"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_93_ver_n_93_rel" bpmnElement="f_n_93_ver_n_93_rel"><di:waypoint x="1915" y="345"/><di:waypoint x="1997" y="345"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_93_rel_n_93_relight" bpmnElement="f_n_93_rel_n_93_relight"><di:waypoint x="2043" y="345"/><di:waypoint x="1930" y="345"/><di:waypoint x="1930" y="785"/><di:waypoint x="1955" y="785"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_93_relight_n_93_rout" bpmnElement="f_n_93_relight_n_93_rout"><di:waypoint x="2085" y="785"/><di:waypoint x="2125" y="785"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_93_rout_n_93_recon" bpmnElement="f_n_93_rout_n_93_recon"><di:waypoint x="2255" y="785"/><di:waypoint x="2100" y="785"/><di:waypoint x="2100" y="345"/><di:waypoint x="2125" y="345"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_93_rel_n_93_recon" bpmnElement="f_n_93_rel_n_93_recon"><di:waypoint x="2043" y="345"/><di:waypoint x="2125" y="345"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_93_recon_n_93_final" bpmnElement="f_n_93_recon_n_93_final"><di:waypoint x="2255" y="345"/><di:waypoint x="2295" y="345"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_93_final_n_93_close" bpmnElement="f_n_93_final_n_93_close"><di:waypoint x="2425" y="345"/><di:waypoint x="2465" y="345"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_93_close_n_93_end" bpmnElement="f_n_93_close_n_93_end"><di:waypoint x="2595" y="345"/><di:waypoint x="2682" y="345"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

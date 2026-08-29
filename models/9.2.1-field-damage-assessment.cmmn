@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/CMMN/20151109/MODEL" xmlns:cmmndi="http://www.omg.org/spec/CMMN/20151109/CMMNDI" xmlns:dc="http://www.omg.org/spec/CMMN/20151109/DC" xmlns:di="http://www.omg.org/spec/CMMN/20151109/DI" id="defs_Field_damage_assessment" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <case id="Field_damage_assessment" name="9.2.1 Perform field damage assessment">
+    <caseFileModel id="Field_damage_assessment_cfm">
+      <caseFileItem id="cf_area" name="Assigned assessment area or work item"/>
+      <caseFileItem id="cf_known" name="Known plant, access conditions and hazards"/>
+      <caseFileItem id="cf_obs" name="Observations, evidence and fault indications"/>
+    </caseFileModel>
+    <casePlanModel id="Field_damage_assessment_plan" name="9.2.1 Perform field damage assessment" autoComplete="true">
+      <documentation>Access, hazards and what is actually found determine which assessment actions are available and in what order, so two assessors working the same area legitimately diverge. The case exists to protect one thing downstream: 9.2.2 must be able to tell a confirmed observation from an inferred one, and it can only do that if this case records which it was. An immediate hazard leaves the case at once rather than waiting for the assessment to finish.</documentation>
+      <planItem id="pi_t_verify" name="Verify location, access and known hazards" definitionRef="t_verify_def">
+        <itemControl id="ic_t_verify">
+          <requiredRule id="rr_t_verify"><condition><![CDATA[true]]></condition></requiredRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_inspect" name="Inspect assets and locate damage or fault indications" definitionRef="t_inspect_def">
+        <itemControl id="ic_t_inspect">
+          <repetitionRule id="rep_t_inspect"><condition><![CDATA[true]]></condition></repetitionRule>
+          <requiredRule id="rr_t_inspect"><condition><![CDATA[true]]></condition></requiredRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_evidence" name="Record asset, condition, location and supporting evidence" definitionRef="t_evidence_def">
+        <itemControl id="ic_t_evidence">
+          <repetitionRule id="rep_t_evidence"><condition><![CDATA[true]]></condition></repetitionRule>
+          <requiredRule id="rr_t_evidence"><condition><![CDATA[true]]></condition></requiredRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_inaccessible" name="Record an area as inaccessible" definitionRef="t_inaccessible_def">
+        <itemControl id="ic_t_inaccessible">
+          <requiredRule id="rr_t_inaccessible"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_inaccessible"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_rupture" name="Evaluate a potential gas rupture against the stated criteria" definitionRef="t_rupture_def">
+        <itemControl id="ic_t_rupture">
+          <requiredRule id="rr_t_rupture"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_rupture"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_escalate" name="Escalate an immediate hazard" definitionRef="t_escalate_def">
+        <itemControl id="ic_t_escalate">
+          <requiredRule id="rr_t_escalate"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_escalate"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_submit" name="Submit the assessment" definitionRef="t_submit_def">
+        <itemControl id="ic_t_submit">
+          <requiredRule id="rr_t_submit"><condition><![CDATA[true]]></condition></requiredRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_m_covered" name="Area covered" definitionRef="m_covered_def"/>
+      <planItem id="pi_m_submitted" name="Assessment submitted" definitionRef="m_submitted_def"/>
+      <humanTask id="t_verify_def" name="Verify location, access and known hazards" isBlocking="true"><documentation>Required. 29 CFR 1910.269(c) briefing covers hazards, procedures, precautions, energy controls and protective equipment.</documentation></humanTask>
+      <humanTask id="t_inspect_def" name="Inspect assets and locate damage or fault indications" isBlocking="true"><documentation>Required and repeating across the area.</documentation></humanTask>
+      <humanTask id="t_evidence_def" name="Record asset, condition, location and supporting evidence" isBlocking="true"><documentation>Required. The asset and the location, not just the damage - an observation that cannot be tied to an asset cannot be aggregated at 9.2.2.</documentation></humanTask>
+      <humanTask id="t_inaccessible_def" name="Record an area as inaccessible" isBlocking="true"><documentation>Discretionary and important. Inaccessible is a real outcome. Leaving it blank makes an unassessed area look assessed.</documentation></humanTask>
+      <humanTask id="t_rupture_def" name="Evaluate a potential gas rupture against the stated criteria" isBlocking="true"><documentation>Discretionary, and only where it applies. 49 CFR 192.615(a)(12) requires written rupture-identification procedures with stated evaluation criteria; those criteria are the operator's and none is drawn here.</documentation></humanTask>
+      <humanTask id="t_escalate_def" name="Escalate an immediate hazard" isBlocking="true"><documentation>Discretionary and it leaves the case at once. An immediate hazard goes to 9.1.3 now; it does not wait for the assessment to be finished and submitted.</documentation></humanTask>
+      <humanTask id="t_submit_def" name="Submit the assessment" isBlocking="true"><documentation>Required. Into 9.2.2.</documentation></humanTask>
+      <milestone id="m_covered_def" name="Area covered"><documentation>Every location in the assigned area has an outcome, including inaccessible.</documentation></milestone>
+      <milestone id="m_submitted_def" name="Assessment submitted"><documentation>Available to 9.2.2 for aggregation, marked confirmed or unverified.</documentation></milestone>
+    </casePlanModel>
+  </case>
+  <cmmndi:CMMNDI>
+    <cmmndi:CMMNDiagram id="dg_Field_damage_assessment">
+      <cmmndi:CMMNShape id="sh_plan" cmmnElementRef="Field_damage_assessment_plan"><dc:Bounds x="40" y="40" width="1010" height="300"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_verify" cmmnElementRef="pi_t_verify"><dc:Bounds x="80" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_inspect" cmmnElementRef="pi_t_inspect"><dc:Bounds x="270" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_evidence" cmmnElementRef="pi_t_evidence"><dc:Bounds x="460" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_inaccessible" cmmnElementRef="pi_t_inaccessible"><dc:Bounds x="80" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_rupture" cmmnElementRef="pi_t_rupture"><dc:Bounds x="270" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_escalate" cmmnElementRef="pi_t_escalate"><dc:Bounds x="460" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_submit" cmmnElementRef="pi_t_submit"><dc:Bounds x="80" y="290" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_m_covered" cmmnElementRef="pi_m_covered"><dc:Bounds x="270" y="290" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_m_submitted" cmmnElementRef="pi_m_submitted"><dc:Bounds x="460" y="290" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+    </cmmndi:CMMNDiagram>
+  </cmmndi:CMMNDI>
+</definitions>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/CMMN/20151109/MODEL" xmlns:cmmndi="http://www.omg.org/spec/CMMN/20151109/CMMNDI" xmlns:dc="http://www.omg.org/spec/CMMN/20151109/DC" xmlns:di="http://www.omg.org/spec/CMMN/20151109/DI" id="defs_Make_safe_and_secure" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <case id="Make_safe_and_secure" name="9.1.3 Make safe and secure the site">
+    <caseFileModel id="Make_safe_and_secure_cfm">
+      <caseFileItem id="cf_evt" name="Triaged event and reported hazards"/>
+      <caseFileItem id="cf_site" name="Site access, known plant and hazard notes"/>
+      <caseFileItem id="cf_pub" name="Public-safety and agency contacts"/>
+    </caseFileModel>
+    <casePlanModel id="Make_safe_and_secure_plan" name="9.1.3 Make safe and secure the site" autoComplete="true">
+      <documentation>Hazards, access and public-safety needs evolve at the site, and two competent responders will legitimately take the available actions in a different order. That is the CMMN test, and it is the honest shape for the first ten minutes of an emergency. 49 CFR 192.615(a)(5) to (7) sets the priority that does NOT vary: protect people first and property second, reduce the hazard, and make the actual or potential hazard safe. For electric, isolating for employee protection is 29 CFR 1910.269(m). Camunda 8 dropped CMMN, so a runtime for this file means Flowable or an equivalent.</documentation>
+      <planItem id="pi_t_assess" name="Assess active hazards and set the response boundary" definitionRef="t_assess_def">
+        <itemControl id="ic_t_assess">
+          <repetitionRule id="rep_t_assess"><condition><![CDATA[true]]></condition></repetitionRule>
+          <requiredRule id="rr_t_assess"><condition><![CDATA[true]]></condition></requiredRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_people" name="Protect people before property" definitionRef="t_people_def">
+        <itemControl id="ic_t_people">
+          <requiredRule id="rr_t_people"><condition><![CDATA[true]]></condition></requiredRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_public" name="Coordinate with public safety officials" definitionRef="t_public_def">
+        <itemControl id="ic_t_public">
+          <requiredRule id="rr_t_public"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_public"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_iso_e" name="Isolate electric energy as authorised" definitionRef="t_iso_e_def">
+        <itemControl id="ic_t_iso_e">
+          <requiredRule id="rr_t_iso_e"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_iso_e"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_iso_g" name="Shut off or reduce gas flow as authorised" definitionRef="t_iso_g_def">
+        <itemControl id="ic_t_iso_g">
+          <requiredRule id="rr_t_iso_g"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_iso_g"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_access" name="Control access and hold the perimeter" definitionRef="t_access_def">
+        <itemControl id="ic_t_access">
+          <requiredRule id="rr_t_access"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_access"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_preserve" name="Preserve current site information" definitionRef="t_preserve_def">
+        <itemControl id="ic_t_preserve">
+          <requiredRule id="rr_t_preserve"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_preserve"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_status" name="Confirm site status and record actions taken" definitionRef="t_status_def">
+        <itemControl id="ic_t_status">
+          <requiredRule id="rr_t_status"><condition><![CDATA[true]]></condition></requiredRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_m_people" name="People protected" definitionRef="m_people_def"/>
+      <planItem id="pi_m_safe" name="Hazard made safe" definitionRef="m_safe_def"/>
+      <planItem id="pi_m_handover" name="Site secured and handed on" definitionRef="m_handover_def"/>
+      <humanTask id="t_assess_def" name="Assess active hazards and set the response boundary" isBlocking="true"><documentation>Required and repeating. The boundary moves as the hazard is understood; setting it once on arrival is how a responder ends up inside it.</documentation></humanTask>
+      <humanTask id="t_people_def" name="Protect people before property" isBlocking="true"><documentation>Required. 49 CFR 192.615(a)(5) states the order and it is not a preference.</documentation></humanTask>
+      <humanTask id="t_public_def" name="Coordinate with public safety officials" isBlocking="true"><documentation>Discretionary in sequence. Fire, police and medical may already hold the scene, in which case the boundary is theirs and not the operator's.</documentation></humanTask>
+      <humanTask id="t_iso_e_def" name="Isolate electric energy as authorised" isBlocking="true"><documentation>Discretionary. Deenergizing for employee protection is 29 CFR 1910.269(m). This is emergency isolation, not the planned-work clearance issued at 18.4.4.</documentation></humanTask>
+      <humanTask id="t_iso_g_def" name="Shut off or reduce gas flow as authorised" isBlocking="true"><documentation>Discretionary. 49 CFR 192.615(a)(6) covers emergency shutdown, valve shut-off and pressure reduction.</documentation></humanTask>
+      <humanTask id="t_access_def" name="Control access and hold the perimeter" isBlocking="true"><documentation>Discretionary and frequently continuous.</documentation></humanTask>
+      <humanTask id="t_preserve_def" name="Preserve current site information" isBlocking="true"><documentation>Discretionary. What the site looked like before anything was moved is evidence for 9.2.1, for a rupture evaluation under 192.615(a)(12), and sometimes for an investigation nobody has opened yet.</documentation></humanTask>
+      <humanTask id="t_status_def" name="Confirm site status and record actions taken" isBlocking="true"><documentation>Required. The case ends on a recorded status, never on the responder leaving.</documentation></humanTask>
+      <milestone id="m_people_def" name="People protected"><documentation>The first duty, and the one that outranks the rest of the case.</documentation></milestone>
+      <milestone id="m_safe_def" name="Hazard made safe"><documentation>Actual or potential hazard controlled, per 192.615(a)(7) for gas.</documentation></milestone>
+      <milestone id="m_handover_def" name="Site secured and handed on"><documentation>To 9.2.1 for assessment or to 9.3 for restoration, with what was done recorded.</documentation></milestone>
+    </casePlanModel>
+  </case>
+  <cmmndi:CMMNDI>
+    <cmmndi:CMMNDiagram id="dg_Make_safe_and_secure">
+      <cmmndi:CMMNShape id="sh_plan" cmmnElementRef="Make_safe_and_secure_plan"><dc:Bounds x="40" y="40" width="1010" height="300"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_assess" cmmnElementRef="pi_t_assess"><dc:Bounds x="80" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_people" cmmnElementRef="pi_t_people"><dc:Bounds x="270" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_public" cmmnElementRef="pi_t_public"><dc:Bounds x="460" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_iso_e" cmmnElementRef="pi_t_iso_e"><dc:Bounds x="80" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_iso_g" cmmnElementRef="pi_t_iso_g"><dc:Bounds x="270" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_access" cmmnElementRef="pi_t_access"><dc:Bounds x="460" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_preserve" cmmnElementRef="pi_t_preserve"><dc:Bounds x="80" y="290" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_status" cmmnElementRef="pi_t_status"><dc:Bounds x="270" y="290" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_m_people" cmmnElementRef="pi_m_people"><dc:Bounds x="460" y="290" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_m_safe" cmmnElementRef="pi_m_safe"><dc:Bounds x="80" y="390" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_m_handover" cmmnElementRef="pi_m_handover"><dc:Bounds x="270" y="390" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+    </cmmndi:CMMNDiagram>
+  </cmmndi:CMMNDI>
+</definitions>

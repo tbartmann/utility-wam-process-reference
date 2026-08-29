@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/CMMN/20151109/MODEL" xmlns:cmmndi="http://www.omg.org/spec/CMMN/20151109/CMMNDI" xmlns:dc="http://www.omg.org/spec/CMMN/20151109/DC" xmlns:di="http://www.omg.org/spec/CMMN/20151109/DI" id="defs_Event_logistics" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <case id="Event_logistics" name="9.4.4 Manage logistics, lodging and staging">
+    <caseFileModel id="Event_logistics_cfm">
+      <caseFileItem id="cf_demand" name="Staging, lodging, material and support demand"/>
+      <caseFileItem id="cf_sites" name="Secured sites, services and capacity"/>
+      <caseFileItem id="cf_alloc" name="Crew and equipment allocations"/>
+    </caseFileModel>
+    <casePlanModel id="Event_logistics_plan" name="9.4.4 Manage logistics, lodging and staging" autoComplete="true">
+      <documentation>Arrivals, shortages, site capacity and access all move independently, and two competent coordinators will answer them in a different order - which is the CMMN test, and also why this is the part of a major event that most often fails. 49 CFR 192.615(a)(4) requires personnel, equipment, tools and materials to be available as needed at the scene, and that is the only fixed requirement here: the pack supplies no staging-site, lodging, capacity or allocation method, so none is drawn.</documentation>
+      <planItem id="pi_t_demand" name="Maintain the current demand picture" definitionRef="t_demand_def">
+        <itemControl id="ic_t_demand">
+          <repetitionRule id="rep_t_demand"><condition><![CDATA[true]]></condition></repetitionRule>
+          <requiredRule id="rr_t_demand"><condition><![CDATA[true]]></condition></requiredRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_secure" name="Secure sites and services" definitionRef="t_secure_def">
+        <itemControl id="ic_t_secure">
+          <requiredRule id="rr_t_secure"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_secure"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_allocate" name="Allocate arriving crews and equipment" definitionRef="t_allocate_def">
+        <itemControl id="ic_t_allocate">
+          <repetitionRule id="rep_t_allocate"><condition><![CDATA[true]]></condition></repetitionRule>
+          <requiredRule id="rr_t_allocate"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_allocate"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_monitor" name="Monitor capacity, access, safety and supply constraints" definitionRef="t_monitor_def">
+        <itemControl id="ic_t_monitor">
+          <repetitionRule id="rep_t_monitor"><condition><![CDATA[true]]></condition></repetitionRule>
+          <requiredRule id="rr_t_monitor"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_monitor"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_resolve" name="Resolve shortages and conflicting demands" definitionRef="t_resolve_def">
+        <itemControl id="ic_t_resolve">
+          <repetitionRule id="rep_t_resolve"><condition><![CDATA[true]]></condition></repetitionRule>
+          <requiredRule id="rr_t_resolve"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_resolve"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_scene" name="Confirm what is needed is available at the scene" definitionRef="t_scene_def">
+        <itemControl id="ic_t_scene">
+          <repetitionRule id="rep_t_scene"><condition><![CDATA[true]]></condition></repetitionRule>
+          <requiredRule id="rr_t_scene"><condition><![CDATA[true]]></condition></requiredRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_record" name="Record assignments, services and event cost" definitionRef="t_record_def">
+        <itemControl id="ic_t_record">
+          <repetitionRule id="rep_t_record"><condition><![CDATA[true]]></condition></repetitionRule>
+          <requiredRule id="rr_t_record"><condition><![CDATA[true]]></condition></requiredRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_m_staged" name="Resources staged" definitionRef="m_staged_def"/>
+      <planItem id="pi_m_supplied" name="Scene supplied" definitionRef="m_supplied_def"/>
+      <planItem id="pi_m_released" name="Commitments closed" definitionRef="m_released_def"/>
+      <humanTask id="t_demand_def" name="Maintain the current demand picture" isBlocking="true"><documentation>Required and repeating. Demand changes every time 9.4.2 commits another crew.</documentation></humanTask>
+      <humanTask id="t_secure_def" name="Secure sites and services" isBlocking="true"><documentation>Discretionary. Often the long-lead item and often started before the demand is known.</documentation></humanTask>
+      <humanTask id="t_allocate_def" name="Allocate arriving crews and equipment" isBlocking="true"><documentation>Discretionary and repeating.</documentation></humanTask>
+      <humanTask id="t_monitor_def" name="Monitor capacity, access, safety and supply constraints" isBlocking="true"><documentation>Discretionary and repeating. A staging site that loses access is a restoration problem an hour later.</documentation></humanTask>
+      <humanTask id="t_resolve_def" name="Resolve shortages and conflicting demands" isBlocking="true"><documentation>Discretionary. Two events competing for one yard is the ordinary case, not the exception.</documentation></humanTask>
+      <humanTask id="t_scene_def" name="Confirm what is needed is available at the scene" isBlocking="true"><documentation>Required. 49 CFR 192.615(a)(4) for gas. This is the test that matters: not that a site was secured, but that the crew at the scene has what it needs.</documentation></humanTask>
+      <humanTask id="t_record_def" name="Record assignments, services and event cost" isBlocking="true"><documentation>Required and repeating. Feeds 9.4.5, where an unrecorded logistics cost is an unrecoverable one.</documentation></humanTask>
+      <milestone id="m_staged_def" name="Resources staged"><documentation>Arriving crews and equipment have a location and services.</documentation></milestone>
+      <milestone id="m_supplied_def" name="Scene supplied"><documentation>What the work needs is where the work is.</documentation></milestone>
+      <milestone id="m_released_def" name="Commitments closed"><documentation>Sites and services released at 9.4.6, with cost recorded.</documentation></milestone>
+    </casePlanModel>
+  </case>
+  <cmmndi:CMMNDI>
+    <cmmndi:CMMNDiagram id="dg_Event_logistics">
+      <cmmndi:CMMNShape id="sh_plan" cmmnElementRef="Event_logistics_plan"><dc:Bounds x="40" y="40" width="1010" height="300"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_demand" cmmnElementRef="pi_t_demand"><dc:Bounds x="80" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_secure" cmmnElementRef="pi_t_secure"><dc:Bounds x="270" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_allocate" cmmnElementRef="pi_t_allocate"><dc:Bounds x="460" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_monitor" cmmnElementRef="pi_t_monitor"><dc:Bounds x="80" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_resolve" cmmnElementRef="pi_t_resolve"><dc:Bounds x="270" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_scene" cmmnElementRef="pi_t_scene"><dc:Bounds x="460" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_record" cmmnElementRef="pi_t_record"><dc:Bounds x="80" y="290" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_m_staged" cmmnElementRef="pi_m_staged"><dc:Bounds x="270" y="290" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_m_supplied" cmmnElementRef="pi_m_supplied"><dc:Bounds x="460" y="290" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_m_released" cmmnElementRef="pi_m_released"><dc:Bounds x="80" y="390" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+    </cmmndi:CMMNDiagram>
+  </cmmndi:CMMNDI>
+</definitions>

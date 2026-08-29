@@ -217,6 +217,15 @@ rejected a submission.
       run 18:7, 26:11, 21:9, 20:6 and 22:11. A group with two BPMN files is an
       error. See `specs/SCHEMA.md`. *Two submissions got this wrong because the
       rule was implicit in the worked example and never stated.*
+- [ ] **Trigger text and activities share one three-line box.** The slide renders
+      `trigger.text` + any `[cim]` + `"   Activities: "` + the activities joined by
+      `"  >  "` as a SINGLE string, and the composed result must be **477 characters or
+      fewer**. Every individual length can be inside its own budget and the composition
+      still overflow - that is exactly how four processes shipped over the cap. Add the
+      parts up before you submit.
+- [ ] **`sources` is what the process content derives from.** Not why you chose a
+      notation - `notation.why` carries that - and never this campaign's own prompt or
+      `vocabulary.json`, which would make the reference evidence for itself.
 - [ ] **`clause-verified` names a clause.** The status means you confirmed a clause
       number and title. `IEEE 1366-2022` on its own confirms nothing about a clause;
       its honest status is `consensus` — the body publishes this standard, and that is

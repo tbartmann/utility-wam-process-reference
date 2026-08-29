@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_P_9_2" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <process id="P_9_2" name="9.2 Assess damage" isExecutable="false">
+    <documentation>9.2.2 and 9.2.5 are drawn. The field assessment itself is a case at 9.2.1, and the effort estimate and estimated time to restore are determinations the pack supplies no method for - specified, not modelled, because an invented productivity rate becomes the number a commission asks about later. The discipline this path exists to hold is one line: conflicting, duplicate and unverified observations stay visible and do not become confirmed restoration scope.</documentation>
+    <laneSet id="P_9_2_lanes">
+      <lane id="l_92_dmg" name="Damage assessment">
+        <flowNodeRef>n_92_start</flowNodeRef>
+        <flowNodeRef>n_92_val</flowNodeRef>
+        <flowNodeRef>n_92_grp</flowNodeRef>
+        <flowNodeRef>n_92_cg</flowNodeRef>
+        <flowNodeRef>n_92_exc</flowNodeRef>
+        <flowNodeRef>n_92_con</flowNodeRef>
+        <flowNodeRef>n_92_r</flowNodeRef>
+        <flowNodeRef>n_92_col</flowNodeRef>
+        <flowNodeRef>n_92_rec</flowNodeRef>
+      </lane>
+      <lane id="l_92_evt" name="Event management">
+        <flowNodeRef>n_92_req</flowNodeRef>
+        <flowNodeRef>n_92_est</flowNodeRef>
+        <flowNodeRef>n_92_res</flowNodeRef>
+        <flowNodeRef>n_92_fg</flowNodeRef>
+        <flowNodeRef>n_92_re</flowNodeRef>
+        <flowNodeRef>n_92_rev</flowNodeRef>
+        <flowNodeRef>n_92_pub</flowNodeRef>
+        <flowNodeRef>n_92_end</flowNodeRef>
+      </lane>
+    </laneSet>
+    <startEvent id="n_92_start" name="Field damage assessments available"><messageEventDefinition id="n_92_start_md"/></startEvent>
+    <serviceTask id="n_92_val" name="Validate asset, location and assessment status"><documentation>9.2.2.</documentation></serviceTask>
+    <serviceTask id="n_92_grp" name="Group by location, asset and network segment"><documentation>9.2.2.</documentation></serviceTask>
+    <exclusiveGateway id="n_92_cg" name="Reports agree"/>
+    <userTask id="n_92_exc" name="List the conflicting, duplicate or incomplete reports"><documentation>9.2.2. Kept visible. Silently reconciling two disagreeing assessments produces a restoration scope nobody observed.</documentation></userTask>
+    <serviceTask id="n_92_con" name="Consolidate repair quantities and constraints"><documentation>9.2.2.</documentation></serviceTask>
+    <sendTask id="n_92_req" name="Issue the restoration requirement"><documentation>9.2.2. The assessment-to-restoration trace is preserved per asset and location.</documentation></sendTask>
+    <sendTask id="n_92_est" name="Hand to effort estimate and ETR"><documentation>9.2.3 and 9.2.4 are specified: no pack source states a restoration productivity, duration or forecasting method.</documentation></sendTask>
+    <startEvent id="n_92_r" name="New damage, progress or network status"><messageEventDefinition id="n_92_r_md"/></startEvent>
+    <serviceTask id="n_92_col" name="Collect new damage, progress and completion evidence"><documentation>9.2.5.</documentation></serviceTask>
+    <userTask id="n_92_rec" name="Reconcile new, changed and closed restoration work"><documentation>9.2.5. Revised only from traceable field, work or network evidence.</documentation></userTask>
+    <serviceTask id="n_92_res" name="Update resource requirement and controlling sequence"><documentation>9.2.5.</documentation></serviceTask>
+    <exclusiveGateway id="n_92_fg" name="Forecast changes"/>
+    <serviceTask id="n_92_re" name="Reaffirm the current forecast"><documentation>9.2.5.</documentation></serviceTask>
+    <serviceTask id="n_92_rev" name="Revise the forecast, preserving the prior version"><documentation>9.2.5. The prior version is preserved because the question asked afterwards is always when the estimate changed and on what evidence.</documentation></serviceTask>
+    <sendTask id="n_92_pub" name="Publish the new assessment and forecast version"><documentation>9.2.5. The pack supplies no refresh cadence or change threshold, so neither is drawn.</documentation></sendTask>
+    <endEvent id="n_92_end" name="Restoration requirement current"/>
+    <sequenceFlow id="f_n_92_start_n_92_val" sourceRef="n_92_start" targetRef="n_92_val" name=""/>
+    <sequenceFlow id="f_n_92_val_n_92_grp" sourceRef="n_92_val" targetRef="n_92_grp" name=""/>
+    <sequenceFlow id="f_n_92_grp_n_92_cg" sourceRef="n_92_grp" targetRef="n_92_cg" name=""/>
+    <sequenceFlow id="f_n_92_cg_n_92_exc" sourceRef="n_92_cg" targetRef="n_92_exc" name="conflict or duplicate"><conditionExpression xsi:type="tFormalExpression"><![CDATA[reportsAgree = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_92_exc_n_92_con" sourceRef="n_92_exc" targetRef="n_92_con" name="excluded from confirmed scope"/>
+    <sequenceFlow id="f_n_92_cg_n_92_con" sourceRef="n_92_cg" targetRef="n_92_con" name="agree"/>
+    <sequenceFlow id="f_n_92_con_n_92_req" sourceRef="n_92_con" targetRef="n_92_req" name=""/>
+    <sequenceFlow id="f_n_92_req_n_92_est" sourceRef="n_92_req" targetRef="n_92_est" name=""/>
+    <sequenceFlow id="f_n_92_est_n_92_end" sourceRef="n_92_est" targetRef="n_92_end" name=""/>
+    <sequenceFlow id="f_n_92_r_n_92_col" sourceRef="n_92_r" targetRef="n_92_col" name=""/>
+    <sequenceFlow id="f_n_92_col_n_92_rec" sourceRef="n_92_col" targetRef="n_92_rec" name=""/>
+    <sequenceFlow id="f_n_92_rec_n_92_res" sourceRef="n_92_rec" targetRef="n_92_res" name=""/>
+    <sequenceFlow id="f_n_92_res_n_92_fg" sourceRef="n_92_res" targetRef="n_92_fg" name=""/>
+    <sequenceFlow id="f_n_92_fg_n_92_re" sourceRef="n_92_fg" targetRef="n_92_re" name="no material change"><conditionExpression xsi:type="tFormalExpression"><![CDATA[forecastChanged = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_92_re_n_92_pub" sourceRef="n_92_re" targetRef="n_92_pub" name=""/>
+    <sequenceFlow id="f_n_92_fg_n_92_rev" sourceRef="n_92_fg" targetRef="n_92_rev" name="material change"/>
+    <sequenceFlow id="f_n_92_rev_n_92_pub" sourceRef="n_92_rev" targetRef="n_92_pub" name=""/>
+    <sequenceFlow id="f_n_92_pub_n_92_end" sourceRef="n_92_pub" targetRef="n_92_end" name=""/>
+  </process>
+  <bpmndi:BPMNDiagram id="dg_P_9_2">
+    <bpmndi:BPMNPlane id="pl_P_9_2" bpmnElement="P_9_2">
+      <bpmndi:BPMNShape id="sh_n_92_start" bpmnElement="n_92_start"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_92_val" bpmnElement="n_92_val"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_92_grp" bpmnElement="n_92_grp"><dc:Bounds x="425" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_92_cg" bpmnElement="n_92_cg"><dc:Bounds x="637" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_92_exc" bpmnElement="n_92_exc"><dc:Bounds x="595" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_92_con" bpmnElement="n_92_con"><dc:Bounds x="765" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_92_req" bpmnElement="n_92_req"><dc:Bounds x="935" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_92_est" bpmnElement="n_92_est"><dc:Bounds x="1105" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_92_r" bpmnElement="n_92_r"><dc:Bounds x="132" y="767" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_92_col" bpmnElement="n_92_col"><dc:Bounds x="255" y="750" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_92_rec" bpmnElement="n_92_rec"><dc:Bounds x="425" y="750" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_92_res" bpmnElement="n_92_res"><dc:Bounds x="595" y="750" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_92_fg" bpmnElement="n_92_fg"><dc:Bounds x="807" y="762" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_92_re" bpmnElement="n_92_re"><dc:Bounds x="765" y="970" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_92_rev" bpmnElement="n_92_rev"><dc:Bounds x="935" y="750" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_92_pub" bpmnElement="n_92_pub"><dc:Bounds x="1105" y="750" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_92_end" bpmnElement="n_92_end"><dc:Bounds x="1322" y="437" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ed_f_n_92_start_n_92_val" bpmnElement="f_n_92_start_n_92_val"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_92_val_n_92_grp" bpmnElement="f_n_92_val_n_92_grp"><di:waypoint x="385" y="235"/><di:waypoint x="425" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_92_grp_n_92_cg" bpmnElement="f_n_92_grp_n_92_cg"><di:waypoint x="555" y="235"/><di:waypoint x="637" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_92_cg_n_92_exc" bpmnElement="f_n_92_cg_n_92_exc"><di:waypoint x="683" y="235"/><di:waypoint x="570" y="235"/><di:waypoint x="570" y="455"/><di:waypoint x="595" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_92_exc_n_92_con" bpmnElement="f_n_92_exc_n_92_con"><di:waypoint x="725" y="455"/><di:waypoint x="740" y="455"/><di:waypoint x="740" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_92_cg_n_92_con" bpmnElement="f_n_92_cg_n_92_con"><di:waypoint x="683" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_92_con_n_92_req" bpmnElement="f_n_92_con_n_92_req"><di:waypoint x="895" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_92_req_n_92_est" bpmnElement="f_n_92_req_n_92_est"><di:waypoint x="1065" y="235"/><di:waypoint x="1105" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_92_est_n_92_end" bpmnElement="f_n_92_est_n_92_end"><di:waypoint x="1235" y="235"/><di:waypoint x="1297" y="235"/><di:waypoint x="1297" y="455"/><di:waypoint x="1322" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_92_r_n_92_col" bpmnElement="f_n_92_r_n_92_col"><di:waypoint x="168" y="785"/><di:waypoint x="255" y="785"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_92_col_n_92_rec" bpmnElement="f_n_92_col_n_92_rec"><di:waypoint x="385" y="785"/><di:waypoint x="425" y="785"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_92_rec_n_92_res" bpmnElement="f_n_92_rec_n_92_res"><di:waypoint x="555" y="785"/><di:waypoint x="595" y="785"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_92_res_n_92_fg" bpmnElement="f_n_92_res_n_92_fg"><di:waypoint x="725" y="785"/><di:waypoint x="807" y="785"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_92_fg_n_92_re" bpmnElement="f_n_92_fg_n_92_re"><di:waypoint x="853" y="785"/><di:waypoint x="740" y="785"/><di:waypoint x="740" y="1005"/><di:waypoint x="765" y="1005"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_92_re_n_92_pub" bpmnElement="f_n_92_re_n_92_pub"><di:waypoint x="895" y="1005"/><di:waypoint x="1080" y="1005"/><di:waypoint x="1080" y="785"/><di:waypoint x="1105" y="785"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_92_fg_n_92_rev" bpmnElement="f_n_92_fg_n_92_rev"><di:waypoint x="853" y="785"/><di:waypoint x="935" y="785"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_92_rev_n_92_pub" bpmnElement="f_n_92_rev_n_92_pub"><di:waypoint x="1065" y="785"/><di:waypoint x="1105" y="785"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_92_pub_n_92_end" bpmnElement="f_n_92_pub_n_92_end"><di:waypoint x="1235" y="785"/><di:waypoint x="1297" y="785"/><di:waypoint x="1297" y="455"/><di:waypoint x="1322" y="455"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

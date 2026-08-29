@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_P_9_6" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <process id="P_9_6" name="9.6 Manage wildfire operational response" isExecutable="false">
+    <documentation>9.6.2, 9.6.3 and 9.6.4 are drawn. The plan and the deenergization criteria at 9.6.1 are a standing record AND a determination the pack supplies no rules for, so they are specified twice over.
+
+This path deliberately begins after an authorised shutoff decision exists. The Source Authority Pack names no wildfire deenergization or public-safety shutoff authority at all - no criteria, no approval route, no notice timing, no notice content, no cancellation rule - and 16 U.S.C. 824o(a)(1) excludes local distribution from the federal bulk-power definition, so it supplies none either. Drawing the decision gate would mean inventing the thresholds on which a utility de-energises a community. What is drawn is what happens once somebody with the authority has decided: execute, notify, patrol, restore, and assemble the evidence.</documentation>
+    <laneSet id="P_9_6_lanes">
+      <lane id="l_96_no" name="Network operations">
+        <flowNodeRef>n_96_start</flowNodeRef>
+        <flowNodeRef>n_96_scope</flowNodeRef>
+        <flowNodeRef>n_96_exec</flowNodeRef>
+        <flowNodeRef>n_96_rec</flowNodeRef>
+        <flowNodeRef>n_96_mon</flowNodeRef>
+        <flowNodeRef>n_96_dir</flowNodeRef>
+        <flowNodeRef>n_96_wait</flowNodeRef>
+        <flowNodeRef>n_96_area</flowNodeRef>
+        <flowNodeRef>n_96_rest</flowNodeRef>
+      </lane>
+      <lane id="l_96_cs" name="Customer and public safety">
+        <flowNodeRef>n_96_note</flowNodeRef>
+      </lane>
+      <lane id="l_96_frd" name="Patrol">
+        <flowNodeRef>n_96_pat</flowNodeRef>
+        <flowNodeRef>n_96_dg</flowNodeRef>
+        <flowNodeRef>n_96_rep</flowNodeRef>
+      </lane>
+      <lane id="l_96_mai" name="Evidence and cost">
+        <flowNodeRef>n_96_ev</flowNodeRef>
+        <flowNodeRef>n_96_link</flowNodeRef>
+        <flowNodeRef>n_96_gap2</flowNodeRef>
+        <flowNodeRef>n_96_pkg</flowNodeRef>
+        <flowNodeRef>n_96_end</flowNodeRef>
+      </lane>
+    </laneSet>
+    <startEvent id="n_96_start" name="Authorised shutoff decision exists"><conditionalEventDefinition id="n_96_start_cd"><condition/></conditionalEventDefinition></startEvent>
+    <userTask id="n_96_scope" name="Confirm the authorised deenergization scope and timing"><documentation>9.6.2. The criteria and the authority are the operator's; this step confirms what was decided, it does not decide.</documentation></userTask>
+    <userTask id="n_96_exec" name="Execute deenergization and record affected assets"><documentation>9.6.2.</documentation></userTask>
+    <sendTask id="n_96_note" name="Issue customer and public-safety notices"><documentation>9.6.2. The pack states no notice timing or content, so neither is drawn. Recording what was sent and when is still owed.</documentation></sendTask>
+    <serviceTask id="n_96_rec" name="Record affected locations, event time, notice status"><documentation>9.6.2.</documentation></serviceTask>
+    <receiveTask id="n_96_mon" name="Monitor conditions and publish status changes"><documentation>9.6.2.</documentation></receiveTask>
+    <exclusiveGateway id="n_96_dir" name="Patrol authorised"/>
+    <userTask id="n_96_wait" name="Hold deenergized"><documentation>9.6.3. Patrol begins on direction, not on the weather improving.</documentation></userTask>
+    <serviceTask id="n_96_area" name="Assign patrol areas with access and hazard information"><documentation>9.6.3.</documentation></serviceTask>
+    <userTask id="n_96_pat" name="Inspect and record damage, no-damage or inaccessible"><documentation>9.6.3. Inaccessible is a third outcome and not a silent no-damage. 29 CFR 1910.269(m) governs the deenergized condition the patrol works under.</documentation></userTask>
+    <exclusiveGateway id="n_96_dg" name="Section clear"/>
+    <sendTask id="n_96_rep" name="Create repair work and hold the section"><documentation>9.6.3. A damaged section stays held; it does not re-energise because the rest of the circuit is ready.</documentation></sendTask>
+    <userTask id="n_96_rest" name="Restore released sections and update customers"><documentation>9.6.3.</documentation></userTask>
+    <serviceTask id="n_96_ev" name="Collect shutoff, notice, patrol, restoration and cost records"><documentation>9.6.4.</documentation></serviceTask>
+    <userTask id="n_96_link" name="Validate event, time, asset, location and work links"><documentation>9.6.4. Documentation is carried on MAI: IEC 61968-6 cl. 4.2 has no document-management component and the gap is recorded rather than filled with an invented code.</documentation></userTask>
+    <userTask id="n_96_gap2" name="Identify missing, conflicting and unsupported evidence"><documentation>9.6.4.</documentation></userTask>
+    <serviceTask id="n_96_pkg" name="Assemble the evidence and cost package"><documentation>9.6.4. The pack states no jurisdictional filing content, retention period or recovery rule, so the package is assembled to the operator's own specification.</documentation></serviceTask>
+    <endEvent id="n_96_end" name="Event evidence packaged"/>
+    <sequenceFlow id="f_n_96_start_n_96_scope" sourceRef="n_96_start" targetRef="n_96_scope" name=""/>
+    <sequenceFlow id="f_n_96_scope_n_96_exec" sourceRef="n_96_scope" targetRef="n_96_exec" name=""/>
+    <sequenceFlow id="f_n_96_exec_n_96_note" sourceRef="n_96_exec" targetRef="n_96_note" name=""/>
+    <sequenceFlow id="f_n_96_note_n_96_rec" sourceRef="n_96_note" targetRef="n_96_rec" name=""/>
+    <sequenceFlow id="f_n_96_rec_n_96_mon" sourceRef="n_96_rec" targetRef="n_96_mon" name=""/>
+    <sequenceFlow id="f_n_96_mon_n_96_dir" sourceRef="n_96_mon" targetRef="n_96_dir" name=""/>
+    <sequenceFlow id="f_n_96_dir_n_96_wait" sourceRef="n_96_dir" targetRef="n_96_wait" name="not yet"><conditionExpression xsi:type="tFormalExpression"><![CDATA[patrolAuthorised = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_96_wait_n_96_mon" sourceRef="n_96_wait" targetRef="n_96_mon" name=""/>
+    <sequenceFlow id="f_n_96_dir_n_96_area" sourceRef="n_96_dir" targetRef="n_96_area" name="authorised"/>
+    <sequenceFlow id="f_n_96_area_n_96_pat" sourceRef="n_96_area" targetRef="n_96_pat" name=""/>
+    <sequenceFlow id="f_n_96_pat_n_96_dg" sourceRef="n_96_pat" targetRef="n_96_dg" name=""/>
+    <sequenceFlow id="f_n_96_dg_n_96_rep" sourceRef="n_96_dg" targetRef="n_96_rep" name="damage or inaccessible"><conditionExpression xsi:type="tFormalExpression"><![CDATA[sectionClear = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_96_rep_n_96_ev" sourceRef="n_96_rep" targetRef="n_96_ev" name=""/>
+    <sequenceFlow id="f_n_96_dg_n_96_rest" sourceRef="n_96_dg" targetRef="n_96_rest" name="clear"/>
+    <sequenceFlow id="f_n_96_rest_n_96_ev" sourceRef="n_96_rest" targetRef="n_96_ev" name=""/>
+    <sequenceFlow id="f_n_96_ev_n_96_link" sourceRef="n_96_ev" targetRef="n_96_link" name=""/>
+    <sequenceFlow id="f_n_96_link_n_96_gap2" sourceRef="n_96_link" targetRef="n_96_gap2" name=""/>
+    <sequenceFlow id="f_n_96_gap2_n_96_pkg" sourceRef="n_96_gap2" targetRef="n_96_pkg" name=""/>
+    <sequenceFlow id="f_n_96_pkg_n_96_end" sourceRef="n_96_pkg" targetRef="n_96_end" name=""/>
+  </process>
+  <bpmndi:BPMNDiagram id="dg_P_9_6">
+    <bpmndi:BPMNPlane id="pl_P_9_6" bpmnElement="P_9_6">
+      <bpmndi:BPMNShape id="sh_n_96_start" bpmnElement="n_96_start"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_96_scope" bpmnElement="n_96_scope"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_96_exec" bpmnElement="n_96_exec"><dc:Bounds x="425" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_96_note" bpmnElement="n_96_note"><dc:Bounds x="595" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_96_rec" bpmnElement="n_96_rec"><dc:Bounds x="765" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_96_mon" bpmnElement="n_96_mon"><dc:Bounds x="935" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_96_dir" bpmnElement="n_96_dir"><dc:Bounds x="1147" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_96_wait" bpmnElement="n_96_wait"><dc:Bounds x="1105" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_96_area" bpmnElement="n_96_area"><dc:Bounds x="1275" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_96_pat" bpmnElement="n_96_pat"><dc:Bounds x="1445" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_96_dg" bpmnElement="n_96_dg"><dc:Bounds x="1657" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_96_rep" bpmnElement="n_96_rep"><dc:Bounds x="1615" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_96_rest" bpmnElement="n_96_rest"><dc:Bounds x="1785" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_96_ev" bpmnElement="n_96_ev"><dc:Bounds x="1955" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_96_link" bpmnElement="n_96_link"><dc:Bounds x="2125" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_96_gap2" bpmnElement="n_96_gap2"><dc:Bounds x="2295" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_96_pkg" bpmnElement="n_96_pkg"><dc:Bounds x="2465" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_96_end" bpmnElement="n_96_end"><dc:Bounds x="2682" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ed_f_n_96_start_n_96_scope" bpmnElement="f_n_96_start_n_96_scope"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_96_scope_n_96_exec" bpmnElement="f_n_96_scope_n_96_exec"><di:waypoint x="385" y="235"/><di:waypoint x="425" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_96_exec_n_96_note" bpmnElement="f_n_96_exec_n_96_note"><di:waypoint x="555" y="235"/><di:waypoint x="595" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_96_note_n_96_rec" bpmnElement="f_n_96_note_n_96_rec"><di:waypoint x="725" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_96_rec_n_96_mon" bpmnElement="f_n_96_rec_n_96_mon"><di:waypoint x="895" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_96_mon_n_96_dir" bpmnElement="f_n_96_mon_n_96_dir"><di:waypoint x="1065" y="235"/><di:waypoint x="1147" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_96_dir_n_96_wait" bpmnElement="f_n_96_dir_n_96_wait"><di:waypoint x="1193" y="235"/><di:waypoint x="1080" y="235"/><di:waypoint x="1080" y="455"/><di:waypoint x="1105" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_96_wait_n_96_mon" bpmnElement="f_n_96_wait_n_96_mon"><di:waypoint x="1235" y="455"/><di:waypoint x="910" y="455"/><di:waypoint x="910" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_96_dir_n_96_area" bpmnElement="f_n_96_dir_n_96_area"><di:waypoint x="1193" y="235"/><di:waypoint x="1275" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_96_area_n_96_pat" bpmnElement="f_n_96_area_n_96_pat"><di:waypoint x="1405" y="235"/><di:waypoint x="1445" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_96_pat_n_96_dg" bpmnElement="f_n_96_pat_n_96_dg"><di:waypoint x="1575" y="235"/><di:waypoint x="1657" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_96_dg_n_96_rep" bpmnElement="f_n_96_dg_n_96_rep"><di:waypoint x="1703" y="235"/><di:waypoint x="1590" y="235"/><di:waypoint x="1590" y="455"/><di:waypoint x="1615" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_96_rep_n_96_ev" bpmnElement="f_n_96_rep_n_96_ev"><di:waypoint x="1745" y="455"/><di:waypoint x="1930" y="455"/><di:waypoint x="1930" y="235"/><di:waypoint x="1955" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_96_dg_n_96_rest" bpmnElement="f_n_96_dg_n_96_rest"><di:waypoint x="1703" y="235"/><di:waypoint x="1785" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_96_rest_n_96_ev" bpmnElement="f_n_96_rest_n_96_ev"><di:waypoint x="1915" y="235"/><di:waypoint x="1955" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_96_ev_n_96_link" bpmnElement="f_n_96_ev_n_96_link"><di:waypoint x="2085" y="235"/><di:waypoint x="2125" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_96_link_n_96_gap2" bpmnElement="f_n_96_link_n_96_gap2"><di:waypoint x="2255" y="235"/><di:waypoint x="2295" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_96_gap2_n_96_pkg" bpmnElement="f_n_96_gap2_n_96_pkg"><di:waypoint x="2425" y="235"/><di:waypoint x="2465" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_96_pkg_n_96_end" bpmnElement="f_n_96_pkg_n_96_end"><di:waypoint x="2595" y="235"/><di:waypoint x="2682" y="235"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

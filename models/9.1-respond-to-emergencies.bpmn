@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_P_9_1" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <process id="P_9_1" name="9.1 Respond to emergencies" isExecutable="false">
+    <documentation>Only 9.1.2 is drawn. Triage at 9.1.1 and escalation at 9.1.4 are determinations with no stated rule and are specified rather than modelled; making safe at 9.1.3 is a case. What this path carries is the dispatch duty: 49 CFR 192.615(a)(3) requires gas emergency procedures to provide for prompt and effective response, and 29 CFR 1910.269(c) requires the employee in charge to have the available job information and hold the briefing BEFORE work starts. The briefing is a gate on starting, not a form filled in afterwards.</documentation>
+    <laneSet id="P_9_1_lanes">
+      <lane id="l_91_no" name="Emergency control">
+        <flowNodeRef>n_91_start</flowNodeRef>
+        <flowNodeRef>n_91_val</flowNodeRef>
+        <flowNodeRef>n_91_res</flowNodeRef>
+        <flowNodeRef>n_91_qg</flowNodeRef>
+        <flowNodeRef>n_91_esc</flowNodeRef>
+        <flowNodeRef>n_91_info</flowNodeRef>
+        <flowNodeRef>n_91_disp</flowNodeRef>
+        <flowNodeRef>n_91_ack</flowNodeRef>
+        <flowNodeRef>n_91_ag</flowNodeRef>
+        <flowNodeRef>n_91_re</flowNodeRef>
+      </lane>
+      <lane id="l_91_frd" name="First responder">
+        <flowNodeRef>n_91_brief</flowNodeRef>
+        <flowNodeRef>n_91_end</flowNodeRef>
+      </lane>
+    </laneSet>
+    <startEvent id="n_91_start" name="Triaged event needs immediate response"><messageEventDefinition id="n_91_start_md"/></startEvent>
+    <serviceTask id="n_91_val" name="Validate event, location and reported hazards"><documentation>9.1.2. Triage happened at 9.1.1, which is specified and not drawn - no source in the pack states a cross-commodity triage threshold.</documentation></serviceTask>
+    <userTask id="n_91_res" name="Identify an available qualified responder"><documentation>9.1.2. Gas covered tasks are performed under the operator qualification programme required by 49 CFR 192 Subpart N; electric requires a qualified employee under 29 CFR 1910.269(a)(2).</documentation></userTask>
+    <exclusiveGateway id="n_91_qg" name="Qualified responder available"/>
+    <sendTask id="n_91_esc" name="Escalate for resources"><documentation>9.1.4. The escalation route is specified, not drawn: the pack supplies no cross-commodity escalation threshold.</documentation></sendTask>
+    <sendTask id="n_91_info" name="Provide job, site and energy-control information"><documentation>9.1.2. What is known about the site travels with the assignment. A responder who learns of a hazard on arrival was dispatched badly.</documentation></sendTask>
+    <sendTask id="n_91_disp" name="Dispatch and record the assignment time"><documentation>9.1.2. The assignment time is the start of every response measure this category later reports.</documentation></sendTask>
+    <receiveTask id="n_91_ack" name="Confirm acknowledgement and expected arrival"><documentation>9.1.2. An unacknowledged dispatch is not a response.</documentation></receiveTask>
+    <exclusiveGateway id="n_91_ag" name="Acknowledged"/>
+    <userTask id="n_91_re" name="Redispatch"><documentation>9.1.2.</documentation></userTask>
+    <userTask id="n_91_brief" name="Hold the job briefing before work starts"><documentation>9.1.2. 29 CFR 1910.269(c). It gates the start of work; it is not paperwork and it is not PPE.</documentation></userTask>
+    <endEvent id="n_91_end" name="Responder en route and briefed"/>
+    <sequenceFlow id="f_n_91_start_n_91_val" sourceRef="n_91_start" targetRef="n_91_val" name=""/>
+    <sequenceFlow id="f_n_91_val_n_91_res" sourceRef="n_91_val" targetRef="n_91_res" name=""/>
+    <sequenceFlow id="f_n_91_res_n_91_qg" sourceRef="n_91_res" targetRef="n_91_qg" name=""/>
+    <sequenceFlow id="f_n_91_qg_n_91_esc" sourceRef="n_91_qg" targetRef="n_91_esc" name="none available"><conditionExpression xsi:type="tFormalExpression"><![CDATA[responderAvailable = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_91_esc_n_91_res" sourceRef="n_91_esc" targetRef="n_91_res" name="resource assigned"/>
+    <sequenceFlow id="f_n_91_qg_n_91_info" sourceRef="n_91_qg" targetRef="n_91_info" name="available"/>
+    <sequenceFlow id="f_n_91_info_n_91_disp" sourceRef="n_91_info" targetRef="n_91_disp" name=""/>
+    <sequenceFlow id="f_n_91_disp_n_91_ack" sourceRef="n_91_disp" targetRef="n_91_ack" name=""/>
+    <sequenceFlow id="f_n_91_ack_n_91_ag" sourceRef="n_91_ack" targetRef="n_91_ag" name=""/>
+    <sequenceFlow id="f_n_91_ag_n_91_re" sourceRef="n_91_ag" targetRef="n_91_re" name="no acknowledgement"><conditionExpression xsi:type="tFormalExpression"><![CDATA[acknowledged = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_91_re_n_91_disp" sourceRef="n_91_re" targetRef="n_91_disp" name=""/>
+    <sequenceFlow id="f_n_91_ag_n_91_brief" sourceRef="n_91_ag" targetRef="n_91_brief" name="acknowledged"/>
+    <sequenceFlow id="f_n_91_brief_n_91_end" sourceRef="n_91_brief" targetRef="n_91_end" name=""/>
+  </process>
+  <bpmndi:BPMNDiagram id="dg_P_9_1">
+    <bpmndi:BPMNPlane id="pl_P_9_1" bpmnElement="P_9_1">
+      <bpmndi:BPMNShape id="sh_n_91_start" bpmnElement="n_91_start"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_91_val" bpmnElement="n_91_val"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_91_res" bpmnElement="n_91_res"><dc:Bounds x="425" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_91_qg" bpmnElement="n_91_qg"><dc:Bounds x="637" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_91_esc" bpmnElement="n_91_esc"><dc:Bounds x="595" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_91_info" bpmnElement="n_91_info"><dc:Bounds x="765" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_91_disp" bpmnElement="n_91_disp"><dc:Bounds x="935" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_91_ack" bpmnElement="n_91_ack"><dc:Bounds x="1105" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_91_ag" bpmnElement="n_91_ag"><dc:Bounds x="1317" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_91_re" bpmnElement="n_91_re"><dc:Bounds x="1275" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_91_brief" bpmnElement="n_91_brief"><dc:Bounds x="1445" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_91_end" bpmnElement="n_91_end"><dc:Bounds x="1662" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ed_f_n_91_start_n_91_val" bpmnElement="f_n_91_start_n_91_val"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_91_val_n_91_res" bpmnElement="f_n_91_val_n_91_res"><di:waypoint x="385" y="235"/><di:waypoint x="425" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_91_res_n_91_qg" bpmnElement="f_n_91_res_n_91_qg"><di:waypoint x="555" y="235"/><di:waypoint x="637" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_91_qg_n_91_esc" bpmnElement="f_n_91_qg_n_91_esc"><di:waypoint x="683" y="235"/><di:waypoint x="570" y="235"/><di:waypoint x="570" y="455"/><di:waypoint x="595" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_91_esc_n_91_res" bpmnElement="f_n_91_esc_n_91_res"><di:waypoint x="725" y="455"/><di:waypoint x="400" y="455"/><di:waypoint x="400" y="235"/><di:waypoint x="425" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_91_qg_n_91_info" bpmnElement="f_n_91_qg_n_91_info"><di:waypoint x="683" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_91_info_n_91_disp" bpmnElement="f_n_91_info_n_91_disp"><di:waypoint x="895" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_91_disp_n_91_ack" bpmnElement="f_n_91_disp_n_91_ack"><di:waypoint x="1065" y="235"/><di:waypoint x="1105" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_91_ack_n_91_ag" bpmnElement="f_n_91_ack_n_91_ag"><di:waypoint x="1235" y="235"/><di:waypoint x="1317" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_91_ag_n_91_re" bpmnElement="f_n_91_ag_n_91_re"><di:waypoint x="1363" y="235"/><di:waypoint x="1250" y="235"/><di:waypoint x="1250" y="455"/><di:waypoint x="1275" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_91_re_n_91_disp" bpmnElement="f_n_91_re_n_91_disp"><di:waypoint x="1405" y="455"/><di:waypoint x="910" y="455"/><di:waypoint x="910" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_91_ag_n_91_brief" bpmnElement="f_n_91_ag_n_91_brief"><di:waypoint x="1363" y="235"/><di:waypoint x="1445" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_91_brief_n_91_end" bpmnElement="f_n_91_brief_n_91_end"><di:waypoint x="1575" y="235"/><di:waypoint x="1662" y="235"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

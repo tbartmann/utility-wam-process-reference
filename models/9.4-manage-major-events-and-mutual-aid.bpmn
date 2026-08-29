@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_P_9_4" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <process id="P_9_4" name="9.4 Manage major events and mutual aid" isExecutable="false">
+    <documentation>9.4.1, 9.4.2, 9.4.3, 9.4.5 and 9.4.6 are drawn; logistics is a case at 9.4.4. The Source Authority Pack names Edison Electric Institute mutual assistance material but gives no document, edition or process, so the sequence here is the operator's and is labelled as such. What IS regulated gets drawn: 49 CFR 192.615(b)(1) and (2) put current procedures in the hands of supervisors responsible for emergency action and train the appropriate personnel, 192.615(c)(4) requires planning mutual assistance with public officials, and 29 CFR 1910.269(a)(3) makes the host and the visiting employer exchange installation, hazard and work-rule information BEFORE work. A visiting crew is a contract employer arriving at speed, and the duty does not relax because the event is an emergency.</documentation>
+    <laneSet id="P_9_4_lanes">
+      <lane id="l_94_evt" name="Event command">
+        <flowNodeRef>n_94_sig</flowNodeRef>
+        <flowNodeRef>n_94_act</flowNodeRef>
+        <flowNodeRef>n_94_not</flowNodeRef>
+        <flowNodeRef>n_94_xfer</flowNodeRef>
+        <flowNodeRef>n_94_conf</flowNodeRef>
+        <flowNodeRef>n_94_dem</flowNodeRef>
+        <flowNodeRef>n_94_gap</flowNodeRef>
+        <flowNodeRef>n_94_req</flowNodeRef>
+        <flowNodeRef>n_94_off</flowNodeRef>
+        <flowNodeRef>n_94_plan</flowNodeRef>
+        <flowNodeRef>n_94_dm</flowNodeRef>
+        <flowNodeRef>n_94_elig</flowNodeRef>
+        <flowNodeRef>n_94_dg</flowNodeRef>
+        <flowNodeRef>n_94_open</flowNodeRef>
+        <flowNodeRef>n_94_free</flowNodeRef>
+        <flowNodeRef>n_94_end</flowNodeRef>
+      </lane>
+      <lane id="l_94_hr" name="Visiting crews">
+        <flowNodeRef>n_94_arr</flowNodeRef>
+        <flowNodeRef>n_94_ros</flowNodeRef>
+        <flowNodeRef>n_94_host</flowNodeRef>
+        <flowNodeRef>n_94_qual</flowNodeRef>
+        <flowNodeRef>n_94_qg</flowNodeRef>
+        <flowNodeRef>n_94_hold</flowNodeRef>
+        <flowNodeRef>n_94_brief</flowNodeRef>
+        <flowNodeRef>n_94_rel</flowNodeRef>
+      </lane>
+      <lane id="l_94_fin" name="Event cost">
+        <flowNodeRef>n_94_cost</flowNodeRef>
+        <flowNodeRef>n_94_cval</flowNodeRef>
+        <flowNodeRef>n_94_csep</flowNodeRef>
+        <flowNodeRef>n_94_csum</flowNodeRef>
+      </lane>
+    </laneSet>
+    <startEvent id="n_94_sig" name="Event exceeds normal operational control"><signalEventDefinition id="n_94_sig_sd"/></startEvent>
+    <userTask id="n_94_act" name="Designate the event lead and functional roles"><documentation>9.4.1. The pack supplies no cross-commodity activation levels or organisation chart, so neither is drawn.</documentation></userTask>
+    <sendTask id="n_94_not" name="Notify assigned personnel and supervisors"><documentation>9.4.1. 49 CFR 192.615(b)(1) and (2) for gas.</documentation></sendTask>
+    <serviceTask id="n_94_xfer" name="Transfer event, hazard and restoration information"><documentation>9.4.1.</documentation></serviceTask>
+    <serviceTask id="n_94_conf" name="Confirm command, control and communication active"><documentation>9.4.1.</documentation></serviceTask>
+    <serviceTask id="n_94_dem" name="Compare demand with committed internal capacity"><documentation>9.4.2.</documentation></serviceTask>
+    <exclusiveGateway id="n_94_gap" name="Capacity gap"/>
+    <sendTask id="n_94_req" name="Request internal, external or mutual-assistance crews"><documentation>9.4.2. 49 CFR 192.615(c)(4) covers planning mutual assistance with public officials for gas.</documentation></sendTask>
+    <receiveTask id="n_94_off" name="Receive offers and commitments"><documentation>9.4.2.</documentation></receiveTask>
+    <sendTask id="n_94_plan" name="Assign reporting location, window and event contact"><documentation>9.4.2.</documentation></sendTask>
+    <startEvent id="n_94_arr" name="Visiting crew checks in"><messageEventDefinition id="n_94_arr_md"/></startEvent>
+    <serviceTask id="n_94_ros" name="Receive the roster and qualification information"><documentation>9.4.3.</documentation></serviceTask>
+    <userTask id="n_94_host" name="Transfer host installation, operating and hazard information"><documentation>9.4.3. 29 CFR 1910.269(a)(3). Host and contract employer inform each other, and an emergency does not suspend it.</documentation></userTask>
+    <userTask id="n_94_qual" name="Verify role, qualification and crew composition"><documentation>9.4.3. Gas covered tasks stay under 49 CFR 192 Subpart N.</documentation></userTask>
+    <exclusiveGateway id="n_94_qg" name="Accepted"/>
+    <userTask id="n_94_hold" name="Hold or restrict the crew"><documentation>9.4.3. Restrictions are recorded, so dispatch can see them.</documentation></userTask>
+    <userTask id="n_94_brief" name="Host orientation and job briefing"><documentation>9.4.3. 29 CFR 1910.269(c) for electric work.</documentation></userTask>
+    <sendTask id="n_94_rel" name="Release the crew to restoration dispatch"><documentation>9.4.3.</documentation></sendTask>
+    <serviceTask id="n_94_cost" name="Collect labour, equipment, material and logistics charges"><documentation>9.4.5. Against an event cost identifier established when the event activated.</documentation></serviceTask>
+    <userTask id="n_94_cval" name="Validate charges against work, crew and material records"><documentation>9.4.5.</documentation></userTask>
+    <userTask id="n_94_csep" name="Separate unsupported, duplicate and disputed charges"><documentation>9.4.5. Regulatory-recovery eligibility and account treatment are jurisdiction-specific and are not in the pack, so no eligibility test is drawn.</documentation></userTask>
+    <serviceTask id="n_94_csum" name="Summarise cost with a traceable evidence chain"><documentation>9.4.5. Every included cost keeps its source work, resource and charge trace, because that trace is the whole basis of a recovery filing.</documentation></serviceTask>
+    <startEvent id="n_94_dm" name="Demand falls or assigned work complete"><conditionalEventDefinition id="n_94_dm_cd"><condition/></conditionalEventDefinition></startEvent>
+    <userTask id="n_94_elig" name="Identify resources eligible for release"><documentation>9.4.6.</documentation></userTask>
+    <exclusiveGateway id="n_94_dg" name="Work, equipment and records accounted for"/>
+    <userTask id="n_94_open" name="Hold the release against the open item"><documentation>9.4.6. A resource released before its work, its issued equipment and its records have an accountable disposition leaves all three with nobody.</documentation></userTask>
+    <sendTask id="n_94_free" name="Communicate release, travel and destination"><documentation>9.4.6.</documentation></sendTask>
+    <endEvent id="n_94_end" name="Resources released and event closed out"/>
+    <sequenceFlow id="f_n_94_sig_n_94_act" sourceRef="n_94_sig" targetRef="n_94_act" name=""/>
+    <sequenceFlow id="f_n_94_act_n_94_not" sourceRef="n_94_act" targetRef="n_94_not" name=""/>
+    <sequenceFlow id="f_n_94_not_n_94_xfer" sourceRef="n_94_not" targetRef="n_94_xfer" name=""/>
+    <sequenceFlow id="f_n_94_xfer_n_94_conf" sourceRef="n_94_xfer" targetRef="n_94_conf" name=""/>
+    <sequenceFlow id="f_n_94_conf_n_94_dem" sourceRef="n_94_conf" targetRef="n_94_dem" name=""/>
+    <sequenceFlow id="f_n_94_dem_n_94_gap" sourceRef="n_94_dem" targetRef="n_94_gap" name=""/>
+    <sequenceFlow id="f_n_94_gap_n_94_req" sourceRef="n_94_gap" targetRef="n_94_req" name="demand exceeds capacity"><conditionExpression xsi:type="tFormalExpression"><![CDATA[capacityGap = true]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_94_req_n_94_off" sourceRef="n_94_req" targetRef="n_94_off" name=""/>
+    <sequenceFlow id="f_n_94_off_n_94_plan" sourceRef="n_94_off" targetRef="n_94_plan" name=""/>
+    <sequenceFlow id="f_n_94_plan_n_94_cost" sourceRef="n_94_plan" targetRef="n_94_cost" name=""/>
+    <sequenceFlow id="f_n_94_gap_n_94_cost" sourceRef="n_94_gap" targetRef="n_94_cost" name="capacity sufficient"/>
+    <sequenceFlow id="f_n_94_arr_n_94_ros" sourceRef="n_94_arr" targetRef="n_94_ros" name=""/>
+    <sequenceFlow id="f_n_94_ros_n_94_host" sourceRef="n_94_ros" targetRef="n_94_host" name=""/>
+    <sequenceFlow id="f_n_94_host_n_94_qual" sourceRef="n_94_host" targetRef="n_94_qual" name=""/>
+    <sequenceFlow id="f_n_94_qual_n_94_qg" sourceRef="n_94_qual" targetRef="n_94_qg" name=""/>
+    <sequenceFlow id="f_n_94_qg_n_94_hold" sourceRef="n_94_qg" targetRef="n_94_hold" name="not accepted"><conditionExpression xsi:type="tFormalExpression"><![CDATA[crewAccepted = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_94_hold_n_94_qual" sourceRef="n_94_hold" targetRef="n_94_qual" name="resolved"/>
+    <sequenceFlow id="f_n_94_qg_n_94_brief" sourceRef="n_94_qg" targetRef="n_94_brief" name="accepted"/>
+    <sequenceFlow id="f_n_94_brief_n_94_rel" sourceRef="n_94_brief" targetRef="n_94_rel" name=""/>
+    <sequenceFlow id="f_n_94_cost_n_94_cval" sourceRef="n_94_cost" targetRef="n_94_cval" name=""/>
+    <sequenceFlow id="f_n_94_cval_n_94_csep" sourceRef="n_94_cval" targetRef="n_94_csep" name=""/>
+    <sequenceFlow id="f_n_94_csep_n_94_csum" sourceRef="n_94_csep" targetRef="n_94_csum" name=""/>
+    <sequenceFlow id="f_n_94_csum_n_94_dm" sourceRef="n_94_csum" targetRef="n_94_dm" name=""/>
+    <sequenceFlow id="f_n_94_dm_n_94_elig" sourceRef="n_94_dm" targetRef="n_94_elig" name=""/>
+    <sequenceFlow id="f_n_94_elig_n_94_dg" sourceRef="n_94_elig" targetRef="n_94_dg" name=""/>
+    <sequenceFlow id="f_n_94_dg_n_94_open" sourceRef="n_94_dg" targetRef="n_94_open" name="something outstanding"><conditionExpression xsi:type="tFormalExpression"><![CDATA[accountedFor = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_94_open_n_94_dg" sourceRef="n_94_open" targetRef="n_94_dg" name="disposition recorded"/>
+    <sequenceFlow id="f_n_94_dg_n_94_free" sourceRef="n_94_dg" targetRef="n_94_free" name="accounted for"/>
+    <sequenceFlow id="f_n_94_free_n_94_end" sourceRef="n_94_free" targetRef="n_94_end" name=""/>
+  </process>
+  <bpmndi:BPMNDiagram id="dg_P_9_4">
+    <bpmndi:BPMNPlane id="pl_P_9_4" bpmnElement="P_9_4">
+      <bpmndi:BPMNShape id="sh_n_94_sig" bpmnElement="n_94_sig"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_94_act" bpmnElement="n_94_act"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_94_not" bpmnElement="n_94_not"><dc:Bounds x="425" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_94_xfer" bpmnElement="n_94_xfer"><dc:Bounds x="595" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_94_conf" bpmnElement="n_94_conf"><dc:Bounds x="765" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_94_dem" bpmnElement="n_94_dem"><dc:Bounds x="935" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_94_gap" bpmnElement="n_94_gap"><dc:Bounds x="1147" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_94_req" bpmnElement="n_94_req"><dc:Bounds x="1105" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_94_off" bpmnElement="n_94_off"><dc:Bounds x="1275" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_94_plan" bpmnElement="n_94_plan"><dc:Bounds x="1445" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_94_arr" bpmnElement="n_94_arr"><dc:Bounds x="1662" y="657" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_94_ros" bpmnElement="n_94_ros"><dc:Bounds x="1785" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_94_host" bpmnElement="n_94_host"><dc:Bounds x="1955" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_94_qual" bpmnElement="n_94_qual"><dc:Bounds x="2125" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_94_qg" bpmnElement="n_94_qg"><dc:Bounds x="2337" y="652" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_94_hold" bpmnElement="n_94_hold"><dc:Bounds x="2295" y="860" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_94_brief" bpmnElement="n_94_brief"><dc:Bounds x="2465" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_94_rel" bpmnElement="n_94_rel"><dc:Bounds x="2635" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_94_cost" bpmnElement="n_94_cost"><dc:Bounds x="1615" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_94_cval" bpmnElement="n_94_cval"><dc:Bounds x="1785" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_94_csep" bpmnElement="n_94_csep"><dc:Bounds x="1955" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_94_csum" bpmnElement="n_94_csum"><dc:Bounds x="2125" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_94_dm" bpmnElement="n_94_dm"><dc:Bounds x="2342" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_94_elig" bpmnElement="n_94_elig"><dc:Bounds x="2465" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_94_dg" bpmnElement="n_94_dg"><dc:Bounds x="2677" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_94_open" bpmnElement="n_94_open"><dc:Bounds x="2635" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_94_free" bpmnElement="n_94_free"><dc:Bounds x="2805" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_94_end" bpmnElement="n_94_end"><dc:Bounds x="3022" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ed_f_n_94_sig_n_94_act" bpmnElement="f_n_94_sig_n_94_act"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_94_act_n_94_not" bpmnElement="f_n_94_act_n_94_not"><di:waypoint x="385" y="235"/><di:waypoint x="425" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_94_not_n_94_xfer" bpmnElement="f_n_94_not_n_94_xfer"><di:waypoint x="555" y="235"/><di:waypoint x="595" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_94_xfer_n_94_conf" bpmnElement="f_n_94_xfer_n_94_conf"><di:waypoint x="725" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_94_conf_n_94_dem" bpmnElement="f_n_94_conf_n_94_dem"><di:waypoint x="895" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_94_dem_n_94_gap" bpmnElement="f_n_94_dem_n_94_gap"><di:waypoint x="1065" y="235"/><di:waypoint x="1147" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_94_gap_n_94_req" bpmnElement="f_n_94_gap_n_94_req"><di:waypoint x="1193" y="235"/><di:waypoint x="1080" y="235"/><di:waypoint x="1080" y="455"/><di:waypoint x="1105" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_94_req_n_94_off" bpmnElement="f_n_94_req_n_94_off"><di:waypoint x="1235" y="455"/><di:waypoint x="1275" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_94_off_n_94_plan" bpmnElement="f_n_94_off_n_94_plan"><di:waypoint x="1405" y="455"/><di:waypoint x="1445" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_94_plan_n_94_cost" bpmnElement="f_n_94_plan_n_94_cost"><di:waypoint x="1575" y="455"/><di:waypoint x="1590" y="455"/><di:waypoint x="1590" y="235"/><di:waypoint x="1615" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_94_gap_n_94_cost" bpmnElement="f_n_94_gap_n_94_cost"><di:waypoint x="1193" y="235"/><di:waypoint x="1615" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_94_arr_n_94_ros" bpmnElement="f_n_94_arr_n_94_ros"><di:waypoint x="1698" y="675"/><di:waypoint x="1785" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_94_ros_n_94_host" bpmnElement="f_n_94_ros_n_94_host"><di:waypoint x="1915" y="675"/><di:waypoint x="1955" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_94_host_n_94_qual" bpmnElement="f_n_94_host_n_94_qual"><di:waypoint x="2085" y="675"/><di:waypoint x="2125" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_94_qual_n_94_qg" bpmnElement="f_n_94_qual_n_94_qg"><di:waypoint x="2255" y="675"/><di:waypoint x="2337" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_94_qg_n_94_hold" bpmnElement="f_n_94_qg_n_94_hold"><di:waypoint x="2383" y="675"/><di:waypoint x="2270" y="675"/><di:waypoint x="2270" y="895"/><di:waypoint x="2295" y="895"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_94_hold_n_94_qual" bpmnElement="f_n_94_hold_n_94_qual"><di:waypoint x="2425" y="895"/><di:waypoint x="2100" y="895"/><di:waypoint x="2100" y="675"/><di:waypoint x="2125" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_94_qg_n_94_brief" bpmnElement="f_n_94_qg_n_94_brief"><di:waypoint x="2383" y="675"/><di:waypoint x="2465" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_94_brief_n_94_rel" bpmnElement="f_n_94_brief_n_94_rel"><di:waypoint x="2595" y="675"/><di:waypoint x="2635" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_94_cost_n_94_cval" bpmnElement="f_n_94_cost_n_94_cval"><di:waypoint x="1745" y="235"/><di:waypoint x="1785" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_94_cval_n_94_csep" bpmnElement="f_n_94_cval_n_94_csep"><di:waypoint x="1915" y="235"/><di:waypoint x="1955" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_94_csep_n_94_csum" bpmnElement="f_n_94_csep_n_94_csum"><di:waypoint x="2085" y="235"/><di:waypoint x="2125" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_94_csum_n_94_dm" bpmnElement="f_n_94_csum_n_94_dm"><di:waypoint x="2255" y="235"/><di:waypoint x="2342" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_94_dm_n_94_elig" bpmnElement="f_n_94_dm_n_94_elig"><di:waypoint x="2378" y="235"/><di:waypoint x="2465" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_94_elig_n_94_dg" bpmnElement="f_n_94_elig_n_94_dg"><di:waypoint x="2595" y="235"/><di:waypoint x="2677" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_94_dg_n_94_open" bpmnElement="f_n_94_dg_n_94_open"><di:waypoint x="2723" y="235"/><di:waypoint x="2610" y="235"/><di:waypoint x="2610" y="455"/><di:waypoint x="2635" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_94_open_n_94_dg" bpmnElement="f_n_94_open_n_94_dg"><di:waypoint x="2765" y="455"/><di:waypoint x="2652" y="455"/><di:waypoint x="2652" y="235"/><di:waypoint x="2677" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_94_dg_n_94_free" bpmnElement="f_n_94_dg_n_94_free"><di:waypoint x="2723" y="235"/><di:waypoint x="2805" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_94_free_n_94_end" bpmnElement="f_n_94_free_n_94_end"><di:waypoint x="2935" y="235"/><di:waypoint x="3022" y="235"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>
