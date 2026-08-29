@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_Generate_programmed_work" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <process id="Generate_programmed_work" name="1.4 Generate programmed work" isExecutable="false">
+    <documentation>Tier-4 activities under 1.4.1 to 1.4.3. Exception handling is delegated to 1.4.4-generation-exception.cmmn.</documentation>
+    <startEvent id="s_pm" name="Preventive interval due"><timerEventDefinition id="s_pm_td"/></startEvent>
+    <startEvent id="s_insp" name="Inspection or survey cycle due"><timerEventDefinition id="s_insp_td"/></startEvent>
+    <startEvent id="s_prog" name="Programme tranche due"><timerEventDefinition id="s_prog_td"/></startEvent>
+    <serviceTask id="t_pop" name="Select eligible in-service population"><documentation>Excludes retired and transferred assets, which would otherwise generate work that cannot be performed.</documentation></serviceTask>
+    <businessRuleTask id="t_lead" name="Apply interval and lead time"><documentation>Generation lead time must exceed the planning and scheduling cycle.</documentation></businessRuleTask>
+    <serviceTask id="t_cap" name="Test capacity and material availability"><documentation>1.4.3. Releasing beyond absorbable capacity converts a programme into a backlog.</documentation></serviceTask>
+    <serviceTask id="t_gen" name="Generate work"/>
+    <serviceTask id="t_recon" name="Reconcile generated against expected volume"><documentation>A silent generation failure on a mandated cycle surfaces at audit. Reconcile every run.</documentation></serviceTask>
+    <exclusiveGateway id="g_ok" name="Reconciles?"/>
+    <callActivity id="t_exc" name="Handle generation exception"><documentation>1.4.4. Case-managed; see 1.4.4-generation-exception.cmmn.</documentation></callActivity>
+    <endEvent id="e_ok" name="Programmed work released"/>
+    <endEvent id="e_exc" name="Exception resolved or gap accepted"/>
+    <sequenceFlow id="f_s_pm_t_pop" sourceRef="s_pm" targetRef="t_pop" name=""/>
+    <sequenceFlow id="f_s_insp_t_pop" sourceRef="s_insp" targetRef="t_pop" name=""/>
+    <sequenceFlow id="f_s_prog_t_pop" sourceRef="s_prog" targetRef="t_pop" name=""/>
+    <sequenceFlow id="f_t_pop_t_lead" sourceRef="t_pop" targetRef="t_lead" name=""/>
+    <sequenceFlow id="f_t_lead_t_cap" sourceRef="t_lead" targetRef="t_cap" name="programme tranche"><conditionExpression xsi:type="tFormalExpression"><![CDATA[workKind = "programme"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_t_lead_t_gen" sourceRef="t_lead" targetRef="t_gen" name="preventive or cycle"/>
+    <sequenceFlow id="f_t_cap_t_gen" sourceRef="t_cap" targetRef="t_gen" name="capacity and material available"/>
+    <sequenceFlow id="f_t_gen_t_recon" sourceRef="t_gen" targetRef="t_recon" name=""/>
+    <sequenceFlow id="f_t_recon_g_ok" sourceRef="t_recon" targetRef="g_ok" name=""/>
+    <sequenceFlow id="f_g_ok_t_exc" sourceRef="g_ok" targetRef="t_exc" name="variance or failure"><conditionExpression xsi:type="tFormalExpression"><![CDATA[reconciled = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_g_ok_e_ok" sourceRef="g_ok" targetRef="e_ok" name="reconciles"/>
+    <sequenceFlow id="f_t_exc_e_exc" sourceRef="t_exc" targetRef="e_exc" name=""/>
+  </process>
+  <bpmndi:BPMNDiagram id="dg_Generate_programmed_work">
+    <bpmndi:BPMNPlane id="pl_Generate_programmed_work" bpmnElement="Generate_programmed_work">
+      <bpmndi:BPMNShape id="sh_s_pm" bpmnElement="s_pm"><dc:Bounds x="132" y="107" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_s_insp" bpmnElement="s_insp"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_s_prog" bpmnElement="s_prog"><dc:Bounds x="132" y="327" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_t_pop" bpmnElement="t_pop"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_t_lead" bpmnElement="t_lead"><dc:Bounds x="425" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_t_cap" bpmnElement="t_cap"><dc:Bounds x="595" y="310" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_t_gen" bpmnElement="t_gen"><dc:Bounds x="765" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_t_recon" bpmnElement="t_recon"><dc:Bounds x="935" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_g_ok" bpmnElement="g_ok"><dc:Bounds x="1147" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_t_exc" bpmnElement="t_exc"><dc:Bounds x="1105" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_e_ok" bpmnElement="e_ok"><dc:Bounds x="1322" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_e_exc" bpmnElement="e_exc"><dc:Bounds x="1322" y="437" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ed_f_s_pm_t_pop" bpmnElement="f_s_pm_t_pop"><di:waypoint x="168" y="125"/><di:waypoint x="230" y="125"/><di:waypoint x="230" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_s_insp_t_pop" bpmnElement="f_s_insp_t_pop"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_s_prog_t_pop" bpmnElement="f_s_prog_t_pop"><di:waypoint x="168" y="345"/><di:waypoint x="230" y="345"/><di:waypoint x="230" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_t_pop_t_lead" bpmnElement="f_t_pop_t_lead"><di:waypoint x="385" y="235"/><di:waypoint x="425" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_t_lead_t_cap" bpmnElement="f_t_lead_t_cap"><di:waypoint x="555" y="235"/><di:waypoint x="570" y="235"/><di:waypoint x="570" y="345"/><di:waypoint x="595" y="345"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_t_lead_t_gen" bpmnElement="f_t_lead_t_gen"><di:waypoint x="555" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_t_cap_t_gen" bpmnElement="f_t_cap_t_gen"><di:waypoint x="725" y="345"/><di:waypoint x="740" y="345"/><di:waypoint x="740" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_t_gen_t_recon" bpmnElement="f_t_gen_t_recon"><di:waypoint x="895" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_t_recon_g_ok" bpmnElement="f_t_recon_g_ok"><di:waypoint x="1065" y="235"/><di:waypoint x="1147" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_g_ok_t_exc" bpmnElement="f_g_ok_t_exc"><di:waypoint x="1193" y="235"/><di:waypoint x="1080" y="235"/><di:waypoint x="1080" y="455"/><di:waypoint x="1105" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_g_ok_e_ok" bpmnElement="f_g_ok_e_ok"><di:waypoint x="1193" y="235"/><di:waypoint x="1322" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_t_exc_e_exc" bpmnElement="f_t_exc_e_exc"><di:waypoint x="1235" y="455"/><di:waypoint x="1322" y="455"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

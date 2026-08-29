@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_P_2_2" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <process id="P_2_2" name="2.2 Perform compatible-unit design and estimating" isExecutable="false">
+    <documentation>Tier-4 activities under 2.2.2, 2.2.3, 2.2.4 and 2.2.6. 2.2.1 is a standing capability and is specified, not flowed. 2.2.5 is a determination and is in 2.2.5-capitalisation-determination.dmn. IEC 61968-6:2015 cl. 4.2.5 Design is the only international-standard mention of compatible units, the design and estimation system, and the design location; the CONTENT of a unit library has no authority and is the operator's.</documentation>
+    <startEvent id="n_22_start" name="Authorised design requires unit expression"><messageEventDefinition id="n_22_start_md"/></startEvent>
+    <userTask id="n_22_loc" name="Divide the design into design locations"><documentation>2.2.2. The design location is the unit of estimating, staking and, for RUS borrowers, of the construction unit record.</documentation></userTask>
+    <userTask id="n_22_place" name="Place compatible units at each location"><documentation>2.2.2. Units come from the library maintained by 2.2.1.</documentation></userTask>
+    <userTask id="n_22_line" name="Record non-standard content as line items"><documentation>2.2.2 variant. Where no unit fits. A growing line-item share is a signal the library is out of date.</documentation></userTask>
+    <userTask id="n_22_recon" name="Reconcile placed units against the drawing"><documentation>2.2.2. The reconciliation is what makes the unit set an expression of the design rather than a parallel document.</documentation></userTask>
+    <serviceTask id="n_22_explode" name="Explode units into labour, material and plant"><documentation>2.2.3. Deterministic from the library content.</documentation></serviceTask>
+    <serviceTask id="n_22_agg" name="Aggregate content across the design"><documentation>2.2.3.</documentation></serviceTask>
+    <sendTask id="n_22_pub" name="Publish the requirement to materials and resourcing"><documentation>2.2.3. Early publication is what lets material lead time be absorbed before it becomes a schedule constraint.</documentation></sendTask>
+    <serviceTask id="n_22_cost" name="Apply current unit costs"><documentation>2.2.4.</documentation></serviceTask>
+    <userTask id="n_22_class" name="State the estimate class and the basis"><documentation>2.2.4. AACE 96R-18 for distribution and 97R-18 for pipeline give the class against design maturity. Class 3 is the common authorisation gate.</documentation></userTask>
+    <businessRuleTask id="n_22_acct" name="Determine the accounting treatment"><documentation>2.2.5. Calls decision Capitalisation_determination in 2.2.5-capitalisation-determination.dmn.</documentation></businessRuleTask>
+    <exclusiveGateway id="n_22_gate" name="Release conditions"/>
+    <userTask id="n_22_hold" name="Hold pending funding or external clearance"><documentation>2.2.6 variant.</documentation></userTask>
+    <serviceTask id="n_22_rel" name="Release the design and its content to work management"><documentation>2.2.6. Fixes the design revision the release is against.</documentation></serviceTask>
+    <serviceTask id="n_22_stage" name="Release by design location or phase"><documentation>2.2.6 variant. Staged release keeps the revision fixed per stage.</documentation></serviceTask>
+    <endEvent id="n_22_end" name="Design released for construction work"/>
+    <sequenceFlow id="f_n_22_start_n_22_loc" sourceRef="n_22_start" targetRef="n_22_loc" name=""/>
+    <sequenceFlow id="f_n_22_loc_n_22_place" sourceRef="n_22_loc" targetRef="n_22_place" name=""/>
+    <sequenceFlow id="f_n_22_place_n_22_line" sourceRef="n_22_place" targetRef="n_22_line" name="content with no unit"><conditionExpression xsi:type="tFormalExpression"><![CDATA[unitCoverage = "partial"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_22_line_n_22_recon" sourceRef="n_22_line" targetRef="n_22_recon" name=""/>
+    <sequenceFlow id="f_n_22_place_n_22_recon" sourceRef="n_22_place" targetRef="n_22_recon" name="wholly unit-based"/>
+    <sequenceFlow id="f_n_22_recon_n_22_explode" sourceRef="n_22_recon" targetRef="n_22_explode" name=""/>
+    <sequenceFlow id="f_n_22_explode_n_22_agg" sourceRef="n_22_explode" targetRef="n_22_agg" name=""/>
+    <sequenceFlow id="f_n_22_agg_n_22_pub" sourceRef="n_22_agg" targetRef="n_22_pub" name=""/>
+    <sequenceFlow id="f_n_22_agg_n_22_cost" sourceRef="n_22_agg" targetRef="n_22_cost" name=""/>
+    <sequenceFlow id="f_n_22_cost_n_22_class" sourceRef="n_22_cost" targetRef="n_22_class" name=""/>
+    <sequenceFlow id="f_n_22_class_n_22_acct" sourceRef="n_22_class" targetRef="n_22_acct" name=""/>
+    <sequenceFlow id="f_n_22_acct_n_22_gate" sourceRef="n_22_acct" targetRef="n_22_gate" name=""/>
+    <sequenceFlow id="f_n_22_gate_n_22_hold" sourceRef="n_22_gate" targetRef="n_22_hold" name="funding or clearance outstanding"><conditionExpression xsi:type="tFormalExpression"><![CDATA[releaseConditionsMet = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_22_hold_n_22_gate" sourceRef="n_22_hold" targetRef="n_22_gate" name="condition satisfied"/>
+    <sequenceFlow id="f_n_22_gate_n_22_stage" sourceRef="n_22_gate" targetRef="n_22_stage" name="staged release"><conditionExpression xsi:type="tFormalExpression"><![CDATA[releaseMode = "staged"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_22_gate_n_22_rel" sourceRef="n_22_gate" targetRef="n_22_rel" name="release in full"/>
+    <sequenceFlow id="f_n_22_stage_n_22_end" sourceRef="n_22_stage" targetRef="n_22_end" name=""/>
+    <sequenceFlow id="f_n_22_rel_n_22_end" sourceRef="n_22_rel" targetRef="n_22_end" name=""/>
+  </process>
+  <bpmndi:BPMNDiagram id="dg_P_2_2">
+    <bpmndi:BPMNPlane id="pl_P_2_2" bpmnElement="P_2_2">
+      <bpmndi:BPMNShape id="sh_n_22_start" bpmnElement="n_22_start"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_22_loc" bpmnElement="n_22_loc"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_22_place" bpmnElement="n_22_place"><dc:Bounds x="425" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_22_line" bpmnElement="n_22_line"><dc:Bounds x="425" y="90" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_22_recon" bpmnElement="n_22_recon"><dc:Bounds x="595" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_22_explode" bpmnElement="n_22_explode"><dc:Bounds x="765" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_22_agg" bpmnElement="n_22_agg"><dc:Bounds x="935" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_22_pub" bpmnElement="n_22_pub"><dc:Bounds x="1105" y="90" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_22_cost" bpmnElement="n_22_cost"><dc:Bounds x="1105" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_22_class" bpmnElement="n_22_class"><dc:Bounds x="1275" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_22_acct" bpmnElement="n_22_acct"><dc:Bounds x="1445" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_22_gate" bpmnElement="n_22_gate"><dc:Bounds x="1657" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_22_hold" bpmnElement="n_22_hold"><dc:Bounds x="1615" y="310" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_22_rel" bpmnElement="n_22_rel"><dc:Bounds x="1785" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_22_stage" bpmnElement="n_22_stage"><dc:Bounds x="1785" y="90" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_22_end" bpmnElement="n_22_end"><dc:Bounds x="2002" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ed_f_n_22_start_n_22_loc" bpmnElement="f_n_22_start_n_22_loc"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_22_loc_n_22_place" bpmnElement="f_n_22_loc_n_22_place"><di:waypoint x="385" y="235"/><di:waypoint x="425" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_22_place_n_22_line" bpmnElement="f_n_22_place_n_22_line"><di:waypoint x="555" y="235"/><di:waypoint x="400" y="235"/><di:waypoint x="400" y="125"/><di:waypoint x="425" y="125"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_22_line_n_22_recon" bpmnElement="f_n_22_line_n_22_recon"><di:waypoint x="555" y="125"/><di:waypoint x="570" y="125"/><di:waypoint x="570" y="235"/><di:waypoint x="595" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_22_place_n_22_recon" bpmnElement="f_n_22_place_n_22_recon"><di:waypoint x="555" y="235"/><di:waypoint x="595" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_22_recon_n_22_explode" bpmnElement="f_n_22_recon_n_22_explode"><di:waypoint x="725" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_22_explode_n_22_agg" bpmnElement="f_n_22_explode_n_22_agg"><di:waypoint x="895" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_22_agg_n_22_pub" bpmnElement="f_n_22_agg_n_22_pub"><di:waypoint x="1065" y="235"/><di:waypoint x="1080" y="235"/><di:waypoint x="1080" y="125"/><di:waypoint x="1105" y="125"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_22_agg_n_22_cost" bpmnElement="f_n_22_agg_n_22_cost"><di:waypoint x="1065" y="235"/><di:waypoint x="1105" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_22_cost_n_22_class" bpmnElement="f_n_22_cost_n_22_class"><di:waypoint x="1235" y="235"/><di:waypoint x="1275" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_22_class_n_22_acct" bpmnElement="f_n_22_class_n_22_acct"><di:waypoint x="1405" y="235"/><di:waypoint x="1445" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_22_acct_n_22_gate" bpmnElement="f_n_22_acct_n_22_gate"><di:waypoint x="1575" y="235"/><di:waypoint x="1657" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_22_gate_n_22_hold" bpmnElement="f_n_22_gate_n_22_hold"><di:waypoint x="1703" y="235"/><di:waypoint x="1590" y="235"/><di:waypoint x="1590" y="345"/><di:waypoint x="1615" y="345"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_22_hold_n_22_gate" bpmnElement="f_n_22_hold_n_22_gate"><di:waypoint x="1745" y="345"/><di:waypoint x="1632" y="345"/><di:waypoint x="1632" y="235"/><di:waypoint x="1657" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_22_gate_n_22_stage" bpmnElement="f_n_22_gate_n_22_stage"><di:waypoint x="1703" y="235"/><di:waypoint x="1760" y="235"/><di:waypoint x="1760" y="125"/><di:waypoint x="1785" y="125"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_22_gate_n_22_rel" bpmnElement="f_n_22_gate_n_22_rel"><di:waypoint x="1703" y="235"/><di:waypoint x="1785" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_22_stage_n_22_end" bpmnElement="f_n_22_stage_n_22_end"><di:waypoint x="1915" y="125"/><di:waypoint x="1977" y="125"/><di:waypoint x="1977" y="235"/><di:waypoint x="2002" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_22_rel_n_22_end" bpmnElement="f_n_22_rel_n_22_end"><di:waypoint x="1915" y="235"/><di:waypoint x="2002" y="235"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

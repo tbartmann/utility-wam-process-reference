@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/" id="Appointment_windows" name="3.3.1 Offer appointment windows" namespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <description>Called when a customer-present job needs a window. The output is a SET of offerable windows - a value - which is why the hit policy is COLLECT: a job routinely has several offerable windows and the caller needs all of them, not the first.</description>
+  <inputData id="in_customerPresent" name="Customer must be present"><variable id="in_customerPresent_v" name="Customer must be present" typeRef="boolean"/></inputData>
+  <inputData id="in_windowCapacity" name="Remaining capacity in the window"><variable id="in_windowCapacity_v" name="Remaining capacity in the window" typeRef="number"/></inputData>
+  <inputData id="in_serviceLevel" name="Committed service level"><variable id="in_serviceLevel_v" name="Committed service level" typeRef="string"/></inputData>
+  <inputData id="in_requiredQualification" name="Required qualification"><variable id="in_requiredQualification_v" name="Required qualification" typeRef="string"/></inputData>
+  <inputData id="in_accessConstraint" name="Access constraint on the premise"><variable id="in_accessConstraint_v" name="Access constraint on the premise" typeRef="string"/></inputData>
+  <knowledgeSource id="ks_servicelevel" name="State commission service quality rules and the operator's tariff"><description>Appointment windows and missed-appointment obligations are set by state commission rule and by the operator's own tariff, not by federal law. The window catalogue is therefore an operator specialization; what is reference here is that a window is determined from capacity, service level and access rather than offered freely.</description></knowledgeSource>
+  <decision id="d_3_3_1" name="Offerable windows">
+    <description>3.3.1. Meter access or exchange and service alteration at the premise are the common customer-present cases; 6.2 and 10.5 are the callers.</description>
+    <variable id="d_3_3_1_v" name="Offerable windows" typeRef="string"/>
+    <informationRequirement id="ir_d_3_3_1_in_customerPresent"><requiredInput href="#in_customerPresent"/></informationRequirement>
+    <informationRequirement id="ir_d_3_3_1_in_windowCapacity"><requiredInput href="#in_windowCapacity"/></informationRequirement>
+    <informationRequirement id="ir_d_3_3_1_in_serviceLevel"><requiredInput href="#in_serviceLevel"/></informationRequirement>
+    <informationRequirement id="ir_d_3_3_1_in_accessConstraint"><requiredInput href="#in_accessConstraint"/></informationRequirement>
+    <informationRequirement id="ir_d_3_3_1_in_requiredQualification"><requiredInput href="#in_requiredQualification"/></informationRequirement>
+    <authorityRequirement id="ar_d_3_3_1"><requiredAuthority href="#ks_servicelevel"/></authorityRequirement>
+    <decisionTable id="d_3_3_1_dt" hitPolicy="COLLECT" preferredOrientation="Rule-as-Row">
+      <input id="d_3_3_1_i1" label="Customer must be present"><inputExpression id="d_3_3_1_i1_e" typeRef="boolean"><text>in_customerPresent</text></inputExpression></input>
+      <input id="d_3_3_1_i2" label="Remaining capacity in the window"><inputExpression id="d_3_3_1_i2_e" typeRef="number"><text>in_windowCapacity</text></inputExpression></input>
+      <input id="d_3_3_1_i3" label="Committed service level"><inputExpression id="d_3_3_1_i3_e" typeRef="string"><text>in_serviceLevel</text></inputExpression></input>
+      <input id="d_3_3_1_i4" label="Access constraint on the premise"><inputExpression id="d_3_3_1_i4_e" typeRef="string"><text>in_accessConstraint</text></inputExpression></input>
+      <output id="d_3_3_1_o" label="Offerable windows" name="Offerable windows" typeRef="string"/>
+      <rule id="d_3_3_1_r1">
+        <description>The work does not need the customer. It goes to 3.4.1 without a window.</description>
+        <inputEntry id="d_3_3_1_r1_ie1"><text>false</text></inputEntry>
+        <inputEntry id="d_3_3_1_r1_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_3_3_1_r1_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_3_3_1_r1_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_3_3_1_r1_oe"><text>"noWindowRequired"</text></outputEntry>
+      </rule>
+      <rule id="d_3_3_1_r2">
+        <description>Offered only where capacity actually remains; a service level does not create capacity.</description>
+        <inputEntry id="d_3_3_1_r2_ie1"><text>true</text></inputEntry>
+        <inputEntry id="d_3_3_1_r2_ie2"><text>&gt; 0</text></inputEntry>
+        <inputEntry id="d_3_3_1_r2_ie3"><text>"sameDay"</text></inputEntry>
+        <inputEntry id="d_3_3_1_r2_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_3_3_1_r2_oe"><text>"sameDayWindow"</text></outputEntry>
+      </rule>
+      <rule id="d_3_3_1_r3">
+        <inputEntry id="d_3_3_1_r3_ie1"><text>true</text></inputEntry>
+        <inputEntry id="d_3_3_1_r3_ie2"><text>&gt; 0</text></inputEntry>
+        <inputEntry id="d_3_3_1_r3_ie3"><text>"nextDay","standard"</text></inputEntry>
+        <inputEntry id="d_3_3_1_r3_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_3_3_1_r3_oe"><text>"standardWindow"</text></outputEntry>
+      </rule>
+      <rule id="d_3_3_1_r4">
+        <description>Access conditions narrow the offerable set rather than blocking the job.</description>
+        <inputEntry id="d_3_3_1_r4_ie1"><text>true</text></inputEntry>
+        <inputEntry id="d_3_3_1_r4_ie2"><text>&gt; 0</text></inputEntry>
+        <inputEntry id="d_3_3_1_r4_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_3_3_1_r4_ie4"><text>"escortRequired","keyHolder"</text></inputEntry>
+        <outputEntry id="d_3_3_1_r4_oe"><text>"escortedWindow"</text></outputEntry>
+      </rule>
+      <rule id="d_3_3_1_r5">
+        <description>Explicit, so that 'no window' is a recorded determination that holds or escalates the work, not an empty result the caller has to interpret.</description>
+        <inputEntry id="d_3_3_1_r5_ie1"><text>true</text></inputEntry>
+        <inputEntry id="d_3_3_1_r5_ie2"><text>&lt;= 0</text></inputEntry>
+        <inputEntry id="d_3_3_1_r5_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_3_3_1_r5_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_3_3_1_r5_oe"><text>"noOfferableWindow"</text></outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram id="drd_Appointment_windows">
+      <dmndi:DMNShape id="sh_in_customerPresent" dmnElementRef="in_customerPresent"><dc:Bounds x="60" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_windowCapacity" dmnElementRef="in_windowCapacity"><dc:Bounds x="245" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_serviceLevel" dmnElementRef="in_serviceLevel"><dc:Bounds x="430" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_requiredQualification" dmnElementRef="in_requiredQualification"><dc:Bounds x="615" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_accessConstraint" dmnElementRef="in_accessConstraint"><dc:Bounds x="800" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_d_3_3_1" dmnElementRef="d_3_3_1"><dc:Bounds x="60" y="240" width="180" height="70"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_ks_servicelevel" dmnElementRef="ks_servicelevel"><dc:Bounds x="900" y="100" width="160" height="55"/></dmndi:DMNShape>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</definitions>

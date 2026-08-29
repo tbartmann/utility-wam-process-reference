@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/CMMN/20151109/MODEL" xmlns:cmmndi="http://www.omg.org/spec/CMMN/20151109/CMMNDI" xmlns:dc="http://www.omg.org/spec/CMMN/20151109/DC" xmlns:di="http://www.omg.org/spec/CMMN/20151109/DI" id="defs_Generation_exception" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <case id="Generation_exception" name="1.4.4 Manage work generation exceptions">
+    <caseFileModel id="Generation_exception_cfm">
+      <caseFileItem id="cf_run" name="Generation run result"/>
+      <caseFileItem id="cf_expected" name="Expected volume"/>
+      <caseFileItem id="cf_strategy" name="Maintenance strategy and interval"/>
+    </caseFileModel>
+    <casePlanModel id="Generation_exception_plan" name="1.4.4 Manage work generation exceptions" autoComplete="true">
+      <documentation>CMMN because the planner chooses among investigate, correct, rerun, raise manually and accept, in an order that depends on what the run actually did.</documentation>
+      <planItem id="pi_t_reconcile" name="Reconcile generated against expected volume" definitionRef="t_reconcile_def">
+        <itemControl id="ic_t_reconcile">
+          <requiredRule id="rr_t_reconcile"><condition><![CDATA[true]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_reconcile"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_investigate" name="Investigate the variance" definitionRef="t_investigate_def">
+        <itemControl id="ic_t_investigate">
+          <requiredRule id="rr_t_investigate"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_investigate"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_correct" name="Correct the strategy, interval or asset record" definitionRef="t_correct_def">
+        <itemControl id="ic_t_correct">
+          <repetitionRule id="rep_t_correct"><condition><![CDATA[true]]></condition></repetitionRule>
+          <requiredRule id="rr_t_correct"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_correct"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_rerun" name="Rerun generation" definitionRef="t_rerun_def">
+        <itemControl id="ic_t_rerun">
+          <repetitionRule id="rep_t_rerun"><condition><![CDATA[true]]></condition></repetitionRule>
+          <requiredRule id="rr_t_rerun"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_rerun"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_manual" name="Raise the missed work manually" definitionRef="t_manual_def">
+        <itemControl id="ic_t_manual">
+          <repetitionRule id="rep_t_manual"><condition><![CDATA[true]]></condition></repetitionRule>
+          <requiredRule id="rr_t_manual"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_manual"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_accept" name="Accept the gap with a recorded rationale" definitionRef="t_accept_def">
+        <itemControl id="ic_t_accept">
+          <requiredRule id="rr_t_accept"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_accept"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_m_resolved" name="Run reconciled or gap accepted" definitionRef="m_resolved_def"/>
+      <humanTask id="t_reconcile_def" name="Reconcile generated against expected volume" isBlocking="true"><documentation>Every run. A silent failure on a mandated cycle surfaces at audit.</documentation></humanTask>
+      <humanTask id="t_investigate_def" name="Investigate the variance" isBlocking="true"><documentation>Volume implausible, run failed, or population gap.</documentation></humanTask>
+      <humanTask id="t_correct_def" name="Correct the strategy, interval or asset record" isBlocking="true"><documentation>Repeated manual correction of the same exception is a strategy defect. Correct the strategy, not the instance.</documentation></humanTask>
+      <processTask id="t_rerun_def" name="Rerun generation"><documentation>Calls 1.4-generate-programmed-work.bpmn.</documentation></processTask>
+      <humanTask id="t_manual_def" name="Raise the missed work manually" isBlocking="true"><documentation>Where lead time will not survive a rerun.</documentation></humanTask>
+      <humanTask id="t_accept_def" name="Accept the gap with a recorded rationale" isBlocking="true"><documentation>Legitimate, but reviewed. An accepted gap on a mandated cycle needs the compliance owner.</documentation></humanTask>
+      <milestone id="m_resolved_def" name="Run reconciled or gap accepted"></milestone>
+    </casePlanModel>
+  </case>
+  <cmmndi:CMMNDI>
+    <cmmndi:CMMNDiagram id="dg_Generation_exception">
+      <cmmndi:CMMNShape id="sh_plan" cmmnElementRef="Generation_exception_plan"><dc:Bounds x="40" y="40" width="820" height="300"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_reconcile" cmmnElementRef="pi_t_reconcile"><dc:Bounds x="80" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_investigate" cmmnElementRef="pi_t_investigate"><dc:Bounds x="270" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_correct" cmmnElementRef="pi_t_correct"><dc:Bounds x="460" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_rerun" cmmnElementRef="pi_t_rerun"><dc:Bounds x="80" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_manual" cmmnElementRef="pi_t_manual"><dc:Bounds x="270" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_accept" cmmnElementRef="pi_t_accept"><dc:Bounds x="460" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_m_resolved" cmmnElementRef="pi_m_resolved"><dc:Bounds x="80" y="290" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+    </cmmndi:CMMNDiagram>
+  </cmmndi:CMMNDI>
+</definitions>

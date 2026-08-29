@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_P_3_5_2" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <process id="P_3_5_2" name="3.5.2 Assign equipment and vehicles to crews" isExecutable="false">
+    <documentation>The only modelled process in group 3.5. The other four - crew definition, the district map and the availability watch - are standing capabilities with no instance boundary and are specified rather than drawn. Assignment of a pool item to a crew is a repeating path and does have an instance, which is the distinction the notation rule turns on.</documentation>
+    <startEvent id="n_352_start" name="A crew needs its assignment, or an assignment has changed"><messageEventDefinition id="n_352_start_md"/></startEvent>
+    <serviceTask id="n_352_need" name="Take the crew definition and the equipment it needs"><documentation>3.5.2. From the standing crew definition at 3.5.1.</documentation></serviceTask>
+    <serviceTask id="n_352_pool" name="Read the available vehicle and tool pool"><documentation>3.5.2. Hooks to 13.3 Manage mobile and vehicle inventory.</documentation></serviceTask>
+    <exclusiveGateway id="n_352_gate" name="Availability"/>
+    <serviceTask id="n_352_ded" name="Assign a dedicated vehicle"><documentation>3.5.2 variant.</documentation></serviceTask>
+    <serviceTask id="n_352_shared" name="Assign from the shared pool"><documentation>3.5.2 variant. A shared assignment carries a period, or two crews plan against the same vehicle.</documentation></serviceTask>
+    <userTask id="n_352_spec" name="Issue a specialist tool per job"><documentation>3.5.2 variant. Issued against the job rather than the crew, so it returns.</documentation></userTask>
+    <serviceTask id="n_352_rec" name="Record the assignment against the crew"><documentation>3.5.2.</documentation></serviceTask>
+    <serviceTask id="n_352_down" name="Mark equipment down or shared"><documentation>3.5.2. Equipment marked down feeds 3.5.4, which feeds 3.4.4 when a placement is already in force.</documentation></serviceTask>
+    <sendTask id="n_352_pub" name="Publish the crew's capability to scheduling"><documentation>3.5.2. A crew without its equipment is not the crew the schedule matched on.</documentation></sendTask>
+    <endEvent id="n_352_end" name="Crew equipped and publishable"/>
+    <sequenceFlow id="f_n_352_start_n_352_need" sourceRef="n_352_start" targetRef="n_352_need" name=""/>
+    <sequenceFlow id="f_n_352_need_n_352_pool" sourceRef="n_352_need" targetRef="n_352_pool" name=""/>
+    <sequenceFlow id="f_n_352_pool_n_352_gate" sourceRef="n_352_pool" targetRef="n_352_gate" name=""/>
+    <sequenceFlow id="f_n_352_gate_n_352_ded" sourceRef="n_352_gate" targetRef="n_352_ded" name="dedicated vehicle available"><conditionExpression xsi:type="tFormalExpression"><![CDATA[assignmentMode = "dedicated"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_352_gate_n_352_spec" sourceRef="n_352_gate" targetRef="n_352_spec" name="specialist tool required"><conditionExpression xsi:type="tFormalExpression"><![CDATA[assignmentMode = "specialistPerJob"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_352_gate_n_352_shared" sourceRef="n_352_gate" targetRef="n_352_shared" name="from the shared pool"/>
+    <sequenceFlow id="f_n_352_ded_n_352_rec" sourceRef="n_352_ded" targetRef="n_352_rec" name=""/>
+    <sequenceFlow id="f_n_352_shared_n_352_rec" sourceRef="n_352_shared" targetRef="n_352_rec" name=""/>
+    <sequenceFlow id="f_n_352_spec_n_352_rec" sourceRef="n_352_spec" targetRef="n_352_rec" name=""/>
+    <sequenceFlow id="f_n_352_rec_n_352_down" sourceRef="n_352_rec" targetRef="n_352_down" name=""/>
+    <sequenceFlow id="f_n_352_down_n_352_pub" sourceRef="n_352_down" targetRef="n_352_pub" name=""/>
+    <sequenceFlow id="f_n_352_pub_n_352_end" sourceRef="n_352_pub" targetRef="n_352_end" name=""/>
+  </process>
+  <bpmndi:BPMNDiagram id="dg_P_3_5_2">
+    <bpmndi:BPMNPlane id="pl_P_3_5_2" bpmnElement="P_3_5_2">
+      <bpmndi:BPMNShape id="sh_n_352_start" bpmnElement="n_352_start"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_352_need" bpmnElement="n_352_need"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_352_pool" bpmnElement="n_352_pool"><dc:Bounds x="425" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_352_gate" bpmnElement="n_352_gate"><dc:Bounds x="637" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_352_ded" bpmnElement="n_352_ded"><dc:Bounds x="595" y="90" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_352_shared" bpmnElement="n_352_shared"><dc:Bounds x="765" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_352_spec" bpmnElement="n_352_spec"><dc:Bounds x="765" y="310" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_352_rec" bpmnElement="n_352_rec"><dc:Bounds x="935" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_352_down" bpmnElement="n_352_down"><dc:Bounds x="1105" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_352_pub" bpmnElement="n_352_pub"><dc:Bounds x="1275" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_352_end" bpmnElement="n_352_end"><dc:Bounds x="1492" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ed_f_n_352_start_n_352_need" bpmnElement="f_n_352_start_n_352_need"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_352_need_n_352_pool" bpmnElement="f_n_352_need_n_352_pool"><di:waypoint x="385" y="235"/><di:waypoint x="425" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_352_pool_n_352_gate" bpmnElement="f_n_352_pool_n_352_gate"><di:waypoint x="555" y="235"/><di:waypoint x="637" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_352_gate_n_352_ded" bpmnElement="f_n_352_gate_n_352_ded"><di:waypoint x="683" y="235"/><di:waypoint x="570" y="235"/><di:waypoint x="570" y="125"/><di:waypoint x="595" y="125"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_352_gate_n_352_spec" bpmnElement="f_n_352_gate_n_352_spec"><di:waypoint x="683" y="235"/><di:waypoint x="740" y="235"/><di:waypoint x="740" y="345"/><di:waypoint x="765" y="345"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_352_gate_n_352_shared" bpmnElement="f_n_352_gate_n_352_shared"><di:waypoint x="683" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_352_ded_n_352_rec" bpmnElement="f_n_352_ded_n_352_rec"><di:waypoint x="725" y="125"/><di:waypoint x="910" y="125"/><di:waypoint x="910" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_352_shared_n_352_rec" bpmnElement="f_n_352_shared_n_352_rec"><di:waypoint x="895" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_352_spec_n_352_rec" bpmnElement="f_n_352_spec_n_352_rec"><di:waypoint x="895" y="345"/><di:waypoint x="910" y="345"/><di:waypoint x="910" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_352_rec_n_352_down" bpmnElement="f_n_352_rec_n_352_down"><di:waypoint x="1065" y="235"/><di:waypoint x="1105" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_352_down_n_352_pub" bpmnElement="f_n_352_down_n_352_pub"><di:waypoint x="1235" y="235"/><di:waypoint x="1275" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_352_pub_n_352_end" bpmnElement="f_n_352_pub_n_352_end"><di:waypoint x="1405" y="235"/><di:waypoint x="1492" y="235"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

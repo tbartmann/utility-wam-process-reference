@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_P_3_3" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <process id="P_3_3" name="3.3 Manage appointments" isExecutable="false">
+    <documentation>Tier-4 activities under 3.3.2, 3.3.3 and 3.3.4. Window determination is in 3.3.1-offer-appointment-windows.dmn. An amend re-enters the determination and the reservation rather than editing a held window in place - that is what keeps the reservation honest when the window has since gone.</documentation>
+    <startEvent id="n_33_start" name="A window has been chosen and must be held"><messageEventDefinition id="n_33_start_md"/></startEvent>
+    <serviceTask id="n_33_take" name="Take the chosen window and the work it covers"><documentation>3.3.2.</documentation></serviceTask>
+    <serviceTask id="n_33_free" name="Test that the capacity is still free"><documentation>3.3.2. Request-reply against scheduling; the window may have gone since it was offered.</documentation></serviceTask>
+    <exclusiveGateway id="n_33_gate" name="Still free"/>
+    <sendTask id="n_33_rej" name="Reject the reservation"><documentation>3.3.2. The caller returns to 3.3.1 for a fresh set of windows.</documentation></sendTask>
+    <endEvent id="n_33_endrej" name="Window already taken"/>
+    <serviceTask id="n_33_res" name="Reserve the hours and skill against the work"><documentation>3.3.2.</documentation></serviceTask>
+    <sendTask id="n_33_conf" name="Confirm the window to the customer and the schedule"><documentation>3.3.3. Confirmation is what makes the appointment binding on the operator.</documentation></sendTask>
+    <eventBasedGateway id="n_33_ev" name=""/>
+    <receiveTask id="n_33_amend" name="Amend request received"><documentation>3.3.3. Customer-initiated or operator-initiated; both re-enter 3.3.1 and 3.3.2.</documentation></receiveTask>
+    <receiveTask id="n_33_cancel" name="Cancel request received"><documentation>3.3.3.</documentation></receiveTask>
+    <receiveTask id="n_33_fail" name="Window passed without a completed visit"><documentation>3.3.4. Message start of the failure path.</documentation></receiveTask>
+    <serviceTask id="n_33_rel" name="Release the reserved capacity"><documentation>3.3.3. Capacity not released is capacity lost, and it is invisible.</documentation></serviceTask>
+    <userTask id="n_33_why" name="Record the failure and who missed it"><documentation>3.3.4. Customer no-access, crew late or unable, or a hazard or access condition found on arrival. The three lead to different actions and different measures.</documentation></userTask>
+    <exclusiveGateway id="n_33_hold" name="Work still stands"/>
+    <callActivity id="n_33_re" name="Offer a new window"><documentation>3.3.4. Calls decision Appointment_windows through 3.3.1.</documentation></callActivity>
+    <serviceTask id="n_33_close" name="Close and keep the failure visible to planning"><documentation>3.3.4. Visible, or the same premise fails again next cycle.</documentation></serviceTask>
+    <endEvent id="n_33_end" name="Appointment closed or rebooked"/>
+    <sequenceFlow id="f_n_33_start_n_33_take" sourceRef="n_33_start" targetRef="n_33_take" name=""/>
+    <sequenceFlow id="f_n_33_take_n_33_free" sourceRef="n_33_take" targetRef="n_33_free" name=""/>
+    <sequenceFlow id="f_n_33_free_n_33_gate" sourceRef="n_33_free" targetRef="n_33_gate" name=""/>
+    <sequenceFlow id="f_n_33_gate_n_33_rej" sourceRef="n_33_gate" targetRef="n_33_rej" name="gone"><conditionExpression xsi:type="tFormalExpression"><![CDATA[capacityStillFree = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_33_rej_n_33_endrej" sourceRef="n_33_rej" targetRef="n_33_endrej" name=""/>
+    <sequenceFlow id="f_n_33_gate_n_33_res" sourceRef="n_33_gate" targetRef="n_33_res" name="free"/>
+    <sequenceFlow id="f_n_33_res_n_33_conf" sourceRef="n_33_res" targetRef="n_33_conf" name=""/>
+    <sequenceFlow id="f_n_33_conf_n_33_ev" sourceRef="n_33_conf" targetRef="n_33_ev" name=""/>
+    <sequenceFlow id="f_n_33_ev_n_33_amend" sourceRef="n_33_ev" targetRef="n_33_amend" name=""/>
+    <sequenceFlow id="f_n_33_ev_n_33_cancel" sourceRef="n_33_ev" targetRef="n_33_cancel" name=""/>
+    <sequenceFlow id="f_n_33_ev_n_33_fail" sourceRef="n_33_ev" targetRef="n_33_fail" name=""/>
+    <sequenceFlow id="f_n_33_amend_n_33_rel" sourceRef="n_33_amend" targetRef="n_33_rel" name=""/>
+    <sequenceFlow id="f_n_33_cancel_n_33_rel" sourceRef="n_33_cancel" targetRef="n_33_rel" name=""/>
+    <sequenceFlow id="f_n_33_rel_n_33_re" sourceRef="n_33_rel" targetRef="n_33_re" name="amend - offer again"><conditionExpression xsi:type="tFormalExpression"><![CDATA[appointmentOutcome = "amend"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_33_rel_n_33_end" sourceRef="n_33_rel" targetRef="n_33_end" name="cancel"/>
+    <sequenceFlow id="f_n_33_fail_n_33_why" sourceRef="n_33_fail" targetRef="n_33_why" name=""/>
+    <sequenceFlow id="f_n_33_why_n_33_hold" sourceRef="n_33_why" targetRef="n_33_hold" name=""/>
+    <sequenceFlow id="f_n_33_hold_n_33_re" sourceRef="n_33_hold" targetRef="n_33_re" name="work still stands"><conditionExpression xsi:type="tFormalExpression"><![CDATA[workStillRequired = true]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_33_hold_n_33_close" sourceRef="n_33_hold" targetRef="n_33_close" name="work no longer required"/>
+    <sequenceFlow id="f_n_33_re_n_33_end" sourceRef="n_33_re" targetRef="n_33_end" name=""/>
+    <sequenceFlow id="f_n_33_close_n_33_end" sourceRef="n_33_close" targetRef="n_33_end" name=""/>
+  </process>
+  <bpmndi:BPMNDiagram id="dg_P_3_3">
+    <bpmndi:BPMNPlane id="pl_P_3_3" bpmnElement="P_3_3">
+      <bpmndi:BPMNShape id="sh_n_33_start" bpmnElement="n_33_start"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_33_take" bpmnElement="n_33_take"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_33_free" bpmnElement="n_33_free"><dc:Bounds x="425" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_33_gate" bpmnElement="n_33_gate"><dc:Bounds x="637" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_33_rej" bpmnElement="n_33_rej"><dc:Bounds x="595" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_33_endrej" bpmnElement="n_33_endrej"><dc:Bounds x="812" y="437" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_33_res" bpmnElement="n_33_res"><dc:Bounds x="765" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_33_conf" bpmnElement="n_33_conf"><dc:Bounds x="935" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_33_ev" bpmnElement="n_33_ev"><dc:Bounds x="1147" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_33_amend" bpmnElement="n_33_amend"><dc:Bounds x="1105" y="90" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_33_cancel" bpmnElement="n_33_cancel"><dc:Bounds x="1275" y="90" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_33_fail" bpmnElement="n_33_fail"><dc:Bounds x="1275" y="310" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_33_rel" bpmnElement="n_33_rel"><dc:Bounds x="1445" y="90" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_33_why" bpmnElement="n_33_why"><dc:Bounds x="1445" y="310" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_33_hold" bpmnElement="n_33_hold"><dc:Bounds x="1657" y="322" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_33_re" bpmnElement="n_33_re"><dc:Bounds x="1615" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_33_close" bpmnElement="n_33_close"><dc:Bounds x="1785" y="310" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_33_end" bpmnElement="n_33_end"><dc:Bounds x="2002" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ed_f_n_33_start_n_33_take" bpmnElement="f_n_33_start_n_33_take"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_33_take_n_33_free" bpmnElement="f_n_33_take_n_33_free"><di:waypoint x="385" y="235"/><di:waypoint x="425" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_33_free_n_33_gate" bpmnElement="f_n_33_free_n_33_gate"><di:waypoint x="555" y="235"/><di:waypoint x="637" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_33_gate_n_33_rej" bpmnElement="f_n_33_gate_n_33_rej"><di:waypoint x="683" y="235"/><di:waypoint x="570" y="235"/><di:waypoint x="570" y="455"/><di:waypoint x="595" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_33_rej_n_33_endrej" bpmnElement="f_n_33_rej_n_33_endrej"><di:waypoint x="725" y="455"/><di:waypoint x="812" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_33_gate_n_33_res" bpmnElement="f_n_33_gate_n_33_res"><di:waypoint x="683" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_33_res_n_33_conf" bpmnElement="f_n_33_res_n_33_conf"><di:waypoint x="895" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_33_conf_n_33_ev" bpmnElement="f_n_33_conf_n_33_ev"><di:waypoint x="1065" y="235"/><di:waypoint x="1147" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_33_ev_n_33_amend" bpmnElement="f_n_33_ev_n_33_amend"><di:waypoint x="1193" y="235"/><di:waypoint x="1080" y="235"/><di:waypoint x="1080" y="125"/><di:waypoint x="1105" y="125"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_33_ev_n_33_cancel" bpmnElement="f_n_33_ev_n_33_cancel"><di:waypoint x="1193" y="235"/><di:waypoint x="1250" y="235"/><di:waypoint x="1250" y="125"/><di:waypoint x="1275" y="125"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_33_ev_n_33_fail" bpmnElement="f_n_33_ev_n_33_fail"><di:waypoint x="1193" y="235"/><di:waypoint x="1250" y="235"/><di:waypoint x="1250" y="345"/><di:waypoint x="1275" y="345"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_33_amend_n_33_rel" bpmnElement="f_n_33_amend_n_33_rel"><di:waypoint x="1235" y="125"/><di:waypoint x="1445" y="125"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_33_cancel_n_33_rel" bpmnElement="f_n_33_cancel_n_33_rel"><di:waypoint x="1405" y="125"/><di:waypoint x="1445" y="125"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_33_rel_n_33_re" bpmnElement="f_n_33_rel_n_33_re"><di:waypoint x="1575" y="125"/><di:waypoint x="1590" y="125"/><di:waypoint x="1590" y="235"/><di:waypoint x="1615" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_33_rel_n_33_end" bpmnElement="f_n_33_rel_n_33_end"><di:waypoint x="1575" y="125"/><di:waypoint x="1977" y="125"/><di:waypoint x="1977" y="235"/><di:waypoint x="2002" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_33_fail_n_33_why" bpmnElement="f_n_33_fail_n_33_why"><di:waypoint x="1405" y="345"/><di:waypoint x="1445" y="345"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_33_why_n_33_hold" bpmnElement="f_n_33_why_n_33_hold"><di:waypoint x="1575" y="345"/><di:waypoint x="1657" y="345"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_33_hold_n_33_re" bpmnElement="f_n_33_hold_n_33_re"><di:waypoint x="1703" y="345"/><di:waypoint x="1590" y="345"/><di:waypoint x="1590" y="235"/><di:waypoint x="1615" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_33_hold_n_33_close" bpmnElement="f_n_33_hold_n_33_close"><di:waypoint x="1703" y="345"/><di:waypoint x="1785" y="345"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_33_re_n_33_end" bpmnElement="f_n_33_re_n_33_end"><di:waypoint x="1745" y="235"/><di:waypoint x="2002" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_33_close_n_33_end" bpmnElement="f_n_33_close_n_33_end"><di:waypoint x="1915" y="345"/><di:waypoint x="1977" y="345"/><di:waypoint x="1977" y="235"/><di:waypoint x="2002" y="235"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

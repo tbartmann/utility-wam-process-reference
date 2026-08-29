@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_Validate_and_screen_work" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <process id="Validate_and_screen_work" name="1.2 Validate and screen work" isExecutable="false">
+    <documentation>Tier-4 activities under 1.2.1 to 1.2.4. The duplicate determination and the screening disposition are delegated, not drawn: see the .dmn and .cmmn beside this file.</documentation>
+    <startEvent id="s" name="Candidate work registered"/>
+    <serviceTask id="t_enrich" name="Enrich from premise, asset and network records"><documentation>1.2.1. Lookups against GINV, AM and CS.</documentation></serviceTask>
+    <exclusiveGateway id="g_enriched" name="Resolvable?"/>
+    <userTask id="t_except" name="Raise data quality exception and hold"><documentation>1.2.1 exception path. Held out of scheduling rather than defaulted.</documentation></userTask>
+    <userTask id="t_confirm" name="Confirm asset, location and premise"><documentation>1.2.3. For gas this establishes whether the work sits in a regulated segment.</documentation></userTask>
+    <businessRuleTask id="t_dup" name="Determine duplicate"><documentation>1.2.2. Calls decision Duplicate_determination in 1.2.2-duplicate-determination.dmn.</documentation></businessRuleTask>
+    <exclusiveGateway id="g_dup" name="Disposition"/>
+    <serviceTask id="t_merge" name="Merge and append the additional report"><documentation>1.2.2. Each customer hazard report keeps its own evidence of response.</documentation></serviceTask>
+    <callActivity id="t_scope" name="Handle out-of-scope demand"><documentation>1.2.4. Case-managed; see 1.2.4-screening-disposition.cmmn.</documentation></callActivity>
+    <endEvent id="e_screened" name="Work screened and ready to categorise"/>
+    <endEvent id="e_merged" name="Merged into existing work"/>
+    <endEvent id="e_closed" name="Closed or referred"/>
+    <sequenceFlow id="f_s_t_enrich" sourceRef="s" targetRef="t_enrich" name=""/>
+    <sequenceFlow id="f_t_enrich_g_enriched" sourceRef="t_enrich" targetRef="g_enriched" name=""/>
+    <sequenceFlow id="f_g_enriched_t_except" sourceRef="g_enriched" targetRef="t_except" name="not resolvable"><conditionExpression xsi:type="tFormalExpression"><![CDATA[enrichmentResolved = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_g_enriched_t_confirm" sourceRef="g_enriched" targetRef="t_confirm" name="resolved"/>
+    <sequenceFlow id="f_t_except_t_confirm" sourceRef="t_except" targetRef="t_confirm" name="resolved manually"/>
+    <sequenceFlow id="f_t_confirm_t_dup" sourceRef="t_confirm" targetRef="t_dup" name=""/>
+    <sequenceFlow id="f_t_dup_g_dup" sourceRef="t_dup" targetRef="g_dup" name=""/>
+    <sequenceFlow id="f_g_dup_t_merge" sourceRef="g_dup" targetRef="t_merge" name="duplicate"><conditionExpression xsi:type="tFormalExpression"><![CDATA[duplicateDetermination = "merge"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_g_dup_t_scope" sourceRef="g_dup" targetRef="t_scope" name="out of scope"><conditionExpression xsi:type="tFormalExpression"><![CDATA[duplicateDetermination = "outOfScope"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_g_dup_e_screened" sourceRef="g_dup" targetRef="e_screened" name="distinct"/>
+    <sequenceFlow id="f_t_merge_e_merged" sourceRef="t_merge" targetRef="e_merged" name=""/>
+    <sequenceFlow id="f_t_scope_e_closed" sourceRef="t_scope" targetRef="e_closed" name=""/>
+  </process>
+  <bpmndi:BPMNDiagram id="dg_Validate_and_screen_work">
+    <bpmndi:BPMNPlane id="pl_Validate_and_screen_work" bpmnElement="Validate_and_screen_work">
+      <bpmndi:BPMNShape id="sh_s" bpmnElement="s"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_t_enrich" bpmnElement="t_enrich"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_g_enriched" bpmnElement="g_enriched"><dc:Bounds x="467" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_t_except" bpmnElement="t_except"><dc:Bounds x="425" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_t_confirm" bpmnElement="t_confirm"><dc:Bounds x="595" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_t_dup" bpmnElement="t_dup"><dc:Bounds x="765" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_g_dup" bpmnElement="g_dup"><dc:Bounds x="977" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_t_merge" bpmnElement="t_merge"><dc:Bounds x="1105" y="90" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_t_scope" bpmnElement="t_scope"><dc:Bounds x="1105" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_e_screened" bpmnElement="e_screened"><dc:Bounds x="1322" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_e_merged" bpmnElement="e_merged"><dc:Bounds x="1322" y="107" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_e_closed" bpmnElement="e_closed"><dc:Bounds x="1322" y="437" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ed_f_s_t_enrich" bpmnElement="f_s_t_enrich"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_t_enrich_g_enriched" bpmnElement="f_t_enrich_g_enriched"><di:waypoint x="385" y="235"/><di:waypoint x="467" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_g_enriched_t_except" bpmnElement="f_g_enriched_t_except"><di:waypoint x="513" y="235"/><di:waypoint x="400" y="235"/><di:waypoint x="400" y="455"/><di:waypoint x="425" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_g_enriched_t_confirm" bpmnElement="f_g_enriched_t_confirm"><di:waypoint x="513" y="235"/><di:waypoint x="595" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_t_except_t_confirm" bpmnElement="f_t_except_t_confirm"><di:waypoint x="555" y="455"/><di:waypoint x="570" y="455"/><di:waypoint x="570" y="235"/><di:waypoint x="595" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_t_confirm_t_dup" bpmnElement="f_t_confirm_t_dup"><di:waypoint x="725" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_t_dup_g_dup" bpmnElement="f_t_dup_g_dup"><di:waypoint x="895" y="235"/><di:waypoint x="977" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_g_dup_t_merge" bpmnElement="f_g_dup_t_merge"><di:waypoint x="1023" y="235"/><di:waypoint x="1080" y="235"/><di:waypoint x="1080" y="125"/><di:waypoint x="1105" y="125"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_g_dup_t_scope" bpmnElement="f_g_dup_t_scope"><di:waypoint x="1023" y="235"/><di:waypoint x="1080" y="235"/><di:waypoint x="1080" y="455"/><di:waypoint x="1105" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_g_dup_e_screened" bpmnElement="f_g_dup_e_screened"><di:waypoint x="1023" y="235"/><di:waypoint x="1322" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_t_merge_e_merged" bpmnElement="f_t_merge_e_merged"><di:waypoint x="1235" y="125"/><di:waypoint x="1322" y="125"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_t_scope_e_closed" bpmnElement="f_t_scope_e_closed"><di:waypoint x="1235" y="455"/><di:waypoint x="1322" y="455"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

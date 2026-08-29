@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/" id="Capacity_sourcing" name="3.2.3 Balance internal and contracted capacity" namespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <description>Called from 3.2-plan-shifts-and-rosters.bpmn as a business rule task. The output is a value - internal, contracted, or a split - not a state change of the work, which is why it is a table. It emits the SHARED decisionVariable deliveryRoute, so this determination and the sourcing determination in 16.2 remain one rule set. Expressions are FEEL; Flowable has no FEEL and its binding is generated separately.</description>
+  <inputData id="in_residualHours" name="Residual gap in hours"><variable id="in_residualHours_v" name="Residual gap in hours" typeRef="number"/></inputData>
+  <inputData id="in_requiredQualification" name="Required qualification"><variable id="in_requiredQualification_v" name="Required qualification" typeRef="string"/></inputData>
+  <inputData id="in_contractedAvailable" name="Contracted capacity available"><variable id="in_contractedAvailable_v" name="Contracted capacity available" typeRef="boolean"/></inputData>
+  <inputData id="in_contractorQualified" name="Contractor qualified for the task"><variable id="in_contractorQualified_v" name="Contractor qualified for the task" typeRef="boolean"/></inputData>
+  <inputData id="in_peakOrProgramme" name="Peak or programme period"><variable id="in_peakOrProgramme_v" name="Peak or programme period" typeRef="boolean"/></inputData>
+  <knowledgeSource id="ks_qualification" name="49 CFR 192 Subpart N and 29 CFR 1910.269"><description>Where a task is a covered task, the operator is responsible for the individual being qualified whether they are an employee or a contractor - 192.805(b). For electric, the qualified-person determination at 1910.269(l) constrains who may be assigned. Neither is waived by using a contractor, which is why qualification is an input here and not a downstream check.</description></knowledgeSource>
+  <decision id="d_3_2_3" name="Capacity sourcing">
+    <description>3.2.3. Values are the shared deliveryRoute vocabulary. Commercial thresholds - when contracting is preferred on cost rather than on capacity - are an operator specialization keyed on this decision's uid, not a rule in the reference.</description>
+    <variable id="d_3_2_3_v" name="Capacity sourcing" typeRef="string"/>
+    <informationRequirement id="ir_d_3_2_3_in_residualHours"><requiredInput href="#in_residualHours"/></informationRequirement>
+    <informationRequirement id="ir_d_3_2_3_in_contractedAvailable"><requiredInput href="#in_contractedAvailable"/></informationRequirement>
+    <informationRequirement id="ir_d_3_2_3_in_contractorQualified"><requiredInput href="#in_contractorQualified"/></informationRequirement>
+    <informationRequirement id="ir_d_3_2_3_in_peakOrProgramme"><requiredInput href="#in_peakOrProgramme"/></informationRequirement>
+    <informationRequirement id="ir_d_3_2_3_in_requiredQualification"><requiredInput href="#in_requiredQualification"/></informationRequirement>
+    <authorityRequirement id="ar_d_3_2_3"><requiredAuthority href="#ks_qualification"/></authorityRequirement>
+    <decisionTable id="d_3_2_3_dt" hitPolicy="FIRST" preferredOrientation="Rule-as-Row">
+      <input id="d_3_2_3_i1" label="Residual gap in hours"><inputExpression id="d_3_2_3_i1_e" typeRef="number"><text>in_residualHours</text></inputExpression></input>
+      <input id="d_3_2_3_i2" label="Contracted capacity available"><inputExpression id="d_3_2_3_i2_e" typeRef="boolean"><text>in_contractedAvailable</text></inputExpression></input>
+      <input id="d_3_2_3_i3" label="Contractor qualified for the task"><inputExpression id="d_3_2_3_i3_e" typeRef="boolean"><text>in_contractorQualified</text></inputExpression></input>
+      <input id="d_3_2_3_i4" label="Peak or programme period"><inputExpression id="d_3_2_3_i4_e" typeRef="boolean"><text>in_peakOrProgramme</text></inputExpression></input>
+      <output id="d_3_2_3_o" label="Capacity sourcing" name="Capacity sourcing" typeRef="string"/>
+      <rule id="d_3_2_3_r1">
+        <description>No residual gap. The internal roster covers the period.</description>
+        <inputEntry id="d_3_2_3_r1_ie1"><text>&lt;= 0</text></inputEntry>
+        <inputEntry id="d_3_2_3_r1_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_3_2_3_r1_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_3_2_3_r1_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_3_2_3_r1_oe"><text>"internal"</text></outputEntry>
+      </rule>
+      <rule id="d_3_2_3_r2">
+        <description>No contracted capacity on agreement. The gap returns to 3.1.4 as a shortfall rather than being wished away here.</description>
+        <inputEntry id="d_3_2_3_r2_ie1"><text>&gt;  0</text></inputEntry>
+        <inputEntry id="d_3_2_3_r2_ie2"><text>false</text></inputEntry>
+        <inputEntry id="d_3_2_3_r2_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_3_2_3_r2_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_3_2_3_r2_oe"><text>"internal"</text></outputEntry>
+      </rule>
+      <rule id="d_3_2_3_r3">
+        <description>Contracted capacity exists but is not qualified for the task. Qualification is not transferable and the operator carries the duty either way.</description>
+        <inputEntry id="d_3_2_3_r3_ie1"><text>&gt;  0</text></inputEntry>
+        <inputEntry id="d_3_2_3_r3_ie2"><text>true</text></inputEntry>
+        <inputEntry id="d_3_2_3_r3_ie3"><text>false</text></inputEntry>
+        <inputEntry id="d_3_2_3_r3_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_3_2_3_r3_oe"><text>"internal"</text></outputEntry>
+      </rule>
+      <rule id="d_3_2_3_r4">
+        <description>Peak or programme cover is the case contracted capacity exists for.</description>
+        <inputEntry id="d_3_2_3_r4_ie1"><text>&gt;  0</text></inputEntry>
+        <inputEntry id="d_3_2_3_r4_ie2"><text>true</text></inputEntry>
+        <inputEntry id="d_3_2_3_r4_ie3"><text>true</text></inputEntry>
+        <inputEntry id="d_3_2_3_r4_ie4"><text>true</text></inputEntry>
+        <outputEntry id="d_3_2_3_r4_oe"><text>"externalService"</text></outputEntry>
+      </rule>
+      <rule id="d_3_2_3_r5">
+        <description>Ordinary residual gap: internal for the base, contracted for the named gap.</description>
+        <inputEntry id="d_3_2_3_r5_ie1"><text>&gt;  0</text></inputEntry>
+        <inputEntry id="d_3_2_3_r5_ie2"><text>true</text></inputEntry>
+        <inputEntry id="d_3_2_3_r5_ie3"><text>true</text></inputEntry>
+        <inputEntry id="d_3_2_3_r5_ie4"><text>false</text></inputEntry>
+        <outputEntry id="d_3_2_3_r5_oe"><text>"internalAndExternal"</text></outputEntry>
+      </rule>
+      <rule id="d_3_2_3_r6">
+        <description>Held for a person. An unroutable case usually means the residual gap or the qualification is missing, which is a data problem rather than a sourcing one.</description>
+        <inputEntry id="d_3_2_3_r6_ie1"><text>-</text></inputEntry>
+        <inputEntry id="d_3_2_3_r6_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_3_2_3_r6_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_3_2_3_r6_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_3_2_3_r6_oe"><text>"workManagementReview"</text></outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram id="drd_Capacity_sourcing">
+      <dmndi:DMNShape id="sh_in_residualHours" dmnElementRef="in_residualHours"><dc:Bounds x="60" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_requiredQualification" dmnElementRef="in_requiredQualification"><dc:Bounds x="245" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_contractedAvailable" dmnElementRef="in_contractedAvailable"><dc:Bounds x="430" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_contractorQualified" dmnElementRef="in_contractorQualified"><dc:Bounds x="615" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_peakOrProgramme" dmnElementRef="in_peakOrProgramme"><dc:Bounds x="800" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_d_3_2_3" dmnElementRef="d_3_2_3"><dc:Bounds x="60" y="240" width="180" height="70"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_ks_qualification" dmnElementRef="ks_qualification"><dc:Bounds x="900" y="100" width="160" height="55"/></dmndi:DMNShape>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</definitions>

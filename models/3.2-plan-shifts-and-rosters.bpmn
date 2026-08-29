@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_P_3_2" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <process id="P_3_2" name="3.2 Plan shifts and rosters" isExecutable="false">
+    <documentation>Tier-4 activities under 3.2.1, 3.2.2 and 3.2.4. The internal-versus-contracted split is a determination and is delegated to 3.2.3-internal-versus-contracted.dmn. Its output uses the shared decisionVariable deliveryRoute, so this rule set and the sourcing determination in 16.2 stay one rule set rather than two that drift.</documentation>
+    <startEvent id="n_32_start" name="Roster period due to be built"><timerEventDefinition id="n_32_start_td"/></startEvent>
+    <userTask id="n_32_cover" name="Set the cover the period needs"><documentation>3.2.1. By skill, district and shift.</documentation></userTask>
+    <userTask id="n_32_place" name="Place people on shifts against qualification and rules"><documentation>3.2.1. Labour rules and qualification are hard constraints here, not preferences to be balanced.</documentation></userTask>
+    <userTask id="n_32_bal" name="Balance rest, weekends and known restrictions"><documentation>3.2.1.</documentation></userTask>
+    <serviceTask id="n_32_draft" name="Hold a draft roster for the overlay"><documentation>3.2.1.</documentation></serviceTask>
+    <startEvent id="n_32_lstart" name="Leave, absence or on-call to be placed"><messageEventDefinition id="n_32_lstart_md"/></startEvent>
+    <userTask id="n_32_leave" name="Collect approved leave and absence"><documentation>3.2.2.</documentation></userTask>
+    <userTask id="n_32_standby" name="Set standby and on-call against residual risk"><documentation>3.2.2. Duty standby and call-out on-call are different commitments and are placed separately.</documentation></userTask>
+    <serviceTask id="n_32_test" name="Test that remaining cover still meets the skill need"><documentation>3.2.2. This is the test that makes the overlay honest rather than decorative.</documentation></serviceTask>
+    <exclusiveGateway id="n_32_gap" name="Cover met"/>
+    <businessRuleTask id="n_32_split" name="Determine the internal and contracted split"><documentation>3.2.3. Calls decision Capacity_sourcing in 3.2.3-internal-versus-contracted.dmn.</documentation></businessRuleTask>
+    <sendTask id="n_32_commit" name="Commit the split to contractor management"><documentation>3.2.3. Hooks to 16.2 Award and assign contracted work.</documentation></sendTask>
+    <serviceTask id="n_32_close" name="Close the roster for the period"><documentation>3.2.4.</documentation></serviceTask>
+    <sendTask id="n_32_issue" name="Issue to the people named on it"><documentation>3.2.4.</documentation></sendTask>
+    <sendTask id="n_32_sched" name="Issue to scheduling as committed capacity"><documentation>3.2.4. Contractor names travel on the same issue, or the schedule plans against capacity it cannot see.</documentation></sendTask>
+    <receiveTask id="n_32_ack" name="Record acknowledgements and later amendments"><documentation>3.2.4. An in-period amendment re-enters here rather than rebuilding the roster.</documentation></receiveTask>
+    <endEvent id="n_32_end" name="Roster issued as committed capacity"/>
+    <sequenceFlow id="f_n_32_start_n_32_cover" sourceRef="n_32_start" targetRef="n_32_cover" name=""/>
+    <sequenceFlow id="f_n_32_cover_n_32_place" sourceRef="n_32_cover" targetRef="n_32_place" name=""/>
+    <sequenceFlow id="f_n_32_place_n_32_bal" sourceRef="n_32_place" targetRef="n_32_bal" name=""/>
+    <sequenceFlow id="f_n_32_bal_n_32_draft" sourceRef="n_32_bal" targetRef="n_32_draft" name=""/>
+    <sequenceFlow id="f_n_32_lstart_n_32_leave" sourceRef="n_32_lstart" targetRef="n_32_leave" name=""/>
+    <sequenceFlow id="f_n_32_leave_n_32_standby" sourceRef="n_32_leave" targetRef="n_32_standby" name=""/>
+    <sequenceFlow id="f_n_32_standby_n_32_test" sourceRef="n_32_standby" targetRef="n_32_test" name=""/>
+    <sequenceFlow id="f_n_32_draft_n_32_test" sourceRef="n_32_draft" targetRef="n_32_test" name=""/>
+    <sequenceFlow id="f_n_32_test_n_32_gap" sourceRef="n_32_test" targetRef="n_32_gap" name=""/>
+    <sequenceFlow id="f_n_32_gap_n_32_split" sourceRef="n_32_gap" targetRef="n_32_split" name="cover not met"><conditionExpression xsi:type="tFormalExpression"><![CDATA[coverMet = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_32_split_n_32_commit" sourceRef="n_32_split" targetRef="n_32_commit" name="contracted or split"><conditionExpression xsi:type="tFormalExpression"><![CDATA[deliveryRoute != "internal"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_32_split_n_32_close" sourceRef="n_32_split" targetRef="n_32_close" name="internal only"/>
+    <sequenceFlow id="f_n_32_commit_n_32_close" sourceRef="n_32_commit" targetRef="n_32_close" name=""/>
+    <sequenceFlow id="f_n_32_gap_n_32_close" sourceRef="n_32_gap" targetRef="n_32_close" name="cover met"/>
+    <sequenceFlow id="f_n_32_close_n_32_issue" sourceRef="n_32_close" targetRef="n_32_issue" name=""/>
+    <sequenceFlow id="f_n_32_issue_n_32_sched" sourceRef="n_32_issue" targetRef="n_32_sched" name=""/>
+    <sequenceFlow id="f_n_32_sched_n_32_ack" sourceRef="n_32_sched" targetRef="n_32_ack" name=""/>
+    <sequenceFlow id="f_n_32_ack_n_32_end" sourceRef="n_32_ack" targetRef="n_32_end" name=""/>
+  </process>
+  <bpmndi:BPMNDiagram id="dg_P_3_2">
+    <bpmndi:BPMNPlane id="pl_P_3_2" bpmnElement="P_3_2">
+      <bpmndi:BPMNShape id="sh_n_32_start" bpmnElement="n_32_start"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_32_cover" bpmnElement="n_32_cover"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_32_place" bpmnElement="n_32_place"><dc:Bounds x="425" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_32_bal" bpmnElement="n_32_bal"><dc:Bounds x="595" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_32_draft" bpmnElement="n_32_draft"><dc:Bounds x="765" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_32_lstart" bpmnElement="n_32_lstart"><dc:Bounds x="642" y="437" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_32_leave" bpmnElement="n_32_leave"><dc:Bounds x="765" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_32_standby" bpmnElement="n_32_standby"><dc:Bounds x="935" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_32_test" bpmnElement="n_32_test"><dc:Bounds x="935" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_32_gap" bpmnElement="n_32_gap"><dc:Bounds x="1147" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_32_split" bpmnElement="n_32_split"><dc:Bounds x="1105" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_32_commit" bpmnElement="n_32_commit"><dc:Bounds x="1275" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_32_close" bpmnElement="n_32_close"><dc:Bounds x="1275" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_32_issue" bpmnElement="n_32_issue"><dc:Bounds x="1445" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_32_sched" bpmnElement="n_32_sched"><dc:Bounds x="1615" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_32_ack" bpmnElement="n_32_ack"><dc:Bounds x="1785" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_32_end" bpmnElement="n_32_end"><dc:Bounds x="2002" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ed_f_n_32_start_n_32_cover" bpmnElement="f_n_32_start_n_32_cover"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_32_cover_n_32_place" bpmnElement="f_n_32_cover_n_32_place"><di:waypoint x="385" y="235"/><di:waypoint x="425" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_32_place_n_32_bal" bpmnElement="f_n_32_place_n_32_bal"><di:waypoint x="555" y="235"/><di:waypoint x="595" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_32_bal_n_32_draft" bpmnElement="f_n_32_bal_n_32_draft"><di:waypoint x="725" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_32_lstart_n_32_leave" bpmnElement="f_n_32_lstart_n_32_leave"><di:waypoint x="678" y="455"/><di:waypoint x="765" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_32_leave_n_32_standby" bpmnElement="f_n_32_leave_n_32_standby"><di:waypoint x="895" y="455"/><di:waypoint x="935" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_32_standby_n_32_test" bpmnElement="f_n_32_standby_n_32_test"><di:waypoint x="1065" y="455"/><di:waypoint x="910" y="455"/><di:waypoint x="910" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_32_draft_n_32_test" bpmnElement="f_n_32_draft_n_32_test"><di:waypoint x="895" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_32_test_n_32_gap" bpmnElement="f_n_32_test_n_32_gap"><di:waypoint x="1065" y="235"/><di:waypoint x="1147" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_32_gap_n_32_split" bpmnElement="f_n_32_gap_n_32_split"><di:waypoint x="1193" y="235"/><di:waypoint x="1080" y="235"/><di:waypoint x="1080" y="455"/><di:waypoint x="1105" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_32_split_n_32_commit" bpmnElement="f_n_32_split_n_32_commit"><di:waypoint x="1235" y="455"/><di:waypoint x="1275" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_32_split_n_32_close" bpmnElement="f_n_32_split_n_32_close"><di:waypoint x="1235" y="455"/><di:waypoint x="1250" y="455"/><di:waypoint x="1250" y="235"/><di:waypoint x="1275" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_32_commit_n_32_close" bpmnElement="f_n_32_commit_n_32_close"><di:waypoint x="1405" y="455"/><di:waypoint x="1250" y="455"/><di:waypoint x="1250" y="235"/><di:waypoint x="1275" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_32_gap_n_32_close" bpmnElement="f_n_32_gap_n_32_close"><di:waypoint x="1193" y="235"/><di:waypoint x="1275" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_32_close_n_32_issue" bpmnElement="f_n_32_close_n_32_issue"><di:waypoint x="1405" y="235"/><di:waypoint x="1445" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_32_issue_n_32_sched" bpmnElement="f_n_32_issue_n_32_sched"><di:waypoint x="1575" y="235"/><di:waypoint x="1615" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_32_sched_n_32_ack" bpmnElement="f_n_32_sched_n_32_ack"><di:waypoint x="1745" y="235"/><di:waypoint x="1785" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_32_ack_n_32_end" bpmnElement="f_n_32_ack_n_32_end"><di:waypoint x="1915" y="235"/><di:waypoint x="2002" y="235"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

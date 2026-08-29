@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_P_2_6" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <process id="P_2_6" name="2.6 Obtain permits and satisfy prerequisites" isExecutable="false">
+    <documentation>Tier-4 activities under 2.6.2, 2.6.3 and 2.6.4. The permit determination 2.6.1 is in 2.6.1-permit-determination.dmn. NOTE: no consensus practice exists for permit management as a process. CGA Best Practices covers the 811 locate request comprehensively and nothing else; obtaining, tracking, expiring and closing out road-opening, railroad and environmental permits is judgment, framed here against EN 17007 cl. 6.5.3 ACT.2.</documentation>
+    <startEvent id="n_26_start" name="Permit requirement determined"><messageEventDefinition id="n_26_start_md"/></startEvent>
+    <sendTask id="n_26_sub" name="Submit each request to its issuing party"><documentation>2.6.2. The one-call request goes to the centre; municipal, railroad and environmental requests each go to a different party on a different clock.</documentation></sendTask>
+    <receiveTask id="n_26_track" name="Track against the expected response time"><documentation>2.6.2. The statutory locate window is state law; a municipal ordinance window is not standardised at all.</documentation></receiveTask>
+    <exclusiveGateway id="n_26_ovr" name="Response received"/>
+    <userTask id="n_26_chase" name="Chase or escalate the overdue response"><documentation>2.6.2. An overdue locate is not a reason to dig; the waiting period is a hard constraint on the earliest start.</documentation></userTask>
+    <sendTask id="n_26_emer" name="Notify under the emergency provision"><documentation>2.6.2 variant. Where the statutory waiting window does not apply. The provision is state law and its conditions are narrow.</documentation></sendTask>
+    <serviceTask id="n_26_rec" name="Record the permit with its conditions and validity"><documentation>2.6.2. Conditions travel on the work, not in the permit coordinator's head.</documentation></serviceTask>
+    <userTask id="n_26_chk" name="Check permits, material, qualification and safety prerequisites"><documentation>2.6.3. Including the isolation, clearance or briefing the method requires.</documentation></userTask>
+    <exclusiveGateway id="n_26_gate" name="All prerequisites held"/>
+    <userTask id="n_26_hold" name="Hold against the named missing prerequisite"><documentation>2.6.3. Named, not generic. 'Not ready' with no reason is what makes ready backlog meaningless.</documentation></userTask>
+    <serviceTask id="n_26_ready" name="Release the work as ready to schedule"><documentation>2.6.3. Ready is a defined state, not an opinion.</documentation></serviceTask>
+    <endEvent id="n_26_end" name="Work ready to schedule"/>
+    <endEvent id="n_26_endh" name="Held with a named prerequisite"/>
+    <startEvent id="n_26_tstart" name="Permit approaching expiry"><timerEventDefinition id="n_26_tstart_td"/></startEvent>
+    <exclusiveGateway id="n_26_exp" name="Work will complete in time"/>
+    <sendTask id="n_26_ren" name="Renew or extend before expiry"><documentation>2.6.4. A locate update before expiry is the common case and is the one most often missed.</documentation></sendTask>
+    <userTask id="n_26_lapse" name="Stop work and re-request"><documentation>2.6.4 variant. A lapsed permit stops the work; continuing is an offence, not a risk to be managed.</documentation></userTask>
+    <serviceTask id="n_26_cost" name="Record permit cost against the work"><documentation>2.6.4.</documentation></serviceTask>
+    <userTask id="n_26_close" name="Close out and satisfy any reinstatement condition"><documentation>2.6.4. Reinstatement is a permit condition and is charged to the work.</documentation></userTask>
+    <endEvent id="n_26_tend" name="Permit closed out"/>
+    <sequenceFlow id="f_n_26_start_n_26_sub" sourceRef="n_26_start" targetRef="n_26_sub" name=""/>
+    <sequenceFlow id="f_n_26_emer_n_26_rec" sourceRef="n_26_emer" targetRef="n_26_rec" name=""/>
+    <sequenceFlow id="f_n_26_sub_n_26_track" sourceRef="n_26_sub" targetRef="n_26_track" name=""/>
+    <sequenceFlow id="f_n_26_track_n_26_ovr" sourceRef="n_26_track" targetRef="n_26_ovr" name=""/>
+    <sequenceFlow id="f_n_26_ovr_n_26_chase" sourceRef="n_26_ovr" targetRef="n_26_chase" name="overdue"><conditionExpression xsi:type="tFormalExpression"><![CDATA[responseOverdue = true]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_26_chase_n_26_track" sourceRef="n_26_chase" targetRef="n_26_track" name="chased"/>
+    <sequenceFlow id="f_n_26_ovr_n_26_rec" sourceRef="n_26_ovr" targetRef="n_26_rec" name="received"/>
+    <sequenceFlow id="f_n_26_rec_n_26_chk" sourceRef="n_26_rec" targetRef="n_26_chk" name=""/>
+    <sequenceFlow id="f_n_26_chk_n_26_gate" sourceRef="n_26_chk" targetRef="n_26_gate" name=""/>
+    <sequenceFlow id="f_n_26_gate_n_26_hold" sourceRef="n_26_gate" targetRef="n_26_hold" name="prerequisite missing"><conditionExpression xsi:type="tFormalExpression"><![CDATA[prerequisitesHeld = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_26_hold_n_26_endh" sourceRef="n_26_hold" targetRef="n_26_endh" name=""/>
+    <sequenceFlow id="f_n_26_gate_n_26_ready" sourceRef="n_26_gate" targetRef="n_26_ready" name="all held"/>
+    <sequenceFlow id="f_n_26_ready_n_26_end" sourceRef="n_26_ready" targetRef="n_26_end" name=""/>
+    <sequenceFlow id="f_n_26_tstart_n_26_exp" sourceRef="n_26_tstart" targetRef="n_26_exp" name=""/>
+    <sequenceFlow id="f_n_26_exp_n_26_ren" sourceRef="n_26_exp" targetRef="n_26_ren" name="work will not complete in time"><conditionExpression xsi:type="tFormalExpression"><![CDATA[completesBeforeExpiry = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_26_ren_n_26_lapse" sourceRef="n_26_ren" targetRef="n_26_lapse" name="renewal refused or late"><conditionExpression xsi:type="tFormalExpression"><![CDATA[renewalGranted = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_26_ren_n_26_cost" sourceRef="n_26_ren" targetRef="n_26_cost" name="renewed"/>
+    <sequenceFlow id="f_n_26_lapse_n_26_cost" sourceRef="n_26_lapse" targetRef="n_26_cost" name=""/>
+    <sequenceFlow id="f_n_26_exp_n_26_cost" sourceRef="n_26_exp" targetRef="n_26_cost" name="completes in time"/>
+    <sequenceFlow id="f_n_26_cost_n_26_close" sourceRef="n_26_cost" targetRef="n_26_close" name=""/>
+    <sequenceFlow id="f_n_26_close_n_26_tend" sourceRef="n_26_close" targetRef="n_26_tend" name=""/>
+  </process>
+  <bpmndi:BPMNDiagram id="dg_P_2_6">
+    <bpmndi:BPMNPlane id="pl_P_2_6" bpmnElement="P_2_6">
+      <bpmndi:BPMNShape id="sh_n_26_start" bpmnElement="n_26_start"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_26_sub" bpmnElement="n_26_sub"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_26_track" bpmnElement="n_26_track"><dc:Bounds x="425" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_26_ovr" bpmnElement="n_26_ovr"><dc:Bounds x="637" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_26_chase" bpmnElement="n_26_chase"><dc:Bounds x="595" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_26_emer" bpmnElement="n_26_emer"><dc:Bounds x="255" y="90" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_26_rec" bpmnElement="n_26_rec"><dc:Bounds x="765" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_26_chk" bpmnElement="n_26_chk"><dc:Bounds x="935" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_26_gate" bpmnElement="n_26_gate"><dc:Bounds x="1147" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_26_hold" bpmnElement="n_26_hold"><dc:Bounds x="1105" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_26_ready" bpmnElement="n_26_ready"><dc:Bounds x="1275" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_26_end" bpmnElement="n_26_end"><dc:Bounds x="1492" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_26_endh" bpmnElement="n_26_endh"><dc:Bounds x="1322" y="437" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_26_tstart" bpmnElement="n_26_tstart"><dc:Bounds x="812" y="657" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_26_exp" bpmnElement="n_26_exp"><dc:Bounds x="977" y="652" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_26_ren" bpmnElement="n_26_ren"><dc:Bounds x="935" y="750" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_26_lapse" bpmnElement="n_26_lapse"><dc:Bounds x="1105" y="750" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_26_cost" bpmnElement="n_26_cost"><dc:Bounds x="1105" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_26_close" bpmnElement="n_26_close"><dc:Bounds x="1275" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_26_tend" bpmnElement="n_26_tend"><dc:Bounds x="1492" y="657" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ed_f_n_26_start_n_26_sub" bpmnElement="f_n_26_start_n_26_sub"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_26_emer_n_26_rec" bpmnElement="f_n_26_emer_n_26_rec"><di:waypoint x="385" y="125"/><di:waypoint x="740" y="125"/><di:waypoint x="740" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_26_sub_n_26_track" bpmnElement="f_n_26_sub_n_26_track"><di:waypoint x="385" y="235"/><di:waypoint x="425" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_26_track_n_26_ovr" bpmnElement="f_n_26_track_n_26_ovr"><di:waypoint x="555" y="235"/><di:waypoint x="637" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_26_ovr_n_26_chase" bpmnElement="f_n_26_ovr_n_26_chase"><di:waypoint x="683" y="235"/><di:waypoint x="570" y="235"/><di:waypoint x="570" y="455"/><di:waypoint x="595" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_26_chase_n_26_track" bpmnElement="f_n_26_chase_n_26_track"><di:waypoint x="725" y="455"/><di:waypoint x="400" y="455"/><di:waypoint x="400" y="235"/><di:waypoint x="425" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_26_ovr_n_26_rec" bpmnElement="f_n_26_ovr_n_26_rec"><di:waypoint x="683" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_26_rec_n_26_chk" bpmnElement="f_n_26_rec_n_26_chk"><di:waypoint x="895" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_26_chk_n_26_gate" bpmnElement="f_n_26_chk_n_26_gate"><di:waypoint x="1065" y="235"/><di:waypoint x="1147" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_26_gate_n_26_hold" bpmnElement="f_n_26_gate_n_26_hold"><di:waypoint x="1193" y="235"/><di:waypoint x="1080" y="235"/><di:waypoint x="1080" y="455"/><di:waypoint x="1105" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_26_hold_n_26_endh" bpmnElement="f_n_26_hold_n_26_endh"><di:waypoint x="1235" y="455"/><di:waypoint x="1322" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_26_gate_n_26_ready" bpmnElement="f_n_26_gate_n_26_ready"><di:waypoint x="1193" y="235"/><di:waypoint x="1275" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_26_ready_n_26_end" bpmnElement="f_n_26_ready_n_26_end"><di:waypoint x="1405" y="235"/><di:waypoint x="1492" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_26_tstart_n_26_exp" bpmnElement="f_n_26_tstart_n_26_exp"><di:waypoint x="848" y="675"/><di:waypoint x="977" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_26_exp_n_26_ren" bpmnElement="f_n_26_exp_n_26_ren"><di:waypoint x="1023" y="675"/><di:waypoint x="910" y="675"/><di:waypoint x="910" y="785"/><di:waypoint x="935" y="785"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_26_ren_n_26_lapse" bpmnElement="f_n_26_ren_n_26_lapse"><di:waypoint x="1065" y="785"/><di:waypoint x="1105" y="785"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_26_ren_n_26_cost" bpmnElement="f_n_26_ren_n_26_cost"><di:waypoint x="1065" y="785"/><di:waypoint x="1080" y="785"/><di:waypoint x="1080" y="675"/><di:waypoint x="1105" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_26_lapse_n_26_cost" bpmnElement="f_n_26_lapse_n_26_cost"><di:waypoint x="1235" y="785"/><di:waypoint x="1080" y="785"/><di:waypoint x="1080" y="675"/><di:waypoint x="1105" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_26_exp_n_26_cost" bpmnElement="f_n_26_exp_n_26_cost"><di:waypoint x="1023" y="675"/><di:waypoint x="1105" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_26_cost_n_26_close" bpmnElement="f_n_26_cost_n_26_close"><di:waypoint x="1235" y="675"/><di:waypoint x="1275" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_26_close_n_26_tend" bpmnElement="f_n_26_close_n_26_tend"><di:waypoint x="1405" y="675"/><di:waypoint x="1492" y="675"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

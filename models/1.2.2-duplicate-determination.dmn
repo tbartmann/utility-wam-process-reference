@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/" id="Duplicate_determination" name="1.2.2 Duplicate determination" namespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <description>Called from 1.2-validate-and-screen-work.bpmn as a business rule task. Kept in DMN because the matching rules change far more often than the flow around them.</description>
+  <inputData id="in_sameAsset" name="Same asset"><variable id="in_sameAsset_v" name="Same asset" typeRef="boolean"/></inputData>
+  <inputData id="in_sameLocation" name="Same location"><variable id="in_sameLocation_v" name="Same location" typeRef="boolean"/></inputData>
+  <inputData id="in_sameCondition" name="Same condition"><variable id="in_sameCondition_v" name="Same condition" typeRef="boolean"/></inputData>
+  <inputData id="in_openWork" name="Existing work status"><variable id="in_openWork_v" name="Existing work status" typeRef="string"/></inputData>
+  <inputData id="in_daysSinceClosed" name="Days since existing work closed"><variable id="in_daysSinceClosed_v" name="Days since existing work closed" typeRef="number"/></inputData>
+  <inputData id="in_hazardReport" name="Reported as hazard"><variable id="in_hazardReport_v" name="Reported as hazard" typeRef="boolean"/></inputData>
+  <decision id="dec_duplicate" name="Duplicate determination">
+    <description>Default is deliberately distinct. Measure the false-merge rate, not only the duplicate-catch rate.</description>
+    <variable id="dec_duplicate_v" name="Duplicate determination" typeRef="string"/>
+    <informationRequirement id="ir_dec_duplicate_in_hazardReport"><requiredInput href="#in_hazardReport"/></informationRequirement>
+    <informationRequirement id="ir_dec_duplicate_in_sameAsset"><requiredInput href="#in_sameAsset"/></informationRequirement>
+    <informationRequirement id="ir_dec_duplicate_in_sameCondition"><requiredInput href="#in_sameCondition"/></informationRequirement>
+    <informationRequirement id="ir_dec_duplicate_in_openWork"><requiredInput href="#in_openWork"/></informationRequirement>
+    <informationRequirement id="ir_dec_duplicate_in_daysSinceClosed"><requiredInput href="#in_daysSinceClosed"/></informationRequirement>
+    <informationRequirement id="ir_dec_duplicate_in_sameLocation"><requiredInput href="#in_sameLocation"/></informationRequirement>
+    <decisionTable id="dec_duplicate_dt" hitPolicy="FIRST" preferredOrientation="Rule-as-Row">
+      <input id="dec_duplicate_i1" label="Reported as hazard"><inputExpression id="dec_duplicate_i1_e" typeRef="boolean"><text>in_hazardReport</text></inputExpression></input>
+      <input id="dec_duplicate_i2" label="Same asset"><inputExpression id="dec_duplicate_i2_e" typeRef="boolean"><text>in_sameAsset</text></inputExpression></input>
+      <input id="dec_duplicate_i3" label="Same condition"><inputExpression id="dec_duplicate_i3_e" typeRef="boolean"><text>in_sameCondition</text></inputExpression></input>
+      <input id="dec_duplicate_i4" label="Existing work status"><inputExpression id="dec_duplicate_i4_e" typeRef="string"><text>in_openWork</text></inputExpression></input>
+      <input id="dec_duplicate_i5" label="Days since existing work closed"><inputExpression id="dec_duplicate_i5_e" typeRef="number"><text>in_daysSinceClosed</text></inputExpression></input>
+      <output id="dec_duplicate_o" label="Duplicate determination" name="Duplicate determination" typeRef="string"/>
+      <rule id="dec_duplicate_r1">
+        <description>Merged for delivery, but the hazard report keeps its own evidence of response.</description>
+        <inputEntry id="dec_duplicate_r1_ie1"><text>true</text></inputEntry>
+        <inputEntry id="dec_duplicate_r1_ie2"><text>true</text></inputEntry>
+        <inputEntry id="dec_duplicate_r1_ie3"><text>true</text></inputEntry>
+        <inputEntry id="dec_duplicate_r1_ie4"><text>"open"</text></inputEntry>
+        <inputEntry id="dec_duplicate_r1_ie5"><text>-</text></inputEntry>
+        <outputEntry id="dec_duplicate_r1_oe"><text>"mergeWithOwnEvidence"</text></outputEntry>
+      </rule>
+      <rule id="dec_duplicate_r2">
+        <inputEntry id="dec_duplicate_r2_ie1"><text>-</text></inputEntry>
+        <inputEntry id="dec_duplicate_r2_ie2"><text>true</text></inputEntry>
+        <inputEntry id="dec_duplicate_r2_ie3"><text>true</text></inputEntry>
+        <inputEntry id="dec_duplicate_r2_ie4"><text>"open"</text></inputEntry>
+        <inputEntry id="dec_duplicate_r2_ie5"><text>-</text></inputEntry>
+        <outputEntry id="dec_duplicate_r2_oe"><text>"merge"</text></outputEntry>
+      </rule>
+      <rule id="dec_duplicate_r3">
+        <description>Recently closed and recurring is a reliability signal, not a duplicate.</description>
+        <inputEntry id="dec_duplicate_r3_ie1"><text>-</text></inputEntry>
+        <inputEntry id="dec_duplicate_r3_ie2"><text>true</text></inputEntry>
+        <inputEntry id="dec_duplicate_r3_ie3"><text>true</text></inputEntry>
+        <inputEntry id="dec_duplicate_r3_ie4"><text>"closed"</text></inputEntry>
+        <inputEntry id="dec_duplicate_r3_ie5"><text>&lt;= 30</text></inputEntry>
+        <outputEntry id="dec_duplicate_r3_oe"><text>"recurrence"</text></outputEntry>
+      </rule>
+      <rule id="dec_duplicate_r4">
+        <description>Same asset, different condition. Linked so the field sees both, not merged.</description>
+        <inputEntry id="dec_duplicate_r4_ie1"><text>-</text></inputEntry>
+        <inputEntry id="dec_duplicate_r4_ie2"><text>true</text></inputEntry>
+        <inputEntry id="dec_duplicate_r4_ie3"><text>false</text></inputEntry>
+        <inputEntry id="dec_duplicate_r4_ie4"><text>-</text></inputEntry>
+        <inputEntry id="dec_duplicate_r4_ie5"><text>-</text></inputEntry>
+        <outputEntry id="dec_duplicate_r4_oe"><text>"distinctLinked"</text></outputEntry>
+      </rule>
+      <rule id="dec_duplicate_r5">
+        <inputEntry id="dec_duplicate_r5_ie1"><text>-</text></inputEntry>
+        <inputEntry id="dec_duplicate_r5_ie2"><text>false</text></inputEntry>
+        <inputEntry id="dec_duplicate_r5_ie3"><text>-</text></inputEntry>
+        <inputEntry id="dec_duplicate_r5_ie4"><text>-</text></inputEntry>
+        <inputEntry id="dec_duplicate_r5_ie5"><text>-</text></inputEntry>
+        <outputEntry id="dec_duplicate_r5_oe"><text>"distinct"</text></outputEntry>
+      </rule>
+      <rule id="dec_duplicate_r6">
+        <description>Default to distinct. A false merge hides work; a missed merge only costs a visit.</description>
+        <inputEntry id="dec_duplicate_r6_ie1"><text>-</text></inputEntry>
+        <inputEntry id="dec_duplicate_r6_ie2"><text>-</text></inputEntry>
+        <inputEntry id="dec_duplicate_r6_ie3"><text>-</text></inputEntry>
+        <inputEntry id="dec_duplicate_r6_ie4"><text>-</text></inputEntry>
+        <inputEntry id="dec_duplicate_r6_ie5"><text>-</text></inputEntry>
+        <outputEntry id="dec_duplicate_r6_oe"><text>"distinct"</text></outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram id="drd_Duplicate_determination">
+      <dmndi:DMNShape id="sh_in_sameAsset" dmnElementRef="in_sameAsset"><dc:Bounds x="60" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_sameLocation" dmnElementRef="in_sameLocation"><dc:Bounds x="245" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_sameCondition" dmnElementRef="in_sameCondition"><dc:Bounds x="430" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_openWork" dmnElementRef="in_openWork"><dc:Bounds x="615" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_daysSinceClosed" dmnElementRef="in_daysSinceClosed"><dc:Bounds x="800" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_hazardReport" dmnElementRef="in_hazardReport"><dc:Bounds x="985" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_dec_duplicate" dmnElementRef="dec_duplicate"><dc:Bounds x="60" y="240" width="180" height="70"/></dmndi:DMNShape>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</definitions>

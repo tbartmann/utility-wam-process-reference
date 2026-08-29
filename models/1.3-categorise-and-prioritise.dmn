@@ -1,0 +1,344 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/" id="Categorise_and_prioritise" name="1.3 Categorise and prioritise work" namespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <description>Decision requirements diagram for process group 1.3. All four tier-3 processes in the group are determinations, not state changes, so the group is modelled entirely in DMN and called from BPMN as business rule tasks. Expressions are FEEL, per DMN. Flowable has no FEEL; its binding layer rewrites to JUEL.</description>
+  <inputData id="in_condition" name="Reported condition"><variable id="in_condition_v" name="Reported condition" typeRef="string"/></inputData>
+  <inputData id="in_assetClass" name="Asset class"><variable id="in_assetClass_v" name="Asset class" typeRef="string"/></inputData>
+  <inputData id="in_criticality" name="Asset criticality"><variable id="in_criticality_v" name="Asset criticality" typeRef="string"/></inputData>
+  <inputData id="in_origin" name="Origination route"><variable id="in_origin_v" name="Origination route" typeRef="string"/></inputData>
+  <inputData id="in_hazardGrade" name="Hazard grade"><variable id="in_hazardGrade_v" name="Hazard grade" typeRef="string"/></inputData>
+  <inputData id="in_obligation" name="Obligation reference"><variable id="in_obligation_v" name="Obligation reference" typeRef="string"/></inputData>
+  <inputData id="in_lastCompliant" name="Date of last compliant completion"><variable id="in_lastCompliant_v" name="Date of last compliant completion" typeRef="date"/></inputData>
+  <inputData id="in_segment" name="Population attribute"><variable id="in_segment_v" name="Population attribute" typeRef="string"/></inputData>
+  <inputData id="in_priorFinding" name="Prior inspection finding"><variable id="in_priorFinding_v" name="Prior inspection finding" typeRef="string"/></inputData>
+  <inputData id="in_skill" name="Required qualification"><variable id="in_skill_v" name="Required qualification" typeRef="string"/></inputData>
+  <inputData id="in_district" name="District"><variable id="in_district_v" name="District" typeRef="string"/></inputData>
+  <knowledgeSource id="ks_regulation" name="49 CFR Part 192"><description>Federal minimum standards for gas distribution. Intervals bind twice - a nominal period in calendar years and a not-to-exceed figure in months. Changing a rule sourced here is a regulatory change, not a configuration change. Intervals are ceilings a regulator may lower under 192.1013.</description></knowledgeSource>
+  <knowledgeSource id="ks_gptc" name="ANSI/GPTC Z380.1 G-192-11"><description>Leak grades and repair timeframes. ANSI-accredited industry consensus published by AGA, NOT incorporated by reference into Part 192 - the federal text is 192.703(c), 'Hazardous leaks must be repaired promptly', and that is the whole of it. Binding only where a state adopts the scheme.</description></knowledgeSource>
+  <knowledgeSource id="ks_standard" name="EN 13306:2017 / ISO 14224:2016"><description>Maintenance type taxonomy. EN 13306 cl. 7 Maintenance types; ISO 14224 cl. 9.6.2 Maintenance categories.</description></knowledgeSource>
+  <decision id="dec_workType" name="Maintenance type">
+    <description>1.3.1. Types are EN 13306:2017 cl. 7 - preventive (predetermined, condition-based) and corrective (immediate, deferred), mirrored by ISO 14224 cl. 9.6.2. Clause and title confirmed from official contents; the definitions are paywalled and are not reproduced here. Using the standard's types rather than a local list is what makes SMRP 5.4.1 Reactive Work and 5.4.2 Proactive Work comparable with anyone else's.</description>
+    <variable id="dec_workType_v" name="Maintenance type" typeRef="string"/>
+    <informationRequirement id="ir_dec_workType_in_origin"><requiredInput href="#in_origin"/></informationRequirement>
+    <informationRequirement id="ir_dec_workType_in_condition"><requiredInput href="#in_condition"/></informationRequirement>
+    <informationRequirement id="ir_dec_workType_in_obligation"><requiredInput href="#in_obligation"/></informationRequirement>
+    <authorityRequirement id="ar_dec_workType"><requiredAuthority href="#ks_standard"/></authorityRequirement>
+    <decisionTable id="dec_workType_dt" hitPolicy="UNIQUE" preferredOrientation="Rule-as-Row">
+      <input id="dec_workType_i1" label="Origination route"><inputExpression id="dec_workType_i1_e" typeRef="string"><text>in_origin</text></inputExpression></input>
+      <input id="dec_workType_i2" label="Trigger basis"><inputExpression id="dec_workType_i2_e" typeRef="string"><text>in_condition</text></inputExpression></input>
+      <input id="dec_workType_i3" label="Obligation reference"><inputExpression id="dec_workType_i3_e" typeRef="string"><text>in_obligation</text></inputExpression></input>
+      <output id="dec_workType_o" label="Maintenance type" name="Maintenance type" typeRef="string"/>
+      <rule id="dec_workType_r1">
+        <description>Interval or usage based. EN 13306 cl. 7.</description>
+        <inputEntry id="dec_workType_r1_ie1"><text>"regulatoryProgramme","plannedCycle"</text></inputEntry>
+        <inputEntry id="dec_workType_r1_ie2"><text>-</text></inputEntry>
+        <inputEntry id="dec_workType_r1_ie3"><text>-</text></inputEntry>
+        <outputEntry id="dec_workType_r1_oe"><text>"preventive.predetermined"</text></outputEntry>
+      </rule>
+      <rule id="dec_workType_r2">
+        <description>A monitored parameter crossed a threshold before failure.</description>
+        <inputEntry id="dec_workType_r2_ie1"><text>"deviceCondition"</text></inputEntry>
+        <inputEntry id="dec_workType_r2_ie2"><text>"thresholdCrossed"</text></inputEntry>
+        <inputEntry id="dec_workType_r2_ie3"><text>-</text></inputEntry>
+        <outputEntry id="dec_workType_r2_oe"><text>"preventive.conditionBased"</text></outputEntry>
+      </rule>
+      <rule id="dec_workType_r3">
+        <description>Predictive is a form of condition-based in the EN 13306 taxonomy.</description>
+        <inputEntry id="dec_workType_r3_ie1"><text>"deviceCondition"</text></inputEntry>
+        <inputEntry id="dec_workType_r3_ie2"><text>"trendProjected"</text></inputEntry>
+        <inputEntry id="dec_workType_r3_ie3"><text>-</text></inputEntry>
+        <outputEntry id="dec_workType_r3_oe"><text>"preventive.conditionBased"</text></outputEntry>
+      </rule>
+      <rule id="dec_workType_r4">
+        <description>Function lost; restoration cannot be deferred.</description>
+        <inputEntry id="dec_workType_r4_ie1"><text>"networkEvent"</text></inputEntry>
+        <inputEntry id="dec_workType_r4_ie2"><text>-</text></inputEntry>
+        <inputEntry id="dec_workType_r4_ie3"><text>-</text></inputEntry>
+        <outputEntry id="dec_workType_r4_oe"><text>"corrective.immediate"</text></outputEntry>
+      </rule>
+      <rule id="dec_workType_r5">
+        <description>Grade 1 requires immediate and continuous action until no longer hazardous.</description>
+        <inputEntry id="dec_workType_r5_ie1"><text>-</text></inputEntry>
+        <inputEntry id="dec_workType_r5_ie2"><text>"hazardGraded1"</text></inputEntry>
+        <inputEntry id="dec_workType_r5_ie3"><text>-</text></inputEntry>
+        <outputEntry id="dec_workType_r5_oe"><text>"corrective.immediate"</text></outputEntry>
+      </rule>
+      <rule id="dec_workType_r6">
+        <description>Function impaired or at risk, but the repair can be scheduled.</description>
+        <inputEntry id="dec_workType_r6_ie1"><text>"inspectionFinding","customerRequest","fieldIdentified"</text></inputEntry>
+        <inputEntry id="dec_workType_r6_ie2"><text>-</text></inputEntry>
+        <inputEntry id="dec_workType_r6_ie3"><text>-</text></inputEntry>
+        <outputEntry id="dec_workType_r6_oe"><text>"corrective.deferred"</text></outputEntry>
+      </rule>
+      <rule id="dec_workType_r7">
+        <description>Held. The four types are mutually exclusive by construction, so anything unclassified is a data problem, not a fifth type.</description>
+        <inputEntry id="dec_workType_r7_ie1"><text>-</text></inputEntry>
+        <inputEntry id="dec_workType_r7_ie2"><text>-</text></inputEntry>
+        <inputEntry id="dec_workType_r7_ie3"><text>-</text></inputEntry>
+        <outputEntry id="dec_workType_r7_oe"><text>"unclassified"</text></outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <decision id="dec_priority" name="Rank">
+    <description>1.3.2. EN 17007 cl. 6.5.2 ACT.1 'Rank the events'. PRIORITY hit policy: rules are ordered by output priority, so a leak grade always beats a criticality rule. The grades are ANSI-accredited consensus, not federal law, and GPTC itself says the judgement of operator personnel at the scene is of primary importance in assigning a grade - so this table records the consequence of a grade, it does not assign one. Watch the share of work landing at immediate; rank inflation makes the queue meaningless.</description>
+    <variable id="dec_priority_v" name="Rank" typeRef="string"/>
+    <informationRequirement id="ir_dec_priority_in_hazardGrade"><requiredInput href="#in_hazardGrade"/></informationRequirement>
+    <informationRequirement id="ir_dec_priority_dec_workType"><requiredDecision href="#dec_workType"/></informationRequirement>
+    <informationRequirement id="ir_dec_priority_in_criticality"><requiredInput href="#in_criticality"/></informationRequirement>
+    <authorityRequirement id="ar_dec_priority"><requiredAuthority href="#ks_gptc"/></authorityRequirement>
+    <decisionTable id="dec_priority_dt" hitPolicy="PRIORITY" preferredOrientation="Rule-as-Row">
+      <input id="dec_priority_i1" label="Leak grade"><inputExpression id="dec_priority_i1_e" typeRef="string"><text>in_hazardGrade</text></inputExpression></input>
+      <input id="dec_priority_i2" label="Maintenance type"><inputExpression id="dec_priority_i2_e" typeRef="string"><text>dec_workType</text></inputExpression></input>
+      <input id="dec_priority_i3" label="Item criticality"><inputExpression id="dec_priority_i3_e" typeRef="string"><text>in_criticality</text></inputExpression></input>
+      <output id="dec_priority_o" label="Rank" name="Rank" typeRef="string"/>
+      <rule id="dec_priority_r1">
+        <description>GPTC G-192-11 sec. 5.6(a): a leak representing an existing or probable hazard to persons or property, requiring immediate repair or continuous action until the conditions are no longer hazardous.</description>
+        <inputEntry id="dec_priority_r1_ie1"><text>"grade1"</text></inputEntry>
+        <inputEntry id="dec_priority_r1_ie2"><text>-</text></inputEntry>
+        <inputEntry id="dec_priority_r1_ie3"><text>-</text></inputEntry>
+        <outputEntry id="dec_priority_r1_oe"><text>"immediate"</text></outputEntry>
+      </rule>
+      <rule id="dec_priority_r2">
+        <description>GPTC G-192-11 sec. 5.6(b): non-hazardous at detection but requiring scheduled repair based on probable future hazard. Table 3b: repair or clear within one calendar year but no later than 15 months from report, reevaluated at least every six months until cleared.</description>
+        <inputEntry id="dec_priority_r2_ie1"><text>"grade2"</text></inputEntry>
+        <inputEntry id="dec_priority_r2_ie2"><text>-</text></inputEntry>
+        <inputEntry id="dec_priority_r2_ie3"><text>-</text></inputEntry>
+        <outputEntry id="dec_priority_r2_oe"><text>"scheduled"</text></outputEntry>
+      </rule>
+      <rule id="dec_priority_r3">
+        <description>GPTC G-192-11 sec. 5.6(c): non-hazardous at detection and reasonably expected to remain so. Table 3c: reevaluate at the next scheduled survey or within 15 months of report, whichever is first.</description>
+        <inputEntry id="dec_priority_r3_ie1"><text>"grade3"</text></inputEntry>
+        <inputEntry id="dec_priority_r3_ie2"><text>-</text></inputEntry>
+        <inputEntry id="dec_priority_r3_ie3"><text>-</text></inputEntry>
+        <outputEntry id="dec_priority_r3_oe"><text>"routine"</text></outputEntry>
+      </rule>
+      <rule id="dec_priority_r4">
+        <inputEntry id="dec_priority_r4_ie1"><text>-</text></inputEntry>
+        <inputEntry id="dec_priority_r4_ie2"><text>"corrective.immediate"</text></inputEntry>
+        <inputEntry id="dec_priority_r4_ie3"><text>-</text></inputEntry>
+        <outputEntry id="dec_priority_r4_oe"><text>"immediate"</text></outputEntry>
+      </rule>
+      <rule id="dec_priority_r5">
+        <inputEntry id="dec_priority_r5_ie1"><text>-</text></inputEntry>
+        <inputEntry id="dec_priority_r5_ie2"><text>"preventive.predetermined","preventive.conditionBased"</text></inputEntry>
+        <inputEntry id="dec_priority_r5_ie3"><text>-</text></inputEntry>
+        <outputEntry id="dec_priority_r5_oe"><text>"scheduled"</text></outputEntry>
+      </rule>
+      <rule id="dec_priority_r6">
+        <description>Criticality basis: EN 13306:2017 Annex E Criticality matrix.</description>
+        <inputEntry id="dec_priority_r6_ie1"><text>-</text></inputEntry>
+        <inputEntry id="dec_priority_r6_ie2"><text>-</text></inputEntry>
+        <inputEntry id="dec_priority_r6_ie3"><text>"critical"</text></inputEntry>
+        <outputEntry id="dec_priority_r6_oe"><text>"scheduled"</text></outputEntry>
+      </rule>
+      <rule id="dec_priority_r7">
+        <inputEntry id="dec_priority_r7_ie1"><text>-</text></inputEntry>
+        <inputEntry id="dec_priority_r7_ie2"><text>-</text></inputEntry>
+        <inputEntry id="dec_priority_r7_ie3"><text>-</text></inputEntry>
+        <outputEntry id="dec_priority_r7_oe"><text>"routine"</text></outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <decision id="dec_dueDate" name="Compliance due date">
+    <description>1.3.3. Every rule carries its eCFR citation. Two structural warnings. First, Part 192 intervals bind twice - the calendar-year count AND the not-to-exceed month figure - and this table computes only the month figure, so the calendar-year test must be applied alongside it. Second, Part 192 does not define 'business district', so the population attribute that selects the first two rules is an operator determination made in the 192.605 operating and maintenance manual, not a federal one.</description>
+    <variable id="dec_dueDate_v" name="Compliance due date" typeRef="date"/>
+    <informationRequirement id="ir_dec_dueDate_in_obligation"><requiredInput href="#in_obligation"/></informationRequirement>
+    <informationRequirement id="ir_dec_dueDate_in_segment"><requiredInput href="#in_segment"/></informationRequirement>
+    <informationRequirement id="ir_dec_dueDate_in_priorFinding"><requiredInput href="#in_priorFinding"/></informationRequirement>
+    <informationRequirement id="ir_dec_dueDate_in_lastCompliant"><requiredInput href="#in_lastCompliant"/></informationRequirement>
+    <authorityRequirement id="ar_dec_dueDate"><requiredAuthority href="#ks_regulation"/></authorityRequirement>
+    <decisionTable id="dec_dueDate_dt" hitPolicy="UNIQUE" preferredOrientation="Rule-as-Row">
+      <input id="dec_dueDate_i1" label="Obligation"><inputExpression id="dec_dueDate_i1_e" typeRef="string"><text>in_obligation</text></inputExpression></input>
+      <input id="dec_dueDate_i2" label="Population attribute"><inputExpression id="dec_dueDate_i2_e" typeRef="string"><text>in_segment</text></inputExpression></input>
+      <input id="dec_dueDate_i3" label="Prior finding"><inputExpression id="dec_dueDate_i3_e" typeRef="string"><text>in_priorFinding</text></inputExpression></input>
+      <input id="dec_dueDate_i4" label="Date of last compliant completion"><inputExpression id="dec_dueDate_i4_e" typeRef="date"><text>in_lastCompliant</text></inputExpression></input>
+      <output id="dec_dueDate_o" label="Compliance due date" name="Compliance due date" typeRef="date"/>
+      <rule id="dec_dueDate_r1">
+        <description>49 CFR 192.723(b)(1): in business districts, at intervals not exceeding 15 months, but at least once each calendar year. Both bind.</description>
+        <inputEntry id="dec_dueDate_r1_ie1"><text>"leakSurvey"</text></inputEntry>
+        <inputEntry id="dec_dueDate_r1_ie2"><text>"businessDistrict"</text></inputEntry>
+        <inputEntry id="dec_dueDate_r1_ie3"><text>-</text></inputEntry>
+        <inputEntry id="dec_dueDate_r1_ie4"><text>-</text></inputEntry>
+        <outputEntry id="dec_dueDate_r1_oe"><text>in_lastCompliant + duration("P15M")</text></outputEntry>
+      </rule>
+      <rule id="dec_dueDate_r2">
+        <description>49 CFR 192.723(b)(2) proviso: for cathodically unprotected distribution lines subject to 192.465(e) on which electrical surveys are impractical, at least once every 3 calendar years at intervals not exceeding 39 months. This case turns on an asset attribute, not on geography.</description>
+        <inputEntry id="dec_dueDate_r2_ie1"><text>"leakSurvey"</text></inputEntry>
+        <inputEntry id="dec_dueDate_r2_ie2"><text>"cathodicallyUnprotected"</text></inputEntry>
+        <inputEntry id="dec_dueDate_r2_ie3"><text>-</text></inputEntry>
+        <inputEntry id="dec_dueDate_r2_ie4"><text>-</text></inputEntry>
+        <outputEntry id="dec_dueDate_r2_oe"><text>in_lastCompliant + duration("P39M")</text></outputEntry>
+      </rule>
+      <rule id="dec_dueDate_r3">
+        <description>49 CFR 192.723(b)(2): outside business districts, at least once every 5 calendar years at intervals not exceeding 63 months.</description>
+        <inputEntry id="dec_dueDate_r3_ie1"><text>"leakSurvey"</text></inputEntry>
+        <inputEntry id="dec_dueDate_r3_ie2"><text>-</text></inputEntry>
+        <inputEntry id="dec_dueDate_r3_ie3"><text>-</text></inputEntry>
+        <inputEntry id="dec_dueDate_r3_ie4"><text>-</text></inputEntry>
+        <outputEntry id="dec_dueDate_r3_oe"><text>in_lastCompliant + duration("P63M")</text></outputEntry>
+      </rule>
+      <rule id="dec_dueDate_r4">
+        <description>49 CFR 192.481(d): a finding on a service line at the most recent inspection shortens the next from 63 to 39 months. The calculation must read the OUTCOME of the prior inspection, not only its date.</description>
+        <inputEntry id="dec_dueDate_r4_ie1"><text>"atmosphericCorrosion"</text></inputEntry>
+        <inputEntry id="dec_dueDate_r4_ie2"><text>"serviceLine"</text></inputEntry>
+        <inputEntry id="dec_dueDate_r4_ie3"><text>"corrosionFound"</text></inputEntry>
+        <inputEntry id="dec_dueDate_r4_ie4"><text>-</text></inputEntry>
+        <outputEntry id="dec_dueDate_r4_oe"><text>in_lastCompliant + duration("P39M")</text></outputEntry>
+      </rule>
+      <rule id="dec_dueDate_r5">
+        <description>49 CFR 192.481(a)(2).</description>
+        <inputEntry id="dec_dueDate_r5_ie1"><text>"atmosphericCorrosion"</text></inputEntry>
+        <inputEntry id="dec_dueDate_r5_ie2"><text>"serviceLine"</text></inputEntry>
+        <inputEntry id="dec_dueDate_r5_ie3"><text>-</text></inputEntry>
+        <inputEntry id="dec_dueDate_r5_ie4"><text>-</text></inputEntry>
+        <outputEntry id="dec_dueDate_r5_oe"><text>in_lastCompliant + duration("P63M")</text></outputEntry>
+      </rule>
+      <rule id="dec_dueDate_r6">
+        <description>49 CFR 192.481(a)(1): onshore other than a service line.</description>
+        <inputEntry id="dec_dueDate_r6_ie1"><text>"atmosphericCorrosion"</text></inputEntry>
+        <inputEntry id="dec_dueDate_r6_ie2"><text>-</text></inputEntry>
+        <inputEntry id="dec_dueDate_r6_ie3"><text>-</text></inputEntry>
+        <inputEntry id="dec_dueDate_r6_ie4"><text>-</text></inputEntry>
+        <outputEntry id="dec_dueDate_r6_oe"><text>in_lastCompliant + duration("P39M")</text></outputEntry>
+      </rule>
+      <rule id="dec_dueDate_r7">
+        <description>49 CFR 192.465(a).</description>
+        <inputEntry id="dec_dueDate_r7_ie1"><text>"cathodicProtectionTest"</text></inputEntry>
+        <inputEntry id="dec_dueDate_r7_ie2"><text>-</text></inputEntry>
+        <inputEntry id="dec_dueDate_r7_ie3"><text>-</text></inputEntry>
+        <inputEntry id="dec_dueDate_r7_ie4"><text>-</text></inputEntry>
+        <outputEntry id="dec_dueDate_r7_oe"><text>in_lastCompliant + duration("P15M")</text></outputEntry>
+      </rule>
+      <rule id="dec_dueDate_r8">
+        <description>49 CFR 192.465(b)(1): six times each calendar year, intervals not exceeding 2 1/2 months. Remote measurement satisfies this but does NOT remove the annual physical inspection under 192.465(b)(2).</description>
+        <inputEntry id="dec_dueDate_r8_ie1"><text>"rectifierInspection"</text></inputEntry>
+        <inputEntry id="dec_dueDate_r8_ie2"><text>"remote"</text></inputEntry>
+        <inputEntry id="dec_dueDate_r8_ie3"><text>-</text></inputEntry>
+        <inputEntry id="dec_dueDate_r8_ie4"><text>-</text></inputEntry>
+        <outputEntry id="dec_dueDate_r8_oe"><text>in_lastCompliant + duration("P2M15D")</text></outputEntry>
+      </rule>
+      <rule id="dec_dueDate_r9">
+        <description>49 CFR 192.747(a): each valve whose use may be necessary for safe operation. The population is operator-determined.</description>
+        <inputEntry id="dec_dueDate_r9_ie1"><text>"valveMaintenance"</text></inputEntry>
+        <inputEntry id="dec_dueDate_r9_ie2"><text>-</text></inputEntry>
+        <inputEntry id="dec_dueDate_r9_ie3"><text>-</text></inputEntry>
+        <inputEntry id="dec_dueDate_r9_ie4"><text>-</text></inputEntry>
+        <outputEntry id="dec_dueDate_r9_oe"><text>in_lastCompliant + duration("P15M")</text></outputEntry>
+      </rule>
+      <rule id="dec_dueDate_r10">
+        <description>49 CFR 192.749(a): vaults of 200 cubic feet or more.</description>
+        <inputEntry id="dec_dueDate_r10_ie1"><text>"vaultInspection"</text></inputEntry>
+        <inputEntry id="dec_dueDate_r10_ie2"><text>-</text></inputEntry>
+        <inputEntry id="dec_dueDate_r10_ie3"><text>-</text></inputEntry>
+        <inputEntry id="dec_dueDate_r10_ie4"><text>-</text></inputEntry>
+        <outputEntry id="dec_dueDate_r10_oe"><text>in_lastCompliant + duration("P15M")</text></outputEntry>
+      </rule>
+      <rule id="dec_dueDate_r11">
+        <description>49 CFR 192.739(a) inspection and testing; 192.743(a) relief capacity.</description>
+        <inputEntry id="dec_dueDate_r11_ie1"><text>"regulatorStation"</text></inputEntry>
+        <inputEntry id="dec_dueDate_r11_ie2"><text>-</text></inputEntry>
+        <inputEntry id="dec_dueDate_r11_ie3"><text>-</text></inputEntry>
+        <inputEntry id="dec_dueDate_r11_ie4"><text>-</text></inputEntry>
+        <outputEntry id="dec_dueDate_r11_oe"><text>in_lastCompliant + duration("P15M")</text></outputEntry>
+      </rule>
+      <rule id="dec_dueDate_r12">
+        <description>A fixed date supplied by the order, overriding the standing interval.</description>
+        <inputEntry id="dec_dueDate_r12_ie1"><text>"enforceableOrder"</text></inputEntry>
+        <inputEntry id="dec_dueDate_r12_ie2"><text>-</text></inputEntry>
+        <inputEntry id="dec_dueDate_r12_ie3"><text>-</text></inputEntry>
+        <inputEntry id="dec_dueDate_r12_ie4"><text>-</text></inputEntry>
+        <outputEntry id="dec_dueDate_r12_oe"><text>in_lastCompliant</text></outputEntry>
+      </rule>
+      <rule id="dec_dueDate_r13">
+        <description>No federal interval. For electric distribution there is none - 16 U.S.C. 824o places distribution outside the federal reliability regime, so intervals are state rule. The due date then comes from the response target, not from here.</description>
+        <inputEntry id="dec_dueDate_r13_ie1"><text>-</text></inputEntry>
+        <inputEntry id="dec_dueDate_r13_ie2"><text>-</text></inputEntry>
+        <inputEntry id="dec_dueDate_r13_ie3"><text>-</text></inputEntry>
+        <inputEntry id="dec_dueDate_r13_ie4"><text>-</text></inputEntry>
+        <outputEntry id="dec_dueDate_r13_oe"><text>null</text></outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <decision id="dec_routing" name="Responsible organisation">
+    <description>1.3.4. EN 17007 cl. 6.15 SER 'Provide external maintenance services'. FIRST hit policy: rules are read in order and the first match wins, so the immediate and qualification rules take precedence by position. The qualification rule is not a convenience: 49 CFR 192.801(b) defines a covered task by the activity, and 192.805(b) makes the operator responsible for ensuring the individual is qualified whether they are an employee or a contractor.</description>
+    <variable id="dec_routing_v" name="Responsible organisation" typeRef="string"/>
+    <informationRequirement id="ir_dec_routing_dec_workType"><requiredDecision href="#dec_workType"/></informationRequirement>
+    <informationRequirement id="ir_dec_routing_in_skill"><requiredInput href="#in_skill"/></informationRequirement>
+    <informationRequirement id="ir_dec_routing_in_district"><requiredInput href="#in_district"/></informationRequirement>
+    <informationRequirement id="ir_dec_routing_in_assetClass"><requiredInput href="#in_assetClass"/></informationRequirement>
+    <decisionTable id="dec_routing_dt" hitPolicy="FIRST" preferredOrientation="Rule-as-Row">
+      <input id="dec_routing_i1" label="Work type"><inputExpression id="dec_routing_i1_e" typeRef="string"><text>dec_workType</text></inputExpression></input>
+      <input id="dec_routing_i2" label="Required qualification"><inputExpression id="dec_routing_i2_e" typeRef="string"><text>in_skill</text></inputExpression></input>
+      <input id="dec_routing_i3" label="District"><inputExpression id="dec_routing_i3_e" typeRef="string"><text>in_district</text></inputExpression></input>
+      <input id="dec_routing_i4" label="Asset class"><inputExpression id="dec_routing_i4_e" typeRef="string"><text>in_assetClass</text></inputExpression></input>
+      <output id="dec_routing_o" label="Responsible organisation" name="Responsible organisation" typeRef="string"/>
+      <rule id="dec_routing_r1">
+        <description>Emergency work stays with the district regardless of qualification routing.</description>
+        <inputEntry id="dec_routing_r1_ie1"><text>"emergencyRestoration"</text></inputEntry>
+        <inputEntry id="dec_routing_r1_ie2"><text>-</text></inputEntry>
+        <inputEntry id="dec_routing_r1_ie3"><text>-</text></inputEntry>
+        <inputEntry id="dec_routing_r1_ie4"><text>-</text></inputEntry>
+        <outputEntry id="dec_routing_r1_oe"><text>"districtFieldOperations"</text></outputEntry>
+      </rule>
+      <rule id="dec_routing_r2">
+        <description>Qualification is a routing input, not a dispatch check. Routing that ignores it sends unqualified resources to covered tasks.</description>
+        <inputEntry id="dec_routing_r2_ie1"><text>-</text></inputEntry>
+        <inputEntry id="dec_routing_r2_ie2"><text>not(null)</text></inputEntry>
+        <inputEntry id="dec_routing_r2_ie3"><text>-</text></inputEntry>
+        <inputEntry id="dec_routing_r2_ie4"><text>-</text></inputEntry>
+        <outputEntry id="dec_routing_r2_oe"><text>"qualifiedCrewPool"</text></outputEntry>
+      </rule>
+      <rule id="dec_routing_r3">
+        <description>Handed to 16.0 for award. Shares its sourcing rule with 16.2.1.</description>
+        <inputEntry id="dec_routing_r3_ie1"><text>"preventive.predetermined"</text></inputEntry>
+        <inputEntry id="dec_routing_r3_ie2"><text>-</text></inputEntry>
+        <inputEntry id="dec_routing_r3_ie3"><text>-</text></inputEntry>
+        <inputEntry id="dec_routing_r3_ie4"><text>"programmePopulation"</text></inputEntry>
+        <outputEntry id="dec_routing_r3_oe"><text>"externalService"</text></outputEntry>
+      </rule>
+      <rule id="dec_routing_r4">
+        <inputEntry id="dec_routing_r4_ie1"><text>-</text></inputEntry>
+        <inputEntry id="dec_routing_r4_ie2"><text>-</text></inputEntry>
+        <inputEntry id="dec_routing_r4_ie3"><text>-</text></inputEntry>
+        <inputEntry id="dec_routing_r4_ie4"><text>"meter"</text></inputEntry>
+        <outputEntry id="dec_routing_r4_oe"><text>"meteringOperations"</text></outputEntry>
+      </rule>
+      <rule id="dec_routing_r5">
+        <inputEntry id="dec_routing_r5_ie1"><text>-</text></inputEntry>
+        <inputEntry id="dec_routing_r5_ie2"><text>-</text></inputEntry>
+        <inputEntry id="dec_routing_r5_ie3"><text>not(null)</text></inputEntry>
+        <inputEntry id="dec_routing_r5_ie4"><text>-</text></inputEntry>
+        <outputEntry id="dec_routing_r5_oe"><text>"districtFieldOperations"</text></outputEntry>
+      </rule>
+      <rule id="dec_routing_r6">
+        <description>Unroutable. Held for review rather than dispatched to a default.</description>
+        <inputEntry id="dec_routing_r6_ie1"><text>-</text></inputEntry>
+        <inputEntry id="dec_routing_r6_ie2"><text>-</text></inputEntry>
+        <inputEntry id="dec_routing_r6_ie3"><text>-</text></inputEntry>
+        <inputEntry id="dec_routing_r6_ie4"><text>-</text></inputEntry>
+        <outputEntry id="dec_routing_r6_oe"><text>"workManagementReview"</text></outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram id="drd_Categorise_and_prioritise">
+      <dmndi:DMNShape id="sh_in_condition" dmnElementRef="in_condition"><dc:Bounds x="60" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_assetClass" dmnElementRef="in_assetClass"><dc:Bounds x="245" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_criticality" dmnElementRef="in_criticality"><dc:Bounds x="430" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_origin" dmnElementRef="in_origin"><dc:Bounds x="615" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_hazardGrade" dmnElementRef="in_hazardGrade"><dc:Bounds x="800" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_obligation" dmnElementRef="in_obligation"><dc:Bounds x="985" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_lastCompliant" dmnElementRef="in_lastCompliant"><dc:Bounds x="1170" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_segment" dmnElementRef="in_segment"><dc:Bounds x="1355" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_priorFinding" dmnElementRef="in_priorFinding"><dc:Bounds x="1540" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_skill" dmnElementRef="in_skill"><dc:Bounds x="1725" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_district" dmnElementRef="in_district"><dc:Bounds x="1910" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_dec_workType" dmnElementRef="dec_workType"><dc:Bounds x="60" y="240" width="180" height="70"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_dec_priority" dmnElementRef="dec_priority"><dc:Bounds x="260" y="240" width="180" height="70"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_dec_dueDate" dmnElementRef="dec_dueDate"><dc:Bounds x="460" y="240" width="180" height="70"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_dec_routing" dmnElementRef="dec_routing"><dc:Bounds x="660" y="240" width="180" height="70"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_ks_regulation" dmnElementRef="ks_regulation"><dc:Bounds x="900" y="100" width="160" height="55"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_ks_gptc" dmnElementRef="ks_gptc"><dc:Bounds x="1080" y="100" width="160" height="55"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_ks_standard" dmnElementRef="ks_standard"><dc:Bounds x="1260" y="100" width="160" height="55"/></dmndi:DMNShape>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</definitions>

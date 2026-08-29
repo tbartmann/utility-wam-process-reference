@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_P_3_4" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <process id="P_3_4" name="3.4 Optimise the schedule" isExecutable="false">
+    <documentation>Tier-4 activities under 3.4.1 and 3.4.4. Constraint binding is in 3.4.3-apply-constraints.dmn; exceptions and overrides are case-managed in 3.4.5-schedule-exceptions.cmmn; travel routing 3.4.2 is specified and deliberately not drawn, because the algorithm is vendor-defined. Note what this group does NOT do: it publishes a schedule change, it does not dispatch. Dispatch is 4.1.</documentation>
+    <startEvent id="n_34_start" name="Work released as ready to schedule"><messageEventDefinition id="n_34_start_md"/></startEvent>
+    <businessRuleTask id="n_34_bind" name="Bind the constraint set"><documentation>3.4.3. Calls decision Schedule_constraints in 3.4.3-apply-constraints.dmn. Statutory dates, qualification, customer windows and approved outage windows.</documentation></businessRuleTask>
+    <serviceTask id="n_34_match" name="Match skill, qualification, location and priority"><documentation>3.4.1.</documentation></serviceTask>
+    <exclusiveGateway id="n_34_gate" name="Match found"/>
+    <serviceTask id="n_34_hold" name="Leave in the ready bank with the reason"><documentation>3.4.1. With the reason - an unmatched item with no reason is indistinguishable from an item nobody looked at.</documentation></serviceTask>
+    <callActivity id="n_34_ex" name="Handle as an exception or override"><documentation>3.4.5. Case-managed; see 3.4.5-schedule-exceptions.cmmn.</documentation></callActivity>
+    <serviceTask id="n_34_place" name="Place on a crew and a WorkTimeSchedule"><documentation>3.4.1. Internal crew, or a contracted crew already on the roster.</documentation></serviceTask>
+    <callActivity id="n_34_route" name="Order the day for travel"><documentation>3.4.2. Specified, not drawn - the routing algorithm is vendor-defined. It may return no safe order, which sends the work back to 3.4.1.</documentation></callActivity>
+    <sendTask id="n_34_pub" name="Publish the schedule"><documentation>3.4.1.</documentation></sendTask>
+    <endEvent id="n_34_end" name="Work scheduled"/>
+    <startEvent id="n_34_dstart" name="Emergent work or a disruption has invalidated part of the schedule"><messageEventDefinition id="n_34_dstart_md"/></startEvent>
+    <serviceTask id="n_34_hit" name="Identify the work and crews the disruption has hit"><documentation>3.4.4.</documentation></serviceTask>
+    <serviceTask id="n_34_prot" name="Protect compliance-dated and in-progress work"><documentation>3.4.4. Protected first, before anything is re-placed. A compliance date does not move because the day did.</documentation></serviceTask>
+    <exclusiveGateway id="n_34_major" name="Still a day's rebuild"/>
+    <sendTask id="n_34_hand" name="Hand to major event management"><documentation>3.4.4. When it is no longer a day's rebuild it belongs to 9.4, not here.</documentation></sendTask>
+    <serviceTask id="n_34_re" name="Place the emergent item and re-place what it displaced"><documentation>3.4.4.</documentation></serviceTask>
+    <sendTask id="n_34_pub2" name="Publish the change to dispatch"><documentation>3.4.4. Publish, not dispatch. Dispatch is 4.1 and the distinction is deliberate.</documentation></sendTask>
+    <endEvent id="n_34_dend" name="Schedule rebuilt"/>
+    <endEvent id="n_34_hend" name="Handed to major event management"/>
+    <sequenceFlow id="f_n_34_start_n_34_bind" sourceRef="n_34_start" targetRef="n_34_bind" name=""/>
+    <sequenceFlow id="f_n_34_bind_n_34_match" sourceRef="n_34_bind" targetRef="n_34_match" name=""/>
+    <sequenceFlow id="f_n_34_match_n_34_gate" sourceRef="n_34_match" targetRef="n_34_gate" name=""/>
+    <sequenceFlow id="f_n_34_gate_n_34_hold" sourceRef="n_34_gate" targetRef="n_34_hold" name="no match"><conditionExpression xsi:type="tFormalExpression"><![CDATA[matchFound = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_34_hold_n_34_ex" sourceRef="n_34_hold" targetRef="n_34_ex" name=""/>
+    <sequenceFlow id="f_n_34_ex_n_34_match" sourceRef="n_34_ex" targetRef="n_34_match" name="returned to matching"/>
+    <sequenceFlow id="f_n_34_gate_n_34_place" sourceRef="n_34_gate" targetRef="n_34_place" name="matched"/>
+    <sequenceFlow id="f_n_34_place_n_34_route" sourceRef="n_34_place" targetRef="n_34_route" name=""/>
+    <sequenceFlow id="f_n_34_route_n_34_match" sourceRef="n_34_route" targetRef="n_34_match" name="no safe order"><conditionExpression xsi:type="tFormalExpression"><![CDATA[routable = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_34_route_n_34_pub" sourceRef="n_34_route" targetRef="n_34_pub" name="ordered"/>
+    <sequenceFlow id="f_n_34_pub_n_34_end" sourceRef="n_34_pub" targetRef="n_34_end" name=""/>
+    <sequenceFlow id="f_n_34_dstart_n_34_hit" sourceRef="n_34_dstart" targetRef="n_34_hit" name=""/>
+    <sequenceFlow id="f_n_34_hit_n_34_prot" sourceRef="n_34_hit" targetRef="n_34_prot" name=""/>
+    <sequenceFlow id="f_n_34_prot_n_34_major" sourceRef="n_34_prot" targetRef="n_34_major" name=""/>
+    <sequenceFlow id="f_n_34_major_n_34_hand" sourceRef="n_34_major" targetRef="n_34_hand" name="beyond a day's rebuild"><conditionExpression xsi:type="tFormalExpression"><![CDATA[disruptionScale = "majorEvent"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_34_hand_n_34_hend" sourceRef="n_34_hand" targetRef="n_34_hend" name=""/>
+    <sequenceFlow id="f_n_34_major_n_34_re" sourceRef="n_34_major" targetRef="n_34_re" name="a day's rebuild"/>
+    <sequenceFlow id="f_n_34_re_n_34_pub2" sourceRef="n_34_re" targetRef="n_34_pub2" name=""/>
+    <sequenceFlow id="f_n_34_pub2_n_34_dend" sourceRef="n_34_pub2" targetRef="n_34_dend" name=""/>
+  </process>
+  <bpmndi:BPMNDiagram id="dg_P_3_4">
+    <bpmndi:BPMNPlane id="pl_P_3_4" bpmnElement="P_3_4">
+      <bpmndi:BPMNShape id="sh_n_34_start" bpmnElement="n_34_start"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_34_bind" bpmnElement="n_34_bind"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_34_match" bpmnElement="n_34_match"><dc:Bounds x="425" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_34_gate" bpmnElement="n_34_gate"><dc:Bounds x="637" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_34_hold" bpmnElement="n_34_hold"><dc:Bounds x="595" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_34_ex" bpmnElement="n_34_ex"><dc:Bounds x="765" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_34_place" bpmnElement="n_34_place"><dc:Bounds x="765" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_34_route" bpmnElement="n_34_route"><dc:Bounds x="935" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_34_pub" bpmnElement="n_34_pub"><dc:Bounds x="1105" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_34_end" bpmnElement="n_34_end"><dc:Bounds x="1322" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_34_dstart" bpmnElement="n_34_dstart"><dc:Bounds x="472" y="657" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_34_hit" bpmnElement="n_34_hit"><dc:Bounds x="595" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_34_prot" bpmnElement="n_34_prot"><dc:Bounds x="765" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_34_major" bpmnElement="n_34_major"><dc:Bounds x="977" y="652" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_34_hand" bpmnElement="n_34_hand"><dc:Bounds x="935" y="750" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_34_re" bpmnElement="n_34_re"><dc:Bounds x="1105" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_34_pub2" bpmnElement="n_34_pub2"><dc:Bounds x="1275" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_34_dend" bpmnElement="n_34_dend"><dc:Bounds x="1492" y="657" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_34_hend" bpmnElement="n_34_hend"><dc:Bounds x="1152" y="767" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ed_f_n_34_start_n_34_bind" bpmnElement="f_n_34_start_n_34_bind"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_34_bind_n_34_match" bpmnElement="f_n_34_bind_n_34_match"><di:waypoint x="385" y="235"/><di:waypoint x="425" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_34_match_n_34_gate" bpmnElement="f_n_34_match_n_34_gate"><di:waypoint x="555" y="235"/><di:waypoint x="637" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_34_gate_n_34_hold" bpmnElement="f_n_34_gate_n_34_hold"><di:waypoint x="683" y="235"/><di:waypoint x="570" y="235"/><di:waypoint x="570" y="455"/><di:waypoint x="595" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_34_hold_n_34_ex" bpmnElement="f_n_34_hold_n_34_ex"><di:waypoint x="725" y="455"/><di:waypoint x="765" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_34_ex_n_34_match" bpmnElement="f_n_34_ex_n_34_match"><di:waypoint x="895" y="455"/><di:waypoint x="400" y="455"/><di:waypoint x="400" y="235"/><di:waypoint x="425" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_34_gate_n_34_place" bpmnElement="f_n_34_gate_n_34_place"><di:waypoint x="683" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_34_place_n_34_route" bpmnElement="f_n_34_place_n_34_route"><di:waypoint x="895" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_34_route_n_34_match" bpmnElement="f_n_34_route_n_34_match"><di:waypoint x="1065" y="235"/><di:waypoint x="425" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_34_route_n_34_pub" bpmnElement="f_n_34_route_n_34_pub"><di:waypoint x="1065" y="235"/><di:waypoint x="1105" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_34_pub_n_34_end" bpmnElement="f_n_34_pub_n_34_end"><di:waypoint x="1235" y="235"/><di:waypoint x="1322" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_34_dstart_n_34_hit" bpmnElement="f_n_34_dstart_n_34_hit"><di:waypoint x="508" y="675"/><di:waypoint x="595" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_34_hit_n_34_prot" bpmnElement="f_n_34_hit_n_34_prot"><di:waypoint x="725" y="675"/><di:waypoint x="765" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_34_prot_n_34_major" bpmnElement="f_n_34_prot_n_34_major"><di:waypoint x="895" y="675"/><di:waypoint x="977" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_34_major_n_34_hand" bpmnElement="f_n_34_major_n_34_hand"><di:waypoint x="1023" y="675"/><di:waypoint x="910" y="675"/><di:waypoint x="910" y="785"/><di:waypoint x="935" y="785"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_34_hand_n_34_hend" bpmnElement="f_n_34_hand_n_34_hend"><di:waypoint x="1065" y="785"/><di:waypoint x="1152" y="785"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_34_major_n_34_re" bpmnElement="f_n_34_major_n_34_re"><di:waypoint x="1023" y="675"/><di:waypoint x="1105" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_34_re_n_34_pub2" bpmnElement="f_n_34_re_n_34_pub2"><di:waypoint x="1235" y="675"/><di:waypoint x="1275" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_34_pub2_n_34_dend" bpmnElement="f_n_34_pub2_n_34_dend"><di:waypoint x="1405" y="675"/><di:waypoint x="1492" y="675"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

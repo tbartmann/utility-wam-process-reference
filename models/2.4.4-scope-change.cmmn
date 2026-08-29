@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/CMMN/20151109/MODEL" xmlns:cmmndi="http://www.omg.org/spec/CMMN/20151109/CMMNDI" xmlns:dc="http://www.omg.org/spec/CMMN/20151109/DC" xmlns:di="http://www.omg.org/spec/CMMN/20151109/DI" id="defs_Scope_change" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <case id="Scope_change" name="2.4.4 Manage change to authorised scope">
+    <caseFileModel id="Scope_change_cfm">
+      <caseFileItem id="cf_baseline" name="Authorised baseline"/>
+      <caseFileItem id="cf_change" name="Proposed change and its origin"/>
+      <caseFileItem id="cf_permit" name="Permit and clearance position"/>
+      <caseFileItem id="cf_analysis" name="Implication analysis"/>
+    </caseFileModel>
+    <casePlanModel id="Scope_change_plan" name="2.4.4 Manage change to authorised scope" autoComplete="true">
+      <documentation>CMMN because the elements of a management of change are enumerated but not sequenced. A permit implication is chased before a cost implication when the crew is on site, and the reverse when it is not - two competent people would legitimately order the same case differently, which is the test for case management. 49 CFR 192.13(d) requires an MOC process for onshore gas TRANSMISSION only; for gas distribution DIMP has no MOC element and this is voluntary practice under API RP 1173.</documentation>
+      <planItem id="pi_t_24_reason" name="Record the reason for the change and the approving authority" definitionRef="t_24_reason_def">
+        <itemControl id="ic_t_24_reason">
+          <requiredRule id="rr_t_24_reason"><condition><![CDATA[true]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_24_reason"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_24_analyse" name="Analyse the implications for cost, schedule, permits and safety" definitionRef="t_24_analyse_def">
+        <itemControl id="ic_t_24_analyse">
+          <requiredRule id="rr_t_24_analyse"><condition><![CDATA[true]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_24_analyse"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_24_permit" name="Acquire the work permit the change now requires" definitionRef="t_24_permit_def">
+        <itemControl id="ic_t_24_permit">
+          <repetitionRule id="rep_t_24_permit"><condition><![CDATA[true]]></condition></repetitionRule>
+          <requiredRule id="rr_t_24_permit"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_24_permit"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_24_design" name="Raise a design revision and re-release" definitionRef="t_24_design_def">
+        <itemControl id="ic_t_24_design">
+          <requiredRule id="rr_t_24_design"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_24_design"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_24_reapprove" name="Re-approve at the authority the changed value and risk require" definitionRef="t_24_reapprove_def">
+        <itemControl id="ic_t_24_reapprove">
+          <requiredRule id="rr_t_24_reapprove"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_24_reapprove"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_24_qual" name="Confirm qualification of staff for the changed method" definitionRef="t_24_qual_def">
+        <itemControl id="ic_t_24_qual">
+          <requiredRule id="rr_t_24_qual"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_24_qual"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_24_comm" name="Communicate the change to affected parties" definitionRef="t_24_comm_def">
+        <itemControl id="ic_t_24_comm">
+          <repetitionRule id="rep_t_24_comm"><condition><![CDATA[true]]></condition></repetitionRule>
+          <requiredRule id="rr_t_24_comm"><condition><![CDATA[true]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_24_comm"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_24_record" name="Document the change and its time limitation" definitionRef="t_24_record_def">
+        <itemControl id="ic_t_24_record">
+          <requiredRule id="rr_t_24_record"><condition><![CDATA[true]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_24_record"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_m_24_rebaselined" name="Change approved and the baseline restated" definitionRef="m_24_rebaselined_def"/>
+      <humanTask id="t_24_reason_def" name="Record the reason for the change and the approving authority" isBlocking="true"><documentation>49 CFR 192.13(d) elements: reason for change and authority for approving changes. Recorded first because it establishes who owns the case.</documentation></humanTask>
+      <humanTask id="t_24_analyse_def" name="Analyse the implications for cost, schedule, permits and safety" isBlocking="true"><documentation>Analysis of implications. ISO 55001:2024 cl. 6.3 requires risks from a planned change, permanent or temporary, to be assessed before the change is implemented.</documentation></humanTask>
+      <humanTask id="t_24_permit_def" name="Acquire the work permit the change now requires" isBlocking="true"><documentation>Acquisition of required work permits. Repeats where the change touches more than one consent. Calls 2.6-permits-and-prerequisites.bpmn.</documentation></humanTask>
+      <processTask id="t_24_design_def" name="Raise a design revision and re-release"><documentation>Where the change alters the design. Calls 2.1-engineer-and-design-work.bpmn at its change start event.</documentation></processTask>
+      <decisionTask id="t_24_reapprove_def" name="Re-approve at the authority the changed value and risk require"><documentation>Calls Approval_routing. A change within delegated tolerance is recorded, not re-approved; the tolerance is the operator's.</documentation></decisionTask>
+      <humanTask id="t_24_qual_def" name="Confirm qualification of staff for the changed method" isBlocking="true"><documentation>Qualification of staff is an explicit MOC element and is routinely the one missed when a method changes at short notice.</documentation></humanTask>
+      <humanTask id="t_24_comm_def" name="Communicate the change to affected parties" isBlocking="true"><documentation>Communication to affected parties. Repeats per party; the crew on site and the permit issuer are not the same audience.</documentation></humanTask>
+      <humanTask id="t_24_record_def" name="Document the change and its time limitation" isBlocking="true"><documentation>Documentation and time limitations. A temporary change with no stated expiry becomes a permanent one by default.</documentation></humanTask>
+      <milestone id="m_24_rebaselined_def" name="Change approved and the baseline restated"></milestone>
+    </casePlanModel>
+  </case>
+  <cmmndi:CMMNDI>
+    <cmmndi:CMMNDiagram id="dg_Scope_change">
+      <cmmndi:CMMNShape id="sh_plan" cmmnElementRef="Scope_change_plan"><dc:Bounds x="40" y="40" width="1010" height="300"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_24_reason" cmmnElementRef="pi_t_24_reason"><dc:Bounds x="80" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_24_analyse" cmmnElementRef="pi_t_24_analyse"><dc:Bounds x="270" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_24_permit" cmmnElementRef="pi_t_24_permit"><dc:Bounds x="460" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_24_design" cmmnElementRef="pi_t_24_design"><dc:Bounds x="80" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_24_reapprove" cmmnElementRef="pi_t_24_reapprove"><dc:Bounds x="270" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_24_qual" cmmnElementRef="pi_t_24_qual"><dc:Bounds x="460" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_24_comm" cmmnElementRef="pi_t_24_comm"><dc:Bounds x="80" y="290" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_24_record" cmmnElementRef="pi_t_24_record"><dc:Bounds x="270" y="290" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_m_24_rebaselined" cmmnElementRef="pi_m_24_rebaselined"><dc:Bounds x="460" y="290" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+    </cmmndi:CMMNDiagram>
+  </cmmndi:CMMNDI>
+</definitions>

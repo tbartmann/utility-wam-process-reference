@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/CMMN/20151109/MODEL" xmlns:cmmndi="http://www.omg.org/spec/CMMN/20151109/CMMNDI" xmlns:dc="http://www.omg.org/spec/CMMN/20151109/DC" xmlns:di="http://www.omg.org/spec/CMMN/20151109/DI" id="defs_Screening_disposition" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <case id="Screening_disposition" name="1.2.4 Reject or redirect out-of-scope demand">
+    <caseFileModel id="Screening_disposition_cfm">
+      <caseFileItem id="cf_candidate" name="Candidate work"/>
+      <caseFileItem id="cf_originator" name="Originator and commitment"/>
+      <caseFileItem id="cf_boundary" name="Ownership boundary evidence"/>
+    </caseFileModel>
+    <casePlanModel id="Screening_disposition_plan" name="1.2.4 Reject or redirect out-of-scope demand" autoComplete="true">
+      <documentation>CMMN because the handler chooses among referral, feedback, escalation and closure in an order that depends on the case. Two competent people would legitimately sequence it differently, which is the test for case management rather than a process.</documentation>
+      <planItem id="pi_t_verify" name="Verify ownership boundary" definitionRef="t_verify_def">
+        <itemControl id="ic_t_verify">
+          <requiredRule id="rr_t_verify"><condition><![CDATA[true]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_verify"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_hazard" name="Disprove reported hazard" definitionRef="t_hazard_def">
+        <itemControl id="ic_t_hazard">
+          <requiredRule id="rr_t_hazard"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_hazard"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_refer" name="Refer to owning party" definitionRef="t_refer_def">
+        <itemControl id="ic_t_refer">
+          <repetitionRule id="rep_t_refer"><condition><![CDATA[true]]></condition></repetitionRule>
+          <requiredRule id="rr_t_refer"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_refer"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_feedback" name="Give the originator the reason" definitionRef="t_feedback_def">
+        <itemControl id="ic_t_feedback">
+          <requiredRule id="rr_t_feedback"><condition><![CDATA[true]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_feedback"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_escalate" name="Escalate for engineering judgement" definitionRef="t_escalate_def">
+        <itemControl id="ic_t_escalate">
+          <requiredRule id="rr_t_escalate"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_escalate"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_close" name="Close with recorded reason" definitionRef="t_close_def">
+        <itemControl id="ic_t_close">
+          <requiredRule id="rr_t_close"><condition><![CDATA[true]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_close"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_m_disposed" name="Demand disposed with reason recorded" definitionRef="m_disposed_def"/>
+      <humanTask id="t_verify_def" name="Verify ownership boundary" isBlocking="true"><documentation>Whose plant is it. Anything reported as a hazard is not rejected on scope grounds until the hazard is disproved.</documentation></humanTask>
+      <humanTask id="t_hazard_def" name="Disprove reported hazard" isBlocking="true"><documentation>Available only where the report was a hazard. Blocks rejection until done.</documentation></humanTask>
+      <humanTask id="t_refer_def" name="Refer to owning party" isBlocking="true"><documentation>With the evidence. Repeats where more than one party is involved.</documentation></humanTask>
+      <humanTask id="t_feedback_def" name="Give the originator the reason" isBlocking="true"><documentation>Rejection without a route back to the originator destroys the feedback loop and the demand recurs.</documentation></humanTask>
+      <humanTask id="t_escalate_def" name="Escalate for engineering judgement" isBlocking="true"><documentation>Where ownership or scope is genuinely disputed.</documentation></humanTask>
+      <humanTask id="t_close_def" name="Close with recorded reason" isBlocking="true"><documentation>A recorded reason is mandatory. Anything less is a control gap.</documentation></humanTask>
+      <milestone id="m_disposed_def" name="Demand disposed with reason recorded"></milestone>
+    </casePlanModel>
+  </case>
+  <cmmndi:CMMNDI>
+    <cmmndi:CMMNDiagram id="dg_Screening_disposition">
+      <cmmndi:CMMNShape id="sh_plan" cmmnElementRef="Screening_disposition_plan"><dc:Bounds x="40" y="40" width="820" height="300"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_verify" cmmnElementRef="pi_t_verify"><dc:Bounds x="80" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_hazard" cmmnElementRef="pi_t_hazard"><dc:Bounds x="270" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_refer" cmmnElementRef="pi_t_refer"><dc:Bounds x="460" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_feedback" cmmnElementRef="pi_t_feedback"><dc:Bounds x="80" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_escalate" cmmnElementRef="pi_t_escalate"><dc:Bounds x="270" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_close" cmmnElementRef="pi_t_close"><dc:Bounds x="460" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_m_disposed" cmmnElementRef="pi_m_disposed"><dc:Bounds x="80" y="290" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+    </cmmndi:CMMNDiagram>
+  </cmmndi:CMMNDI>
+</definitions>

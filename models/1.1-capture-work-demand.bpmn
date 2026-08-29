@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_Capture_work_demand" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <process id="Capture_work_demand" name="1.1 Capture work demand" isExecutable="false">
+    <documentation>Six origination routes converge on one registered event. EN 17007 cl. 6.4.2 COR.1 classifies actual events; cl. 6.3.3 PRV.2 supplies planned demand. Tier-4 activities under processes 1.1.1 to 1.1.6. Product-neutral: participants are IEC 61968-6 clause 4.2 reference components, not products.</documentation>
+    <startEvent id="s_cust" name="Customer contact received"><messageEventDefinition id="s_cust_md"/></startEvent>
+    <startEvent id="s_cond" name="Device or telemetry condition met"><conditionalEventDefinition id="s_cond_cd"><condition/></conditionalEventDefinition></startEvent>
+    <startEvent id="s_insp" name="Inspection or survey finding recorded"><messageEventDefinition id="s_insp_md"/></startEvent>
+    <startEvent id="s_evt" name="Network or outage event raised"><signalEventDefinition id="s_evt_sd"/></startEvent>
+    <startEvent id="s_field" name="Resource on site identifies work"><messageEventDefinition id="s_field_md"/></startEvent>
+    <startEvent id="s_reg" name="Regulatory interval becomes due"><timerEventDefinition id="s_reg_td"/></startEvent>
+    <userTask id="t_cust" name="Record reported condition and commitment"><documentation>1.1.1. Commitment made to the customer becomes a downstream schedule constraint.</documentation></userTask>
+    <serviceTask id="t_cond" name="Aggregate condition to one candidate per asset"><documentation>1.1.2. Aggregation prevents an alarm storm becoming a queue of duplicates.</documentation></serviceTask>
+    <userTask id="t_insp" name="Record finding and link to originating inspection"><documentation>1.1.3. The link is the evidence chain from finding to remediation.</documentation></userTask>
+    <serviceTask id="t_evt" name="Derive affected section and impact"><documentation>1.1.4.</documentation></serviceTask>
+    <userTask id="t_field" name="Capture field request within permitted work types"><documentation>1.1.5. Permitted types are constrained by the work in hand and the raiser's role.</documentation></userTask>
+    <serviceTask id="t_reg" name="Select population in scope of the obligation"><documentation>1.1.6. The obligation reference must travel on the work record.</documentation></serviceTask>
+    <exclusiveGateway id="g_join" name=""/>
+    <userTask id="t_minor" name="Record against the originating work"><documentation>Where no distinct work item arises. EN 13460 cl. 3.8 defines a work order as the document for a maintenance operation; an addition to work in hand is not one.</documentation></userTask>
+    <userTask id="t_reg_rev" name="Review unclassified work before release"><documentation>Work that could not be classified to an EN 13306 maintenance type is held for review rather than released unclassified.</documentation></userTask>
+    <serviceTask id="t_register" name="Register candidate work"><documentation>Creates Work with originator, reported condition, item or location, and the obligation reference where one applies. CIM has no WorkOrder class - this is Work plus workOrderNumber.</documentation></serviceTask>
+    <endEvent id="e_reg" name="Event registered for classification"/>
+    <endEvent id="e_log" name="Recorded on original work"/>
+    <sequenceFlow id="f_s_cust_t_cust" sourceRef="s_cust" targetRef="t_cust" name=""/>
+    <sequenceFlow id="f_s_cond_t_cond" sourceRef="s_cond" targetRef="t_cond" name=""/>
+    <sequenceFlow id="f_s_insp_t_insp" sourceRef="s_insp" targetRef="t_insp" name=""/>
+    <sequenceFlow id="f_s_evt_t_evt" sourceRef="s_evt" targetRef="t_evt" name=""/>
+    <sequenceFlow id="f_s_field_t_field" sourceRef="s_field" targetRef="t_field" name=""/>
+    <sequenceFlow id="f_s_reg_t_reg" sourceRef="s_reg" targetRef="t_reg" name=""/>
+    <sequenceFlow id="f_t_cust_g_join" sourceRef="t_cust" targetRef="g_join" name=""/>
+    <sequenceFlow id="f_t_cond_g_join" sourceRef="t_cond" targetRef="g_join" name=""/>
+    <sequenceFlow id="f_t_insp_g_join" sourceRef="t_insp" targetRef="g_join" name=""/>
+    <sequenceFlow id="f_t_evt_g_join" sourceRef="t_evt" targetRef="g_join" name=""/>
+    <sequenceFlow id="f_t_field_g_join" sourceRef="t_field" targetRef="g_join" name=""/>
+    <sequenceFlow id="f_t_reg_g_join" sourceRef="t_reg" targetRef="g_join" name=""/>
+    <sequenceFlow id="f_g_join_t_minor" sourceRef="g_join" targetRef="t_minor" name="no distinct work item"><conditionExpression xsi:type="tFormalExpression"><![CDATA[outcome = "additionToWorkInHand"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_g_join_t_reg_rev" sourceRef="g_join" targetRef="t_reg_rev" name="unclassified"><conditionExpression xsi:type="tFormalExpression"><![CDATA[maintenanceType = "unclassified"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_g_join_t_register" sourceRef="g_join" targetRef="t_register" name="otherwise"/>
+    <sequenceFlow id="f_t_reg_rev_t_register" sourceRef="t_reg_rev" targetRef="t_register" name="approved"/>
+    <sequenceFlow id="f_t_minor_e_log" sourceRef="t_minor" targetRef="e_log" name=""/>
+    <sequenceFlow id="f_t_register_e_reg" sourceRef="t_register" targetRef="e_reg" name=""/>
+  </process>
+  <bpmndi:BPMNDiagram id="dg_Capture_work_demand">
+    <bpmndi:BPMNPlane id="pl_Capture_work_demand" bpmnElement="Capture_work_demand">
+      <bpmndi:BPMNShape id="sh_s_cust" bpmnElement="s_cust"><dc:Bounds x="132" y="107" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_s_cond" bpmnElement="s_cond"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_s_insp" bpmnElement="s_insp"><dc:Bounds x="132" y="327" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_s_evt" bpmnElement="s_evt"><dc:Bounds x="132" y="437" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_s_field" bpmnElement="s_field"><dc:Bounds x="132" y="547" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_s_reg" bpmnElement="s_reg"><dc:Bounds x="132" y="657" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_t_cust" bpmnElement="t_cust"><dc:Bounds x="255" y="90" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_t_cond" bpmnElement="t_cond"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_t_insp" bpmnElement="t_insp"><dc:Bounds x="255" y="310" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_t_evt" bpmnElement="t_evt"><dc:Bounds x="255" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_t_field" bpmnElement="t_field"><dc:Bounds x="255" y="530" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_t_reg" bpmnElement="t_reg"><dc:Bounds x="255" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_g_join" bpmnElement="g_join"><dc:Bounds x="467" y="322" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_t_minor" bpmnElement="t_minor"><dc:Bounds x="595" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_t_reg_rev" bpmnElement="t_reg_rev"><dc:Bounds x="595" y="530" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_t_register" bpmnElement="t_register"><dc:Bounds x="595" y="310" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_e_reg" bpmnElement="e_reg"><dc:Bounds x="812" y="327" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_e_log" bpmnElement="e_log"><dc:Bounds x="812" y="657" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ed_f_s_cust_t_cust" bpmnElement="f_s_cust_t_cust"><di:waypoint x="168" y="125"/><di:waypoint x="255" y="125"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_s_cond_t_cond" bpmnElement="f_s_cond_t_cond"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_s_insp_t_insp" bpmnElement="f_s_insp_t_insp"><di:waypoint x="168" y="345"/><di:waypoint x="255" y="345"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_s_evt_t_evt" bpmnElement="f_s_evt_t_evt"><di:waypoint x="168" y="455"/><di:waypoint x="255" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_s_field_t_field" bpmnElement="f_s_field_t_field"><di:waypoint x="168" y="565"/><di:waypoint x="255" y="565"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_s_reg_t_reg" bpmnElement="f_s_reg_t_reg"><di:waypoint x="168" y="675"/><di:waypoint x="255" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_t_cust_g_join" bpmnElement="f_t_cust_g_join"><di:waypoint x="385" y="125"/><di:waypoint x="442" y="125"/><di:waypoint x="442" y="345"/><di:waypoint x="467" y="345"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_t_cond_g_join" bpmnElement="f_t_cond_g_join"><di:waypoint x="385" y="235"/><di:waypoint x="442" y="235"/><di:waypoint x="442" y="345"/><di:waypoint x="467" y="345"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_t_insp_g_join" bpmnElement="f_t_insp_g_join"><di:waypoint x="385" y="345"/><di:waypoint x="467" y="345"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_t_evt_g_join" bpmnElement="f_t_evt_g_join"><di:waypoint x="385" y="455"/><di:waypoint x="442" y="455"/><di:waypoint x="442" y="345"/><di:waypoint x="467" y="345"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_t_field_g_join" bpmnElement="f_t_field_g_join"><di:waypoint x="385" y="565"/><di:waypoint x="442" y="565"/><di:waypoint x="442" y="345"/><di:waypoint x="467" y="345"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_t_reg_g_join" bpmnElement="f_t_reg_g_join"><di:waypoint x="385" y="675"/><di:waypoint x="442" y="675"/><di:waypoint x="442" y="345"/><di:waypoint x="467" y="345"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_g_join_t_minor" bpmnElement="f_g_join_t_minor"><di:waypoint x="513" y="345"/><di:waypoint x="570" y="345"/><di:waypoint x="570" y="675"/><di:waypoint x="595" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_g_join_t_reg_rev" bpmnElement="f_g_join_t_reg_rev"><di:waypoint x="513" y="345"/><di:waypoint x="570" y="345"/><di:waypoint x="570" y="565"/><di:waypoint x="595" y="565"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_g_join_t_register" bpmnElement="f_g_join_t_register"><di:waypoint x="513" y="345"/><di:waypoint x="595" y="345"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_t_reg_rev_t_register" bpmnElement="f_t_reg_rev_t_register"><di:waypoint x="725" y="565"/><di:waypoint x="570" y="565"/><di:waypoint x="570" y="345"/><di:waypoint x="595" y="345"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_t_minor_e_log" bpmnElement="f_t_minor_e_log"><di:waypoint x="725" y="675"/><di:waypoint x="812" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_t_register_e_reg" bpmnElement="f_t_register_e_reg"><di:waypoint x="725" y="345"/><di:waypoint x="812" y="345"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

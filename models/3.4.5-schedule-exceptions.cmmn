@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/CMMN/20151109/MODEL" xmlns:cmmndi="http://www.omg.org/spec/CMMN/20151109/CMMNDI" xmlns:dc="http://www.omg.org/spec/CMMN/20151109/DC" xmlns:di="http://www.omg.org/spec/CMMN/20151109/DI" id="defs_Schedule_exceptions" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <case id="Schedule_exceptions" name="3.4.5 Manage schedule exceptions and overrides">
+    <caseFileModel id="Schedule_exceptions_cfm">
+      <caseFileItem id="cf_item" name="The work item that will not match"/>
+      <caseFileItem id="cf_constraints" name="Constraint set bound at 3.4.3"/>
+      <caseFileItem id="cf_commitment" name="Customer or management commitment"/>
+    </caseFileModel>
+    <casePlanModel id="Schedule_exceptions_plan" name="3.4.5 Manage schedule exceptions and overrides" autoComplete="true">
+      <documentation>CMMN because two competent schedulers will legitimately sequence the same override differently - one tests the hard constraints first, another calls the customer first when a commitment is at stake. That is the test for case management rather than a process. Note the specification's own caveat: the CMMN specification has not changed since 2016 and Camunda 8 dropped it, so committing to CMMN in practice means committing to Flowable. The count is deliberately low.</documentation>
+      <planItem id="pi_t_345_record" name="Record the exception and the reason" definitionRef="t_345_record_def">
+        <itemControl id="ic_t_345_record">
+          <requiredRule id="rr_t_345_record"><condition><![CDATA[true]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_345_record"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_345_hard" name="Test against the hard constraints already bound" definitionRef="t_345_hard_def">
+        <itemControl id="ic_t_345_hard">
+          <requiredRule id="rr_t_345_hard"><condition><![CDATA[true]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_345_hard"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_345_customer" name="Check the customer or management commitment" definitionRef="t_345_customer_def">
+        <itemControl id="ic_t_345_customer">
+          <requiredRule id="rr_t_345_customer"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_345_customer"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_345_displace" name="Identify what the override displaces" definitionRef="t_345_displace_def">
+        <itemControl id="ic_t_345_displace">
+          <repetitionRule id="rep_t_345_displace"><condition><![CDATA[true]]></condition></repetitionRule>
+          <requiredRule id="rr_t_345_displace"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_345_displace"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_345_accept" name="Accept the override and place the item" definitionRef="t_345_accept_def">
+        <itemControl id="ic_t_345_accept">
+          <requiredRule id="rr_t_345_accept"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_345_accept"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_345_reject" name="Reject against a hard constraint" definitionRef="t_345_reject_def">
+        <itemControl id="ic_t_345_reject">
+          <requiredRule id="rr_t_345_reject"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_345_reject"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_345_return" name="Return to matching" definitionRef="t_345_return_def">
+        <itemControl id="ic_t_345_return">
+          <requiredRule id="rr_t_345_return"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_345_return"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_m_345_disposed" name="Override placed, rejected or returned, with the reason recorded and visible to measures" definitionRef="m_345_disposed_def"/>
+      <humanTask id="t_345_record_def" name="Record the exception and the reason" isBlocking="true"><documentation>First, and required. An override with no recorded reason is indistinguishable from a scheduling error, and it is what makes schedule compliance meaningless as a measure.</documentation></humanTask>
+      <humanTask id="t_345_hard_def" name="Test against the hard constraints already bound" isBlocking="true"><documentation>3.4.3 bound them before matching. A statutory date, a qualification requirement or an outage window is not overridable by a scheduler, and this task is where that is established rather than discovered.</documentation></humanTask>
+      <humanTask id="t_345_customer_def" name="Check the customer or management commitment" isBlocking="true"><documentation>A commitment made to a customer is a real constraint even though no regulation carries it.</documentation></humanTask>
+      <humanTask id="t_345_displace_def" name="Identify what the override displaces" isBlocking="true"><documentation>Repeats per displaced item. An override that silently displaces compliance-dated work converts one problem into a worse one.</documentation></humanTask>
+      <processTask id="t_345_accept_def" name="Accept the override and place the item"><documentation>Calls 3.4-optimise-the-schedule.bpmn at its placement step.</documentation></processTask>
+      <humanTask id="t_345_reject_def" name="Reject against a hard constraint" isBlocking="true"><documentation>With the constraint named, so the requester sees which one and does not ask again next week.</documentation></humanTask>
+      <processTask id="t_345_return_def" name="Return to matching"><documentation>Where the exception turns out to be a data problem rather than a genuine override. Calls 3.4-optimise-the-schedule.bpmn.</documentation></processTask>
+      <milestone id="m_345_disposed_def" name="Override placed, rejected or returned, with the reason recorded and visible to measures"></milestone>
+    </casePlanModel>
+  </case>
+  <cmmndi:CMMNDI>
+    <cmmndi:CMMNDiagram id="dg_Schedule_exceptions">
+      <cmmndi:CMMNShape id="sh_plan" cmmnElementRef="Schedule_exceptions_plan"><dc:Bounds x="40" y="40" width="1010" height="300"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_345_record" cmmnElementRef="pi_t_345_record"><dc:Bounds x="80" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_345_hard" cmmnElementRef="pi_t_345_hard"><dc:Bounds x="270" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_345_customer" cmmnElementRef="pi_t_345_customer"><dc:Bounds x="460" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_345_displace" cmmnElementRef="pi_t_345_displace"><dc:Bounds x="80" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_345_accept" cmmnElementRef="pi_t_345_accept"><dc:Bounds x="270" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_345_reject" cmmnElementRef="pi_t_345_reject"><dc:Bounds x="460" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_345_return" cmmnElementRef="pi_t_345_return"><dc:Bounds x="80" y="290" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_m_345_disposed" cmmnElementRef="pi_m_345_disposed"><dc:Bounds x="270" y="290" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+    </cmmndi:CMMNDiagram>
+  </cmmndi:CMMNDI>
+</definitions>

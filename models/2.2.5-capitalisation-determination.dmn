@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/" id="Capitalisation_determination" name="2.2.5 Capitalisation determination" namespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <description>Called from 2.2-compatible-unit-design-and-estimating.bpmn as a business rule task. The output is an accounting classification, not a state change, and it is exactly the logic an auditor asks to see. Expressions are FEEL, per DMN. Flowable has no FEEL; its binding layer rewrites to JUEL and is generated separately.</description>
+  <inputData id="in_effectOnPlant" name="Effect on plant"><variable id="in_effectOnPlant_v" name="Effect on plant" typeRef="string"/></inputData>
+  <inputData id="in_propertyUnit" name="Property unit affected"><variable id="in_propertyUnit_v" name="Property unit affected" typeRef="string"/></inputData>
+  <inputData id="in_replacedIndependently" name="Minor item replaced independently"><variable id="in_replacedIndependently_v" name="Minor item replaced independently" typeRef="boolean"/></inputData>
+  <inputData id="in_betterment" name="Substantial betterment"><variable id="in_betterment_v" name="Substantial betterment" typeRef="boolean"/></inputData>
+  <inputData id="in_retirementWithReplacement" name="Retirement accompanied by replacement"><variable id="in_retirementWithReplacement_v" name="Retirement accompanied by replacement" typeRef="boolean"/></inputData>
+  <knowledgeSource id="ks_ferc" name="18 CFR Part 101 (electric) / Part 201 (gas)"><description>FERC Uniform System of Accounts. Electric Plant Instruction 10(A) additions and retirements of electric plant, 10(C)(1) and 10(C)(3) the betterment test, Instruction 11 work order requirement, Definition 34 retirement unit and Definition 18 minor item of property. Binds FPA and NGA entities; a state-regulated distribution utility is bound by what its commission adopted.</description></knowledgeSource>
+  <knowledgeSource id="ks_rus" name="7 CFR Part 1767"><description>RUS accounting requirements for electric borrowers, which adopt the FERC system with additions. Binds RUS borrowers only.</description></knowledgeSource>
+  <decision id="d_2_2_5" name="Capitalisation determination">
+    <description>2.2.5. The determination is made before authorisation because it changes the funding source and the account the work will charge. Clause references are Electric Plant Instructions 10(A), 10(C)(1) and 10(C)(3) with Definitions 18 and 34; the Part 201 gas parallel is Gas Plant Instruction equivalents. The state-regulated position is a specialization, not a change to this table.</description>
+    <variable id="d_2_2_5_v" name="Capitalisation determination" typeRef="string"/>
+    <informationRequirement id="ir_d_2_2_5_in_effectOnPlant"><requiredInput href="#in_effectOnPlant"/></informationRequirement>
+    <informationRequirement id="ir_d_2_2_5_in_propertyUnit"><requiredInput href="#in_propertyUnit"/></informationRequirement>
+    <informationRequirement id="ir_d_2_2_5_in_replacedIndependently"><requiredInput href="#in_replacedIndependently"/></informationRequirement>
+    <informationRequirement id="ir_d_2_2_5_in_betterment"><requiredInput href="#in_betterment"/></informationRequirement>
+    <informationRequirement id="ir_d_2_2_5_in_retirementWithReplacement"><requiredInput href="#in_retirementWithReplacement"/></informationRequirement>
+    <authorityRequirement id="ar_d_2_2_5"><requiredAuthority href="#ks_ferc"/></authorityRequirement>
+    <decisionTable id="d_2_2_5_dt" hitPolicy="FIRST" preferredOrientation="Rule-as-Row">
+      <input id="d_2_2_5_i1" label="Effect on plant"><inputExpression id="d_2_2_5_i1_e" typeRef="string"><text>in_effectOnPlant</text></inputExpression></input>
+      <input id="d_2_2_5_i2" label="Property unit affected"><inputExpression id="d_2_2_5_i2_e" typeRef="string"><text>in_propertyUnit</text></inputExpression></input>
+      <input id="d_2_2_5_i3" label="Minor item replaced independently"><inputExpression id="d_2_2_5_i3_e" typeRef="boolean"><text>in_replacedIndependently</text></inputExpression></input>
+      <input id="d_2_2_5_i4" label="Substantial betterment"><inputExpression id="d_2_2_5_i4_e" typeRef="boolean"><text>in_betterment</text></inputExpression></input>
+      <input id="d_2_2_5_i5" label="Retirement accompanied by replacement"><inputExpression id="d_2_2_5_i5_e" typeRef="boolean"><text>in_retirementWithReplacement</text></inputExpression></input>
+      <output id="d_2_2_5_o" label="Capitalisation determination" name="Capitalisation determination" typeRef="string"/>
+      <rule id="d_2_2_5_r1">
+        <description>Addition of a retirement unit is a plant addition.</description>
+        <inputEntry id="d_2_2_5_r1_ie1"><text>"addition"</text></inputEntry>
+        <inputEntry id="d_2_2_5_r1_ie2"><text>"retirementUnit"</text></inputEntry>
+        <inputEntry id="d_2_2_5_r1_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_2_2_5_r1_ie4"><text>-</text></inputEntry>
+        <inputEntry id="d_2_2_5_r1_ie5"><text>-</text></inputEntry>
+        <outputEntry id="d_2_2_5_r1_oe"><text>"capitalise"</text></outputEntry>
+      </rule>
+      <rule id="d_2_2_5_r2">
+        <description>Replacement of a retirement unit is an addition plus a retirement, recorded separately in the same work order.</description>
+        <inputEntry id="d_2_2_5_r2_ie1"><text>"replacement"</text></inputEntry>
+        <inputEntry id="d_2_2_5_r2_ie2"><text>"retirementUnit"</text></inputEntry>
+        <inputEntry id="d_2_2_5_r2_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_2_2_5_r2_ie4"><text>-</text></inputEntry>
+        <inputEntry id="d_2_2_5_r2_ie5"><text>true</text></inputEntry>
+        <outputEntry id="d_2_2_5_r2_oe"><text>"capitaliseAndRetire"</text></outputEntry>
+      </rule>
+      <rule id="d_2_2_5_r3">
+        <description>A minor item replaced independently of the retirement unit it belongs to is maintenance expense.</description>
+        <inputEntry id="d_2_2_5_r3_ie1"><text>"replacement"</text></inputEntry>
+        <inputEntry id="d_2_2_5_r3_ie2"><text>"minorItem"</text></inputEntry>
+        <inputEntry id="d_2_2_5_r3_ie3"><text>true</text></inputEntry>
+        <inputEntry id="d_2_2_5_r3_ie4"><text>false</text></inputEntry>
+        <inputEntry id="d_2_2_5_r3_ie5"><text>-</text></inputEntry>
+        <outputEntry id="d_2_2_5_r3_oe"><text>"expense"</text></outputEntry>
+      </rule>
+      <rule id="d_2_2_5_r4">
+        <description>Where the replacement effects a substantial betterment, only the excess over the cost of replacing without betterment is capitalised.</description>
+        <inputEntry id="d_2_2_5_r4_ie1"><text>"replacement"</text></inputEntry>
+        <inputEntry id="d_2_2_5_r4_ie2"><text>"minorItem"</text></inputEntry>
+        <inputEntry id="d_2_2_5_r4_ie3"><text>true</text></inputEntry>
+        <inputEntry id="d_2_2_5_r4_ie4"><text>true</text></inputEntry>
+        <inputEntry id="d_2_2_5_r4_ie5"><text>-</text></inputEntry>
+        <outputEntry id="d_2_2_5_r4_oe"><text>"capitaliseExcess"</text></outputEntry>
+      </rule>
+      <rule id="d_2_2_5_r5">
+        <description>A minor item replaced as part of its retirement unit follows the unit's treatment; it is not classified independently.</description>
+        <inputEntry id="d_2_2_5_r5_ie1"><text>"replacement"</text></inputEntry>
+        <inputEntry id="d_2_2_5_r5_ie2"><text>"minorItem"</text></inputEntry>
+        <inputEntry id="d_2_2_5_r5_ie3"><text>false</text></inputEntry>
+        <inputEntry id="d_2_2_5_r5_ie4"><text>-</text></inputEntry>
+        <inputEntry id="d_2_2_5_r5_ie5"><text>-</text></inputEntry>
+        <outputEntry id="d_2_2_5_r5_oe"><text>"followUnit"</text></outputEntry>
+      </rule>
+      <rule id="d_2_2_5_r6">
+        <description>Retirement with no replacement. The retirement entry stands alone.</description>
+        <inputEntry id="d_2_2_5_r6_ie1"><text>"retirement"</text></inputEntry>
+        <inputEntry id="d_2_2_5_r6_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_2_2_5_r6_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_2_2_5_r6_ie4"><text>-</text></inputEntry>
+        <inputEntry id="d_2_2_5_r6_ie5"><text>false</text></inputEntry>
+        <outputEntry id="d_2_2_5_r6_oe"><text>"retireOnly"</text></outputEntry>
+      </rule>
+      <rule id="d_2_2_5_r7">
+        <description>Held for the accounting owner. Defaulting an unclassified case to expense is how capital leaks into O&amp;M and how the continuing property record drifts.</description>
+        <inputEntry id="d_2_2_5_r7_ie1"><text>-</text></inputEntry>
+        <inputEntry id="d_2_2_5_r7_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_2_2_5_r7_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_2_2_5_r7_ie4"><text>-</text></inputEntry>
+        <inputEntry id="d_2_2_5_r7_ie5"><text>-</text></inputEntry>
+        <outputEntry id="d_2_2_5_r7_oe"><text>"determineManually"</text></outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram id="drd_Capitalisation_determination">
+      <dmndi:DMNShape id="sh_in_effectOnPlant" dmnElementRef="in_effectOnPlant"><dc:Bounds x="60" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_propertyUnit" dmnElementRef="in_propertyUnit"><dc:Bounds x="245" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_replacedIndependently" dmnElementRef="in_replacedIndependently"><dc:Bounds x="430" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_betterment" dmnElementRef="in_betterment"><dc:Bounds x="615" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_retirementWithReplacement" dmnElementRef="in_retirementWithReplacement"><dc:Bounds x="800" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_d_2_2_5" dmnElementRef="d_2_2_5"><dc:Bounds x="60" y="240" width="180" height="70"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_ks_ferc" dmnElementRef="ks_ferc"><dc:Bounds x="900" y="100" width="160" height="55"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_ks_rus" dmnElementRef="ks_rus"><dc:Bounds x="1080" y="100" width="160" height="55"/></dmndi:DMNShape>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</definitions>

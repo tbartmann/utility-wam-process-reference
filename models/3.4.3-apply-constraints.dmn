@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/" id="Schedule_constraints" name="3.4.3 Apply service-level and compliance constraints" namespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <description>Called from 3.4-optimise-the-schedule.bpmn before matching. The output is a CONSTRAINT SET - dates, windows, eligible resources - a value rather than a placement, which is why it is a table and why the hit policy is COLLECT: one item routinely carries several constraints at once and the placer needs all of them. Binding them before matching, rather than checking them after, is what stops the schedule proposing work it may not legally do.</description>
+  <inputData id="in_maintenanceType" name="Maintenance type"><variable id="in_maintenanceType_v" name="Maintenance type" typeRef="string"/></inputData>
+  <inputData id="in_commodity" name="Commodity"><variable id="in_commodity_v" name="Commodity" typeRef="string"/></inputData>
+  <inputData id="in_obligation" name="Obligation reference"><variable id="in_obligation_v" name="Obligation reference" typeRef="string"/></inputData>
+  <inputData id="in_requiredQualification" name="Required qualification"><variable id="in_requiredQualification_v" name="Required qualification" typeRef="string"/></inputData>
+  <inputData id="in_customerPresent" name="Customer must be present"><variable id="in_customerPresent_v" name="Customer must be present" typeRef="boolean"/></inputData>
+  <inputData id="in_energisedWork" name="Work on or near energised plant"><variable id="in_energisedWork_v" name="Work on or near energised plant" typeRef="boolean"/></inputData>
+  <knowledgeSource id="ks_part192" name="49 CFR Part 192"><description>Federal minimum intervals for gas distribution. They bind twice - a nominal period in calendar years and a not-to-exceed figure in months - and some are conditional on the prior outcome rather than the prior date. Changing a date sourced here is a regulatory change, not a scheduling decision.</description></knowledgeSource>
+  <knowledgeSource id="ks_state" name="State commission inspection rules"><description>Electric distribution has NO federal prescriptive interval layer: 16 U.S.C. 824o excludes local distribution from the bulk-power system. The interval comes from a named state rule, and the rule must be named on the work rather than assumed.</description></knowledgeSource>
+  <knowledgeSource id="ks_osha" name="29 CFR 1910.269"><description>Minimum approach distance and the qualified-person determination at 1910.269(l), job briefing at 1910.269(c), and deenergising for employee protection at 1910.269(m). These constrain who may be assigned and when work may start, which makes them scheduling constraints and not only safety rules.</description></knowledgeSource>
+  <decision id="d_3_4_3" name="Schedule constraint set">
+    <description>3.4.3. Additional knowledge sources: state commission inspection rules and 29 CFR 1910.269. Interval VALUES are regulatory and are not reproduced in this table; the table returns the KIND of constraint, and the value comes from the obligation register at 12.6.1.</description>
+    <variable id="d_3_4_3_v" name="Schedule constraint set" typeRef="string"/>
+    <informationRequirement id="ir_d_3_4_3_in_maintenanceType"><requiredInput href="#in_maintenanceType"/></informationRequirement>
+    <informationRequirement id="ir_d_3_4_3_in_commodity"><requiredInput href="#in_commodity"/></informationRequirement>
+    <informationRequirement id="ir_d_3_4_3_in_obligation"><requiredInput href="#in_obligation"/></informationRequirement>
+    <informationRequirement id="ir_d_3_4_3_in_requiredQualification"><requiredInput href="#in_requiredQualification"/></informationRequirement>
+    <informationRequirement id="ir_d_3_4_3_in_customerPresent"><requiredInput href="#in_customerPresent"/></informationRequirement>
+    <informationRequirement id="ir_d_3_4_3_in_energisedWork"><requiredInput href="#in_energisedWork"/></informationRequirement>
+    <authorityRequirement id="ar_d_3_4_3"><requiredAuthority href="#ks_part192"/></authorityRequirement>
+    <decisionTable id="d_3_4_3_dt" hitPolicy="COLLECT" preferredOrientation="Rule-as-Row">
+      <input id="d_3_4_3_i1" label="Maintenance type"><inputExpression id="d_3_4_3_i1_e" typeRef="string"><text>in_maintenanceType</text></inputExpression></input>
+      <input id="d_3_4_3_i2" label="Commodity"><inputExpression id="d_3_4_3_i2_e" typeRef="string"><text>in_commodity</text></inputExpression></input>
+      <input id="d_3_4_3_i3" label="Obligation reference"><inputExpression id="d_3_4_3_i3_e" typeRef="string"><text>in_obligation</text></inputExpression></input>
+      <input id="d_3_4_3_i4" label="Required qualification"><inputExpression id="d_3_4_3_i4_e" typeRef="string"><text>in_requiredQualification</text></inputExpression></input>
+      <input id="d_3_4_3_i5" label="Customer must be present"><inputExpression id="d_3_4_3_i5_e" typeRef="boolean"><text>in_customerPresent</text></inputExpression></input>
+      <input id="d_3_4_3_i6" label="Work on or near energised plant"><inputExpression id="d_3_4_3_i6_e" typeRef="boolean"><text>in_energisedWork</text></inputExpression></input>
+      <output id="d_3_4_3_o" label="Schedule constraint set" name="Schedule constraint set" typeRef="string"/>
+      <rule id="d_3_4_3_r1">
+        <description>49 CFR 192 cyclic work. The not-to-exceed month figure is the hard date, not the nominal year count.</description>
+        <inputEntry id="d_3_4_3_r1_ie1"><text>"preventive.predetermined"</text></inputEntry>
+        <inputEntry id="d_3_4_3_r1_ie2"><text>"gas"</text></inputEntry>
+        <inputEntry id="d_3_4_3_r1_ie3"><text>not(null)</text></inputEntry>
+        <inputEntry id="d_3_4_3_r1_ie4"><text>-</text></inputEntry>
+        <inputEntry id="d_3_4_3_r1_ie5"><text>-</text></inputEntry>
+        <inputEntry id="d_3_4_3_r1_ie6"><text>-</text></inputEntry>
+        <outputEntry id="d_3_4_3_r1_oe"><text>"statutoryDueDate"</text></outputEntry>
+      </rule>
+      <rule id="d_3_4_3_r2">
+        <description>Named state rule. There is no federal equivalent for distribution.</description>
+        <inputEntry id="d_3_4_3_r2_ie1"><text>"preventive.predetermined"</text></inputEntry>
+        <inputEntry id="d_3_4_3_r2_ie2"><text>"electric"</text></inputEntry>
+        <inputEntry id="d_3_4_3_r2_ie3"><text>not(null)</text></inputEntry>
+        <inputEntry id="d_3_4_3_r2_ie4"><text>-</text></inputEntry>
+        <inputEntry id="d_3_4_3_r2_ie5"><text>-</text></inputEntry>
+        <inputEntry id="d_3_4_3_r2_ie6"><text>-</text></inputEntry>
+        <outputEntry id="d_3_4_3_r2_oe"><text>"stateRuleDueDate"</text></outputEntry>
+      </rule>
+      <rule id="d_3_4_3_r3">
+        <description>Covered task or qualified-person work. The constraint is on WHO, and it narrows the eligible resource set before matching rather than failing at dispatch.</description>
+        <inputEntry id="d_3_4_3_r3_ie1"><text>-</text></inputEntry>
+        <inputEntry id="d_3_4_3_r3_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_3_4_3_r3_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_3_4_3_r3_ie4"><text>not(null)</text></inputEntry>
+        <inputEntry id="d_3_4_3_r3_ie5"><text>-</text></inputEntry>
+        <inputEntry id="d_3_4_3_r3_ie6"><text>-</text></inputEntry>
+        <outputEntry id="d_3_4_3_r3_oe"><text>"qualifiedResourceOnly"</text></outputEntry>
+      </rule>
+      <rule id="d_3_4_3_r4">
+        <description>Determined by 3.3.1 and reserved by 3.3.2. The schedule may not place outside it.</description>
+        <inputEntry id="d_3_4_3_r4_ie1"><text>-</text></inputEntry>
+        <inputEntry id="d_3_4_3_r4_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_3_4_3_r4_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_3_4_3_r4_ie4"><text>-</text></inputEntry>
+        <inputEntry id="d_3_4_3_r4_ie5"><text>true</text></inputEntry>
+        <inputEntry id="d_3_4_3_r4_ie6"><text>-</text></inputEntry>
+        <outputEntry id="d_3_4_3_r4_oe"><text>"customerWindow"</text></outputEntry>
+      </rule>
+      <rule id="d_3_4_3_r5">
+        <description>Work on or near energised plant needs an outage window approved at 18.2.2, and later a clearance issued at 18.4.4 under 29 CFR 1910.269(m). The window is a scheduling constraint; the clearance is a release prerequisite at 2.6.3.</description>
+        <inputEntry id="d_3_4_3_r5_ie1"><text>-</text></inputEntry>
+        <inputEntry id="d_3_4_3_r5_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_3_4_3_r5_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_3_4_3_r5_ie4"><text>-</text></inputEntry>
+        <inputEntry id="d_3_4_3_r5_ie5"><text>-</text></inputEntry>
+        <inputEntry id="d_3_4_3_r5_ie6"><text>true</text></inputEntry>
+        <outputEntry id="d_3_4_3_r5_oe"><text>"approvedOutageWindow"</text></outputEntry>
+      </rule>
+      <rule id="d_3_4_3_r6">
+        <description>Function lost. The constraint is that it cannot be deferred into the plan at all.</description>
+        <inputEntry id="d_3_4_3_r6_ie1"><text>"corrective.immediate"</text></inputEntry>
+        <inputEntry id="d_3_4_3_r6_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_3_4_3_r6_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_3_4_3_r6_ie4"><text>-</text></inputEntry>
+        <inputEntry id="d_3_4_3_r6_ie5"><text>-</text></inputEntry>
+        <inputEntry id="d_3_4_3_r6_ie6"><text>-</text></inputEntry>
+        <outputEntry id="d_3_4_3_r6_oe"><text>"immediateResponse"</text></outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram id="drd_Schedule_constraints">
+      <dmndi:DMNShape id="sh_in_maintenanceType" dmnElementRef="in_maintenanceType"><dc:Bounds x="60" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_commodity" dmnElementRef="in_commodity"><dc:Bounds x="245" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_obligation" dmnElementRef="in_obligation"><dc:Bounds x="430" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_requiredQualification" dmnElementRef="in_requiredQualification"><dc:Bounds x="615" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_customerPresent" dmnElementRef="in_customerPresent"><dc:Bounds x="800" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_energisedWork" dmnElementRef="in_energisedWork"><dc:Bounds x="985" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_d_3_4_3" dmnElementRef="d_3_4_3"><dc:Bounds x="60" y="240" width="180" height="70"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_ks_part192" dmnElementRef="ks_part192"><dc:Bounds x="900" y="100" width="160" height="55"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_ks_state" dmnElementRef="ks_state"><dc:Bounds x="1080" y="100" width="160" height="55"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_ks_osha" dmnElementRef="ks_osha"><dc:Bounds x="1260" y="100" width="160" height="55"/></dmndi:DMNShape>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</definitions>

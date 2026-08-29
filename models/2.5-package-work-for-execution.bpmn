@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_P_2_5" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <process id="P_2_5" name="2.5 Package work for execution" isExecutable="false">
+    <documentation>Tier-4 activities under 2.5.1 to 2.5.4. EN 17007:2017 cl. 6.5.3 ACT.2 Prepare for the maintenance tasks is the process; cl. 6.10 DOC and cl. 6.16 SPP supply the documentation and spare parts. NOTE: no standard specifies what a work package or job plan must CONTAIN - EN 13460:2009 Annex B is informative and the only prescriptive list, 7 CFR 1724.53(b)(1), binds RUS borrowers only. The task structure below is framed against ACT.2; the content is the operator's.</documentation>
+    <startEvent id="n_25_start" name="Authorised work requires a job plan"><messageEventDefinition id="n_25_start_md"/></startEvent>
+    <exclusiveGateway id="n_25_lib" name="Plan source"/>
+    <serviceTask id="n_25_std" name="Instantiate the standard job plan"><documentation>2.5.1 variant. From the library, for repeat work.</documentation></serviceTask>
+    <userTask id="n_25_tasks" name="Break the work into tasks with sequence and dependencies"><documentation>2.5.1.</documentation></userTask>
+    <userTask id="n_25_proc" name="Attach the procedure or method statement to each task"><documentation>2.5.1.</documentation></userTask>
+    <userTask id="n_25_crit" name="State the acceptance criteria per task"><documentation>2.5.1. A task with no acceptance criterion cannot be verified complete, so closure becomes a judgement call in the field.</documentation></userTask>
+    <userTask id="n_25_crew" name="Determine crew composition and qualification"><documentation>2.5.2. Where a task is a covered task under 49 CFR 192 Subpart N the qualification belongs on the work here, not as a check at dispatch.</documentation></userTask>
+    <userTask id="n_25_tool" name="State plant, tools and access equipment"><documentation>2.5.2.</documentation></userTask>
+    <serviceTask id="n_25_mat" name="Derive the material requirement"><documentation>2.5.4.</documentation></serviceTask>
+    <exclusiveGateway id="n_25_stock" name="Material available"/>
+    <sendTask id="n_25_req" name="Requisition against lead time"><documentation>2.5.4. Non-stock material. Reserving late converts a planning problem into a schedule failure.</documentation></sendTask>
+    <endEvent id="n_25_held" name="Held for material"/>
+    <serviceTask id="n_25_res" name="Reserve the material"><documentation>2.5.4.</documentation></serviceTask>
+    <userTask id="n_25_doc" name="Assemble drawings, procedures and permits at revision"><documentation>2.5.3. At the current revision, fixed on the work.</documentation></userTask>
+    <serviceTask id="n_25_wdraw" name="Withdraw superseded documents"><documentation>2.5.3. Superseded revisions left in a package get built. Withdrawal is part of assembly, not a separate tidy-up.</documentation></serviceTask>
+    <serviceTask id="n_25_use" name="Confirm availability at the place of use"><documentation>2.5.3. EN 17007 cl. 6.10 DOC: up-to-date and usable documents at the place of use. A package assembled correctly but not available in the field has failed.</documentation></serviceTask>
+    <sendTask id="n_25_pub" name="Publish the requirement to resource planning"><documentation>2.5.2 and 2.5.4.</documentation></sendTask>
+    <endEvent id="n_25_end" name="Work packaged"/>
+    <sequenceFlow id="f_n_25_start_n_25_lib" sourceRef="n_25_start" targetRef="n_25_lib" name=""/>
+    <sequenceFlow id="f_n_25_lib_n_25_std" sourceRef="n_25_lib" targetRef="n_25_std" name="standard plan exists"><conditionExpression xsi:type="tFormalExpression"><![CDATA[jobPlanSource = "library"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_25_std_n_25_crew" sourceRef="n_25_std" targetRef="n_25_crew" name=""/>
+    <sequenceFlow id="f_n_25_lib_n_25_tasks" sourceRef="n_25_lib" targetRef="n_25_tasks" name="plan built for this work"/>
+    <sequenceFlow id="f_n_25_tasks_n_25_proc" sourceRef="n_25_tasks" targetRef="n_25_proc" name=""/>
+    <sequenceFlow id="f_n_25_proc_n_25_crit" sourceRef="n_25_proc" targetRef="n_25_crit" name=""/>
+    <sequenceFlow id="f_n_25_crit_n_25_crew" sourceRef="n_25_crit" targetRef="n_25_crew" name=""/>
+    <sequenceFlow id="f_n_25_crew_n_25_tool" sourceRef="n_25_crew" targetRef="n_25_tool" name=""/>
+    <sequenceFlow id="f_n_25_crew_n_25_mat" sourceRef="n_25_crew" targetRef="n_25_mat" name=""/>
+    <sequenceFlow id="f_n_25_mat_n_25_stock" sourceRef="n_25_mat" targetRef="n_25_stock" name=""/>
+    <sequenceFlow id="f_n_25_stock_n_25_req" sourceRef="n_25_stock" targetRef="n_25_req" name="not in stock"><conditionExpression xsi:type="tFormalExpression"><![CDATA[materialAvailable = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_25_req_n_25_held" sourceRef="n_25_req" targetRef="n_25_held" name=""/>
+    <sequenceFlow id="f_n_25_stock_n_25_res" sourceRef="n_25_stock" targetRef="n_25_res" name="available"/>
+    <sequenceFlow id="f_n_25_res_n_25_doc" sourceRef="n_25_res" targetRef="n_25_doc" name=""/>
+    <sequenceFlow id="f_n_25_doc_n_25_wdraw" sourceRef="n_25_doc" targetRef="n_25_wdraw" name=""/>
+    <sequenceFlow id="f_n_25_doc_n_25_use" sourceRef="n_25_doc" targetRef="n_25_use" name=""/>
+    <sequenceFlow id="f_n_25_use_n_25_pub" sourceRef="n_25_use" targetRef="n_25_pub" name=""/>
+    <sequenceFlow id="f_n_25_pub_n_25_end" sourceRef="n_25_pub" targetRef="n_25_end" name=""/>
+  </process>
+  <bpmndi:BPMNDiagram id="dg_P_2_5">
+    <bpmndi:BPMNPlane id="pl_P_2_5" bpmnElement="P_2_5">
+      <bpmndi:BPMNShape id="sh_n_25_start" bpmnElement="n_25_start"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_25_lib" bpmnElement="n_25_lib"><dc:Bounds x="297" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_25_std" bpmnElement="n_25_std"><dc:Bounds x="255" y="90" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_25_tasks" bpmnElement="n_25_tasks"><dc:Bounds x="425" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_25_proc" bpmnElement="n_25_proc"><dc:Bounds x="595" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_25_crit" bpmnElement="n_25_crit"><dc:Bounds x="765" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_25_crew" bpmnElement="n_25_crew"><dc:Bounds x="935" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_25_tool" bpmnElement="n_25_tool"><dc:Bounds x="1105" y="90" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_25_mat" bpmnElement="n_25_mat"><dc:Bounds x="1105" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_25_stock" bpmnElement="n_25_stock"><dc:Bounds x="1317" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_25_req" bpmnElement="n_25_req"><dc:Bounds x="1275" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_25_held" bpmnElement="n_25_held"><dc:Bounds x="1492" y="437" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_25_res" bpmnElement="n_25_res"><dc:Bounds x="1445" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_25_doc" bpmnElement="n_25_doc"><dc:Bounds x="1615" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_25_wdraw" bpmnElement="n_25_wdraw"><dc:Bounds x="1785" y="90" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_25_use" bpmnElement="n_25_use"><dc:Bounds x="1785" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_25_pub" bpmnElement="n_25_pub"><dc:Bounds x="1955" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_25_end" bpmnElement="n_25_end"><dc:Bounds x="2172" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ed_f_n_25_start_n_25_lib" bpmnElement="f_n_25_start_n_25_lib"><di:waypoint x="168" y="235"/><di:waypoint x="297" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_25_lib_n_25_std" bpmnElement="f_n_25_lib_n_25_std"><di:waypoint x="343" y="235"/><di:waypoint x="230" y="235"/><di:waypoint x="230" y="125"/><di:waypoint x="255" y="125"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_25_std_n_25_crew" bpmnElement="f_n_25_std_n_25_crew"><di:waypoint x="385" y="125"/><di:waypoint x="910" y="125"/><di:waypoint x="910" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_25_lib_n_25_tasks" bpmnElement="f_n_25_lib_n_25_tasks"><di:waypoint x="343" y="235"/><di:waypoint x="425" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_25_tasks_n_25_proc" bpmnElement="f_n_25_tasks_n_25_proc"><di:waypoint x="555" y="235"/><di:waypoint x="595" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_25_proc_n_25_crit" bpmnElement="f_n_25_proc_n_25_crit"><di:waypoint x="725" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_25_crit_n_25_crew" bpmnElement="f_n_25_crit_n_25_crew"><di:waypoint x="895" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_25_crew_n_25_tool" bpmnElement="f_n_25_crew_n_25_tool"><di:waypoint x="1065" y="235"/><di:waypoint x="1080" y="235"/><di:waypoint x="1080" y="125"/><di:waypoint x="1105" y="125"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_25_crew_n_25_mat" bpmnElement="f_n_25_crew_n_25_mat"><di:waypoint x="1065" y="235"/><di:waypoint x="1105" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_25_mat_n_25_stock" bpmnElement="f_n_25_mat_n_25_stock"><di:waypoint x="1235" y="235"/><di:waypoint x="1317" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_25_stock_n_25_req" bpmnElement="f_n_25_stock_n_25_req"><di:waypoint x="1363" y="235"/><di:waypoint x="1250" y="235"/><di:waypoint x="1250" y="455"/><di:waypoint x="1275" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_25_req_n_25_held" bpmnElement="f_n_25_req_n_25_held"><di:waypoint x="1405" y="455"/><di:waypoint x="1492" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_25_stock_n_25_res" bpmnElement="f_n_25_stock_n_25_res"><di:waypoint x="1363" y="235"/><di:waypoint x="1445" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_25_res_n_25_doc" bpmnElement="f_n_25_res_n_25_doc"><di:waypoint x="1575" y="235"/><di:waypoint x="1615" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_25_doc_n_25_wdraw" bpmnElement="f_n_25_doc_n_25_wdraw"><di:waypoint x="1745" y="235"/><di:waypoint x="1760" y="235"/><di:waypoint x="1760" y="125"/><di:waypoint x="1785" y="125"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_25_doc_n_25_use" bpmnElement="f_n_25_doc_n_25_use"><di:waypoint x="1745" y="235"/><di:waypoint x="1785" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_25_use_n_25_pub" bpmnElement="f_n_25_use_n_25_pub"><di:waypoint x="1915" y="235"/><di:waypoint x="1955" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_25_pub_n_25_end" bpmnElement="f_n_25_pub_n_25_end"><di:waypoint x="2085" y="235"/><di:waypoint x="2172" y="235"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_P_2_1" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <process id="P_2_1" name="2.1 Engineer and design work" isExecutable="false">
+    <documentation>Tier-4 activities under 2.1.1 to 2.1.4. ISO 9001:2015 cl. 8.3 design and development is the process spine: inputs, controls, outputs, changes. The federal codes govern the designed artefact rather than the design process - 49 CFR 192 Subpart B is about pipe and NESC sets safety criteria with no design-review requirement - so the review gate here is the operator's, framed against ISO 9001 cl. 8.3.4. Participants are IEC 61968-6 cl. 4.2 reference components, not products.</documentation>
+    <startEvent id="n_21_start" name="Authorised demand requires a design"><messageEventDefinition id="n_21_start_md"/></startEvent>
+    <userTask id="n_21_scope" name="Determine what must be verified on site"><documentation>2.1.1. Work type sets the verification scope. A desk survey is a decision, not an omission.</documentation></userTask>
+    <exclusiveGateway id="n_21_route" name="Survey route"/>
+    <serviceTask id="n_21_desk" name="Survey from records"><documentation>2.1.1 variant. Low-risk work against a complete record.</documentation></serviceTask>
+    <userTask id="n_21_field" name="Survey the site and locate existing facilities"><documentation>2.1.1. Existing buried and overhead plant, access, clearance, ground, environmental and third-party constraints. ASCE 38-22 gives the quality levels where subsurface utility engineering is used.</documentation></userTask>
+    <serviceTask id="n_21_rec" name="Record the survey as a design input"><documentation>2.1.1. The survey becomes a documented design input, not a memory.</documentation></serviceTask>
+    <userTask id="n_21_in" name="Assemble design inputs and code requirements"><documentation>2.1.2. ISO 9001 cl. 8.3.3: functional and performance requirements, statutory and regulatory requirements, and the codes of practice the organisation has committed to implement. Conflicting inputs are resolved here.</documentation></userTask>
+    <userTask id="n_21_prod" name="Produce the design against the construction standards"><documentation>2.1.2. For distribution to RUS-accepted standards where 7 CFR 1724.51 applies.</documentation></userTask>
+    <serviceTask id="n_21_out" name="Record design outputs and acceptance criteria"><documentation>2.1.2. ISO 9001 cl. 8.3.5 requires outputs to include or reference acceptance criteria. Without them construction cannot be verified.</documentation></serviceTask>
+    <userTask id="n_21_rev" name="Review, verify and validate the design"><documentation>2.1.3. ISO 9001 cl. 8.3.4: review against requirements, verify outputs meet inputs, validate the result meets intended use, and record the action taken on any problem found.</documentation></userTask>
+    <exclusiveGateway id="n_21_auth" name="Authority required"/>
+    <userTask id="n_21_pe" name="Obtain professional certification"><documentation>2.1.3 variant. Where state licensure law requires an engineer's seal. That requirement is state law and is not federally standardised.</documentation></userTask>
+    <userTask id="n_21_ext" name="Obtain external approval"><documentation>2.1.3 variant. Funder, authority having jurisdiction, or joint-use owner.</documentation></userTask>
+    <serviceTask id="n_21_issue" name="Authorise and issue the design"><documentation>2.1.3. Issue fixes the revision everything downstream is built against.</documentation></serviceTask>
+    <endEvent id="n_21_end" name="Design issued at a fixed revision"/>
+    <startEvent id="n_21_chg" name="Change to an issued design proposed"><messageEventDefinition id="n_21_chg_md"/></startEvent>
+    <userTask id="n_21_imp" name="Review the change for adverse impact"><documentation>2.1.4. ISO 9001 cl. 8.3.6 requires the review to consider the effect on conformity, and the actions taken to prevent adverse impacts to be retained.</documentation></userTask>
+    <userTask id="n_21_capprove" name="Authorise the change"><documentation>2.1.4.</documentation></userTask>
+    <serviceTask id="n_21_reissue" name="Reissue and withdraw the superseded revision"><documentation>2.1.4. Withdrawal is part of reissue. A superseded drawing left in a package gets built.</documentation></serviceTask>
+    <endEvent id="n_21_permit" name="Re-permitting required"/>
+    <endEvent id="n_21_cend" name="Design reissued"/>
+    <sequenceFlow id="f_n_21_start_n_21_scope" sourceRef="n_21_start" targetRef="n_21_scope" name=""/>
+    <sequenceFlow id="f_n_21_scope_n_21_route" sourceRef="n_21_scope" targetRef="n_21_route" name=""/>
+    <sequenceFlow id="f_n_21_route_n_21_desk" sourceRef="n_21_route" targetRef="n_21_desk" name="records sufficient"><conditionExpression xsi:type="tFormalExpression"><![CDATA[surveyRoute = "desk"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_21_route_n_21_field" sourceRef="n_21_route" targetRef="n_21_field" name="site verification required"/>
+    <sequenceFlow id="f_n_21_desk_n_21_rec" sourceRef="n_21_desk" targetRef="n_21_rec" name=""/>
+    <sequenceFlow id="f_n_21_field_n_21_rec" sourceRef="n_21_field" targetRef="n_21_rec" name=""/>
+    <sequenceFlow id="f_n_21_rec_n_21_in" sourceRef="n_21_rec" targetRef="n_21_in" name=""/>
+    <sequenceFlow id="f_n_21_in_n_21_prod" sourceRef="n_21_in" targetRef="n_21_prod" name=""/>
+    <sequenceFlow id="f_n_21_prod_n_21_out" sourceRef="n_21_prod" targetRef="n_21_out" name=""/>
+    <sequenceFlow id="f_n_21_out_n_21_rev" sourceRef="n_21_out" targetRef="n_21_rev" name=""/>
+    <sequenceFlow id="f_n_21_rev_n_21_auth" sourceRef="n_21_rev" targetRef="n_21_auth" name=""/>
+    <sequenceFlow id="f_n_21_auth_n_21_pe" sourceRef="n_21_auth" targetRef="n_21_pe" name="certification required"><conditionExpression xsi:type="tFormalExpression"><![CDATA[designAuthority = "professionalEngineer"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_21_auth_n_21_ext" sourceRef="n_21_auth" targetRef="n_21_ext" name="external approval required"><conditionExpression xsi:type="tFormalExpression"><![CDATA[designAuthority = "external"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_21_auth_n_21_issue" sourceRef="n_21_auth" targetRef="n_21_issue" name="internal authority"/>
+    <sequenceFlow id="f_n_21_pe_n_21_issue" sourceRef="n_21_pe" targetRef="n_21_issue" name=""/>
+    <sequenceFlow id="f_n_21_ext_n_21_issue" sourceRef="n_21_ext" targetRef="n_21_issue" name=""/>
+    <sequenceFlow id="f_n_21_issue_n_21_end" sourceRef="n_21_issue" targetRef="n_21_end" name=""/>
+    <sequenceFlow id="f_n_21_chg_n_21_imp" sourceRef="n_21_chg" targetRef="n_21_imp" name=""/>
+    <sequenceFlow id="f_n_21_imp_n_21_capprove" sourceRef="n_21_imp" targetRef="n_21_capprove" name=""/>
+    <sequenceFlow id="f_n_21_capprove_n_21_reissue" sourceRef="n_21_capprove" targetRef="n_21_reissue" name=""/>
+    <sequenceFlow id="f_n_21_reissue_n_21_permit" sourceRef="n_21_reissue" targetRef="n_21_permit" name="permit or commitment affected"><conditionExpression xsi:type="tFormalExpression"><![CDATA[permitImpact = true]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_21_reissue_n_21_cend" sourceRef="n_21_reissue" targetRef="n_21_cend" name="no permit effect"/>
+  </process>
+  <bpmndi:BPMNDiagram id="dg_P_2_1">
+    <bpmndi:BPMNPlane id="pl_P_2_1" bpmnElement="P_2_1">
+      <bpmndi:BPMNShape id="sh_n_21_start" bpmnElement="n_21_start"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_21_scope" bpmnElement="n_21_scope"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_21_route" bpmnElement="n_21_route"><dc:Bounds x="467" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_21_desk" bpmnElement="n_21_desk"><dc:Bounds x="425" y="90" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_21_field" bpmnElement="n_21_field"><dc:Bounds x="595" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_21_rec" bpmnElement="n_21_rec"><dc:Bounds x="765" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_21_in" bpmnElement="n_21_in"><dc:Bounds x="935" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_21_prod" bpmnElement="n_21_prod"><dc:Bounds x="1105" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_21_out" bpmnElement="n_21_out"><dc:Bounds x="1275" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_21_rev" bpmnElement="n_21_rev"><dc:Bounds x="1445" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_21_auth" bpmnElement="n_21_auth"><dc:Bounds x="1657" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_21_pe" bpmnElement="n_21_pe"><dc:Bounds x="1615" y="90" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_21_ext" bpmnElement="n_21_ext"><dc:Bounds x="1615" y="310" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_21_issue" bpmnElement="n_21_issue"><dc:Bounds x="1785" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_21_end" bpmnElement="n_21_end"><dc:Bounds x="2002" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_21_chg" bpmnElement="n_21_chg"><dc:Bounds x="982" y="547" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_21_imp" bpmnElement="n_21_imp"><dc:Bounds x="1105" y="530" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_21_capprove" bpmnElement="n_21_capprove"><dc:Bounds x="1275" y="530" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_21_reissue" bpmnElement="n_21_reissue"><dc:Bounds x="1445" y="530" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_21_permit" bpmnElement="n_21_permit"><dc:Bounds x="1662" y="657" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_21_cend" bpmnElement="n_21_cend"><dc:Bounds x="1662" y="547" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ed_f_n_21_start_n_21_scope" bpmnElement="f_n_21_start_n_21_scope"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_21_scope_n_21_route" bpmnElement="f_n_21_scope_n_21_route"><di:waypoint x="385" y="235"/><di:waypoint x="467" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_21_route_n_21_desk" bpmnElement="f_n_21_route_n_21_desk"><di:waypoint x="513" y="235"/><di:waypoint x="400" y="235"/><di:waypoint x="400" y="125"/><di:waypoint x="425" y="125"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_21_route_n_21_field" bpmnElement="f_n_21_route_n_21_field"><di:waypoint x="513" y="235"/><di:waypoint x="595" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_21_desk_n_21_rec" bpmnElement="f_n_21_desk_n_21_rec"><di:waypoint x="555" y="125"/><di:waypoint x="740" y="125"/><di:waypoint x="740" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_21_field_n_21_rec" bpmnElement="f_n_21_field_n_21_rec"><di:waypoint x="725" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_21_rec_n_21_in" bpmnElement="f_n_21_rec_n_21_in"><di:waypoint x="895" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_21_in_n_21_prod" bpmnElement="f_n_21_in_n_21_prod"><di:waypoint x="1065" y="235"/><di:waypoint x="1105" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_21_prod_n_21_out" bpmnElement="f_n_21_prod_n_21_out"><di:waypoint x="1235" y="235"/><di:waypoint x="1275" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_21_out_n_21_rev" bpmnElement="f_n_21_out_n_21_rev"><di:waypoint x="1405" y="235"/><di:waypoint x="1445" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_21_rev_n_21_auth" bpmnElement="f_n_21_rev_n_21_auth"><di:waypoint x="1575" y="235"/><di:waypoint x="1657" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_21_auth_n_21_pe" bpmnElement="f_n_21_auth_n_21_pe"><di:waypoint x="1703" y="235"/><di:waypoint x="1590" y="235"/><di:waypoint x="1590" y="125"/><di:waypoint x="1615" y="125"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_21_auth_n_21_ext" bpmnElement="f_n_21_auth_n_21_ext"><di:waypoint x="1703" y="235"/><di:waypoint x="1590" y="235"/><di:waypoint x="1590" y="345"/><di:waypoint x="1615" y="345"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_21_auth_n_21_issue" bpmnElement="f_n_21_auth_n_21_issue"><di:waypoint x="1703" y="235"/><di:waypoint x="1785" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_21_pe_n_21_issue" bpmnElement="f_n_21_pe_n_21_issue"><di:waypoint x="1745" y="125"/><di:waypoint x="1760" y="125"/><di:waypoint x="1760" y="235"/><di:waypoint x="1785" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_21_ext_n_21_issue" bpmnElement="f_n_21_ext_n_21_issue"><di:waypoint x="1745" y="345"/><di:waypoint x="1760" y="345"/><di:waypoint x="1760" y="235"/><di:waypoint x="1785" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_21_issue_n_21_end" bpmnElement="f_n_21_issue_n_21_end"><di:waypoint x="1915" y="235"/><di:waypoint x="2002" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_21_chg_n_21_imp" bpmnElement="f_n_21_chg_n_21_imp"><di:waypoint x="1018" y="565"/><di:waypoint x="1105" y="565"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_21_imp_n_21_capprove" bpmnElement="f_n_21_imp_n_21_capprove"><di:waypoint x="1235" y="565"/><di:waypoint x="1275" y="565"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_21_capprove_n_21_reissue" bpmnElement="f_n_21_capprove_n_21_reissue"><di:waypoint x="1405" y="565"/><di:waypoint x="1445" y="565"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_21_reissue_n_21_permit" bpmnElement="f_n_21_reissue_n_21_permit"><di:waypoint x="1575" y="565"/><di:waypoint x="1637" y="565"/><di:waypoint x="1637" y="675"/><di:waypoint x="1662" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_21_reissue_n_21_cend" bpmnElement="f_n_21_reissue_n_21_cend"><di:waypoint x="1575" y="565"/><di:waypoint x="1662" y="565"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

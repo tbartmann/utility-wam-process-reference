@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_P_3_1" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <process id="P_3_1" name="3.1 Forecast demand and capacity" isExecutable="false">
+    <documentation>Tier-4 activities under 3.1.1, 3.1.2 and 3.1.4. Two timer-started cycles that must run on the same horizon - a demand view and a capacity view - and a conditional comparison that classifies and escalates the gap. 3.1.3 what-if simulation is specified without a model: a run has a start and an end, but no standard path exists and two planners will not sequence the same tests.</documentation>
+    <startEvent id="n_31_dstart" name="Planning cycle due"><timerEventDefinition id="n_31_dstart_td"/></startEvent>
+    <serviceTask id="n_31_bank" name="Gather the work bank from every origination route"><documentation>3.1.1. Planned, cyclic, capital and customer routes. The cyclic gas load comes from 49 CFR 192 intervals; the electric inspection load comes from a named state rule, because 16 U.S.C. 824o excludes local distribution from the federal layer.</documentation></serviceTask>
+    <serviceTask id="n_31_conv" name="Convert each item to volume, skill and duration"><documentation>3.1.1.</documentation></serviceTask>
+    <serviceTask id="n_31_seg" name="Segment by work type, commodity, district and period"><documentation>3.1.1.</documentation></serviceTask>
+    <sendTask id="n_31_dpub" name="Publish the demand view"><documentation>3.1.1.</documentation></sendTask>
+    <startEvent id="n_31_cstart" name="Same planning cycle, or a roster change"><timerEventDefinition id="n_31_cstart_td"/></startEvent>
+    <serviceTask id="n_31_supply" name="Take roster, qualifications and contracted capacity"><documentation>3.1.2. Contracted capacity counts only where it is already on agreement.</documentation></serviceTask>
+    <serviceTask id="n_31_hours" name="Convert supply to available hours by skill and district"><documentation>3.1.2.</documentation></serviceTask>
+    <serviceTask id="n_31_sub" name="Subtract leave, training, restrictions and non-wrench time"><documentation>3.1.2. Standby and on-call are a distinct, limited pool and are not general capacity.</documentation></serviceTask>
+    <sendTask id="n_31_cpub" name="Publish the capacity view against the demand view"><documentation>3.1.2. Same horizon as the demand view, or the comparison is meaningless.</documentation></sendTask>
+    <startEvent id="n_31_gstart" name="Demand exceeds committed capacity in a skill, district or period"><conditionalEventDefinition id="n_31_gstart_cd"><condition/></conditionalEventDefinition></startEvent>
+    <serviceTask id="n_31_cmp" name="Compare demand and capacity by skill, district, period"><documentation>3.1.4.</documentation></serviceTask>
+    <businessRuleTask id="n_31_class" name="Classify each gap"><documentation>3.1.4. Absorbable, overtime, contract or unworkable.</documentation></businessRuleTask>
+    <exclusiveGateway id="n_31_gate" name="Gap class"/>
+    <userTask id="n_31_act" name="Take the capacity action"><documentation>3.1.4. Overtime on the internal roster, additional contracted capacity, or move work across district or period.</documentation></userTask>
+    <userTask id="n_31_esc" name="Escalate the unworkable or compliance-dated gap"><documentation>3.1.4. A compliance-dated gap is escalated whether or not a capacity action exists; that is the whole point of naming it.</documentation></userTask>
+    <serviceTask id="n_31_rec" name="Record the decision and any action taken"><documentation>3.1.4.</documentation></serviceTask>
+    <endEvent id="n_31_end" name="Shortfall closed or escalated"/>
+    <sequenceFlow id="f_n_31_dstart_n_31_bank" sourceRef="n_31_dstart" targetRef="n_31_bank" name=""/>
+    <sequenceFlow id="f_n_31_bank_n_31_conv" sourceRef="n_31_bank" targetRef="n_31_conv" name=""/>
+    <sequenceFlow id="f_n_31_conv_n_31_seg" sourceRef="n_31_conv" targetRef="n_31_seg" name=""/>
+    <sequenceFlow id="f_n_31_seg_n_31_dpub" sourceRef="n_31_seg" targetRef="n_31_dpub" name=""/>
+    <sequenceFlow id="f_n_31_cstart_n_31_supply" sourceRef="n_31_cstart" targetRef="n_31_supply" name=""/>
+    <sequenceFlow id="f_n_31_supply_n_31_hours" sourceRef="n_31_supply" targetRef="n_31_hours" name=""/>
+    <sequenceFlow id="f_n_31_hours_n_31_sub" sourceRef="n_31_hours" targetRef="n_31_sub" name=""/>
+    <sequenceFlow id="f_n_31_sub_n_31_cpub" sourceRef="n_31_sub" targetRef="n_31_cpub" name=""/>
+    <sequenceFlow id="f_n_31_gstart_n_31_cmp" sourceRef="n_31_gstart" targetRef="n_31_cmp" name=""/>
+    <sequenceFlow id="f_n_31_cmp_n_31_class" sourceRef="n_31_cmp" targetRef="n_31_class" name=""/>
+    <sequenceFlow id="f_n_31_class_n_31_gate" sourceRef="n_31_class" targetRef="n_31_gate" name=""/>
+    <sequenceFlow id="f_n_31_gate_n_31_act" sourceRef="n_31_gate" targetRef="n_31_act" name="absorbable, overtime or contract"><conditionExpression xsi:type="tFormalExpression"><![CDATA[gapClass = "overtime" or gapClass = "contract" or gapClass = "absorbable"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_31_gate_n_31_esc" sourceRef="n_31_gate" targetRef="n_31_esc" name="unworkable or compliance-dated"><conditionExpression xsi:type="tFormalExpression"><![CDATA[gapClass = "unworkable" or complianceDated = true]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_31_act_n_31_rec" sourceRef="n_31_act" targetRef="n_31_rec" name=""/>
+    <sequenceFlow id="f_n_31_esc_n_31_rec" sourceRef="n_31_esc" targetRef="n_31_rec" name=""/>
+    <sequenceFlow id="f_n_31_rec_n_31_end" sourceRef="n_31_rec" targetRef="n_31_end" name=""/>
+  </process>
+  <bpmndi:BPMNDiagram id="dg_P_3_1">
+    <bpmndi:BPMNPlane id="pl_P_3_1" bpmnElement="P_3_1">
+      <bpmndi:BPMNShape id="sh_n_31_dstart" bpmnElement="n_31_dstart"><dc:Bounds x="132" y="107" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_31_bank" bpmnElement="n_31_bank"><dc:Bounds x="255" y="90" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_31_conv" bpmnElement="n_31_conv"><dc:Bounds x="425" y="90" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_31_seg" bpmnElement="n_31_seg"><dc:Bounds x="595" y="90" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_31_dpub" bpmnElement="n_31_dpub"><dc:Bounds x="765" y="90" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_31_cstart" bpmnElement="n_31_cstart"><dc:Bounds x="132" y="327" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_31_supply" bpmnElement="n_31_supply"><dc:Bounds x="255" y="310" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_31_hours" bpmnElement="n_31_hours"><dc:Bounds x="425" y="310" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_31_sub" bpmnElement="n_31_sub"><dc:Bounds x="595" y="310" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_31_cpub" bpmnElement="n_31_cpub"><dc:Bounds x="765" y="310" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_31_gstart" bpmnElement="n_31_gstart"><dc:Bounds x="982" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_31_cmp" bpmnElement="n_31_cmp"><dc:Bounds x="1105" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_31_class" bpmnElement="n_31_class"><dc:Bounds x="1275" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_31_gate" bpmnElement="n_31_gate"><dc:Bounds x="1487" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_31_act" bpmnElement="n_31_act"><dc:Bounds x="1445" y="90" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_31_esc" bpmnElement="n_31_esc"><dc:Bounds x="1445" y="310" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_31_rec" bpmnElement="n_31_rec"><dc:Bounds x="1615" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_31_end" bpmnElement="n_31_end"><dc:Bounds x="1832" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ed_f_n_31_dstart_n_31_bank" bpmnElement="f_n_31_dstart_n_31_bank"><di:waypoint x="168" y="125"/><di:waypoint x="255" y="125"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_31_bank_n_31_conv" bpmnElement="f_n_31_bank_n_31_conv"><di:waypoint x="385" y="125"/><di:waypoint x="425" y="125"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_31_conv_n_31_seg" bpmnElement="f_n_31_conv_n_31_seg"><di:waypoint x="555" y="125"/><di:waypoint x="595" y="125"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_31_seg_n_31_dpub" bpmnElement="f_n_31_seg_n_31_dpub"><di:waypoint x="725" y="125"/><di:waypoint x="765" y="125"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_31_cstart_n_31_supply" bpmnElement="f_n_31_cstart_n_31_supply"><di:waypoint x="168" y="345"/><di:waypoint x="255" y="345"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_31_supply_n_31_hours" bpmnElement="f_n_31_supply_n_31_hours"><di:waypoint x="385" y="345"/><di:waypoint x="425" y="345"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_31_hours_n_31_sub" bpmnElement="f_n_31_hours_n_31_sub"><di:waypoint x="555" y="345"/><di:waypoint x="595" y="345"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_31_sub_n_31_cpub" bpmnElement="f_n_31_sub_n_31_cpub"><di:waypoint x="725" y="345"/><di:waypoint x="765" y="345"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_31_gstart_n_31_cmp" bpmnElement="f_n_31_gstart_n_31_cmp"><di:waypoint x="1018" y="235"/><di:waypoint x="1105" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_31_cmp_n_31_class" bpmnElement="f_n_31_cmp_n_31_class"><di:waypoint x="1235" y="235"/><di:waypoint x="1275" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_31_class_n_31_gate" bpmnElement="f_n_31_class_n_31_gate"><di:waypoint x="1405" y="235"/><di:waypoint x="1487" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_31_gate_n_31_act" bpmnElement="f_n_31_gate_n_31_act"><di:waypoint x="1533" y="235"/><di:waypoint x="1420" y="235"/><di:waypoint x="1420" y="125"/><di:waypoint x="1445" y="125"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_31_gate_n_31_esc" bpmnElement="f_n_31_gate_n_31_esc"><di:waypoint x="1533" y="235"/><di:waypoint x="1420" y="235"/><di:waypoint x="1420" y="345"/><di:waypoint x="1445" y="345"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_31_act_n_31_rec" bpmnElement="f_n_31_act_n_31_rec"><di:waypoint x="1575" y="125"/><di:waypoint x="1590" y="125"/><di:waypoint x="1590" y="235"/><di:waypoint x="1615" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_31_esc_n_31_rec" bpmnElement="f_n_31_esc_n_31_rec"><di:waypoint x="1575" y="345"/><di:waypoint x="1590" y="345"/><di:waypoint x="1590" y="235"/><di:waypoint x="1615" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_31_rec_n_31_end" bpmnElement="f_n_31_rec_n_31_end"><di:waypoint x="1745" y="235"/><di:waypoint x="1832" y="235"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>
