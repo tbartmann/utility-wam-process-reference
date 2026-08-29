@@ -40,7 +40,7 @@
     <serviceTask id="n_116_keep" name="Retain the basis with the calculation"><documentation>11.6.1. 1.1404(f) gives you 30 days to produce it on request.</documentation></serviceTask>
     <exclusiveGateway id="n_116_rg" name="Rate increasing"/>
     <sendTask id="n_116_not" name="Give 60 days written notice"><documentation>11.6.2. 1.1403(c). Billing an increase without it does not make it effective.</documentation></sendTask>
-    <sendTask id="n_116_inv" name="Issue the invoice with its count and rate"><documentation>11.6.2. An invoice without them generates a dispute you then reconstruct the basis for.</documentation></sendTask>
+    <sendTask id="n_116_inv" name="Issue the invoice with its count and rate"><documentation>11.6.2. 47 U.S.C. 224(g) and 47 CFR 1.1408(a) also make a utility that provides telecom or cable services itself impute the same rate to its own costs and charge any affiliate. The rate you bill is the rate you pay yourself.</documentation></sendTask>
     <serviceTask id="n_116_age" name="Age the receivable"><documentation>11.6.2. Non-payment is a contract matter. It is not a 224(f)(2) ground and does not license withholding access.</documentation></serviceTask>
     <endEvent id="n_116_end" name="Billed"/>
     <startEvent id="n_116_s" name="Joint ownership settlement due"><timerEventDefinition id="n_116_s_td"/></startEvent>

@@ -37,7 +37,7 @@
     <serviceTask id="n_113_load" name="Analyse loading (11.3.2)"><documentation>11.3.2. Specified, not modelled: NESC Rule 250B is unread and writing the table would invent the arithmetic.</documentation></serviceTask>
     <exclusiveGateway id="n_113_lg" name="Disposition"/>
     <sendTask id="n_113_repl" name="Commit a replacement to 11.5"><documentation>11.3.2. And 1.1411(j)(3) removes the attacher's self-help on pole replacements.</documentation></sendTask>
-    <userTask id="n_113_des" name="Design the clearance solution"><documentation>11.3.3. NESC Rules 235C and 238 govern; NRECA puts the communication worker safety zone at generally 40 in.</documentation></userTask>
+    <userTask id="n_113_des" name="Design the clearance solution"><documentation>11.3.3. NESC Rules 235C and 238 govern the clearances; NRECA puts the communication worker safety zone at generally 40 in. 47 CFR 1.1402(q) defines simple make-ready as transferable without reasonable expectation of an outage or damage and without splicing.</documentation></userTask>
     <exclusiveGateway id="n_113_cls" name="Simple or complex"/>
     <userTask id="n_113_obj" name="Object in writing that simple work is complex"><documentation>11.3.3. 1.1411(k)(2)(ii) makes a specific written objection determinative.</documentation></userTask>
     <userTask id="n_113_est" name="Price and issue the itemised estimate"><documentation>11.3.4. Within 14 days of the survey, 29 for a Large Order, pole by pole where asked.</documentation></userTask>

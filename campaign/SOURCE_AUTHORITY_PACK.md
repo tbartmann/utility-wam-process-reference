@@ -614,6 +614,7 @@ content the rest of this reference has to derive from consensus.
 | | (e) | the telecommunications rate formula | `regulation` |
 | | (f)(1) | a utility **shall** provide nondiscriminatory access | `regulation` |
 | | (f)(2) | an **electric** utility may deny access on a non-discriminatory basis for insufficient capacity, safety, reliability or generally applicable engineering purposes | `regulation` |
+| | (g) | a utility providing telecommunications or cable services **imputes** the attachment rate to its own costs | `regulation` |
 | | (h) | written notice of intended modification | `regulation` |
 | | (i) | an attacher does not bear the cost of rearranging or replacing its attachment where that is required by an **additional** attachment | `regulation` |
 
@@ -626,12 +627,15 @@ applies a number. No state regime is in this pack; naming one is `judgment`.
 
 | Locator | What it establishes | Status |
 |---|---|---|
+| **1.1402(a), (i), (j), (k), (n), (p), (q)** | definitions: utility; conduit, conduit system, duct, inner-duct; and **complex** and **simple make-ready** - simple being work in the communications space transferable with no reasonable expectation of a service outage or facility damage and no splicing | `regulation` |
+| **1.1405(a)-(b)** | a suitable State certificate is **conclusive proof** of the Commission's lack of jurisdiction; absent one it is rebuttably presumed the State does not regulate | `regulation` |
 | **1.1403(a)** | duty to provide access; denial only on a non-discriminatory basis for insufficient capacity, safety, reliability or generally applicable engineering purposes, in writing with all supporting evidence | `regulation` |
 | **1.1403(c)** | **60 days** written notice before removal, a rate increase, or modification other than make-ready, routine maintenance or emergency response | `regulation` |
 | **1.1406(d)** | the maximum just and reasonable rate formulas — (d)(1) cable, (d)(2) telecommunications (higher of two), (d)(3) conduit | `regulation` |
 | **1.1407** | remedies: prescribe a rate, terminate or substitute a term, order a refund with interest, order access within a specified time | `regulation` |
+| **1.1408(a)** | **imputation**: a utility that itself provides telecommunications or cable services imputes an equal amount to its own costs and charges any affiliate. 47 U.S.C. 224(g) is the statute | `regulation` |
 | **1.1408(b)** | **modification cost allocation**: borne by all parties that obtain access as a result of the modification and all parties that directly benefit, shared proportionately | `regulation` |
-| **1.1409(a)–(d)** | unusable-space apportionment at two-thirds of an equal share; rebuttable presumptive attaching-entity averages of **3** (non-urbanized, under 50,000) and **5** (urbanized) | `regulation` |
+| **1.1409(a)–(d)** | unusable-space apportionment at two-thirds of an equal share; rebuttable presumptive attaching-entity averages of **3** (non-urbanized, under 50,000) and **5** (urbanized). (d)(3): a challenge is made with information and its methodology, and **where a complete inspection is impractical a statistically sound survey may be submitted**; (d)(4) then makes the resulting data the presumptive number | `regulation` |
 | **1.1410** | rebuttable presumptions: attachment **1 ft**, usable space **13.5 ft**, unusable space **24 ft**, pole height **37.5 ft** | `regulation` |
 | **1.1411** | the access timeline — see E3 | `regulation` |
 | **1.1412(a)–(c)** | contractor lists for self-help and simple work; minimum qualifications, including agreeing to follow **NESC** guidelines where the utility publishes none, and OSHA Qualified and Competent Person rules | `regulation` |
@@ -701,3 +705,20 @@ cost-allocation rule for make-ready.
 * **Transfer notification exchanges.** A multi-party notification system is the norm and
   the reference names no product, per the product-neutrality rule.
 
+### E6 — Reconciled against an independent specification, 2026-08-29
+
+Grok specified this same category unasked, twenty minutes after the Claude version merged.
+Rather than discard it, its citations were verified against primary text and six were
+adopted: `1.1402(p)` and `(q)`, `1.1405`, `47 U.S.C. 224(g)` with `1.1408(a)`,
+18 CFR Part 101 Accounts **364** and **366**, and the `1.1402` conduit vocabulary. One of
+them corrected an error — `1.1409(d)(3)` had been read as making a complete inspection's
+data displace the presumptive average, which is `(d)(4)`.
+
+Its notation was **not** adopted on three counts. It made 11.1.5 the governing-regime
+determination a SPEC and 11.3.2 the loading analysis a DMN. Both are the wrong way round:
+the regime determination returns a value from tests the statute states, and the loading
+arithmetic is NESC Rule 250B, which is paywalled and unread here.
+
+Two independent derivations of the same category agreeing on substance, and disagreeing
+only on notation and citation depth, is the strongest corroboration anything in this
+reference has.

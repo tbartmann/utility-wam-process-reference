@@ -27,6 +27,14 @@
     "Category boundaries held deliberately: 12.1 registers the structure and 11.4.1 carries the joint use overlay on it; 2.0 designs the line and 11.2.6 obtains the right to occupy somebody else's structure so it can be built; 5.3 posts the retirement and 11.5.4 clears the field condition; 16.0 contracts companies to work for you and 11.1.1 licenses another party to attach to you - opposite directions.",
     "This category applies to electric only in model.json. Gas has no analogue: there is no third-party attachment to a gas main."
   ],
+  "merge_corrections": [
+    {
+      "date": "2026-08-29",
+      "by": "Claude",
+      "what": "Reconciled against Grok's independent specification of the same category, filed unasked twenty minutes after this one shipped. Six of its citations were verified against primary text and adopted, and one of them exposed an ERROR here: 11.4.5 said a complete inspection's data displaces the presumptive attacher average, conflating 47 CFR 1.1409(d)(3) with (d)(4). (d)(3) takes a challenge with its methodology and permits a statistically sound survey where a complete inspection is impractical; (d)(4) is what makes the result the presumptive number. Also adopted: 1.1402(p) and (q), which DEFINE complex and simple make-ready; 1.1405, the operative mechanism behind 224(c) certification; 47 U.S.C. 224(g) with 47 CFR 1.1408(a) imputation, absent from 11.6 entirely; 18 CFR Part 101 Accounts 364 and 366 in place of a bare Part reference; and 1.1402(i), (j), (k), (n) for the conduit vocabulary. Grok's notation was NOT adopted on three counts - it made the governing-regime determination SPEC and the loading analysis DMN, and both are the wrong way round.",
+      "count": 6
+    }
+  ],
   "processes": [
     {
       "uid": 10336,
@@ -328,6 +336,11 @@
         {
           "for": "attaching entity count",
           "cite": "47 CFR 1.1409 Allocation of Unusable Space Costs (b) all attaching entities attached to the pole shall be counted for apportioning unusable space",
+          "status": "regulation"
+        },
+        {
+          "for": "plant account",
+          "cite": "18 CFR Part 101 Account 364 Poles, towers and fixtures",
           "status": "regulation"
         },
         {
@@ -757,7 +770,7 @@
       "controls": [
         {
           "kind": "regulatory",
-          "text": "47 U.S.C. 224(c)(1) removes Commission jurisdiction where a State regulates, and 224(c)(2) requires the State to certify that it does and that it considers subscriber interests. Roughly half the States have certified and this reference holds no State rule."
+          "text": "47 U.S.C. 224(c) removes Commission jurisdiction where a State certifies that it regulates and considers subscriber interests. 47 CFR 1.1405(a) makes that certificate conclusive proof. This reference holds no State rule."
         },
         {
           "kind": "regulatory",
@@ -799,7 +812,7 @@
         },
         {
           "for": "reverse preemption",
-          "cite": "47 U.S.C. 224 Pole attachments (c)(1) and (c)(2) State certification",
+          "cite": "47 U.S.C. 224 Pole attachments (c)(1) and (c)(2) State certification; 47 CFR 1.1405 Dismissal of pole attachment complaints for lack of jurisdiction (a) a suitable certificate is conclusive proof of lack of jurisdiction and (b) absence of one is a rebuttable presumption the State does not regulate",
           "status": "regulation"
         },
         {
@@ -2379,7 +2392,7 @@
         },
         {
           "kind": "regulatory",
-          "text": "Simple or complex decides the route, and under 1.1411(k)(2)(ii) the utility's written objection that simple work is complex is determinative."
+          "text": "47 CFR 1.1402(q) defines simple make-ready as transferable without reasonable expectation of a service outage or facility damage and without splicing; (p) is the complement. Under 1.1411(k)(2)(ii) the utility's written objection is determinative."
         }
       ],
       "measures": [
@@ -2423,7 +2436,7 @@
         },
         {
           "for": "simple versus complex",
-          "cite": "47 CFR 1.1411 Timeline for access to utility poles (k)(2)(ii) the utility's objection is final and determinative",
+          "cite": "47 CFR 1.1402 Definitions (p) complex and (q) simple make-ready; 47 CFR 1.1411 Timeline for access to utility poles (k)(2)(ii) the utility's objection is final and determinative",
           "status": "regulation"
         }
       ],
@@ -3225,6 +3238,16 @@
           "status": "regulation"
         },
         {
+          "for": "conduit vocabulary",
+          "cite": "47 CFR 1.1402 Definitions (i) conduit, (j) conduit system, (k) duct, (n) inner-duct",
+          "status": "regulation"
+        },
+        {
+          "for": "plant account",
+          "cite": "18 CFR Part 101 Account 366 Underground conduit",
+          "status": "regulation"
+        },
+        {
           "for": "occupancy content",
           "cite": "No standard specifies conduit occupancy record content",
           "status": "judgment"
@@ -3378,7 +3401,7 @@
         },
         {
           "for": "counting basis",
-          "cite": "47 CFR 1.1409 Allocation of Unusable Space Costs (b) and (d)(3) challenge to a presumptive attacher average by inspection",
+          "cite": "47 CFR 1.1409 Allocation of Unusable Space Costs (b) all attaching entities counted; (d)(3) a complete inspection or, where impractical, a statistically sound survey",
           "status": "regulation"
         },
         {
@@ -3665,7 +3688,7 @@
         },
         {
           "kind": "regulatory",
-          "text": "1.1409(d)(3) lets an attacher challenge a presumptive average, and a complete inspection's data then governs. An audit is that evidence."
+          "text": "1.1409(d)(3) lets an attacher challenge a presumptive average with information and its methodology, and where a complete inspection is impractical a statistically sound survey may be submitted. (d)(4) is what then makes the resulting data the presumptive number."
         }
       ],
       "measures": [
@@ -3699,7 +3722,7 @@
         },
         {
           "for": "challenge evidence",
-          "cite": "47 CFR 1.1409 Allocation of Unusable Space Costs (d)(3) and (d)(4) successful challenge changes the presumptive number",
+          "cite": "47 CFR 1.1409 Allocation of Unusable Space Costs (d)(3) a statistically sound survey where a complete inspection is impractical; (d)(4) the resulting data becomes the presumptive number",
           "status": "regulation"
         },
         {
@@ -4964,7 +4987,7 @@
         },
         {
           "kind": "financial",
-          "text": "An invoice that does not carry the count and the rate it was built from generates a dispute the utility then has to reconstruct the basis for."
+          "text": "47 U.S.C. 224(g) and 47 CFR 1.1408(a) make a utility that itself provides telecom or cable services impute the same rate to its own costs and charge it to any affiliate. The rate you bill is the rate you pay yourself."
         },
         {
           "kind": "operational",
@@ -5011,9 +5034,9 @@
           "status": "regulation"
         },
         {
-          "for": "invoice content",
-          "cite": "Invoice content is contract; no standard specifies it",
-          "status": "judgment"
+          "for": "imputation",
+          "cite": "47 U.S.C. 224 Pole attachments (g); 47 CFR 1.1408 Imputation of rates; modification costs (a) impute an equal amount to the cost of your own telecom or cable services and charge any affiliate",
+          "status": "regulation"
         }
       ],
       "provenance": {
