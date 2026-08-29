@@ -50,6 +50,28 @@ domain-specific one and is cited first.
 | `measures` | elements to define indicators | c) g) | Cited to EN 15341 and SMRP, not invented. |
 | `variants` | — | b) | Named cases that run differently. Standards-derived only. |
 | `notation` | — | b) | `class`, `why`, `artifact`. |
+
+### Artifact granularity — BPMN at the group, DMN and CMMN at the process
+
+A behaviour model exists to show a **sequence across processes**: how 2.1.1 flows into
+2.1.2 and where it branches. One BPMN file per tier-3 process shows thirty disconnected
+fragments and loses the only thing BPMN is for.
+
+So:
+
+- **BPMN** — one file per **process group**, named `<group>-<kebab-name>.bpmn`, covering
+  every BPMN process in that group. `2.1-engineer-and-design-work.bpmn` carries 2.1.1
+  through 2.1.4. A group with two BPMN files is an error.
+- **DMN** — one file per **process**, named `<process>-<kebab-name>.dmn`. A determination
+  is its own thing and is called from the group's BPMN as a business rule task.
+  `2.2.5-capitalisation-determination.dmn`.
+- **CMMN** — one file per **process**, named `<process>-<kebab-name>.cmmn`, for the same
+  reason. `2.4.4-scope-change.cmmn`.
+- **SPEC** — no artifact. `null`.
+
+The ratio to expect is roughly one artifact per two processes. The five merged categories
+run 18 processes to 7 models, 26 to 11, 21 to 9, 20 to 6 and 22 to 11. Thirty models for
+thirty-two processes means the group boundaries were not used.
 | `en17007` | — | — | The EN 17007 process this corresponds to. |
 | `sources` | — | — | Per-field citations with a verification status. |
 | `provenance` | — | — | `grade`, `corr`, `warrant` — same scheme as `eam/provenance.py`. |

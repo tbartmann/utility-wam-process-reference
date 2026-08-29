@@ -208,6 +208,11 @@ rejected a submission.
       **`variants`**, `notation`, `sources`, `provenance`. *An entire submission was
       rejected for `variants` missing on all 26 processes.*
 - [ ] `id` and `uid` match your assignment pack exactly. Do not invent either.
+- [ ] **One BPMN file per process GROUP, not per process.** DMN and CMMN are per
+      process. Expect roughly one artifact per two processes; the merged categories
+      run 18:7, 26:11, 21:9, 20:6 and 22:11. A group with two BPMN files is an
+      error. See `specs/SCHEMA.md`. *Two submissions got this wrong because the
+      rule was implicit in the worked example and never stated.*
 - [ ] **Variants are different for every process, and none is merely the commodity.**
       A variant is a named way the work differs in practice — the route, the method, the
       outcome — such that a utility recognises its own operation. `model.json` already
