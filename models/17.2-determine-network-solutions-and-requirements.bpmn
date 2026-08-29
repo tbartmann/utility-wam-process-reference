@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_P_17_2" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <process id="P_17_2" name="17.2 Determine network solutions and requirements" isExecutable="false">
+    <documentation>17.2.1, 17.2.3, 17.2.4, 17.2.5 and 17.2.6 are drawn. 17.2.2 is specified and not drawn: nothing in the pack states how a priced whole-life comparison is weighed against deliverability, consent or a statutory clock.
+
+The requirements branches are parallel and commodity-split by design. An electric option produces protection and control requirements (17.2.3) and secondary systems requirements (17.2.4); a gas option produces pressure and overpressure requirements (17.2.5). All three produce REQUIREMENTS FOR 2.1 and none of them designs: 17.2.3 does not calculate settings, 17.2.4 does not configure the control room, and 17.2.5 cites 49 CFR 192.195 and 192.197 as the authority rather than publishing a setpoint table.
+
+17.2.3 names NERC PRC only when 17.3.4 has returned bulk-power. 16 U.S.C. 824o(a)(1) excludes local distribution from the bulk-power system, so on a distribution option the NERC families are cited as not applying - the same discipline 7.0 applies to FAC-003.</documentation>
+    <laneSet id="P_17_2_lanes">
+      <lane id="l_172_plan" name="Network planning">
+        <flowNodeRef>n_172_start</flowNodeRef>
+        <flowNodeRef>n_172_opt</flowNodeRef>
+        <flowNodeRef>n_172_cmp</flowNodeRef>
+        <flowNodeRef>n_172_split</flowNodeRef>
+        <flowNodeRef>n_172_join</flowNodeRef>
+        <flowNodeRef>n_172_sel</flowNodeRef>
+        <flowNodeRef>n_172_gw</flowNodeRef>
+        <flowNodeRef>n_172_back</flowNodeRef>
+        <flowNodeRef>n_172_rel</flowNodeRef>
+        <flowNodeRef>n_172_end</flowNodeRef>
+      </lane>
+      <lane id="l_172_eng" name="Engineering requirements">
+        <flowNodeRef>n_172_prot</flowNodeRef>
+        <flowNodeRef>n_172_sec</flowNodeRef>
+        <flowNodeRef>n_172_gas</flowNodeRef>
+      </lane>
+    </laneSet>
+    <startEvent id="n_172_start" name="Shortfall released for optioning"><messageEventDefinition id="n_172_start_md"/></startEvent>
+    <userTask id="n_172_opt" name="Develop at least two options, including a non-build"><documentation>17.2.1. A single option is a proposal, not an option set. The non-build is included wherever one exists, so a build is visible as a choice.</documentation></userTask>
+    <callActivity id="n_172_cmp" name="Compare on the whole-life basis (17.5.2)"><documentation>17.5.2 owns the arithmetic. 17.2.2 then weighs that comparison against what the basis cannot price, and neither of them selects.</documentation></callActivity>
+    <parallelGateway id="n_172_split" name="Commodity requirements"/>
+    <userTask id="n_172_prot" name="State protection and control requirements"><documentation>17.2.3, electric. Requirements for 2.1. Settings calculation stays in 2.1, and NERC PRC is named only where 17.3.4 returned bulk-power.</documentation></userTask>
+    <userTask id="n_172_sec" name="State SCADA, communications and metering requirements"><documentation>17.2.4, electric. At the new node. Configuring the control room is out of scope of this category entirely.</documentation></userTask>
+    <userTask id="n_172_gas" name="State pressure, regulation and overpressure requirements"><documentation>17.2.5, gas. 49 CFR 192.195 overpressure protection and 192.197 control of service-line pressure are cited as the authority; the setpoint is the design's.</documentation></userTask>
+    <parallelGateway id="n_172_join" name="Requirements complete"/>
+    <userTask id="n_172_sel" name="Select one option, or return the shortfall"><documentation>17.2.6. With the 17.3 classification the selection relied on recorded, because 17.4.1 carries it forward and 17.4.6 re-baselines on it.</documentation></userTask>
+    <exclusiveGateway id="n_172_gw" name="Selected"/>
+    <sendTask id="n_172_back" name="Return to 17.1 as insufficiently defined"><documentation>17.2.6. A shortfall that cannot be optioned is a shortfall that was never properly classified at 17.1.5.</documentation></sendTask>
+    <sendTask id="n_172_rel" name="Release the selected solution to 17.4.1"><documentation>17.2.6.</documentation></sendTask>
+    <endEvent id="n_172_end" name="Solution selected and released"/>
+    <sequenceFlow id="f_n_172_start_n_172_opt" sourceRef="n_172_start" targetRef="n_172_opt" name=""/>
+    <sequenceFlow id="f_n_172_opt_n_172_cmp" sourceRef="n_172_opt" targetRef="n_172_cmp" name=""/>
+    <sequenceFlow id="f_n_172_cmp_n_172_split" sourceRef="n_172_cmp" targetRef="n_172_split" name=""/>
+    <sequenceFlow id="f_n_172_split_n_172_prot" sourceRef="n_172_split" targetRef="n_172_prot" name=""/>
+    <sequenceFlow id="f_n_172_split_n_172_sec" sourceRef="n_172_split" targetRef="n_172_sec" name=""/>
+    <sequenceFlow id="f_n_172_split_n_172_gas" sourceRef="n_172_split" targetRef="n_172_gas" name=""/>
+    <sequenceFlow id="f_n_172_prot_n_172_join" sourceRef="n_172_prot" targetRef="n_172_join" name=""/>
+    <sequenceFlow id="f_n_172_sec_n_172_join" sourceRef="n_172_sec" targetRef="n_172_join" name=""/>
+    <sequenceFlow id="f_n_172_gas_n_172_join" sourceRef="n_172_gas" targetRef="n_172_join" name=""/>
+    <sequenceFlow id="f_n_172_join_n_172_sel" sourceRef="n_172_join" targetRef="n_172_sel" name=""/>
+    <sequenceFlow id="f_n_172_sel_n_172_gw" sourceRef="n_172_sel" targetRef="n_172_gw" name=""/>
+    <sequenceFlow id="f_n_172_gw_n_172_back" sourceRef="n_172_gw" targetRef="n_172_back" name="not selectable"><conditionExpression xsi:type="tFormalExpression"><![CDATA[selected = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_172_gw_n_172_rel" sourceRef="n_172_gw" targetRef="n_172_rel" name="selected"/>
+    <sequenceFlow id="f_n_172_rel_n_172_end" sourceRef="n_172_rel" targetRef="n_172_end" name=""/>
+  </process>
+  <bpmndi:BPMNDiagram id="dg_P_17_2">
+    <bpmndi:BPMNPlane id="pl_P_17_2" bpmnElement="P_17_2">
+      <bpmndi:BPMNShape id="sh_n_172_start" bpmnElement="n_172_start"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_172_opt" bpmnElement="n_172_opt"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_172_cmp" bpmnElement="n_172_cmp"><dc:Bounds x="425" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_172_split" bpmnElement="n_172_split"><dc:Bounds x="637" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_172_prot" bpmnElement="n_172_prot"><dc:Bounds x="765" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_172_sec" bpmnElement="n_172_sec"><dc:Bounds x="765" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_172_gas" bpmnElement="n_172_gas"><dc:Bounds x="765" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_172_join" bpmnElement="n_172_join"><dc:Bounds x="977" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_172_sel" bpmnElement="n_172_sel"><dc:Bounds x="1105" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_172_gw" bpmnElement="n_172_gw"><dc:Bounds x="1317" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_172_back" bpmnElement="n_172_back"><dc:Bounds x="1275" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_172_rel" bpmnElement="n_172_rel"><dc:Bounds x="1445" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_172_end" bpmnElement="n_172_end"><dc:Bounds x="1662" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ed_f_n_172_start_n_172_opt" bpmnElement="f_n_172_start_n_172_opt"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_172_opt_n_172_cmp" bpmnElement="f_n_172_opt_n_172_cmp"><di:waypoint x="385" y="235"/><di:waypoint x="425" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_172_cmp_n_172_split" bpmnElement="f_n_172_cmp_n_172_split"><di:waypoint x="555" y="235"/><di:waypoint x="637" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_172_split_n_172_prot" bpmnElement="f_n_172_split_n_172_prot"><di:waypoint x="683" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_172_split_n_172_sec" bpmnElement="f_n_172_split_n_172_sec"><di:waypoint x="683" y="235"/><di:waypoint x="740" y="235"/><di:waypoint x="740" y="455"/><di:waypoint x="765" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_172_split_n_172_gas" bpmnElement="f_n_172_split_n_172_gas"><di:waypoint x="683" y="235"/><di:waypoint x="740" y="235"/><di:waypoint x="740" y="675"/><di:waypoint x="765" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_172_prot_n_172_join" bpmnElement="f_n_172_prot_n_172_join"><di:waypoint x="895" y="235"/><di:waypoint x="977" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_172_sec_n_172_join" bpmnElement="f_n_172_sec_n_172_join"><di:waypoint x="895" y="455"/><di:waypoint x="952" y="455"/><di:waypoint x="952" y="235"/><di:waypoint x="977" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_172_gas_n_172_join" bpmnElement="f_n_172_gas_n_172_join"><di:waypoint x="895" y="675"/><di:waypoint x="952" y="675"/><di:waypoint x="952" y="235"/><di:waypoint x="977" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_172_join_n_172_sel" bpmnElement="f_n_172_join_n_172_sel"><di:waypoint x="1023" y="235"/><di:waypoint x="1105" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_172_sel_n_172_gw" bpmnElement="f_n_172_sel_n_172_gw"><di:waypoint x="1235" y="235"/><di:waypoint x="1317" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_172_gw_n_172_back" bpmnElement="f_n_172_gw_n_172_back"><di:waypoint x="1363" y="235"/><di:waypoint x="1250" y="235"/><di:waypoint x="1250" y="455"/><di:waypoint x="1275" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_172_gw_n_172_rel" bpmnElement="f_n_172_gw_n_172_rel"><di:waypoint x="1363" y="235"/><di:waypoint x="1445" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_172_rel_n_172_end" bpmnElement="f_n_172_rel_n_172_end"><di:waypoint x="1575" y="235"/><di:waypoint x="1662" y="235"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

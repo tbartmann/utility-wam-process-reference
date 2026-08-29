@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/" id="Gas_class_location" name="17.3.1 Determine and maintain gas class location" namespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <description>One of the few determinations in this reference whose rule is published rather than practised. 49 CFR 192.5(a)(1) defines the class location unit - an onshore area extending 220 yards on either side of the centreline of any continuous one-mile length of pipeline - and 192.5(b) then counts buildings intended for human occupancy within it.
+
+The table returns THE CLASS AND ITS AUTHORITY and nothing else. It does not return what the class obliges: design factors are subpart C, MAOP is 17.3.2, integrity management is 17.3.3, and the ongoing obligations are 8.0's. A table that returned obligations would have to be re-verified every time Part 192 changed; one that returns a class does not.
+
+192.5(c) permits the boundaries of a class location unit to be adjusted, and 192.5(d) requires records of the current class of each gas TRANSMISSION segment and how it was determined. Distribution still classifies under 192.5; it is the record rule in (d) that names transmission.</description>
+  <inputData id="in_offshore" name="Offshore area"><variable id="in_offshore_v" name="Offshore area" typeRef="boolean"/></inputData>
+  <inputData id="in_buildings" name="Buildings intended for human occupancy in the unit"><variable id="in_buildings_v" name="Buildings intended for human occupancy in the unit" typeRef="number"/></inputData>
+  <inputData id="in_publicAssembly" name="A 192.5(b)(3)(ii) public-assembly case applies"><variable id="in_publicAssembly_v" name="A 192.5(b)(3)(ii) public-assembly case applies" typeRef="boolean"/></inputData>
+  <inputData id="in_fourStorey" name="Buildings with four or more storeys are prevalent"><variable id="in_fourStorey_v" name="Buildings with four or more storeys are prevalent" typeRef="boolean"/></inputData>
+  <knowledgeSource id="ks_1925" name="49 CFR 192.5 Class locations"><description>(a)(1) the 220-yard, one-mile class location unit; (b)(1) to (b)(4) the four classes; (b)(3)(ii) the public-assembly case; (c) adjustment of unit boundaries; (d) the record of the current class of each gas transmission segment.</description></knowledgeSource>
+  <decision id="d_17_3_1" name="Gas class location">
+    <variable id="d_17_3_1_v" name="Gas class location" typeRef="string"/>
+    <informationRequirement id="ir_d_17_3_1_ks_1925"><requiredInput href="#ks_1925"/></informationRequirement>
+    <decisionTable id="d_17_3_1_dt" hitPolicy="FIRST" preferredOrientation="Rule-as-Row">
+      <input id="d_17_3_1_i1" label="Offshore"><inputExpression id="d_17_3_1_i1_e" typeRef="boolean"><text>in_offshore</text></inputExpression></input>
+      <input id="d_17_3_1_i2" label="Four or more storeys prevalent"><inputExpression id="d_17_3_1_i2_e" typeRef="boolean"><text>in_fourStorey</text></inputExpression></input>
+      <input id="d_17_3_1_i3" label="Buildings in the unit"><inputExpression id="d_17_3_1_i3_e" typeRef="number"><text>in_buildings</text></inputExpression></input>
+      <input id="d_17_3_1_i4" label="Public-assembly case"><inputExpression id="d_17_3_1_i4_e" typeRef="boolean"><text>in_publicAssembly</text></inputExpression></input>
+      <output id="d_17_3_1_o" label="Gas class location" name="Gas class location" typeRef="string"/>
+      <rule id="d_17_3_1_r1">
+        <description>49 CFR 192.5(b)(1)(i). An offshore area is Class 1 whatever the count.</description>
+        <inputEntry id="d_17_3_1_r1_ie1"><text>true</text></inputEntry>
+        <inputEntry id="d_17_3_1_r1_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_17_3_1_r1_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_17_3_1_r1_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_17_3_1_r1_oe"><text>"class1"</text></outputEntry>
+      </rule>
+      <rule id="d_17_3_1_r2">
+        <description>192.5(b)(4). Prevalence of four-storey buildings, not a count of them - the only class in the section that is not decided arithmetically.</description>
+        <inputEntry id="d_17_3_1_r2_ie1"><text>false</text></inputEntry>
+        <inputEntry id="d_17_3_1_r2_ie2"><text>true</text></inputEntry>
+        <inputEntry id="d_17_3_1_r2_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_17_3_1_r2_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_17_3_1_r2_oe"><text>"class4"</text></outputEntry>
+      </rule>
+      <rule id="d_17_3_1_r3">
+        <description>192.5(b)(3)(i).</description>
+        <inputEntry id="d_17_3_1_r3_ie1"><text>false</text></inputEntry>
+        <inputEntry id="d_17_3_1_r3_ie2"><text>false</text></inputEntry>
+        <inputEntry id="d_17_3_1_r3_ie3"><text>&gt;= 46</text></inputEntry>
+        <inputEntry id="d_17_3_1_r3_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_17_3_1_r3_oe"><text>"class3"</text></outputEntry>
+      </rule>
+      <rule id="d_17_3_1_r4">
+        <description>192.5(b)(3)(ii). The public-assembly case reaches Class 3 on a building or small well-defined outside area occupied by people, without the count.</description>
+        <inputEntry id="d_17_3_1_r4_ie1"><text>false</text></inputEntry>
+        <inputEntry id="d_17_3_1_r4_ie2"><text>false</text></inputEntry>
+        <inputEntry id="d_17_3_1_r4_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_17_3_1_r4_ie4"><text>true</text></inputEntry>
+        <outputEntry id="d_17_3_1_r4_oe"><text>"class3"</text></outputEntry>
+      </rule>
+      <rule id="d_17_3_1_r5">
+        <description>192.5(b)(2). More than 10 and fewer than 46.</description>
+        <inputEntry id="d_17_3_1_r5_ie1"><text>false</text></inputEntry>
+        <inputEntry id="d_17_3_1_r5_ie2"><text>false</text></inputEntry>
+        <inputEntry id="d_17_3_1_r5_ie3"><text>&gt; 10</text></inputEntry>
+        <inputEntry id="d_17_3_1_r5_ie4"><text>false</text></inputEntry>
+        <outputEntry id="d_17_3_1_r5_oe"><text>"class2"</text></outputEntry>
+      </rule>
+      <rule id="d_17_3_1_r6">
+        <description>192.5(b)(1)(ii).</description>
+        <inputEntry id="d_17_3_1_r6_ie1"><text>false</text></inputEntry>
+        <inputEntry id="d_17_3_1_r6_ie2"><text>false</text></inputEntry>
+        <inputEntry id="d_17_3_1_r6_ie3"><text>&lt;= 10</text></inputEntry>
+        <inputEntry id="d_17_3_1_r6_ie4"><text>false</text></inputEntry>
+        <outputEntry id="d_17_3_1_r6_oe"><text>"class1"</text></outputEntry>
+      </rule>
+      <rule id="d_17_3_1_r7">
+        <description>The unit has not been established. 192.5(a)(1) has to be applied before anything is counted, and 192.5(c) may have adjusted its boundaries.</description>
+        <inputEntry id="d_17_3_1_r7_ie1"><text>-</text></inputEntry>
+        <inputEntry id="d_17_3_1_r7_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_17_3_1_r7_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_17_3_1_r7_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_17_3_1_r7_oe"><text>"determineManually"</text></outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram id="drd_Gas_class_location">
+      <dmndi:DMNShape id="sh_in_offshore" dmnElementRef="in_offshore"><dc:Bounds x="60" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_buildings" dmnElementRef="in_buildings"><dc:Bounds x="245" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_publicAssembly" dmnElementRef="in_publicAssembly"><dc:Bounds x="430" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_fourStorey" dmnElementRef="in_fourStorey"><dc:Bounds x="615" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_d_17_3_1" dmnElementRef="d_17_3_1"><dc:Bounds x="60" y="240" width="180" height="70"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_ks_1925" dmnElementRef="ks_1925"><dc:Bounds x="900" y="100" width="160" height="55"/></dmndi:DMNShape>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</definitions>

@@ -541,7 +541,11 @@ courses covering 49 CFR 192/195 and ASME B31Q), NGA, SGA.
 | **EEI** | — | Mutual assistance and business continuity (relevant to 9.0 storm work). Employment aptitude batteries (CAST, POSS, MASS, TECH) if 14.0 covers selection. No process standard. | `consensus` |
 
 **Do not claim:** a NEMA standard for distribution asset inspection (searched, none found;
-absence not proven). IEEE 493 (edition and scope unverified — do not cite).
+absence not proven). IEEE 493 (edition and scope unverified — do not cite). **IEEE 1729-2025**
+(named in `model.json`'s derivation line for 17.0 when the Asset Lifecycle band was added, and
+never in this pack; Grok refused to cite it on 2026-08-29 and was right to. The derivation line
+was corrected rather than the pack extended, because nobody here has read the document. If it is
+obtained, it is `clause-verified` at best — IEEE is paywalled.)
 
 ---
 

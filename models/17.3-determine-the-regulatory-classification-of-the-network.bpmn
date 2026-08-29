@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_P_17_3" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <process id="P_17_3" name="17.3 Turn a classification change into work" isExecutable="false">
+    <documentation>Only 17.3.5 is drawn. 17.3.1 to 17.3.4 are the four determinations above and each is a table, because each returns a class and its authority rather than changing the state of anything.
+
+What this path exists for is the clock. A classification change is not a notification, it is dated work, and the dates are the regulation's: 49 CFR 192.609 requires the study IMMEDIATELY where population density indicates a class change for steel above 40 percent of SMYS; 192.611(d) allows 24 months from the change to confirm or revise the MAOP; 192.905(c) allows one year to incorporate a newly identified high consequence area into the baseline assessment plan.
+
+The boundary at the end is deliberate. This process RAISES work; 1.0 identifies and qualifies it and 8.0 consumes the new class for ongoing obligations. No integrity assessment starts in 17.0.</documentation>
+    <laneSet id="P_17_3_lanes">
+      <lane id="l_173_am" name="Asset management and integrity">
+        <flowNodeRef>n_173_start</flowNodeRef>
+        <flowNodeRef>n_173_what</flowNodeRef>
+        <flowNodeRef>n_173_study</flowNodeRef>
+        <flowNodeRef>n_173_maop</flowNodeRef>
+        <flowNodeRef>n_173_hca</flowNodeRef>
+        <flowNodeRef>n_173_juris</flowNodeRef>
+        <flowNodeRef>n_173_join</flowNodeRef>
+      </lane>
+      <lane id="l_173_work" name="Work initiation">
+        <flowNodeRef>n_173_raise</flowNodeRef>
+        <flowNodeRef>n_173_cls</flowNodeRef>
+        <flowNodeRef>n_173_end</flowNodeRef>
+      </lane>
+    </laneSet>
+    <startEvent id="n_173_start" name="A class, HCA or jurisdiction determination has changed"><conditionalEventDefinition id="n_173_start_cd"><condition/></conditionalEventDefinition></startEvent>
+    <exclusiveGateway id="n_173_what" name="What changed"/>
+    <userTask id="n_173_study" name="Make the 192.609 study immediately"><documentation>17.3.5. 49 CFR 192.609, where the segment is steel operating at hoop stress above 40 percent of SMYS. Immediately is the regulation's word, not a priority.</documentation></userTask>
+    <serviceTask id="n_173_maop" name="Raise MAOP confirmation on the 24-month clock"><documentation>17.3.5. 192.611(d), from the date of the class change - not from the date the study finished. 17.3.2 has already returned which path applies.</documentation></serviceTask>
+    <serviceTask id="n_173_hca" name="Raise baseline-plan incorporation on the one-year clock"><documentation>17.3.5. 192.905(c). The plan is incorporated within one year of identification; the assessment itself runs to Subpart O and belongs to 8.0.</documentation></serviceTask>
+    <serviceTask id="n_173_juris" name="Record the jurisdiction change"><documentation>17.3.5. An electric segment moving onto or off the bulk-power system under 16 U.S.C. 824o changes which standards bind and carries no federal clock of its own. Recording it is what stops 17.2.3 citing NERC on a distribution option.</documentation></serviceTask>
+    <exclusiveGateway id="n_173_join" name="Dated work identified"/>
+    <sendTask id="n_173_raise" name="Raise it into 1.0 with the date the rule sets"><documentation>17.3.5. Work requests, with the statutory date carried as the constraint. 17.4.2 will rank on that date and 17.4.6 will re-baseline the programme around it.</documentation></sendTask>
+    <sendTask id="n_173_cls" name="Publish the new classification for 8.0"><documentation>17.3.5. 8.0 consumes the class. It does not re-derive it, and it does not read Part 192 for itself.</documentation></sendTask>
+    <endEvent id="n_173_end" name="Work raised, classification published"/>
+    <sequenceFlow id="f_n_173_start_n_173_what" sourceRef="n_173_start" targetRef="n_173_what" name=""/>
+    <sequenceFlow id="f_n_173_what_n_173_study" sourceRef="n_173_what" targetRef="n_173_study" name="class increase, steel above 40 percent SMYS"><conditionExpression xsi:type="tFormalExpression"><![CDATA[change = "classIncrease"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_173_what_n_173_hca" sourceRef="n_173_what" targetRef="n_173_hca" name="newly identified HCA"><conditionExpression xsi:type="tFormalExpression"><![CDATA[change = "newHCA"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_173_what_n_173_juris" sourceRef="n_173_what" targetRef="n_173_juris" name="jurisdiction moved"><conditionExpression xsi:type="tFormalExpression"><![CDATA[change = "jurisdiction"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_173_study_n_173_maop" sourceRef="n_173_study" targetRef="n_173_maop" name=""/>
+    <sequenceFlow id="f_n_173_maop_n_173_join" sourceRef="n_173_maop" targetRef="n_173_join" name=""/>
+    <sequenceFlow id="f_n_173_hca_n_173_join" sourceRef="n_173_hca" targetRef="n_173_join" name=""/>
+    <sequenceFlow id="f_n_173_juris_n_173_join" sourceRef="n_173_juris" targetRef="n_173_join" name=""/>
+    <sequenceFlow id="f_n_173_join_n_173_raise" sourceRef="n_173_join" targetRef="n_173_raise" name=""/>
+    <sequenceFlow id="f_n_173_raise_n_173_cls" sourceRef="n_173_raise" targetRef="n_173_cls" name=""/>
+    <sequenceFlow id="f_n_173_cls_n_173_end" sourceRef="n_173_cls" targetRef="n_173_end" name=""/>
+  </process>
+  <bpmndi:BPMNDiagram id="dg_P_17_3">
+    <bpmndi:BPMNPlane id="pl_P_17_3" bpmnElement="P_17_3">
+      <bpmndi:BPMNShape id="sh_n_173_start" bpmnElement="n_173_start"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_173_what" bpmnElement="n_173_what"><dc:Bounds x="297" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_173_study" bpmnElement="n_173_study"><dc:Bounds x="425" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_173_maop" bpmnElement="n_173_maop"><dc:Bounds x="595" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_173_hca" bpmnElement="n_173_hca"><dc:Bounds x="425" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_173_juris" bpmnElement="n_173_juris"><dc:Bounds x="425" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_173_join" bpmnElement="n_173_join"><dc:Bounds x="807" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_173_raise" bpmnElement="n_173_raise"><dc:Bounds x="935" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_173_cls" bpmnElement="n_173_cls"><dc:Bounds x="1105" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_173_end" bpmnElement="n_173_end"><dc:Bounds x="1322" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ed_f_n_173_start_n_173_what" bpmnElement="f_n_173_start_n_173_what"><di:waypoint x="168" y="235"/><di:waypoint x="297" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_173_what_n_173_study" bpmnElement="f_n_173_what_n_173_study"><di:waypoint x="343" y="235"/><di:waypoint x="425" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_173_what_n_173_hca" bpmnElement="f_n_173_what_n_173_hca"><di:waypoint x="343" y="235"/><di:waypoint x="400" y="235"/><di:waypoint x="400" y="455"/><di:waypoint x="425" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_173_what_n_173_juris" bpmnElement="f_n_173_what_n_173_juris"><di:waypoint x="343" y="235"/><di:waypoint x="400" y="235"/><di:waypoint x="400" y="675"/><di:waypoint x="425" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_173_study_n_173_maop" bpmnElement="f_n_173_study_n_173_maop"><di:waypoint x="555" y="235"/><di:waypoint x="595" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_173_maop_n_173_join" bpmnElement="f_n_173_maop_n_173_join"><di:waypoint x="725" y="235"/><di:waypoint x="807" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_173_hca_n_173_join" bpmnElement="f_n_173_hca_n_173_join"><di:waypoint x="555" y="455"/><di:waypoint x="782" y="455"/><di:waypoint x="782" y="235"/><di:waypoint x="807" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_173_juris_n_173_join" bpmnElement="f_n_173_juris_n_173_join"><di:waypoint x="555" y="675"/><di:waypoint x="782" y="675"/><di:waypoint x="782" y="235"/><di:waypoint x="807" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_173_join_n_173_raise" bpmnElement="f_n_173_join_n_173_raise"><di:waypoint x="853" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_173_raise_n_173_cls" bpmnElement="f_n_173_raise_n_173_cls"><di:waypoint x="1065" y="235"/><di:waypoint x="1105" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_173_cls_n_173_end" bpmnElement="f_n_173_cls_n_173_end"><di:waypoint x="1235" y="235"/><di:waypoint x="1322" y="235"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_P_17_4" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <process id="P_17_4" name="17.4 Build and monitor the capital programme" isExecutable="false">
+    <documentation>17.4.1, 17.4.3, 17.4.4, 17.4.5 and 17.4.6 are drawn. 17.4.2 is specified and not drawn, because no source in the pack gives a portfolio score - the ordering rule is the operator's, and the only ranking this reference can assert is a statutory clock arriving from 17.3.5.
+
+Two boundaries hold the group in place. 17.4.1 PUBLISHES A PLAN and authorises nothing; 17.4.4 releases a funded tranche as work requests into 1.0, and 2.4.1 then validates an individual item against the plan this group produced. And a re-baseline is published rather than applied: 17.4.6 records the change and its authorisation, because a plan quietly overwritten is a plan nothing can be measured against.</documentation>
+    <laneSet id="P_17_4_lanes">
+      <lane id="l_174_prog" name="Programme management">
+        <flowNodeRef>n_174_t</flowNodeRef>
+        <flowNodeRef>n_174_plan</flowNodeRef>
+        <flowNodeRef>n_174_fit</flowNodeRef>
+        <flowNodeRef>n_174_pri</flowNodeRef>
+        <flowNodeRef>n_174_pub</flowNodeRef>
+        <flowNodeRef>n_174_rt</flowNodeRef>
+        <flowNodeRef>n_174_rel</flowNodeRef>
+        <flowNodeRef>n_174_hand</flowNodeRef>
+        <flowNodeRef>n_174_mt</flowNodeRef>
+        <flowNodeRef>n_174_mon</flowNodeRef>
+        <flowNodeRef>n_174_var</flowNodeRef>
+        <flowNodeRef>n_174_ok</flowNodeRef>
+        <flowNodeRef>n_174_reb</flowNodeRef>
+        <flowNodeRef>n_174_auth</flowNodeRef>
+        <flowNodeRef>n_174_new</flowNodeRef>
+        <flowNodeRef>n_174_end</flowNodeRef>
+      </lane>
+      <lane id="l_174_fin" name="Finance">
+        <flowNodeRef>n_174_fund</flowNodeRef>
+      </lane>
+    </laneSet>
+    <startEvent id="n_174_t" name="Planning cycle, or a solution has been released"><timerEventDefinition id="n_174_t_td"/></startEvent>
+    <userTask id="n_174_plan" name="Place selected solutions by year, area and funding type"><documentation>17.4.1. Carrying the 17.3 classification each item holds, because a statutory clock travels with the item and not with the year.</documentation></userTask>
+    <exclusiveGateway id="n_174_fit" name="Fits the years and the money"/>
+    <callActivity id="n_174_pri" name="Prioritise and balance the portfolio (17.4.2)"><documentation>17.4.2. Specified, not drawn. The rule is the operator's unless a statute ranks the item.</documentation></callActivity>
+    <userTask id="n_174_fund" name="Secure funding against the ordered plan"><documentation>17.4.3. Internal capital, borrower finance, or a third-party contribution - which is work type WT7 and is charged accordingly.</documentation></userTask>
+    <sendTask id="n_174_pub" name="Publish the funded plan"><documentation>17.4.1 and 17.4.3. Published, and authorising nothing on its own.</documentation></sendTask>
+    <startEvent id="n_174_rt" name="Next funded year or package is due"><timerEventDefinition id="n_174_rt_td"/></startEvent>
+    <serviceTask id="n_174_rel" name="Create work requests for the tranche"><documentation>17.4.4. Into 1.0. Unreleased years stay on the plan and are not work.</documentation></serviceTask>
+    <sendTask id="n_174_hand" name="Hand the tranche to 1.0"><documentation>17.4.4. 2.4.1 will check an individual item against this plan later; that is a different act and belongs to 2.0.</documentation></sendTask>
+    <startEvent id="n_174_mt" name="Reporting cycle on a released tranche"><timerEventDefinition id="n_174_mt_td"/></startEvent>
+    <userTask id="n_174_mon" name="Compare delivery and spend with plan and funding"><documentation>17.4.5. On released items only. An unreleased year has no variance.</documentation></userTask>
+    <exclusiveGateway id="n_174_var" name="Variance"/>
+    <endEvent id="n_174_ok" name="On plan"><documentation>17.4.5.</documentation></endEvent>
+    <userTask id="n_174_reb" name="Revise year, cost or scope"><documentation>17.4.6. Also entered from a 17.3.5 classification clock, which can make a published plan untrue without anything having overspent.</documentation></userTask>
+    <userTask id="n_174_auth" name="Record the change and its authorisation"><documentation>17.4.6.</documentation></userTask>
+    <sendTask id="n_174_new" name="Publish the new baseline"><documentation>17.4.6. Published beside the old one. Silently overwriting a baseline destroys the only thing 17.5.3 can compare a delivered outcome against.</documentation></sendTask>
+    <endEvent id="n_174_end" name="Programme re-baselined"/>
+    <sequenceFlow id="f_n_174_t_n_174_plan" sourceRef="n_174_t" targetRef="n_174_plan" name=""/>
+    <sequenceFlow id="f_n_174_plan_n_174_fit" sourceRef="n_174_plan" targetRef="n_174_fit" name=""/>
+    <sequenceFlow id="f_n_174_fit_n_174_pri" sourceRef="n_174_fit" targetRef="n_174_pri" name="does not fit"><conditionExpression xsi:type="tFormalExpression"><![CDATA[fits = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_174_pri_n_174_fund" sourceRef="n_174_pri" targetRef="n_174_fund" name=""/>
+    <sequenceFlow id="f_n_174_fit_n_174_fund" sourceRef="n_174_fit" targetRef="n_174_fund" name="fits"/>
+    <sequenceFlow id="f_n_174_fund_n_174_pub" sourceRef="n_174_fund" targetRef="n_174_pub" name=""/>
+    <sequenceFlow id="f_n_174_rt_n_174_rel" sourceRef="n_174_rt" targetRef="n_174_rel" name=""/>
+    <sequenceFlow id="f_n_174_rel_n_174_hand" sourceRef="n_174_rel" targetRef="n_174_hand" name=""/>
+    <sequenceFlow id="f_n_174_mt_n_174_mon" sourceRef="n_174_mt" targetRef="n_174_mon" name=""/>
+    <sequenceFlow id="f_n_174_mon_n_174_var" sourceRef="n_174_mon" targetRef="n_174_var" name=""/>
+    <sequenceFlow id="f_n_174_var_n_174_ok" sourceRef="n_174_var" targetRef="n_174_ok" name="on plan"><conditionExpression xsi:type="tFormalExpression"><![CDATA[variance = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_174_var_n_174_reb" sourceRef="n_174_var" targetRef="n_174_reb" name="overspend, delay or scope change"/>
+    <sequenceFlow id="f_n_174_reb_n_174_auth" sourceRef="n_174_reb" targetRef="n_174_auth" name=""/>
+    <sequenceFlow id="f_n_174_auth_n_174_new" sourceRef="n_174_auth" targetRef="n_174_new" name=""/>
+    <sequenceFlow id="f_n_174_new_n_174_end" sourceRef="n_174_new" targetRef="n_174_end" name=""/>
+  </process>
+  <bpmndi:BPMNDiagram id="dg_P_17_4">
+    <bpmndi:BPMNPlane id="pl_P_17_4" bpmnElement="P_17_4">
+      <bpmndi:BPMNShape id="sh_n_174_t" bpmnElement="n_174_t"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_174_plan" bpmnElement="n_174_plan"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_174_fit" bpmnElement="n_174_fit"><dc:Bounds x="467" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_174_pri" bpmnElement="n_174_pri"><dc:Bounds x="425" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_174_fund" bpmnElement="n_174_fund"><dc:Bounds x="595" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_174_pub" bpmnElement="n_174_pub"><dc:Bounds x="765" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_174_rt" bpmnElement="n_174_rt"><dc:Bounds x="132" y="657" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_174_rel" bpmnElement="n_174_rel"><dc:Bounds x="255" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_174_hand" bpmnElement="n_174_hand"><dc:Bounds x="425" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_174_mt" bpmnElement="n_174_mt"><dc:Bounds x="132" y="877" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_174_mon" bpmnElement="n_174_mon"><dc:Bounds x="255" y="860" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_174_var" bpmnElement="n_174_var"><dc:Bounds x="467" y="872" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_174_ok" bpmnElement="n_174_ok"><dc:Bounds x="472" y="1097" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_174_reb" bpmnElement="n_174_reb"><dc:Bounds x="595" y="860" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_174_auth" bpmnElement="n_174_auth"><dc:Bounds x="765" y="860" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_174_new" bpmnElement="n_174_new"><dc:Bounds x="935" y="860" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_174_end" bpmnElement="n_174_end"><dc:Bounds x="1152" y="877" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ed_f_n_174_t_n_174_plan" bpmnElement="f_n_174_t_n_174_plan"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_174_plan_n_174_fit" bpmnElement="f_n_174_plan_n_174_fit"><di:waypoint x="385" y="235"/><di:waypoint x="467" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_174_fit_n_174_pri" bpmnElement="f_n_174_fit_n_174_pri"><di:waypoint x="513" y="235"/><di:waypoint x="400" y="235"/><di:waypoint x="400" y="455"/><di:waypoint x="425" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_174_pri_n_174_fund" bpmnElement="f_n_174_pri_n_174_fund"><di:waypoint x="555" y="455"/><di:waypoint x="570" y="455"/><di:waypoint x="570" y="235"/><di:waypoint x="595" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_174_fit_n_174_fund" bpmnElement="f_n_174_fit_n_174_fund"><di:waypoint x="513" y="235"/><di:waypoint x="595" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_174_fund_n_174_pub" bpmnElement="f_n_174_fund_n_174_pub"><di:waypoint x="725" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_174_rt_n_174_rel" bpmnElement="f_n_174_rt_n_174_rel"><di:waypoint x="168" y="675"/><di:waypoint x="255" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_174_rel_n_174_hand" bpmnElement="f_n_174_rel_n_174_hand"><di:waypoint x="385" y="675"/><di:waypoint x="425" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_174_mt_n_174_mon" bpmnElement="f_n_174_mt_n_174_mon"><di:waypoint x="168" y="895"/><di:waypoint x="255" y="895"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_174_mon_n_174_var" bpmnElement="f_n_174_mon_n_174_var"><di:waypoint x="385" y="895"/><di:waypoint x="467" y="895"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_174_var_n_174_ok" bpmnElement="f_n_174_var_n_174_ok"><di:waypoint x="513" y="895"/><di:waypoint x="447" y="895"/><di:waypoint x="447" y="1115"/><di:waypoint x="472" y="1115"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_174_var_n_174_reb" bpmnElement="f_n_174_var_n_174_reb"><di:waypoint x="513" y="895"/><di:waypoint x="595" y="895"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_174_reb_n_174_auth" bpmnElement="f_n_174_reb_n_174_auth"><di:waypoint x="725" y="895"/><di:waypoint x="765" y="895"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_174_auth_n_174_new" bpmnElement="f_n_174_auth_n_174_new"><di:waypoint x="895" y="895"/><di:waypoint x="935" y="895"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_174_new_n_174_end" bpmnElement="f_n_174_new_n_174_end"><di:waypoint x="1065" y="895"/><di:waypoint x="1152" y="895"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

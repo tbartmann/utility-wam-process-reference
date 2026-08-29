@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/" id="Jurisdictional_boundary" name="17.3.4 Confirm jurisdictional and regulated-segment boundaries" namespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <description>Returns A JURISDICTION AND THE STATUTE OR PART THAT SET IT, never a list of obligations. Every other model in this category and several in 8.0 consume this value, which is why it is a table of its own rather than a paragraph in each of them.
+
+The electric half is the asymmetry that runs through this whole reference. 16 U.S.C. 824o(a)(1) says the bulk-power system does not include facilities used in the local distribution of electric energy, and 824o(i)(1) limits the Electric Reliability Organization to reliability standards for the bulk-power system. So the NERC TPL and PRC families are named in 17.2.3 ONLY where this table has returned bulkPower - the same discipline 7.0 applies to FAC-003, where the citation is a negative finding rather than an obligation.
+
+The gas half is 49 CFR 192.3's definitions of transmission line and distribution line, 192.8 and 192.9 for gathering, and the resulting split between Subpart O and Subpart P. Gas has a federal layer here that electric distribution does not, and that is a fact about the law rather than an omission in the model.</description>
+  <inputData id="in_commodity" name="Commodity"><variable id="in_commodity_v" name="Commodity" typeRef="string"/></inputData>
+  <inputData id="in_electricRole" name="Electric facility role"><variable id="in_electricRole_v" name="Electric facility role" typeRef="string"/></inputData>
+  <inputData id="in_gasLineType" name="Gas line type under 49 CFR 192.3"><variable id="in_gasLineType_v" name="Gas line type under 49 CFR 192.3" typeRef="string"/></inputData>
+  <knowledgeSource id="ks_jurisdiction" name="16 U.S.C. 824o(a)(1) and (i)(1); 49 CFR 192.3, 192.8, 192.9 and 192.1001"><description>824o(a)(1) excludes local distribution from the bulk-power system and (i)(1) limits the ERO to it. 192.3 defines transmission and distribution lines; 192.8 and 192.9 govern gathering; 192.1001 opens Subpart P.</description></knowledgeSource>
+  <decision id="d_17_3_4" name="Jurisdiction">
+    <variable id="d_17_3_4_v" name="Jurisdiction" typeRef="string"/>
+    <informationRequirement id="ir_d_17_3_4_ks_jurisdiction"><requiredInput href="#ks_jurisdiction"/></informationRequirement>
+    <decisionTable id="d_17_3_4_dt" hitPolicy="FIRST" preferredOrientation="Rule-as-Row">
+      <input id="d_17_3_4_i1" label="Commodity"><inputExpression id="d_17_3_4_i1_e" typeRef="string"><text>in_commodity</text></inputExpression></input>
+      <input id="d_17_3_4_i2" label="Electric facility role"><inputExpression id="d_17_3_4_i2_e" typeRef="string"><text>in_electricRole</text></inputExpression></input>
+      <input id="d_17_3_4_i3" label="Gas line type"><inputExpression id="d_17_3_4_i3_e" typeRef="string"><text>in_gasLineType</text></inputExpression></input>
+      <output id="d_17_3_4_o" label="Jurisdiction" name="Jurisdiction" typeRef="string"/>
+      <rule id="d_17_3_4_r1">
+        <description>16 U.S.C. 824o(a)(1). Outside the bulk-power system, so outside the ERO's standards under (i)(1). There is no federal reliability layer here; the obligations, where they exist, are the State's.</description>
+        <inputEntry id="d_17_3_4_r1_ie1"><text>"electric"</text></inputEntry>
+        <inputEntry id="d_17_3_4_r1_ie2"><text>"localDistribution"</text></inputEntry>
+        <inputEntry id="d_17_3_4_r1_ie3"><text>-</text></inputEntry>
+        <outputEntry id="d_17_3_4_r1_oe"><text>"localDistribution"</text></outputEntry>
+      </rule>
+      <rule id="d_17_3_4_r2">
+        <description>16 U.S.C. 824o. NERC TPL and PRC families apply and 17.2.3 names them. This is the only branch in which they may be cited as binding.</description>
+        <inputEntry id="d_17_3_4_r2_ie1"><text>"electric"</text></inputEntry>
+        <inputEntry id="d_17_3_4_r2_ie2"><text>"bulkPower"</text></inputEntry>
+        <inputEntry id="d_17_3_4_r2_ie3"><text>-</text></inputEntry>
+        <outputEntry id="d_17_3_4_r2_oe"><text>"bulkPower"</text></outputEntry>
+      </rule>
+      <rule id="d_17_3_4_r3">
+        <description>49 CFR 192.3 transmission line; Subpart O transmission integrity management, with 17.3.3 deciding whether a given segment is covered.</description>
+        <inputEntry id="d_17_3_4_r3_ie1"><text>"gas"</text></inputEntry>
+        <inputEntry id="d_17_3_4_r3_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_17_3_4_r3_ie3"><text>"transmission"</text></inputEntry>
+        <outputEntry id="d_17_3_4_r3_oe"><text>"part192SubpartO"</text></outputEntry>
+      </rule>
+      <rule id="d_17_3_4_r4">
+        <description>49 CFR 192.3 distribution line; 192.1001 to 192.1015 distribution integrity management. Not Subpart O, at any class location.</description>
+        <inputEntry id="d_17_3_4_r4_ie1"><text>"gas"</text></inputEntry>
+        <inputEntry id="d_17_3_4_r4_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_17_3_4_r4_ie3"><text>"distribution"</text></inputEntry>
+        <outputEntry id="d_17_3_4_r4_oe"><text>"part192SubpartP"</text></outputEntry>
+      </rule>
+      <rule id="d_17_3_4_r5">
+        <description>49 CFR 192.8 and 192.9. How much of Part 192 applies depends on the gathering type, and this reference does not state that determination.</description>
+        <inputEntry id="d_17_3_4_r5_ie1"><text>"gas"</text></inputEntry>
+        <inputEntry id="d_17_3_4_r5_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_17_3_4_r5_ie3"><text>"gathering"</text></inputEntry>
+        <outputEntry id="d_17_3_4_r5_oe"><text>"part192Gathering"</text></outputEntry>
+      </rule>
+      <rule id="d_17_3_4_r6">
+        <description>Commodity or line type not established. Everything downstream of this table depends on it, so a named exception is better than a default.</description>
+        <inputEntry id="d_17_3_4_r6_ie1"><text>-</text></inputEntry>
+        <inputEntry id="d_17_3_4_r6_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_17_3_4_r6_ie3"><text>-</text></inputEntry>
+        <outputEntry id="d_17_3_4_r6_oe"><text>"determineManually"</text></outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram id="drd_Jurisdictional_boundary">
+      <dmndi:DMNShape id="sh_in_commodity" dmnElementRef="in_commodity"><dc:Bounds x="60" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_electricRole" dmnElementRef="in_electricRole"><dc:Bounds x="245" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_gasLineType" dmnElementRef="in_gasLineType"><dc:Bounds x="430" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_d_17_3_4" dmnElementRef="d_17_3_4"><dc:Bounds x="60" y="240" width="180" height="70"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_ks_jurisdiction" dmnElementRef="ks_jurisdiction"><dc:Bounds x="900" y="100" width="160" height="55"/></dmndi:DMNShape>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</definitions>

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_P_17_5" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <process id="P_17_5" name="17.5 Realise whole-life value" isExecutable="false">
+    <documentation>17.5.2, 17.5.3 and 17.5.4 are drawn. 17.5.1 is specified and not drawn: ISO 55001:2024 cl. 8.1 requires life-cycle management and GFMAM subject 3.6 is Life cycle Value Realization, and neither gives a discount rate, an NPV or a risk-cost formula. Publishing a basis is a standing act; applying it is not.
+
+17.5.2 owns the arithmetic and 17.2.2 does not repeat it. That division was set at merge: the two processes arrived with the same inputs and the same outputs, and a published basis applied to an option set is one application. 17.5.2 applies it; 17.2.2 weighs the result against what the basis cannot price.
+
+The do-nothing case is drawn rather than annotated, because it is what makes a preference visible as a preference.</documentation>
+    <laneSet id="P_17_5_lanes">
+      <lane id="l_175_am" name="Asset management">
+        <flowNodeRef>n_175_start</flowNodeRef>
+        <flowNodeRef>n_175_basis</flowNodeRef>
+        <flowNodeRef>n_175_apply</flowNodeRef>
+        <flowNodeRef>n_175_dn</flowNodeRef>
+        <flowNodeRef>n_175_out</flowNodeRef>
+        <flowNodeRef>n_175_end</flowNodeRef>
+        <flowNodeRef>n_175_is</flowNodeRef>
+        <flowNodeRef>n_175_case</flowNodeRef>
+        <flowNodeRef>n_175_cmp</flowNodeRef>
+        <flowNodeRef>n_175_res</flowNodeRef>
+        <flowNodeRef>n_175_met</flowNodeRef>
+      </lane>
+      <lane id="l_175_std" name="Standards and programme">
+        <flowNodeRef>n_175_dec</flowNodeRef>
+        <flowNodeRef>n_175_raise</flowNodeRef>
+        <flowNodeRef>n_175_fend</flowNodeRef>
+      </lane>
+    </laneSet>
+    <startEvent id="n_175_start" name="An option set is ready to compare"><conditionalEventDefinition id="n_175_start_cd"><condition/></conditionalEventDefinition></startEvent>
+    <serviceTask id="n_175_basis" name="Take the published basis from 17.5.1"><documentation>17.5.1 is specified, not drawn. What arrives is a basis by asset class - elements and horizon - and not a formula.</documentation></serviceTask>
+    <serviceTask id="n_175_apply" name="Apply the basis across the named horizon"><documentation>17.5.2. The same basis to every option, so the comparison is between options and not between methods.</documentation></serviceTask>
+    <serviceTask id="n_175_dn" name="Include the do-nothing case"><documentation>17.5.2. Required. Without it a build is compared only with other builds.</documentation></serviceTask>
+    <sendTask id="n_175_out" name="Hand the comparison to 17.2.2 and 17.2.6"><documentation>17.5.2. 17.2.2 weighs it against deliverability, consent and any statutory clock; 17.2.6 selects.</documentation></sendTask>
+    <endEvent id="n_175_end" name="Comparison published"/>
+    <startEvent id="n_175_is" name="A capital item is in service"><conditionalEventDefinition id="n_175_is_cd"><condition/></conditionalEventDefinition></startEvent>
+    <serviceTask id="n_175_case" name="Take the recorded basis from 17.2.6 and the as-built"><documentation>17.5.3. The as-built comes from 5.4. Comparing against the design rather than the as-built compares the case with itself.</documentation></serviceTask>
+    <userTask id="n_175_cmp" name="Compare delivered capacity, reliability and cost"><documentation>17.5.3. Against the case that was recorded at selection, not against a case rewritten since.</documentation></userTask>
+    <exclusiveGateway id="n_175_res" name="Outcome"/>
+    <endEvent id="n_175_met" name="Met, or not yet measurable"><documentation>17.5.3. Not-yet-measurable is a real answer and is recorded as one.</documentation></endEvent>
+    <userTask id="n_175_dec" name="Decide what must change"><documentation>17.5.4. The basis, a design standard, or the plan - and only one of the three is this category's to change directly.</documentation></userTask>
+    <sendTask id="n_175_raise" name="Raise the change to 17.5.1, 2.1 or 17.4.6"><documentation>17.5.4. Raised and authorised there. Silently editing a design standard from a single missed outcome is how a standard stops meaning anything.</documentation></sendTask>
+    <endEvent id="n_175_fend" name="Feedback raised"/>
+    <sequenceFlow id="f_n_175_start_n_175_basis" sourceRef="n_175_start" targetRef="n_175_basis" name=""/>
+    <sequenceFlow id="f_n_175_basis_n_175_apply" sourceRef="n_175_basis" targetRef="n_175_apply" name=""/>
+    <sequenceFlow id="f_n_175_apply_n_175_dn" sourceRef="n_175_apply" targetRef="n_175_dn" name=""/>
+    <sequenceFlow id="f_n_175_dn_n_175_out" sourceRef="n_175_dn" targetRef="n_175_out" name=""/>
+    <sequenceFlow id="f_n_175_out_n_175_end" sourceRef="n_175_out" targetRef="n_175_end" name=""/>
+    <sequenceFlow id="f_n_175_is_n_175_case" sourceRef="n_175_is" targetRef="n_175_case" name=""/>
+    <sequenceFlow id="f_n_175_case_n_175_cmp" sourceRef="n_175_case" targetRef="n_175_cmp" name=""/>
+    <sequenceFlow id="f_n_175_cmp_n_175_res" sourceRef="n_175_cmp" targetRef="n_175_res" name=""/>
+    <sequenceFlow id="f_n_175_res_n_175_met" sourceRef="n_175_res" targetRef="n_175_met" name="met, or not yet measurable"/>
+    <sequenceFlow id="f_n_175_res_n_175_dec" sourceRef="n_175_res" targetRef="n_175_dec" name="missed"><conditionExpression xsi:type="tFormalExpression"><![CDATA[outcome = "missed"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_175_dec_n_175_raise" sourceRef="n_175_dec" targetRef="n_175_raise" name=""/>
+    <sequenceFlow id="f_n_175_raise_n_175_fend" sourceRef="n_175_raise" targetRef="n_175_fend" name=""/>
+  </process>
+  <bpmndi:BPMNDiagram id="dg_P_17_5">
+    <bpmndi:BPMNPlane id="pl_P_17_5" bpmnElement="P_17_5">
+      <bpmndi:BPMNShape id="sh_n_175_start" bpmnElement="n_175_start"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_175_basis" bpmnElement="n_175_basis"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_175_apply" bpmnElement="n_175_apply"><dc:Bounds x="425" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_175_dn" bpmnElement="n_175_dn"><dc:Bounds x="595" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_175_out" bpmnElement="n_175_out"><dc:Bounds x="765" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_175_end" bpmnElement="n_175_end"><dc:Bounds x="982" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_175_is" bpmnElement="n_175_is"><dc:Bounds x="132" y="437" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_175_case" bpmnElement="n_175_case"><dc:Bounds x="255" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_175_cmp" bpmnElement="n_175_cmp"><dc:Bounds x="425" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_175_res" bpmnElement="n_175_res"><dc:Bounds x="637" y="432" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_175_met" bpmnElement="n_175_met"><dc:Bounds x="642" y="657" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_175_dec" bpmnElement="n_175_dec"><dc:Bounds x="765" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_175_raise" bpmnElement="n_175_raise"><dc:Bounds x="935" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_175_fend" bpmnElement="n_175_fend"><dc:Bounds x="1152" y="437" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ed_f_n_175_start_n_175_basis" bpmnElement="f_n_175_start_n_175_basis"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_175_basis_n_175_apply" bpmnElement="f_n_175_basis_n_175_apply"><di:waypoint x="385" y="235"/><di:waypoint x="425" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_175_apply_n_175_dn" bpmnElement="f_n_175_apply_n_175_dn"><di:waypoint x="555" y="235"/><di:waypoint x="595" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_175_dn_n_175_out" bpmnElement="f_n_175_dn_n_175_out"><di:waypoint x="725" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_175_out_n_175_end" bpmnElement="f_n_175_out_n_175_end"><di:waypoint x="895" y="235"/><di:waypoint x="982" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_175_is_n_175_case" bpmnElement="f_n_175_is_n_175_case"><di:waypoint x="168" y="455"/><di:waypoint x="255" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_175_case_n_175_cmp" bpmnElement="f_n_175_case_n_175_cmp"><di:waypoint x="385" y="455"/><di:waypoint x="425" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_175_cmp_n_175_res" bpmnElement="f_n_175_cmp_n_175_res"><di:waypoint x="555" y="455"/><di:waypoint x="637" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_175_res_n_175_met" bpmnElement="f_n_175_res_n_175_met"><di:waypoint x="683" y="455"/><di:waypoint x="617" y="455"/><di:waypoint x="617" y="675"/><di:waypoint x="642" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_175_res_n_175_dec" bpmnElement="f_n_175_res_n_175_dec"><di:waypoint x="683" y="455"/><di:waypoint x="765" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_175_dec_n_175_raise" bpmnElement="f_n_175_dec_n_175_raise"><di:waypoint x="895" y="455"/><di:waypoint x="935" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_175_raise_n_175_fend" bpmnElement="f_n_175_raise_n_175_fend"><di:waypoint x="1065" y="455"/><di:waypoint x="1152" y="455"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

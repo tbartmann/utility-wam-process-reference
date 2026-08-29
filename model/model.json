@@ -5975,7 +5975,7 @@
    ],
    "summary": "Determine what the network must deliver, what it cannot deliver today, and which investments close the difference. This is where most capital work originates; the work lifecycle in 1.0 to 5.0 begins after it.",
    "uid": 10540,
-   "derivation": "APQC 10.2.1 Manage capital program for productive assets (19209) and 10.2.2 Perform utility network planning (19213); GFMAM 3.2 Demand Analysis, 3.4 Planning, 3.6 Life cycle Value Realization; ISO 55001:2024 cl. 6.2.2 and cl. 8.1; IEEE 1729-2025; 49 CFR 192.609 and 192.611.",
+   "derivation": "APQC 10.2.1 Manage capital program for productive assets (19209) and 10.2.2 Perform utility network planning (19213); GFMAM 3.2 Demand Analysis, 3.4 Planning, 3.6 Life cycle Value Realization; ISO 55001:2024 cl. 6.2.2 and cl. 8.1; 49 CFR 192.5, 192.609, 192.611, 192.903, 192.905 and 192.1001; 16 U.S.C. 824o(a)(1).",
    "groups": [
     {
      "id": "17.1",

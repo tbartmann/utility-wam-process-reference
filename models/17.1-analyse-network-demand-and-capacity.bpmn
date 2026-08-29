@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_P_17_1" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <process id="P_17_1" name="17.1 Analyse network demand and capacity" isExecutable="false">
+    <documentation>17.1.2, 17.1.3, 17.1.4 and 17.1.5 are drawn. 17.1.1 is specified and not drawn, because no source in the pack gives forecast arithmetic.
+
+The group has two entries and they meet at 17.1.5. A planning cycle runs cases against a model; a connection enquiry arrives on its own clock and is tested once. Both can produce a shortfall, and a shortfall is the only thing 17.2 accepts - which is why 17.1.4 returns fits, fits-with-conditions or shortfall and never designs the service. Designing the connection is 10.6.
+
+NETWORK demand is not WORK demand. 3.1 forecasts crew hours and work volume; this group forecasts load, throughput and growth. The two are separate all the way down and collapsing them is the most likely way to misread this category.</documentation>
+    <laneSet id="P_17_1_lanes">
+      <lane id="l_171_plan" name="Network planning">
+        <flowNodeRef>n_171_t</flowNodeRef>
+        <flowNodeRef>n_171_dem</flowNodeRef>
+        <flowNodeRef>n_171_cap</flowNodeRef>
+        <flowNodeRef>n_171_mod</flowNodeRef>
+        <flowNodeRef>n_171_run</flowNodeRef>
+        <flowNodeRef>n_171_held</flowNodeRef>
+        <flowNodeRef>n_171_ok</flowNodeRef>
+        <flowNodeRef>n_171_sf</flowNodeRef>
+        <flowNodeRef>n_171_rel</flowNodeRef>
+        <flowNodeRef>n_171_end</flowNodeRef>
+      </lane>
+      <lane id="l_171_conn" name="Connections">
+        <flowNodeRef>n_171_c</flowNodeRef>
+        <flowNodeRef>n_171_test</flowNodeRef>
+        <flowNodeRef>n_171_fit</flowNodeRef>
+        <flowNodeRef>n_171_fits</flowNodeRef>
+      </lane>
+    </laneSet>
+    <startEvent id="n_171_t" name="Planning cycle, or connected load has changed"><timerEventDefinition id="n_171_t_td"/></startEvent>
+    <serviceTask id="n_171_dem" name="Take the demand view from 17.1.1"><documentation>17.1.1 is specified rather than drawn. What arrives here is a demand view by area and year, not a method.</documentation></serviceTask>
+    <userTask id="n_171_cap" name="State capacity and performance of in-service plant"><documentation>17.1.2. Ratings, constraints and recent performance, compared with the demand view and - where the operator uses it - with IEEE 1366 reliability.</documentation></userTask>
+    <serviceTask id="n_171_mod" name="Build or refresh the network model"><documentation>17.1.3. From the asset record, so the model is the network as recorded rather than as remembered.</documentation></serviceTask>
+    <serviceTask id="n_171_run" name="Run the named cases"><documentation>17.1.3. Intact, the contingency cases the operator has named, and the growth horizon from 17.1.1.</documentation></serviceTask>
+    <exclusiveGateway id="n_171_held" name="Network held"/>
+    <endEvent id="n_171_ok" name="No shortfall this cycle"><documentation>17.1.3.</documentation></endEvent>
+    <startEvent id="n_171_c" name="Connection or load change proposed"><messageEventDefinition id="n_171_c_md"/></startEvent>
+    <userTask id="n_171_test" name="Test the proposal against capacity and model"><documentation>17.1.4. Once, against the current capacity statement - not against a forecast of what the network might become.</documentation></userTask>
+    <exclusiveGateway id="n_171_fit" name="Fits"/>
+    <endEvent id="n_171_fits" name="Fits, or fits with conditions"><documentation>17.1.4. Conditions travel to 10.6 with the connection. The service is designed there and not here.</documentation></endEvent>
+    <userTask id="n_171_sf" name="Classify and locate the shortfall"><documentation>17.1.5. Capacity, reliability or both, and where on the network. An unclassified shortfall cannot be optioned, because the option set depends on which it is.</documentation></userTask>
+    <sendTask id="n_171_rel" name="Release the shortfall record to 17.2.1"><documentation>17.1.5.</documentation></sendTask>
+    <endEvent id="n_171_end" name="Shortfall released for optioning"/>
+    <sequenceFlow id="f_n_171_t_n_171_dem" sourceRef="n_171_t" targetRef="n_171_dem" name=""/>
+    <sequenceFlow id="f_n_171_dem_n_171_cap" sourceRef="n_171_dem" targetRef="n_171_cap" name=""/>
+    <sequenceFlow id="f_n_171_cap_n_171_mod" sourceRef="n_171_cap" targetRef="n_171_mod" name=""/>
+    <sequenceFlow id="f_n_171_mod_n_171_run" sourceRef="n_171_mod" targetRef="n_171_run" name=""/>
+    <sequenceFlow id="f_n_171_run_n_171_held" sourceRef="n_171_run" targetRef="n_171_held" name=""/>
+    <sequenceFlow id="f_n_171_held_n_171_ok" sourceRef="n_171_held" targetRef="n_171_ok" name="all cases held"><conditionExpression xsi:type="tFormalExpression"><![CDATA[casesFailed = 0]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_171_held_n_171_sf" sourceRef="n_171_held" targetRef="n_171_sf" name="a case did not hold"/>
+    <sequenceFlow id="f_n_171_c_n_171_test" sourceRef="n_171_c" targetRef="n_171_test" name=""/>
+    <sequenceFlow id="f_n_171_test_n_171_fit" sourceRef="n_171_test" targetRef="n_171_fit" name=""/>
+    <sequenceFlow id="f_n_171_fit_n_171_fits" sourceRef="n_171_fit" targetRef="n_171_fits" name="fits, or fits with conditions"/>
+    <sequenceFlow id="f_n_171_fit_n_171_sf" sourceRef="n_171_fit" targetRef="n_171_sf" name="shortfall"><conditionExpression xsi:type="tFormalExpression"><![CDATA[outcome = "shortfall"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_171_sf_n_171_rel" sourceRef="n_171_sf" targetRef="n_171_rel" name=""/>
+    <sequenceFlow id="f_n_171_rel_n_171_end" sourceRef="n_171_rel" targetRef="n_171_end" name=""/>
+  </process>
+  <bpmndi:BPMNDiagram id="dg_P_17_1">
+    <bpmndi:BPMNPlane id="pl_P_17_1" bpmnElement="P_17_1">
+      <bpmndi:BPMNShape id="sh_n_171_t" bpmnElement="n_171_t"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_171_dem" bpmnElement="n_171_dem"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_171_cap" bpmnElement="n_171_cap"><dc:Bounds x="425" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_171_mod" bpmnElement="n_171_mod"><dc:Bounds x="595" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_171_run" bpmnElement="n_171_run"><dc:Bounds x="765" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_171_held" bpmnElement="n_171_held"><dc:Bounds x="977" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_171_ok" bpmnElement="n_171_ok"><dc:Bounds x="982" y="437" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_171_c" bpmnElement="n_171_c"><dc:Bounds x="132" y="657" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_171_test" bpmnElement="n_171_test"><dc:Bounds x="255" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_171_fit" bpmnElement="n_171_fit"><dc:Bounds x="467" y="652" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_171_fits" bpmnElement="n_171_fits"><dc:Bounds x="472" y="877" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_171_sf" bpmnElement="n_171_sf"><dc:Bounds x="1105" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_171_rel" bpmnElement="n_171_rel"><dc:Bounds x="1275" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_171_end" bpmnElement="n_171_end"><dc:Bounds x="1492" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ed_f_n_171_t_n_171_dem" bpmnElement="f_n_171_t_n_171_dem"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_171_dem_n_171_cap" bpmnElement="f_n_171_dem_n_171_cap"><di:waypoint x="385" y="235"/><di:waypoint x="425" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_171_cap_n_171_mod" bpmnElement="f_n_171_cap_n_171_mod"><di:waypoint x="555" y="235"/><di:waypoint x="595" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_171_mod_n_171_run" bpmnElement="f_n_171_mod_n_171_run"><di:waypoint x="725" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_171_run_n_171_held" bpmnElement="f_n_171_run_n_171_held"><di:waypoint x="895" y="235"/><di:waypoint x="977" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_171_held_n_171_ok" bpmnElement="f_n_171_held_n_171_ok"><di:waypoint x="1023" y="235"/><di:waypoint x="957" y="235"/><di:waypoint x="957" y="455"/><di:waypoint x="982" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_171_held_n_171_sf" bpmnElement="f_n_171_held_n_171_sf"><di:waypoint x="1023" y="235"/><di:waypoint x="1105" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_171_c_n_171_test" bpmnElement="f_n_171_c_n_171_test"><di:waypoint x="168" y="675"/><di:waypoint x="255" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_171_test_n_171_fit" bpmnElement="f_n_171_test_n_171_fit"><di:waypoint x="385" y="675"/><di:waypoint x="467" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_171_fit_n_171_fits" bpmnElement="f_n_171_fit_n_171_fits"><di:waypoint x="513" y="675"/><di:waypoint x="447" y="675"/><di:waypoint x="447" y="895"/><di:waypoint x="472" y="895"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_171_fit_n_171_sf" bpmnElement="f_n_171_fit_n_171_sf"><di:waypoint x="513" y="675"/><di:waypoint x="1080" y="675"/><di:waypoint x="1080" y="235"/><di:waypoint x="1105" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_171_sf_n_171_rel" bpmnElement="f_n_171_sf_n_171_rel"><di:waypoint x="1235" y="235"/><di:waypoint x="1275" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_171_rel_n_171_end" bpmnElement="f_n_171_rel_n_171_end"><di:waypoint x="1405" y="235"/><di:waypoint x="1492" y="235"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

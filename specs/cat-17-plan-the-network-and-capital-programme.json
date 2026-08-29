@@ -1,0 +1,4417 @@
+{
+ "category": {
+  "uid": 10540,
+  "id": "17.0",
+  "name": "Plan the Network and Capital Programme",
+  "band": "Asset Lifecycle"
+ },
+ "platform": "Grok",
+ "model": "grok-4.6",
+ "round": 6,
+ "date": "2026-08-29",
+ "schema": "eam/specs/SCHEMA.md",
+ "derivation": "STANDARDS-DERIVED. Citation statuses observe source_status_ceiling. Network demand is GFMAM 3.2 and APQC 10.2.2; the capital programme is APQC 10.2.1 and ISO 55001:2024 cl. 6.2.2; whole-life value is GFMAM 3.6 and ISO 55001 cl. 8.1. Gas class, HCA and MAOP are 49 CFR 192.5, 192.609, 192.611, 192.903 and 192.905. Electric jurisdiction is 16 U.S.C. 824o. IEEE 1729 is in model.json derivation and is not in the Source Authority Pack, so it is not cited. 3.1 continues to forecast WORK demand. 2.4.1 validates the item against the programme 17.4 produces.",
+ "field_set": "EN 17007:2017 cl. 5.2 maintenance process profile, corroborated by ISO 9001:2015 cl. 4.4.1 a) to h).",
+ "gaps": [
+  "IEEE 1729-2025 is named in model.json derivation for this category and is not in the Source Authority Pack. It is not cited. Electric distribution network-planning method is therefore ISO 55001 cl. 6.2.2, GFMAM 3.2/3.4, IEC 61968-6 NE/SIM, and APQC 10.2.2 as structure.",
+  "EN 17007 assumes the item already exists. Network planning, capital programming and whole-life value are asset-creation and asset-management-planning, not maintenance. MAN, OPT, IMP, MRQ, DTA and BUD are nearest-process mappings. ISO 55001:2024 cl. 6.2.2 and cl. 8.1 are the real spine. Say so rather than stretching CEN into a planning statute.",
+  "No pack source states network-demand forecast arithmetic, power-flow or pressure-drop arithmetic, a portfolio score, NPV or a risk-cost formula. 17.1.1, 17.2.2, 17.4.2 and 17.5.1 are therefore SPEC - a determination whose rule no source states - not DMN and not 'standing'.",
+  "NERC TPL and PRC bind the bulk-power system. 16 U.S.C. 824o(a)(1) and (i)(1) keep them off local distribution. 17.2.3 names them only when 17.3.4 returned bulk-power.",
+  "49 CFR 192.5(d) record-keeping names gas transmission segments. Class location still classifies locations for the whole part. 192.609/611 class-change study and MAOP confirmation are steel above 40 percent SMYS. 192.611(a)(4)(vii) bars the eligible-Class-3 IM path for gathering and distribution. 17.3.2 returns that bar as a class, it does not invent a distribution MAOP rule.",
+  "Subpart O HCA and covered-segment (192.903, 192.905) are transmission. Distribution is DIMP under 192.1001-1015. 17.3.3 returns DIMP-distribution as a class with that authority, so 8.0 does not apply HCA obligations to a main.",
+  "IEC 61968-11 Work package has no NetworkDemand, ClassLocation or HCA class. The classification is held as Asset plus WorkActivityRecord.",
+  "IEC 61968-6 cl. 4.2 NE is network extension planning and SIM is network operation simulation. There is no capital-programme component; the plan sits on NE and the money on FIN.",
+  "APQC 10.2.1 and 10.2.2 close this category structurally (pcf_id 19209, 19213). They are consensus structure, not content. 10.2.3.1 Develop construction strategy (pcf_id 19220) still has no model home - that is a finding for 2.0, not a process to add here.",
+  "2.4.1 already validates funding for one work item. 17.4 produces the programme it checks. 3.1 already forecasts work demand. 12.5 still owns maintenance strategy. 12.6.3 still owns replacement and renewal of a single asset. Those boundaries are in the process text.",
+  "Real-time monitoring, alarm handling, optimisation and protection settings remain out of scope (APQC 14.1.4 is scope). 17.1.3 tests planning cases; it is not the control room."
+ ],
+ "processes": [
+  {
+   "uid": 10542,
+   "id": "17.1.1",
+   "name": "Forecast network demand by area and horizon",
+   "group": {
+    "id": "17.1",
+    "name": "Analyse network demand and capacity",
+    "uid": 10541
+   },
+   "intent": "Produce a forward view of load or throughput the network must serve, by area and year.",
+   "activities": [
+    "Set the area and the planning horizon",
+    "Assemble historic load or throughput and known connections",
+    "Publish a demand view by area and year",
+    "Hand the view to 17.1.3; do not treat it as crew demand"
+   ],
+   "trigger": {
+    "kind": "timer",
+    "text": "Planning cycle, or a material change in connected load or throughput.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Historic load or throughput by area",
+     "party": "AM",
+     "data": "Asset"
+    },
+    {
+     "what": "Known new connections from 17.1.4",
+     "party": "CS",
+     "data": "Work"
+    },
+    {
+     "what": "Network geography",
+     "party": "GINV",
+     "data": "WorkLocation"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Demand view by area and horizon",
+     "party": "NE",
+     "data": "Work"
+    },
+    {
+     "what": "Unmodelled area or incomplete history",
+     "party": "NE",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "systems": [
+    {
+     "component": "NE",
+     "role": "owning",
+     "service": "Network demand view"
+    },
+    {
+     "component": "AM",
+     "role": "reference",
+     "service": "Historic load or throughput"
+    },
+    {
+     "component": "CS",
+     "role": "originating",
+     "service": "Known new connections"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "AM",
+     "to": "NE",
+     "payload": "WorkRequest",
+     "verb": "get",
+     "pattern": "batch"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Network planner",
+     "raci": "R"
+    },
+    {
+     "role": "Planning manager",
+     "raci": "A"
+    },
+    {
+     "role": "Customer connections planner",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "Asset",
+    "WorkLocation",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "This is NETWORK demand - load, throughput, growth. 3.1 forecasts WORK demand and crew hours. Do not collapse the two. APQC 10.2.2.1 (pcf_id 19214) is the structural precedent for this process, not a method."
+    },
+    {
+     "kind": "operational",
+     "text": "No pack source states the forecast arithmetic. The output is a demand view whose method is the operator's. That is why this is SPEC, not DMN."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Planned Work",
+     "definition": "SMRP 5.3.1. Demand that entered with a horizon can be planned; surprise load cannot.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    },
+    {
+     "name": "Cycle Time",
+     "definition": "SMRP 5.4.7 from cycle start to a published demand view.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    }
+   ],
+   "variants": [
+    "Electric peak and energy by area",
+    "Gas throughput by area",
+    "Connection-driven growth handed up from 17.1.4"
+   ],
+   "notation": {
+    "class": "SPEC",
+    "why": "A determination whose rule no source states. No pack source gives forecast arithmetic for network demand.",
+    "artifact": null
+   },
+   "en17007": {
+    "process": "MAN.6",
+    "title": "Define, select, analyse and communicate the information",
+    "clause": "6.2"
+   },
+   "sources": [
+    {
+     "for": "process",
+     "cite": "EN 17007:2017 cl. 6.2 MAN.6",
+     "status": "verified"
+    },
+    {
+     "for": "planning duty",
+     "cite": "ANSI/ASTM/ISO 55001-2024 cl. 6.2.2 asset management planning",
+     "status": "clause-verified"
+    },
+    {
+     "for": "landscape",
+     "cite": "GFMAM Asset Management Landscape 3rd ed. v3.0, 2024-06, subject 3.2 Demand Analysis",
+     "status": "verified"
+    },
+    {
+     "for": "structure",
+     "cite": "APQC PCF Utilities v7.2.1 10.2.2.1 Perform demand forecasting (pcf_id 19214) - structural precedent only",
+     "status": "consensus"
+    },
+    {
+     "for": "interfaces",
+     "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 payloads; Annex A verbs",
+     "status": "clause-verified"
+    },
+    {
+     "for": "data_objects",
+     "cite": "IEC 61968-11:2013 CIM extensions for distribution, Work package",
+     "status": "clause-verified"
+    },
+    {
+     "for": "method",
+     "cite": "No pack source states a network-demand forecast method for gas or electric distribution",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "standard",
+    "primary": "GFMAM Asset Management Landscape 3rd ed. subject 3.2 Demand Analysis"
+   }
+  },
+  {
+   "uid": 10543,
+   "id": "17.1.2",
+   "name": "Assess capacity and performance of existing plant",
+   "group": {
+    "id": "17.1",
+    "name": "Analyse network demand and capacity",
+    "uid": 10541
+   },
+   "intent": "State what the existing network can deliver, against the demand view and against reliability.",
+   "activities": [
+    "Take ratings, constraints and recent performance of in-service plant",
+    "Compare capacity with the demand view from 17.1.1",
+    "Compare reliability performance with IEEE 1366 where it is used",
+    "Publish a capacity-and-performance statement by area"
+   ],
+   "trigger": {
+    "kind": "conditional",
+    "text": "A demand view is ready, or plant ratings or performance have changed.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Demand view by area and horizon",
+     "party": "NE",
+     "data": "Work"
+    },
+    {
+     "what": "In-service plant ratings and constraints",
+     "party": "AM",
+     "data": "Asset"
+    },
+    {
+     "what": "Reliability performance history",
+     "party": "AM",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Capacity and performance statement by area",
+     "party": "NE",
+     "data": "Work"
+    },
+    {
+     "what": "Plant that is already at or over its limit",
+     "party": "AM",
+     "data": "Asset"
+    }
+   ],
+   "systems": [
+    {
+     "component": "NE",
+     "role": "owning",
+     "service": "Capacity statement"
+    },
+    {
+     "component": "AM",
+     "role": "reference",
+     "service": "Plant ratings and history"
+    },
+    {
+     "component": "GINV",
+     "role": "reference",
+     "service": "Area geography"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "AM",
+     "to": "NE",
+     "payload": "WorkRequest",
+     "verb": "get",
+     "pattern": "batch"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Network planner",
+     "raci": "R"
+    },
+    {
+     "role": "Planning manager",
+     "raci": "A"
+    },
+    {
+     "role": "Reliability engineer",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "Asset",
+    "WorkActivityRecord",
+    "WorkLocation"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "APQC 10.2.2.2 (pcf_id 19215) is assess performance and capacity of current assets. The numeric rating of a circuit or a main is the operator's; this process records the comparison, it does not invent a rating table."
+    },
+    {
+     "kind": "operational",
+     "text": "IEEE 1366-2022 defines SAIDI, SAIFI and CAIDI. It does not set a shortfall threshold. Name the operator or state target; do not imply a federal one. 16 U.S.C. 824o keeps NERC TPL off local distribution."
+    }
+   ],
+   "measures": [
+    {
+     "name": "SAIDI",
+     "definition": "IEEE 1366-2022. Duration is one half of the performance statement.",
+     "cite": "IEEE 1366-2022"
+    },
+    {
+     "name": "SAIFI",
+     "definition": "IEEE 1366-2022. Frequency is the other half.",
+     "cite": "IEEE 1366-2022"
+    }
+   ],
+   "variants": [
+    "Electric thermal or voltage limit",
+    "Gas pressure or flow limit",
+    "Reliability performance against IEEE 1366, with an operator or state target"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "A demand view is compared with plant ratings and performance on a repeating path.",
+    "artifact": "models/17.1-analyse-network-demand-and-capacity.bpmn"
+   },
+   "en17007": {
+    "process": "DTA.2",
+    "title": "Evaluate the reliability and maintainability of the items by maintaining an actual state assessment of the item",
+    "clause": "6.10"
+   },
+   "sources": [
+    {
+     "for": "process",
+     "cite": "EN 17007:2017 cl. 6.10 DTA.2",
+     "status": "verified"
+    },
+    {
+     "for": "planning duty",
+     "cite": "ANSI/ASTM/ISO 55001-2024 cl. 6.2.2 asset management planning",
+     "status": "clause-verified"
+    },
+    {
+     "for": "landscape",
+     "cite": "GFMAM Asset Management Landscape 3rd ed. v3.0, 2024-06, subject 3.2 Demand Analysis",
+     "status": "verified"
+    },
+    {
+     "for": "structure",
+     "cite": "APQC PCF Utilities v7.2.1 10.2.2.2 Assess performance and capacity of current assets (pcf_id 19215) - structural precedent only",
+     "status": "consensus"
+    },
+    {
+     "for": "reliability method",
+     "cite": "IEEE 1366-2022",
+     "status": "consensus"
+    },
+    {
+     "for": "distribution boundary",
+     "cite": "16 U.S.C. 824o(a)(1) bulk-power system excludes local distribution",
+     "status": "regulation"
+    },
+    {
+     "for": "interfaces",
+     "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 payloads; Annex A verbs",
+     "status": "clause-verified"
+    },
+    {
+     "for": "data_objects",
+     "cite": "IEC 61968-11:2013 CIM extensions for distribution, Work package",
+     "status": "clause-verified"
+    }
+   ],
+   "provenance": {
+    "basis": "standard",
+    "primary": "ANSI/ASTM/ISO 55001-2024 cl. 6.2.2 asset management planning"
+   }
+  },
+  {
+   "uid": 10544,
+   "id": "17.1.3",
+   "name": "Model the network and test scenarios",
+   "group": {
+    "id": "17.1",
+    "name": "Analyse network demand and capacity",
+    "uid": 10541
+   },
+   "intent": "Test whether the existing network, under named cases, can meet the demand view.",
+   "activities": [
+    "Build or refresh the network model from the asset record",
+    "Load the demand view and the cases to be tested",
+    "Run the cases and record where the network does not hold",
+    "Hand failed cases to 17.1.5 as candidate shortfalls"
+   ],
+   "trigger": {
+    "kind": "conditional",
+    "text": "A demand view and a capacity statement are ready to be tested as cases.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Network connectivity and ratings",
+     "party": "AM",
+     "data": "Asset"
+    },
+    {
+     "what": "Demand view by area and horizon",
+     "party": "NE",
+     "data": "Work"
+    },
+    {
+     "what": "Cases to be tested",
+     "party": "SIM",
+     "data": "Work"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Case results, pass or not-hold",
+     "party": "SIM",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Locations that did not hold",
+     "party": "GINV",
+     "data": "WorkLocation"
+    }
+   ],
+   "systems": [
+    {
+     "component": "SIM",
+     "role": "owning",
+     "service": "Network case testing"
+    },
+    {
+     "component": "NE",
+     "role": "originating",
+     "service": "Demand view and cases"
+    },
+    {
+     "component": "AM",
+     "role": "reference",
+     "service": "Network model"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "NE",
+     "to": "SIM",
+     "payload": "WorkRequest",
+     "verb": "create",
+     "pattern": "event"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Network modeller",
+     "raci": "R"
+    },
+    {
+     "role": "Planning manager",
+     "raci": "A"
+    },
+    {
+     "role": "Network planner",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "Asset",
+    "WorkLocation",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "IEC 61968-6 cl. 4.2 SIM is network operation simulation. The engine - power flow, pressure drop, contingency set - is not in the pack. Run the cases; do not write the arithmetic into this specification."
+    },
+    {
+     "kind": "operational",
+     "text": "Real-time optimisation and protection settings are out of scope of this reference (APQC 14.1.4 is scope, not 17.0). This process tests planning cases, not the control room."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Cycle Time",
+     "definition": "SMRP 5.4.7 from case set to recorded results.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    },
+    {
+     "name": "Planned Work",
+     "definition": "SMRP 5.3.1. Cases run with lead time become options in 17.2, not surprises in 4.0.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    }
+   ],
+   "variants": [
+    "Intact-network case",
+    "Contingency case the operator has named",
+    "Growth-horizon case taken from 17.1.1"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "Named cases are run against a network model and the failures are recorded.",
+    "artifact": "models/17.1-analyse-network-demand-and-capacity.bpmn"
+   },
+   "en17007": {
+    "process": "DTA.2",
+    "title": "Evaluate the reliability and maintainability of the items by maintaining an actual state assessment of the item",
+    "clause": "6.10"
+   },
+   "sources": [
+    {
+     "for": "process",
+     "cite": "EN 17007:2017 cl. 6.10 DTA.2",
+     "status": "verified"
+    },
+    {
+     "for": "component",
+     "cite": "IEC 61968-6:2015 cl. 4.2 SIM Network operation simulation",
+     "status": "clause-verified"
+    },
+    {
+     "for": "structure",
+     "cite": "APQC PCF Utilities v7.2.1 10.2.2.3 Perform network modeling (pcf_id 19216) - structural precedent only",
+     "status": "consensus"
+    },
+    {
+     "for": "landscape",
+     "cite": "GFMAM Asset Management Landscape 3rd ed. v3.0, 2024-06, subject 3.2 Demand Analysis",
+     "status": "verified"
+    },
+    {
+     "for": "data_objects",
+     "cite": "IEC 61968-11:2013 CIM extensions for distribution, Work package",
+     "status": "clause-verified"
+    },
+    {
+     "for": "engine",
+     "cite": "No pack source states the network-model arithmetic or the contingency set",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "standard",
+    "primary": "IEC 61968-6:2015 cl. 4.2 SIM Network operation simulation"
+   }
+  },
+  {
+   "uid": 10545,
+   "id": "17.1.4",
+   "name": "Assess new connection and load-growth impact",
+   "group": {
+    "id": "17.1",
+    "name": "Analyse network demand and capacity",
+    "uid": 10541
+   },
+   "intent": "Decide whether a proposed connection or load change fits the existing network, or is a shortfall.",
+   "activities": [
+    "Take the proposed load, generation or throughput at the named location",
+    "Test it against the current capacity statement and model",
+    "Return fits, fits-with-conditions, or shortfall",
+    "If shortfall, raise it into 17.1.5; do not design the service in 10.6"
+   ],
+   "trigger": {
+    "kind": "message",
+    "text": "A proposed new load, generation or throughput needs a network-impact view.",
+    "cim": "WorkRequest.create"
+   },
+   "inputs": [
+    {
+     "what": "Proposed connection or load change",
+     "party": "CS",
+     "data": "Work"
+    },
+    {
+     "what": "Location on the network",
+     "party": "GINV",
+     "data": "WorkLocation"
+    },
+    {
+     "what": "Current capacity statement",
+     "party": "NE",
+     "data": "Work"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Fits, fits-with-conditions, or shortfall",
+     "party": "NE",
+     "data": "Work"
+    },
+    {
+     "what": "Shortfall handed to 17.1.5",
+     "party": "NE",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "systems": [
+    {
+     "component": "NE",
+     "role": "owning",
+     "service": "Connection impact"
+    },
+    {
+     "component": "CS",
+     "role": "originating",
+     "service": "Proposed connection"
+    },
+    {
+     "component": "SIM",
+     "role": "supporting",
+     "service": "Case test of the proposal"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "CS",
+     "to": "NE",
+     "payload": "WorkRequest",
+     "verb": "create",
+     "pattern": "request-reply"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Network planner",
+     "raci": "R"
+    },
+    {
+     "role": "Planning manager",
+     "raci": "A"
+    },
+    {
+     "role": "Connections planner",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkLocation",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "10.6.1 qualifies the customer service. This process assesses the NETWORK. Do not design the service here and do not duplicate 10.6.6 interconnection review."
+    },
+    {
+     "kind": "operational",
+     "text": "IEC 61968-6 cl. 4.2 NE is network extension planning. A fits-with-conditions result is a requirement into 17.2, not a field job."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Cycle Time",
+     "definition": "SMRP 5.4.7 from proposal to fits, conditions or shortfall.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    },
+    {
+     "name": "Rework",
+     "definition": "SMRP 4.1. Connections later found to need plant the impact study missed.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    }
+   ],
+   "variants": [
+    "New large electric load",
+    "New gas load or fuel conversion",
+    "Distributed generation with reverse flow"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "A proposed connection is tested once and returns fits, conditions or shortfall.",
+    "artifact": "models/17.1-analyse-network-demand-and-capacity.bpmn"
+   },
+   "en17007": {
+    "process": "ACT.2",
+    "title": "Prepare for the maintenance tasks",
+    "clause": "6.5.3"
+   },
+   "sources": [
+    {
+     "for": "process",
+     "cite": "EN 17007:2017 cl. 6.5.3 ACT.2",
+     "status": "verified"
+    },
+    {
+     "for": "component",
+     "cite": "IEC 61968-6:2015 cl. 4.2 NE Network extension planning",
+     "status": "clause-verified"
+    },
+    {
+     "for": "planning duty",
+     "cite": "ANSI/ASTM/ISO 55001-2024 cl. 6.2.2 asset management planning",
+     "status": "clause-verified"
+    },
+    {
+     "for": "data_objects",
+     "cite": "IEC 61968-11:2013 CIM extensions for distribution, Work package",
+     "status": "clause-verified"
+    },
+    {
+     "for": "boundary",
+     "cite": "10.6.1 qualifies the customer service; 17.1.4 assesses network impact only",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "standard",
+    "primary": "IEC 61968-6:2015 cl. 4.2 NE Network extension planning"
+   }
+  },
+  {
+   "uid": 10546,
+   "id": "17.1.5",
+   "name": "Identify capacity and reliability shortfalls",
+   "group": {
+    "id": "17.1",
+    "name": "Analyse network demand and capacity",
+    "uid": 10541
+   },
+   "intent": "Name the shortfall 17.2 must option: capacity, reliability, or both, and where.",
+   "activities": [
+    "Collect failed cases from 17.1.3 and shortfalls from 17.1.4",
+    "Classify each as capacity, reliability, or both",
+    "Locate it on the network",
+    "Release a shortfall record to 17.2.1"
+   ],
+   "trigger": {
+    "kind": "conditional",
+    "text": "A case has not held, or a connection has been returned as a shortfall.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Failed case results",
+     "party": "SIM",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Connection shortfalls",
+     "party": "NE",
+     "data": "Work"
+    },
+    {
+     "what": "Reliability performance against the named target",
+     "party": "AM",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Shortfall record: type, location, horizon",
+     "party": "NE",
+     "data": "Work"
+    },
+    {
+     "what": "Shortfall released to 17.2.1",
+     "party": "DGN",
+     "data": "Work"
+    }
+   ],
+   "systems": [
+    {
+     "component": "NE",
+     "role": "owning",
+     "service": "Shortfall register"
+    },
+    {
+     "component": "DGN",
+     "role": "consuming",
+     "service": "Shortfall to be optioned"
+    },
+    {
+     "component": "SIM",
+     "role": "originating",
+     "service": "Failed cases"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "NE",
+     "to": "DGN",
+     "payload": "WorkRequest",
+     "verb": "create",
+     "pattern": "event"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Network planner",
+     "raci": "R"
+    },
+    {
+     "role": "Planning manager",
+     "raci": "A"
+    },
+    {
+     "role": "Reliability engineer",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkLocation",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "The type is capacity, reliability, or both. The threshold that makes performance a shortfall is the operator's or a state's. IEEE 1366 defines the indices, not the trigger."
+    },
+    {
+     "kind": "operational",
+     "text": "This record is what 17.2 options against. Do not jump from a failed case to a preferred solution in this process."
+    }
+   ],
+   "measures": [
+    {
+     "name": "SAIDI",
+     "definition": "IEEE 1366-2022. Reliability shortfalls are duration-shaped unless SAIFI is the named target.",
+     "cite": "IEEE 1366-2022"
+    },
+    {
+     "name": "Planned Work",
+     "definition": "SMRP 5.3.1. A named shortfall is what 17.2 can plan; an unnamed one becomes reactive work.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    }
+   ],
+   "variants": [
+    "Capacity shortfall against the demand view",
+    "Reliability shortfall against a named IEEE 1366 target",
+    "Both, for 17.2 to option together"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "Failed cases and connection shortfalls become a typed shortfall record for 17.2.",
+    "artifact": "models/17.1-analyse-network-demand-and-capacity.bpmn"
+   },
+   "en17007": {
+    "process": "OPT.1",
+    "title": "Determine the areas of improvement",
+    "clause": "6.13"
+   },
+   "sources": [
+    {
+     "for": "process",
+     "cite": "EN 17007:2017 cl. 6.13 OPT.1",
+     "status": "verified"
+    },
+    {
+     "for": "landscape",
+     "cite": "GFMAM Asset Management Landscape 3rd ed. v3.0, 2024-06, subject 3.2 Demand Analysis",
+     "status": "verified"
+    },
+    {
+     "for": "reliability method",
+     "cite": "IEEE 1366-2022",
+     "status": "consensus"
+    },
+    {
+     "for": "interfaces",
+     "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 payloads; Annex A verbs",
+     "status": "clause-verified"
+    },
+    {
+     "for": "data_objects",
+     "cite": "IEC 61968-11:2013 CIM extensions for distribution, Work package",
+     "status": "clause-verified"
+    },
+    {
+     "for": "threshold",
+     "cite": "No pack source states the numeric trigger that turns IEEE 1366 performance into a shortfall",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "standard",
+    "primary": "GFMAM Asset Management Landscape 3rd ed. subject 3.2 Demand Analysis"
+   }
+  },
+  {
+   "uid": 10548,
+   "id": "17.2.1",
+   "name": "Develop options for each identified shortfall",
+   "group": {
+    "id": "17.2",
+    "name": "Determine network solutions and requirements",
+    "uid": 10547
+   },
+   "intent": "Put more than one way of closing the shortfall on the table before a solution is chosen.",
+   "activities": [
+    "Take the shortfall record from 17.1.5",
+    "Develop at least two options, including a non-build where one exists",
+    "State what each option would change on the network",
+    "Hand the option set to 17.2.2 and to the commodity requirements"
+   ],
+   "trigger": {
+    "kind": "message",
+    "text": "A capacity or reliability shortfall has been released for optioning.",
+    "cim": "WorkRequest.create"
+   },
+   "inputs": [
+    {
+     "what": "Shortfall record from 17.1.5",
+     "party": "NE",
+     "data": "Work"
+    },
+    {
+     "what": "Existing plant at the location",
+     "party": "AM",
+     "data": "Asset"
+    },
+    {
+     "what": "Applicable construction and protection standards",
+     "party": "DGN",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Option set for the shortfall",
+     "party": "DGN",
+     "data": "Work"
+    },
+    {
+     "what": "Option that needs protection, secondary or pressure work",
+     "party": "DGN",
+     "data": "WorkTask"
+    }
+   ],
+   "systems": [
+    {
+     "component": "DGN",
+     "role": "owning",
+     "service": "Option set"
+    },
+    {
+     "component": "NE",
+     "role": "originating",
+     "service": "Shortfall"
+    },
+    {
+     "component": "AM",
+     "role": "reference",
+     "service": "Existing plant"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "NE",
+     "to": "DGN",
+     "payload": "WorkRequest",
+     "verb": "create",
+     "pattern": "event"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Planning engineer",
+     "raci": "R"
+    },
+    {
+     "role": "Planning manager",
+     "raci": "A"
+    },
+    {
+     "role": "Network planner",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkTask",
+    "Asset",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "ISO 9001:2015 cl. 8.3.3 requires design inputs to include statutory and regulatory requirements and codes of practice. Options that ignore 17.3 classification are incomplete."
+    },
+    {
+     "kind": "operational",
+     "text": "2.1 engineers the selected solution. This process only names options. Do not produce a construction design here."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Planned Work",
+     "definition": "SMRP 5.3.1. Optioned shortfalls can be planned; unoptioned ones cannot.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    },
+    {
+     "name": "Cycle Time",
+     "definition": "SMRP 5.4.7 from shortfall to a documented option set.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    }
+   ],
+   "variants": [
+    "Reinforce existing plant",
+    "New circuit, feeder or main",
+    "Non-build or demand-side option"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "A shortfall is turned into a documented option set before any one is chosen.",
+    "artifact": "models/17.2-determine-network-solutions-and-requirements.bpmn"
+   },
+   "en17007": {
+    "process": "IMP.5",
+    "title": "Analyse and choose options and validate the solutions",
+    "clause": "6.6"
+   },
+   "sources": [
+    {
+     "for": "process",
+     "cite": "EN 17007:2017 cl. 6.6 IMP.5",
+     "status": "verified"
+    },
+    {
+     "for": "design inputs",
+     "cite": "ISO 9001:2015 cl. 8.3.3 Design and development inputs",
+     "status": "clause-verified"
+    },
+    {
+     "for": "landscape",
+     "cite": "GFMAM Asset Management Landscape 3rd ed. v3.0, 2024-06, subject 3.4 Planning",
+     "status": "verified"
+    },
+    {
+     "for": "interfaces",
+     "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 payloads; Annex A verbs",
+     "status": "clause-verified"
+    },
+    {
+     "for": "data_objects",
+     "cite": "IEC 61968-11:2013 CIM extensions for distribution, Work package",
+     "status": "clause-verified"
+    }
+   ],
+   "provenance": {
+    "basis": "standard",
+    "primary": "ISO 9001:2015 cl. 8.3.3 Design and development inputs"
+   }
+  },
+  {
+   "uid": 10549,
+   "id": "17.2.2",
+   "name": "Evaluate options against whole-life value",
+   "group": {
+    "id": "17.2",
+    "name": "Determine network solutions and requirements",
+    "uid": 10547
+   },
+   "intent": "Weigh the 17.5.2 comparison against what the whole-life basis does not price, and return a preferred option.",
+   "activities": [
+    "Take the life-cycle comparison from 17.5.2 and the option set from 17.2.1",
+    "Weigh what the basis does not price: deliverability, consent, classification clocks",
+    "Return a preferred option and state the trade-off it accepts",
+    "Do not re-run the arithmetic and do not select - that is 17.5.2 and 17.2.6"
+   ],
+   "trigger": {
+    "kind": "conditional",
+    "text": "A life-cycle comparison is ready to be weighed against what it does not price.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Option set from 17.2.1",
+     "party": "DGN",
+     "data": "Work"
+    },
+    {
+     "what": "Life-cycle comparison from 17.5.2",
+     "party": "FIN",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Classification of the segment from 17.3",
+     "party": "AM",
+     "data": "Asset"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Preferred option with the trade-off stated",
+     "party": "DGN",
+     "data": "Work"
+    },
+    {
+     "what": "Basis of the preference recorded for 17.2.6",
+     "party": "FIN",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "systems": [
+    {
+     "component": "FIN",
+     "role": "owning",
+     "service": "Life-cycle comparison"
+    },
+    {
+     "component": "DGN",
+     "role": "originating",
+     "service": "Option set"
+    },
+    {
+     "component": "AM",
+     "role": "reference",
+     "service": "Segment classification"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "DGN",
+     "to": "FIN",
+     "payload": "WorkRequest",
+     "verb": "get",
+     "pattern": "request-reply"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Planning engineer",
+     "raci": "R"
+    },
+    {
+     "role": "Planning manager",
+     "raci": "A"
+    },
+    {
+     "role": "Finance analyst",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkActivityRecord",
+    "Asset"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "ISO 55001:2024 cl. 8.1 requires life cycle management. GFMAM subject 3.6 is Life cycle Value Realization. Neither states the NPV, discount rate or risk-cost arithmetic. That is why this is SPEC, not DMN."
+    },
+    {
+     "kind": "operational",
+     "text": "AACE RP 17R-97 is a guideline, not a standard, and gives method not numbers. Contingency and escalation values remain judgment."
+    },
+    {
+     "kind": "operational",
+     "text": "17.5.2 does the arithmetic and this process does not repeat it. What is weighed here is what the basis cannot price - deliverability, consent, and a 192.611(d) or 192.905(c) clock that makes a cheaper option late."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Maintenance cost",
+     "definition": "EN 15341 cl. 12 Mi. Whole-life comparison is a cost comparison, not a work-order charge.",
+     "cite": "EN 15341:2019+A1:2022 cl. 12 Mi maintenance-cost indicators"
+    },
+    {
+     "name": "Planned Work",
+     "definition": "SMRP 5.3.1. Compared options can be selected; uncompared ones are preference.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    }
+   ],
+   "variants": [
+    "Capital build versus operate-differently",
+    "Replace versus repair over the remaining life",
+    "Defer versus do now"
+   ],
+   "notation": {
+    "class": "SPEC",
+    "why": "A determination whose rule no source states. ISO 55001 cl. 8.1 requires life-cycle consideration; nothing weighs a priced comparison against an unpriced constraint.",
+    "artifact": null
+   },
+   "en17007": {
+    "process": "OPT.7",
+    "title": "Prioritize improvements for future investments (MRQ process)",
+    "clause": "6.13"
+   },
+   "sources": [
+    {
+     "for": "process",
+     "cite": "EN 17007:2017 cl. 6.13 OPT.7",
+     "status": "verified"
+    },
+    {
+     "for": "life cycle",
+     "cite": "ANSI/ASTM/ISO 55001-2024 cl. 8.1 operational planning and control including life cycle management",
+     "status": "clause-verified"
+    },
+    {
+     "for": "landscape",
+     "cite": "GFMAM Asset Management Landscape 3rd ed. v3.0, 2024-06, subject 3.6 Life cycle Value Realization",
+     "status": "verified"
+    },
+    {
+     "for": "estimating method",
+     "cite": "AACE International RP 17R-97 Cost Estimate Classification System - guideline, not a standard",
+     "status": "consensus"
+    },
+    {
+     "for": "interfaces",
+     "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 payloads; Annex A verbs",
+     "status": "clause-verified"
+    },
+    {
+     "for": "data_objects",
+     "cite": "IEC 61968-11:2013 CIM extensions for distribution, Work package",
+     "status": "clause-verified"
+    },
+    {
+     "for": "arithmetic",
+     "cite": "No pack source weighs a priced whole-life comparison against deliverability, consent or a statutory clock",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "standard",
+    "primary": "ANSI/ASTM/ISO 55001-2024 cl. 8.1 life cycle management"
+   }
+  },
+  {
+   "uid": 10550,
+   "id": "17.2.3",
+   "name": "Determine protection and control requirements",
+   "group": {
+    "id": "17.2",
+    "name": "Determine network solutions and requirements",
+    "uid": 10547
+   },
+   "intent": "State the protection and control the selected electric option must include, as requirements for 2.1.",
+   "activities": [
+    "Take the electric options that would change the network",
+    "State protection and control requirements as design inputs",
+    "Leave settings calculation to 2.1; do not invent a scheme here",
+    "Record that NERC PRC is bulk-power and does not bind local distribution"
+   ],
+   "trigger": {
+    "kind": "conditional",
+    "text": "An electric option would add or change protected plant.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Electric option set",
+     "party": "DGN",
+     "data": "Work"
+    },
+    {
+     "what": "Existing protection and control on the affected plant",
+     "party": "AM",
+     "data": "Asset"
+    },
+    {
+     "what": "Segment classification from 17.3.4",
+     "party": "AM",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Protection and control requirements for 2.1",
+     "party": "DGN",
+     "data": "Work"
+    },
+    {
+     "what": "Bulk-power versus distribution flag from 17.3.4",
+     "party": "NE",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "systems": [
+    {
+     "component": "DGN",
+     "role": "owning",
+     "service": "Protection requirements"
+    },
+    {
+     "component": "NE",
+     "role": "reference",
+     "service": "Jurisdictional class"
+    },
+    {
+     "component": "AM",
+     "role": "reference",
+     "service": "Existing protection"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "DGN",
+     "to": "NE",
+     "payload": "WorkRequest",
+     "verb": "change",
+     "pattern": "event"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Protection engineer",
+     "raci": "R"
+    },
+    {
+     "role": "Planning manager",
+     "raci": "A"
+    },
+    {
+     "role": "Network planner",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "Asset",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "regulatory",
+     "text": "16 U.S.C. 824o(a)(1) and (i)(1) keep NERC PRC and TPL off local distribution. If 17.3.4 returned bulk-power, name the NERC family; if it returned local distribution, do not."
+    },
+    {
+     "kind": "operational",
+     "text": "APQC 10.2.2.4 (pcf_id 19217) is perform protection design. This process produces REQUIREMENTS. 2.1 produces the design. Settings are not invented here."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Planned Work",
+     "definition": "SMRP 5.3.1. Protection requirements issued with the option, not discovered in commissioning.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    },
+    {
+     "name": "Rework",
+     "definition": "SMRP 4.1. Designs that omit a stated protection requirement.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    }
+   ],
+   "variants": [
+    "Distribution overcurrent and coordination requirements",
+    "Sectionalising or reclosing requirements",
+    "Bulk-power PRC/TPL named only when 17.3.4 returned bulk-power"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "An electric option produces a requirements record for 2.1, not a setting calculation.",
+    "artifact": "models/17.2-determine-network-solutions-and-requirements.bpmn"
+   },
+   "en17007": {
+    "process": "MRQ.3",
+    "title": "Develop reliability, maintainability and logistic support requirements",
+    "clause": "6.12"
+   },
+   "sources": [
+    {
+     "for": "process",
+     "cite": "EN 17007:2017 cl. 6.12 MRQ.3",
+     "status": "verified"
+    },
+    {
+     "for": "design inputs",
+     "cite": "ISO 9001:2015 cl. 8.3.3 Design and development inputs",
+     "status": "clause-verified"
+    },
+    {
+     "for": "distribution boundary",
+     "cite": "16 U.S.C. 824o(a)(1); 16 U.S.C. 824o(i)(1)",
+     "status": "regulation"
+    },
+    {
+     "for": "structure",
+     "cite": "APQC PCF Utilities v7.2.1 10.2.2.4 Perform protection design (pcf_id 19217) - structural precedent only",
+     "status": "consensus"
+    },
+    {
+     "for": "interfaces",
+     "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 payloads; Annex A verbs",
+     "status": "clause-verified"
+    },
+    {
+     "for": "data_objects",
+     "cite": "IEC 61968-11:2013 CIM extensions for distribution, Work package",
+     "status": "clause-verified"
+    }
+   ],
+   "provenance": {
+    "basis": "regulation",
+    "primary": "16 U.S.C. 824o(a)(1) and (i)(1) local distribution excluded from the ERO"
+   }
+  },
+  {
+   "uid": 10551,
+   "id": "17.2.4",
+   "name": "Determine secondary systems requirements",
+   "group": {
+    "id": "17.2",
+    "name": "Determine network solutions and requirements",
+    "uid": 10547
+   },
+   "intent": "State the secondary systems the electric option must include - points, communications, metering at the node.",
+   "activities": [
+    "Take the electric options that add plant",
+    "State SCADA points, communications and metering as design inputs",
+    "Do not configure the control room; that is out of scope",
+    "Hand the requirements to 2.1 with the primary option"
+   ],
+   "trigger": {
+    "kind": "conditional",
+    "text": "An electric option would add plant that needs secondary systems.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Electric option set",
+     "party": "DGN",
+     "data": "Work"
+    },
+    {
+     "what": "Existing secondary systems at the location",
+     "party": "AM",
+     "data": "Asset"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Secondary-systems requirements for 2.1",
+     "party": "DGN",
+     "data": "Work"
+    },
+    {
+     "what": "Points and metering list attached to the option",
+     "party": "DGN",
+     "data": "WorkTask"
+    }
+   ],
+   "systems": [
+    {
+     "component": "DGN",
+     "role": "owning",
+     "service": "Secondary-systems requirements"
+    },
+    {
+     "component": "AM",
+     "role": "reference",
+     "service": "Existing secondary plant"
+    },
+    {
+     "component": "NE",
+     "role": "informed",
+     "service": "Requirements on the option"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "DGN",
+     "to": "NE",
+     "payload": "WorkRequest",
+     "verb": "change",
+     "pattern": "event"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Planning engineer",
+     "raci": "R"
+    },
+    {
+     "role": "Planning manager",
+     "raci": "A"
+    },
+    {
+     "role": "Network operations engineer",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkTask",
+    "Asset"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "APQC 10.2.2.5 (pcf_id 19218) is perform secondary systems design. This process produces REQUIREMENTS. Real-time operation of those systems is out of scope (APQC 14.1.4 is scope)."
+    },
+    {
+     "kind": "operational",
+     "text": "4.4.5 is point-to-point verification at execution. Do not pull commissioning of points forward into planning."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Planned Work",
+     "definition": "SMRP 5.3.1. Secondary requirements issued with the option.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    },
+    {
+     "name": "Rework",
+     "definition": "SMRP 4.1. Plant built without the points 19.1 will need to energise against.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    }
+   ],
+   "variants": [
+    "SCADA points for the new plant",
+    "Protection or operational communications",
+    "Metering at the new node"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "An electric option produces a secondary-systems requirements record for 2.1.",
+    "artifact": "models/17.2-determine-network-solutions-and-requirements.bpmn"
+   },
+   "en17007": {
+    "process": "MRQ.3",
+    "title": "Develop reliability, maintainability and logistic support requirements",
+    "clause": "6.12"
+   },
+   "sources": [
+    {
+     "for": "process",
+     "cite": "EN 17007:2017 cl. 6.12 MRQ.3",
+     "status": "verified"
+    },
+    {
+     "for": "design inputs",
+     "cite": "ISO 9001:2015 cl. 8.3.3 Design and development inputs",
+     "status": "clause-verified"
+    },
+    {
+     "for": "structure",
+     "cite": "APQC PCF Utilities v7.2.1 10.2.2.5 Perform secondary systems design (pcf_id 19218) - structural precedent only",
+     "status": "consensus"
+    },
+    {
+     "for": "interfaces",
+     "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 payloads; Annex A verbs",
+     "status": "clause-verified"
+    },
+    {
+     "for": "data_objects",
+     "cite": "IEC 61968-11:2013 CIM extensions for distribution, Work package",
+     "status": "clause-verified"
+    },
+    {
+     "for": "control-room boundary",
+     "cite": "Real-time secondary-system operation is out of scope of this reference",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "standard",
+    "primary": "ISO 9001:2015 cl. 8.3.3 Design and development inputs"
+   }
+  },
+  {
+   "uid": 10552,
+   "id": "17.2.5",
+   "name": "Determine pressure and regulation requirements",
+   "group": {
+    "id": "17.2",
+    "name": "Determine network solutions and requirements",
+    "uid": 10547
+   },
+   "intent": "State the pressure and overpressure protection a gas option must include, as requirements for 2.1.",
+   "activities": [
+    "Take the gas options that would change pressure or regulation",
+    "State pressure, regulation and overpressure-protection requirements",
+    "Cite 49 CFR 192.195 and 192.197 as the authority, not a setpoint table",
+    "Hand the requirements to 2.1 with the primary option"
+   ],
+   "trigger": {
+    "kind": "conditional",
+    "text": "A gas option would add or change regulation or pressure plant.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Gas option set",
+     "party": "DGN",
+     "data": "Work"
+    },
+    {
+     "what": "Existing pressure and regulation at the location",
+     "party": "AM",
+     "data": "Asset"
+    },
+    {
+     "what": "Class location from 17.3.1",
+     "party": "AM",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Pressure and regulation requirements for 2.1",
+     "party": "DGN",
+     "data": "Work"
+    },
+    {
+     "what": "Overpressure-protection requirement attached",
+     "party": "DGN",
+     "data": "WorkTask"
+    }
+   ],
+   "systems": [
+    {
+     "component": "DGN",
+     "role": "owning",
+     "service": "Pressure requirements"
+    },
+    {
+     "component": "AM",
+     "role": "reference",
+     "service": "Existing regulation"
+    },
+    {
+     "component": "NE",
+     "role": "informed",
+     "service": "Requirements on the option"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "DGN",
+     "to": "NE",
+     "payload": "WorkRequest",
+     "verb": "change",
+     "pattern": "event"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Gas system engineer",
+     "raci": "R"
+    },
+    {
+     "role": "Planning manager",
+     "raci": "A"
+    },
+    {
+     "role": "Integrity engineer",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkTask",
+    "Asset",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "regulatory",
+     "text": "49 CFR 192.195 is protection against accidental overpressuring. 192.197 is control of the pressure of gas delivered from high-pressure distribution systems. 192.199 and 192.201 are requirements for pressure-relieving and limiting stations. Setpoints are not invented here."
+    },
+    {
+     "kind": "operational",
+     "text": "Class location from 17.3.1 is a design input. Do not re-decide class in this process."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Planned Work",
+     "definition": "SMRP 5.3.1. Pressure requirements issued with the option.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    },
+    {
+     "name": "Rework",
+     "definition": "SMRP 4.1. Plant built without the overpressure protection 192.195 required.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    }
+   ],
+   "variants": [
+    "District regulator addition",
+    "Overpressure protection under 49 CFR 192.195",
+    "Relieving or limiting station under 192.199 and 192.201"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "A gas option produces pressure and overpressure requirements for 2.1.",
+    "artifact": "models/17.2-determine-network-solutions-and-requirements.bpmn"
+   },
+   "en17007": {
+    "process": "MRQ.3",
+    "title": "Develop reliability, maintainability and logistic support requirements",
+    "clause": "6.12"
+   },
+   "sources": [
+    {
+     "for": "process",
+     "cite": "EN 17007:2017 cl. 6.12 MRQ.3",
+     "status": "verified"
+    },
+    {
+     "for": "controls.regulatory",
+     "cite": "49 CFR 192.195, 192.197, 192.199, 192.201",
+     "status": "regulation"
+    },
+    {
+     "for": "design inputs",
+     "cite": "ISO 9001:2015 cl. 8.3.3 Design and development inputs",
+     "status": "clause-verified"
+    },
+    {
+     "for": "interfaces",
+     "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 payloads; Annex A verbs",
+     "status": "clause-verified"
+    },
+    {
+     "for": "data_objects",
+     "cite": "IEC 61968-11:2013 CIM extensions for distribution, Work package",
+     "status": "clause-verified"
+    }
+   ],
+   "provenance": {
+    "basis": "regulation",
+    "primary": "49 CFR 192.195 protection against accidental overpressuring"
+   }
+  },
+  {
+   "uid": 10553,
+   "id": "17.2.6",
+   "name": "Select the solution and record the basis",
+   "group": {
+    "id": "17.2",
+    "name": "Determine network solutions and requirements",
+    "uid": 10547
+   },
+   "intent": "Choose one option and write down why, so 17.4 can fund it and 2.1 can design it.",
+   "activities": [
+    "Take the option set, the whole-life comparison and the requirements",
+    "Select one option, or send the shortfall back to 17.1 as ill-defined",
+    "Record the basis, including the 17.3 classification used",
+    "Release the selected solution to 17.4.1"
+   ],
+   "trigger": {
+    "kind": "conditional",
+    "text": "Options, comparison and commodity requirements are ready for a selection.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Option set and comparison",
+     "party": "DGN",
+     "data": "Work"
+    },
+    {
+     "what": "Protection, secondary or pressure requirements",
+     "party": "DGN",
+     "data": "WorkTask"
+    },
+    {
+     "what": "Segment classification from 17.3",
+     "party": "AM",
+     "data": "Asset"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Selected solution and recorded basis",
+     "party": "DGN",
+     "data": "Work"
+    },
+    {
+     "what": "Solution released to 17.4.1",
+     "party": "NE",
+     "data": "Work"
+    }
+   ],
+   "systems": [
+    {
+     "component": "DGN",
+     "role": "owning",
+     "service": "Solution selection"
+    },
+    {
+     "component": "NE",
+     "role": "consuming",
+     "service": "Selected solution for the programme"
+    },
+    {
+     "component": "FIN",
+     "role": "reference",
+     "service": "Whole-life comparison"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "DGN",
+     "to": "NE",
+     "payload": "WorkRequest",
+     "verb": "change",
+     "pattern": "event"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Planning manager",
+     "raci": "A"
+    },
+    {
+     "role": "Planning engineer",
+     "raci": "R"
+    },
+    {
+     "role": "Finance analyst",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkTask",
+    "Asset",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "ISO 9001:2015 cl. 8.3.6 requires identification, review, control and retained authorisation of design changes. ISO 55001:2024 cl. 6.3 is planning of changes. The basis is what 17.5.3 will later evaluate against."
+    },
+    {
+     "kind": "operational",
+     "text": "EN 17007 has no funding or authorisation process. MAN.4 is budget setting, used at 17.4.3, not here."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Planned Work",
+     "definition": "SMRP 5.3.1. A selected solution can enter the capital programme.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    },
+    {
+     "name": "Cycle Time",
+     "definition": "SMRP 5.4.7 from option set to a recorded selection.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    }
+   ],
+   "variants": [
+    "Selected build, basis recorded",
+    "Selected non-build, basis recorded",
+    "Returned to 17.1 as insufficiently defined"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "A known path from compared options to a recorded selection or a return.",
+    "artifact": "models/17.2-determine-network-solutions-and-requirements.bpmn"
+   },
+   "en17007": {
+    "process": "MRQ.6",
+    "title": "Participate in the analysis and choice of options and validate the solutions",
+    "clause": "6.12"
+   },
+   "sources": [
+    {
+     "for": "process",
+     "cite": "EN 17007:2017 cl. 6.12 MRQ.6",
+     "status": "verified"
+    },
+    {
+     "for": "changes",
+     "cite": "ANSI/ASTM/ISO 55001-2024 cl. 6.3 Planning of changes",
+     "status": "clause-verified"
+    },
+    {
+     "for": "design changes",
+     "cite": "ISO 9001:2015 cl. 8.3.6 Design and development changes",
+     "status": "clause-verified"
+    },
+    {
+     "for": "landscape",
+     "cite": "GFMAM Asset Management Landscape 3rd ed. v3.0, 2024-06, subject 3.4 Planning",
+     "status": "verified"
+    },
+    {
+     "for": "interfaces",
+     "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 payloads; Annex A verbs",
+     "status": "clause-verified"
+    },
+    {
+     "for": "data_objects",
+     "cite": "IEC 61968-11:2013 CIM extensions for distribution, Work package",
+     "status": "clause-verified"
+    }
+   ],
+   "provenance": {
+    "basis": "standard",
+    "primary": "ANSI/ASTM/ISO 55001-2024 cl. 6.3 Planning of changes"
+   }
+  },
+  {
+   "uid": 10555,
+   "id": "17.3.1",
+   "name": "Determine and maintain gas class location",
+   "group": {
+    "id": "17.3",
+    "name": "Determine the regulatory classification of the network",
+    "uid": 10554
+   },
+   "intent": "Return Class 1, 2, 3 or 4 for the segment, and name 49 CFR 192.5 as the authority.",
+   "activities": [
+    "Build the class location unit around the segment",
+    "Count buildings intended for human occupancy",
+    "Return Class 1, 2, 3 or 4 under 49 CFR 192.5(b)",
+    "Apply 192.5(c) cluster and end rules, and keep the 192.5(d) record"
+   ],
+   "trigger": {
+    "kind": "conditional",
+    "text": "A segment is new, or population density around an existing segment has changed.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Segment centreline and length",
+     "party": "GINV",
+     "data": "WorkLocation"
+    },
+    {
+     "what": "Buildings and occupancy around the segment",
+     "party": "AM",
+     "data": "Asset"
+    },
+    {
+     "what": "Current recorded class, if any",
+     "party": "AM",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Class 1, 2, 3 or 4, authority 49 CFR 192.5",
+     "party": "AM",
+     "data": "Asset"
+    },
+    {
+     "what": "How the class was determined, for the 192.5(d) record",
+     "party": "AM",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "systems": [
+    {
+     "component": "AM",
+     "role": "owning",
+     "service": "Class location"
+    },
+    {
+     "component": "GINV",
+     "role": "reference",
+     "service": "Segment geography"
+    },
+    {
+     "component": "NE",
+     "role": "informed",
+     "service": "Class used by planning"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "GINV",
+     "to": "AM",
+     "payload": "WorkRequest",
+     "verb": "change",
+     "pattern": "event"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Integrity engineer",
+     "raci": "R"
+    },
+    {
+     "role": "Planning manager",
+     "raci": "A"
+    },
+    {
+     "role": "Network planner",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Asset",
+    "WorkLocation",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "regulatory",
+     "text": "49 CFR 192.5(b): Class 1 is offshore or 10 or fewer buildings; Class 2 is more than 10 but fewer than 46; Class 3 is 46 or more, or a 192.5(b)(3)(ii) public-assembly case; Class 4 is where buildings with four or more stories are prevalent. 192.5(a)(1) is the 220-yard, 1-mile unit."
+    },
+    {
+     "kind": "regulatory",
+     "text": "49 CFR 192.5(d) requires records that document the current class of each gas transmission pipeline segment and how it was determined. Distribution still uses 192.5 for design; the record rule in (d) names transmission."
+    }
+   ],
+   "measures": [
+    {
+     "name": "PM Compliance",
+     "definition": "SMRP 5.4.14. The class on the segment is current against 192.5.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    },
+    {
+     "name": "Cycle Time",
+     "definition": "SMRP 5.4.7 from density change to a recorded class.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    }
+   ],
+   "variants": [
+    "Class 1 under 49 CFR 192.5(b)(1)",
+    "Class 2 under 192.5(b)(2)",
+    "Class 3 under 192.5(b)(3)",
+    "Class 4 under 192.5(b)(4)",
+    "Cluster or end adjustment under 192.5(c)"
+   ],
+   "notation": {
+    "class": "DMN",
+    "why": "The output is Class 1, 2, 3 or 4 and the authority 49 CFR 192.5, not a state change of the pipe.",
+    "artifact": "models/17.3.1-gas-class-location.dmn"
+   },
+   "en17007": {
+    "process": "DTA.10",
+    "title": "Save and provide access to data in a data processing system",
+    "clause": "6.10"
+   },
+   "sources": [
+    {
+     "for": "process",
+     "cite": "EN 17007:2017 cl. 6.10 DTA.10",
+     "status": "verified"
+    },
+    {
+     "for": "controls.regulatory",
+     "cite": "49 CFR 192.5 Class locations",
+     "status": "regulation"
+    },
+    {
+     "for": "interfaces",
+     "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 payloads; Annex A verbs",
+     "status": "clause-verified"
+    },
+    {
+     "for": "data_objects",
+     "cite": "IEC 61968-11:2013 CIM extensions for distribution, Work package",
+     "status": "clause-verified"
+    }
+   ],
+   "provenance": {
+    "basis": "regulation",
+    "primary": "49 CFR 192.5 Class locations"
+   }
+  },
+  {
+   "uid": 10556,
+   "id": "17.3.2",
+   "name": "Confirm maximum allowable operating pressure against class",
+   "group": {
+    "id": "17.3",
+    "name": "Determine the regulatory classification of the network",
+    "uid": 10554
+   },
+   "intent": "Return whether MAOP is commensurate with the present class, and which 192.611 path applies.",
+   "activities": [
+    "Take the class from 17.3.1 and the established MAOP",
+    "Return commensurate, or not commensurate",
+    "If not, return reduce, retest, or eligible-Class-3 IM under 192.611(a)",
+    "Return not-authorised when 192.611(a)(4)(vii) bars distribution and gathering"
+   ],
+   "trigger": {
+    "kind": "conditional",
+    "text": "Class location has changed, or MAOP is being confirmed against the present class.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Class 1, 2, 3 or 4 from 17.3.1",
+     "party": "AM",
+     "data": "Asset"
+    },
+    {
+     "what": "Established MAOP and hoop-stress record",
+     "party": "AM",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Transmission, distribution or gathering flag from 17.3.4",
+     "party": "AM",
+     "data": "Work"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Commensurate, reduce, retest, eligible-Class-3 IM, or not-authorised",
+     "party": "AM",
+     "data": "Work"
+    },
+    {
+     "what": "192.609 study items if an increase in density triggered the change",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "systems": [
+    {
+     "component": "AM",
+     "role": "owning",
+     "service": "MAOP versus class"
+    },
+    {
+     "component": "MAI",
+     "role": "consuming",
+     "service": "Study and confirmation work"
+    },
+    {
+     "component": "NE",
+     "role": "informed",
+     "service": "MAOP path"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "AM",
+     "to": "MAI",
+     "payload": "WorkRequest",
+     "verb": "create",
+     "pattern": "event"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Integrity engineer",
+     "raci": "R"
+    },
+    {
+     "role": "Planning manager",
+     "raci": "A"
+    },
+    {
+     "role": "Gas system engineer",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "Asset",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "regulatory",
+     "text": "49 CFR 192.609: when density indicates a class change for steel operating at hoop stress more than 40 percent of SMYS, or MAOP is not commensurate, the operator shall immediately make the listed study. 192.611(d): confirmation or revision must be completed within 24 months of the class change."
+    },
+    {
+     "kind": "regulatory",
+     "text": "49 CFR 192.611(a)(1)-(3) are retest, reduce, or requalify. 192.611(a)(4) is the eligible Class 3 integrity-management path. 192.611(a)(4)(vii): that path is not authorised for gathering or distribution lines."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Cycle Time",
+     "definition": "SMRP 5.4.7 against the 24-month clock in 49 CFR 192.611(d).",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    },
+    {
+     "name": "Overdue Work",
+     "definition": "SMRP 5.4.11. Confirmation still open after 24 months.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    }
+   ],
+   "variants": [
+    "Commensurate - no MAOP change",
+    "Reduce MAOP under 49 CFR 192.611(a)(2)",
+    "Retest under subpart J, 192.611(a)(3)",
+    "Eligible Class 3 IM path under 192.611(a)(4)",
+    "Distribution or gathering - 192.611(a)(4) not authorised"
+   ],
+   "notation": {
+    "class": "DMN",
+    "why": "The output is commensurate, reduce, retest, eligible-Class-3 IM or not-authorised, with 192.611 as the authority.",
+    "artifact": "models/17.3.2-maop-against-class.dmn"
+   },
+   "en17007": {
+    "process": "MRQ.6",
+    "title": "Participate in the analysis and choice of options and validate the solutions",
+    "clause": "6.12"
+   },
+   "sources": [
+    {
+     "for": "process",
+     "cite": "EN 17007:2017 cl. 6.12 MRQ.6",
+     "status": "verified"
+    },
+    {
+     "for": "controls.regulatory",
+     "cite": "49 CFR 192.609; 49 CFR 192.611",
+     "status": "regulation"
+    },
+    {
+     "for": "interfaces",
+     "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 payloads; Annex A verbs",
+     "status": "clause-verified"
+    },
+    {
+     "for": "data_objects",
+     "cite": "IEC 61968-11:2013 CIM extensions for distribution, Work package",
+     "status": "clause-verified"
+    }
+   ],
+   "provenance": {
+    "basis": "regulation",
+    "primary": "49 CFR 192.611 Change in class location: Confirmation or revision of MAOP"
+   }
+  },
+  {
+   "uid": 10557,
+   "id": "17.3.3",
+   "name": "Determine high-consequence and covered-segment status",
+   "group": {
+    "id": "17.3",
+    "name": "Determine the regulatory classification of the network",
+    "uid": 10554
+   },
+   "intent": "Return HCA, covered-segment, not-HCA, or DIMP-distribution, and name the subpart that applies.",
+   "activities": [
+    "Take class from 17.3.1 and the transmission or distribution flag from 17.3.4",
+    "If transmission, apply 192.903 method (1) or (2) and 192.905",
+    "Return HCA, covered-segment, or not-HCA, authority Subpart O",
+    "If distribution, return DIMP-distribution, authority 49 CFR 192.1001, not HCA"
+   ],
+   "trigger": {
+    "kind": "conditional",
+    "text": "Class, identified sites or the transmission/distribution flag has changed.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Class 1, 2, 3 or 4 from 17.3.1",
+     "party": "AM",
+     "data": "Asset"
+    },
+    {
+     "what": "Identified sites and occupancy from operations and public officials",
+     "party": "FRD",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Transmission or distribution flag from 17.3.4",
+     "party": "AM",
+     "data": "Work"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "HCA, covered-segment, not-HCA or DIMP, plus authority",
+     "party": "AM",
+     "data": "Asset"
+    },
+    {
+     "what": "Method (1) or (2) applied, per 192.905(a)",
+     "party": "AM",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "systems": [
+    {
+     "component": "AM",
+     "role": "owning",
+     "service": "HCA and covered-segment status"
+    },
+    {
+     "component": "FRD",
+     "role": "originating",
+     "service": "Identified-site evidence"
+    },
+    {
+     "component": "NE",
+     "role": "informed",
+     "service": "Status used by planning"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "FRD",
+     "to": "AM",
+     "payload": "WorkRequest",
+     "verb": "change",
+     "pattern": "event"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Integrity engineer",
+     "raci": "R"
+    },
+    {
+     "role": "Planning manager",
+     "raci": "A"
+    },
+    {
+     "role": "Network planner",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Asset",
+    "Work",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "regulatory",
+     "text": "49 CFR 192.903: a covered segment is a gas transmission pipeline segment in a high consequence area. HCA is Class 3 or 4, or a Class 1/2 PIR case with 20 or more buildings or an identified site. Subpart O is transmission integrity management."
+    },
+    {
+     "kind": "regulatory",
+     "text": "49 CFR 192.905: the operator must use method (1) or (2) from 192.903, describe which in the IM programme, and incorporate a newly identified HCA into the baseline assessment plan within one year. 192.1001 is DIMP - distribution is not a Subpart O covered segment."
+    }
+   ],
+   "measures": [
+    {
+     "name": "PM Compliance",
+     "definition": "SMRP 5.4.14. Newly identified HCA incorporated within the one-year 192.905(c) clock.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    },
+    {
+     "name": "Cycle Time",
+     "definition": "SMRP 5.4.7 from new site information to a recorded HCA status.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    }
+   ],
+   "variants": [
+    "HCA by Class 3 or 4 under 49 CFR 192.903(1)(i)-(ii)",
+    "HCA by potential-impact circle and identified site",
+    "Covered segment - transmission in an HCA",
+    "Not HCA",
+    "Distribution - DIMP under 49 CFR 192.1001, not Subpart O"
+   ],
+   "notation": {
+    "class": "DMN",
+    "why": "The output is HCA, covered-segment, not-HCA or DIMP-distribution, plus the subpart that set it.",
+    "artifact": "models/17.3.3-hca-and-covered-segment.dmn"
+   },
+   "en17007": {
+    "process": "DTA.3",
+    "title": "Draw up and maintain an up-to-date list of critical items",
+    "clause": "6.10"
+   },
+   "sources": [
+    {
+     "for": "process",
+     "cite": "EN 17007:2017 cl. 6.10 DTA.3",
+     "status": "verified"
+    },
+    {
+     "for": "controls.regulatory",
+     "cite": "49 CFR 192.903; 49 CFR 192.905; 49 CFR 192.1001",
+     "status": "regulation"
+    },
+    {
+     "for": "interfaces",
+     "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 payloads; Annex A verbs",
+     "status": "clause-verified"
+    },
+    {
+     "for": "data_objects",
+     "cite": "IEC 61968-11:2013 CIM extensions for distribution, Work package",
+     "status": "clause-verified"
+    }
+   ],
+   "provenance": {
+    "basis": "regulation",
+    "primary": "49 CFR 192.903 high consequence area and covered segment"
+   }
+  },
+  {
+   "uid": 10558,
+   "id": "17.3.4",
+   "name": "Confirm jurisdictional and regulated-segment boundaries",
+   "group": {
+    "id": "17.3",
+    "name": "Determine the regulatory classification of the network",
+    "uid": 10554
+   },
+   "intent": "Return the jurisdiction of the segment and name the statute or part that set it.",
+   "activities": [
+    "Take the commodity and the function of the segment",
+    "For electric, return bulk-power or local-distribution under 16 U.S.C. 824o",
+    "For gas, return transmission, distribution or gathering under 49 CFR 192.3 and 192.8",
+    "Publish the class 8.0 and 17.2 will consume; do not list the obligations here"
+   ],
+   "trigger": {
+    "kind": "conditional",
+    "text": "A segment is new, reclassified, or its function has changed.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Segment function and commodity",
+     "party": "AM",
+     "data": "Asset"
+    },
+    {
+     "what": "Electric: whether the facility is used in local distribution",
+     "party": "NE",
+     "data": "Work"
+    },
+    {
+     "what": "Gas: transmission, distribution or gathering attributes",
+     "party": "AM",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Jurisdiction and the authority that set it",
+     "party": "AM",
+     "data": "Asset"
+    },
+    {
+     "what": "Flag consumed by 17.2.3, 17.3.2, 17.3.3 and 8.0",
+     "party": "NE",
+     "data": "Work"
+    }
+   ],
+   "systems": [
+    {
+     "component": "AM",
+     "role": "owning",
+     "service": "Jurisdictional class"
+    },
+    {
+     "component": "NE",
+     "role": "consuming",
+     "service": "Class used in planning"
+    },
+    {
+     "component": "MAI",
+     "role": "informed",
+     "service": "Class used by 8.0"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "AM",
+     "to": "NE",
+     "payload": "WorkRequest",
+     "verb": "change",
+     "pattern": "publish-subscribe"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Regulatory specialist",
+     "raci": "R"
+    },
+    {
+     "role": "Planning manager",
+     "raci": "A"
+    },
+    {
+     "role": "Integrity engineer",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Asset",
+    "Work",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "regulatory",
+     "text": "16 U.S.C. 824o(a)(1): bulk-power system does not include facilities used in the local distribution of electric energy. 824o(i)(1) limits the ERO to reliability standards for only the bulk-power system. Return bulk-power or local-distribution and name that statute."
+    },
+    {
+     "kind": "regulatory",
+     "text": "49 CFR 192.3 defines transmission line and distribution line. 192.8 and 192.9 are gathering. Subpart O applies to transmission; Subpart P (192.1001-1015) to distribution. Return the part and do not apply HCA to distribution."
+    }
+   ],
+   "measures": [
+    {
+     "name": "PM Compliance",
+     "definition": "SMRP 5.4.14. Every in-service segment has a recorded jurisdiction.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    },
+    {
+     "name": "ICT indicators",
+     "definition": "EN 15341 cl. 12 ICTi. Completeness of the jurisdictional flag 8.0 will read.",
+     "cite": "EN 15341:2019+A1:2022 cl. 12 ICTi"
+    }
+   ],
+   "variants": [
+    "Bulk-power under 16 U.S.C. 824o",
+    "Local distribution under 16 U.S.C. 824o(a)(1)",
+    "Part 192 Subpart O covered pipeline",
+    "Part 192 Subpart P DIMP",
+    "Gathering under 49 CFR 192.8 and 192.9"
+   ],
+   "notation": {
+    "class": "DMN",
+    "why": "The output is a jurisdiction and the statute or part that set it, not a list of obligations.",
+    "artifact": "models/17.3.4-jurisdictional-boundary.dmn"
+   },
+   "en17007": {
+    "process": "DTA.9",
+    "title": "Monitor methods, technologies, regulations, standards, etc",
+    "clause": "6.10"
+   },
+   "sources": [
+    {
+     "for": "process",
+     "cite": "EN 17007:2017 cl. 6.10 DTA.9",
+     "status": "verified"
+    },
+    {
+     "for": "electric",
+     "cite": "16 U.S.C. 824o(a)(1); 16 U.S.C. 824o(i)(1)",
+     "status": "regulation"
+    },
+    {
+     "for": "gas",
+     "cite": "49 CFR 192.3; 49 CFR 192.8; 49 CFR 192.9; 49 CFR 192.1001",
+     "status": "regulation"
+    },
+    {
+     "for": "interfaces",
+     "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 payloads; Annex A verbs",
+     "status": "clause-verified"
+    },
+    {
+     "for": "data_objects",
+     "cite": "IEC 61968-11:2013 CIM extensions for distribution, Work package",
+     "status": "clause-verified"
+    }
+   ],
+   "provenance": {
+    "basis": "regulation",
+    "primary": "16 U.S.C. 824o(a)(1) and 49 CFR 192.3"
+   }
+  },
+  {
+   "uid": 10559,
+   "id": "17.3.5",
+   "name": "Raise work from a classification change",
+   "group": {
+    "id": "17.3",
+    "name": "Determine the regulatory classification of the network",
+    "uid": 10554
+   },
+   "intent": "Turn a class, HCA or jurisdiction change into work 1.0 can take, on the clock the rule sets.",
+   "activities": [
+    "Take the new class, HCA status or jurisdiction",
+    "If 192.609 applies, raise the study as work",
+    "If 192.905(c) applies, raise baseline-assessment work within one year",
+    "Hand the work to 1.0; do not execute it here"
+   ],
+   "trigger": {
+    "kind": "conditional",
+    "text": "17.3.1, 17.3.2, 17.3.3 or 17.3.4 has returned a class that changed.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "New class, HCA status or jurisdiction",
+     "party": "AM",
+     "data": "Asset"
+    },
+    {
+     "what": "Previous class, HCA status or jurisdiction",
+     "party": "AM",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "192.611 path if MAOP is not commensurate",
+     "party": "AM",
+     "data": "Work"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Work request into 1.0",
+     "party": "MAI",
+     "data": "Work"
+    },
+    {
+     "what": "Clock: 24 months under 192.611(d), or one year under 192.905(c)",
+     "party": "SCHD",
+     "data": "WorkTimeSchedule"
+    }
+   ],
+   "systems": [
+    {
+     "component": "MAI",
+     "role": "owning",
+     "service": "Work raised from classification"
+    },
+    {
+     "component": "AM",
+     "role": "originating",
+     "service": "Classification change"
+    },
+    {
+     "component": "SCHD",
+     "role": "owning",
+     "service": "Statutory clock"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "AM",
+     "to": "MAI",
+     "payload": "WorkRequest",
+     "verb": "create",
+     "pattern": "event"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Integrity engineer",
+     "raci": "R"
+    },
+    {
+     "role": "Planning manager",
+     "raci": "A"
+    },
+    {
+     "role": "Work initiator",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "Asset",
+    "WorkTimeSchedule",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "regulatory",
+     "text": "49 CFR 192.609 raises an immediate study on a class-location increase for steel above 40 percent SMYS. 192.611(d) gives 24 months to confirm or revise MAOP. 192.905(c) gives one year to put a newly identified HCA into the baseline assessment plan."
+    },
+    {
+     "kind": "operational",
+     "text": "1.0 identifies and qualifies the work. This process only raises it. 8.0 will consume the new class for ongoing obligations. Do not start integrity assessments in 17.0."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Cycle Time",
+     "definition": "SMRP 5.4.7 from classification change to a work request in 1.0.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    },
+    {
+     "name": "Overdue Work",
+     "definition": "SMRP 5.4.11 against the 24-month 192.611(d) or one-year 192.905(c) clock.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    }
+   ],
+   "variants": [
+    "Class increase - 192.609 study on steel above 40 percent SMYS",
+    "New HCA - baseline plan within one year under 192.905(c)",
+    "MAOP confirmation work under 192.611",
+    "Electric segment moving onto or off 16 U.S.C. 824o"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "A classification change raises dated work into 1.0 on a known path.",
+    "artifact": "models/17.3-determine-the-regulatory-classification-of-the-network.bpmn"
+   },
+   "en17007": {
+    "process": "PRV.2",
+    "title": "Use and update the Maintenance Plans",
+    "clause": "6.3.3"
+   },
+   "sources": [
+    {
+     "for": "process",
+     "cite": "EN 17007:2017 cl. 6.3.3 PRV.2",
+     "status": "verified"
+    },
+    {
+     "for": "controls.regulatory",
+     "cite": "49 CFR 192.609; 49 CFR 192.611(d); 49 CFR 192.905(c)",
+     "status": "regulation"
+    },
+    {
+     "for": "interfaces",
+     "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 payloads; Annex A verbs",
+     "status": "clause-verified"
+    },
+    {
+     "for": "data_objects",
+     "cite": "IEC 61968-11:2013 CIM extensions for distribution, Work package",
+     "status": "clause-verified"
+    }
+   ],
+   "provenance": {
+    "basis": "regulation",
+    "primary": "49 CFR 192.905(c) newly identified high consequence area"
+   }
+  },
+  {
+   "uid": 10561,
+   "id": "17.4.1",
+   "name": "Define the capital investment plan",
+   "group": {
+    "id": "17.4",
+    "name": "Build and monitor the capital programme",
+    "uid": 10560
+   },
+   "intent": "Write the multi-year list of selected solutions 17.2.6 released, as the plan 2.4.1 will later check against.",
+   "activities": [
+    "Collect selected solutions from 17.2.6",
+    "Place them by year, area and funding type",
+    "Record the 17.3 classification each item carries",
+    "Publish the plan; do not authorise individual work here"
+   ],
+   "trigger": {
+    "kind": "timer",
+    "text": "Planning cycle, or a selected solution has been released from 17.2.6.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Selected solutions and recorded bases",
+     "party": "DGN",
+     "data": "Work"
+    },
+    {
+     "what": "Whole-life comparison from 17.2.2",
+     "party": "FIN",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Current plan, if this is a revision",
+     "party": "NE",
+     "data": "Work"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Capital investment plan by year",
+     "party": "NE",
+     "data": "Work"
+    },
+    {
+     "what": "Plan 2.4.1 will validate items against",
+     "party": "FIN",
+     "data": "Work"
+    }
+   ],
+   "systems": [
+    {
+     "component": "NE",
+     "role": "owning",
+     "service": "Capital investment plan"
+    },
+    {
+     "component": "FIN",
+     "role": "consuming",
+     "service": "Plan used at 2.4.1"
+    },
+    {
+     "component": "DGN",
+     "role": "originating",
+     "service": "Selected solutions"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "DGN",
+     "to": "NE",
+     "payload": "WorkRequest",
+     "verb": "change",
+     "pattern": "batch"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Programme manager",
+     "raci": "A"
+    },
+    {
+     "role": "Planning manager",
+     "raci": "R"
+    },
+    {
+     "role": "Finance controller",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "APQC 10.2.1.1 (pcf_id 19210) is define capital investment plan. 2.4.1 validates funding for one work item against this plan. Do not re-decide the programme at the work-order gate."
+    },
+    {
+     "kind": "regulatory",
+     "text": "7 CFR 1710.250(e): RUS facilities must be approved and receive environmental clearance before the start of construction. For a borrower, the item must sit in an approved construction work plan."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Planned Work",
+     "definition": "SMRP 5.3.1. Work that sits on this plan can be planned; work that does not is a gate failure at 2.4.1.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    },
+    {
+     "name": "Cycle Time",
+     "definition": "SMRP 5.4.7 from selected solutions to a published plan.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    }
+   ],
+   "variants": [
+    "Multi-year capital plan",
+    "RUS construction work plan under 7 CFR 1710.250",
+    "Amendment adding facilities to an approved plan"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "Selected solutions are assembled into a published multi-year plan.",
+    "artifact": "models/17.4-build-and-monitor-the-capital-programme.bpmn"
+   },
+   "en17007": {
+    "process": "MAN.1",
+    "title": "Establish the maintenance policy, strategy and development actions",
+    "clause": "6.2"
+   },
+   "sources": [
+    {
+     "for": "process",
+     "cite": "EN 17007:2017 cl. 6.2 MAN.1",
+     "status": "verified"
+    },
+    {
+     "for": "planning duty",
+     "cite": "ANSI/ASTM/ISO 55001-2024 cl. 6.2.2 asset management planning",
+     "status": "clause-verified"
+    },
+    {
+     "for": "structure",
+     "cite": "APQC PCF Utilities v7.2.1 10.2.1.1 Define capital investment plan (pcf_id 19210) - structural precedent only",
+     "status": "consensus"
+    },
+    {
+     "for": "RUS",
+     "cite": "7 CFR 1710.250(e)",
+     "status": "regulation"
+    },
+    {
+     "for": "interfaces",
+     "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 payloads; Annex A verbs",
+     "status": "clause-verified"
+    },
+    {
+     "for": "data_objects",
+     "cite": "IEC 61968-11:2013 CIM extensions for distribution, Work package",
+     "status": "clause-verified"
+    }
+   ],
+   "provenance": {
+    "basis": "standard",
+    "primary": "ANSI/ASTM/ISO 55001-2024 cl. 6.2.2 asset management planning"
+   }
+  },
+  {
+   "uid": 10562,
+   "id": "17.4.2",
+   "name": "Prioritise and balance the investment portfolio",
+   "group": {
+    "id": "17.4",
+    "name": "Build and monitor the capital programme",
+    "uid": 10560
+   },
+   "intent": "Order the plan when it will not all fit the years and money available.",
+   "activities": [
+    "Take the plan from 17.4.1 and the money and years available",
+    "Order items, naming the rule used",
+    "Record what was deferred and why",
+    "Do not invent a scoring model - the rule is the operator's unless a statute ranks the item"
+   ],
+   "trigger": {
+    "kind": "conditional",
+    "text": "The plan will not fit the years or the money available.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Capital investment plan",
+     "party": "NE",
+     "data": "Work"
+    },
+    {
+     "what": "Money and years available",
+     "party": "FIN",
+     "data": "Work"
+    },
+    {
+     "what": "Statutory clocks from 17.3.5",
+     "party": "SCHD",
+     "data": "WorkTimeSchedule"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Ordered plan, with deferred items named",
+     "party": "NE",
+     "data": "Work"
+    },
+    {
+     "what": "Deferral record",
+     "party": "FIN",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "systems": [
+    {
+     "component": "NE",
+     "role": "owning",
+     "service": "Portfolio order"
+    },
+    {
+     "component": "FIN",
+     "role": "reference",
+     "service": "Money available"
+    },
+    {
+     "component": "SCHD",
+     "role": "reference",
+     "service": "Statutory clocks"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "FIN",
+     "to": "NE",
+     "payload": "WorkRequest",
+     "verb": "change",
+     "pattern": "event"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Programme manager",
+     "raci": "A"
+    },
+    {
+     "role": "Planning manager",
+     "raci": "R"
+    },
+    {
+     "role": "Finance controller",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkTimeSchedule",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "ISO 55002:2018 cl. 8.1.2 is decision-making criteria - title only, body paywalled. No pack source states a portfolio score. A 192.611(d) 24-month clock outranks preference. That is why this is SPEC, not DMN."
+    },
+    {
+     "kind": "operational",
+     "text": "Do not build a second optimiser. 3.4 optimises the work schedule. This process only orders the capital plan."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Planned Work",
+     "definition": "SMRP 5.3.1. Ordered items remain planned; silently dropped items do not.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    },
+    {
+     "name": "Backlog",
+     "definition": "SMRP 5.4.8. Deferred capital items are backlog against the plan.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    }
+   ],
+   "variants": [
+    "Ranked by a statutory clock from 17.3.5",
+    "Ranked by capacity shortfall from 17.1.5",
+    "Ranked by the operator's published whole-life rule from 17.5.1"
+   ],
+   "notation": {
+    "class": "SPEC",
+    "why": "A determination whose rule no source states. No pack source gives a portfolio score; statutory clocks still bind.",
+    "artifact": null
+   },
+   "en17007": {
+    "process": "OPT.7",
+    "title": "Prioritize improvements for future investments (MRQ process)",
+    "clause": "6.13"
+   },
+   "sources": [
+    {
+     "for": "process",
+     "cite": "EN 17007:2017 cl. 6.13 OPT.7",
+     "status": "verified"
+    },
+    {
+     "for": "criteria",
+     "cite": "ISO 55002:2018 cl. 8.1.2 decision-making criteria",
+     "status": "clause-verified"
+    },
+    {
+     "for": "landscape",
+     "cite": "GFMAM Asset Management Landscape 3rd ed. v3.0, 2024-06, subject 3.4 Planning",
+     "status": "verified"
+    },
+    {
+     "for": "interfaces",
+     "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 payloads; Annex A verbs",
+     "status": "clause-verified"
+    },
+    {
+     "for": "data_objects",
+     "cite": "IEC 61968-11:2013 CIM extensions for distribution, Work package",
+     "status": "clause-verified"
+    },
+    {
+     "for": "score",
+     "cite": "No pack source states a capital-portfolio scoring method",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "standard",
+    "primary": "ISO 55002:2018 cl. 8.1.2 decision-making criteria"
+   }
+  },
+  {
+   "uid": 10563,
+   "id": "17.4.3",
+   "name": "Secure programme funding and external financing",
+   "group": {
+    "id": "17.4",
+    "name": "Build and monitor the capital programme",
+    "uid": 10560
+   },
+   "intent": "Put money against the ordered plan, including borrower or third-party finance where that is the route.",
+   "activities": [
+    "Take the ordered plan",
+    "Identify internal capital, borrower finance or third-party contribution",
+    "Secure the money the plan will charge",
+    "Hand the funded plan to 17.4.4"
+   ],
+   "trigger": {
+    "kind": "conditional",
+    "text": "An ordered plan needs money before a tranche can be released.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Ordered capital plan",
+     "party": "NE",
+     "data": "Work"
+    },
+    {
+     "what": "Internal capital position",
+     "party": "FIN",
+     "data": "Work"
+    },
+    {
+     "what": "Borrower or contribution conditions, if any",
+     "party": "FIN",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Funded plan, by source",
+     "party": "FIN",
+     "data": "Work"
+    },
+    {
+     "what": "Unfunded remainder held",
+     "party": "NE",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "systems": [
+    {
+     "component": "FIN",
+     "role": "owning",
+     "service": "Programme funding"
+    },
+    {
+     "component": "NE",
+     "role": "consuming",
+     "service": "Funded plan"
+    },
+    {
+     "component": "MAI",
+     "role": "informed",
+     "service": "Funding 2.4.1 will check"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "NE",
+     "to": "FIN",
+     "payload": "WorkRequest",
+     "verb": "change",
+     "pattern": "event"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Finance controller",
+     "raci": "A"
+    },
+    {
+     "role": "Programme manager",
+     "raci": "R"
+    },
+    {
+     "role": "Planning manager",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "financial",
+     "text": "18 CFR 101 Electric Plant Instruction 11 requires construction to be recorded by work order. Definition 8 is construction work in progress. Funding here is the programme purse; 2.4.1 commits the item."
+    },
+    {
+     "kind": "regulatory",
+     "text": "APQC 10.2.1.3 (pcf_id 19212) is secure construction financing. 7 CFR 1710.250(e) is the RUS approval-and-clearance gate. EN 17007 MAN.4 is budget setting, which is this process, not work authorisation."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Planned Work",
+     "definition": "SMRP 5.3.1. Funded plan items can be released; unfunded ones cannot.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    },
+    {
+     "name": "Maintenance cost",
+     "definition": "EN 15341 cl. 12 Mi. Programme funding is the purse, not a work-order actual.",
+     "cite": "EN 15341:2019+A1:2022 cl. 12 Mi maintenance-cost indicators"
+    }
+   ],
+   "variants": [
+    "Internal capital",
+    "RUS or other federal borrower finance under 7 CFR 1710.250",
+    "Third-party contribution, work type WT7"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "An ordered plan is funded from named sources before any tranche is released.",
+    "artifact": "models/17.4-build-and-monitor-the-capital-programme.bpmn"
+   },
+   "en17007": {
+    "process": "MAN.4",
+    "title": "Prepare and negotiate the budgets",
+    "clause": "6.2"
+   },
+   "sources": [
+    {
+     "for": "process",
+     "cite": "EN 17007:2017 cl. 6.2 MAN.4",
+     "status": "verified"
+    },
+    {
+     "for": "plant accounts",
+     "cite": "18 CFR 101 Electric Plant Instruction 11; Definition 8",
+     "status": "regulation"
+    },
+    {
+     "for": "RUS",
+     "cite": "7 CFR 1710.250(e)",
+     "status": "regulation"
+    },
+    {
+     "for": "structure",
+     "cite": "APQC PCF Utilities v7.2.1 10.2.1.3 Secure construction financing (pcf_id 19212) - structural precedent only",
+     "status": "consensus"
+    },
+    {
+     "for": "interfaces",
+     "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 payloads; Annex A verbs",
+     "status": "clause-verified"
+    },
+    {
+     "for": "data_objects",
+     "cite": "IEC 61968-11:2013 CIM extensions for distribution, Work package",
+     "status": "clause-verified"
+    }
+   ],
+   "provenance": {
+    "basis": "regulation",
+    "primary": "18 CFR 101 Electric Plant Instruction 11 Work Order and Property Record System Required"
+   }
+  },
+  {
+   "uid": 10564,
+   "id": "17.4.4",
+   "name": "Release programme tranches to work initiation",
+   "group": {
+    "id": "17.4",
+    "name": "Build and monitor the capital programme",
+    "uid": 10560
+   },
+   "intent": "Release a funded year or package as work 1.0 can take, so 2.4.1 has a programme to check against.",
+   "activities": [
+    "Take the funded plan and the year or package to release",
+    "Create work requests for the tranche",
+    "Hand them to 1.0",
+    "Leave unreleased years on the plan"
+   ],
+   "trigger": {
+    "kind": "timer",
+    "text": "The next funded year or package is due to become work.",
+    "cim": "WorkRequest.create"
+   },
+   "inputs": [
+    {
+     "what": "Funded capital plan",
+     "party": "FIN",
+     "data": "Work"
+    },
+    {
+     "what": "Year or package to release",
+     "party": "NE",
+     "data": "Work"
+    },
+    {
+     "what": "Classification each item carries from 17.3",
+     "party": "AM",
+     "data": "Asset"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Work requests for the tranche",
+     "party": "MAI",
+     "data": "Work"
+    },
+    {
+     "what": "Released versus remaining on the plan",
+     "party": "NE",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "systems": [
+    {
+     "component": "NE",
+     "role": "owning",
+     "service": "Tranche release"
+    },
+    {
+     "component": "MAI",
+     "role": "receiving",
+     "service": "Work initiation"
+    },
+    {
+     "component": "FIN",
+     "role": "reference",
+     "service": "Funded plan 2.4.1 will check"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "NE",
+     "to": "MAI",
+     "payload": "WorkRequest",
+     "verb": "create",
+     "pattern": "batch"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Programme manager",
+     "raci": "A"
+    },
+    {
+     "role": "Work initiator",
+     "raci": "R"
+    },
+    {
+     "role": "Planning manager",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "Asset",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "2.4.1 validates funding for the individual work item against the programme this process released. Do not re-decide the programme at that gate, and do not build a parallel optimiser."
+    },
+    {
+     "kind": "operational",
+     "text": "1.0 identifies and qualifies work. This process only releases a tranche. Design stays in 2.1."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Planned Work",
+     "definition": "SMRP 5.3.1. Released tranche items enter as planned capital.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    },
+    {
+     "name": "Schedule Compliance",
+     "definition": "SMRP 5.4.3. Tranche released in the year the plan named.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    }
+   ],
+   "variants": [
+    "Annual tranche to 1.0 as capital work",
+    "Package released after a 17.3.5 statutory clock",
+    "Unreleased remainder held on the plan"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "A funded year or package becomes work requests into 1.0.",
+    "artifact": "models/17.4-build-and-monitor-the-capital-programme.bpmn"
+   },
+   "en17007": {
+    "process": "PRV.2",
+    "title": "Use and update the Maintenance Plans",
+    "clause": "6.3.3"
+   },
+   "sources": [
+    {
+     "for": "process",
+     "cite": "EN 17007:2017 cl. 6.3.3 PRV.2",
+     "status": "verified"
+    },
+    {
+     "for": "planning duty",
+     "cite": "ANSI/ASTM/ISO 55001-2024 cl. 6.2.2 asset management planning",
+     "status": "clause-verified"
+    },
+    {
+     "for": "structure",
+     "cite": "APQC PCF Utilities v7.2.1 10.2.1 Manage capital program for productive assets (pcf_id 19209) - structural precedent only",
+     "status": "consensus"
+    },
+    {
+     "for": "interfaces",
+     "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 payloads; Annex A verbs",
+     "status": "clause-verified"
+    },
+    {
+     "for": "data_objects",
+     "cite": "IEC 61968-11:2013 CIM extensions for distribution, Work package",
+     "status": "clause-verified"
+    },
+    {
+     "for": "boundary",
+     "cite": "2.4.1 validates the item against this programme; 17.4.4 does not authorise the job",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "standard",
+    "primary": "ANSI/ASTM/ISO 55001-2024 cl. 6.2.2 asset management planning"
+   }
+  },
+  {
+   "uid": 10565,
+   "id": "17.4.5",
+   "name": "Monitor programme delivery and spend against plan",
+   "group": {
+    "id": "17.4",
+    "name": "Build and monitor the capital programme",
+    "uid": 10560
+   },
+   "intent": "Compare what was released with what has been designed, built and spent, and name the variance.",
+   "activities": [
+    "Collect delivery and spend on released tranche items",
+    "Compare with the plan year and the funded amount",
+    "Record on-plan, overspend, delay or scope change",
+    "Hand scope or cost change to 17.4.6"
+   ],
+   "trigger": {
+    "kind": "timer",
+    "text": "Reporting cycle on a released tranche, or a material variance is visible.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Released tranche and funded amounts",
+     "party": "FIN",
+     "data": "Work"
+    },
+    {
+     "what": "Design, construction and closure progress",
+     "party": "CON",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Actual cost from 5.2",
+     "party": "FIN",
+     "data": "Work"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Variance: on-plan, overspend, delay or scope change",
+     "party": "NE",
+     "data": "Work"
+    },
+    {
+     "what": "Variance handed to 17.4.6 when it is a re-baseline",
+     "party": "FIN",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "systems": [
+    {
+     "component": "NE",
+     "role": "owning",
+     "service": "Programme monitor"
+    },
+    {
+     "component": "FIN",
+     "role": "reference",
+     "service": "Spend versus funded amount"
+    },
+    {
+     "component": "CON",
+     "role": "reference",
+     "service": "Delivery progress"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "CON",
+     "to": "NE",
+     "payload": "WorkRequest",
+     "verb": "get",
+     "pattern": "batch"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Programme manager",
+     "raci": "A"
+    },
+    {
+     "role": "Planning manager",
+     "raci": "R"
+    },
+    {
+     "role": "Finance controller",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "APQC 10.2.1.2 (pcf_id 19211) is monitor capital program. 15.1 measures after closure. This process watches the PROGRAMME, not the job. 5.2 supplies actuals; do not recode them here."
+    },
+    {
+     "kind": "financial",
+     "text": "18 CFR 101 Electric Plant Instruction 3 states the components of construction cost. Variance is against those components, not against an arbitrary overhead percentage (EPI 4(B))."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Cycle Time",
+     "definition": "SMRP 5.4.7. Programme items ageing past the plan year.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    },
+    {
+     "name": "Maintenance cost",
+     "definition": "EN 15341 cl. 12 Mi. Spend versus the funded plan.",
+     "cite": "EN 15341:2019+A1:2022 cl. 12 Mi maintenance-cost indicators"
+    }
+   ],
+   "variants": [
+    "On-plan",
+    "Overspend or delay",
+    "Scope change feeding 17.4.6"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "Released items are compared with plan year and funded amount on a repeating cycle.",
+    "artifact": "models/17.4-build-and-monitor-the-capital-programme.bpmn"
+   },
+   "en17007": {
+    "process": "MAN.5",
+    "title": "Oversee the actions",
+    "clause": "6.2"
+   },
+   "sources": [
+    {
+     "for": "process",
+     "cite": "EN 17007:2017 cl. 6.2 MAN.5",
+     "status": "verified"
+    },
+    {
+     "for": "structure",
+     "cite": "APQC PCF Utilities v7.2.1 10.2.1.2 Monitor capital program (pcf_id 19211) - structural precedent only",
+     "status": "consensus"
+    },
+    {
+     "for": "cost components",
+     "cite": "18 CFR 101 Electric Plant Instruction 3; EPI 4(B)",
+     "status": "regulation"
+    },
+    {
+     "for": "programme control",
+     "cite": "ISO 21502:2020 cl. 7.7 Cost management; cl. 7.10 Change control",
+     "status": "clause-verified"
+    },
+    {
+     "for": "interfaces",
+     "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 payloads; Annex A verbs",
+     "status": "clause-verified"
+    },
+    {
+     "for": "data_objects",
+     "cite": "IEC 61968-11:2013 CIM extensions for distribution, Work package",
+     "status": "clause-verified"
+    }
+   ],
+   "provenance": {
+    "basis": "regulation",
+    "primary": "18 CFR 101 Electric Plant Instruction 3 Components of construction cost"
+   }
+  },
+  {
+   "uid": 10566,
+   "id": "17.4.6",
+   "name": "Re-baseline the programme",
+   "group": {
+    "id": "17.4",
+    "name": "Build and monitor the capital programme",
+    "uid": 10560
+   },
+   "intent": "Change the published plan when cost, scope or a classification clock has made the old one untrue.",
+   "activities": [
+    "Take the variance from 17.4.5 or a classification change from 17.3.5",
+    "Revise year, cost or scope",
+    "Record the change and its authorisation",
+    "Publish the new baseline; do not silently overwrite the old one"
+   ],
+   "trigger": {
+    "kind": "conditional",
+    "text": "A variance or a classification clock has made the published plan untrue.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Variance from 17.4.5",
+     "party": "NE",
+     "data": "Work"
+    },
+    {
+     "what": "Classification-driven work from 17.3.5",
+     "party": "MAI",
+     "data": "Work"
+    },
+    {
+     "what": "Current published plan",
+     "party": "FIN",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "New baseline, with the change authorised",
+     "party": "NE",
+     "data": "Work"
+    },
+    {
+     "what": "Superseded baseline retained",
+     "party": "FIN",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "systems": [
+    {
+     "component": "NE",
+     "role": "owning",
+     "service": "Programme baseline"
+    },
+    {
+     "component": "FIN",
+     "role": "recording",
+     "service": "Authorised change"
+    },
+    {
+     "component": "MAI",
+     "role": "originating",
+     "service": "Classification-driven work"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "NE",
+     "to": "FIN",
+     "payload": "WorkRequest",
+     "verb": "change",
+     "pattern": "event"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Programme manager",
+     "raci": "A"
+    },
+    {
+     "role": "Planning manager",
+     "raci": "R"
+    },
+    {
+     "role": "Finance controller",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "ISO 55001:2024 cl. 6.3 is planning of changes; cl. 8.2 is control of change. ISO 9001:2015 cl. 8.3.6 requires retained authorisation of design changes. ISO 21502:2020 cl. 7.10 is change control."
+    },
+    {
+     "kind": "operational",
+     "text": "A silent overwrite leaves 2.4.1 checking a plan that no longer exists. Keep the superseded baseline."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Rework",
+     "definition": "SMRP 4.1. Work released against a baseline later changed without a record.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    },
+    {
+     "name": "Cycle Time",
+     "definition": "SMRP 5.4.7 from variance to a published new baseline.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    }
+   ],
+   "variants": [
+    "Cost re-baseline",
+    "Scope re-baseline",
+    "Obligation change from 17.3.5"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "A variance or a classification clock produces an authorised new baseline.",
+    "artifact": "models/17.4-build-and-monitor-the-capital-programme.bpmn"
+   },
+   "en17007": {
+    "process": "MAN.7",
+    "title": "Define policy and strategy areas of improvement",
+    "clause": "6.2"
+   },
+   "sources": [
+    {
+     "for": "process",
+     "cite": "EN 17007:2017 cl. 6.2 MAN.7",
+     "status": "verified"
+    },
+    {
+     "for": "changes",
+     "cite": "ANSI/ASTM/ISO 55001-2024 cl. 6.3 Planning of changes; cl. 8.2 Control of change",
+     "status": "clause-verified"
+    },
+    {
+     "for": "design changes",
+     "cite": "ISO 9001:2015 cl. 8.3.6 Design and development changes",
+     "status": "clause-verified"
+    },
+    {
+     "for": "programme change",
+     "cite": "ISO 21502:2020 cl. 7.10 Change control",
+     "status": "clause-verified"
+    },
+    {
+     "for": "interfaces",
+     "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 payloads; Annex A verbs",
+     "status": "clause-verified"
+    },
+    {
+     "for": "data_objects",
+     "cite": "IEC 61968-11:2013 CIM extensions for distribution, Work package",
+     "status": "clause-verified"
+    }
+   ],
+   "provenance": {
+    "basis": "standard",
+    "primary": "ANSI/ASTM/ISO 55001-2024 cl. 6.3 Planning of changes"
+   }
+  },
+  {
+   "uid": 10568,
+   "id": "17.5.1",
+   "name": "Establish the whole-life cost basis by asset class",
+   "group": {
+    "id": "17.5",
+    "name": "Realise whole-life value",
+    "uid": 10567
+   },
+   "intent": "Publish the cost elements 17.2.2 will use, by asset class, without inventing the arithmetic.",
+   "activities": [
+    "Name the asset classes the basis covers",
+    "Name the cost elements - capital, operate, maintain, dispose",
+    "Name the horizon",
+    "Publish the basis; do not compute an option here"
+   ],
+   "trigger": {
+    "kind": "manual",
+    "text": "The whole-life basis is due for issue or revision.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Asset classes in the register",
+     "party": "AM",
+     "data": "Asset"
+    },
+    {
+     "what": "Capital, operating and disposal cost history",
+     "party": "FIN",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Published whole-life basis by asset class",
+     "party": "FIN",
+     "data": "Work"
+    },
+    {
+     "what": "Classes with no basis yet",
+     "party": "AM",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "systems": [
+    {
+     "component": "FIN",
+     "role": "owning",
+     "service": "Whole-life basis"
+    },
+    {
+     "component": "AM",
+     "role": "reference",
+     "service": "Asset classes"
+    },
+    {
+     "component": "DGN",
+     "role": "consuming",
+     "service": "Basis 17.2.2 will apply"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "AM",
+     "to": "FIN",
+     "payload": "WorkRequest",
+     "verb": "get",
+     "pattern": "batch"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Finance analyst",
+     "raci": "R"
+    },
+    {
+     "role": "Planning manager",
+     "raci": "A"
+    },
+    {
+     "role": "Asset manager",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "Asset",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "GFMAM subject 3.6 is Life cycle Value Realization. ISO 55001:2024 cl. 8.1 requires life cycle management. EN 17485:2021 cl. 5.3 and cl. 5.6 are cited by number only. None of them states the discount rate or the risk-cost formula. That is why this is SPEC, not DMN."
+    },
+    {
+     "kind": "financial",
+     "text": "18 CFR 101 Electric Plant Instruction 3 lists components of construction cost. That is the capital leg of the basis, not the whole life."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Maintenance cost",
+     "definition": "EN 15341 cl. 12 Mi. The basis names cost elements; it does not charge a job.",
+     "cite": "EN 15341:2019+A1:2022 cl. 12 Mi maintenance-cost indicators"
+    },
+    {
+     "name": "ICT indicators",
+     "definition": "EN 15341 cl. 12 ICTi. Completeness of the basis across asset classes.",
+     "cite": "EN 15341:2019+A1:2022 cl. 12 ICTi"
+    }
+   ],
+   "variants": [
+    "Replacement-cost elements named",
+    "Operating and maintenance elements named",
+    "Disposal elements named"
+   ],
+   "notation": {
+    "class": "SPEC",
+    "why": "A determination whose rule no source states. ISO 55001 cl. 8.1 requires a life-cycle basis; it does not give the formula.",
+    "artifact": null
+   },
+   "en17007": {
+    "process": "BUD.1",
+    "title": "Define, compile cost elements and calculate or estimate actual costs",
+    "clause": "6.8"
+   },
+   "sources": [
+    {
+     "for": "process",
+     "cite": "EN 17007:2017 cl. 6.8 BUD.1",
+     "status": "verified"
+    },
+    {
+     "for": "life cycle",
+     "cite": "ANSI/ASTM/ISO 55001-2024 cl. 8.1 operational planning and control including life cycle management",
+     "status": "clause-verified"
+    },
+    {
+     "for": "landscape",
+     "cite": "GFMAM Asset Management Landscape 3rd ed. v3.0, 2024-06, subject 3.6 Life cycle Value Realization",
+     "status": "verified"
+    },
+    {
+     "for": "value framework",
+     "cite": "EN 17485:2021 cl. 5.3; cl. 5.6",
+     "status": "clause-verified"
+    },
+    {
+     "for": "capital leg",
+     "cite": "18 CFR 101 Electric Plant Instruction 3",
+     "status": "regulation"
+    },
+    {
+     "for": "interfaces",
+     "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 payloads; Annex A verbs",
+     "status": "clause-verified"
+    },
+    {
+     "for": "data_objects",
+     "cite": "IEC 61968-11:2013 CIM extensions for distribution, Work package",
+     "status": "clause-verified"
+    },
+    {
+     "for": "formula",
+     "cite": "No pack source states discount rate or risk-cost arithmetic for a whole-life basis",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "standard",
+    "primary": "GFMAM Asset Management Landscape 3rd ed. subject 3.6 Life cycle Value Realization"
+   }
+  },
+  {
+   "uid": 10569,
+   "id": "17.5.2",
+   "name": "Compare intervention options over the asset life cycle",
+   "group": {
+    "id": "17.5",
+    "name": "Realise whole-life value",
+    "uid": 10567
+   },
+   "intent": "Apply the published basis to the options 17.2.1 developed, including a do-nothing case.",
+   "activities": [
+    "Take the option set and the published basis",
+    "Apply the basis across the named horizon",
+    "Include a do-nothing case",
+    "Hand the comparison to 17.2.2 and 17.2.6"
+   ],
+   "trigger": {
+    "kind": "conditional",
+    "text": "An option set is ready to be compared on the published whole-life basis.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Option set from 17.2.1",
+     "party": "DGN",
+     "data": "Work"
+    },
+    {
+     "what": "Published whole-life basis from 17.5.1",
+     "party": "FIN",
+     "data": "Work"
+    },
+    {
+     "what": "Classification of the segment from 17.3",
+     "party": "AM",
+     "data": "Asset"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Life-cycle comparison of the options",
+     "party": "FIN",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Comparison available to 17.2.6",
+     "party": "DGN",
+     "data": "Work"
+    }
+   ],
+   "systems": [
+    {
+     "component": "FIN",
+     "role": "owning",
+     "service": "Life-cycle comparison"
+    },
+    {
+     "component": "DGN",
+     "role": "originating",
+     "service": "Option set"
+    },
+    {
+     "component": "AM",
+     "role": "reference",
+     "service": "Segment classification"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "DGN",
+     "to": "FIN",
+     "payload": "WorkRequest",
+     "verb": "get",
+     "pattern": "request-reply"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Planning engineer",
+     "raci": "R"
+    },
+    {
+     "role": "Planning manager",
+     "raci": "A"
+    },
+    {
+     "role": "Finance analyst",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "Asset",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "This process APPLIES the 17.5.1 basis and owns the arithmetic. It does not invent a second formula, and 17.2.2 does not repeat this one - 17.2.2 weighs this comparison against what the basis cannot price."
+    },
+    {
+     "kind": "operational",
+     "text": "ISO 55001:2024 cl. 8.1 is the duty to consider the life cycle. The do-nothing case is required so a preference is visible as a preference."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Maintenance cost",
+     "definition": "EN 15341 cl. 12 Mi. Comparison is in cost terms the basis named.",
+     "cite": "EN 15341:2019+A1:2022 cl. 12 Mi maintenance-cost indicators"
+    },
+    {
+     "name": "Planned Work",
+     "definition": "SMRP 5.3.1. Compared options can be selected in 17.2.6.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    }
+   ],
+   "variants": [
+    "Build versus operate-differently, over the named horizon",
+    "Replace versus repair, over the remaining life",
+    "Do-nothing case recorded"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "A published basis is applied to an option set, including do-nothing, on a known path.",
+    "artifact": "models/17.5-realise-whole-life-value.bpmn"
+   },
+   "en17007": {
+    "process": "OPT.7",
+    "title": "Prioritize improvements for future investments (MRQ process)",
+    "clause": "6.13"
+   },
+   "sources": [
+    {
+     "for": "process",
+     "cite": "EN 17007:2017 cl. 6.13 OPT.7",
+     "status": "verified"
+    },
+    {
+     "for": "life cycle",
+     "cite": "ANSI/ASTM/ISO 55001-2024 cl. 8.1 operational planning and control including life cycle management",
+     "status": "clause-verified"
+    },
+    {
+     "for": "landscape",
+     "cite": "GFMAM Asset Management Landscape 3rd ed. v3.0, 2024-06, subject 3.6 Life cycle Value Realization",
+     "status": "verified"
+    },
+    {
+     "for": "interfaces",
+     "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 payloads; Annex A verbs",
+     "status": "clause-verified"
+    },
+    {
+     "for": "data_objects",
+     "cite": "IEC 61968-11:2013 CIM extensions for distribution, Work package",
+     "status": "clause-verified"
+    }
+   ],
+   "provenance": {
+    "basis": "standard",
+    "primary": "ANSI/ASTM/ISO 55001-2024 cl. 8.1 life cycle management"
+   }
+  },
+  {
+   "uid": 10570,
+   "id": "17.5.3",
+   "name": "Evaluate delivered outcomes against the investment case",
+   "group": {
+    "id": "17.5",
+    "name": "Realise whole-life value",
+    "uid": 10567
+   },
+   "intent": "After the plant is in service, compare what was delivered with the basis recorded at 17.2.6.",
+   "activities": [
+    "Take the recorded basis from 17.2.6 and the as-built from 5.4",
+    "Compare delivered capacity, reliability and cost with the case",
+    "Record met, missed or not-yet-measurable",
+    "Hand missed outcomes to 17.5.4"
+   ],
+   "trigger": {
+    "kind": "conditional",
+    "text": "A capital item has been handed into service and has a recorded investment case.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Recorded basis from 17.2.6",
+     "party": "DGN",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "As-built and in-service record from 5.4",
+     "party": "AM",
+     "data": "Asset"
+    },
+    {
+     "what": "Reliability performance after in-service",
+     "party": "AM",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Met, missed or not-yet-measurable against the case",
+     "party": "FIN",
+     "data": "Work"
+    },
+    {
+     "what": "Missed outcome handed to 17.5.4",
+     "party": "NE",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "systems": [
+    {
+     "component": "FIN",
+     "role": "owning",
+     "service": "Outcome versus case"
+    },
+    {
+     "component": "AM",
+     "role": "reference",
+     "service": "In-service plant"
+    },
+    {
+     "component": "NE",
+     "role": "consuming",
+     "service": "Missed outcomes"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "AM",
+     "to": "FIN",
+     "payload": "WorkRequest",
+     "verb": "get",
+     "pattern": "batch"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Planning manager",
+     "raci": "A"
+    },
+    {
+     "role": "Finance analyst",
+     "raci": "R"
+    },
+    {
+     "role": "Reliability engineer",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "Asset",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "ISO 9001:2015 cl. 8.6 is release of products and services. 19.1 commissions the plant. This process evaluates the CASE, after in-service, not the commissioning test."
+    },
+    {
+     "kind": "operational",
+     "text": "IEEE 1366-2022 is the reliability method where the case used it. Do not invent a new index at evaluation."
+    }
+   ],
+   "measures": [
+    {
+     "name": "SAIDI",
+     "definition": "IEEE 1366-2022 where the investment case used duration.",
+     "cite": "IEEE 1366-2022"
+    },
+    {
+     "name": "Rework",
+     "definition": "SMRP 4.1. Plant that missed the recorded case.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    }
+   ],
+   "variants": [
+    "Delivered capacity matches the case",
+    "Delivered reliability against IEEE 1366 matches the case",
+    "Cost out-turn against the case"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "In-service plant is compared with the recorded case and returns met, missed or not-yet-measurable.",
+    "artifact": "models/17.5-realise-whole-life-value.bpmn"
+   },
+   "en17007": {
+    "process": "BUD.1",
+    "title": "Define, compile cost elements and calculate or estimate actual costs",
+    "clause": "6.8"
+   },
+   "sources": [
+    {
+     "for": "process",
+     "cite": "EN 17007:2017 cl. 6.8 BUD.1",
+     "status": "verified"
+    },
+    {
+     "for": "release",
+     "cite": "ISO 9001:2015 cl. 8.6 Release of products and services",
+     "status": "clause-verified"
+    },
+    {
+     "for": "landscape",
+     "cite": "GFMAM Asset Management Landscape 3rd ed. v3.0, 2024-06, subject 3.6 Life cycle Value Realization",
+     "status": "verified"
+    },
+    {
+     "for": "reliability method",
+     "cite": "IEEE 1366-2022",
+     "status": "consensus"
+    },
+    {
+     "for": "interfaces",
+     "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 payloads; Annex A verbs",
+     "status": "clause-verified"
+    },
+    {
+     "for": "data_objects",
+     "cite": "IEC 61968-11:2013 CIM extensions for distribution, Work package",
+     "status": "clause-verified"
+    }
+   ],
+   "provenance": {
+    "basis": "standard",
+    "primary": "GFMAM Asset Management Landscape 3rd ed. subject 3.6 Life cycle Value Realization"
+   }
+  },
+  {
+   "uid": 10571,
+   "id": "17.5.4",
+   "name": "Feed results back into strategy and design standards",
+   "group": {
+    "id": "17.5",
+    "name": "Realise whole-life value",
+    "uid": 10567
+   },
+   "intent": "Change the basis, the design standard or the plan when delivered outcomes missed the case.",
+   "activities": [
+    "Take missed outcomes from 17.5.3",
+    "Decide whether the basis, a design standard, or the plan must change",
+    "Raise the change to 17.5.1, 2.1 or 17.4.6",
+    "Do not silently edit a standard"
+   ],
+   "trigger": {
+    "kind": "conditional",
+    "text": "A delivered outcome has been returned as missed against the investment case.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Missed outcomes from 17.5.3",
+     "party": "FIN",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Current design standards",
+     "party": "DGN",
+     "data": "Work"
+    },
+    {
+     "what": "Current whole-life basis",
+     "party": "FIN",
+     "data": "Work"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Change raised to 17.5.1, 2.1 or 17.4.6",
+     "party": "NE",
+     "data": "Work"
+    },
+    {
+     "what": "Authorised change record",
+     "party": "DGN",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "systems": [
+    {
+     "component": "NE",
+     "role": "owning",
+     "service": "Feedback to strategy"
+    },
+    {
+     "component": "DGN",
+     "role": "consuming",
+     "service": "Design-standard change"
+    },
+    {
+     "component": "FIN",
+     "role": "consuming",
+     "service": "Basis change"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "FIN",
+     "to": "NE",
+     "payload": "WorkRequest",
+     "verb": "create",
+     "pattern": "event"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Planning manager",
+     "raci": "A"
+    },
+    {
+     "role": "Asset manager",
+     "raci": "R"
+    },
+    {
+     "role": "Design engineer",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "ISO 55001:2024 cl. 6.3 planning of changes and cl. 8.2 control of change. ISO 9001:2015 cl. 8.3.6 retained authorisation of design changes. 12.5 still owns maintenance strategy; this process only raises the change."
+    },
+    {
+     "kind": "operational",
+     "text": "MAN.7 is define policy and strategy areas of improvement. A silent edit of a design standard is the failure this process exists to prevent."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Rework",
+     "definition": "SMRP 4.1. The same miss repeated because the standard was not changed.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    },
+    {
+     "name": "Cycle Time",
+     "definition": "SMRP 5.4.7 from missed outcome to an authorised change request.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    }
+   ],
+   "variants": [
+    "Whole-life basis change into 17.5.1",
+    "Design-standard change into 2.1",
+    "Programme assumption change into 17.4.6"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "A missed outcome raises an authorised change to the basis, a standard or the plan.",
+    "artifact": "models/17.5-realise-whole-life-value.bpmn"
+   },
+   "en17007": {
+    "process": "MAN.7",
+    "title": "Define policy and strategy areas of improvement",
+    "clause": "6.2"
+   },
+   "sources": [
+    {
+     "for": "process",
+     "cite": "EN 17007:2017 cl. 6.2 MAN.7",
+     "status": "verified"
+    },
+    {
+     "for": "changes",
+     "cite": "ANSI/ASTM/ISO 55001-2024 cl. 6.3 Planning of changes; cl. 8.2 Control of change",
+     "status": "clause-verified"
+    },
+    {
+     "for": "design changes",
+     "cite": "ISO 9001:2015 cl. 8.3.6 Design and development changes",
+     "status": "clause-verified"
+    },
+    {
+     "for": "interfaces",
+     "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 payloads; Annex A verbs",
+     "status": "clause-verified"
+    },
+    {
+     "for": "data_objects",
+     "cite": "IEC 61968-11:2013 CIM extensions for distribution, Work package",
+     "status": "clause-verified"
+    }
+   ],
+   "provenance": {
+    "basis": "standard",
+    "primary": "ANSI/ASTM/ISO 55001-2024 cl. 6.3 Planning of changes"
+   }
+  }
+ ],
+ "merge_corrections": [
+  {
+   "date": "2026-08-29",
+   "by": "Claude",
+   "what": "ONE CORRECTION. 17.2.2 and 17.5.2 arrived with identical inputs (option set from 17.2.1, whole-life basis from 17.5.1, classification from 17.3) and identical outputs (a comparison, to FIN and to 17.2.6), and with opposite notation - SPEC and BPMN - for what would then be one act. The submission saw the collision and tried to hold it apart in a control, but a published basis applied to an option set is one application, not two. Resolved by giving 17.5.2 the arithmetic it already claimed and re-scoping 17.2.2 to the thing no source prices: weighing that comparison against deliverability, consent and the 192.611(d) and 192.905(c) clocks. 17.2.2 now consumes 17.5.2 rather than duplicating it, and stays SPEC because nothing states how an unpriced constraint is weighed against a priced comparison. Both processes are in model.json, so the overlap is the taxonomy's and not the submitter's - recorded here so the next reader knows which one owns what.",
+   "fields_changed": [
+    "17.2.2 intent",
+    "17.2.2 activities",
+    "17.2.2 trigger.text",
+    "17.2.2 inputs[1]",
+    "17.2.2 outputs",
+    "17.2.2 systems[0].service",
+    "17.2.2 controls (+1)",
+    "17.2.2 notation.why",
+    "17.2.2 sources judgment cite",
+    "17.5.2 controls[0]"
+   ],
+   "accepted_from_submitter": [
+    "17.3.3 returns DIMP-distribution as a class with 49 CFR 192.1001 as its authority, so 8.0 cannot apply Subpart O high-consequence-area obligations to a distribution main. This is the coordination 17.0 was sequenced ahead of 8.0 for, and it arrived without being asked for.",
+    "192.611(a)(4)(vii) bars the eligible-Class-3 integrity-management path for gathering and distribution lines, and 17.3.2 returns that bar as a class rather than inventing a distribution MAOP rule. Correct, and the kind of negative finding this reference is built on.",
+    "IEEE 1729-2025 is named in model.json's derivation for this category and is not in the Source Authority Pack. The submission refused to cite it and said so. That is the rule working: model.json's derivation line is now the thing to fix, not the specification.",
+    "Four SPEC processes, each justified as a determination whose rule no source states - forecast arithmetic, whole-life weighting, portfolio score, cost basis - rather than as 'standing'. This is the second SPEC case used correctly by another platform.",
+    "EN 17007 is named as the wrong spine for asset creation and ISO 55001 cl. 6.2.2 and cl. 8.1 named as the right one, instead of stretching CEN into a planning statute.",
+    "16 U.S.C. 824o(a)(1) and (i)(1) used to keep NERC TPL and PRC off local distribution, consistent with 7.0's treatment of FAC-003 and with 17.3.4."
+   ],
+   "models_built_here": "Nine artifacts, 5 BPMN and 4 DMN. Grok specifies them and cannot build them; only this side has the generator."
+  }
+ ]
+}

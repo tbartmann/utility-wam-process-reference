@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/" id="Maop_against_class" name="17.3.2 Confirm maximum allowable operating pressure against class" namespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <description>Returns which 49 CFR 192.611 path applies when the hoop stress corresponding to an established MAOP is no longer commensurate with the present class location. 192.609 is what puts the segment here: an increase in population density indicating a class change for steel operating above 40 percent of SMYS, or an MAOP no longer commensurate, requires the operator to IMMEDIATELY make the study that section lists. 192.611(d) then gives 24 months from the change to complete the confirmation or revision, and that clock is what 17.3.5 raises as work.
+
+The last row is the one to read. 192.611(a)(4) opens an integrity-management path for eligible Class 3 segments, and 192.611(a)(4)(vii) withholds it from gathering and distribution lines. The table returns THAT BAR AS A CLASS rather than inventing a distribution MAOP rule, because there is not one to invent.
+
+192.611(a) offers a further path this reference does not state. Where none of the enumerated paths fits, the table returns determineManually and names the section rather than choosing for the operator.</description>
+  <inputData id="in_commensurate" name="MAOP commensurate with the present class"><variable id="in_commensurate_v" name="MAOP commensurate with the present class" typeRef="boolean"/></inputData>
+  <inputData id="in_lineType" name="Line type under 49 CFR 192.3"><variable id="in_lineType_v" name="Line type under 49 CFR 192.3" typeRef="string"/></inputData>
+  <inputData id="in_path" name="Path the operator proposes under 192.611(a)"><variable id="in_path_v" name="Path the operator proposes under 192.611(a)" typeRef="string"/></inputData>
+  <knowledgeSource id="ks_192609" name="49 CFR 192.609 Change in class location: Required study; 49 CFR 192.611 Change in class location: Confirmation or revision of maximum allowable operating pressure"><description>192.609 requires the study immediately, for steel above 40 percent SMYS. 192.611(d) requires the confirmation or revision within 24 months of the class change. 192.611(a)(4)(vii) bars the eligible-Class-3 path for gathering and distribution.</description></knowledgeSource>
+  <decision id="d_17_3_2" name="MAOP path">
+    <variable id="d_17_3_2_v" name="MAOP path" typeRef="string"/>
+    <informationRequirement id="ir_d_17_3_2_ks_192609"><requiredInput href="#ks_192609"/></informationRequirement>
+    <decisionTable id="d_17_3_2_dt" hitPolicy="FIRST" preferredOrientation="Rule-as-Row">
+      <input id="d_17_3_2_i1" label="MAOP commensurate"><inputExpression id="d_17_3_2_i1_e" typeRef="boolean"><text>in_commensurate</text></inputExpression></input>
+      <input id="d_17_3_2_i2" label="Line type"><inputExpression id="d_17_3_2_i2_e" typeRef="string"><text>in_lineType</text></inputExpression></input>
+      <input id="d_17_3_2_i3" label="Proposed path"><inputExpression id="d_17_3_2_i3_e" typeRef="string"><text>in_path</text></inputExpression></input>
+      <output id="d_17_3_2_o" label="MAOP path" name="MAOP path" typeRef="string"/>
+      <rule id="d_17_3_2_r1">
+        <description>No MAOP change. The class may still have changed - 17.3.3 and 8.0 consume that independently of this answer.</description>
+        <inputEntry id="d_17_3_2_r1_ie1"><text>true</text></inputEntry>
+        <inputEntry id="d_17_3_2_r1_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_17_3_2_r1_ie3"><text>-</text></inputEntry>
+        <outputEntry id="d_17_3_2_r1_oe"><text>"commensurate"</text></outputEntry>
+      </rule>
+      <rule id="d_17_3_2_r2">
+        <description>49 CFR 192.611(a)(4)(vii). The integrity-management path is not authorised for a gathering or distribution line. This is a bar, not a default to something else: the operator returns to (a)(2) or (a)(3).</description>
+        <inputEntry id="d_17_3_2_r2_ie1"><text>false</text></inputEntry>
+        <inputEntry id="d_17_3_2_r2_ie2"><text>"gathering","distribution"</text></inputEntry>
+        <inputEntry id="d_17_3_2_r2_ie3"><text>"eligibleClass3IM"</text></inputEntry>
+        <outputEntry id="d_17_3_2_r2_oe"><text>"notAuthorised"</text></outputEntry>
+      </rule>
+      <rule id="d_17_3_2_r3">
+        <description>192.611(a)(2). MAOP reduced so the corresponding hoop stress is no more than this part allows for a new segment in the existing class location.</description>
+        <inputEntry id="d_17_3_2_r3_ie1"><text>false</text></inputEntry>
+        <inputEntry id="d_17_3_2_r3_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_17_3_2_r3_ie3"><text>"reduce"</text></inputEntry>
+        <outputEntry id="d_17_3_2_r3_oe"><text>"reduce"</text></outputEntry>
+      </rule>
+      <rule id="d_17_3_2_r4">
+        <description>192.611(a)(3). Tested under subpart J, with the MAOP then established under 192.619.</description>
+        <inputEntry id="d_17_3_2_r4_ie1"><text>false</text></inputEntry>
+        <inputEntry id="d_17_3_2_r4_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_17_3_2_r4_ie3"><text>"retest"</text></inputEntry>
+        <outputEntry id="d_17_3_2_r4_oe"><text>"retest"</text></outputEntry>
+      </rule>
+      <rule id="d_17_3_2_r5">
+        <description>192.611(a)(4). Available to an eligible Class 3 transmission segment and to nothing else.</description>
+        <inputEntry id="d_17_3_2_r5_ie1"><text>false</text></inputEntry>
+        <inputEntry id="d_17_3_2_r5_ie2"><text>"transmission"</text></inputEntry>
+        <inputEntry id="d_17_3_2_r5_ie3"><text>"eligibleClass3IM"</text></inputEntry>
+        <outputEntry id="d_17_3_2_r5_oe"><text>"eligibleClass3IM"</text></outputEntry>
+      </rule>
+      <rule id="d_17_3_2_r6">
+        <description>Line type or proposed path not established, or the segment qualifies under a 192.611(a) path this reference does not state. The 24-month clock at 192.611(d) runs either way, and 17.3.5 raises it.</description>
+        <inputEntry id="d_17_3_2_r6_ie1"><text>-</text></inputEntry>
+        <inputEntry id="d_17_3_2_r6_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_17_3_2_r6_ie3"><text>-</text></inputEntry>
+        <outputEntry id="d_17_3_2_r6_oe"><text>"determineManually"</text></outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram id="drd_Maop_against_class">
+      <dmndi:DMNShape id="sh_in_commensurate" dmnElementRef="in_commensurate"><dc:Bounds x="60" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_lineType" dmnElementRef="in_lineType"><dc:Bounds x="245" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_path" dmnElementRef="in_path"><dc:Bounds x="430" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_d_17_3_2" dmnElementRef="d_17_3_2"><dc:Bounds x="60" y="240" width="180" height="70"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_ks_192609" dmnElementRef="ks_192609"><dc:Bounds x="900" y="100" width="160" height="55"/></dmndi:DMNShape>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</definitions>

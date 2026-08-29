@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/" id="Hca_and_covered_segment" name="17.3.3 Determine high-consequence and covered-segment status" namespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <description>THE MOST CONSEQUENTIAL ROW IN THIS CATEGORY IS THE FIRST ONE. A distribution main is not a Subpart O covered segment. 49 CFR 192.903 defines a covered segment as a segment of gas TRANSMISSION pipeline in a high consequence area, and 192.1001 puts distribution under Subpart P - distribution integrity management - instead. The table returns dimpDistribution with that authority named so that 8.0 consumes a class rather than re-deriving one, and so that baseline assessment intervals and covered-segment obligations cannot be applied to a main.
+
+For transmission, 192.903 gives two ways to an HCA and 192.905 requires the operator to use method (1) or (2) and to describe which in the integrity management programme. 192.905(c) then gives one year to incorporate a newly identified high consequence area into the baseline assessment plan, and that is the clock 17.3.5 raises.</description>
+  <inputData id="in_lineType" name="Line type under 49 CFR 192.3"><variable id="in_lineType_v" name="Line type under 49 CFR 192.3" typeRef="string"/></inputData>
+  <inputData id="in_class" name="Class location from 17.3.1"><variable id="in_class_v" name="Class location from 17.3.1" typeRef="string"/></inputData>
+  <inputData id="in_pirCase" name="Potential-impact circle case: 20 or more buildings or an identified site"><variable id="in_pirCase_v" name="Potential-impact circle case: 20 or more buildings or an identified site" typeRef="boolean"/></inputData>
+  <knowledgeSource id="ks_subpartO" name="49 CFR 192.903 Definitions (covered segment, high consequence area); 49 CFR 192.905 How does an operator identify a high consequence area?; 49 CFR 192.1001 Distribution integrity management"><description>192.905 requires method (1) or (2) from 192.903 and its description in the IM programme; 192.905(c) requires a newly identified HCA to be incorporated into the baseline assessment plan within one year.</description></knowledgeSource>
+  <decision id="d_17_3_3" name="High-consequence status">
+    <variable id="d_17_3_3_v" name="High-consequence status" typeRef="string"/>
+    <informationRequirement id="ir_d_17_3_3_ks_subpartO"><requiredInput href="#ks_subpartO"/></informationRequirement>
+    <decisionTable id="d_17_3_3_dt" hitPolicy="FIRST" preferredOrientation="Rule-as-Row">
+      <input id="d_17_3_3_i1" label="Line type"><inputExpression id="d_17_3_3_i1_e" typeRef="string"><text>in_lineType</text></inputExpression></input>
+      <input id="d_17_3_3_i2" label="Class location"><inputExpression id="d_17_3_3_i2_e" typeRef="string"><text>in_class</text></inputExpression></input>
+      <input id="d_17_3_3_i3" label="Potential-impact circle case"><inputExpression id="d_17_3_3_i3_e" typeRef="boolean"><text>in_pirCase</text></inputExpression></input>
+      <output id="d_17_3_3_o" label="High-consequence status" name="High-consequence status" typeRef="string"/>
+      <rule id="d_17_3_3_r1">
+        <description>49 CFR 192.1001. Subpart P, not Subpart O. A distribution main has no covered segment and no baseline assessment plan, and applying either to one is the single most likely misreading of gas integrity obligations in this model.</description>
+        <inputEntry id="d_17_3_3_r1_ie1"><text>"distribution"</text></inputEntry>
+        <inputEntry id="d_17_3_3_r1_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_17_3_3_r1_ie3"><text>-</text></inputEntry>
+        <outputEntry id="d_17_3_3_r1_oe"><text>"dimpDistribution"</text></outputEntry>
+      </rule>
+      <rule id="d_17_3_3_r2">
+        <description>192.903, high consequence area by class location. A transmission segment in it is a covered segment.</description>
+        <inputEntry id="d_17_3_3_r2_ie1"><text>"transmission"</text></inputEntry>
+        <inputEntry id="d_17_3_3_r2_ie2"><text>"class3","class4"</text></inputEntry>
+        <inputEntry id="d_17_3_3_r2_ie3"><text>-</text></inputEntry>
+        <outputEntry id="d_17_3_3_r2_oe"><text>"coveredSegmentByClass"</text></outputEntry>
+      </rule>
+      <rule id="d_17_3_3_r3">
+        <description>192.903, the potential-impact-circle route: 20 or more buildings intended for human occupancy, or an identified site. 192.905 requires the operator to say which of the two methods it used.</description>
+        <inputEntry id="d_17_3_3_r3_ie1"><text>"transmission"</text></inputEntry>
+        <inputEntry id="d_17_3_3_r3_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_17_3_3_r3_ie3"><text>true</text></inputEntry>
+        <outputEntry id="d_17_3_3_r3_oe"><text>"coveredSegmentByPIR"</text></outputEntry>
+      </rule>
+      <rule id="d_17_3_3_r4">
+        <description>Transmission outside a high consequence area. Subpart O still applies to the pipeline; the covered-segment obligations do not apply to this segment.</description>
+        <inputEntry id="d_17_3_3_r4_ie1"><text>"transmission"</text></inputEntry>
+        <inputEntry id="d_17_3_3_r4_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_17_3_3_r4_ie3"><text>false</text></inputEntry>
+        <outputEntry id="d_17_3_3_r4_oe"><text>"notHCA"</text></outputEntry>
+      </rule>
+      <rule id="d_17_3_3_r5">
+        <description>49 CFR 192.8 and 192.9 decide which gathering lines are regulated and to what extent. This reference does not state that determination.</description>
+        <inputEntry id="d_17_3_3_r5_ie1"><text>"gathering"</text></inputEntry>
+        <inputEntry id="d_17_3_3_r5_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_17_3_3_r5_ie3"><text>-</text></inputEntry>
+        <outputEntry id="d_17_3_3_r5_oe"><text>"determineManually"</text></outputEntry>
+      </rule>
+      <rule id="d_17_3_3_r6">
+        <description>Line type not established. 17.3.4 settles it and this table consumes it.</description>
+        <inputEntry id="d_17_3_3_r6_ie1"><text>-</text></inputEntry>
+        <inputEntry id="d_17_3_3_r6_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_17_3_3_r6_ie3"><text>-</text></inputEntry>
+        <outputEntry id="d_17_3_3_r6_oe"><text>"determineManually"</text></outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram id="drd_Hca_and_covered_segment">
+      <dmndi:DMNShape id="sh_in_lineType" dmnElementRef="in_lineType"><dc:Bounds x="60" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_class" dmnElementRef="in_class"><dc:Bounds x="245" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_pirCase" dmnElementRef="in_pirCase"><dc:Bounds x="430" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_d_17_3_3" dmnElementRef="d_17_3_3"><dc:Bounds x="60" y="240" width="180" height="70"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_ks_subpartO" dmnElementRef="ks_subpartO"><dc:Bounds x="900" y="100" width="160" height="55"/></dmndi:DMNShape>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</definitions>
