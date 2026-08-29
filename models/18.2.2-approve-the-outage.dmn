@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/" id="Outage_decision" name="18.2.2 Approve, reject or defer the outage plan" namespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <description>A determination whose output is a value - the decision and what it is conditioned on - rather than a change of state, which is why it is a table and not a flow.
+
+READ THE ANNOTATIONS BEFORE THE RULES. No source states an outage approval rule. There is no federal, consensus or industry-body test for whether a planned outage should go ahead, and this reference holds none; 49 CFR 192.605 requires an operator to HAVE procedures for start-up and shutdown, not to approve outages by any particular test. What the table fixes is narrower and defensible: an unverified plan cannot be approved, and a plan whose contingency has not been agreed cannot be approved, because approving either one approves a network state nobody has checked. The ordering of everything else - which outage wins, what a deferral costs, when a condition is enough - is the operator's, and 18.2.4 is where it is actually settled between people.
+
+The one hard input is the request itself. 29 CFR 1910.269(m)(3)(i) makes the request to deenergize a particular section an act of the employee in charge at execution time. An approval here is not that request and does not substitute for it: approving an outage plan authorises a window, not a deenergization.</description>
+  <inputData id="in_verified" name="Plan verified against the current network state (18.1.4)"><variable id="in_verified_v" name="Plan verified against the current network state (18.1.4)" typeRef="boolean"/></inputData>
+  <inputData id="in_contingency" name="Abnormal conditions and contingency agreed (18.1.5)"><variable id="in_contingency_v" name="Abnormal conditions and contingency agreed (18.1.5)" typeRef="boolean"/></inputData>
+  <inputData id="in_contends" name="Contends with another submitted or approved outage"><variable id="in_contends_v" name="Contends with another submitted or approved outage" typeRef="boolean"/></inputData>
+  <inputData id="in_stateAcceptable" name="Network state the plan leaves is acceptable for the duration"><variable id="in_stateAcceptable_v" name="Network state the plan leaves is acceptable for the duration" typeRef="boolean"/></inputData>
+  <inputData id="in_conditionsAvailable" name="A condition would make it acceptable"><variable id="in_conditionsAvailable_v" name="A condition would make it acceptable" typeRef="boolean"/></inputData>
+  <knowledgeSource id="ks_outage" name="GFMAM Asset Management Landscape 3rd ed. v3.0, 2024-06, subject 3.8 Shutdown and Outage Strategy and Planning; APQC PCF Utilities v7.2.1 14.1.6 Perform planned network operation (pcf_id 19285)"><description>Both frameworks name this activity, which is why 18.0 is not one of the framework gaps. Neither states a test for approving one outage over another, and this table does not invent one.</description></knowledgeSource>
+  <decision id="d_18_2_2" name="Outage decision">
+    <variable id="d_18_2_2_v" name="Outage decision" typeRef="string"/>
+    <informationRequirement id="ir_d_18_2_2_ks_outage"><requiredInput href="#ks_outage"/></informationRequirement>
+    <decisionTable id="d_18_2_2_dt" hitPolicy="FIRST" preferredOrientation="Rule-as-Row">
+      <input id="d_18_2_2_i1" label="Plan verified"><inputExpression id="d_18_2_2_i1_e" typeRef="boolean"><text>in_verified</text></inputExpression></input>
+      <input id="d_18_2_2_i2" label="Contingency agreed"><inputExpression id="d_18_2_2_i2_e" typeRef="boolean"><text>in_contingency</text></inputExpression></input>
+      <input id="d_18_2_2_i3" label="Contends with another outage"><inputExpression id="d_18_2_2_i3_e" typeRef="boolean"><text>in_contends</text></inputExpression></input>
+      <input id="d_18_2_2_i4" label="Resulting state acceptable"><inputExpression id="d_18_2_2_i4_e" typeRef="boolean"><text>in_stateAcceptable</text></inputExpression></input>
+      <input id="d_18_2_2_i5" label="A condition would make it acceptable"><inputExpression id="d_18_2_2_i5_e" typeRef="boolean"><text>in_conditionsAvailable</text></inputExpression></input>
+      <output id="d_18_2_2_o" label="Outage decision" name="Outage decision" typeRef="string"/>
+      <rule id="d_18_2_2_r1">
+        <description>Returned to 18.1.4, not refused. The plan was never verified against the state it will actually meet, and 1910.269(m)(3)(ii) is measured against the network as it is, not as the plan assumed.</description>
+        <inputEntry id="d_18_2_2_r1_ie1"><text>false</text></inputEntry>
+        <inputEntry id="d_18_2_2_r1_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_18_2_2_r1_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_18_2_2_r1_ie4"><text>-</text></inputEntry>
+        <inputEntry id="d_18_2_2_r1_ie5"><text>-</text></inputEntry>
+        <outputEntry id="d_18_2_2_r1_oe"><text>"reject"</text></outputEntry>
+      </rule>
+      <rule id="d_18_2_2_r2">
+        <description>Returned to 18.1.5. The abort arrangement has to exist before the clearance does; 18.5.3 is the only lawful way back and (m)(3)(xiii) will not let it start until every crew has released.</description>
+        <inputEntry id="d_18_2_2_r2_ie1"><text>true</text></inputEntry>
+        <inputEntry id="d_18_2_2_r2_ie2"><text>false</text></inputEntry>
+        <inputEntry id="d_18_2_2_r2_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_18_2_2_r2_ie4"><text>-</text></inputEntry>
+        <inputEntry id="d_18_2_2_r2_ie5"><text>-</text></inputEntry>
+        <outputEntry id="d_18_2_2_r2_oe"><text>"reject"</text></outputEntry>
+      </rule>
+      <rule id="d_18_2_2_r3">
+        <description>To 18.2.4, which is a case rather than a rule. THIS IS THE ROW WHERE A PRIORITY RULE WOULD SIT IF THIS REFERENCE HAD ONE. It does not: what a deferral costs - a compliance date, a customer commitment, a crew already mobilised - is the operator's to weigh.</description>
+        <inputEntry id="d_18_2_2_r3_ie1"><text>true</text></inputEntry>
+        <inputEntry id="d_18_2_2_r3_ie2"><text>true</text></inputEntry>
+        <inputEntry id="d_18_2_2_r3_ie3"><text>true</text></inputEntry>
+        <inputEntry id="d_18_2_2_r3_ie4"><text>-</text></inputEntry>
+        <inputEntry id="d_18_2_2_r3_ie5"><text>-</text></inputEntry>
+        <outputEntry id="d_18_2_2_r3_oe"><text>"defer"</text></outputEntry>
+      </rule>
+      <rule id="d_18_2_2_r4">
+        <description>Approved for a window. Not a deenergization: (m)(3)(i) still requires the employee in charge to request that, at execution, for a named section.</description>
+        <inputEntry id="d_18_2_2_r4_ie1"><text>true</text></inputEntry>
+        <inputEntry id="d_18_2_2_r4_ie2"><text>true</text></inputEntry>
+        <inputEntry id="d_18_2_2_r4_ie3"><text>false</text></inputEntry>
+        <inputEntry id="d_18_2_2_r4_ie4"><text>true</text></inputEntry>
+        <inputEntry id="d_18_2_2_r4_ie5"><text>-</text></inputEntry>
+        <outputEntry id="d_18_2_2_r4_oe"><text>"approve"</text></outputEntry>
+      </rule>
+      <rule id="d_18_2_2_r5">
+        <description>The condition travels with the window to 18.2.3 and into the work package. A condition recorded only in the approval has not been imposed on anybody.</description>
+        <inputEntry id="d_18_2_2_r5_ie1"><text>true</text></inputEntry>
+        <inputEntry id="d_18_2_2_r5_ie2"><text>true</text></inputEntry>
+        <inputEntry id="d_18_2_2_r5_ie3"><text>false</text></inputEntry>
+        <inputEntry id="d_18_2_2_r5_ie4"><text>false</text></inputEntry>
+        <inputEntry id="d_18_2_2_r5_ie5"><text>true</text></inputEntry>
+        <outputEntry id="d_18_2_2_r5_oe"><text>"approveWithConditions"</text></outputEntry>
+      </rule>
+      <rule id="d_18_2_2_r6">
+        <description>The state the plan leaves is not acceptable and no condition fixes it. Back to 18.1.2 for a different isolation, which is usually a smaller one.</description>
+        <inputEntry id="d_18_2_2_r6_ie1"><text>true</text></inputEntry>
+        <inputEntry id="d_18_2_2_r6_ie2"><text>true</text></inputEntry>
+        <inputEntry id="d_18_2_2_r6_ie3"><text>false</text></inputEntry>
+        <inputEntry id="d_18_2_2_r6_ie4"><text>false</text></inputEntry>
+        <inputEntry id="d_18_2_2_r6_ie5"><text>false</text></inputEntry>
+        <outputEntry id="d_18_2_2_r6_oe"><text>"reject"</text></outputEntry>
+      </rule>
+      <rule id="d_18_2_2_r7">
+        <description>Verification or contingency status not established. A named exception, because the default would approve a plan nobody has checked.</description>
+        <inputEntry id="d_18_2_2_r7_ie1"><text>-</text></inputEntry>
+        <inputEntry id="d_18_2_2_r7_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_18_2_2_r7_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_18_2_2_r7_ie4"><text>-</text></inputEntry>
+        <inputEntry id="d_18_2_2_r7_ie5"><text>-</text></inputEntry>
+        <outputEntry id="d_18_2_2_r7_oe"><text>"determineManually"</text></outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram id="drd_Outage_decision">
+      <dmndi:DMNShape id="sh_in_verified" dmnElementRef="in_verified"><dc:Bounds x="60" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_contingency" dmnElementRef="in_contingency"><dc:Bounds x="245" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_contends" dmnElementRef="in_contends"><dc:Bounds x="430" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_stateAcceptable" dmnElementRef="in_stateAcceptable"><dc:Bounds x="615" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_conditionsAvailable" dmnElementRef="in_conditionsAvailable"><dc:Bounds x="800" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_d_18_2_2" dmnElementRef="d_18_2_2"><dc:Bounds x="60" y="240" width="180" height="70"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_ks_outage" dmnElementRef="ks_outage"><dc:Bounds x="900" y="100" width="160" height="55"/></dmndi:DMNShape>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</definitions>

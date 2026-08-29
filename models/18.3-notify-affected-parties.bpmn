@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_P_18_3" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <process id="P_18_3" name="18.3 Notify the parties the operation affects" isExecutable="false">
+    <documentation>All four processes are drawn. The group has two entries because a first notice and a change notice are different acts: 18.3.4 re-issues on the SAME channel to everyone already told, and says what changed rather than repeating the original.
+
+NO LEAD TIME APPEARS IN THIS FILE. Outage notice periods and the terms of a life-support or medical register are tariff, State or contract, and this reference holds none of them - so the timer carries the lead time as an input rather than a number. 49 CFR 192.615(a)(3) is in the file for contrast only: it requires a prompt and effective response to an EMERGENCY, which is what a planned notice is not, and reaching for it as a planned-notice rule is the most likely way to mis-source this group.</documentation>
+    <laneSet id="P_18_3_lanes">
+      <lane id="l_183_comm" name="Customer communications">
+        <flowNodeRef>n_183_start</flowNodeRef>
+        <flowNodeRef>n_183_res</flowNodeRef>
+        <flowNodeRef>n_183_third</flowNodeRef>
+        <flowNodeRef>n_183_gw</flowNodeRef>
+        <flowNodeRef>n_183_t</flowNodeRef>
+        <flowNodeRef>n_183_send</flowNodeRef>
+        <flowNodeRef>n_183_rec</flowNodeRef>
+        <flowNodeRef>n_183_del</flowNodeRef>
+        <flowNodeRef>n_183_retry</flowNodeRef>
+        <flowNodeRef>n_183_esc</flowNodeRef>
+        <flowNodeRef>n_183_done</flowNodeRef>
+        <flowNodeRef>n_183_chg</flowNodeRef>
+        <flowNodeRef>n_183_what</flowNodeRef>
+        <flowNodeRef>n_183_reiss</flowNodeRef>
+        <flowNodeRef>n_183_moved</flowNodeRef>
+        <flowNodeRef>n_183_cend</flowNodeRef>
+      </lane>
+      <lane id="l_183_cust" name="Critical customer contact">
+        <flowNodeRef>n_183_crit</flowNodeRef>
+        <flowNodeRef>n_183_creach</flowNodeRef>
+        <flowNodeRef>n_183_hold</flowNodeRef>
+        <flowNodeRef>n_183_recrit</flowNodeRef>
+      </lane>
+    </laneSet>
+    <startEvent id="n_183_start" name="Confirmed window published"><messageEventDefinition id="n_183_start_md"/></startEvent>
+    <serviceTask id="n_183_res" name="Resolve the impact list to notifiable parties (18.3.1)"><documentation>18.3.1. The 18.1.3 impact list is premises and sections; this is people, organisations and the channel each of them is owed.</documentation></serviceTask>
+    <userTask id="n_183_third" name="Add attachers, agencies and adjacent operators"><documentation>18.3.1. Third-party attachers are 11.0's counterparties and an adjacent operator is 19.1.3's. Both are notified here and neither is a customer.</documentation></userTask>
+    <exclusiveGateway id="n_183_gw" name="Critical or life-support premises in scope"/>
+    <userTask id="n_183_crit" name="Contact each critical premise personally (18.3.3)"><documentation>18.3.3. On the register's terms, which belong to the operator or the tariff. An unanswered message is not a confirmation that somebody vulnerable knows.</documentation></userTask>
+    <exclusiveGateway id="n_183_creach" name="Customer reached and arranged"/>
+    <endEvent id="n_183_hold" name="Hold or replan the outage"><documentation>18.3.3. Back to 18.2.3 for a different window. The outage moves; the customer does not.</documentation></endEvent>
+    <startEvent id="n_183_t" name="Notice lead time reached"><documentation>18.3.2. The lead time is an input. This reference states none.</documentation><timerEventDefinition id="n_183_t_td"/></startEvent>
+    <sendTask id="n_183_send" name="Send on each party's channel (18.3.2)"><documentation>18.3.2. Statutory, tariff and contractual notices differ by party and by State.</documentation></sendTask>
+    <serviceTask id="n_183_rec" name="Record what was sent, to whom and when"><documentation>18.3.2. The record is the only evidence the notice existed, and 18.3.4 needs the channel it went out on.</documentation></serviceTask>
+    <exclusiveGateway id="n_183_del" name="Delivered"/>
+    <sendTask id="n_183_retry" name="Retry before the window closes"><documentation>18.3.2.</documentation></sendTask>
+    <sendTask id="n_183_esc" name="Escalate a party that cannot be reached"><documentation>18.3.2. Escalation is not the same as delivery and the record says which happened.</documentation></sendTask>
+    <endEvent id="n_183_done" name="Parties notified"/>
+    <startEvent id="n_183_chg" name="Window changed, deferred or cancelled"><messageEventDefinition id="n_183_chg_md"/></startEvent>
+    <userTask id="n_183_what" name="Establish what actually changed (18.3.4)"><documentation>18.3.4. Scope, window or cancellation. Re-issuing the original notice with a new date tells nobody what happened.</documentation></userTask>
+    <sendTask id="n_183_reiss" name="Re-issue to everyone already notified, same channel"><documentation>18.3.4. Everyone already told, on the channel they were told on - not the channel that is convenient now.</documentation></sendTask>
+    <exclusiveGateway id="n_183_moved" name="Window moved"/>
+    <sendTask id="n_183_recrit" name="Re-run the critical-premise contact"><documentation>18.3.4. A moved window is a new arrangement for a life-support customer, not an amendment to the old one.</documentation></sendTask>
+    <endEvent id="n_183_cend" name="Change communicated"/>
+    <sequenceFlow id="f_n_183_start_n_183_res" sourceRef="n_183_start" targetRef="n_183_res" name=""/>
+    <sequenceFlow id="f_n_183_res_n_183_third" sourceRef="n_183_res" targetRef="n_183_third" name=""/>
+    <sequenceFlow id="f_n_183_third_n_183_gw" sourceRef="n_183_third" targetRef="n_183_gw" name=""/>
+    <sequenceFlow id="f_n_183_gw_n_183_crit" sourceRef="n_183_gw" targetRef="n_183_crit" name="critical premises present"><conditionExpression xsi:type="tFormalExpression"><![CDATA[criticalPremises > 0]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_183_gw_n_183_t" sourceRef="n_183_gw" targetRef="n_183_t" name="none"/>
+    <sequenceFlow id="f_n_183_crit_n_183_creach" sourceRef="n_183_crit" targetRef="n_183_creach" name=""/>
+    <sequenceFlow id="f_n_183_creach_n_183_hold" sourceRef="n_183_creach" targetRef="n_183_hold" name="not reached"><conditionExpression xsi:type="tFormalExpression"><![CDATA[reached = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_183_creach_n_183_t" sourceRef="n_183_creach" targetRef="n_183_t" name="reached and arranged"/>
+    <sequenceFlow id="f_n_183_t_n_183_send" sourceRef="n_183_t" targetRef="n_183_send" name=""/>
+    <sequenceFlow id="f_n_183_send_n_183_rec" sourceRef="n_183_send" targetRef="n_183_rec" name=""/>
+    <sequenceFlow id="f_n_183_rec_n_183_del" sourceRef="n_183_rec" targetRef="n_183_del" name=""/>
+    <sequenceFlow id="f_n_183_del_n_183_retry" sourceRef="n_183_del" targetRef="n_183_retry" name="not delivered"><conditionExpression xsi:type="tFormalExpression"><![CDATA[delivered = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_183_retry_n_183_esc" sourceRef="n_183_retry" targetRef="n_183_esc" name=""/>
+    <sequenceFlow id="f_n_183_esc_n_183_done" sourceRef="n_183_esc" targetRef="n_183_done" name=""/>
+    <sequenceFlow id="f_n_183_del_n_183_done" sourceRef="n_183_del" targetRef="n_183_done" name="delivered"/>
+    <sequenceFlow id="f_n_183_chg_n_183_what" sourceRef="n_183_chg" targetRef="n_183_what" name=""/>
+    <sequenceFlow id="f_n_183_what_n_183_reiss" sourceRef="n_183_what" targetRef="n_183_reiss" name=""/>
+    <sequenceFlow id="f_n_183_reiss_n_183_moved" sourceRef="n_183_reiss" targetRef="n_183_moved" name=""/>
+    <sequenceFlow id="f_n_183_moved_n_183_recrit" sourceRef="n_183_moved" targetRef="n_183_recrit" name="moved"><conditionExpression xsi:type="tFormalExpression"><![CDATA[windowMoved = true]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_183_recrit_n_183_cend" sourceRef="n_183_recrit" targetRef="n_183_cend" name=""/>
+    <sequenceFlow id="f_n_183_moved_n_183_cend" sourceRef="n_183_moved" targetRef="n_183_cend" name="cancelled or scope only"/>
+  </process>
+  <bpmndi:BPMNDiagram id="dg_P_18_3">
+    <bpmndi:BPMNPlane id="pl_P_18_3" bpmnElement="P_18_3">
+      <bpmndi:BPMNShape id="sh_n_183_start" bpmnElement="n_183_start"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_183_res" bpmnElement="n_183_res"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_183_third" bpmnElement="n_183_third"><dc:Bounds x="425" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_183_gw" bpmnElement="n_183_gw"><dc:Bounds x="637" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_183_crit" bpmnElement="n_183_crit"><dc:Bounds x="595" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_183_creach" bpmnElement="n_183_creach"><dc:Bounds x="807" y="432" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_183_hold" bpmnElement="n_183_hold"><dc:Bounds x="812" y="657" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_183_t" bpmnElement="n_183_t"><dc:Bounds x="132" y="877" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_183_send" bpmnElement="n_183_send"><dc:Bounds x="255" y="860" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_183_rec" bpmnElement="n_183_rec"><dc:Bounds x="425" y="860" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_183_del" bpmnElement="n_183_del"><dc:Bounds x="637" y="872" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_183_retry" bpmnElement="n_183_retry"><dc:Bounds x="595" y="1080" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_183_esc" bpmnElement="n_183_esc"><dc:Bounds x="765" y="1080" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_183_done" bpmnElement="n_183_done"><dc:Bounds x="982" y="877" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_183_chg" bpmnElement="n_183_chg"><dc:Bounds x="132" y="1317" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_183_what" bpmnElement="n_183_what"><dc:Bounds x="255" y="1300" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_183_reiss" bpmnElement="n_183_reiss"><dc:Bounds x="425" y="1300" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_183_moved" bpmnElement="n_183_moved"><dc:Bounds x="637" y="1312" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_183_recrit" bpmnElement="n_183_recrit"><dc:Bounds x="595" y="1520" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_183_cend" bpmnElement="n_183_cend"><dc:Bounds x="812" y="1317" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ed_f_n_183_start_n_183_res" bpmnElement="f_n_183_start_n_183_res"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_183_res_n_183_third" bpmnElement="f_n_183_res_n_183_third"><di:waypoint x="385" y="235"/><di:waypoint x="425" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_183_third_n_183_gw" bpmnElement="f_n_183_third_n_183_gw"><di:waypoint x="555" y="235"/><di:waypoint x="637" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_183_gw_n_183_crit" bpmnElement="f_n_183_gw_n_183_crit"><di:waypoint x="683" y="235"/><di:waypoint x="570" y="235"/><di:waypoint x="570" y="455"/><di:waypoint x="595" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_183_gw_n_183_t" bpmnElement="f_n_183_gw_n_183_t"><di:waypoint x="683" y="235"/><di:waypoint x="107" y="235"/><di:waypoint x="107" y="895"/><di:waypoint x="132" y="895"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_183_crit_n_183_creach" bpmnElement="f_n_183_crit_n_183_creach"><di:waypoint x="725" y="455"/><di:waypoint x="807" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_183_creach_n_183_hold" bpmnElement="f_n_183_creach_n_183_hold"><di:waypoint x="853" y="455"/><di:waypoint x="787" y="455"/><di:waypoint x="787" y="675"/><di:waypoint x="812" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_183_creach_n_183_t" bpmnElement="f_n_183_creach_n_183_t"><di:waypoint x="853" y="455"/><di:waypoint x="107" y="455"/><di:waypoint x="107" y="895"/><di:waypoint x="132" y="895"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_183_t_n_183_send" bpmnElement="f_n_183_t_n_183_send"><di:waypoint x="168" y="895"/><di:waypoint x="255" y="895"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_183_send_n_183_rec" bpmnElement="f_n_183_send_n_183_rec"><di:waypoint x="385" y="895"/><di:waypoint x="425" y="895"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_183_rec_n_183_del" bpmnElement="f_n_183_rec_n_183_del"><di:waypoint x="555" y="895"/><di:waypoint x="637" y="895"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_183_del_n_183_retry" bpmnElement="f_n_183_del_n_183_retry"><di:waypoint x="683" y="895"/><di:waypoint x="570" y="895"/><di:waypoint x="570" y="1115"/><di:waypoint x="595" y="1115"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_183_retry_n_183_esc" bpmnElement="f_n_183_retry_n_183_esc"><di:waypoint x="725" y="1115"/><di:waypoint x="765" y="1115"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_183_esc_n_183_done" bpmnElement="f_n_183_esc_n_183_done"><di:waypoint x="895" y="1115"/><di:waypoint x="957" y="1115"/><di:waypoint x="957" y="895"/><di:waypoint x="982" y="895"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_183_del_n_183_done" bpmnElement="f_n_183_del_n_183_done"><di:waypoint x="683" y="895"/><di:waypoint x="982" y="895"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_183_chg_n_183_what" bpmnElement="f_n_183_chg_n_183_what"><di:waypoint x="168" y="1335"/><di:waypoint x="255" y="1335"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_183_what_n_183_reiss" bpmnElement="f_n_183_what_n_183_reiss"><di:waypoint x="385" y="1335"/><di:waypoint x="425" y="1335"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_183_reiss_n_183_moved" bpmnElement="f_n_183_reiss_n_183_moved"><di:waypoint x="555" y="1335"/><di:waypoint x="637" y="1335"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_183_moved_n_183_recrit" bpmnElement="f_n_183_moved_n_183_recrit"><di:waypoint x="683" y="1335"/><di:waypoint x="570" y="1335"/><di:waypoint x="570" y="1555"/><di:waypoint x="595" y="1555"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_183_recrit_n_183_cend" bpmnElement="f_n_183_recrit_n_183_cend"><di:waypoint x="725" y="1555"/><di:waypoint x="787" y="1555"/><di:waypoint x="787" y="1335"/><di:waypoint x="812" y="1335"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_183_moved_n_183_cend" bpmnElement="f_n_183_moved_n_183_cend"><di:waypoint x="683" y="1335"/><di:waypoint x="812" y="1335"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

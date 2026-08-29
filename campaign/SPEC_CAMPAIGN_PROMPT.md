@@ -8,20 +8,24 @@ rounds; only the category assignment does.
 Category 1.0 is the **worked example** — read it before starting.
 
 **Rounds 1 to 5 are closed. This is the replan of 2026-08-29, and it supersedes the
-round table.** Ten categories are in the reference; 249 processes remain across nine.
+round table.** Eleven categories are in the reference; 224 processes remain across eight.
 
 | Platform | Categories | Processes | Nature |
 |---|---|---|---|
 | **ChatGPT** | 4.0, 6.0, 12.0, 15.0 | 110 | **Rework only.** All four are filed and rejected on mechanical rules. No new category until they merge. |
 | **Grok** | 17.0, 19.0 | 47 | New. Two of the three Asset Lifecycle categories. |
-| **Claude** | 8.0, 14.0, 18.0 | 92 | New, plus merging everything that arrives. |
+| **Claude** | 8.0, 14.0 | 67 | New, plus merging everything that arrives. 18.0 done. |
 
-In the reference already: 1.0, 2.0, 5.0 and 11.0 (Claude); 9.0 (ChatGPT); 3.0, 7.0, 10.0,
-13.0 and 16.0 (Grok). 257 of 506 processes, 51%.
+In the reference already: 1.0, 2.0, 5.0, 11.0 and 18.0 (Claude); 9.0 (ChatGPT); 3.0, 7.0,
+10.0, 13.0 and 16.0 (Grok). 282 of 506 processes, 56%.
 
-**18.0 is not available.** It is constrained by twenty-four references to 18.4.4 and twelve
-to 18.2.2 from six merged categories, all of them about the difference between a clearance,
-a permit and an emergency isolation. It is assigned to whoever also merges those six.
+**18.0 is merged, 2026-08-29.** It was taken first because twenty-four references to 18.4.4
+and twelve to 18.2.2 already existed in six merged categories, all of them about the
+difference between a clearance, a permit and an emergency isolation, and all nine of those
+cross-references now resolve. Read `cat-18-operate-the-network-for-planned-work.json` before
+writing anything that touches an isolation: **a clearance is issued at 18.4.4 by the system
+operator and by no other process in this model**, a permit comes from an external authority
+at 7.3.2, emergency isolation is 9.3.2, and a gas isolation is not a clearance at all.
 
 **Take assigned categories only.** A category specified twice is not a contribution, it is
 a reconciliation job — and it has already happened once, on 11.0.

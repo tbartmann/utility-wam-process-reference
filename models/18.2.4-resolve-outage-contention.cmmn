@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/CMMN/20151109/MODEL" xmlns:cmmndi="http://www.omg.org/spec/CMMN/20151109/CMMNDI" xmlns:dc="http://www.omg.org/spec/CMMN/20151109/DC" xmlns:di="http://www.omg.org/spec/CMMN/20151109/DI" id="defs_Resolve_contention" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <case id="Resolve_contention" name="18.2.4 Resolve conflicting or competing outage requests">
+    <caseFileModel id="Resolve_contention_cfm">
+      <caseFileItem id="cf_requests" name="The contending requests and what each is enabling"/>
+      <caseFileItem id="cf_network" name="Network state and the windows already committed"/>
+      <caseFileItem id="cf_cost" name="What deferring each one costs - dates, commitments, mobilisation"/>
+    </caseFileModel>
+    <casePlanModel id="Resolve_contention_plan" name="18.2.4 Resolve conflicting or competing outage requests" autoComplete="true">
+      <documentation>Combining, sequencing, deferring and escalating are all available at once and two competent schedulers will not try them in the same order, which is the CMMN test. It is also the process in this category with the least source behind it: no standard, regulation or industry body states an outage priority rule, and this reference states none either. What the case fixes is the two things that are not discretionary.
+
+RE-VERIFICATION IS REQUIRED. A combined window is a different network state from either plan alone, and both plans go back through 18.1.4 against the combined state before anything is scheduled. Combining two verified plans does not produce a verified plan.
+
+TELLING THE LOSER WHY IS REQUIRED. A deferred request that is not told why comes back unchanged next week and contends again. That is judgment and is attributed to nobody, but it is the only thing that stops this case running weekly on the same two requests.</documentation>
+      <planItem id="pi_t_identify" name="Identify the requests that cannot coexist" definitionRef="t_identify_def">
+        <itemControl id="ic_t_identify">
+          <requiredRule id="rr_t_identify"><condition><![CDATA[true]]></condition></requiredRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_establish" name="Establish what each is enabling and what deferral costs" definitionRef="t_establish_def">
+        <itemControl id="ic_t_establish">
+          <requiredRule id="rr_t_establish"><condition><![CDATA[true]]></condition></requiredRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_combine" name="Negotiate a combined window" definitionRef="t_combine_def">
+        <itemControl id="ic_t_combine">
+          <requiredRule id="rr_t_combine"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_combine"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_sequence" name="Sequence them within the same period" definitionRef="t_sequence_def">
+        <itemControl id="ic_t_sequence">
+          <requiredRule id="rr_t_sequence"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_sequence"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_defer" name="Defer one, with the reason recorded" definitionRef="t_defer_def">
+        <itemControl id="ic_t_defer">
+          <requiredRule id="rr_t_defer"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_defer"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_escalate" name="Escalate where both are compliance-driven" definitionRef="t_escalate_def">
+        <itemControl id="ic_t_escalate">
+          <requiredRule id="rr_t_escalate"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_escalate"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_reverify" name="Re-verify both plans at 18.1.4 against the combined state" definitionRef="t_reverify_def">
+        <itemControl id="ic_t_reverify">
+          <requiredRule id="rr_t_reverify"><condition><![CDATA[true]]></condition></requiredRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_tell" name="Tell the deferred request why" definitionRef="t_tell_def">
+        <itemControl id="ic_t_tell">
+          <requiredRule id="rr_t_tell"><condition><![CDATA[true]]></condition></requiredRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_m_resolved" name="Contention resolved" definitionRef="m_resolved_def"/>
+      <planItem id="pi_m_reverified" name="Affected plans re-verified" definitionRef="m_reverified_def"/>
+      <humanTask id="t_identify_def" name="Identify the requests that cannot coexist" isBlocking="true"><documentation>Required. Contention is a property of the network, not of the calendar: two outages on the same day that do not touch are not in contention.</documentation></humanTask>
+      <humanTask id="t_establish_def" name="Establish what each is enabling and what deferral costs" isBlocking="true"><documentation>Required. Without it the decision is made on who asked first, which is the outcome this case exists to avoid.</documentation></humanTask>
+      <humanTask id="t_combine_def" name="Negotiate a combined window" isBlocking="true"><documentation>Discretionary. Usually better than sequencing and always better than taking the network out twice - but it changes the state both plans assumed.</documentation></humanTask>
+      <humanTask id="t_sequence_def" name="Sequence them within the same period" isBlocking="true"><documentation>Discretionary. Keeps both plans intact and spends the network twice.</documentation></humanTask>
+      <humanTask id="t_defer_def" name="Defer one, with the reason recorded" isBlocking="true"><documentation>Discretionary. 49 CFR 192.747(b) is worth checking before deferring a gas outage: an inoperable valve needs prompt remedial action or a designated alternative, and a deferral may be what makes the alternative necessary.</documentation></humanTask>
+      <humanTask id="t_escalate_def" name="Escalate where both are compliance-driven" isBlocking="true"><documentation>Discretionary. Two outages each holding a regulatory date is not a scheduling problem and is not settled at this level.</documentation></humanTask>
+      <humanTask id="t_reverify_def" name="Re-verify both plans at 18.1.4 against the combined state" isBlocking="true"><documentation>Required whenever the resolution changed either plan. 1910.269(m)(3)(ii) is measured against the network the switching will actually meet.</documentation></humanTask>
+      <humanTask id="t_tell_def" name="Tell the deferred request why" isBlocking="true"><documentation>Required. Judgment, attributed to nobody: an unexplained deferral returns unchanged and contends again.</documentation></humanTask>
+      <milestone id="m_resolved_def" name="Contention resolved"><documentation>Combined, sequenced, deferred or escalated - and recorded as which.</documentation></milestone>
+      <milestone id="m_reverified_def" name="Affected plans re-verified"><documentation>Against the state the resolution actually produces.</documentation></milestone>
+    </casePlanModel>
+  </case>
+  <cmmndi:CMMNDI>
+    <cmmndi:CMMNDiagram id="dg_Resolve_contention">
+      <cmmndi:CMMNShape id="sh_plan" cmmnElementRef="Resolve_contention_plan"><dc:Bounds x="40" y="40" width="1010" height="300"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_identify" cmmnElementRef="pi_t_identify"><dc:Bounds x="80" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_establish" cmmnElementRef="pi_t_establish"><dc:Bounds x="270" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_combine" cmmnElementRef="pi_t_combine"><dc:Bounds x="460" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_sequence" cmmnElementRef="pi_t_sequence"><dc:Bounds x="80" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_defer" cmmnElementRef="pi_t_defer"><dc:Bounds x="270" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_escalate" cmmnElementRef="pi_t_escalate"><dc:Bounds x="460" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_reverify" cmmnElementRef="pi_t_reverify"><dc:Bounds x="80" y="290" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_tell" cmmnElementRef="pi_t_tell"><dc:Bounds x="270" y="290" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_m_resolved" cmmnElementRef="pi_m_resolved"><dc:Bounds x="460" y="290" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_m_reverified" cmmnElementRef="pi_m_reverified"><dc:Bounds x="80" y="390" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+    </cmmndi:CMMNDiagram>
+  </cmmndi:CMMNDI>
+</definitions>

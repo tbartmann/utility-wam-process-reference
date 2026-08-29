@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_P_18_2" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <process id="P_18_2" name="18.2 Approve and schedule the planned operation" isExecutable="false">
+    <documentation>18.2.1, 18.2.3 and 18.2.5 are drawn. 18.2.2 is a decision and 18.2.4 is a case. The group has two entries, and that is the point of drawing it: a submission arriving and a scheduled window reaching its readiness checkpoint are different triggers with different failure modes, and only the second one can hand a window back.
+
+One sequence is fixed and is not the author's preference. The window is fixed AFTER approval and BEFORE notice, because 18.3 notifies against a confirmed window and 18.3.4 exists precisely because re-notifying a moved window is a different act from notifying a new one.</documentation>
+    <laneSet id="P_18_2_lanes">
+      <lane id="l_182_req" name="Requesting planner">
+        <flowNodeRef>n_182_start</flowNodeRef>
+        <flowNodeRef>n_182_asm</flowNodeRef>
+        <flowNodeRef>n_182_route</flowNodeRef>
+        <flowNodeRef>n_182_rej</flowNodeRef>
+        <flowNodeRef>n_182_t</flowNodeRef>
+        <flowNodeRef>n_182_mat</flowNodeRef>
+        <flowNodeRef>n_182_crew</flowNodeRef>
+        <flowNodeRef>n_182_rdy</flowNodeRef>
+        <flowNodeRef>n_182_rel</flowNodeRef>
+        <flowNodeRef>n_182_hand</flowNodeRef>
+      </lane>
+      <lane id="l_182_auth" name="Approving authority and scheduling">
+        <flowNodeRef>n_182_dec</flowNodeRef>
+        <flowNodeRef>n_182_gw</flowNodeRef>
+        <flowNodeRef>n_182_case</flowNodeRef>
+        <flowNodeRef>n_182_sched</flowNodeRef>
+        <flowNodeRef>n_182_bind</flowNodeRef>
+        <flowNodeRef>n_182_pub</flowNodeRef>
+        <flowNodeRef>n_182_live</flowNodeRef>
+      </lane>
+    </laneSet>
+    <startEvent id="n_182_start" name="Verified plan ready to submit"><messageEventDefinition id="n_182_start_md"/></startEvent>
+    <userTask id="n_182_asm" name="Assemble plan, impact and contingency (18.2.1)"><documentation>18.2.1. One submission. A plan submitted without its impact cannot be weighed against a competing outage at 18.2.4.</documentation></userTask>
+    <sendTask id="n_182_route" name="Route to the approving authority for that network"><documentation>18.2.1. Which authority depends on whose network the isolation reaches; a plan crossing into another operator's network goes to 19.1.3 as well.</documentation></sendTask>
+    <businessRuleTask id="n_182_dec" name="Decide the outage request (18.2.2)"><documentation>18.2.2. Approve, approve with conditions, defer or reject - and the basis.</documentation></businessRuleTask>
+    <exclusiveGateway id="n_182_gw" name="Decision"/>
+    <endEvent id="n_182_rej" name="Rejected, returned to planning"><documentation>18.2.2. A rejection returns to 18.1.2 with what failed, not to the requester with a refusal.</documentation></endEvent>
+    <callActivity id="n_182_case" name="Resolve contention (18.2.4)"><documentation>18.2.4. Combining, sequencing and deferring are all available and no two schedulers try them in the same order.</documentation></callActivity>
+    <userTask id="n_182_sched" name="Fix the window and the switching crews (18.2.3)"><documentation>18.2.3. The window carries any condition the approval attached; a condition that does not reach the window has not been imposed.</documentation></userTask>
+    <serviceTask id="n_182_bind" name="Bind the work the outage exists to enable"><documentation>18.2.3. The work packages at 16.2.3 that named a clearance as REQUIRED are the ones bound here.</documentation></serviceTask>
+    <sendTask id="n_182_pub" name="Publish the window to notice and to the work schedule"><documentation>18.2.3. This is what 18.3.1 consumes. Until it is published, no notice period is running.</documentation></sendTask>
+    <endEvent id="n_182_live" name="Operation scheduled"/>
+    <startEvent id="n_182_t" name="Readiness checkpoint reached"><timerEventDefinition id="n_182_t_td"/></startEvent>
+    <userTask id="n_182_mat" name="Confirm materials, permits and access for the date"><documentation>18.2.5. A permit from an external authority is 7.3.2 and has its own lead time; it is confirmed here and never assumed.</documentation></userTask>
+    <userTask id="n_182_crew" name="Confirm crews and the switching resource still committed"><documentation>18.2.5. The switching resource is a separate commitment from the work crew and is the one most often quietly reassigned.</documentation></userTask>
+    <exclusiveGateway id="n_182_rdy" name="Ready"/>
+    <endEvent id="n_182_rel" name="Combined package released to execution"><documentation>18.2.5. What 18.4.1 starts from.</documentation></endEvent>
+    <sendTask id="n_182_hand" name="Hand the window back to 18.2.3"><documentation>18.2.5. A window handed back early is a window another outage can use. A window handed back on the day is an outage nobody could use.</documentation></sendTask>
+    <sequenceFlow id="f_n_182_start_n_182_asm" sourceRef="n_182_start" targetRef="n_182_asm" name=""/>
+    <sequenceFlow id="f_n_182_asm_n_182_route" sourceRef="n_182_asm" targetRef="n_182_route" name=""/>
+    <sequenceFlow id="f_n_182_route_n_182_dec" sourceRef="n_182_route" targetRef="n_182_dec" name=""/>
+    <sequenceFlow id="f_n_182_dec_n_182_gw" sourceRef="n_182_dec" targetRef="n_182_gw" name=""/>
+    <sequenceFlow id="f_n_182_gw_n_182_rej" sourceRef="n_182_gw" targetRef="n_182_rej" name="rejected"><conditionExpression xsi:type="tFormalExpression"><![CDATA[decision = "reject"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_182_gw_n_182_case" sourceRef="n_182_gw" targetRef="n_182_case" name="deferred"><conditionExpression xsi:type="tFormalExpression"><![CDATA[decision = "defer"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_182_gw_n_182_sched" sourceRef="n_182_gw" targetRef="n_182_sched" name="approved, with or without conditions"><conditionExpression xsi:type="tFormalExpression"><![CDATA[decision = "approve" or decision = "approveWithConditions"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_182_case_n_182_dec" sourceRef="n_182_case" targetRef="n_182_dec" name="re-decided on a combined or sequenced plan"/>
+    <sequenceFlow id="f_n_182_sched_n_182_bind" sourceRef="n_182_sched" targetRef="n_182_bind" name=""/>
+    <sequenceFlow id="f_n_182_bind_n_182_pub" sourceRef="n_182_bind" targetRef="n_182_pub" name=""/>
+    <sequenceFlow id="f_n_182_pub_n_182_live" sourceRef="n_182_pub" targetRef="n_182_live" name=""/>
+    <sequenceFlow id="f_n_182_t_n_182_mat" sourceRef="n_182_t" targetRef="n_182_mat" name=""/>
+    <sequenceFlow id="f_n_182_mat_n_182_crew" sourceRef="n_182_mat" targetRef="n_182_crew" name=""/>
+    <sequenceFlow id="f_n_182_crew_n_182_rdy" sourceRef="n_182_crew" targetRef="n_182_rdy" name=""/>
+    <sequenceFlow id="f_n_182_rdy_n_182_rel" sourceRef="n_182_rdy" targetRef="n_182_rel" name="ready"/>
+    <sequenceFlow id="f_n_182_rdy_n_182_hand" sourceRef="n_182_rdy" targetRef="n_182_hand" name="not ready"><conditionExpression xsi:type="tFormalExpression"><![CDATA[ready = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_182_hand_n_182_t" sourceRef="n_182_hand" targetRef="n_182_t" name=""/>
+  </process>
+  <bpmndi:BPMNDiagram id="dg_P_18_2">
+    <bpmndi:BPMNPlane id="pl_P_18_2" bpmnElement="P_18_2">
+      <bpmndi:BPMNShape id="sh_n_182_start" bpmnElement="n_182_start"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_182_asm" bpmnElement="n_182_asm"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_182_route" bpmnElement="n_182_route"><dc:Bounds x="425" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_182_dec" bpmnElement="n_182_dec"><dc:Bounds x="595" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_182_gw" bpmnElement="n_182_gw"><dc:Bounds x="807" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_182_rej" bpmnElement="n_182_rej"><dc:Bounds x="812" y="657" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_182_case" bpmnElement="n_182_case"><dc:Bounds x="765" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_182_sched" bpmnElement="n_182_sched"><dc:Bounds x="935" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_182_bind" bpmnElement="n_182_bind"><dc:Bounds x="1105" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_182_pub" bpmnElement="n_182_pub"><dc:Bounds x="1275" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_182_live" bpmnElement="n_182_live"><dc:Bounds x="1492" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_182_t" bpmnElement="n_182_t"><dc:Bounds x="132" y="877" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_182_mat" bpmnElement="n_182_mat"><dc:Bounds x="255" y="860" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_182_crew" bpmnElement="n_182_crew"><dc:Bounds x="425" y="860" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_182_rdy" bpmnElement="n_182_rdy"><dc:Bounds x="637" y="872" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_182_rel" bpmnElement="n_182_rel"><dc:Bounds x="812" y="877" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_182_hand" bpmnElement="n_182_hand"><dc:Bounds x="595" y="1080" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ed_f_n_182_start_n_182_asm" bpmnElement="f_n_182_start_n_182_asm"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_182_asm_n_182_route" bpmnElement="f_n_182_asm_n_182_route"><di:waypoint x="385" y="235"/><di:waypoint x="425" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_182_route_n_182_dec" bpmnElement="f_n_182_route_n_182_dec"><di:waypoint x="555" y="235"/><di:waypoint x="595" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_182_dec_n_182_gw" bpmnElement="f_n_182_dec_n_182_gw"><di:waypoint x="725" y="235"/><di:waypoint x="807" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_182_gw_n_182_rej" bpmnElement="f_n_182_gw_n_182_rej"><di:waypoint x="853" y="235"/><di:waypoint x="787" y="235"/><di:waypoint x="787" y="675"/><di:waypoint x="812" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_182_gw_n_182_case" bpmnElement="f_n_182_gw_n_182_case"><di:waypoint x="853" y="235"/><di:waypoint x="740" y="235"/><di:waypoint x="740" y="455"/><di:waypoint x="765" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_182_gw_n_182_sched" bpmnElement="f_n_182_gw_n_182_sched"><di:waypoint x="853" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_182_case_n_182_dec" bpmnElement="f_n_182_case_n_182_dec"><di:waypoint x="895" y="455"/><di:waypoint x="570" y="455"/><di:waypoint x="570" y="235"/><di:waypoint x="595" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_182_sched_n_182_bind" bpmnElement="f_n_182_sched_n_182_bind"><di:waypoint x="1065" y="235"/><di:waypoint x="1105" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_182_bind_n_182_pub" bpmnElement="f_n_182_bind_n_182_pub"><di:waypoint x="1235" y="235"/><di:waypoint x="1275" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_182_pub_n_182_live" bpmnElement="f_n_182_pub_n_182_live"><di:waypoint x="1405" y="235"/><di:waypoint x="1492" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_182_t_n_182_mat" bpmnElement="f_n_182_t_n_182_mat"><di:waypoint x="168" y="895"/><di:waypoint x="255" y="895"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_182_mat_n_182_crew" bpmnElement="f_n_182_mat_n_182_crew"><di:waypoint x="385" y="895"/><di:waypoint x="425" y="895"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_182_crew_n_182_rdy" bpmnElement="f_n_182_crew_n_182_rdy"><di:waypoint x="555" y="895"/><di:waypoint x="637" y="895"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_182_rdy_n_182_rel" bpmnElement="f_n_182_rdy_n_182_rel"><di:waypoint x="683" y="895"/><di:waypoint x="812" y="895"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_182_rdy_n_182_hand" bpmnElement="f_n_182_rdy_n_182_hand"><di:waypoint x="683" y="895"/><di:waypoint x="570" y="895"/><di:waypoint x="570" y="1115"/><di:waypoint x="595" y="1115"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_182_hand_n_182_t" bpmnElement="f_n_182_hand_n_182_t"><di:waypoint x="725" y="1115"/><di:waypoint x="107" y="1115"/><di:waypoint x="107" y="895"/><di:waypoint x="132" y="895"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

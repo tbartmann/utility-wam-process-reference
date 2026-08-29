@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/CMMN/20151109/MODEL" xmlns:cmmndi="http://www.omg.org/spec/CMMN/20151109/CMMNDI" xmlns:dc="http://www.omg.org/spec/CMMN/20151109/DC" xmlns:di="http://www.omg.org/spec/CMMN/20151109/DI" id="defs_Abnormal_and_contingency" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <case id="Abnormal_and_contingency" name="18.1.5 Determine abnormal-condition and contingency arrangements">
+    <caseFileModel id="Abnormal_and_contingency_cfm">
+      <caseFileItem id="cf_plan" name="Verified switching plan and the state it will leave"/>
+      <caseFileItem id="cf_network" name="Network state, redundancy and forecast conditions"/>
+      <caseFileItem id="cf_standing" name="Standing instructions already in force on this network"/>
+    </caseFileModel>
+    <casePlanModel id="Abnormal_and_contingency_plan" name="18.1.5 Determine abnormal-condition and contingency arrangements" autoComplete="true">
+      <documentation>Redundancy lost, weather, the cost of aborting mid-isolation and the standing instruction the control room will operate to are all live at once, and two competent operators will not settle them in the same order - which is the CMMN test.
+
+One thing does not move, and it is why the abort arrangement is a required item rather than a discretionary one: it has to be agreed BEFORE the clearance is issued. Deciding how to abandon an isolation while standing in it is not a decision, it is a reaction.
+
+What this reference does not hold: any standing-instruction content, any redundancy threshold and any weather limit. All three are the operator's. Where an abnormal condition stops being planned and becomes an emergency, 49 CFR 192.615 emergency plans govern for gas and the route leaves this category for 9.0. Camunda 8 dropped CMMN, so a runtime for this file means Flowable or an equivalent.</documentation>
+      <planItem id="pi_t_redundancy" name="Identify what the isolation leaves without redundancy" definitionRef="t_redundancy_def">
+        <itemControl id="ic_t_redundancy">
+          <requiredRule id="rr_t_redundancy"><condition><![CDATA[true]]></condition></requiredRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_abnormal" name="Agree the abnormal conditions that will stand" definitionRef="t_abnormal_def">
+        <itemControl id="ic_t_abnormal">
+          <requiredRule id="rr_t_abnormal"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_abnormal"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_weather" name="Set the weather or condition limits for the window" definitionRef="t_weather_def">
+        <itemControl id="ic_t_weather">
+          <requiredRule id="rr_t_weather"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_weather"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_abort" name="Agree the abort arrangement and what it costs" definitionRef="t_abort_def">
+        <itemControl id="ic_t_abort">
+          <requiredRule id="rr_t_abort"><condition><![CDATA[true]]></condition></requiredRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_protect" name="Agree protection and automation changes for the duration" definitionRef="t_protect_def">
+        <itemControl id="ic_t_protect">
+          <requiredRule id="rr_t_protect"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_protect"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_emergency" name="Route a condition that has become an emergency" definitionRef="t_emergency_def">
+        <itemControl id="ic_t_emergency">
+          <requiredRule id="rr_t_emergency"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_emergency"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_record" name="Record the standing instruction the control room will hold" definitionRef="t_record_def">
+        <itemControl id="ic_t_record">
+          <requiredRule id="rr_t_record"><condition><![CDATA[true]]></condition></requiredRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_m_agreed" name="Abnormal conditions agreed" definitionRef="m_agreed_def"/>
+      <planItem id="pi_m_contingency" name="Contingency and abort agreed" definitionRef="m_contingency_def"/>
+      <planItem id="pi_m_standing" name="Standing instruction in force" definitionRef="m_standing_def"/>
+      <humanTask id="t_redundancy_def" name="Identify what the isolation leaves without redundancy" isBlocking="true"><documentation>Required. Everything else in the case is a response to this, and a plan whose loss of redundancy was never stated cannot have a contingency.</documentation></humanTask>
+      <humanTask id="t_abnormal_def" name="Agree the abnormal conditions that will stand" isBlocking="true"><documentation>Discretionary in sequence. These are the conditions the control room operates to for the duration, and 18.5.5 records any that outlive the work.</documentation></humanTask>
+      <humanTask id="t_weather_def" name="Set the weather or condition limits for the window" isBlocking="true"><documentation>Discretionary. No source states a limit. Lightning, wind and temperature limits are the operator's and this reference states none.</documentation></humanTask>
+      <humanTask id="t_abort_def" name="Agree the abort arrangement and what it costs" isBlocking="true"><documentation>Required, and required BEFORE the clearance. 18.5.3 is the only lawful way back and (m)(3)(xiii) will not let it start until every crew has released.</documentation></humanTask>
+      <humanTask id="t_protect_def" name="Agree protection and automation changes for the duration" isBlocking="true"><documentation>Discretionary. Settings altered for the isolation are restored at 18.5.3, and a section restored with its reclosing still blocked is not restored.</documentation></humanTask>
+      <humanTask id="t_emergency_def" name="Route a condition that has become an emergency" isBlocking="true"><documentation>Discretionary. For gas, 49 CFR 192.615 emergency plans; either commodity leaves this category for 9.0 rather than continuing as a planned outage.</documentation></humanTask>
+      <humanTask id="t_record_def" name="Record the standing instruction the control room will hold" isBlocking="true"><documentation>Required. An arrangement agreed in a meeting and not written into the control room's standing instructions does not exist at two in the morning.</documentation></humanTask>
+      <milestone id="m_agreed_def" name="Abnormal conditions agreed"><documentation>What will stand during the work, and for how long.</documentation></milestone>
+      <milestone id="m_contingency_def" name="Contingency and abort agreed"><documentation>Including who may invoke it and what it costs.</documentation></milestone>
+      <milestone id="m_standing_def" name="Standing instruction in force"><documentation>Held by the control room, not by the plan.</documentation></milestone>
+    </casePlanModel>
+  </case>
+  <cmmndi:CMMNDI>
+    <cmmndi:CMMNDiagram id="dg_Abnormal_and_contingency">
+      <cmmndi:CMMNShape id="sh_plan" cmmnElementRef="Abnormal_and_contingency_plan"><dc:Bounds x="40" y="40" width="1010" height="300"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_redundancy" cmmnElementRef="pi_t_redundancy"><dc:Bounds x="80" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_abnormal" cmmnElementRef="pi_t_abnormal"><dc:Bounds x="270" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_weather" cmmnElementRef="pi_t_weather"><dc:Bounds x="460" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_abort" cmmnElementRef="pi_t_abort"><dc:Bounds x="80" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_protect" cmmnElementRef="pi_t_protect"><dc:Bounds x="270" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_emergency" cmmnElementRef="pi_t_emergency"><dc:Bounds x="460" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_record" cmmnElementRef="pi_t_record"><dc:Bounds x="80" y="290" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_m_agreed" cmmnElementRef="pi_m_agreed"><dc:Bounds x="270" y="290" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_m_contingency" cmmnElementRef="pi_m_contingency"><dc:Bounds x="460" y="290" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_m_standing" cmmnElementRef="pi_m_standing"><dc:Bounds x="80" y="390" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+    </cmmndi:CMMNDiagram>
+  </cmmndi:CMMNDI>
+</definitions>

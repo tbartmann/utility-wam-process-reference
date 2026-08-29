@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_P_18_4" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <process id="P_18_4" name="18.4 Execute the switching and issue the clearance" isExecutable="false">
+    <documentation>18.4.1, 18.4.2, 18.4.3, 18.4.4 and 18.4.6 are drawn. 18.4.5 is the register they all write to and has no instance boundary, so it is specified rather than modelled.
+
+THIS FLOW IS NOT THE AUTHOR'S. 29 CFR 1910.269(m)(2)(i) requires compliance with all of (m)(3) IN THE ORDER SPECIFIED, and the electric path below is (m)(3)(i), (ii), (iii), (vi), (vii) and (viii) in that order. Two orderings in it are the ones most often got wrong in practice and both are drawn explicitly: the clearance is GIVEN BEFORE the line is tested, not after - (m)(3)(vi) tests after the system operator gives it; and the line may be treated as deenergized only after grounding, because (m)(3)(viii) says only then and (m)(1) says anything else is treated as energized.
+
+The gas path is a different regime, not a shorter one. It has no clearance, no tags in the (m)(3)(v) sense and no test for voltage. It has 49 CFR 192.605(b)(5), 192.751 and 192.629, and its energy control is 29 CFR 1910.147 - which reaches gas precisely because 1910.147(a)(1)(ii)(C) excludes electric utility installations and not gas ones.</documentation>
+    <laneSet id="P_18_4_lanes">
+      <lane id="l_184_eic" name="Employee in charge and crew">
+        <flowNodeRef>n_184_start</flowNodeRef>
+        <flowNodeRef>n_184_brief</flowNodeRef>
+        <flowNodeRef>n_184_gw</flowNodeRef>
+        <flowNodeRef>n_184_req</flowNodeRef>
+        <flowNodeRef>n_184_test</flowNodeRef>
+        <flowNodeRef>n_184_gnd</flowNodeRef>
+        <flowNodeRef>n_184_deen</flowNodeRef>
+        <flowNodeRef>n_184_xstart</flowNodeRef>
+        <flowNodeRef>n_184_xwho</flowNodeRef>
+        <flowNodeRef>n_184_xno</flowNodeRef>
+        <flowNodeRef>n_184_xinf</flowNodeRef>
+        <flowNodeRef>n_184_xnew</flowNodeRef>
+        <flowNodeRef>n_184_xend</flowNodeRef>
+      </lane>
+      <lane id="l_184_so" name="System operator and control room">
+        <flowNodeRef>n_184_open</flowNodeRef>
+        <flowNodeRef>n_184_inop</flowNodeRef>
+        <flowNodeRef>n_184_remote</flowNodeRef>
+        <flowNodeRef>n_184_give</flowNodeRef>
+        <flowNodeRef>n_184_regr</flowNodeRef>
+        <flowNodeRef>n_184_xreg</flowNodeRef>
+      </lane>
+      <lane id="l_184_gas" name="Gas operations">
+        <flowNodeRef>n_184_shut</flowNodeRef>
+        <flowNodeRef>n_184_ign</flowNodeRef>
+        <flowNodeRef>n_184_purge</flowNodeRef>
+        <flowNodeRef>n_184_atm</flowNodeRef>
+        <flowNodeRef>n_184_loto</flowNodeRef>
+        <flowNodeRef>n_184_gend</flowNodeRef>
+      </lane>
+    </laneSet>
+    <startEvent id="n_184_start" name="Approved operation due for execution"><messageEventDefinition id="n_184_start_md"/></startEvent>
+    <userTask id="n_184_brief" name="Hold the job briefing before the work"><documentation>29 CFR 1910.269(c)(1)(ii): the employee in charge conducts a job briefing before the job. (c)(3)(ii) requires another one when anything significant to safety changes - which an aborted isolation is.</documentation></userTask>
+    <exclusiveGateway id="n_184_gw" name="Regime from 18.1.1"/>
+    <receiveTask id="n_184_req" name="Employee in charge requests deenergization"><documentation>18.4.4. (m)(3)(i): the employee the employer designates as in charge REQUESTS the system operator to deenergize the particular section, and becomes responsible for the clearance. Nothing else in this model performs that request.</documentation></receiveTask>
+    <serviceTask id="n_184_open" name="Open every means a known source could supply"><documentation>18.4.1. (m)(3)(ii): all switches, disconnectors, jumpers, taps and other means.</documentation></serviceTask>
+    <serviceTask id="n_184_inop" name="Render each opened means inoperable and tag it"><documentation>18.4.1. (m)(3)(ii) and (v); (m)(2)(v) adds that a disconnecting means accessible to the public is rendered inoperable while open.</documentation></serviceTask>
+    <serviceTask id="n_184_remote" name="Tag and disable automatic and remote controls"><documentation>18.4.1. (m)(3)(iii), AT THE POINTS OF CONTROL. Remote reclose is the failure mode this step exists for, and 18.5.3 re-enables what is disabled here.</documentation></serviceTask>
+    <sendTask id="n_184_give" name="System operator gives the clearance"><documentation>18.4.4. (m)(3)(vi). To the employee who requested it and to no-one else. This is the act nine other categories reference and no field process may perform.</documentation></sendTask>
+    <serviceTask id="n_184_regr" name="Record it on the clearance register (18.4.5)"><documentation>18.4.5. Holder, section, tags placed and time. (m)(3)(xii) makes the register the thing that says whether a tag may come off.</documentation></serviceTask>
+    <userTask id="n_184_test" name="Test with a device designed to detect voltage"><documentation>18.4.2. (m)(3)(vi), and AFTER the clearance is given. Testing before it is not an early start on the sequence, it is out of order.</documentation></userTask>
+    <userTask id="n_184_gnd" name="Install protective grounds to make an equipotential zone"><documentation>18.4.2. (m)(3)(vii) with (n)(2) and (n)(3).</documentation></userTask>
+    <endEvent id="n_184_deen" name="Only now treated as deenergized"><documentation>18.4.2. (m)(3)(viii). Before this point (m)(1) governs and the section is treated as energized whatever has been done to it.</documentation></endEvent>
+    <serviceTask id="n_184_shut" name="Shut the section down within MAOP"><documentation>18.4.1, gas. 49 CFR 192.605(b)(5), within MAOP plus the allowed build-up, using a valve 192.747 says is in service and serviceable.</documentation></serviceTask>
+    <serviceTask id="n_184_ign" name="Clear ignition sources and provide an extinguisher"><documentation>18.4.3. 49 CFR 192.751(a), before a hazardous amount is vented. (b) forbids welding or cutting on pipe holding a combustible mixture.</documentation></serviceTask>
+    <serviceTask id="n_184_purge" name="Purge to the required flow, with an inert slug where needed"><documentation>18.4.3. 49 CFR 192.629: a MODERATELY RAPID AND CONTINUOUS FLOW, and a SLUG OF INERT GAS first where that alone cannot prevent a hazardous mixture.</documentation></serviceTask>
+    <userTask id="n_184_atm" name="Confirm the atmosphere before the section is opened"><documentation>18.4.3. The gas analogue of testing for voltage, and not interchangeable with it.</documentation></userTask>
+    <serviceTask id="n_184_loto" name="Apply energy control under 1910.147"><documentation>18.4.1, gas. 1910.147 reaches gas distribution work; (a)(1)(ii)(C) excludes only electric utility generation, transmission and distribution installations.</documentation></serviceTask>
+    <endEvent id="n_184_gend" name="Section safe for work"><documentation>18.4.3.</documentation></endEvent>
+    <startEvent id="n_184_xstart" name="Clearance must be transferred"><messageEventDefinition id="n_184_xstart_md"/></startEvent>
+    <exclusiveGateway id="n_184_xwho" name="Initiated by the holder or their supervisor"><documentation>18.4.6. (m)(3)(ix) names two people and no others.</documentation></exclusiveGateway>
+    <endEvent id="n_184_xno" name="Refused: nobody else may initiate a transfer"><documentation>18.4.6. (m)(3)(ix).</documentation></endEvent>
+    <sendTask id="n_184_xinf" name="Inform the system operator and the crew"><documentation>18.4.6. (m)(3)(ix): both, not either.</documentation></sendTask>
+    <serviceTask id="n_184_xnew" name="New employee in charge becomes responsible"><documentation>18.4.6. And (m)(3)(xi) then permits that person to release it, which is the whole purpose of recording the transfer.</documentation></serviceTask>
+    <serviceTask id="n_184_xreg" name="Update the register (18.4.5)"><documentation>18.4.5.</documentation></serviceTask>
+    <endEvent id="n_184_xend" name="Clearance transferred"/>
+    <sequenceFlow id="f_n_184_start_n_184_brief" sourceRef="n_184_start" targetRef="n_184_brief" name=""/>
+    <sequenceFlow id="f_n_184_brief_n_184_gw" sourceRef="n_184_brief" targetRef="n_184_gw" name=""/>
+    <sequenceFlow id="f_n_184_gw_n_184_req" sourceRef="n_184_gw" targetRef="n_184_req" name="electric"><conditionExpression xsi:type="tFormalExpression"><![CDATA[regime = "systemOperator" or regime = "employeeInCharge" or regime = "singleCrewVisibleDisconnect"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_184_gw_n_184_shut" sourceRef="n_184_gw" targetRef="n_184_shut" name="gas"><conditionExpression xsi:type="tFormalExpression"><![CDATA[regime = "gasOperating"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_184_req_n_184_open" sourceRef="n_184_req" targetRef="n_184_open" name=""/>
+    <sequenceFlow id="f_n_184_open_n_184_inop" sourceRef="n_184_open" targetRef="n_184_inop" name=""/>
+    <sequenceFlow id="f_n_184_inop_n_184_remote" sourceRef="n_184_inop" targetRef="n_184_remote" name=""/>
+    <sequenceFlow id="f_n_184_remote_n_184_give" sourceRef="n_184_remote" targetRef="n_184_give" name=""/>
+    <sequenceFlow id="f_n_184_give_n_184_regr" sourceRef="n_184_give" targetRef="n_184_regr" name=""/>
+    <sequenceFlow id="f_n_184_regr_n_184_test" sourceRef="n_184_regr" targetRef="n_184_test" name=""/>
+    <sequenceFlow id="f_n_184_test_n_184_gnd" sourceRef="n_184_test" targetRef="n_184_gnd" name=""/>
+    <sequenceFlow id="f_n_184_gnd_n_184_deen" sourceRef="n_184_gnd" targetRef="n_184_deen" name=""/>
+    <sequenceFlow id="f_n_184_shut_n_184_ign" sourceRef="n_184_shut" targetRef="n_184_ign" name=""/>
+    <sequenceFlow id="f_n_184_ign_n_184_purge" sourceRef="n_184_ign" targetRef="n_184_purge" name=""/>
+    <sequenceFlow id="f_n_184_purge_n_184_atm" sourceRef="n_184_purge" targetRef="n_184_atm" name=""/>
+    <sequenceFlow id="f_n_184_atm_n_184_loto" sourceRef="n_184_atm" targetRef="n_184_loto" name=""/>
+    <sequenceFlow id="f_n_184_loto_n_184_gend" sourceRef="n_184_loto" targetRef="n_184_gend" name=""/>
+    <sequenceFlow id="f_n_184_xstart_n_184_xwho" sourceRef="n_184_xstart" targetRef="n_184_xwho" name=""/>
+    <sequenceFlow id="f_n_184_xwho_n_184_xno" sourceRef="n_184_xwho" targetRef="n_184_xno" name="anyone else"><conditionExpression xsi:type="tFormalExpression"><![CDATA[initiator = "other"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_184_xwho_n_184_xinf" sourceRef="n_184_xwho" targetRef="n_184_xinf" name="holder, or supervisor for illness or emergency"/>
+    <sequenceFlow id="f_n_184_xinf_n_184_xnew" sourceRef="n_184_xinf" targetRef="n_184_xnew" name=""/>
+    <sequenceFlow id="f_n_184_xnew_n_184_xreg" sourceRef="n_184_xnew" targetRef="n_184_xreg" name=""/>
+    <sequenceFlow id="f_n_184_xreg_n_184_xend" sourceRef="n_184_xreg" targetRef="n_184_xend" name=""/>
+  </process>
+  <bpmndi:BPMNDiagram id="dg_P_18_4">
+    <bpmndi:BPMNPlane id="pl_P_18_4" bpmnElement="P_18_4">
+      <bpmndi:BPMNShape id="sh_n_184_start" bpmnElement="n_184_start"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_184_brief" bpmnElement="n_184_brief"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_184_gw" bpmnElement="n_184_gw"><dc:Bounds x="467" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_184_req" bpmnElement="n_184_req"><dc:Bounds x="595" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_184_open" bpmnElement="n_184_open"><dc:Bounds x="765" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_184_inop" bpmnElement="n_184_inop"><dc:Bounds x="935" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_184_remote" bpmnElement="n_184_remote"><dc:Bounds x="1105" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_184_give" bpmnElement="n_184_give"><dc:Bounds x="1275" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_184_regr" bpmnElement="n_184_regr"><dc:Bounds x="1445" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_184_test" bpmnElement="n_184_test"><dc:Bounds x="1615" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_184_gnd" bpmnElement="n_184_gnd"><dc:Bounds x="1785" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_184_deen" bpmnElement="n_184_deen"><dc:Bounds x="2002" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_184_shut" bpmnElement="n_184_shut"><dc:Bounds x="595" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_184_ign" bpmnElement="n_184_ign"><dc:Bounds x="765" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_184_purge" bpmnElement="n_184_purge"><dc:Bounds x="935" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_184_atm" bpmnElement="n_184_atm"><dc:Bounds x="1105" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_184_loto" bpmnElement="n_184_loto"><dc:Bounds x="1275" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_184_gend" bpmnElement="n_184_gend"><dc:Bounds x="1492" y="657" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_184_xstart" bpmnElement="n_184_xstart"><dc:Bounds x="132" y="1097" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_184_xwho" bpmnElement="n_184_xwho"><dc:Bounds x="297" y="1092" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_184_xno" bpmnElement="n_184_xno"><dc:Bounds x="302" y="1317" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_184_xinf" bpmnElement="n_184_xinf"><dc:Bounds x="425" y="1080" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_184_xnew" bpmnElement="n_184_xnew"><dc:Bounds x="595" y="1080" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_184_xreg" bpmnElement="n_184_xreg"><dc:Bounds x="765" y="1080" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_184_xend" bpmnElement="n_184_xend"><dc:Bounds x="982" y="1097" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ed_f_n_184_start_n_184_brief" bpmnElement="f_n_184_start_n_184_brief"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_184_brief_n_184_gw" bpmnElement="f_n_184_brief_n_184_gw"><di:waypoint x="385" y="235"/><di:waypoint x="467" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_184_gw_n_184_req" bpmnElement="f_n_184_gw_n_184_req"><di:waypoint x="513" y="235"/><di:waypoint x="595" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_184_gw_n_184_shut" bpmnElement="f_n_184_gw_n_184_shut"><di:waypoint x="513" y="235"/><di:waypoint x="570" y="235"/><di:waypoint x="570" y="675"/><di:waypoint x="595" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_184_req_n_184_open" bpmnElement="f_n_184_req_n_184_open"><di:waypoint x="725" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_184_open_n_184_inop" bpmnElement="f_n_184_open_n_184_inop"><di:waypoint x="895" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_184_inop_n_184_remote" bpmnElement="f_n_184_inop_n_184_remote"><di:waypoint x="1065" y="235"/><di:waypoint x="1105" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_184_remote_n_184_give" bpmnElement="f_n_184_remote_n_184_give"><di:waypoint x="1235" y="235"/><di:waypoint x="1275" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_184_give_n_184_regr" bpmnElement="f_n_184_give_n_184_regr"><di:waypoint x="1405" y="235"/><di:waypoint x="1445" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_184_regr_n_184_test" bpmnElement="f_n_184_regr_n_184_test"><di:waypoint x="1575" y="235"/><di:waypoint x="1615" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_184_test_n_184_gnd" bpmnElement="f_n_184_test_n_184_gnd"><di:waypoint x="1745" y="235"/><di:waypoint x="1785" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_184_gnd_n_184_deen" bpmnElement="f_n_184_gnd_n_184_deen"><di:waypoint x="1915" y="235"/><di:waypoint x="2002" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_184_shut_n_184_ign" bpmnElement="f_n_184_shut_n_184_ign"><di:waypoint x="725" y="675"/><di:waypoint x="765" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_184_ign_n_184_purge" bpmnElement="f_n_184_ign_n_184_purge"><di:waypoint x="895" y="675"/><di:waypoint x="935" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_184_purge_n_184_atm" bpmnElement="f_n_184_purge_n_184_atm"><di:waypoint x="1065" y="675"/><di:waypoint x="1105" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_184_atm_n_184_loto" bpmnElement="f_n_184_atm_n_184_loto"><di:waypoint x="1235" y="675"/><di:waypoint x="1275" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_184_loto_n_184_gend" bpmnElement="f_n_184_loto_n_184_gend"><di:waypoint x="1405" y="675"/><di:waypoint x="1492" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_184_xstart_n_184_xwho" bpmnElement="f_n_184_xstart_n_184_xwho"><di:waypoint x="168" y="1115"/><di:waypoint x="297" y="1115"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_184_xwho_n_184_xno" bpmnElement="f_n_184_xwho_n_184_xno"><di:waypoint x="343" y="1115"/><di:waypoint x="277" y="1115"/><di:waypoint x="277" y="1335"/><di:waypoint x="302" y="1335"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_184_xwho_n_184_xinf" bpmnElement="f_n_184_xwho_n_184_xinf"><di:waypoint x="343" y="1115"/><di:waypoint x="425" y="1115"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_184_xinf_n_184_xnew" bpmnElement="f_n_184_xinf_n_184_xnew"><di:waypoint x="555" y="1115"/><di:waypoint x="595" y="1115"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_184_xnew_n_184_xreg" bpmnElement="f_n_184_xnew_n_184_xreg"><di:waypoint x="725" y="1115"/><di:waypoint x="765" y="1115"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_184_xreg_n_184_xend" bpmnElement="f_n_184_xreg_n_184_xend"><di:waypoint x="895" y="1115"/><di:waypoint x="982" y="1115"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

@@ -722,3 +722,74 @@ arithmetic is NESC Rule 250B, which is paywalled and unread here.
 Two independent derivations of the same category agreeing on substance, and disagreeing
 only on notation and citation depth, is the strongest corroboration anything in this
 reference has.
+
+---
+
+## Section F — Planned network operation and the clearance (added 2026-08-29 for 18.0)
+
+The pack already pointed at 29 CFR 1910.269(m) and told every category that consumes a
+clearance to cite **18.4.4** as its producing process. Twenty-four references now do. This
+section carries what (m) actually says, read verbatim from the current eCFR, because 18.0
+is the category that has to satisfy all of them.
+
+### F1 — 29 CFR 1910.269(m) is the clearance lifecycle, and it is prescriptive
+
+Two things about (m) shape the whole category.
+
+**It fixes the ORDER.** (m)(2)(i) requires the employer to comply with all of (m)(3)
+"**in the order specified**". A regulation that specifies a sequence is the strongest case
+for BPMN anywhere in this reference — the flow is not the author's, it is the rule's.
+
+**It names who does what.** The employee in charge of the clearance REQUESTS
+deenergization; the **system operator gives the clearance**. That is 18.4.4, and it is why
+no field process may issue one.
+
+| Locator | What it establishes |
+|---|---|
+| (m)(1) | Applies to deenergizing transmission and distribution lines for employee protection. Conductors deenergized under procedures **other than** (d) or (m) **shall be treated as energized** |
+| (m)(2)(i)–(iii) | Whether a system operator is in charge decides the regime; with one crew and a visible, solely-controlled disconnect, (m)(3)(i), (iii) and (v) do not apply and tags are not required |
+| (m)(2)(iv) | Two or more crews: either a single employee in charge for all, or each crew complies independently with **separate tags** |
+| (m)(2)(v) | Disconnecting means accessible to the public must be rendered inoperable while open |
+| (m)(3)(i) | The designated employee in charge **requests** the system operator to deenergize |
+| (m)(3)(ii)–(iii) | All switches, disconnectors, jumpers and taps open and rendered inoperable and **tagged**; automatic and remote controls tagged at the point of control and disabled |
+| (m)(3)(v) | Tags prohibit operation and indicate employees are at work |
+| (m)(3)(vi) | **After** (i) to (v), and **after the system operator gives a clearance**, test with a device designed to detect voltage |
+| (m)(3)(vii) | Install protective grounds per (n) |
+| (m)(3)(viii) | **Only then** may the lines be considered deenergized |
+| (m)(3)(ix) | **Transfer**: the employee in charge, or their supervisor if illness or emergency forces them off site, informs the system operator and the crew; the new employee in charge becomes responsible |
+| (m)(3)(x) | **Release**: notify each employee, ensure all are clear, ensure all grounds removed, report to the system operator, then release |
+| (m)(3)(xi) | **Only the employee in charge who requested the clearance may release it**, unless transferred under (ix) |
+| (m)(3)(xii) | No tag may be removed without release of the associated clearance |
+| (m)(3)(xiii) | No one initiates reenergization until all grounds are removed, **all crews release their clearances**, all employees are clear and all tags are removed |
+
+(n)(2): to work lines as deenergized the employer ensures they are deenergized **under (m)**
+and properly grounded; (n)(3) requires an equipotential zone. (c)(1)(ii) requires the
+employee in charge to conduct a job briefing before the job; (c)(3)(ii) requires an
+additional briefing on significant changes affecting safety.
+
+### F2 — The gas half, which is a different regime and not a clearance
+
+| Locator | What it establishes | Status |
+|---|---|---|
+| **49 CFR 192.605(b)(5)** | operating procedures must cover **starting up and shutting down any part of the pipeline** so it stays within MAOP plus the allowed build-up | `regulation` |
+| **49 CFR 192.629(a)–(b)** | purging air with gas, or gas with air, in a **moderately rapid and continuous flow**, with a **slug of inert gas** first where a hazardous mixture could otherwise form | `regulation` |
+| **49 CFR 192.751(a)–(c)** | venting a hazardous amount of gas: remove every potential ignition source, provide a fire extinguisher, no welding or cutting on pipe containing a combustible mixture, post warning signs | `regulation` |
+| **49 CFR 192.747** | a valve necessary for safe operation is checked and serviced at intervals **not exceeding 15 months, but at least once each calendar year**; an inoperable valve takes prompt remedial action unless an alternative valve is designated | `regulation` |
+
+**A gas isolation is not a clearance.** 1910.269(m) is an electric transmission and
+distribution rule. Gas energy control falls under 29 CFR 1910.147 within its own scope,
+and the operating discipline is 192.605(b)(5) and the purging and ignition rules above.
+Drawing one path over both commodities would be wrong twice, so 18.4 branches.
+
+### F3 — Framework anchors, already in the pack
+
+GFMAM subject **3.8 Shutdown and Outage Strategy and Planning** and APQC PCF Utilities
+**14.1.6 Perform planned network operation (19285)** both reach this category. It is
+therefore NOT one of the framework gaps — unlike 11.0, both frameworks name it.
+
+### F4 — What is NOT sourced
+
+Outage notice periods, life-support and medical customer registers, competing-outage
+priority rules, clearance expiry periods and abnormal-condition standing instructions are
+all operator, tariff or State. None is in this pack and 18.0 marks each as `judgment`.
+

@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_P_18_5" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <process id="P_18_5" name="18.5 Return the network to service" isExecutable="false">
+    <documentation>All five processes are drawn. Like 18.4 the order is the regulation's: (m)(3)(x)(A) to (D), then (xi), then (xii), then (xiii), and 29 CFR 1910.269(m)(2)(i) requires them in the order specified.
+
+Two gates in this file are the ones that make it worth drawing rather than listing. WHO MAY RELEASE: (m)(3)(xi) permits only the employee in charge who REQUESTED the clearance, unless responsibility was transferred under (ix) - so a surrender offered by anyone else is refused, and a clearance whose holder has gone home without transferring cannot lawfully be released by the person standing there. AND WHOSE CLEARANCE IS LAST: (m)(3)(xiii) bars anyone from initiating reenergization until ALL grounds are removed, ALL crews release THEIR clearances, ALL employees are clear and ALL tags are removed. One crew finishing is not the section finishing.
+
+A premise that does not come back stops being a planned outage. It becomes an unplanned interruption and leaves for 9.0, because the two are reported differently under IEEE 1366 - and for gas a premise needing relight goes to 9.3.5 under the 49 CFR 192.615(a)(9) duty to safely restore any service outage.</documentation>
+    <laneSet id="P_18_5_lanes">
+      <lane id="l_185_eic" name="Employee in charge and crew">
+        <flowNodeRef>n_185_start</flowNodeRef>
+        <flowNodeRef>n_185_conf</flowNodeRef>
+        <flowNodeRef>n_185_not</flowNodeRef>
+        <flowNodeRef>n_185_clr</flowNodeRef>
+        <flowNodeRef>n_185_gnd</flowNodeRef>
+        <flowNodeRef>n_185_rep</flowNodeRef>
+        <flowNodeRef>n_185_ref</flowNodeRef>
+      </lane>
+      <lane id="l_185_so" name="System operator and control room">
+        <flowNodeRef>n_185_who</flowNodeRef>
+        <flowNodeRef>n_185_can</flowNodeRef>
+        <flowNodeRef>n_185_tag</flowNodeRef>
+        <flowNodeRef>n_185_last</flowNodeRef>
+        <flowNodeRef>n_185_wait</flowNodeRef>
+        <flowNodeRef>n_185_bar</flowNodeRef>
+        <flowNodeRef>n_185_gwc</flowNodeRef>
+        <flowNodeRef>n_185_rev</flowNodeRef>
+        <flowNodeRef>n_185_reen</flowNodeRef>
+        <flowNodeRef>n_185_gas</flowNodeRef>
+        <flowNodeRef>n_185_rec</flowNodeRef>
+        <flowNodeRef>n_185_end</flowNodeRef>
+      </lane>
+      <lane id="l_185_cust" name="Customer operations">
+        <flowNodeRef>n_185_sup</flowNodeRef>
+        <flowNodeRef>n_185_all</flowNodeRef>
+        <flowNodeRef>n_185_ref9</flowNodeRef>
+        <flowNodeRef>n_185_notp</flowNodeRef>
+        <flowNodeRef>n_185_crit</flowNodeRef>
+      </lane>
+    </laneSet>
+    <startEvent id="n_185_start" name="Work under a clearance complete or stopped"><documentation>18.5.1. Stopped is as valid a trigger as complete: a clearance held open over an abandoned job blocks the network and the crew who could have used it.</documentation><messageEventDefinition id="n_185_start_md"/></startEvent>
+    <userTask id="n_185_conf" name="Confirm the work under this clearance is finished"><documentation>18.5.1.</documentation></userTask>
+    <sendTask id="n_185_not" name="Notify each employee of the pending release"><documentation>18.5.1. (m)(3)(x)(A).</documentation></sendTask>
+    <userTask id="n_185_clr" name="Confirm every employee is clear"><documentation>18.5.1. (m)(3)(x)(B).</documentation></userTask>
+    <userTask id="n_185_gnd" name="Confirm every protective ground under it is removed"><documentation>18.5.1. (m)(3)(x)(C), and only the grounds placed under THIS clearance. Another crew's grounds stay.</documentation></userTask>
+    <sendTask id="n_185_rep" name="Report to the system operator and release"><documentation>18.5.2. (m)(3)(x)(D).</documentation></sendTask>
+    <exclusiveGateway id="n_185_who" name="Released by the requester or a transferee"/>
+    <endEvent id="n_185_ref" name="Surrender refused"><documentation>18.5.2. (m)(3)(xi). The clearance stays live and 18.4.6 is the only route out of this state.</documentation></endEvent>
+    <serviceTask id="n_185_can" name="Cancel the clearance on the register (18.4.5)"><documentation>18.5.2.</documentation></serviceTask>
+    <serviceTask id="n_185_tag" name="Release the tags associated with it"><documentation>18.5.2. (m)(3)(xii): no tag may be removed without release of its clearance.</documentation></serviceTask>
+    <exclusiveGateway id="n_185_last" name="Last clearance on the section"/>
+    <endEvent id="n_185_wait" name="Section stays deenergized under another clearance"><documentation>18.5.3. A legitimate ending, and the one (m)(3)(xiii) exists to protect.</documentation></endEvent>
+    <userTask id="n_185_bar" name="Confirm the four-part bar before reenergizing"><documentation>18.5.3. (m)(3)(xiii): all grounds removed, all crews released, all employees clear, all tags removed from that point of disconnection.</documentation></userTask>
+    <exclusiveGateway id="n_185_gwc" name="Commodity"/>
+    <serviceTask id="n_185_rev" name="Reverse the switching to the normal configuration"><documentation>18.5.3.</documentation></serviceTask>
+    <serviceTask id="n_185_reen" name="Re-enable the automatic and remote controls"><documentation>18.5.3. What 18.4.1 disabled under (m)(3)(iii). A section restored with its reclosing blocked is not restored, and the next fault finds out.</documentation></serviceTask>
+    <serviceTask id="n_185_gas" name="Return to service within MAOP and purge back to gas"><documentation>18.5.3, gas. 49 CFR 192.605(b)(5) and 192.629. Neither is a clearance release and neither has one.</documentation></serviceTask>
+    <userTask id="n_185_sup" name="Confirm supply is restored at the affected premises"><documentation>18.5.4.</documentation></userTask>
+    <exclusiveGateway id="n_185_all" name="Every premise back"/>
+    <sendTask id="n_185_ref9" name="Refer what did not come back to 9.0"><documentation>18.5.4. An unplanned interruption from here, reported under IEEE 1366; a gas premise needing relight goes to 9.3.5 under 192.615(a)(9).</documentation></sendTask>
+    <sendTask id="n_185_notp" name="Notify the parties told at 18.3 that it has ended"><documentation>18.5.4. On the channel they were told on.</documentation></sendTask>
+    <sendTask id="n_185_crit" name="Confirm restoration personally to critical premises"><documentation>18.5.4. For the same reason the original contact was personal.</documentation></sendTask>
+    <serviceTask id="n_185_rec" name="Record the as-operated state (18.5.5)"><documentation>18.5.5. Device states as actually left, any abnormal condition still standing and why. 18.1.4 reads this back on the next plan, which is what makes it load-bearing rather than administrative.</documentation></serviceTask>
+    <endEvent id="n_185_end" name="Operation closed"/>
+    <sequenceFlow id="f_n_185_start_n_185_conf" sourceRef="n_185_start" targetRef="n_185_conf" name=""/>
+    <sequenceFlow id="f_n_185_conf_n_185_not" sourceRef="n_185_conf" targetRef="n_185_not" name=""/>
+    <sequenceFlow id="f_n_185_not_n_185_clr" sourceRef="n_185_not" targetRef="n_185_clr" name=""/>
+    <sequenceFlow id="f_n_185_clr_n_185_gnd" sourceRef="n_185_clr" targetRef="n_185_gnd" name=""/>
+    <sequenceFlow id="f_n_185_gnd_n_185_rep" sourceRef="n_185_gnd" targetRef="n_185_rep" name=""/>
+    <sequenceFlow id="f_n_185_rep_n_185_who" sourceRef="n_185_rep" targetRef="n_185_who" name=""/>
+    <sequenceFlow id="f_n_185_who_n_185_ref" sourceRef="n_185_who" targetRef="n_185_ref" name="anyone else"><conditionExpression xsi:type="tFormalExpression"><![CDATA[releaser = "other"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_185_who_n_185_can" sourceRef="n_185_who" targetRef="n_185_can" name="requester, or transferee under (ix)"/>
+    <sequenceFlow id="f_n_185_can_n_185_tag" sourceRef="n_185_can" targetRef="n_185_tag" name=""/>
+    <sequenceFlow id="f_n_185_tag_n_185_last" sourceRef="n_185_tag" targetRef="n_185_last" name=""/>
+    <sequenceFlow id="f_n_185_last_n_185_wait" sourceRef="n_185_last" targetRef="n_185_wait" name="others still hold clearances"><conditionExpression xsi:type="tFormalExpression"><![CDATA[openClearances > 0]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_185_last_n_185_bar" sourceRef="n_185_last" targetRef="n_185_bar" name="last one"/>
+    <sequenceFlow id="f_n_185_bar_n_185_gwc" sourceRef="n_185_bar" targetRef="n_185_gwc" name=""/>
+    <sequenceFlow id="f_n_185_gwc_n_185_rev" sourceRef="n_185_gwc" targetRef="n_185_rev" name="electric"/>
+    <sequenceFlow id="f_n_185_gwc_n_185_gas" sourceRef="n_185_gwc" targetRef="n_185_gas" name="gas"><conditionExpression xsi:type="tFormalExpression"><![CDATA[regime = "gasOperating"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_185_rev_n_185_reen" sourceRef="n_185_rev" targetRef="n_185_reen" name=""/>
+    <sequenceFlow id="f_n_185_reen_n_185_sup" sourceRef="n_185_reen" targetRef="n_185_sup" name=""/>
+    <sequenceFlow id="f_n_185_gas_n_185_sup" sourceRef="n_185_gas" targetRef="n_185_sup" name=""/>
+    <sequenceFlow id="f_n_185_sup_n_185_all" sourceRef="n_185_sup" targetRef="n_185_all" name=""/>
+    <sequenceFlow id="f_n_185_all_n_185_ref9" sourceRef="n_185_all" targetRef="n_185_ref9" name="premises missing"><conditionExpression xsi:type="tFormalExpression"><![CDATA[restored = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_185_ref9_n_185_notp" sourceRef="n_185_ref9" targetRef="n_185_notp" name=""/>
+    <sequenceFlow id="f_n_185_all_n_185_notp" sourceRef="n_185_all" targetRef="n_185_notp" name="all back"/>
+    <sequenceFlow id="f_n_185_notp_n_185_crit" sourceRef="n_185_notp" targetRef="n_185_crit" name=""/>
+    <sequenceFlow id="f_n_185_crit_n_185_rec" sourceRef="n_185_crit" targetRef="n_185_rec" name=""/>
+    <sequenceFlow id="f_n_185_rec_n_185_end" sourceRef="n_185_rec" targetRef="n_185_end" name=""/>
+  </process>
+  <bpmndi:BPMNDiagram id="dg_P_18_5">
+    <bpmndi:BPMNPlane id="pl_P_18_5" bpmnElement="P_18_5">
+      <bpmndi:BPMNShape id="sh_n_185_start" bpmnElement="n_185_start"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_185_conf" bpmnElement="n_185_conf"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_185_not" bpmnElement="n_185_not"><dc:Bounds x="425" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_185_clr" bpmnElement="n_185_clr"><dc:Bounds x="595" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_185_gnd" bpmnElement="n_185_gnd"><dc:Bounds x="765" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_185_rep" bpmnElement="n_185_rep"><dc:Bounds x="935" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_185_who" bpmnElement="n_185_who"><dc:Bounds x="1147" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_185_ref" bpmnElement="n_185_ref"><dc:Bounds x="1152" y="437" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_185_can" bpmnElement="n_185_can"><dc:Bounds x="1275" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_185_tag" bpmnElement="n_185_tag"><dc:Bounds x="1445" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_185_last" bpmnElement="n_185_last"><dc:Bounds x="1657" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_185_wait" bpmnElement="n_185_wait"><dc:Bounds x="1662" y="437" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_185_bar" bpmnElement="n_185_bar"><dc:Bounds x="1785" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_185_gwc" bpmnElement="n_185_gwc"><dc:Bounds x="1997" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_185_rev" bpmnElement="n_185_rev"><dc:Bounds x="2125" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_185_reen" bpmnElement="n_185_reen"><dc:Bounds x="2295" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_185_gas" bpmnElement="n_185_gas"><dc:Bounds x="2125" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_185_sup" bpmnElement="n_185_sup"><dc:Bounds x="2465" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_185_all" bpmnElement="n_185_all"><dc:Bounds x="2677" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_185_ref9" bpmnElement="n_185_ref9"><dc:Bounds x="2635" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_185_notp" bpmnElement="n_185_notp"><dc:Bounds x="2805" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_185_crit" bpmnElement="n_185_crit"><dc:Bounds x="2975" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_185_rec" bpmnElement="n_185_rec"><dc:Bounds x="3145" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_185_end" bpmnElement="n_185_end"><dc:Bounds x="3362" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ed_f_n_185_start_n_185_conf" bpmnElement="f_n_185_start_n_185_conf"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_185_conf_n_185_not" bpmnElement="f_n_185_conf_n_185_not"><di:waypoint x="385" y="235"/><di:waypoint x="425" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_185_not_n_185_clr" bpmnElement="f_n_185_not_n_185_clr"><di:waypoint x="555" y="235"/><di:waypoint x="595" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_185_clr_n_185_gnd" bpmnElement="f_n_185_clr_n_185_gnd"><di:waypoint x="725" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_185_gnd_n_185_rep" bpmnElement="f_n_185_gnd_n_185_rep"><di:waypoint x="895" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_185_rep_n_185_who" bpmnElement="f_n_185_rep_n_185_who"><di:waypoint x="1065" y="235"/><di:waypoint x="1147" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_185_who_n_185_ref" bpmnElement="f_n_185_who_n_185_ref"><di:waypoint x="1193" y="235"/><di:waypoint x="1127" y="235"/><di:waypoint x="1127" y="455"/><di:waypoint x="1152" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_185_who_n_185_can" bpmnElement="f_n_185_who_n_185_can"><di:waypoint x="1193" y="235"/><di:waypoint x="1275" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_185_can_n_185_tag" bpmnElement="f_n_185_can_n_185_tag"><di:waypoint x="1405" y="235"/><di:waypoint x="1445" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_185_tag_n_185_last" bpmnElement="f_n_185_tag_n_185_last"><di:waypoint x="1575" y="235"/><di:waypoint x="1657" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_185_last_n_185_wait" bpmnElement="f_n_185_last_n_185_wait"><di:waypoint x="1703" y="235"/><di:waypoint x="1637" y="235"/><di:waypoint x="1637" y="455"/><di:waypoint x="1662" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_185_last_n_185_bar" bpmnElement="f_n_185_last_n_185_bar"><di:waypoint x="1703" y="235"/><di:waypoint x="1785" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_185_bar_n_185_gwc" bpmnElement="f_n_185_bar_n_185_gwc"><di:waypoint x="1915" y="235"/><di:waypoint x="1997" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_185_gwc_n_185_rev" bpmnElement="f_n_185_gwc_n_185_rev"><di:waypoint x="2043" y="235"/><di:waypoint x="2125" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_185_gwc_n_185_gas" bpmnElement="f_n_185_gwc_n_185_gas"><di:waypoint x="2043" y="235"/><di:waypoint x="2100" y="235"/><di:waypoint x="2100" y="675"/><di:waypoint x="2125" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_185_rev_n_185_reen" bpmnElement="f_n_185_rev_n_185_reen"><di:waypoint x="2255" y="235"/><di:waypoint x="2295" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_185_reen_n_185_sup" bpmnElement="f_n_185_reen_n_185_sup"><di:waypoint x="2425" y="235"/><di:waypoint x="2465" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_185_gas_n_185_sup" bpmnElement="f_n_185_gas_n_185_sup"><di:waypoint x="2255" y="675"/><di:waypoint x="2440" y="675"/><di:waypoint x="2440" y="235"/><di:waypoint x="2465" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_185_sup_n_185_all" bpmnElement="f_n_185_sup_n_185_all"><di:waypoint x="2595" y="235"/><di:waypoint x="2677" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_185_all_n_185_ref9" bpmnElement="f_n_185_all_n_185_ref9"><di:waypoint x="2723" y="235"/><di:waypoint x="2610" y="235"/><di:waypoint x="2610" y="455"/><di:waypoint x="2635" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_185_ref9_n_185_notp" bpmnElement="f_n_185_ref9_n_185_notp"><di:waypoint x="2765" y="455"/><di:waypoint x="2780" y="455"/><di:waypoint x="2780" y="235"/><di:waypoint x="2805" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_185_all_n_185_notp" bpmnElement="f_n_185_all_n_185_notp"><di:waypoint x="2723" y="235"/><di:waypoint x="2805" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_185_notp_n_185_crit" bpmnElement="f_n_185_notp_n_185_crit"><di:waypoint x="2935" y="235"/><di:waypoint x="2975" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_185_crit_n_185_rec" bpmnElement="f_n_185_crit_n_185_rec"><di:waypoint x="3105" y="235"/><di:waypoint x="3145" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_185_rec_n_185_end" bpmnElement="f_n_185_rec_n_185_end"><di:waypoint x="3275" y="235"/><di:waypoint x="3362" y="235"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

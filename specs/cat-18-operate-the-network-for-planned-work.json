@@ -1,0 +1,4113 @@
+{
+  "category": {
+    "uid": 10572,
+    "id": "18.0",
+    "name": "Operate the Network for Planned Work",
+    "band": "Asset Lifecycle"
+  },
+  "platform": "Claude",
+  "model": "claude-opus-5",
+  "round": "replan",
+  "date": "2026-08-29",
+  "schema": "eam/specs/SCHEMA.md",
+  "derivation": "STANDARDS-DERIVED. Every field traces to a standard, a regulation or a recognised industry body per _Collab/SOURCE_AUTHORITY_PACK.md section F, obtained for this category. Nothing is generalised from a client programme or a product.",
+  "field_set": "EN 17007:2017 cl. 5.2 maintenance process profile, corroborated by ISO 9001:2015 cl. 4.4.1 a) to h).",
+  "gaps": [
+    "This category was written to satisfy nine statements already merged in six other categories - 2.6.3, 3.4.3, 7.3.2, 7.4.1, 9.3.2, 10.2.2, 10.4.2, 10.6.7 and 16.2.3 - which between them reference 18.4.4 twenty-four times and 18.2.2 twelve. All nine hold: 18.4.4 ISSUES the clearance and never consumes one, it does so against a plan approved at 18.2.2, a clearance is not a permit, and emergency isolation at 9.3.2 is a different object.",
+    "29 CFR 1910.269(m) specifies the ORDER, which nothing else in this reference does. (m)(2)(i) requires compliance with all of (m)(3) 'in the order specified', so group 18.4 draws a sequence the regulation fixes rather than one the author chose. Where a control cites (m)(3)(vi) it is quoting the rule that the test for voltage comes AFTER the system operator gives the clearance, not describing good practice.",
+    "Gas is not a clearance regime and 18.4 branches on commodity for that reason. 1910.269(m) is an electric transmission and distribution rule; a gas isolation runs on 49 CFR 192.605(b)(5), 192.629 purging and 192.751 ignition prevention, with 29 CFR 1910.147 for energy control within its own scope. 18.4.3 has no electric analogue and 18.4.2 has no gas one.",
+    "No federal rule sets a planned-outage notice period for electric distribution: 16 U.S.C. 824o keeps distribution outside the bulk-power regime. Notice periods, critical and life-support register criteria, outage priority rules, clearance expiry and abnormal-condition standing instructions are all State, tariff or operator, and all are judgment here.",
+    "Only one process is SPEC. 18.4.5 is the live clearance register - a standing record the control room reads continuously, whose issue, transfer and release events are drawn at 18.4.4, 18.4.6 and 18.5.2 where they happen. Everything else in the category has an instance.",
+    "Both public frameworks reach this category, unlike 11.0: GFMAM subject 3.8 Shutdown and Outage Strategy and Planning and APQC PCF Utilities 14.1.6 Perform planned network operation (19285) both name it.",
+    "Boundaries held deliberately: 3.4.3 consumes the WINDOW from 18.2.2 and 18.2.3 and never the clearance; 9.0 owns emergency isolation and switching during restoration; 19.1.3 coordinates energisation of NEW assets while 18.5.3 returns existing plant to service; 12.1 holds the asset register while 18.5.5 holds the operating state; 13.1.2 holds the material reservation that 18.2.5 tests.",
+    "49 CFR 192.605(a) requires abnormal-operations procedures for TRANSMISSION lines only. A distribution operator is not obliged to hold them, which is why 18.1.5 is a case built on operator practice rather than on the rule."
+  ],
+  "processes": [
+    {
+      "uid": 10574,
+      "id": "18.1.1",
+      "name": "Determine the isolation the work requires",
+      "group": {
+        "id": "18.1",
+        "name": "Plan network switching and isolation",
+        "uid": 10573
+      },
+      "intent": "Decide what has to be isolated for the work, and which energy-control regime applies.",
+      "activities": [
+        "Take the work, its location and what it will touch",
+        "Determine the extent of isolation the work needs",
+        "Determine the regime: 1910.269(m), 1910.147 or gas operating",
+        "Return the isolation extent and the regime that governs it"
+      ],
+      "trigger": {
+        "kind": "conditional",
+        "text": "Work has been scheduled that cannot proceed on a live network.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Work scope and location",
+          "party": "SCHD",
+          "data": "Work"
+        },
+        {
+          "what": "Network model and connectivity",
+          "party": "GINV",
+          "data": "WorkLocation"
+        },
+        {
+          "what": "Commodity and voltage or pressure class",
+          "party": "AM",
+          "data": "WorkAsset"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Isolation extent and governing regime",
+          "party": "NO",
+          "data": "Work"
+        },
+        {
+          "what": "Work that needs no isolation",
+          "party": "SCHD",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "NO",
+          "role": "system of record",
+          "service": "isolation determination"
+        },
+        {
+          "component": "GINV",
+          "role": "supplier",
+          "service": "network connectivity"
+        },
+        {
+          "component": "SCHD",
+          "role": "consumer",
+          "service": "the work waiting on it"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "SCHD",
+          "to": "NO",
+          "payload": "WorkRequest",
+          "verb": "create",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "System operator",
+          "raci": "A"
+        },
+        {
+          "role": "Network planning engineer",
+          "raci": "R"
+        },
+        {
+          "role": "Work planner",
+          "raci": "C"
+        },
+        {
+          "role": "Field supervisor",
+          "raci": "I"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkLocation",
+        "WorkAsset"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "29 CFR 1910.269(m)(1) is explicit: anything deenergized under procedures other than (d) or (m) SHALL BE TREATED AS ENERGIZED. Choosing the wrong regime does not produce a weaker protection, it produces none."
+        },
+        {
+          "kind": "regulatory",
+          "text": "(m)(2) turns on whether a system operator is in charge of the lines and their means of disconnection. That decides who holds the clearance and is settled here, not in the field."
+        },
+        {
+          "kind": "operational",
+          "text": "Gas is not a clearance. 49 CFR 192.605(b)(5) start-up and shutdown within MAOP is the operating discipline; 29 CFR 1910.147 covers energy control within its own scope."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Isolation determined before scheduling",
+          "definition": "Share of isolation-requiring work with a regime determined before it reached a schedule.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.4.3 Schedule Compliance"
+        }
+      ],
+      "variants": [
+        "Electric transmission and distribution under 1910.269(m)",
+        "Gas isolation under 192.605(b)(5) with 1910.147 energy control",
+        "Work needing no isolation at all",
+        "Single crew with a visible, solely-controlled disconnect under 1910.269(m)(2)(iii)"
+      ],
+      "notation": {
+        "class": "DMN",
+        "why": "The output is an isolation extent and the regime that governs it - values, and the regime tests are stated in the rule rather than inferred.",
+        "artifact": "models/18.1.1-isolation-and-regime.dmn"
+      },
+      "en17007": {
+        "process": "ACT.2",
+        "title": "Prepare for the maintenance tasks",
+        "clause": "6.5.3"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), ACT.2 Prepare for the maintenance tasks, cl. 6.5.3",
+          "status": "verified"
+        },
+        {
+          "for": "treated as energized",
+          "cite": "29 CFR 1910.269(m) Deenergizing lines and equipment for employee protection (m)(1) application",
+          "status": "regulation"
+        },
+        {
+          "for": "who is in charge",
+          "cite": "29 CFR 1910.269(m) Deenergizing lines and equipment for employee protection (m)(2)(i) to (iii)",
+          "status": "regulation"
+        },
+        {
+          "for": "gas regime",
+          "cite": "49 CFR 192.605 Procedural manual for operations, maintenance, and emergencies (b)(5) starting up and shutting down within MAOP; 29 CFR 1910.147 The control of hazardous energy (lockout/tagout)",
+          "status": "regulation"
+        }
+      ],
+      "provenance": {
+        "basis": "regulation",
+        "primary": "29 CFR 1910.269(m) Deenergizing lines and equipment for employee protection"
+      }
+    },
+    {
+      "uid": 10575,
+      "id": "18.1.2",
+      "name": "Create the switching or diversion plan",
+      "group": {
+        "id": "18.1",
+        "name": "Plan network switching and isolation",
+        "uid": 10573
+      },
+      "intent": "Write the switching or diversion plan that will produce the isolation.",
+      "activities": [
+        "Take the required isolation extent",
+        "Identify every point through which energy could be supplied",
+        "Sequence the operations, including remote and automatic controls",
+        "Record the plan and the state it will leave the network in"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "An isolation extent and regime have been determined.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Isolation extent and regime",
+          "party": "NO",
+          "data": "Work"
+        },
+        {
+          "what": "Network state and device status",
+          "party": "GINV",
+          "data": "WorkAsset"
+        },
+        {
+          "what": "Protection and automation settings",
+          "party": "NE",
+          "data": "WorkAsset"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Switching or diversion plan",
+          "party": "NO",
+          "data": "Work"
+        },
+        {
+          "what": "Abnormal state the plan will create",
+          "party": "GINV",
+          "data": "WorkAsset"
+        }
+      ],
+      "systems": [
+        {
+          "component": "NO",
+          "role": "system of record",
+          "service": "switching plan"
+        },
+        {
+          "component": "GINV",
+          "role": "supplier",
+          "service": "device status and connectivity"
+        },
+        {
+          "component": "NE",
+          "role": "supplier",
+          "service": "protection settings affected"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "NO",
+          "to": "GINV",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "System operator",
+          "raci": "A"
+        },
+        {
+          "role": "Network planning engineer",
+          "raci": "R"
+        },
+        {
+          "role": "Protection engineer",
+          "raci": "C"
+        },
+        {
+          "role": "Control room operator",
+          "raci": "I"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkAsset"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "29 CFR 1910.269(m)(3)(ii) requires EVERY switch, disconnector, jumper and tap through which a known source could supply the section to be open. Opening the obvious ones is not a plan."
+        },
+        {
+          "kind": "regulatory",
+          "text": "(m)(3)(iii) requires automatically and remotely controlled switches that could reclose the opened means to be tagged at the point of control and the control feature disabled. Remote reclose is the failure mode this addresses."
+        },
+        {
+          "kind": "operational",
+          "text": "A diversion that keeps customers on supply is still an isolation plan and takes the same discipline. 9.0 switches during restoration; this is planned work only."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Plan completeness",
+          "definition": "Share of switching plans executed without an unplanned additional operation.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.4.1 Rework"
+        }
+      ],
+      "variants": [
+        "Simple radial isolation",
+        "Diversion maintaining supply through an alternative path",
+        "Isolation crossing a system-operator boundary",
+        "Gas isolation by valve with a purge plan"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Take the extent, find every source, sequence and record - a known repeating path.",
+        "artifact": "models/18.1-plan-switching-and-isolation.bpmn"
+      },
+      "en17007": {
+        "process": "ACT.3",
+        "title": "Set in order the tasks",
+        "clause": "6.5.4"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), ACT.3 Set in order the tasks, cl. 6.5.4",
+          "status": "verified"
+        },
+        {
+          "for": "every source open",
+          "cite": "29 CFR 1910.269(m) Deenergizing lines and equipment for employee protection (m)(3)(ii)",
+          "status": "regulation"
+        },
+        {
+          "for": "remote and automatic control",
+          "cite": "29 CFR 1910.269(m) Deenergizing lines and equipment for employee protection (m)(3)(iii)",
+          "status": "regulation"
+        },
+        {
+          "for": "network operations interface",
+          "cite": "IEC 61968-3 Ed. 3.0:2021 Interface for network operations",
+          "status": "consensus"
+        }
+      ],
+      "provenance": {
+        "basis": "regulation",
+        "primary": "29 CFR 1910.269(m) Deenergizing lines and equipment for employee protection (m)(3)"
+      }
+    },
+    {
+      "uid": 10576,
+      "id": "18.1.3",
+      "name": "Assess customer and network impact of the outage",
+      "group": {
+        "id": "18.1",
+        "name": "Plan network switching and isolation",
+        "uid": 10573
+      },
+      "intent": "Establish who loses supply, for how long, and who has to be told.",
+      "activities": [
+        "Trace the customers and third parties on the affected section",
+        "Identify critical, medical and life-support customers among them",
+        "Estimate the duration the plan implies",
+        "Publish the impact so notice and approval can use it"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "A switching plan exists and its customer impact is unknown.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Switching plan and affected section",
+          "party": "NO",
+          "data": "Work"
+        },
+        {
+          "what": "Customers and premises on the section",
+          "party": "CS",
+          "data": "WorkLocation"
+        },
+        {
+          "what": "Third-party attachments and dependencies",
+          "party": "MAI",
+          "data": "WorkAsset"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Impact list with durations",
+          "party": "CS",
+          "data": "Work"
+        },
+        {
+          "what": "Critical and life-support customers flagged",
+          "party": "CS",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "CS",
+          "role": "system of record",
+          "service": "affected customer list"
+        },
+        {
+          "component": "GINV",
+          "role": "supplier",
+          "service": "connectivity tracing"
+        },
+        {
+          "component": "NO",
+          "role": "supplier",
+          "service": "plan and duration"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "NO",
+          "to": "CS",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Control room operator",
+          "raci": "R"
+        },
+        {
+          "role": "System operator",
+          "raci": "A"
+        },
+        {
+          "role": "Customer operations lead",
+          "raci": "C"
+        },
+        {
+          "role": "Joint use administrator",
+          "raci": "I"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkLocation"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "Third parties attached to the structures are affected parties too. 11.4.1 holds who they are and 18.3.1 will notify them; an impact list that counts only metered customers understates the outage."
+        },
+        {
+          "kind": "operational",
+          "text": "No source in the pack sets an outage-duration estimating method or a customer-minutes threshold. Both are the operator's."
+        },
+        {
+          "kind": "regulatory",
+          "text": "16 U.S.C. 824o keeps local distribution outside the federal bulk-power regime, so no federal outage-impact rule reaches distribution planning."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Impact accuracy",
+          "definition": "Difference between planned and actual customers interrupted.",
+          "cite": "IEEE 1366-2022 - the indices the difference is later reported through"
+        }
+      ],
+      "variants": [
+        "Distribution outage affecting metered customers",
+        "Outage affecting a third-party attacher on the same structures",
+        "Diversion with no customer interruption",
+        "Gas outage requiring relight, which commits 9.3.5"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Trace, flag, estimate and publish is a known repeating path.",
+        "artifact": "models/18.1-plan-switching-and-isolation.bpmn"
+      },
+      "en17007": {
+        "process": "ACT.2",
+        "title": "Prepare for the maintenance tasks",
+        "clause": "6.5.3"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), ACT.2 Prepare for the maintenance tasks, cl. 6.5.3",
+          "status": "verified"
+        },
+        {
+          "for": "no federal distribution rule",
+          "cite": "16 U.S.C. 824o Electric reliability - local distribution is outside the bulk-power system",
+          "status": "regulation"
+        },
+        {
+          "for": "indices",
+          "cite": "IEEE 1366-2022",
+          "status": "consensus"
+        },
+        {
+          "for": "duration method",
+          "cite": "No source states an outage-duration estimating method",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "judgment",
+        "primary": "Impact estimation is operator practice"
+      }
+    },
+    {
+      "uid": 10577,
+      "id": "18.1.4",
+      "name": "Verify the plan against the current network state",
+      "group": {
+        "id": "18.1",
+        "name": "Plan network switching and isolation",
+        "uid": 10573
+      },
+      "intent": "Check the plan against the network as it actually stands today.",
+      "activities": [
+        "Compare the plan's assumed states to the current device states",
+        "Test each device the plan operates for known defects",
+        "Identify abnormal conditions already in force",
+        "Return the plan verified, or send it back with what changed"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "A switching plan is ready for verification before approval.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Switching plan",
+          "party": "NO",
+          "data": "Work"
+        },
+        {
+          "what": "Current device and network state",
+          "party": "GINV",
+          "data": "WorkAsset"
+        },
+        {
+          "what": "Defect and maintenance history on the devices",
+          "party": "MAI",
+          "data": "WorkAsset"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Verified plan",
+          "party": "NO",
+          "data": "Work"
+        },
+        {
+          "what": "Plan returned with the discrepancy named",
+          "party": "NO",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "GINV",
+          "role": "system of record",
+          "service": "as-operated network state"
+        },
+        {
+          "component": "NO",
+          "role": "consumer",
+          "service": "verification result"
+        },
+        {
+          "component": "MAI",
+          "role": "supplier",
+          "service": "device defect history"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "GINV",
+          "to": "NO",
+          "payload": "WorkRequest",
+          "verb": "reply",
+          "pattern": "request-reply"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Control room operator",
+          "raci": "R"
+        },
+        {
+          "role": "System operator",
+          "raci": "A"
+        },
+        {
+          "role": "Network planning engineer",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkAsset"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "49 CFR 192.747 requires a valve necessary for safe operation to be checked and serviced at intervals not exceeding 15 months, at least once each calendar year, and an inoperable valve to get prompt remedial action unless an alternative is designated. Isolating on an overdue valve is not verified."
+        },
+        {
+          "kind": "operational",
+          "text": "A plan written against last week's network state is a plan against a network that no longer exists. 18.5.5 keeps the as-operated record true and this process depends on it."
+        },
+        {
+          "kind": "operational",
+          "text": "Abnormal conditions already in force change what the plan will actually achieve, and 18.1.5 holds them."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Verification catch rate",
+          "definition": "Share of plans returned at verification rather than failing at execution.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.4.1 Rework"
+        }
+      ],
+      "variants": [
+        "Plan verified against a current network model",
+        "Plan returned because a device state changed",
+        "Plan returned because a valve or switch is defective",
+        "Plan revised for an abnormal condition already in force"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Compare, test, identify and return is a known repeating path.",
+        "artifact": "models/18.1-plan-switching-and-isolation.bpmn"
+      },
+      "en17007": {
+        "process": "PRV.2",
+        "title": "Use and update the Maintenance Plans",
+        "clause": "6.3.3"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), PRV.2 Use and update the Maintenance Plans, cl. 6.3.3",
+          "status": "verified"
+        },
+        {
+          "for": "valve serviceability",
+          "cite": "49 CFR 192.747 Valve maintenance: Distribution systems (a) 15 months and at least once each calendar year; (b) prompt remedial action or a designated alternative valve",
+          "status": "regulation"
+        },
+        {
+          "for": "network state",
+          "cite": "IEC 61968-3 Ed. 3.0:2021 Interface for network operations",
+          "status": "consensus"
+        },
+        {
+          "for": "verification method",
+          "cite": "No source states a plan-verification method",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "regulation",
+        "primary": "49 CFR 192.747 Valve maintenance: Distribution systems"
+      }
+    },
+    {
+      "uid": 10578,
+      "id": "18.1.5",
+      "name": "Determine abnormal-condition and contingency arrangements",
+      "group": {
+        "id": "18.1",
+        "name": "Plan network switching and isolation",
+        "uid": 10573
+      },
+      "intent": "Decide what happens if the network cannot be returned as planned.",
+      "activities": [
+        "Identify what the isolation leaves without redundancy",
+        "Agree the abnormal conditions that will stand during the work",
+        "Agree the contingency if the work overruns or fails",
+        "Record the standing instruction the control room will operate to"
+      ],
+      "trigger": {
+        "kind": "conditional",
+        "text": "A verified plan leaves the network in a reduced or abnormal state.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Verified switching plan",
+          "party": "NO",
+          "data": "Work"
+        },
+        {
+          "what": "Network redundancy and contingency options",
+          "party": "NE",
+          "data": "WorkAsset"
+        },
+        {
+          "what": "Weather and system conditions expected",
+          "party": "NO",
+          "data": "Work"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Abnormal-condition standing instruction",
+          "party": "NO",
+          "data": "Work"
+        },
+        {
+          "what": "Contingency and abort arrangements",
+          "party": "NO",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "NO",
+          "role": "system of record",
+          "service": "abnormal conditions and contingency"
+        },
+        {
+          "component": "NE",
+          "role": "supplier",
+          "service": "redundancy and alternatives"
+        },
+        {
+          "component": "SCHD",
+          "role": "consumer",
+          "service": "the work the contingency constrains"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "NO",
+          "to": "SCHD",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "System operator",
+          "raci": "A"
+        },
+        {
+          "role": "Control room operator",
+          "raci": "R"
+        },
+        {
+          "role": "Network planning engineer",
+          "raci": "C"
+        },
+        {
+          "role": "Operations manager",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkAsset"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "Two competent operators will trade redundancy, weather risk and the cost of aborting in a different order, and the right answer depends on which of them is binding on the day. That is why this is a case."
+        },
+        {
+          "kind": "operational",
+          "text": "The abort arrangement has to be agreed BEFORE the clearance is issued. Deciding how to abandon an isolation while standing in it is not a decision, it is a reaction."
+        },
+        {
+          "kind": "regulatory",
+          "text": "An abnormal condition that persists past the work is a network state, not an outage note. 18.5.5 records it and 18.1.4 will read it back on the next plan."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Contingency invocation",
+          "definition": "Share of planned operations where the contingency arrangement was invoked.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.4.3 Schedule Compliance"
+        }
+      ],
+      "variants": [
+        "No loss of redundancy, no standing instruction needed",
+        "Reduced redundancy with a standing instruction for the duration",
+        "Weather-dependent abort arrangement",
+        "Abnormal condition intended to persist beyond the work"
+      ],
+      "notation": {
+        "class": "CMMN",
+        "why": "Redundancy, weather and abort cost are all live and two operators will not settle them in the same order.",
+        "artifact": "models/18.1.5-abnormal-and-contingency.cmmn"
+      },
+      "en17007": {
+        "process": "HSE.4",
+        "title": "Propose measures for preventing risks and consequences of identified risks",
+        "clause": "6.7"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), HSE.4 Propose measures for preventing risks, cl. 6.7",
+          "status": "verified"
+        },
+        {
+          "for": "shutdown planning",
+          "cite": "GFMAM Asset Management Landscape 3rd ed. v3.0, 2024-06, subject 3.8 Shutdown and Outage Strategy and Planning",
+          "status": "verified"
+        },
+        {
+          "for": "emergency route",
+          "cite": "49 CFR 192.615 emergency plans, where an abnormal condition becomes an emergency rather than a planned state",
+          "status": "regulation"
+        },
+        {
+          "for": "contingency design",
+          "cite": "No source states an abnormal-condition or contingency standing-instruction format",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "judgment",
+        "primary": "Contingency design is operator practice"
+      }
+    },
+    {
+      "uid": 10580,
+      "id": "18.2.1",
+      "name": "Submit the outage plan for approval",
+      "group": {
+        "id": "18.2",
+        "name": "Approve and schedule planned network operations",
+        "uid": 10579
+      },
+      "intent": "Put the outage plan in front of the authority that can approve it.",
+      "activities": [
+        "Assemble the plan, impact and contingency into one submission",
+        "Route it to the approving authority for the network involved",
+        "Attach the work the outage exists to enable",
+        "Track it against the notice the outage will need"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "A verified plan with its impact and contingency is ready to submit.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Verified plan and abnormal conditions",
+          "party": "NO",
+          "data": "Work"
+        },
+        {
+          "what": "Customer and third-party impact",
+          "party": "CS",
+          "data": "Work"
+        },
+        {
+          "what": "The work requiring the outage",
+          "party": "SCHD",
+          "data": "Work"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Submitted outage request",
+          "party": "NO",
+          "data": "Work"
+        },
+        {
+          "what": "Submission lead time against the notice required",
+          "party": "CS",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "NO",
+          "role": "system of record",
+          "service": "outage request"
+        },
+        {
+          "component": "SCHD",
+          "role": "supplier",
+          "service": "the work behind it"
+        },
+        {
+          "component": "CS",
+          "role": "consumer",
+          "service": "notice lead time"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "SCHD",
+          "to": "NO",
+          "payload": "WorkRequest",
+          "verb": "create",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Work planner",
+          "raci": "R"
+        },
+        {
+          "role": "System operator",
+          "raci": "A"
+        },
+        {
+          "role": "Control room operator",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "A submission that arrives inside the customer notice period forces a choice between an unnotified outage and a deferred one. The lead time is checked here rather than discovered at 18.3."
+        },
+        {
+          "kind": "operational",
+          "text": "The outage exists to enable work. A request that does not carry the work it enables cannot be prioritised against a competing one at 18.2.4."
+        },
+        {
+          "kind": "regulatory",
+          "text": "Where the network is bulk-power rather than local distribution, 16 U.S.C. 824o brings a different coordination regime; this reference covers distribution and says so rather than implying the transmission process."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Submission lead time",
+          "definition": "Days between submission and the planned operation, against the notice the outage requires.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.4.3 Schedule Compliance"
+        }
+      ],
+      "variants": [
+        "Routine distribution outage on the standard lead time",
+        "Short-notice submission requiring an exception",
+        "Outage on a network segment another party operates",
+        "Gas isolation submission under the operating procedure"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Assemble, route, attach and track is a known repeating path.",
+        "artifact": "models/18.2-approve-and-schedule.bpmn"
+      },
+      "en17007": {
+        "process": "ACT.4",
+        "title": "Schedule the tasks",
+        "clause": "6.5.5"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), ACT.4 Schedule the tasks, cl. 6.5.5",
+          "status": "verified"
+        },
+        {
+          "for": "planned operation precedent",
+          "cite": "APQC PCF Utilities v7.2.1 14.1.6 Perform planned network operation (pcf_id 19285) - structural precedent",
+          "status": "consensus"
+        },
+        {
+          "for": "scope boundary",
+          "cite": "16 U.S.C. 824o Electric reliability",
+          "status": "regulation"
+        },
+        {
+          "for": "lead time",
+          "cite": "No source states an outage submission lead time",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "consensus",
+        "primary": "GFMAM Asset Management Landscape 3rd ed. v3.0, 2024-06, subject 3.8 Shutdown and Outage Strategy and Planning"
+      }
+    },
+    {
+      "uid": 10581,
+      "id": "18.2.2",
+      "name": "Approve, reject or defer the outage plan",
+      "group": {
+        "id": "18.2",
+        "name": "Approve and schedule planned network operations",
+        "uid": 10579
+      },
+      "intent": "Approve, reject or defer the outage plan, and say on what basis.",
+      "activities": [
+        "Test the plan, its impact and its contingency against the network state",
+        "Test it against competing demands on the same network",
+        "Return approve, approve-with-conditions, defer or reject",
+        "Record the basis and any condition the approval carries"
+      ],
+      "trigger": {
+        "kind": "conditional",
+        "text": "A submitted outage request needs a decision before it can be scheduled.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Submitted outage request",
+          "party": "NO",
+          "data": "Work"
+        },
+        {
+          "what": "Competing requests on the same network",
+          "party": "NO",
+          "data": "Work"
+        },
+        {
+          "what": "System conditions and risk appetite",
+          "party": "NE",
+          "data": "WorkAsset"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Approved, conditioned, deferred or rejected plan",
+          "party": "SCHD",
+          "data": "Work"
+        },
+        {
+          "what": "Conditions carried on the approval",
+          "party": "NO",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "NO",
+          "role": "system of record",
+          "service": "approval and its basis"
+        },
+        {
+          "component": "SCHD",
+          "role": "consumer",
+          "service": "the schedulable window"
+        },
+        {
+          "component": "NE",
+          "role": "supplier",
+          "service": "system conditions"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "NO",
+          "to": "SCHD",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "System operator",
+          "raci": "A"
+        },
+        {
+          "role": "Operations manager",
+          "raci": "R"
+        },
+        {
+          "role": "Network planning engineer",
+          "raci": "C"
+        },
+        {
+          "role": "Customer operations lead",
+          "raci": "I"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkAsset"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "This approval is what 29 CFR 1910.269(m)(3)(i) later rests on: the employee in charge requests deenergization of a particular section, and the section is the one this approval fixed. An approval that does not name the section is not an approval."
+        },
+        {
+          "kind": "operational",
+          "text": "Twelve references in six merged categories treat 18.2.2 as the producer of an APPROVED SWITCHING PLAN. It must therefore output an object, not a state on somebody else's record."
+        },
+        {
+          "kind": "operational",
+          "text": "Defer is a real outcome and is not a soft reject. A deferred plan keeps its verification; a rejected one returns to 18.1.2."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Approval outcome mix",
+          "definition": "Distribution of approve, condition, defer and reject over the period.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.4.3 Schedule Compliance"
+        }
+      ],
+      "variants": [
+        "Approved as submitted",
+        "Approved with a condition on timing or contingency",
+        "Deferred for a competing outage or system conditions",
+        "Rejected back to planning"
+      ],
+      "notation": {
+        "class": "DMN",
+        "why": "The output is approve, condition, defer or reject - a value, and it is the object twelve references in six categories depend on.",
+        "artifact": "models/18.2.2-approve-the-outage.dmn"
+      },
+      "en17007": {
+        "process": "MAN.5",
+        "title": "Oversee the actions",
+        "clause": "6.2"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), MAN.5 Oversee the actions, cl. 6.2",
+          "status": "verified"
+        },
+        {
+          "for": "what the clearance rests on",
+          "cite": "29 CFR 1910.269(m) Deenergizing lines and equipment for employee protection (m)(3)(i) request to deenergize the particular section",
+          "status": "regulation"
+        },
+        {
+          "for": "shutdown planning",
+          "cite": "GFMAM Asset Management Landscape 3rd ed. v3.0, 2024-06, subject 3.8 Shutdown and Outage Strategy and Planning",
+          "status": "verified"
+        },
+        {
+          "for": "approval criteria",
+          "cite": "No source states outage approval criteria or a risk threshold; both are operator",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "regulation",
+        "primary": "29 CFR 1910.269(m) Deenergizing lines and equipment for employee protection (m)(3)(i)"
+      }
+    },
+    {
+      "uid": 10582,
+      "id": "18.2.3",
+      "name": "Schedule the planned network operation",
+      "group": {
+        "id": "18.2",
+        "name": "Approve and schedule planned network operations",
+        "uid": 10579
+      },
+      "intent": "Put the approved operation in the calendar, with the work it enables.",
+      "activities": [
+        "Take the approved plan and its conditions",
+        "Fix the window and the crews for the switching itself",
+        "Bind the work that will run inside the window",
+        "Publish the window to notice and to the work schedule"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "An outage plan has been approved and needs a window.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Approved plan and conditions",
+          "party": "NO",
+          "data": "Work"
+        },
+        {
+          "what": "Switching resource availability",
+          "party": "SCHD",
+          "data": "Crew"
+        },
+        {
+          "what": "The work to run inside the window",
+          "party": "SCHD",
+          "data": "Work"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Scheduled network operation with a window",
+          "party": "SCHD",
+          "data": "WorkTimeSchedule"
+        },
+        {
+          "what": "Window published to notice and to 3.4",
+          "party": "CS",
+          "data": "Work"
+        }
+      ],
+      "systems": [
+        {
+          "component": "SCHD",
+          "role": "system of record",
+          "service": "the window and its resources"
+        },
+        {
+          "component": "NO",
+          "role": "supplier",
+          "service": "approved plan"
+        },
+        {
+          "component": "CS",
+          "role": "consumer",
+          "service": "notice timing"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "NO",
+          "to": "SCHD",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        },
+        {
+          "from": "SCHD",
+          "to": "CS",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Resource scheduler",
+          "raci": "R"
+        },
+        {
+          "role": "System operator",
+          "raci": "A"
+        },
+        {
+          "role": "Control room operator",
+          "raci": "C"
+        },
+        {
+          "role": "Work planner",
+          "raci": "I"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkTimeSchedule",
+        "Crew"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "3.4.3 consumes the WINDOW from this process and from 18.2.2 - not the clearance. The window is a schedule object; the clearance is a safety object issued on the day at 18.4.4. Merging them is the most common error in this whole area."
+        },
+        {
+          "kind": "operational",
+          "text": "The switching itself needs crews and they are scheduled here. An outage window with no switching resource is a window nobody can open."
+        },
+        {
+          "kind": "operational",
+          "text": "3.4 places the work inside the window. This process does not become a second scheduler for that work."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Window adherence",
+          "definition": "Share of planned operations started and finished inside the scheduled window.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.4.3 Schedule Compliance"
+        }
+      ],
+      "variants": [
+        "Single window covering switch, work and restore",
+        "Window with the work scheduled separately inside it",
+        "Recurring window for a programme of similar work",
+        "Window contingent on weather or system conditions"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Take the approval, fix the window, bind the work, publish.",
+        "artifact": "models/18.2-approve-and-schedule.bpmn"
+      },
+      "en17007": {
+        "process": "ACT.4",
+        "title": "Schedule the tasks",
+        "clause": "6.5.5"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), ACT.4 Schedule the tasks, cl. 6.5.5",
+          "status": "verified"
+        },
+        {
+          "for": "scheduling component",
+          "cite": "IEC 61968-6:2015 cl. 4.2 reference components SCHD Scheduling",
+          "status": "clause-verified"
+        },
+        {
+          "for": "planned operation precedent",
+          "cite": "APQC PCF Utilities v7.2.1 14.1.6 Perform planned network operation (pcf_id 19285) - structural precedent",
+          "status": "consensus"
+        },
+        {
+          "for": "measures",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.4.3 Schedule Compliance",
+          "status": "consensus"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319)"
+      }
+    },
+    {
+      "uid": 10583,
+      "id": "18.2.4",
+      "name": "Resolve conflicting or competing outage requests",
+      "group": {
+        "id": "18.2",
+        "name": "Approve and schedule planned network operations",
+        "uid": 10579
+      },
+      "intent": "Settle which outage happens when two want the same network at the same time.",
+      "activities": [
+        "Identify the requests that cannot coexist",
+        "Establish what each is enabling and what deferring it costs",
+        "Negotiate a combined window, a sequence or a deferral",
+        "Record the decision and tell the losing request why"
+      ],
+      "trigger": {
+        "kind": "conditional",
+        "text": "Two or more approved or submitted outages contend for the same network.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Contending outage requests",
+          "party": "NO",
+          "data": "Work"
+        },
+        {
+          "what": "The work each one enables",
+          "party": "SCHD",
+          "data": "Work"
+        },
+        {
+          "what": "Network conditions limiting concurrent outages",
+          "party": "NE",
+          "data": "WorkAsset"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Resolved sequence or combined window",
+          "party": "SCHD",
+          "data": "Work"
+        },
+        {
+          "what": "Deferred request with its reason",
+          "party": "NO",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "NO",
+          "role": "system of record",
+          "service": "contention and its resolution"
+        },
+        {
+          "component": "SCHD",
+          "role": "consumer",
+          "service": "resulting windows"
+        },
+        {
+          "component": "NE",
+          "role": "supplier",
+          "service": "concurrency limits"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "NO",
+          "to": "SCHD",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "System operator",
+          "raci": "A"
+        },
+        {
+          "role": "Operations manager",
+          "raci": "R"
+        },
+        {
+          "role": "Work planner",
+          "raci": "C"
+        },
+        {
+          "role": "Resource scheduler",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkAsset"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "Combining two outages into one window beats sequencing them and beats taking the network out twice, but both plans need re-verifying at 18.1.4 against the combined state."
+        },
+        {
+          "kind": "operational",
+          "text": "No source states an outage priority rule. What a deferral costs - a compliance date, a customer commitment, a crew already mobilised - is the operator's to weigh and two schedulers weigh it differently."
+        },
+        {
+          "kind": "operational",
+          "text": "A deferred request that is not told why comes back unchanged next week and contends again."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Contention resolution",
+          "definition": "Share of contending requests resolved by combination rather than deferral.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.4.3 Schedule Compliance"
+        }
+      ],
+      "variants": [
+        "Combined into one window",
+        "Sequenced within the same period",
+        "One deferred with a recorded reason",
+        "Escalated where both are compliance-driven"
+      ],
+      "notation": {
+        "class": "CMMN",
+        "why": "Combining, sequencing and deferring are all available and which to try first depends on what each outage is enabling.",
+        "artifact": "models/18.2.4-resolve-outage-contention.cmmn"
+      },
+      "en17007": {
+        "process": "ACT.1",
+        "title": "Rank the events",
+        "clause": "6.5.2"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), ACT.1 Rank the events, cl. 6.5.2",
+          "status": "verified"
+        },
+        {
+          "for": "shutdown planning",
+          "cite": "GFMAM Asset Management Landscape 3rd ed. v3.0, 2024-06, subject 3.8 Shutdown and Outage Strategy and Planning",
+          "status": "verified"
+        },
+        {
+          "for": "re-verification",
+          "cite": "49 CFR 192.747 Valve maintenance: Distribution systems (b) an inoperable valve needs a designated alternative, which a combined plan may change",
+          "status": "regulation"
+        },
+        {
+          "for": "priority rule",
+          "cite": "No source states an outage priority or contention rule",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "judgment",
+        "primary": "Outage priority is operator policy"
+      }
+    },
+    {
+      "uid": 10584,
+      "id": "18.2.5",
+      "name": "Coordinate with maintenance and construction schedules",
+      "group": {
+        "id": "18.2",
+        "name": "Approve and schedule planned network operations",
+        "uid": 10579
+      },
+      "intent": "Line the network operation up with the maintenance and construction it serves.",
+      "activities": [
+        "Take the scheduled window and the work bound to it",
+        "Confirm materials, permits and access are in place for that date",
+        "Confirm the crews and the switching resource are still committed",
+        "Release the combined package, or return the window to 18.2.3"
+      ],
+      "trigger": {
+        "kind": "timer",
+        "text": "A scheduled operation is approaching its readiness checkpoint.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Scheduled window and bound work",
+          "party": "SCHD",
+          "data": "WorkTimeSchedule"
+        },
+        {
+          "what": "Material and permit readiness",
+          "party": "MM",
+          "data": "Work"
+        },
+        {
+          "what": "Crew and contractor commitments",
+          "party": "HR",
+          "data": "Crew"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Confirmed ready package",
+          "party": "SCHD",
+          "data": "Work"
+        },
+        {
+          "what": "Window returned for rescheduling",
+          "party": "NO",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "SCHD",
+          "role": "system of record",
+          "service": "readiness and commitment"
+        },
+        {
+          "component": "MM",
+          "role": "supplier",
+          "service": "material and permit position"
+        },
+        {
+          "component": "HR",
+          "role": "supplier",
+          "service": "crew commitment"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "MM",
+          "to": "SCHD",
+          "payload": "WorkRequest",
+          "verb": "get",
+          "pattern": "request-reply"
+        },
+        {
+          "from": "SCHD",
+          "to": "NO",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Resource scheduler",
+          "raci": "R"
+        },
+        {
+          "role": "Work planner",
+          "raci": "A"
+        },
+        {
+          "role": "Field supervisor",
+          "raci": "C"
+        },
+        {
+          "role": "Control room operator",
+          "raci": "I"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "Crew",
+        "MaterialItem"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "An outage taken for work that turns out to have no material is the most expensive failure in this category: the network is out, the customers are off and nothing is achieved. 13.1.2 holds the reservation and this is where it is tested."
+        },
+        {
+          "kind": "operational",
+          "text": "Returning the window early is cheap. Discovering it on the day costs the outage, the crews and the customer minutes."
+        },
+        {
+          "kind": "regulatory",
+          "text": "Where a contractor will do the work, the 29 CFR 1910.269(a)(3) host and contract employer information exchange is owed before the crew arrives, and 16.2.3 is where it happens."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Readiness at checkpoint",
+          "definition": "Share of scheduled operations confirmed ready at the checkpoint rather than returned.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.4.3 Schedule Compliance"
+        }
+      ],
+      "variants": [
+        "Internal crew with reserved material",
+        "Contracted work with the information exchange complete",
+        "Window returned for a material or permit shortfall",
+        "Multi-discipline package sharing one outage"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Take the window, test readiness, release or return.",
+        "artifact": "models/18.2-approve-and-schedule.bpmn"
+      },
+      "en17007": {
+        "process": "ACT.2",
+        "title": "Prepare for the maintenance tasks",
+        "clause": "6.5.3"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), ACT.2 Prepare for the maintenance tasks, cl. 6.5.3",
+          "status": "verified"
+        },
+        {
+          "for": "contractor information",
+          "cite": "29 CFR 1910.269(a)(3) host and contract employer information transfer",
+          "status": "regulation"
+        },
+        {
+          "for": "scheduling component",
+          "cite": "IEC 61968-6:2015 cl. 4.2 reference components SCHD Scheduling",
+          "status": "clause-verified"
+        },
+        {
+          "for": "readiness criteria",
+          "cite": "No source states an outage readiness checklist",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "judgment",
+        "primary": "Readiness criteria are operator practice"
+      }
+    },
+    {
+      "uid": 10586,
+      "id": "18.3.1",
+      "name": "Identify affected customers and third parties",
+      "group": {
+        "id": "18.3",
+        "name": "Notify parties affected by a planned outage",
+        "uid": 10585
+      },
+      "intent": "Work out exactly who has to be told, including the parties nobody bills.",
+      "activities": [
+        "Take the impact list from 18.1.3 and the confirmed window",
+        "Resolve it to notifiable parties and their preferred channels",
+        "Add third-party attachers, agencies and adjacent operators",
+        "Hand the list to notice with the critical parties marked"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "A scheduled operation has a confirmed window and needs its notice list.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Impact list and window",
+          "party": "CS",
+          "data": "Work"
+        },
+        {
+          "what": "Contact and notification preferences",
+          "party": "CS",
+          "data": "WorkLocation"
+        },
+        {
+          "what": "Third-party attachers on the section",
+          "party": "MAI",
+          "data": "WorkAsset"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Notifiable party list with channels",
+          "party": "CS",
+          "data": "Work"
+        },
+        {
+          "what": "Parties with no reachable channel",
+          "party": "CS",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "CS",
+          "role": "system of record",
+          "service": "notifiable parties and channels"
+        },
+        {
+          "component": "MAI",
+          "role": "supplier",
+          "service": "attachers and agencies"
+        },
+        {
+          "component": "GINV",
+          "role": "supplier",
+          "service": "premises on the section"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "MAI",
+          "to": "CS",
+          "payload": "WorkRequest",
+          "verb": "get",
+          "pattern": "request-reply"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Customer operations lead",
+          "raci": "R"
+        },
+        {
+          "role": "Control room operator",
+          "raci": "A"
+        },
+        {
+          "role": "Joint use administrator",
+          "raci": "C"
+        },
+        {
+          "role": "Communications lead",
+          "raci": "I"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkLocation"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "A third-party attacher whose equipment is on the affected structures is an affected party even though it is not a customer. 11.4.1 holds who they are and a notice list built only from the billing system will miss every one of them."
+        },
+        {
+          "kind": "operational",
+          "text": "10.1.4 holds the contact and notification preference. This process resolves the list; it does not keep a second copy of the preferences."
+        },
+        {
+          "kind": "operational",
+          "text": "A party with no reachable channel is a finding, not an omission. It goes on the exception list so 18.3.2 can escalate rather than silently skip it."
+        }
+      ],
+      "measures": [
+        {
+          "name": "List completeness",
+          "definition": "Share of parties on the notice list traceable to a premise, an attachment or an agency record.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.3.1 applied to the notice list"
+        }
+      ],
+      "variants": [
+        "Metered customers on the affected section",
+        "Third-party attachers and adjacent operators",
+        "Agencies and emergency services where the work affects the highway",
+        "Parties with no reachable channel, escalated"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Take the impact, resolve to parties and channels, hand on.",
+        "artifact": "models/18.3-notify-affected-parties.bpmn"
+      },
+      "en17007": {
+        "process": "DOC.5",
+        "title": "Ensure access to necessary information at all times",
+        "clause": "6.9"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), DOC.5 Ensure access to necessary information, cl. 6.9",
+          "status": "verified"
+        },
+        {
+          "for": "gas emergency communication",
+          "cite": "49 CFR 192.615(a)(3) prompt and effective response, which a planned notice is not - this is the contrast",
+          "status": "regulation"
+        },
+        {
+          "for": "attachers as affected parties",
+          "cite": "47 CFR 1.1403(c) requires notice to attachers before a modification; a planned outage is the operational analogue",
+          "status": "regulation"
+        },
+        {
+          "for": "notice list content",
+          "cite": "No source states a planned-outage notice list",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "judgment",
+        "primary": "Notice lists are operator and tariff"
+      }
+    },
+    {
+      "uid": 10587,
+      "id": "18.3.2",
+      "name": "Issue statutory and contractual outage notices",
+      "group": {
+        "id": "18.3",
+        "name": "Notify parties affected by a planned outage",
+        "uid": 10585
+      },
+      "intent": "Send the notices the law and the contract require, and prove they went.",
+      "activities": [
+        "Send the notice on each party's channel at the required lead time",
+        "Record what was sent, to whom, and when",
+        "Retry a failed delivery before the window closes",
+        "Escalate a party that cannot be reached"
+      ],
+      "trigger": {
+        "kind": "timer",
+        "text": "The notice lead time for a scheduled operation has arrived.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Notifiable party list",
+          "party": "CS",
+          "data": "Work"
+        },
+        {
+          "what": "Window, duration and reason",
+          "party": "SCHD",
+          "data": "WorkTimeSchedule"
+        },
+        {
+          "what": "Statutory and contractual notice periods",
+          "party": "MAI",
+          "data": "Work"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Notice record per party",
+          "party": "CS",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Undelivered notices escalated",
+          "party": "CS",
+          "data": "Work"
+        }
+      ],
+      "systems": [
+        {
+          "component": "CS",
+          "role": "system of record",
+          "service": "notice issue and delivery"
+        },
+        {
+          "component": "MAI",
+          "role": "supplier",
+          "service": "notice obligations"
+        },
+        {
+          "component": "SCHD",
+          "role": "supplier",
+          "service": "window detail"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "CS",
+          "to": "MAI",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "batch"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Communications lead",
+          "raci": "R"
+        },
+        {
+          "role": "Customer operations lead",
+          "raci": "A"
+        },
+        {
+          "role": "Control room operator",
+          "raci": "I"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "No federal rule sets a planned-outage notice period for electric distribution - 16 U.S.C. 824o keeps distribution outside the bulk-power regime. The periods are State, tariff or contract and this reference states none."
+        },
+        {
+          "kind": "operational",
+          "text": "The record of what was sent and when is the whole point. A notice nobody can evidence is a notice that was not given, and a commission asking about a planned outage asks for exactly that record."
+        },
+        {
+          "kind": "operational",
+          "text": "18.3.3 handles the customers where non-delivery is not an administrative problem. This process must not treat them as ordinary retries."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Notice delivery",
+          "definition": "Share of notifiable parties with an evidenced delivery before the window opened.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.4.3 Schedule Compliance"
+        }
+      ],
+      "variants": [
+        "Statutory notice where a State rule applies",
+        "Contractual notice to an attacher or adjacent operator",
+        "Courtesy notice with no external obligation",
+        "Escalated non-delivery"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Send, record, retry and escalate is a known repeating path.",
+        "artifact": "models/18.3-notify-affected-parties.bpmn"
+      },
+      "en17007": {
+        "process": "DOC.6",
+        "title": "Manage the way in which operational documentation is made available",
+        "clause": "6.9"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), DOC.6 Manage how documentation is made available, cl. 6.9",
+          "status": "verified"
+        },
+        {
+          "for": "no federal distribution notice rule",
+          "cite": "16 U.S.C. 824o Electric reliability",
+          "status": "regulation"
+        },
+        {
+          "for": "attacher notice analogue",
+          "cite": "47 CFR 1.1403(c) 60 days before a modification",
+          "status": "regulation"
+        },
+        {
+          "for": "notice periods",
+          "cite": "Planned-outage notice periods are State, tariff or contract and none is in the pack",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "judgment",
+        "primary": "Notice periods are State and tariff"
+      }
+    },
+    {
+      "uid": 10588,
+      "id": "18.3.3",
+      "name": "Notify critical, medical and life-support customers",
+      "group": {
+        "id": "18.3",
+        "name": "Notify parties affected by a planned outage",
+        "uid": 10585
+      },
+      "intent": "Reach the customers for whom losing supply is a clinical or safety event.",
+      "activities": [
+        "Identify registered critical, medical and life-support premises in scope",
+        "Contact each one personally on the register's terms",
+        "Confirm the customer has understood and has arrangements",
+        "Hold or replan the outage where a customer cannot be reached"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "A notice list contains registered critical or life-support premises.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Critical and life-support register entries",
+          "party": "CS",
+          "data": "WorkLocation"
+        },
+        {
+          "what": "Window, duration and reason",
+          "party": "SCHD",
+          "data": "WorkTimeSchedule"
+        },
+        {
+          "what": "Escalation route agreed with the customer",
+          "party": "CS",
+          "data": "Work"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Confirmed contact per critical premise",
+          "party": "CS",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Outage held or replanned for an unreachable premise",
+          "party": "NO",
+          "data": "Work"
+        }
+      ],
+      "systems": [
+        {
+          "component": "CS",
+          "role": "system of record",
+          "service": "critical customer register and contact"
+        },
+        {
+          "component": "SCHD",
+          "role": "supplier",
+          "service": "window"
+        },
+        {
+          "component": "NO",
+          "role": "consumer",
+          "service": "hold or replan decision"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "CS",
+          "to": "NO",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Customer operations lead",
+          "raci": "A"
+        },
+        {
+          "role": "Communications lead",
+          "raci": "R"
+        },
+        {
+          "role": "System operator",
+          "raci": "C"
+        },
+        {
+          "role": "Control room operator",
+          "raci": "I"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkLocation",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "Confirmed contact means the customer answered, not that a message was sent. For a life-support premise an unanswered notice is an unmitigated risk and the escalation is to hold the outage, which is why this process can reach back into 18.2."
+        },
+        {
+          "kind": "regulatory",
+          "text": "Registration criteria, the evidence a customer must supply and any obligation to supply back-up are State and tariff. This reference holds none of them and states none."
+        },
+        {
+          "kind": "operational",
+          "text": "The register itself is maintained at 10.1.4 as a standing contact and notification preference. This process reads it; it does not become a second register."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Critical premise confirmation",
+          "definition": "Share of registered critical premises with a confirmed personal contact before the window opened.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.3.1 applied to the contact record"
+        }
+      ],
+      "variants": [
+        "Confirmed by direct contact",
+        "Confirmed through a nominated representative or carer",
+        "Unreachable, outage held and returned to 18.2.3",
+        "Premise no longer meeting the register criteria, referred to 10.1.4"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Identify, contact, confirm, and hold where confirmation fails.",
+        "artifact": "models/18.3-notify-affected-parties.bpmn"
+      },
+      "en17007": {
+        "process": "HSE.5",
+        "title": "Monitor risk management",
+        "clause": "6.7"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), HSE.5 Monitor risk management, cl. 6.7",
+          "status": "verified"
+        },
+        {
+          "for": "gas restoration duty as the analogue",
+          "cite": "49 CFR 192.615(a)(9) safely restoring any service outage - the duty this notice protects",
+          "status": "regulation"
+        },
+        {
+          "for": "no federal register rule",
+          "cite": "16 U.S.C. 824o Electric reliability",
+          "status": "regulation"
+        },
+        {
+          "for": "register criteria",
+          "cite": "Critical and life-support registration criteria are State and tariff; none is in the pack",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "judgment",
+        "primary": "Life-support registers are State and tariff"
+      }
+    },
+    {
+      "uid": 10589,
+      "id": "18.3.4",
+      "name": "Communicate change, deferral or cancellation",
+      "group": {
+        "id": "18.3",
+        "name": "Notify parties affected by a planned outage",
+        "uid": 10585
+      },
+      "intent": "Tell everyone when the outage moves, shrinks or does not happen.",
+      "activities": [
+        "Detect the change to the window, scope or cancellation",
+        "Re-issue to every party already notified, on the same channel",
+        "Say plainly what changed rather than reissuing the original",
+        "Re-run the critical-premise contact where the window moved"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "A notified operation has been changed, deferred or cancelled.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Change, deferral or cancellation",
+          "party": "NO",
+          "data": "Work"
+        },
+        {
+          "what": "Parties already notified",
+          "party": "CS",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Critical premises previously confirmed",
+          "party": "CS",
+          "data": "WorkLocation"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Change notice per previously notified party",
+          "party": "CS",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Critical contacts re-confirmed",
+          "party": "CS",
+          "data": "Work"
+        }
+      ],
+      "systems": [
+        {
+          "component": "CS",
+          "role": "system of record",
+          "service": "change notices"
+        },
+        {
+          "component": "NO",
+          "role": "supplier",
+          "service": "the change itself"
+        },
+        {
+          "component": "SCHD",
+          "role": "supplier",
+          "service": "the revised window"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "NO",
+          "to": "CS",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Communications lead",
+          "raci": "R"
+        },
+        {
+          "role": "Customer operations lead",
+          "raci": "A"
+        },
+        {
+          "role": "Control room operator",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "A cancelled outage that nobody cancels the notice for costs more trust than the outage would have. The list of who was told is the list who must be told again."
+        },
+        {
+          "kind": "operational",
+          "text": "A moved window restarts the critical-premise confirmation at 18.3.3. A confirmation given for Tuesday is not a confirmation for Thursday."
+        },
+        {
+          "kind": "operational",
+          "text": "Say what changed. Re-sending the original notice with a new date leaves a customer holding two notices and no way to tell which is live."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Change notice completeness",
+          "definition": "Share of previously notified parties who received the change notice.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.3.1 applied to the change notice record"
+        }
+      ],
+      "variants": [
+        "Window moved within the notice period",
+        "Outage cancelled outright",
+        "Scope reduced so fewer parties are affected",
+        "Scope extended, requiring notice to parties not previously told"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Detect, re-issue to the notified list, re-confirm the critical ones.",
+        "artifact": "models/18.3-notify-affected-parties.bpmn"
+      },
+      "en17007": {
+        "process": "DOC.6",
+        "title": "Manage the way in which operational documentation is made available",
+        "clause": "6.9"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), DOC.6 Manage how documentation is made available, cl. 6.9",
+          "status": "verified"
+        },
+        {
+          "for": "gas communication duty",
+          "cite": "49 CFR 192.615(a)(3) prompt and effective response - the emergency analogue, not a planned-change rule",
+          "status": "regulation"
+        },
+        {
+          "for": "shutdown planning",
+          "cite": "GFMAM Asset Management Landscape 3rd ed. v3.0, 2024-06, subject 3.8 Shutdown and Outage Strategy and Planning",
+          "status": "verified"
+        },
+        {
+          "for": "change notice content",
+          "cite": "No source states a planned-outage change notice",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "judgment",
+        "primary": "Change notice practice is operator"
+      }
+    },
+    {
+      "uid": 10591,
+      "id": "18.4.1",
+      "name": "Perform the switching or valve operation",
+      "group": {
+        "id": "18.4",
+        "name": "Execute switching and issue clearance",
+        "uid": 10590
+      },
+      "intent": "Operate the network to the plan and leave every source open, inoperable and tagged.",
+      "activities": [
+        "Confirm the approved plan and the current state before the first operation",
+        "Open every means through which a known source could supply the section",
+        "Render each opened means inoperable and tag it",
+        "Tag and disable automatic and remote controls at the point of control"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "An approved and scheduled operation is due to be executed.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Approved switching plan",
+          "party": "NO",
+          "data": "Work"
+        },
+        {
+          "what": "Current device states",
+          "party": "GINV",
+          "data": "WorkAsset"
+        },
+        {
+          "what": "Employee designated in charge of the clearance",
+          "party": "HR",
+          "data": "Crew"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Section open, inoperable and tagged",
+          "party": "GINV",
+          "data": "WorkAsset"
+        },
+        {
+          "what": "Operation log entry per device",
+          "party": "NO",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "NO",
+          "role": "system of record",
+          "service": "switching execution and log"
+        },
+        {
+          "component": "GINV",
+          "role": "consumer",
+          "service": "resulting device states"
+        },
+        {
+          "component": "FRD",
+          "role": "supplier",
+          "service": "field switching confirmation"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "NO",
+          "to": "GINV",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        },
+        {
+          "from": "FRD",
+          "to": "NO",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "System operator",
+          "raci": "A"
+        },
+        {
+          "role": "Control room operator",
+          "raci": "R"
+        },
+        {
+          "role": "Field switching operator",
+          "raci": "R"
+        },
+        {
+          "role": "Employee in charge of the clearance",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkAsset"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "29 CFR 1910.269(m)(3)(ii): ALL switches, disconnectors, jumpers, taps and other means through which a known source may supply the section shall be open, rendered inoperable unless the design does not permit it, and tagged to indicate employees are at work."
+        },
+        {
+          "kind": "regulatory",
+          "text": "(m)(3)(iii): switches that could automatically or remotely reclose the opened means are tagged AT THE POINTS OF CONTROL and disabled; (m)(2)(v): so is any means the public can reach."
+        },
+        {
+          "kind": "regulatory",
+          "text": "Gas is a different act: 49 CFR 192.605(b)(5) requires a shutdown that stays within MAOP plus the allowed build-up, and 192.747 a valve that is in service and serviceable."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Switching accuracy",
+          "definition": "Share of planned operations completed without an unplanned or corrected device operation.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.4.1 Rework"
+        }
+      ],
+      "variants": [
+        "Electric switching under 1910.269(m)(3)(ii) and (iii)",
+        "Gas valve operation under 192.605(b)(5)",
+        "Single crew with a visible, solely-controlled disconnect, tags not required",
+        "Switching crossing into another operator's network"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "The regulation fixes the order: 1910.269(m)(2)(i) requires compliance with all of (m)(3) in the order specified. The flow is the rule's, not the author's.",
+        "artifact": "models/18.4-execute-switching-and-issue-clearance.bpmn"
+      },
+      "en17007": {
+        "process": "ACT.5",
+        "title": "Start the scheduled tasks",
+        "clause": "6.5.6"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), ACT.5 Start the scheduled tasks, cl. 6.5.6",
+          "status": "verified"
+        },
+        {
+          "for": "open, disable and tag",
+          "cite": "29 CFR 1910.269(m) Deenergizing lines and equipment for employee protection (m)(3)(ii)",
+          "status": "regulation"
+        },
+        {
+          "for": "remote and automatic controls",
+          "cite": "29 CFR 1910.269(m) Deenergizing lines and equipment for employee protection (m)(3)(iii); (m)(2)(v) public access",
+          "status": "regulation"
+        },
+        {
+          "for": "gas shutdown",
+          "cite": "49 CFR 192.605 Procedural manual for operations, maintenance, and emergencies (b)(5); 49 CFR 192.747 Valve maintenance: Distribution systems",
+          "status": "regulation"
+        }
+      ],
+      "provenance": {
+        "basis": "regulation",
+        "primary": "29 CFR 1910.269(m) Deenergizing lines and equipment for employee protection (m)(3)(ii)"
+      }
+    },
+    {
+      "uid": 10592,
+      "id": "18.4.2",
+      "name": "Verify isolation and apply protective grounds",
+      "group": {
+        "id": "18.4",
+        "name": "Execute switching and issue clearance",
+        "uid": 10590
+      },
+      "intent": "Prove the section is dead by testing it, then ground it.",
+      "activities": [
+        "Take the clearance the system operator has given",
+        "Test the lines and equipment with a device designed to detect voltage",
+        "Install protective grounds to create the equipotential zone",
+        "Only then treat the section as deenergized"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "The section is open and tagged and a clearance has been given.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Clearance given by the system operator",
+          "party": "NO",
+          "data": "Work"
+        },
+        {
+          "what": "Section open, inoperable and tagged",
+          "party": "GINV",
+          "data": "WorkAsset"
+        },
+        {
+          "what": "Voltage detection and grounding equipment",
+          "party": "TCM",
+          "data": "Tool"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Tested and grounded section",
+          "party": "FRD",
+          "data": "WorkAsset"
+        },
+        {
+          "what": "Test and grounding record",
+          "party": "NO",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "FRD",
+          "role": "system of record",
+          "service": "test and grounding record"
+        },
+        {
+          "component": "NO",
+          "role": "consumer",
+          "service": "confirmation the section is dead"
+        },
+        {
+          "component": "TCM",
+          "role": "supplier",
+          "service": "test and grounding equipment"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "FRD",
+          "to": "NO",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Employee in charge of the clearance",
+          "raci": "A"
+        },
+        {
+          "role": "Qualified employee",
+          "raci": "R"
+        },
+        {
+          "role": "System operator",
+          "raci": "C"
+        },
+        {
+          "role": "Field supervisor",
+          "raci": "I"
+        }
+      ],
+      "data_objects": [
+        "WorkAsset",
+        "Tool",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "29 CFR 1910.269(m)(3)(vi): AFTER (i) to (v) are followed and AFTER the system operator gives a clearance, the lines shall be tested with a device designed to detect voltage. The order is not advisory - (m)(2)(i) requires (m)(3) in the order specified."
+        },
+        {
+          "kind": "regulatory",
+          "text": "(m)(3)(vii) requires grounds per (n). (n)(2): deenergized under (m) AND grounded before anyone works them as deenergized; (n)(3): grounds placed to make an equipotential zone."
+        },
+        {
+          "kind": "regulatory",
+          "text": "(m)(3)(viii): ONLY after all of that may the lines be considered deenergized. Before it, (m)(1) governs and they are treated as energized."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Test and ground compliance",
+          "definition": "Share of clearances where test and grounding were recorded before work began.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.3.1 applied to the clearance record"
+        }
+      ],
+      "variants": [
+        "Grounded at the worksite for an equipotential zone",
+        "Grounds omitted under 1910.269(n)(2) where the employer demonstrates it is impractical",
+        "Gas section proved by pressure rather than voltage, under the operating procedure",
+        "Induced-voltage location requiring additional grounding"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "A strictly ordered regulatory sequence: test, ground, then and only then treat as deenergized.",
+        "artifact": "models/18.4-execute-switching-and-issue-clearance.bpmn"
+      },
+      "en17007": {
+        "process": "HSE.4",
+        "title": "Propose measures for preventing risks and consequences of identified risks",
+        "clause": "6.7"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), HSE.4 Propose measures for preventing risks, cl. 6.7",
+          "status": "verified"
+        },
+        {
+          "for": "test after clearance",
+          "cite": "29 CFR 1910.269(m) Deenergizing lines and equipment for employee protection (m)(3)(vi)",
+          "status": "regulation"
+        },
+        {
+          "for": "grounding",
+          "cite": "29 CFR 1910.269(n) Grounding for the protection of employees (n)(2) deenergized under (m) and properly grounded; (n)(3) equipotential zone",
+          "status": "regulation"
+        },
+        {
+          "for": "only then deenergized",
+          "cite": "29 CFR 1910.269(m) Deenergizing lines and equipment for employee protection (m)(3)(viii); (m)(1) otherwise treated as energized",
+          "status": "regulation"
+        }
+      ],
+      "provenance": {
+        "basis": "regulation",
+        "primary": "29 CFR 1910.269(m) Deenergizing lines and equipment for employee protection (m)(3)(vi)"
+      }
+    },
+    {
+      "uid": 10593,
+      "id": "18.4.3",
+      "name": "Purge, vent or make the section safe",
+      "group": {
+        "id": "18.4",
+        "name": "Execute switching and issue clearance",
+        "uid": 10590
+      },
+      "intent": "Make the gas section safe to open: purge it, vent it and remove the ignition sources.",
+      "activities": [
+        "Confirm the section is isolated and its pressure is controlled",
+        "Purge with the flow and the inert slug the rule requires",
+        "Remove every potential ignition source from the venting area",
+        "Confirm the atmosphere before the section is opened"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "A gas section has been isolated and must be made safe before work.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Isolated gas section and pressure state",
+          "party": "NO",
+          "data": "WorkAsset"
+        },
+        {
+          "what": "Purge and vent plan",
+          "party": "NO",
+          "data": "Work"
+        },
+        {
+          "what": "Ignition sources in the area",
+          "party": "FRD",
+          "data": "WorkLocation"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Purged and vented section",
+          "party": "FRD",
+          "data": "WorkAsset"
+        },
+        {
+          "what": "Atmosphere confirmation record",
+          "party": "NO",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "FRD",
+          "role": "system of record",
+          "service": "purge and atmosphere record"
+        },
+        {
+          "component": "NO",
+          "role": "supplier",
+          "service": "isolation and pressure state"
+        },
+        {
+          "component": "TCM",
+          "role": "supplier",
+          "service": "detection and venting equipment"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "FRD",
+          "to": "NO",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Qualified gas technician",
+          "raci": "R"
+        },
+        {
+          "role": "Field supervisor",
+          "raci": "A"
+        },
+        {
+          "role": "Control room operator",
+          "raci": "C"
+        },
+        {
+          "role": "System operator",
+          "raci": "I"
+        }
+      ],
+      "data_objects": [
+        "WorkAsset",
+        "Tool",
+        "WorkLocation"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "49 CFR 192.629: purge air with gas, or gas with air, in a MODERATELY RAPID AND CONTINUOUS FLOW; where that cannot prevent a hazardous mixture, a SLUG OF INERT GAS goes in first."
+        },
+        {
+          "kind": "regulatory",
+          "text": "49 CFR 192.751(a): where a hazardous amount of gas is vented into open air, every potential ignition source is removed and a fire extinguisher is provided. (b) forbids welding or cutting on pipe containing a combustible mixture and (c) requires warning signs where appropriate."
+        },
+        {
+          "kind": "operational",
+          "text": "This process has no electric analogue. An electric section is proved dead by testing at 18.4.2; a gas section is made safe by purging, and the two are not interchangeable steps."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Purge compliance",
+          "definition": "Share of gas isolations with a recorded purge and atmosphere confirmation before opening.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.3.1 applied to the purge record"
+        }
+      ],
+      "variants": [
+        "Purge of air by gas on commissioning",
+        "Purge of gas by air before work, with an inert slug",
+        "Venting a hazardous amount with ignition sources cleared",
+        "Section made safe by squeeze-off rather than purge"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Isolate, purge to the prescribed flow, clear ignition sources, confirm - a regulated ordered path.",
+        "artifact": "models/18.4-execute-switching-and-issue-clearance.bpmn"
+      },
+      "en17007": {
+        "process": "ACT.5",
+        "title": "Start the scheduled tasks",
+        "clause": "6.5.6"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), ACT.5 Start the scheduled tasks, cl. 6.5.6",
+          "status": "verified"
+        },
+        {
+          "for": "purging",
+          "cite": "49 CFR 192.629 Purging of pipelines (a) and (b)",
+          "status": "regulation"
+        },
+        {
+          "for": "ignition",
+          "cite": "49 CFR 192.751 Prevention of accidental ignition (a), (b) and (c)",
+          "status": "regulation"
+        },
+        {
+          "for": "energy control",
+          "cite": "29 CFR 1910.147 The control of hazardous energy (lockout/tagout) within its own scope for gas",
+          "status": "regulation"
+        }
+      ],
+      "provenance": {
+        "basis": "regulation",
+        "primary": "49 CFR 192.629 Purging of pipelines"
+      }
+    },
+    {
+      "uid": 10594,
+      "id": "18.4.4",
+      "name": "Issue the clearance or permit-to-work",
+      "group": {
+        "id": "18.4",
+        "name": "Execute switching and issue clearance",
+        "uid": 10590
+      },
+      "intent": "Give the clearance: the system operator's act that lets work start on the section.",
+      "activities": [
+        "Receive the request from the employee designated in charge",
+        "Confirm the section named matches the approved plan and is open and tagged",
+        "Give the clearance to that employee and to no-one else",
+        "Record who holds it, over what, and from when"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "The employee in charge has requested deenergization of a named section.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Request from the employee in charge",
+          "party": "FRD",
+          "data": "Work"
+        },
+        {
+          "what": "Approved plan and its section",
+          "party": "NO",
+          "data": "Work"
+        },
+        {
+          "what": "Confirmed open, inoperable and tagged state",
+          "party": "GINV",
+          "data": "WorkAsset"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Clearance given to the named employee in charge",
+          "party": "FRD",
+          "data": "Work"
+        },
+        {
+          "what": "Register entry: holder, section, time",
+          "party": "NO",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "NO",
+          "role": "system of record",
+          "service": "clearance issue and register"
+        },
+        {
+          "component": "FRD",
+          "role": "consumer",
+          "service": "the crew that may now work"
+        },
+        {
+          "component": "GINV",
+          "role": "supplier",
+          "service": "device state confirmation"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "FRD",
+          "to": "NO",
+          "payload": "WorkRequest",
+          "verb": "get",
+          "pattern": "request-reply"
+        },
+        {
+          "from": "NO",
+          "to": "FRD",
+          "payload": "WorkRequest",
+          "verb": "reply",
+          "pattern": "request-reply"
+        }
+      ],
+      "roles": [
+        {
+          "role": "System operator",
+          "raci": "A"
+        },
+        {
+          "role": "Employee in charge of the clearance",
+          "raci": "R"
+        },
+        {
+          "role": "Control room operator",
+          "raci": "C"
+        },
+        {
+          "role": "Field supervisor",
+          "raci": "I"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkAsset",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "29 CFR 1910.269(m)(3)(i): the employee the employer designates as in charge REQUESTS the system operator to deenergize the section, and becomes responsible for the clearance. (m)(3)(vi) is the system operator GIVING it. This process is that act and nothing else performs it."
+        },
+        {
+          "kind": "regulatory",
+          "text": "(m)(2)(iv): where two or more crews work the same lines, either one employee is in charge of the clearance for all of them, or each crew complies independently with SEPARATE TAGS."
+        },
+        {
+          "kind": "operational",
+          "text": "A clearance is not a permit and not a work package field. A permit comes from an external authority (7.3.2); 16.2.3 only says whether one is REQUIRED; emergency isolation is 9.3.2."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Clearance issue integrity",
+          "definition": "Share of clearances recorded with a named holder, a named section and an issue time.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.3.1 applied to the clearance register"
+        }
+      ],
+      "variants": [
+        "System operator in charge, clearance given remotely",
+        "No system operator: the designated employee performs those functions, (m)(2)(ii)",
+        "Two or more crews under one employee in charge",
+        "Two or more crews holding separate clearances and separate tags"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "1910.269(m)(2)(i) requires all of (m)(3) in the order specified, and this is step (i) to (vi) of it. The sequence is the regulation's.",
+        "artifact": "models/18.4-execute-switching-and-issue-clearance.bpmn"
+      },
+      "en17007": {
+        "process": "ACT.5",
+        "title": "Start the scheduled tasks",
+        "clause": "6.5.6"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), ACT.5 Start the scheduled tasks, cl. 6.5.6",
+          "status": "verified"
+        },
+        {
+          "for": "request and responsibility",
+          "cite": "29 CFR 1910.269(m) Deenergizing lines and equipment for employee protection (m)(3)(i)",
+          "status": "regulation"
+        },
+        {
+          "for": "the giving of the clearance",
+          "cite": "29 CFR 1910.269(m) Deenergizing lines and equipment for employee protection (m)(3)(vi)",
+          "status": "regulation"
+        },
+        {
+          "for": "multiple crews",
+          "cite": "29 CFR 1910.269(m) Deenergizing lines and equipment for employee protection (m)(2)(iv)(A) and (B)",
+          "status": "regulation"
+        }
+      ],
+      "provenance": {
+        "basis": "regulation",
+        "primary": "29 CFR 1910.269(m) Deenergizing lines and equipment for employee protection (m)(3)(i)"
+      }
+    },
+    {
+      "uid": 10595,
+      "id": "18.4.5",
+      "name": "Maintain the register of clearances held",
+      "group": {
+        "id": "18.4",
+        "name": "Execute switching and issue clearance",
+        "uid": 10590
+      },
+      "intent": "Hold the live register of who holds which clearance over what.",
+      "activities": [
+        "Hold every live clearance with its holder, section and time",
+        "Hold the tags placed and where they are",
+        "Show what is deenergized and under whose protection",
+        "Keep the register available to the control room at all times"
+      ],
+      "trigger": {
+        "kind": "none",
+        "text": "A standing register. Individual clearances are events on it.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Clearances issued at 18.4.4",
+          "party": "NO",
+          "data": "Work"
+        },
+        {
+          "what": "Tags placed and their locations",
+          "party": "GINV",
+          "data": "WorkAsset"
+        },
+        {
+          "what": "Transfers and releases",
+          "party": "NO",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Live clearance register",
+          "party": "NO",
+          "data": "Work"
+        },
+        {
+          "what": "Sections under protection, visible to the control room",
+          "party": "GINV",
+          "data": "WorkAsset"
+        }
+      ],
+      "systems": [
+        {
+          "component": "NO",
+          "role": "system of record",
+          "service": "clearance register"
+        },
+        {
+          "component": "GINV",
+          "role": "consumer",
+          "service": "protected sections in the network view"
+        },
+        {
+          "component": "FRD",
+          "role": "supplier",
+          "service": "field confirmation of tags"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "NO",
+          "to": "GINV",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "System operator",
+          "raci": "A"
+        },
+        {
+          "role": "Control room operator",
+          "raci": "R"
+        },
+        {
+          "role": "Employee in charge of the clearance",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkAsset"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "29 CFR 1910.269(m)(3)(xii): no-one may remove tags without release of the associated clearance. The register is what makes the association knowable, and a tag whose clearance nobody can find is a tag nobody can lawfully remove."
+        },
+        {
+          "kind": "regulatory",
+          "text": "(m)(3)(xiii) forbids reenergizing until ALL crews working the lines release THEIR clearances. A register that shows one clearance where two exist will reenergize onto a crew."
+        },
+        {
+          "kind": "operational",
+          "text": "This is a standing record and not an instance. Issue, transfer and release are events on it, performed at 18.4.4, 18.4.6 and 18.5.2."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Register accuracy",
+          "definition": "Share of live clearances whose register entry matches the tags found in the field at audit.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.3.1 applied to the register"
+        }
+      ],
+      "variants": [
+        "Single clearance on a radial section",
+        "Multiple concurrent clearances on one section with separate tags",
+        "Clearance held across a shift change through 18.4.6 transfer",
+        "Gas isolation logged in the same register without being a clearance"
+      ],
+      "notation": {
+        "class": "SPEC",
+        "why": "A standing register the control room reads continuously. Issue, transfer and release are events on it and are drawn where they happen.",
+        "artifact": null
+      },
+      "en17007": {
+        "process": "DTA.1",
+        "title": "Store and validate the raw data in a library and/or a database",
+        "clause": "6.10"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), DTA.1 Store and validate the raw data, cl. 6.10",
+          "status": "verified"
+        },
+        {
+          "for": "tags and clearance association",
+          "cite": "29 CFR 1910.269(m) Deenergizing lines and equipment for employee protection (m)(3)(xii)",
+          "status": "regulation"
+        },
+        {
+          "for": "all crews release",
+          "cite": "29 CFR 1910.269(m) Deenergizing lines and equipment for employee protection (m)(3)(xiii)",
+          "status": "regulation"
+        },
+        {
+          "for": "register content",
+          "cite": "No source states a clearance register format",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "regulation",
+        "primary": "29 CFR 1910.269(m) Deenergizing lines and equipment for employee protection (m)(3)(xii)"
+      }
+    },
+    {
+      "uid": 10596,
+      "id": "18.4.6",
+      "name": "Manage clearance transfer, extension and expiry",
+      "group": {
+        "id": "18.4",
+        "name": "Execute switching and issue clearance",
+        "uid": 10590
+      },
+      "intent": "Move a clearance to a new holder without ever leaving it unheld.",
+      "activities": [
+        "Take the transfer request and the reason for it",
+        "Inform the system operator and the crew of the change",
+        "Make the new employee in charge responsible for the clearance",
+        "Extend or expire the clearance on the operator's own rule"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "The employee in charge must hand the clearance on, or it is expiring.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Transfer or extension request",
+          "party": "FRD",
+          "data": "Work"
+        },
+        {
+          "what": "Live clearance register entry",
+          "party": "NO",
+          "data": "Work"
+        },
+        {
+          "what": "Incoming employee in charge",
+          "party": "HR",
+          "data": "Crew"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Clearance under a new named holder",
+          "party": "NO",
+          "data": "Work"
+        },
+        {
+          "what": "Register updated with the transfer",
+          "party": "NO",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "NO",
+          "role": "system of record",
+          "service": "transfer and register update"
+        },
+        {
+          "component": "FRD",
+          "role": "supplier",
+          "service": "the crews affected"
+        },
+        {
+          "component": "HR",
+          "role": "supplier",
+          "service": "qualification of the incoming holder"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "FRD",
+          "to": "NO",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Employee in charge of the clearance",
+          "raci": "R"
+        },
+        {
+          "role": "System operator",
+          "raci": "A"
+        },
+        {
+          "role": "Field supervisor",
+          "raci": "C"
+        },
+        {
+          "role": "Control room operator",
+          "raci": "I"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "Crew",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "29 CFR 1910.269(m)(3)(ix): to transfer, the employee in charge - or their SUPERVISOR if illness or an emergency takes them off site - informs the system operator and the crew, and the new employee in charge becomes responsible. Only those two may initiate it."
+        },
+        {
+          "kind": "regulatory",
+          "text": "(m)(3)(xi): only the employee in charge who requested the clearance may release it UNLESS responsibility was transferred under (ix)."
+        },
+        {
+          "kind": "operational",
+          "text": "Expiry is not in the rule. Whether a clearance lapses at shift end or runs until surrendered is the operator's standing instruction and this reference states none."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Transfer integrity",
+          "definition": "Share of shift changes on live clearances completed as a recorded transfer rather than a re-issue.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.3.1 applied to the clearance register"
+        }
+      ],
+      "variants": [
+        "Transfer at shift change with both holders present",
+        "Transfer initiated by the supervisor under 1910.269(m)(3)(ix) for illness or emergency",
+        "Extension of a clearance beyond the planned window",
+        "Expiry under the operator's own standing instruction"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Request, inform the operator and the crew, hand responsibility on - the sequence in (m)(3)(ix).",
+        "artifact": "models/18.4-execute-switching-and-issue-clearance.bpmn"
+      },
+      "en17007": {
+        "process": "ACT.6",
+        "title": "Perform the maintenance tasks",
+        "clause": "6.5.7"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), ACT.6 Perform the maintenance tasks, cl. 6.5.7",
+          "status": "verified"
+        },
+        {
+          "for": "transfer",
+          "cite": "29 CFR 1910.269(m) Deenergizing lines and equipment for employee protection (m)(3)(ix)",
+          "status": "regulation"
+        },
+        {
+          "for": "who may release after transfer",
+          "cite": "29 CFR 1910.269(m) Deenergizing lines and equipment for employee protection (m)(3)(xi)",
+          "status": "regulation"
+        },
+        {
+          "for": "expiry",
+          "cite": "Clearance expiry and extension periods are operator standing instructions; the rule states none",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "regulation",
+        "primary": "29 CFR 1910.269(m) Deenergizing lines and equipment for employee protection (m)(3)(ix)"
+      }
+    },
+    {
+      "uid": 10598,
+      "id": "18.5.1",
+      "name": "Confirm work complete and all personnel clear",
+      "group": {
+        "id": "18.5",
+        "name": "Return the network to service",
+        "uid": 10597
+      },
+      "intent": "Establish that the work is finished and that nobody is still on the section.",
+      "activities": [
+        "Confirm the work under this clearance is complete or stopped",
+        "Notify each employee under the clearance that it is about to be released",
+        "Confirm every employee under it is clear of the lines and equipment",
+        "Confirm every protective ground under it has been removed"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "Work under a live clearance is reported complete.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Work completion report",
+          "party": "FRD",
+          "data": "Work"
+        },
+        {
+          "what": "Employees working under the clearance",
+          "party": "HR",
+          "data": "Crew"
+        },
+        {
+          "what": "Protective grounds placed at 18.4.2",
+          "party": "FRD",
+          "data": "WorkAsset"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Section confirmed clear of people and grounds",
+          "party": "FRD",
+          "data": "WorkAsset"
+        },
+        {
+          "what": "Clearance ready to surrender",
+          "party": "NO",
+          "data": "Work"
+        }
+      ],
+      "systems": [
+        {
+          "component": "FRD",
+          "role": "system of record",
+          "service": "clear confirmation"
+        },
+        {
+          "component": "NO",
+          "role": "consumer",
+          "service": "readiness to release"
+        },
+        {
+          "component": "HR",
+          "role": "supplier",
+          "service": "who was working under it"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "FRD",
+          "to": "NO",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Employee in charge of the clearance",
+          "raci": "A"
+        },
+        {
+          "role": "Qualified employee",
+          "raci": "R"
+        },
+        {
+          "role": "Field supervisor",
+          "raci": "C"
+        },
+        {
+          "role": "Control room operator",
+          "raci": "I"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "Crew",
+        "WorkAsset"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "29 CFR 1910.269(m)(3)(x)(A)-(C) is this process exactly: notify each employee under the clearance of the pending release, ensure all are clear of the lines and equipment, and ensure all protective grounds protecting them have been removed. All three, before anything is reported."
+        },
+        {
+          "kind": "operational",
+          "text": "Work stopped is as valid a trigger as work complete. A clearance held open over an abandoned job blocks the network and the crew who could have used the window."
+        },
+        {
+          "kind": "operational",
+          "text": "Grounds removed here are the ones placed under THIS clearance. Another crew's grounds stay, and 18.5.3 will not reenergize until that crew releases too."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Clear confirmation",
+          "definition": "Share of clearance releases preceded by a recorded personnel and grounds confirmation.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.3.1 applied to the release record"
+        }
+      ],
+      "variants": [
+        "Work complete and the crew clear",
+        "Work stopped, clearance surrendered without completion",
+        "Partial completion with the clearance retained for a second shift via 18.4.6",
+        "Gas section restored to pressure rather than released from a clearance"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "The three confirmations of (m)(3)(x) in the order the rule sets them.",
+        "artifact": "models/18.5-return-to-service.bpmn"
+      },
+      "en17007": {
+        "process": "ACT.7",
+        "title": "Finish the tasks",
+        "clause": "6.5.8"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), ACT.7 Finish the tasks, cl. 6.5.8",
+          "status": "verified"
+        },
+        {
+          "for": "notify, clear, grounds removed",
+          "cite": "29 CFR 1910.269(m) Deenergizing lines and equipment for employee protection (m)(3)(x)(A) to (C)",
+          "status": "regulation"
+        },
+        {
+          "for": "grounding basis",
+          "cite": "29 CFR 1910.269(n) Grounding for the protection of employees (n)(2)",
+          "status": "regulation"
+        },
+        {
+          "for": "job briefing on change",
+          "cite": "29 CFR 1910.269(c) Job briefing (c)(3)(ii) additional briefing on significant changes affecting safety",
+          "status": "regulation"
+        }
+      ],
+      "provenance": {
+        "basis": "regulation",
+        "primary": "29 CFR 1910.269(m) Deenergizing lines and equipment for employee protection (m)(3)(x)"
+      }
+    },
+    {
+      "uid": 10599,
+      "id": "18.5.2",
+      "name": "Surrender and cancel the clearance",
+      "group": {
+        "id": "18.5",
+        "name": "Return the network to service",
+        "uid": 10597
+      },
+      "intent": "Surrender the clearance, and take it back only from the person who holds it.",
+      "activities": [
+        "Take the surrender from the employee in charge who holds it",
+        "Refuse a surrender from anyone else unless it was transferred",
+        "Cancel the clearance on the register",
+        "Confirm the tags associated with it may now be removed"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "An employee in charge reports the section clear and surrenders.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Surrender report from the holder",
+          "party": "FRD",
+          "data": "Work"
+        },
+        {
+          "what": "Register entry naming the holder",
+          "party": "NO",
+          "data": "Work"
+        },
+        {
+          "what": "Tags associated with the clearance",
+          "party": "GINV",
+          "data": "WorkAsset"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Cancelled clearance on the register",
+          "party": "NO",
+          "data": "Work"
+        },
+        {
+          "what": "Authority to remove the associated tags",
+          "party": "FRD",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "NO",
+          "role": "system of record",
+          "service": "clearance cancellation"
+        },
+        {
+          "component": "FRD",
+          "role": "consumer",
+          "service": "tag removal authority"
+        },
+        {
+          "component": "GINV",
+          "role": "supplier",
+          "service": "tag locations"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "FRD",
+          "to": "NO",
+          "payload": "WorkRequest",
+          "verb": "close",
+          "pattern": "event"
+        },
+        {
+          "from": "NO",
+          "to": "FRD",
+          "payload": "WorkRequest",
+          "verb": "reply",
+          "pattern": "request-reply"
+        }
+      ],
+      "roles": [
+        {
+          "role": "System operator",
+          "raci": "A"
+        },
+        {
+          "role": "Employee in charge of the clearance",
+          "raci": "R"
+        },
+        {
+          "role": "Control room operator",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkAsset",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "29 CFR 1910.269(m)(3)(xi): ONLY the employee in charge who requested the clearance may release it, unless responsibility was transferred under (m)(3)(ix). A surrender from a supervisor who never held it is not a release."
+        },
+        {
+          "kind": "regulatory",
+          "text": "(m)(3)(x)(D) is the act: report the confirmations from 18.5.1 to the system operator and then release. The report comes first and the release follows it."
+        },
+        {
+          "kind": "regulatory",
+          "text": "(m)(3)(xii): no tags may be removed without release of the associated clearance. Cancelling the register entry is what makes tag removal lawful, which is why the two are the same step and not two."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Release authority",
+          "definition": "Share of releases taken from the recorded holder or a recorded transferee.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.3.1 applied to the release record"
+        }
+      ],
+      "variants": [
+        "Released by the original holder",
+        "Released by a transferee under 1910.269(m)(3)(ix)",
+        "Surrender refused because the person is not the holder",
+        "Last of several concurrent clearances released"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Report, verify the holder, cancel, authorise tag removal - the (m)(3)(x)(D) and (xi) sequence.",
+        "artifact": "models/18.5-return-to-service.bpmn"
+      },
+      "en17007": {
+        "process": "ACT.7",
+        "title": "Finish the tasks",
+        "clause": "6.5.8"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), ACT.7 Finish the tasks, cl. 6.5.8",
+          "status": "verified"
+        },
+        {
+          "for": "only the holder may release",
+          "cite": "29 CFR 1910.269(m) Deenergizing lines and equipment for employee protection (m)(3)(xi)",
+          "status": "regulation"
+        },
+        {
+          "for": "report then release",
+          "cite": "29 CFR 1910.269(m) Deenergizing lines and equipment for employee protection (m)(3)(x)(D)",
+          "status": "regulation"
+        },
+        {
+          "for": "tags follow the clearance",
+          "cite": "29 CFR 1910.269(m) Deenergizing lines and equipment for employee protection (m)(3)(xii)",
+          "status": "regulation"
+        }
+      ],
+      "provenance": {
+        "basis": "regulation",
+        "primary": "29 CFR 1910.269(m) Deenergizing lines and equipment for employee protection (m)(3)(xi)"
+      }
+    },
+    {
+      "uid": 10600,
+      "id": "18.5.3",
+      "name": "Reverse switching and restore the normal configuration",
+      "group": {
+        "id": "18.5",
+        "name": "Return the network to service",
+        "uid": 10597
+      },
+      "intent": "Put the network back, and not before every clearance on it is gone.",
+      "activities": [
+        "Confirm every clearance on the section has been released",
+        "Confirm every protective ground and every tag has been removed",
+        "Reverse the switching to the normal configuration",
+        "Re-enable the automatic and remote controls that were disabled"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "The last clearance on a section has been cancelled.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Cancelled clearances for the section",
+          "party": "NO",
+          "data": "Work"
+        },
+        {
+          "what": "Tag and ground removal confirmations",
+          "party": "FRD",
+          "data": "WorkAsset"
+        },
+        {
+          "what": "Normal configuration from the plan",
+          "party": "GINV",
+          "data": "WorkAsset"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Network returned to normal configuration",
+          "party": "GINV",
+          "data": "WorkAsset"
+        },
+        {
+          "what": "Automatic and remote controls re-enabled",
+          "party": "NE",
+          "data": "WorkAsset"
+        }
+      ],
+      "systems": [
+        {
+          "component": "NO",
+          "role": "system of record",
+          "service": "reenergization sequence"
+        },
+        {
+          "component": "GINV",
+          "role": "consumer",
+          "service": "restored device states"
+        },
+        {
+          "component": "NE",
+          "role": "consumer",
+          "service": "protection and automation restored"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "NO",
+          "to": "GINV",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        },
+        {
+          "from": "NO",
+          "to": "NE",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "System operator",
+          "raci": "A"
+        },
+        {
+          "role": "Control room operator",
+          "raci": "R"
+        },
+        {
+          "role": "Field switching operator",
+          "raci": "R"
+        },
+        {
+          "role": "Protection engineer",
+          "raci": "I"
+        }
+      ],
+      "data_objects": [
+        "WorkAsset",
+        "Work"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "29 CFR 1910.269(m)(3)(xiii) is a four-part bar on reenergizing: no-one initiates it until ALL protective grounds are removed, ALL crews working the lines release THEIR clearances, ALL employees are clear, and ALL protective tags are removed from that point of disconnection."
+        },
+        {
+          "kind": "regulatory",
+          "text": "The automatic and remote controls disabled at 18.4.1 under (m)(3)(iii) are re-enabled here. A section restored with its reclosing blocked is not restored; the next fault finds out."
+        },
+        {
+          "kind": "operational",
+          "text": "Gas returns to service under 49 CFR 192.605(b)(5) within MAOP plus the allowed build-up, and a purge back to gas runs under 192.629. Neither is a clearance release."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Restoration to normal",
+          "definition": "Share of operations returning the network to its planned normal configuration within the window.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.4.3 Schedule Compliance"
+        }
+      ],
+      "variants": [
+        "Reversal to the original normal configuration",
+        "Restoration to a new normal after a permanent change",
+        "Abnormal condition deliberately retained beyond the window",
+        "Gas section returned to pressure under 192.605(b)(5)"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Four confirmations then reverse - the (m)(3)(xiii) bar drawn as the gate it is.",
+        "artifact": "models/18.5-return-to-service.bpmn"
+      },
+      "en17007": {
+        "process": "ACT.7",
+        "title": "Finish the tasks",
+        "clause": "6.5.8"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), ACT.7 Finish the tasks, cl. 6.5.8",
+          "status": "verified"
+        },
+        {
+          "for": "the bar on reenergizing",
+          "cite": "29 CFR 1910.269(m) Deenergizing lines and equipment for employee protection (m)(3)(xiii)",
+          "status": "regulation"
+        },
+        {
+          "for": "controls re-enabled",
+          "cite": "29 CFR 1910.269(m) Deenergizing lines and equipment for employee protection (m)(3)(iii)",
+          "status": "regulation"
+        },
+        {
+          "for": "gas return to service",
+          "cite": "49 CFR 192.605 Procedural manual for operations, maintenance, and emergencies (b)(5); 49 CFR 192.629 Purging of pipelines",
+          "status": "regulation"
+        }
+      ],
+      "provenance": {
+        "basis": "regulation",
+        "primary": "29 CFR 1910.269(m) Deenergizing lines and equipment for employee protection (m)(3)(xiii)"
+      }
+    },
+    {
+      "uid": 10601,
+      "id": "18.5.4",
+      "name": "Confirm restoration and notify affected parties",
+      "group": {
+        "id": "18.5",
+        "name": "Return the network to service",
+        "uid": 10597
+      },
+      "intent": "Tell everyone it is back, and confirm it actually is.",
+      "activities": [
+        "Confirm supply is restored at the affected premises",
+        "Notify the parties told at 18.3 that the outage has ended",
+        "Confirm restoration personally to the critical premises",
+        "Record any premise that did not come back"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "The network has been returned to its normal configuration.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Restored network state",
+          "party": "GINV",
+          "data": "WorkAsset"
+        },
+        {
+          "what": "Parties notified at 18.3",
+          "party": "CS",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Critical premises confirmed at 18.3.3",
+          "party": "CS",
+          "data": "WorkLocation"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Restoration notice per party",
+          "party": "CS",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Premises not restored, referred to 9.0",
+          "party": "NO",
+          "data": "Work"
+        }
+      ],
+      "systems": [
+        {
+          "component": "CS",
+          "role": "system of record",
+          "service": "restoration notices"
+        },
+        {
+          "component": "GINV",
+          "role": "supplier",
+          "service": "restored state"
+        },
+        {
+          "component": "NO",
+          "role": "consumer",
+          "service": "unrestored premises"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "CS",
+          "to": "NO",
+          "payload": "WorkRequest",
+          "verb": "create",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Communications lead",
+          "raci": "R"
+        },
+        {
+          "role": "Customer operations lead",
+          "raci": "A"
+        },
+        {
+          "role": "Control room operator",
+          "raci": "C"
+        },
+        {
+          "role": "System operator",
+          "raci": "I"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkLocation",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "A premise that does not come back is no longer a planned outage. It becomes an unplanned interruption and goes to 9.0, and the two are reported differently under IEEE 1366."
+        },
+        {
+          "kind": "regulatory",
+          "text": "For gas, 49 CFR 192.615(a)(9) requires safely restoring any service outage, and a premise needing relight goes to 9.3.5 rather than being closed here."
+        },
+        {
+          "kind": "operational",
+          "text": "Confirming restoration to a critical premise is a personal contact for the same reason the notice was: an unanswered message is not confirmation that a vulnerable person has supply back."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Restoration notice completeness",
+          "definition": "Share of notified parties who received a restoration notice.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.3.1 applied to the notice record"
+        }
+      ],
+      "variants": [
+        "Full restoration, all parties notified",
+        "Partial restoration with premises referred to 9.0",
+        "Gas restoration requiring relight through 9.3.5",
+        "Restoration ahead of the notified window"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Confirm, notify, re-confirm the critical, refer what did not return.",
+        "artifact": "models/18.5-return-to-service.bpmn"
+      },
+      "en17007": {
+        "process": "ACT.7",
+        "title": "Finish the tasks",
+        "clause": "6.5.8"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), ACT.7 Finish the tasks, cl. 6.5.8",
+          "status": "verified"
+        },
+        {
+          "for": "gas restoration duty",
+          "cite": "49 CFR 192.615(a)(9) safely restoring any service outage",
+          "status": "regulation"
+        },
+        {
+          "for": "interruption reporting",
+          "cite": "IEEE 1366-2022",
+          "status": "consensus"
+        },
+        {
+          "for": "restoration notice content",
+          "cite": "No source states a restoration notice",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "regulation",
+        "primary": "49 CFR 192.615(a)(9)"
+      }
+    },
+    {
+      "uid": 10602,
+      "id": "18.5.5",
+      "name": "Record the as-operated network state",
+      "group": {
+        "id": "18.5",
+        "name": "Return the network to service",
+        "uid": 10597
+      },
+      "intent": "Write down what the network is actually in, so the next plan is verified against truth.",
+      "activities": [
+        "Record the device states the operation actually left",
+        "Record any abnormal condition still standing and why",
+        "Update the as-operated model the control room works from",
+        "Close the operation record with its log, clearances and times"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "An operation has been completed and its state must be recorded.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Actual device states after restoration",
+          "party": "GINV",
+          "data": "WorkAsset"
+        },
+        {
+          "what": "Abnormal conditions still in force",
+          "party": "NO",
+          "data": "Work"
+        },
+        {
+          "what": "Operation log, clearances and times",
+          "party": "NO",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Updated as-operated network state",
+          "party": "GINV",
+          "data": "WorkAsset"
+        },
+        {
+          "what": "Closed operation record",
+          "party": "NO",
+          "data": "Work"
+        }
+      ],
+      "systems": [
+        {
+          "component": "GINV",
+          "role": "system of record",
+          "service": "as-operated network state"
+        },
+        {
+          "component": "NO",
+          "role": "supplier",
+          "service": "operation log and clearance history"
+        },
+        {
+          "component": "AM",
+          "role": "consumer",
+          "service": "asset state changes for 12.1"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "NO",
+          "to": "GINV",
+          "payload": "WorkRequest",
+          "verb": "close",
+          "pattern": "event"
+        },
+        {
+          "from": "GINV",
+          "to": "AM",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Control room operator",
+          "raci": "R"
+        },
+        {
+          "role": "System operator",
+          "raci": "A"
+        },
+        {
+          "role": "Asset data owner",
+          "raci": "C"
+        },
+        {
+          "role": "Network planning engineer",
+          "raci": "I"
+        }
+      ],
+      "data_objects": [
+        "WorkAsset",
+        "Work",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "18.1.4 verifies the next plan against this record. An as-operated state that is a day out of date turns plan verification into a formality and puts the error back into the field."
+        },
+        {
+          "kind": "operational",
+          "text": "An abnormal condition left standing is part of the network state, not a note on a closed job. Recording it here is what makes 18.1.5 able to read it back."
+        },
+        {
+          "kind": "operational",
+          "text": "5.4.6 updates the asset register and 12.1 holds it. This process records the OPERATING state - which devices are open and what is abnormal - and hands asset changes on rather than duplicating the register."
+        }
+      ],
+      "measures": [
+        {
+          "name": "As-operated currency",
+          "definition": "Time between an operation completing and the as-operated state being updated.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.4.7 Work Order Cycle Time"
+        }
+      ],
+      "variants": [
+        "Network returned to normal, no abnormal condition",
+        "Abnormal condition recorded and standing",
+        "Permanent configuration change handed to 12.1",
+        "Operation closed with an incomplete field log, flagged"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Record the state, record what is abnormal, update, close.",
+        "artifact": "models/18.5-return-to-service.bpmn"
+      },
+      "en17007": {
+        "process": "DTA.1",
+        "title": "Store and validate the raw data in a library and/or a database",
+        "clause": "6.10"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), DTA.1 Store and validate the raw data, cl. 6.10",
+          "status": "verified"
+        },
+        {
+          "for": "records available to operating personnel",
+          "cite": "49 CFR 192.605 Procedural manual for operations, maintenance, and emergencies (b)(3) making construction records, maps and operating history available to appropriate operating personnel",
+          "status": "regulation"
+        },
+        {
+          "for": "network operations interface",
+          "cite": "IEC 61968-3 Ed. 3.0:2021 Interface for network operations",
+          "status": "consensus"
+        },
+        {
+          "for": "as-operated content",
+          "cite": "No source states an as-operated record format",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "regulation",
+        "primary": "49 CFR 192.605 Procedural manual for operations, maintenance, and emergencies (b)(3)"
+      }
+    }
+  ]
+}

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_P_18_1" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <process id="P_18_1" name="18.1 Plan the isolation and the switching" isExecutable="false">
+    <documentation>18.1.2, 18.1.3 and 18.1.4 are drawn. 18.1.1 is a decision and 18.1.5 is a case, and each is called rather than redrawn. One ordering is deliberate and is the reason the group is a flow at all: the REGIME is settled before the plan is written, because 29 CFR 1910.269(m)(1) treats anything deenergized under procedures other than (d) or (m) as still energized. A plan written to the wrong regime is not a weaker protection, it is none.
+
+The gas branch is not a shorter version of the electric one. It plans a valve isolation and a purge under 49 CFR 192.605(b)(5) and 192.629, and it tests the valves it intends to use against 192.747 before the plan is called verified.</documentation>
+    <laneSet id="P_18_1_lanes">
+      <lane id="l_181_plan" name="Network planning">
+        <flowNodeRef>n_181_start</flowNodeRef>
+        <flowNodeRef>n_181_reg</flowNodeRef>
+        <flowNodeRef>n_181_gw</flowNodeRef>
+        <flowNodeRef>n_181_none</flowNodeRef>
+        <flowNodeRef>n_181_points</flowNodeRef>
+        <flowNodeRef>n_181_seq</flowNodeRef>
+        <flowNodeRef>n_181_gas</flowNodeRef>
+        <flowNodeRef>n_181_imp</flowNodeRef>
+        <flowNodeRef>n_181_ver</flowNodeRef>
+        <flowNodeRef>n_181_ok</flowNodeRef>
+        <flowNodeRef>n_181_back</flowNodeRef>
+        <flowNodeRef>n_181_end</flowNodeRef>
+      </lane>
+      <lane id="l_181_ops" name="Control room">
+        <flowNodeRef>n_181_val</flowNodeRef>
+        <flowNodeRef>n_181_cont</flowNodeRef>
+      </lane>
+    </laneSet>
+    <startEvent id="n_181_start" name="Work scheduled that cannot proceed live"><conditionalEventDefinition id="n_181_start_cd"><condition/></conditionalEventDefinition></startEvent>
+    <businessRuleTask id="n_181_reg" name="Determine the isolation and the regime (18.1.1)"><documentation>18.1.1. First, and before anything is planned.</documentation></businessRuleTask>
+    <exclusiveGateway id="n_181_gw" name="Regime"/>
+    <endEvent id="n_181_none" name="No isolation required"><documentation>18.1.1. A live-working or no-contact method returns here and never enters 18.4.</documentation></endEvent>
+    <userTask id="n_181_points" name="Identify every point a known source could supply"><documentation>18.1.2. 1910.269(m)(3)(ii) names switches, disconnectors, jumpers and taps. The plan is measured against that list, not against the obvious devices.</documentation></userTask>
+    <userTask id="n_181_seq" name="Sequence the operations, automatic and remote controls included"><documentation>18.1.2. (m)(3)(iii) is planned here and executed at 18.4.1: anything that could reclose the opened means is tagged at its point of control and disabled.</documentation></userTask>
+    <userTask id="n_181_gas" name="Plan the valve isolation and the purge"><documentation>18.1.2, gas. 49 CFR 192.605(b)(5) shutdown within MAOP plus the allowed build-up, with the purge planned to 192.629.</documentation></userTask>
+    <serviceTask id="n_181_val" name="Test each valve the plan will use"><documentation>18.1.4, gas. 49 CFR 192.747: a valve necessary for safe operation is checked and serviced at intervals not exceeding 15 months and at least once each calendar year, and an inoperable one needs prompt remedial action or a designated alternative. Isolating on an overdue valve is not a verified plan.</documentation></serviceTask>
+    <serviceTask id="n_181_imp" name="Trace impact, critical premises and duration (18.1.3)"><documentation>18.1.3. This output is what 18.3.1 resolves into a notice list; the two are not the same list and the register terms belong to the operator.</documentation></serviceTask>
+    <userTask id="n_181_ver" name="Verify against the current network state (18.1.4)"><documentation>18.1.4. Against the as-operated state 18.5.5 maintains, not the design state.</documentation></userTask>
+    <exclusiveGateway id="n_181_ok" name="Verified"/>
+    <sendTask id="n_181_back" name="Return the plan with what changed"><documentation>18.1.4. A returned plan says which device state or defect changed, so 18.1.2 revises rather than starts again.</documentation></sendTask>
+    <callActivity id="n_181_cont" name="Agree abnormal conditions and contingency (18.1.5)"><documentation>18.1.5. A case, not a step: redundancy, weather and the cost of aborting are all live at once.</documentation></callActivity>
+    <endEvent id="n_181_end" name="Verified plan ready to submit"/>
+    <sequenceFlow id="f_n_181_start_n_181_reg" sourceRef="n_181_start" targetRef="n_181_reg" name=""/>
+    <sequenceFlow id="f_n_181_reg_n_181_gw" sourceRef="n_181_reg" targetRef="n_181_gw" name=""/>
+    <sequenceFlow id="f_n_181_gw_n_181_none" sourceRef="n_181_gw" targetRef="n_181_none" name="no isolation"><conditionExpression xsi:type="tFormalExpression"><![CDATA[regime = "noIsolation"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_181_gw_n_181_points" sourceRef="n_181_gw" targetRef="n_181_points" name="electric, 1910.269(m)"><conditionExpression xsi:type="tFormalExpression"><![CDATA[regime = "systemOperator" or regime = "employeeInCharge"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_181_gw_n_181_gas" sourceRef="n_181_gw" targetRef="n_181_gas" name="gas, 192.605(b)(5)"><conditionExpression xsi:type="tFormalExpression"><![CDATA[regime = "gasOperating"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_181_points_n_181_seq" sourceRef="n_181_points" targetRef="n_181_seq" name=""/>
+    <sequenceFlow id="f_n_181_seq_n_181_imp" sourceRef="n_181_seq" targetRef="n_181_imp" name=""/>
+    <sequenceFlow id="f_n_181_gas_n_181_val" sourceRef="n_181_gas" targetRef="n_181_val" name=""/>
+    <sequenceFlow id="f_n_181_val_n_181_imp" sourceRef="n_181_val" targetRef="n_181_imp" name=""/>
+    <sequenceFlow id="f_n_181_imp_n_181_ver" sourceRef="n_181_imp" targetRef="n_181_ver" name=""/>
+    <sequenceFlow id="f_n_181_ver_n_181_ok" sourceRef="n_181_ver" targetRef="n_181_ok" name=""/>
+    <sequenceFlow id="f_n_181_ok_n_181_back" sourceRef="n_181_ok" targetRef="n_181_back" name="returned"><conditionExpression xsi:type="tFormalExpression"><![CDATA[verified = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_181_back_n_181_points" sourceRef="n_181_back" targetRef="n_181_points" name=""/>
+    <sequenceFlow id="f_n_181_ok_n_181_cont" sourceRef="n_181_ok" targetRef="n_181_cont" name="verified"/>
+    <sequenceFlow id="f_n_181_cont_n_181_end" sourceRef="n_181_cont" targetRef="n_181_end" name=""/>
+  </process>
+  <bpmndi:BPMNDiagram id="dg_P_18_1">
+    <bpmndi:BPMNPlane id="pl_P_18_1" bpmnElement="P_18_1">
+      <bpmndi:BPMNShape id="sh_n_181_start" bpmnElement="n_181_start"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_181_reg" bpmnElement="n_181_reg"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_181_gw" bpmnElement="n_181_gw"><dc:Bounds x="467" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_181_none" bpmnElement="n_181_none"><dc:Bounds x="472" y="657" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_181_points" bpmnElement="n_181_points"><dc:Bounds x="595" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_181_seq" bpmnElement="n_181_seq"><dc:Bounds x="765" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_181_gas" bpmnElement="n_181_gas"><dc:Bounds x="595" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_181_val" bpmnElement="n_181_val"><dc:Bounds x="765" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_181_imp" bpmnElement="n_181_imp"><dc:Bounds x="935" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_181_ver" bpmnElement="n_181_ver"><dc:Bounds x="1105" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_181_ok" bpmnElement="n_181_ok"><dc:Bounds x="1317" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_181_back" bpmnElement="n_181_back"><dc:Bounds x="1275" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_181_cont" bpmnElement="n_181_cont"><dc:Bounds x="1445" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_181_end" bpmnElement="n_181_end"><dc:Bounds x="1662" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ed_f_n_181_start_n_181_reg" bpmnElement="f_n_181_start_n_181_reg"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_181_reg_n_181_gw" bpmnElement="f_n_181_reg_n_181_gw"><di:waypoint x="385" y="235"/><di:waypoint x="467" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_181_gw_n_181_none" bpmnElement="f_n_181_gw_n_181_none"><di:waypoint x="513" y="235"/><di:waypoint x="447" y="235"/><di:waypoint x="447" y="675"/><di:waypoint x="472" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_181_gw_n_181_points" bpmnElement="f_n_181_gw_n_181_points"><di:waypoint x="513" y="235"/><di:waypoint x="595" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_181_gw_n_181_gas" bpmnElement="f_n_181_gw_n_181_gas"><di:waypoint x="513" y="235"/><di:waypoint x="570" y="235"/><di:waypoint x="570" y="455"/><di:waypoint x="595" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_181_points_n_181_seq" bpmnElement="f_n_181_points_n_181_seq"><di:waypoint x="725" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_181_seq_n_181_imp" bpmnElement="f_n_181_seq_n_181_imp"><di:waypoint x="895" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_181_gas_n_181_val" bpmnElement="f_n_181_gas_n_181_val"><di:waypoint x="725" y="455"/><di:waypoint x="765" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_181_val_n_181_imp" bpmnElement="f_n_181_val_n_181_imp"><di:waypoint x="895" y="455"/><di:waypoint x="910" y="455"/><di:waypoint x="910" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_181_imp_n_181_ver" bpmnElement="f_n_181_imp_n_181_ver"><di:waypoint x="1065" y="235"/><di:waypoint x="1105" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_181_ver_n_181_ok" bpmnElement="f_n_181_ver_n_181_ok"><di:waypoint x="1235" y="235"/><di:waypoint x="1317" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_181_ok_n_181_back" bpmnElement="f_n_181_ok_n_181_back"><di:waypoint x="1363" y="235"/><di:waypoint x="1250" y="235"/><di:waypoint x="1250" y="455"/><di:waypoint x="1275" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_181_back_n_181_points" bpmnElement="f_n_181_back_n_181_points"><di:waypoint x="1405" y="455"/><di:waypoint x="570" y="455"/><di:waypoint x="570" y="235"/><di:waypoint x="595" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_181_ok_n_181_cont" bpmnElement="f_n_181_ok_n_181_cont"><di:waypoint x="1363" y="235"/><di:waypoint x="1445" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_181_cont_n_181_end" bpmnElement="f_n_181_cont_n_181_end"><di:waypoint x="1575" y="235"/><di:waypoint x="1662" y="235"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

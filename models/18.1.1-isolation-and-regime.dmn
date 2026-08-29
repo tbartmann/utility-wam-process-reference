@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/" id="Isolation_regime" name="18.1.1 Determine the isolation the work requires" namespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <description>The first determination in the category and the one every later model consumes. It is a DMN table rather than a flow because the output is a VALUE - which regime governs - and not a change of state.
+
+29 CFR 1910.269(m)(1) is why it has to be settled first: a conductor deenergized under procedures other than (d) or (m) SHALL BE TREATED AS ENERGIZED. There is no partial credit for a nearly-right regime. (m)(2)(i) to (iii) then turn on whether a system operator is in charge of the lines and their means of disconnection, and on whether a single crew holds a visible, solely-controlled disconnect.
+
+The gas row is not an electric row with different words. 29 CFR 1910.147(a)(1)(ii)(C) excludes electric utility generation, transmission and distribution installations from lockout/tagout, and 1910.269(m) is an electric rule; neither reaches the other's work. Gas isolation is an operating act under 49 CFR 192.605(b)(5) with 1910.147 energy control in its own scope.</description>
+  <inputData id="in_needsIsolation" name="Work can proceed on a live network"><variable id="in_needsIsolation_v" name="Work can proceed on a live network" typeRef="boolean"/></inputData>
+  <inputData id="in_commodity" name="Commodity"><variable id="in_commodity_v" name="Commodity" typeRef="string"/></inputData>
+  <inputData id="in_systemOperator" name="System operator in charge of the lines and their means of disconnection"><variable id="in_systemOperator_v" name="System operator in charge of the lines and their means of disconnection" typeRef="boolean"/></inputData>
+  <inputData id="in_singleCrewVisible" name="One crew, with a disconnect visible to and solely controlled by the employee in charge"><variable id="in_singleCrewVisible_v" name="One crew, with a disconnect visible to and solely controlled by the employee in charge" typeRef="boolean"/></inputData>
+  <knowledgeSource id="ks_269m2" name="29 CFR 1910.269(m)(1) and (m)(2)(i) to (iii); 29 CFR 1910.147(a)(1)(ii)(C); 49 CFR 192.605(b)(5)"><description>(m)(1) fixes the consequence of choosing wrongly: deenergized under anything other than (d) or (m) is TREATED AS ENERGIZED. (m)(2)(i) to (iii) set which of (m)(3) applies. 1910.147(a)(1)(ii)(C) is the exclusion that keeps the two commodities apart.</description></knowledgeSource>
+  <decision id="d_18_1_1" name="Isolation regime">
+    <variable id="d_18_1_1_v" name="Isolation regime" typeRef="string"/>
+    <informationRequirement id="ir_d_18_1_1_ks_269m2"><requiredInput href="#ks_269m2"/></informationRequirement>
+    <decisionTable id="d_18_1_1_dt" hitPolicy="FIRST" preferredOrientation="Rule-as-Row">
+      <input id="d_18_1_1_i1" label="Can proceed live"><inputExpression id="d_18_1_1_i1_e" typeRef="boolean"><text>in_needsIsolation</text></inputExpression></input>
+      <input id="d_18_1_1_i2" label="Commodity"><inputExpression id="d_18_1_1_i2_e" typeRef="string"><text>in_commodity</text></inputExpression></input>
+      <input id="d_18_1_1_i3" label="System operator in charge"><inputExpression id="d_18_1_1_i3_e" typeRef="boolean"><text>in_systemOperator</text></inputExpression></input>
+      <input id="d_18_1_1_i4" label="Single crew, visible solely-controlled disconnect"><inputExpression id="d_18_1_1_i4_e" typeRef="boolean"><text>in_singleCrewVisible</text></inputExpression></input>
+      <output id="d_18_1_1_o" label="Isolation regime" name="Isolation regime" typeRef="string"/>
+      <rule id="d_18_1_1_r1">
+        <description>Live-line or no-contact work. It never enters 18.4 and no clearance exists to release, which also means nothing in 18.5 protects it. Minimum approach distance under 1910.269(l) governs instead, and that is category 8's.</description>
+        <inputEntry id="d_18_1_1_r1_ie1"><text>true</text></inputEntry>
+        <inputEntry id="d_18_1_1_r1_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_18_1_1_r1_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_18_1_1_r1_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_18_1_1_r1_oe"><text>"noIsolation"</text></outputEntry>
+      </rule>
+      <rule id="d_18_1_1_r2">
+        <description>An operating act, not a clearance. 49 CFR 192.605(b)(5) requires the shutdown to keep the part within MAOP plus the allowed build-up; 192.629 governs the purge and 192.751 the ignition sources. 29 CFR 1910.147 applies to gas because 1910.147(a)(1)(ii)(C) excludes only electric utility installations.</description>
+        <inputEntry id="d_18_1_1_r2_ie1"><text>false</text></inputEntry>
+        <inputEntry id="d_18_1_1_r2_ie2"><text>"gas"</text></inputEntry>
+        <inputEntry id="d_18_1_1_r2_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_18_1_1_r2_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_18_1_1_r2_oe"><text>"gasOperating"</text></outputEntry>
+      </rule>
+      <rule id="d_18_1_1_r3">
+        <description>1910.269(m)(2)(ii): no system operator is in charge, and the designated employee in charge performs those functions. The (m)(3) steps still run - what changes is who performs them, not whether they happen.</description>
+        <inputEntry id="d_18_1_1_r3_ie1"><text>false</text></inputEntry>
+        <inputEntry id="d_18_1_1_r3_ie2"><text>"electric"</text></inputEntry>
+        <inputEntry id="d_18_1_1_r3_ie3"><text>false</text></inputEntry>
+        <inputEntry id="d_18_1_1_r3_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_18_1_1_r3_oe"><text>"employeeInCharge"</text></outputEntry>
+      </rule>
+      <rule id="d_18_1_1_r4">
+        <description>1910.269(m)(2)(iii): with one crew and a disconnect visible to and under the sole control of the employee in charge, (m)(3)(i), (iii) and (v) do not apply and tags are not required. This is the ONLY branch in which a tag may be absent, and it collapses the moment a second crew appears - (m)(2)(iv) then governs.</description>
+        <inputEntry id="d_18_1_1_r4_ie1"><text>false</text></inputEntry>
+        <inputEntry id="d_18_1_1_r4_ie2"><text>"electric"</text></inputEntry>
+        <inputEntry id="d_18_1_1_r4_ie3"><text>true</text></inputEntry>
+        <inputEntry id="d_18_1_1_r4_ie4"><text>true</text></inputEntry>
+        <outputEntry id="d_18_1_1_r4_oe"><text>"singleCrewVisibleDisconnect"</text></outputEntry>
+      </rule>
+      <rule id="d_18_1_1_r5">
+        <description>The full (m)(3)(i) to (xiii) lifecycle in the order specified. This is the branch groups 18.4 and 18.5 draw.</description>
+        <inputEntry id="d_18_1_1_r5_ie1"><text>false</text></inputEntry>
+        <inputEntry id="d_18_1_1_r5_ie2"><text>"electric"</text></inputEntry>
+        <inputEntry id="d_18_1_1_r5_ie3"><text>true</text></inputEntry>
+        <inputEntry id="d_18_1_1_r5_ie4"><text>false</text></inputEntry>
+        <outputEntry id="d_18_1_1_r5_oe"><text>"systemOperator"</text></outputEntry>
+      </rule>
+      <rule id="d_18_1_1_r6">
+        <description>Commodity or operator role not established. A named exception, because the default here would be the one (m)(1) punishes.</description>
+        <inputEntry id="d_18_1_1_r6_ie1"><text>-</text></inputEntry>
+        <inputEntry id="d_18_1_1_r6_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_18_1_1_r6_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_18_1_1_r6_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_18_1_1_r6_oe"><text>"determineManually"</text></outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram id="drd_Isolation_regime">
+      <dmndi:DMNShape id="sh_in_needsIsolation" dmnElementRef="in_needsIsolation"><dc:Bounds x="60" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_commodity" dmnElementRef="in_commodity"><dc:Bounds x="245" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_systemOperator" dmnElementRef="in_systemOperator"><dc:Bounds x="430" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_singleCrewVisible" dmnElementRef="in_singleCrewVisible"><dc:Bounds x="615" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_d_18_1_1" dmnElementRef="d_18_1_1"><dc:Bounds x="60" y="240" width="180" height="70"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_ks_269m2" dmnElementRef="ks_269m2"><dc:Bounds x="900" y="100" width="160" height="55"/></dmndi:DMNShape>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</definitions>
