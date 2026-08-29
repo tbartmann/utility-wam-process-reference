@@ -228,6 +228,17 @@ rejected a submission.
 - [ ] **`sources` is what the process content derives from.** Not why you chose a
       notation - `notation.why` carries that - and never this campaign's own prompt or
       `vocabulary.json`, which would make the reference evidence for itself.
+- [ ] **No control text appears on more than two processes.** Ten merged categories
+      carry 279 processes between them and not one control text repeats. A control
+      repeated verbatim is a header, not a constraint on any of the processes it sits
+      on. Three occurrences is an error. The same test applies by eye to outputs,
+      measures and role sets: if a line is true of every process in the model, it is
+      not telling a reader anything about this one.
+- [ ] **A regulation citation names the subdivision that actually bites.** Listing
+      seven subsections and adding "as applicable" identifies nothing. 1910.269(c) is
+      a briefing that gates the start of work; (l) is a minimum approach distance that
+      gates who may be where; (m) is a clearance issued at 18.4.4. They constrain
+      different processes and citing all of them everywhere constrains none.
 - [ ] **`clause-verified` names a clause.** The status means you confirmed a clause
       number and title. `IEEE 1366-2022` on its own confirms nothing about a clause;
       its honest status is `consensus` — the body publishes this standard, and that is
