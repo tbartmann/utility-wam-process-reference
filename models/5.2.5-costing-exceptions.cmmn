@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/CMMN/20151109/MODEL" xmlns:cmmndi="http://www.omg.org/spec/CMMN/20151109/CMMNDI" xmlns:dc="http://www.omg.org/spec/CMMN/20151109/DC" xmlns:di="http://www.omg.org/spec/CMMN/20151109/DI" id="defs_Costing_exceptions" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <case id="Costing_exceptions" name="5.2.5 Resolve costing exceptions">
+    <caseFileModel id="Costing_exceptions_cfm">
+      <caseFileItem id="cf_cost" name="Failed or unsettled cost"/>
+      <caseFileItem id="cf_order" name="Work order and charging account position"/>
+      <caseFileItem id="cf_close" name="Period close timetable"/>
+    </caseFileModel>
+    <casePlanModel id="Costing_exceptions_plan" name="5.2.5 Resolve costing exceptions" autoComplete="true">
+      <documentation>CMMN because the handler chooses among correction, reallocation, write-off and escalation in an order that depends on what the exception is - a charging error is corrected before anything else is looked at, while an aged unsettled order is escalated before anyone tries to correct it. EN 17007 cl. 6.8 BUD.5 Analyse, explain and, if applicable, take corrective actions is the process.</documentation>
+      <planItem id="pi_t_525_identify" name="Identify the cost and why it will not settle" definitionRef="t_525_identify_def">
+        <itemControl id="ic_t_525_identify">
+          <requiredRule id="rr_t_525_identify"><condition><![CDATA[true]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_525_identify"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_525_correct" name="Correct the charging error" definitionRef="t_525_correct_def">
+        <itemControl id="ic_t_525_correct">
+          <repetitionRule id="rep_t_525_correct"><condition><![CDATA[true]]></condition></repetitionRule>
+          <requiredRule id="rr_t_525_correct"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_525_correct"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_525_realloc" name="Reallocate cost charged to the wrong work" definitionRef="t_525_realloc_def">
+        <itemControl id="ic_t_525_realloc">
+          <requiredRule id="rr_t_525_realloc"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_525_realloc"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_525_writeoff" name="Write off with recorded authority" definitionRef="t_525_writeoff_def">
+        <itemControl id="ic_t_525_writeoff">
+          <requiredRule id="rr_t_525_writeoff"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_525_writeoff"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_525_escalate" name="Escalate what cannot be resolved before period close" definitionRef="t_525_escalate_def">
+        <itemControl id="ic_t_525_escalate">
+          <requiredRule id="rr_t_525_escalate"><condition><![CDATA[true]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_525_escalate"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_m_525_cleared" name="Cost cleared or escalated before period close" definitionRef="m_525_cleared_def"/>
+      <humanTask id="t_525_identify_def" name="Identify the cost and why it will not settle" isBlocking="true"><documentation>Required and first. Everything else depends on which of the four kinds of exception this is.</documentation></humanTask>
+      <humanTask id="t_525_correct_def" name="Correct the charging error" isBlocking="true"><documentation>Repeats where several postings carry the same error. A recurring error of one kind is a process defect, not an accounting one - correct the cause.</documentation></humanTask>
+      <humanTask id="t_525_realloc_def" name="Reallocate cost charged to the wrong work" isBlocking="true"><documentation>With the authority recorded. Reallocation between capital and expense is a reportable movement, not a tidy-up.</documentation></humanTask>
+      <humanTask id="t_525_writeoff_def" name="Write off with recorded authority" isBlocking="true"><documentation>Last resort, and never silently. 18 CFR 101 Instruction 11 requires construction to be recorded by work order; a write-off is a statement that cost cannot be attributed to one.</documentation></humanTask>
+      <humanTask id="t_525_escalate_def" name="Escalate what cannot be resolved before period close" isBlocking="true"><documentation>Required, because cost sitting in suspense at period close is either capitalised wrongly or expensed wrongly. Neither is neutral.</documentation></humanTask>
+      <milestone id="m_525_cleared_def" name="Cost cleared or escalated before period close"></milestone>
+    </casePlanModel>
+  </case>
+  <cmmndi:CMMNDI>
+    <cmmndi:CMMNDiagram id="dg_Costing_exceptions">
+      <cmmndi:CMMNShape id="sh_plan" cmmnElementRef="Costing_exceptions_plan"><dc:Bounds x="40" y="40" width="820" height="300"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_525_identify" cmmnElementRef="pi_t_525_identify"><dc:Bounds x="80" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_525_correct" cmmnElementRef="pi_t_525_correct"><dc:Bounds x="270" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_525_realloc" cmmnElementRef="pi_t_525_realloc"><dc:Bounds x="460" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_525_writeoff" cmmnElementRef="pi_t_525_writeoff"><dc:Bounds x="80" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_525_escalate" cmmnElementRef="pi_t_525_escalate"><dc:Bounds x="270" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_m_525_cleared" cmmnElementRef="pi_m_525_cleared"><dc:Bounds x="460" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+    </cmmndi:CMMNDiagram>
+  </cmmndi:CMMNDI>
+</definitions>

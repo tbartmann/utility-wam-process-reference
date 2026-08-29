@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_P_5_4" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <process id="P_5_4" name="5.4 Produce digital as-built and update asset records" isExecutable="false">
+    <documentation>Tier-4 activities under 5.4.1 to 5.4.7. This is the barely-prescribed half of the category. 49 CFR 192.605(b)(3) requires construction records, maps and operating history to be AVAILABLE to appropriate operating personnel - availability, not accuracy - and for electric distribution there is no federal requirement at all, because 16 U.S.C. 824o excludes local distribution and NESC sets no record-keeping duty. Every control here is gas-anchored with the electric position stated as the operator's.</documentation>
+    <startEvent id="n_54_start" name="Work complete and may differ from the design"><messageEventDefinition id="n_54_start_md"/></startEvent>
+    <userTask id="n_54_red" name="Record the redline against the issued revision"><documentation>5.4.1. Against the revision released at 2.2.6. A redline against the wrong revision is worse than none.</documentation></userTask>
+    <userTask id="n_54_pos" name="Capture position before cover"><documentation>5.4.2. While the asset is exposed. After cover the options are a records-based estimate or an excavation, and the first is what puts wrong positions in the map.</documentation></userTask>
+    <serviceTask id="n_54_acc" name="Record the accuracy achieved and the method"><documentation>5.4.2. Achieved, not only required. A map that does not carry its own uncertainty gets trusted beyond it.</documentation></serviceTask>
+    <userTask id="n_54_units" name="Record units installed, removed and abandoned"><documentation>5.4.3.</documentation></userTask>
+    <serviceTask id="n_54_mrec" name="Reconcile against material issued"><documentation>5.4.3. Hooks to 5.2.2.</documentation></serviceTask>
+    <serviceTask id="n_54_cmp" name="Compare the as-built against the design"><documentation>5.4.4.</documentation></serviceTask>
+    <exclusiveGateway id="n_54_cg" name="Difference class"/>
+    <sendTask id="n_54_ret" name="Return a material difference to design review"><documentation>5.4.4. A material difference is a design change discovered after the fact. It goes back through 2.1.3, not into the record as though it were intended.</documentation></sendTask>
+    <endEvent id="n_54_endret" name="Returned to design"/>
+    <userTask id="n_54_acp" name="Review and accept the as-built"><documentation>5.4.5. By a named person against stated criteria. An as-built that enters the record because nobody rejected it is how map quality decays.</documentation></userTask>
+    <exclusiveGateway id="n_54_ag" name="Accepted"/>
+    <sendTask id="n_54_rtn" name="Return for correction"><documentation>5.4.5.</documentation></sendTask>
+    <serviceTask id="n_54_reg" name="Update the asset register and segmentation"><documentation>5.4.6. Re-segmenting a linear asset moves the boundaries history is recorded against; history has to move with the boundary.</documentation></serviceTask>
+    <sendTask id="n_54_strat" name="Apply the maintenance strategy to new plant"><documentation>5.4.6. New plant with no strategy generates no programmed work, and the gap is silent until the first failure or the first audit.</documentation></sendTask>
+    <sendTask id="n_54_pub" name="Publish the change to the network model"><documentation>5.4.7.</documentation></sendTask>
+    <exclusiveGateway id="n_54_pg" name="Accepted by the model"/>
+    <userTask id="n_54_res" name="Resolve the rejection"><documentation>5.4.7. Resolved, not retried until it succeeds.</documentation></userTask>
+    <endEvent id="n_54_end" name="Records updated and published"/>
+    <sequenceFlow id="f_n_54_start_n_54_red" sourceRef="n_54_start" targetRef="n_54_red" name=""/>
+    <sequenceFlow id="f_n_54_red_n_54_pos" sourceRef="n_54_red" targetRef="n_54_pos" name=""/>
+    <sequenceFlow id="f_n_54_pos_n_54_acc" sourceRef="n_54_pos" targetRef="n_54_acc" name=""/>
+    <sequenceFlow id="f_n_54_pos_n_54_units" sourceRef="n_54_pos" targetRef="n_54_units" name=""/>
+    <sequenceFlow id="f_n_54_units_n_54_mrec" sourceRef="n_54_units" targetRef="n_54_mrec" name=""/>
+    <sequenceFlow id="f_n_54_units_n_54_cmp" sourceRef="n_54_units" targetRef="n_54_cmp" name=""/>
+    <sequenceFlow id="f_n_54_cmp_n_54_cg" sourceRef="n_54_cmp" targetRef="n_54_cg" name=""/>
+    <sequenceFlow id="f_n_54_cg_n_54_ret" sourceRef="n_54_cg" targetRef="n_54_ret" name="material difference"><conditionExpression xsi:type="tFormalExpression"><![CDATA[differenceClass = "material"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_54_ret_n_54_endret" sourceRef="n_54_ret" targetRef="n_54_endret" name=""/>
+    <sequenceFlow id="f_n_54_cg_n_54_acp" sourceRef="n_54_cg" targetRef="n_54_acp" name="none or recorded"/>
+    <sequenceFlow id="f_n_54_acp_n_54_ag" sourceRef="n_54_acp" targetRef="n_54_ag" name=""/>
+    <sequenceFlow id="f_n_54_ag_n_54_rtn" sourceRef="n_54_ag" targetRef="n_54_rtn" name="not accepted"><conditionExpression xsi:type="tFormalExpression"><![CDATA[asBuiltAccepted = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_54_rtn_n_54_red" sourceRef="n_54_rtn" targetRef="n_54_red" name="corrected"/>
+    <sequenceFlow id="f_n_54_ag_n_54_reg" sourceRef="n_54_ag" targetRef="n_54_reg" name="accepted"/>
+    <sequenceFlow id="f_n_54_reg_n_54_strat" sourceRef="n_54_reg" targetRef="n_54_strat" name=""/>
+    <sequenceFlow id="f_n_54_reg_n_54_pub" sourceRef="n_54_reg" targetRef="n_54_pub" name=""/>
+    <sequenceFlow id="f_n_54_pub_n_54_pg" sourceRef="n_54_pub" targetRef="n_54_pg" name=""/>
+    <sequenceFlow id="f_n_54_pg_n_54_res" sourceRef="n_54_pg" targetRef="n_54_res" name="rejected by the model"><conditionExpression xsi:type="tFormalExpression"><![CDATA[modelAccepted = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_54_res_n_54_pub" sourceRef="n_54_res" targetRef="n_54_pub" name="resolved"/>
+    <sequenceFlow id="f_n_54_pg_n_54_end" sourceRef="n_54_pg" targetRef="n_54_end" name="published"/>
+  </process>
+  <bpmndi:BPMNDiagram id="dg_P_5_4">
+    <bpmndi:BPMNPlane id="pl_P_5_4" bpmnElement="P_5_4">
+      <bpmndi:BPMNShape id="sh_n_54_start" bpmnElement="n_54_start"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_54_red" bpmnElement="n_54_red"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_54_pos" bpmnElement="n_54_pos"><dc:Bounds x="425" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_54_acc" bpmnElement="n_54_acc"><dc:Bounds x="595" y="90" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_54_units" bpmnElement="n_54_units"><dc:Bounds x="595" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_54_mrec" bpmnElement="n_54_mrec"><dc:Bounds x="765" y="90" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_54_cmp" bpmnElement="n_54_cmp"><dc:Bounds x="765" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_54_cg" bpmnElement="n_54_cg"><dc:Bounds x="977" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_54_ret" bpmnElement="n_54_ret"><dc:Bounds x="935" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_54_endret" bpmnElement="n_54_endret"><dc:Bounds x="1152" y="437" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_54_acp" bpmnElement="n_54_acp"><dc:Bounds x="1105" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_54_ag" bpmnElement="n_54_ag"><dc:Bounds x="1317" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_54_rtn" bpmnElement="n_54_rtn"><dc:Bounds x="1275" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_54_reg" bpmnElement="n_54_reg"><dc:Bounds x="1445" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_54_strat" bpmnElement="n_54_strat"><dc:Bounds x="1615" y="90" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_54_pub" bpmnElement="n_54_pub"><dc:Bounds x="1615" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_54_pg" bpmnElement="n_54_pg"><dc:Bounds x="1827" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_54_res" bpmnElement="n_54_res"><dc:Bounds x="1785" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_54_end" bpmnElement="n_54_end"><dc:Bounds x="2002" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ed_f_n_54_start_n_54_red" bpmnElement="f_n_54_start_n_54_red"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_54_red_n_54_pos" bpmnElement="f_n_54_red_n_54_pos"><di:waypoint x="385" y="235"/><di:waypoint x="425" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_54_pos_n_54_acc" bpmnElement="f_n_54_pos_n_54_acc"><di:waypoint x="555" y="235"/><di:waypoint x="570" y="235"/><di:waypoint x="570" y="125"/><di:waypoint x="595" y="125"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_54_pos_n_54_units" bpmnElement="f_n_54_pos_n_54_units"><di:waypoint x="555" y="235"/><di:waypoint x="595" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_54_units_n_54_mrec" bpmnElement="f_n_54_units_n_54_mrec"><di:waypoint x="725" y="235"/><di:waypoint x="740" y="235"/><di:waypoint x="740" y="125"/><di:waypoint x="765" y="125"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_54_units_n_54_cmp" bpmnElement="f_n_54_units_n_54_cmp"><di:waypoint x="725" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_54_cmp_n_54_cg" bpmnElement="f_n_54_cmp_n_54_cg"><di:waypoint x="895" y="235"/><di:waypoint x="977" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_54_cg_n_54_ret" bpmnElement="f_n_54_cg_n_54_ret"><di:waypoint x="1023" y="235"/><di:waypoint x="910" y="235"/><di:waypoint x="910" y="455"/><di:waypoint x="935" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_54_ret_n_54_endret" bpmnElement="f_n_54_ret_n_54_endret"><di:waypoint x="1065" y="455"/><di:waypoint x="1152" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_54_cg_n_54_acp" bpmnElement="f_n_54_cg_n_54_acp"><di:waypoint x="1023" y="235"/><di:waypoint x="1105" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_54_acp_n_54_ag" bpmnElement="f_n_54_acp_n_54_ag"><di:waypoint x="1235" y="235"/><di:waypoint x="1317" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_54_ag_n_54_rtn" bpmnElement="f_n_54_ag_n_54_rtn"><di:waypoint x="1363" y="235"/><di:waypoint x="1250" y="235"/><di:waypoint x="1250" y="455"/><di:waypoint x="1275" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_54_rtn_n_54_red" bpmnElement="f_n_54_rtn_n_54_red"><di:waypoint x="1405" y="455"/><di:waypoint x="230" y="455"/><di:waypoint x="230" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_54_ag_n_54_reg" bpmnElement="f_n_54_ag_n_54_reg"><di:waypoint x="1363" y="235"/><di:waypoint x="1445" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_54_reg_n_54_strat" bpmnElement="f_n_54_reg_n_54_strat"><di:waypoint x="1575" y="235"/><di:waypoint x="1590" y="235"/><di:waypoint x="1590" y="125"/><di:waypoint x="1615" y="125"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_54_reg_n_54_pub" bpmnElement="f_n_54_reg_n_54_pub"><di:waypoint x="1575" y="235"/><di:waypoint x="1615" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_54_pub_n_54_pg" bpmnElement="f_n_54_pub_n_54_pg"><di:waypoint x="1745" y="235"/><di:waypoint x="1827" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_54_pg_n_54_res" bpmnElement="f_n_54_pg_n_54_res"><di:waypoint x="1873" y="235"/><di:waypoint x="1760" y="235"/><di:waypoint x="1760" y="455"/><di:waypoint x="1785" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_54_res_n_54_pub" bpmnElement="f_n_54_res_n_54_pub"><di:waypoint x="1915" y="455"/><di:waypoint x="1590" y="455"/><di:waypoint x="1590" y="235"/><di:waypoint x="1615" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_54_pg_n_54_end" bpmnElement="f_n_54_pg_n_54_end"><di:waypoint x="1873" y="235"/><di:waypoint x="2002" y="235"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

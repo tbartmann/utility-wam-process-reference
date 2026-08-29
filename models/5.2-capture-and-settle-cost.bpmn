@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_P_5_2" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <process id="P_5_2" name="5.2 Capture and settle cost" isExecutable="false">
+    <documentation>Tier-4 activities under 5.2.1 to 5.2.4. Exceptions are case-managed in 5.2.5-costing-exceptions.cmmn. 18 CFR 101 Electric Plant Instruction 3 governs what may be charged and Instruction 4(B) forbids overhead as an arbitrary percentage on direct construction cost - the same rule that bound the estimate at 2.3.3, binding again against actuals.</documentation>
+    <startEvent id="n_52_start" name="Closed work order requires its cost"><messageEventDefinition id="n_52_start_md"/></startEvent>
+    <serviceTask id="n_52_lab" name="Post labour actuals"><documentation>5.2.1. Approved time by person, work order and task, at the recorded rate basis.</documentation></serviceTask>
+    <userTask id="n_52_rej" name="Reject time naming no valid work order"><documentation>5.2.1. Rejected rather than posted to a default. A default charging account is where cost visibility goes to die.</documentation></userTask>
+    <serviceTask id="n_52_mat" name="Post material and plant actuals"><documentation>5.2.2.</documentation></serviceTask>
+    <serviceTask id="n_52_recon" name="Reconcile issues against units installed"><documentation>5.2.2. Material issued but not installed is on the vehicle, scrapped, or in the ground unrecorded. The third corrupts the asset record.</documentation></serviceTask>
+    <receiveTask id="n_52_con" name="Receive the contractor invoice or valuation"><documentation>5.2.3.</documentation></receiveTask>
+    <serviceTask id="n_52_match" name="Match to contract, rates and delivered work"><documentation>5.2.3.</documentation></serviceTask>
+    <exclusiveGateway id="n_52_mg" name="Matches"/>
+    <sendTask id="n_52_query" name="Query the contractor"><documentation>5.2.3.</documentation></sendTask>
+    <serviceTask id="n_52_conpost" name="Post accepted contracted cost"><documentation>5.2.3.</documentation></serviceTask>
+    <exclusiveGateway id="n_52_all" name="All components posted"/>
+    <callActivity id="n_52_exc" name="Handle the costing exception"><documentation>5.2.5. Case-managed; see 5.2.5-costing-exceptions.cmmn.</documentation></callActivity>
+    <serviceTask id="n_52_oh" name="Apply overhead on its defined basis"><documentation>5.2.4. Not an arbitrary percentage on direct construction cost.</documentation></serviceTask>
+    <serviceTask id="n_52_set" name="Settle the work order to its project"><documentation>5.2.4.</documentation></serviceTask>
+    <serviceTask id="n_52_fix" name="Fix the settled total as the actual"><documentation>5.2.4. This is the actual that SMRP 5.3.3 compares against the estimate.</documentation></serviceTask>
+    <endEvent id="n_52_end" name="Cost settled"/>
+    <sequenceFlow id="f_n_52_start_n_52_lab" sourceRef="n_52_start" targetRef="n_52_lab" name=""/>
+    <sequenceFlow id="f_n_52_start_n_52_con" sourceRef="n_52_start" targetRef="n_52_con" name=""/>
+    <sequenceFlow id="f_n_52_lab_n_52_rej" sourceRef="n_52_lab" targetRef="n_52_rej" name="no valid work order"><conditionExpression xsi:type="tFormalExpression"><![CDATA[workOrderValid = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_52_rej_n_52_lab" sourceRef="n_52_rej" targetRef="n_52_lab" name="corrected"/>
+    <sequenceFlow id="f_n_52_lab_n_52_mat" sourceRef="n_52_lab" targetRef="n_52_mat" name=""/>
+    <sequenceFlow id="f_n_52_mat_n_52_recon" sourceRef="n_52_mat" targetRef="n_52_recon" name=""/>
+    <sequenceFlow id="f_n_52_recon_n_52_all" sourceRef="n_52_recon" targetRef="n_52_all" name=""/>
+    <sequenceFlow id="f_n_52_con_n_52_match" sourceRef="n_52_con" targetRef="n_52_match" name=""/>
+    <sequenceFlow id="f_n_52_match_n_52_mg" sourceRef="n_52_match" targetRef="n_52_mg" name=""/>
+    <sequenceFlow id="f_n_52_mg_n_52_query" sourceRef="n_52_mg" targetRef="n_52_query" name="does not match"><conditionExpression xsi:type="tFormalExpression"><![CDATA[invoiceMatches = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_52_query_n_52_match" sourceRef="n_52_query" targetRef="n_52_match" name="resolved"/>
+    <sequenceFlow id="f_n_52_mg_n_52_conpost" sourceRef="n_52_mg" targetRef="n_52_conpost" name="matches"/>
+    <sequenceFlow id="f_n_52_conpost_n_52_all" sourceRef="n_52_conpost" targetRef="n_52_all" name=""/>
+    <sequenceFlow id="f_n_52_all_n_52_exc" sourceRef="n_52_all" targetRef="n_52_exc" name="cost outstanding or in suspense"><conditionExpression xsi:type="tFormalExpression"><![CDATA[costFullyPosted = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_52_exc_n_52_all" sourceRef="n_52_exc" targetRef="n_52_all" name="resolved"/>
+    <sequenceFlow id="f_n_52_all_n_52_oh" sourceRef="n_52_all" targetRef="n_52_oh" name="all posted"/>
+    <sequenceFlow id="f_n_52_oh_n_52_set" sourceRef="n_52_oh" targetRef="n_52_set" name=""/>
+    <sequenceFlow id="f_n_52_set_n_52_fix" sourceRef="n_52_set" targetRef="n_52_fix" name=""/>
+    <sequenceFlow id="f_n_52_fix_n_52_end" sourceRef="n_52_fix" targetRef="n_52_end" name=""/>
+  </process>
+  <bpmndi:BPMNDiagram id="dg_P_5_2">
+    <bpmndi:BPMNPlane id="pl_P_5_2" bpmnElement="P_5_2">
+      <bpmndi:BPMNShape id="sh_n_52_start" bpmnElement="n_52_start"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_52_lab" bpmnElement="n_52_lab"><dc:Bounds x="255" y="90" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_52_rej" bpmnElement="n_52_rej"><dc:Bounds x="255" y="310" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_52_mat" bpmnElement="n_52_mat"><dc:Bounds x="425" y="90" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_52_recon" bpmnElement="n_52_recon"><dc:Bounds x="595" y="90" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_52_con" bpmnElement="n_52_con"><dc:Bounds x="425" y="310" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_52_match" bpmnElement="n_52_match"><dc:Bounds x="595" y="310" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_52_mg" bpmnElement="n_52_mg"><dc:Bounds x="807" y="322" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_52_query" bpmnElement="n_52_query"><dc:Bounds x="765" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_52_conpost" bpmnElement="n_52_conpost"><dc:Bounds x="935" y="310" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_52_all" bpmnElement="n_52_all"><dc:Bounds x="1147" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_52_exc" bpmnElement="n_52_exc"><dc:Bounds x="1105" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_52_oh" bpmnElement="n_52_oh"><dc:Bounds x="1275" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_52_set" bpmnElement="n_52_set"><dc:Bounds x="1445" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_52_fix" bpmnElement="n_52_fix"><dc:Bounds x="1615" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_52_end" bpmnElement="n_52_end"><dc:Bounds x="1832" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ed_f_n_52_start_n_52_lab" bpmnElement="f_n_52_start_n_52_lab"><di:waypoint x="168" y="235"/><di:waypoint x="230" y="235"/><di:waypoint x="230" y="125"/><di:waypoint x="255" y="125"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_52_start_n_52_con" bpmnElement="f_n_52_start_n_52_con"><di:waypoint x="168" y="235"/><di:waypoint x="400" y="235"/><di:waypoint x="400" y="345"/><di:waypoint x="425" y="345"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_52_lab_n_52_rej" bpmnElement="f_n_52_lab_n_52_rej"><di:waypoint x="385" y="125"/><di:waypoint x="230" y="125"/><di:waypoint x="230" y="345"/><di:waypoint x="255" y="345"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_52_rej_n_52_lab" bpmnElement="f_n_52_rej_n_52_lab"><di:waypoint x="385" y="345"/><di:waypoint x="230" y="345"/><di:waypoint x="230" y="125"/><di:waypoint x="255" y="125"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_52_lab_n_52_mat" bpmnElement="f_n_52_lab_n_52_mat"><di:waypoint x="385" y="125"/><di:waypoint x="425" y="125"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_52_mat_n_52_recon" bpmnElement="f_n_52_mat_n_52_recon"><di:waypoint x="555" y="125"/><di:waypoint x="595" y="125"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_52_recon_n_52_all" bpmnElement="f_n_52_recon_n_52_all"><di:waypoint x="725" y="125"/><di:waypoint x="1122" y="125"/><di:waypoint x="1122" y="235"/><di:waypoint x="1147" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_52_con_n_52_match" bpmnElement="f_n_52_con_n_52_match"><di:waypoint x="555" y="345"/><di:waypoint x="595" y="345"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_52_match_n_52_mg" bpmnElement="f_n_52_match_n_52_mg"><di:waypoint x="725" y="345"/><di:waypoint x="807" y="345"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_52_mg_n_52_query" bpmnElement="f_n_52_mg_n_52_query"><di:waypoint x="853" y="345"/><di:waypoint x="740" y="345"/><di:waypoint x="740" y="455"/><di:waypoint x="765" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_52_query_n_52_match" bpmnElement="f_n_52_query_n_52_match"><di:waypoint x="895" y="455"/><di:waypoint x="570" y="455"/><di:waypoint x="570" y="345"/><di:waypoint x="595" y="345"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_52_mg_n_52_conpost" bpmnElement="f_n_52_mg_n_52_conpost"><di:waypoint x="853" y="345"/><di:waypoint x="935" y="345"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_52_conpost_n_52_all" bpmnElement="f_n_52_conpost_n_52_all"><di:waypoint x="1065" y="345"/><di:waypoint x="1122" y="345"/><di:waypoint x="1122" y="235"/><di:waypoint x="1147" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_52_all_n_52_exc" bpmnElement="f_n_52_all_n_52_exc"><di:waypoint x="1193" y="235"/><di:waypoint x="1080" y="235"/><di:waypoint x="1080" y="455"/><di:waypoint x="1105" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_52_exc_n_52_all" bpmnElement="f_n_52_exc_n_52_all"><di:waypoint x="1235" y="455"/><di:waypoint x="1122" y="455"/><di:waypoint x="1122" y="235"/><di:waypoint x="1147" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_52_all_n_52_oh" bpmnElement="f_n_52_all_n_52_oh"><di:waypoint x="1193" y="235"/><di:waypoint x="1275" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_52_oh_n_52_set" bpmnElement="f_n_52_oh_n_52_set"><di:waypoint x="1405" y="235"/><di:waypoint x="1445" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_52_set_n_52_fix" bpmnElement="f_n_52_set_n_52_fix"><di:waypoint x="1575" y="235"/><di:waypoint x="1615" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_52_fix_n_52_end" bpmnElement="f_n_52_fix_n_52_end"><di:waypoint x="1745" y="235"/><di:waypoint x="1832" y="235"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

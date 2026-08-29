@@ -392,6 +392,57 @@ The accounting concept underneath it is fully citable:
 
 ---
 
+## D-ter. Closure, cost settlement, unitisation and as-built — added Round 2, 2026-08-29
+
+Category 5.0's sources, read for round 2. The pattern here is the reverse of design: the
+accounting side is heavily prescribed and the field-record side is barely prescribed at all.
+
+### Closure and verification
+
+| Source | Use it for | Status |
+|---|---|---|
+| **EN 17007:2017 cl. 6.5.8 ACT.7** *Finalise the maintenance tasks* | The closure process itself. This is the anchor for 5.1 and it is the last of the seven ACT processes. | `verified` |
+| **ISO 9001:2015 cl. 8.6** *Release of products and services*, **cl. 8.7** *Control of nonconforming outputs* | Verification before release, and the rework path at 5.1.3. Titles confirmed; bodies paywalled. | `clause-verified` |
+| **49 CFR 192.605(b)(8)** | *"Periodically reviewing the work done by operator personnel to determine the effectiveness, and adequacy of the procedures used in normal operation and maintenance."* A federal requirement to review completed work — it makes 5.1.2 a duty for gas, not a preference. | `regulation` |
+
+### Cost settlement and unitisation — heavily prescribed
+
+| Source | Use it for | Status |
+|---|---|---|
+| **18 CFR 101** Electric Plant Instruction 3 | Components of construction cost — what may be charged to a work order. | `regulation` |
+| **18 CFR 101** EPI 4(B) | Overhead may not be an arbitrary percentage added to direct construction cost. Already used at 2.3.3; it binds again at settlement. | `regulation` |
+| **18 CFR 101** EPI 10(A), 10(C), Definitions 18, 34 | Additions and retirements, the betterment test, retirement unit and minor item. The determination is made at 2.2.5; 5.3 executes it against actuals. | `regulation` |
+| **18 CFR 101** EPI 11, Definition 8 | Work order requirement and the **continuing plant inventory record**. | `regulation` |
+| **18 CFR 125.3 Item 17(a)(b)(c)** | Construction work in progress ledgers, work order sheets for plant additions, and authorisation records: **5 years after clearance to plant account**, provided continuing plant inventory records are maintained; otherwise 5 years after the plant is retired. | `regulation` |
+| **18 CFR 125.3 Item 16(b)** | The continuing plant inventory ledger itself: **25 years**. Note the asymmetry — the work order may go at 5 years, the property record may not go for 25. | `regulation` |
+| **7 CFR 1767** | RUS accounting for electric borrowers; adopts the FERC system with additions. | `regulation` |
+
+### As-built and asset records — barely prescribed, and asymmetric
+
+| Source | Use it for | Status |
+|---|---|---|
+| **49 CFR 192.605(b)(3)** | *"Making construction records, maps, and operating history available to appropriate operating personnel."* This is the closest thing to a federal as-built duty for gas, and note what it requires: availability to operations, not accuracy. | `regulation` |
+| **49 CFR 192.709(a)** | The date, location and description of each repair made to **pipe** must be retained **for as long as the pipe remains in service**. A permanent record obligation — but transmission only. | `regulation` |
+| **49 CFR 192.709(b), (c)** | Other repairs, 5 years. Patrols, surveys, inspections and tests, 5 years or until the next one, whichever is longer. | `regulation` |
+| **49 CFR 192.13(c)** | *"Each operator shall maintain, modify as appropriate, and follow the plans, procedures, and programs that it is required to establish under this part."* | `regulation` |
+| **49 CFR 192.607** | Material verification for onshore steel **transmission**. Records-driven, and the reason traceable-verifiable-complete language entered the industry. Not a distribution requirement. | `regulation` |
+| **ASCE 38-22** | Quality levels for subsurface utility location. Already in D-bis for survey at design; it applies again at 5.4.2 for as-built capture. | `clause-verified` |
+| **IEC 61968-6 cl. 4.2** FRD *Field recording* | The component that owns as-built capture. | `clause-verified` |
+
+### What is genuinely not standardised here — say so
+
+1. **There is no federal as-built positional accuracy requirement for gas distribution or
+   for electric anything.** 192.605(b)(3) requires records be *available*, not that they be
+   correct to a tolerance. Accuracy standards are the operator's, sometimes a state's.
+2. **There is no federal as-built requirement for electric distribution at all.** 16 U.S.C.
+   824o excludes local distribution, and NESC sets no record-keeping duty. This is the same
+   asymmetry as section E and it runs the whole length of category 5.0.
+3. **Nothing standardises the work-order closure state model.** Whether closure is one
+   state or four, and what may reopen a closed order, is the operator's.
+4. **Nothing standardises unitisation mechanics.** FERC says what a retirement unit is and
+   that additions and retirements must be recorded; how a completed job is broken into
+   units against actual cost is an operator method.
+
 ## E. The gas / electric asymmetry — the most important thing in this pack
 
 The common assumption is that electric is better standardised. **It is the reverse for

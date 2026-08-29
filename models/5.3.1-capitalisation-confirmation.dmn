@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/" id="Capitalisation_confirmation" name="5.3.1 Confirm capitalisation against actuals" namespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <description>Called from 5.3-capitalise-and-unitise.bpmn. This is the SAME determination as 2.2.5, applied against what was actually built rather than what was designed. The two must not fork: an operator's policy change has to land in one place, so the rules and the output values here are identical to 2.2.5 and the only new input is whether the delivered scope differed from the authorised scope.</description>
+  <inputData id="in_effectOnPlant" name="Effect on plant as built"><variable id="in_effectOnPlant_v" name="Effect on plant as built" typeRef="string"/></inputData>
+  <inputData id="in_propertyUnit" name="Property unit affected"><variable id="in_propertyUnit_v" name="Property unit affected" typeRef="string"/></inputData>
+  <inputData id="in_replacedIndependently" name="Minor item replaced independently"><variable id="in_replacedIndependently_v" name="Minor item replaced independently" typeRef="boolean"/></inputData>
+  <inputData id="in_betterment" name="Substantial betterment"><variable id="in_betterment_v" name="Substantial betterment" typeRef="boolean"/></inputData>
+  <inputData id="in_scopeChanged" name="Delivered scope differs from authorised"><variable id="in_scopeChanged_v" name="Delivered scope differs from authorised" typeRef="boolean"/></inputData>
+  <knowledgeSource id="ks_ferc" name="18 CFR Part 101 (electric) / Part 201 (gas)"><description>Electric Plant Instruction 10(A) additions and retirements, 10(C)(1) and 10(C)(3) the betterment test, Definitions 18 minor item and 34 retirement unit, Definition 8 continuing plant inventory record, Instruction 11 work order requirement. The determination is the same one made before authorisation at 2.2.5; what changes here is that it is tested against actuals.</description></knowledgeSource>
+  <decision id="d_5_3_1" name="Capitalisation confirmation">
+    <description>5.3.1. Identical rule set to 2.2.5 with one added input. Where an operator's commission has adopted something other than the federal instructions, that is a specialization keyed on the uid, applied to both decisions or neither.</description>
+    <variable id="d_5_3_1_v" name="Capitalisation confirmation" typeRef="string"/>
+    <informationRequirement id="ir_d_5_3_1_in_scopeChanged"><requiredInput href="#in_scopeChanged"/></informationRequirement>
+    <informationRequirement id="ir_d_5_3_1_in_effectOnPlant"><requiredInput href="#in_effectOnPlant"/></informationRequirement>
+    <informationRequirement id="ir_d_5_3_1_in_propertyUnit"><requiredInput href="#in_propertyUnit"/></informationRequirement>
+    <informationRequirement id="ir_d_5_3_1_in_replacedIndependently"><requiredInput href="#in_replacedIndependently"/></informationRequirement>
+    <informationRequirement id="ir_d_5_3_1_in_betterment"><requiredInput href="#in_betterment"/></informationRequirement>
+    <authorityRequirement id="ar_d_5_3_1"><requiredAuthority href="#ks_ferc"/></authorityRequirement>
+    <decisionTable id="d_5_3_1_dt" hitPolicy="FIRST" preferredOrientation="Rule-as-Row">
+      <input id="d_5_3_1_i1" label="Delivered scope differs from authorised"><inputExpression id="d_5_3_1_i1_e" typeRef="boolean"><text>in_scopeChanged</text></inputExpression></input>
+      <input id="d_5_3_1_i2" label="Effect on plant as built"><inputExpression id="d_5_3_1_i2_e" typeRef="string"><text>in_effectOnPlant</text></inputExpression></input>
+      <input id="d_5_3_1_i3" label="Property unit affected"><inputExpression id="d_5_3_1_i3_e" typeRef="string"><text>in_propertyUnit</text></inputExpression></input>
+      <input id="d_5_3_1_i4" label="Minor item replaced independently"><inputExpression id="d_5_3_1_i4_e" typeRef="boolean"><text>in_replacedIndependently</text></inputExpression></input>
+      <input id="d_5_3_1_i5" label="Substantial betterment"><inputExpression id="d_5_3_1_i5_e" typeRef="boolean"><text>in_betterment</text></inputExpression></input>
+      <output id="d_5_3_1_o" label="Capitalisation confirmation" name="Capitalisation confirmation" typeRef="string"/>
+      <rule id="d_5_3_1_r1">
+        <description>Delivered as authorised. The treatment determined at 2.2.5 stands and is confirmed rather than re-derived.</description>
+        <inputEntry id="d_5_3_1_r1_ie1"><text>false</text></inputEntry>
+        <inputEntry id="d_5_3_1_r1_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_5_3_1_r1_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_5_3_1_r1_ie4"><text>-</text></inputEntry>
+        <inputEntry id="d_5_3_1_r1_ie5"><text>-</text></inputEntry>
+        <outputEntry id="d_5_3_1_r1_oe"><text>"confirmAsAuthorised"</text></outputEntry>
+      </rule>
+      <rule id="d_5_3_1_r2">
+        <description>Re-determined: addition of a retirement unit.</description>
+        <inputEntry id="d_5_3_1_r2_ie1"><text>true</text></inputEntry>
+        <inputEntry id="d_5_3_1_r2_ie2"><text>"addition"</text></inputEntry>
+        <inputEntry id="d_5_3_1_r2_ie3"><text>"retirementUnit"</text></inputEntry>
+        <inputEntry id="d_5_3_1_r2_ie4"><text>-</text></inputEntry>
+        <inputEntry id="d_5_3_1_r2_ie5"><text>-</text></inputEntry>
+        <outputEntry id="d_5_3_1_r2_oe"><text>"capitalise"</text></outputEntry>
+      </rule>
+      <rule id="d_5_3_1_r3">
+        <description>Addition plus retirement, recorded separately in the same work order.</description>
+        <inputEntry id="d_5_3_1_r3_ie1"><text>true</text></inputEntry>
+        <inputEntry id="d_5_3_1_r3_ie2"><text>"replacement"</text></inputEntry>
+        <inputEntry id="d_5_3_1_r3_ie3"><text>"retirementUnit"</text></inputEntry>
+        <inputEntry id="d_5_3_1_r3_ie4"><text>-</text></inputEntry>
+        <inputEntry id="d_5_3_1_r3_ie5"><text>-</text></inputEntry>
+        <outputEntry id="d_5_3_1_r3_oe"><text>"capitaliseAndRetire"</text></outputEntry>
+      </rule>
+      <rule id="d_5_3_1_r4">
+        <description>Minor item replaced independently, no betterment.</description>
+        <inputEntry id="d_5_3_1_r4_ie1"><text>true</text></inputEntry>
+        <inputEntry id="d_5_3_1_r4_ie2"><text>"replacement"</text></inputEntry>
+        <inputEntry id="d_5_3_1_r4_ie3"><text>"minorItem"</text></inputEntry>
+        <inputEntry id="d_5_3_1_r4_ie4"><text>true</text></inputEntry>
+        <inputEntry id="d_5_3_1_r4_ie5"><text>false</text></inputEntry>
+        <outputEntry id="d_5_3_1_r4_oe"><text>"expense"</text></outputEntry>
+      </rule>
+      <rule id="d_5_3_1_r5">
+        <description>Only the excess over replacing without betterment is capitalised.</description>
+        <inputEntry id="d_5_3_1_r5_ie1"><text>true</text></inputEntry>
+        <inputEntry id="d_5_3_1_r5_ie2"><text>"replacement"</text></inputEntry>
+        <inputEntry id="d_5_3_1_r5_ie3"><text>"minorItem"</text></inputEntry>
+        <inputEntry id="d_5_3_1_r5_ie4"><text>true</text></inputEntry>
+        <inputEntry id="d_5_3_1_r5_ie5"><text>true</text></inputEntry>
+        <outputEntry id="d_5_3_1_r5_oe"><text>"capitaliseExcess"</text></outputEntry>
+      </rule>
+      <rule id="d_5_3_1_r6">
+        <description>A minor item replaced as part of its retirement unit follows the unit.</description>
+        <inputEntry id="d_5_3_1_r6_ie1"><text>true</text></inputEntry>
+        <inputEntry id="d_5_3_1_r6_ie2"><text>"replacement"</text></inputEntry>
+        <inputEntry id="d_5_3_1_r6_ie3"><text>"minorItem"</text></inputEntry>
+        <inputEntry id="d_5_3_1_r6_ie4"><text>false</text></inputEntry>
+        <inputEntry id="d_5_3_1_r6_ie5"><text>-</text></inputEntry>
+        <outputEntry id="d_5_3_1_r6_oe"><text>"followUnit"</text></outputEntry>
+      </rule>
+      <rule id="d_5_3_1_r7">
+        <inputEntry id="d_5_3_1_r7_ie1"><text>true</text></inputEntry>
+        <inputEntry id="d_5_3_1_r7_ie2"><text>"retirement"</text></inputEntry>
+        <inputEntry id="d_5_3_1_r7_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_5_3_1_r7_ie4"><text>-</text></inputEntry>
+        <inputEntry id="d_5_3_1_r7_ie5"><text>-</text></inputEntry>
+        <outputEntry id="d_5_3_1_r7_oe"><text>"retireOnly"</text></outputEntry>
+      </rule>
+      <rule id="d_5_3_1_r8">
+        <description>Held for the accounting owner. Defaulting an unclassified case is how capital leaks into O&amp;M and how the continuing property record drifts.</description>
+        <inputEntry id="d_5_3_1_r8_ie1"><text>-</text></inputEntry>
+        <inputEntry id="d_5_3_1_r8_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_5_3_1_r8_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_5_3_1_r8_ie4"><text>-</text></inputEntry>
+        <inputEntry id="d_5_3_1_r8_ie5"><text>-</text></inputEntry>
+        <outputEntry id="d_5_3_1_r8_oe"><text>"determineManually"</text></outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram id="drd_Capitalisation_confirmation">
+      <dmndi:DMNShape id="sh_in_effectOnPlant" dmnElementRef="in_effectOnPlant"><dc:Bounds x="60" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_propertyUnit" dmnElementRef="in_propertyUnit"><dc:Bounds x="245" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_replacedIndependently" dmnElementRef="in_replacedIndependently"><dc:Bounds x="430" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_betterment" dmnElementRef="in_betterment"><dc:Bounds x="615" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_scopeChanged" dmnElementRef="in_scopeChanged"><dc:Bounds x="800" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_d_5_3_1" dmnElementRef="d_5_3_1"><dc:Bounds x="60" y="240" width="180" height="70"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_ks_ferc" dmnElementRef="ks_ferc"><dc:Bounds x="900" y="100" width="160" height="55"/></dmndi:DMNShape>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</definitions>

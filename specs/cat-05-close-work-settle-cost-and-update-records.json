@@ -1,0 +1,3273 @@
+{
+  "category": {
+    "uid": 10123,
+    "id": "5.0",
+    "name": "Close Work, Settle Cost and Update Records",
+    "band": "Work Lifecycle"
+  },
+  "platform": "Claude",
+  "model": "claude-opus-5",
+  "round": 2,
+  "date": "2026-08-29",
+  "schema": "eam/specs/SCHEMA.md",
+  "derivation": "STANDARDS-DERIVED. Every field traces to a standard, a regulation or a recognised industry body per _Collab/SOURCE_AUTHORITY_PACK.md section D-ter. Nothing is generalised from a client programme or a product.",
+  "field_set": "EN 17007:2017 cl. 5.2 maintenance process profile, corroborated by ISO 9001:2015 cl. 4.4.1 a) to h).",
+  "gaps": [
+    "The two halves of this category are prescribed to completely different depths. Cost settlement, capitalisation and unitisation are governed in detail by 18 CFR 101 and 18 CFR 125.3 - what may be charged, what a retirement unit is, how long each record is kept. The as-built and asset record half has almost nothing: 49 CFR 192.605(b)(3) requires construction records be AVAILABLE to operating personnel and says nothing about accuracy.",
+    "There is no federal as-built requirement for electric distribution at all. 16 U.S.C. 824o excludes local distribution from the bulk-power system and NESC ANSI/IEEE C2-2023 sets no record-keeping duty. Every as-built control in 5.4 is therefore gas-anchored, with the electric position stated as the operator's or a state's.",
+    "No federal standard sets positional accuracy for as-built records, gas or electric. ASCE 38-22 gives quality levels A to D as a defensible vocabulary, but the required level is not set by any standard.",
+    "No standard specifies the work order closure state model. Whether closure is one state or four, and what may reopen a closed order, is the operator's. 5.1.4 is marked judgment accordingly.",
+    "No standard specifies unitisation mechanics. 18 CFR 101 defines the retirement unit and requires additions and retirements to be recorded; how settled cost is distributed across units is an operator method. 5.3.2 is marked judgment accordingly.",
+    "The retention asymmetry is worth stating on its own: the continuing plant inventory ledger is kept 25 years under 18 CFR 125.3 Item 16(b), while the work order sheets behind it may be disposed of 5 years after clearance to plant account under Item 17. The property record outlives its own evidence by twenty years.",
+    "No standard specifies as-built acceptance criteria. 5.4.5 is marked judgment.",
+    "49 CFR 192.607 material verification and 192.709(a) permanent repair records are TRANSMISSION only. Distribution operators carry neither, which is the single most misquoted point in this category."
+  ],
+  "processes": [
+    {
+      "uid": 10125,
+      "id": "5.1.1",
+      "name": "Review completion and evidence",
+      "group": {
+        "id": "5.1",
+        "name": "Verify and close work",
+        "uid": 10124
+      },
+      "intent": "Establish that the work was done and that the evidence to prove it exists.",
+      "activities": [
+        "Collect the completion record the crew returned",
+        "Check the evidence each task's acceptance criteria required",
+        "Confirm quantities, units and materials actually used",
+        "Identify what is missing before anything is closed"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "A crew reports work complete and returns its record.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Completion record returned from the field",
+          "party": "FRD",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Acceptance criteria set for each task",
+          "party": "MAI",
+          "data": "WorkTask"
+        },
+        {
+          "what": "Materials and quantities consumed",
+          "party": "MM",
+          "data": "MaterialItem"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Verified completion record",
+          "party": "MAI",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "List of missing evidence",
+          "party": "MAI",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "FRD",
+          "role": "contributing",
+          "service": "Field record capture"
+        },
+        {
+          "component": "MAI",
+          "role": "owning",
+          "service": "Completion verification"
+        },
+        {
+          "component": "MM",
+          "role": "reference",
+          "service": "Material consumption"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "FRD",
+          "to": "MAI",
+          "payload": "MaintenanceOrder",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Field supervisor",
+          "raci": "R"
+        },
+        {
+          "role": "Maintenance manager",
+          "raci": "A"
+        },
+        {
+          "role": "Crew lead",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkTask",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "Evidence is checked against the acceptance criteria set at 2.5.1. Without them, completion is whoever says so."
+        },
+        {
+          "kind": "regulatory",
+          "text": "For gas, the record of a patrol, survey, inspection or test is retained at least five years or until the next one, whichever is longer. The retention clock starts here."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Schedule Compliance Work Orders",
+          "definition": "SMRP 5.4.4.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Rework",
+          "definition": "SMRP 4.1, as the rate of work returning through 5.1.3.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Evidence complete on return",
+        "Evidence incomplete - held for the crew",
+        "Work found not done - reopened rather than closed"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Known sequence from a completion message, with a defined hold.",
+        "artifact": "models/5.1-verify-and-close-work.bpmn"
+      },
+      "en17007": {
+        "process": "ACT.7",
+        "title": "Finish the tasks",
+        "clause": "6.5.8"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.5.8 ACT.7",
+          "status": "verified"
+        },
+        {
+          "for": "release",
+          "cite": "ISO 9001:2015 cl. 8.6 Release of products and services",
+          "status": "clause-verified"
+        },
+        {
+          "for": "controls.regulatory",
+          "cite": "49 CFR 192.709(c) - a record of each patrol, survey, inspection and test required by subparts L and M must be retained for at least 5 years or until the next is completed, whichever is longer",
+          "status": "regulation"
+        },
+        {
+          "for": "measures",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.4.4, 4.1",
+          "status": "consensus"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319)"
+      }
+    },
+    {
+      "uid": 10126,
+      "id": "5.1.2",
+      "name": "Perform quality and compliance check",
+      "group": {
+        "id": "5.1",
+        "name": "Verify and close work",
+        "uid": 10124
+      },
+      "intent": "Check the work against the quality and regulatory standard it had to meet.",
+      "activities": [
+        "Apply the inspection or test the work type requires",
+        "Check the regulatory obligation the work was raised against is discharged",
+        "Record the result and the evidence supporting it",
+        "Raise a nonconformity where the standard is not met"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "A verified completion record requires quality and compliance checking.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Verified completion record",
+          "party": "MAI",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Applicable obligation and its evidence requirement",
+          "party": "AM",
+          "data": "Work"
+        },
+        {
+          "what": "Inspection or test result",
+          "party": "FRD",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Quality and compliance determination",
+          "party": "MAI",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Nonconformity where the standard is not met",
+          "party": "MAI",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "MAI",
+          "role": "owning",
+          "service": "Quality and compliance check"
+        },
+        {
+          "component": "AM",
+          "role": "reference",
+          "service": "Obligation register"
+        },
+        {
+          "component": "FRD",
+          "role": "contributing",
+          "service": "Test and inspection result"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "MAI",
+          "to": "AM",
+          "payload": "MaintenanceOrder",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Maintenance manager",
+          "raci": "A"
+        },
+        {
+          "role": "Compliance owner",
+          "raci": "C"
+        },
+        {
+          "role": "Field supervisor",
+          "raci": "R"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkActivityRecord",
+        "WorkAsset"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "For gas the operator must periodically review the work done by its personnel to determine the effectiveness and adequacy of the procedures used. That makes reviewing completed work a duty, not a preference."
+        },
+        {
+          "kind": "operational",
+          "text": "A compliance-raised job is not discharged until its evidence is recorded against the obligation, not merely against the work."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Rework",
+          "definition": "SMRP 4.1.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Quality indicators",
+          "definition": "EN 15341 cl. 12.",
+          "cite": "EN 15341:2019+A1:2022 Maintenance Key Performance Indicators"
+        }
+      ],
+      "variants": [
+        "Self-check by the crew for routine work",
+        "Independent inspection for safety-critical work",
+        "Regulatory witness or third-party test",
+        "Nonconformity raised - work does not close"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Known sequence with a defined nonconformity path.",
+        "artifact": "models/5.1-verify-and-close-work.bpmn"
+      },
+      "en17007": {
+        "process": "ACT.7",
+        "title": "Finish the tasks",
+        "clause": "6.5.8"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.5.8 ACT.7",
+          "status": "verified"
+        },
+        {
+          "for": "controls.regulatory",
+          "cite": "49 CFR 192.605(b)(8) - periodically reviewing the work done by operator personnel to determine the effectiveness, and adequacy of the procedures used in normal operation and maintenance",
+          "status": "regulation"
+        },
+        {
+          "for": "nonconformity",
+          "cite": "ISO 9001:2015 cl. 8.7 Control of nonconforming outputs",
+          "status": "clause-verified"
+        },
+        {
+          "for": "measures",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 4.1; EN 15341:2019+A1:2022 Maintenance Key Performance Indicators",
+          "status": "consensus"
+        }
+      ],
+      "provenance": {
+        "basis": "regulation",
+        "primary": "49 CFR 192.605(b)(8)"
+      }
+    },
+    {
+      "uid": 10127,
+      "id": "5.1.3",
+      "name": "Return work for rework where deficient",
+      "group": {
+        "id": "5.1",
+        "name": "Verify and close work",
+        "uid": 10124
+      },
+      "intent": "Send deficient work back to be done properly, and keep the fact visible.",
+      "activities": [
+        "Determine what is deficient and against which criterion",
+        "Decide whether to correct, regrade or accept under concession",
+        "Raise the rework and link it to the original work",
+        "Keep the rework visible as rework rather than as new demand"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "A quality or compliance check has failed.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Nonconformity and the criterion it failed",
+          "party": "MAI",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Original work and its acceptance criteria",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Cost already posted to the work",
+          "party": "FIN",
+          "data": "Work"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Rework linked to the original work",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Disposition record - correct, regrade or concede",
+          "party": "MAI",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "MAI",
+          "role": "owning",
+          "service": "Nonconformity disposition"
+        },
+        {
+          "component": "SCHD",
+          "role": "consuming",
+          "service": "Rework to be scheduled"
+        },
+        {
+          "component": "FIN",
+          "role": "reference",
+          "service": "Cost already incurred"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "MAI",
+          "to": "SCHD",
+          "payload": "WorkRequest",
+          "verb": "create",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Maintenance manager",
+          "raci": "A"
+        },
+        {
+          "role": "Field supervisor",
+          "raci": "R"
+        },
+        {
+          "role": "Compliance owner",
+          "raci": "I"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "Rework raised as new demand disappears into the backlog and the rework rate stops meaning anything. The link to the original work is what makes SMRP 4.1 measurable."
+        },
+        {
+          "kind": "regulatory",
+          "text": "Accepting nonconforming work under concession is a decision that must be recorded with its authority, and it is not available where a regulatory obligation is what failed."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Rework",
+          "definition": "SMRP 4.1 - this process is what the measure counts.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Actual Cost to Planning Estimate",
+          "definition": "SMRP 5.3.3, with rework cost attributed to the original work.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Correct in place before closure",
+        "Raise rework and reschedule",
+        "Accept under recorded concession",
+        "Regulatory failure - concession not available"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Known sequence with three named dispositions.",
+        "artifact": "models/5.1-verify-and-close-work.bpmn"
+      },
+      "en17007": {
+        "process": "ACT.7",
+        "title": "Finish the tasks",
+        "clause": "6.5.8"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.5.8 ACT.7",
+          "status": "verified"
+        },
+        {
+          "for": "nonconformity disposition",
+          "cite": "ISO 9001:2015 cl. 8.7 Control of nonconforming outputs - correction, segregation, return, suspension, and concession by an authority, are the enumerated actions",
+          "status": "clause-verified"
+        },
+        {
+          "for": "measures",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 4.1, 5.3.3",
+          "status": "consensus"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "ISO 9001:2015 cl. 8.7 Control of nonconforming outputs"
+      }
+    },
+    {
+      "uid": 10128,
+      "id": "5.1.4",
+      "name": "Close work order and task",
+      "group": {
+        "id": "5.1",
+        "name": "Verify and close work",
+        "uid": 10124
+      },
+      "intent": "Close the work order and its tasks so nothing downstream waits on them.",
+      "activities": [
+        "Confirm verification, compliance and evidence are all recorded",
+        "Close each task and then the work order",
+        "Release anything the open work was holding",
+        "Start the retention clock on the record"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "Verification and compliance checking are complete.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Verified and compliant completion record",
+          "party": "MAI",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Open reservations, permits and clearances",
+          "party": "MM",
+          "data": "Work"
+        },
+        {
+          "what": "Cost posted so far",
+          "party": "FIN",
+          "data": "Work"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Closed work order and tasks",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Released reservations and permits",
+          "party": "MM",
+          "data": "MaterialItem"
+        },
+        {
+          "what": "Record entered into retention",
+          "party": "AM",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "MAI",
+          "role": "owning",
+          "service": "Work order closure"
+        },
+        {
+          "component": "FIN",
+          "role": "consuming",
+          "service": "Cost settlement trigger"
+        },
+        {
+          "component": "MM",
+          "role": "consuming",
+          "service": "Reservation release"
+        },
+        {
+          "component": "AM",
+          "role": "consuming",
+          "service": "Record retention"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "MAI",
+          "to": "FIN",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        },
+        {
+          "from": "MAI",
+          "to": "AM",
+          "payload": "MaintenanceOrder",
+          "verb": "create",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Maintenance planner",
+          "raci": "R"
+        },
+        {
+          "role": "Maintenance manager",
+          "raci": "A"
+        },
+        {
+          "role": "Finance",
+          "raci": "I"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkTask",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "Closure that does not release the reservations, permits and clearances the work held leaves material committed and windows blocked against work that could use them."
+        },
+        {
+          "kind": "regulatory",
+          "text": "For gas, the date, location and description of each repair made to pipe is retained for as long as the pipe remains in service. That is a permanent obligation on a transmission line and it starts at closure."
+        },
+        {
+          "kind": "operational",
+          "text": "No standard specifies the closure state model. Whether closure is one state or four, and what may reopen a closed order, is the operator's."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Work Order Aging",
+          "definition": "SMRP 5.4.6, measured to closure rather than to field completion.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Planned Backlog",
+          "definition": "SMRP 5.4.8, which only falls when work actually closes.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Close complete",
+        "Close with a follow-on raised",
+        "Partial close by task where the order spans phases",
+        "Reopen after closure - recorded, not silent"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Known terminal sequence with defined releases.",
+        "artifact": "models/5.1-verify-and-close-work.bpmn"
+      },
+      "en17007": {
+        "process": "ACT.7",
+        "title": "Finish the tasks",
+        "clause": "6.5.8"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.5.8 ACT.7",
+          "status": "verified"
+        },
+        {
+          "for": "controls.regulatory",
+          "cite": "49 CFR 192.709(a) - the date, location, and description of each repair made to pipe must be retained for as long as the pipe remains in service; 192.709(b) other repairs at least 5 years. Transmission only.",
+          "status": "regulation"
+        },
+        {
+          "for": "closure state model",
+          "cite": "No standard specifies it. EN 17007 ACT.7 names the process and not its states; EN 13460 Annex B is informative.",
+          "status": "judgment"
+        },
+        {
+          "for": "measures",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.4.6, 5.4.8",
+          "status": "consensus"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319)"
+      }
+    },
+    {
+      "uid": 10130,
+      "id": "5.2.1",
+      "name": "Post labour actuals",
+      "group": {
+        "id": "5.2",
+        "name": "Capture and settle cost",
+        "uid": 10129
+      },
+      "intent": "Post the labour actually spent to the work it was spent on.",
+      "activities": [
+        "Take approved time against the work order and task",
+        "Apply the labour rate and any premium the time attracts",
+        "Post labour cost to the work order",
+        "Reject time that names no valid work order"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "Approved time is available to post against work.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Approved time by person, work order and task",
+          "party": "HR",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Labour rates and premium rules",
+          "party": "FIN",
+          "data": null
+        },
+        {
+          "what": "Open work order and its charging account",
+          "party": "FIN",
+          "data": "Work"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Labour cost posted to the work order",
+          "party": "FIN",
+          "data": "Work"
+        },
+        {
+          "what": "Rejected time for correction",
+          "party": "HR",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "HR",
+          "role": "contributing",
+          "service": "Approved time"
+        },
+        {
+          "component": "FIN",
+          "role": "owning",
+          "service": "Labour cost posting"
+        },
+        {
+          "component": "MAI",
+          "role": "reference",
+          "service": "Work order validity"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "HR",
+          "to": "FIN",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Finance",
+          "raci": "A"
+        },
+        {
+          "role": "Field supervisor",
+          "raci": "R"
+        },
+        {
+          "role": "Maintenance planner",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "financial",
+          "text": "Only the components of construction cost the federal accounts enumerate may be charged to a construction work order. Labour is the first of them and the rate basis has to be the recorded one."
+        },
+        {
+          "kind": "operational",
+          "text": "Time that names no valid work order is rejected rather than posted to a default. A default charging account is where cost visibility goes to die."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Actual Cost to Planning Estimate",
+          "definition": "SMRP 5.3.3, labour component.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Craft Worker to Planner Ratio",
+          "definition": "SMRP 5.5.2.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Internal craft time",
+        "Overtime and premium time",
+        "Standby and call-out time",
+        "Rejected - no valid work order"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Known repeating posting sequence with a rejection path.",
+        "artifact": "models/5.2-capture-and-settle-cost.bpmn"
+      },
+      "en17007": {
+        "process": "BUD",
+        "title": "Budget maintenance of items",
+        "clause": "6.8"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.8 BUD",
+          "status": "verified"
+        },
+        {
+          "for": "controls.financial",
+          "cite": "18 CFR Part 101 Uniform System of Accounts (Part 201 for gas) - Electric Plant Instruction 3 components of construction cost",
+          "status": "regulation"
+        },
+        {
+          "for": "RUS borrowers",
+          "cite": "7 CFR Part 1767 RUS accounting requirements for electric borrowers",
+          "status": "regulation"
+        },
+        {
+          "for": "measures",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.3.3, 5.5.2",
+          "status": "consensus"
+        }
+      ],
+      "provenance": {
+        "basis": "regulation",
+        "primary": "18 CFR Part 101 Uniform System of Accounts (Part 201 for gas)"
+      }
+    },
+    {
+      "uid": 10131,
+      "id": "5.2.2",
+      "name": "Post material and equipment actuals",
+      "group": {
+        "id": "5.2",
+        "name": "Capture and settle cost",
+        "uid": 10129
+      },
+      "intent": "Post the material and equipment actually consumed to the work.",
+      "activities": [
+        "Take issues, returns and adjustments against the work order",
+        "Value them on the recorded basis",
+        "Post material and plant cost to the work order",
+        "Reconcile what was issued against what the as-built records as installed"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "Material issues, returns or plant usage are available to post.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Material issued, returned and adjusted",
+          "party": "MM",
+          "data": "MaterialItem"
+        },
+        {
+          "what": "Plant and equipment usage",
+          "party": "MM",
+          "data": "Tool"
+        },
+        {
+          "what": "Units recorded as installed on the as-built",
+          "party": "FRD",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Material and plant cost posted",
+          "party": "FIN",
+          "data": "Work"
+        },
+        {
+          "what": "Reconciliation exception where issue and install disagree",
+          "party": "MM",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "MM",
+          "role": "contributing",
+          "service": "Issues, returns and valuation"
+        },
+        {
+          "component": "FIN",
+          "role": "owning",
+          "service": "Material cost posting"
+        },
+        {
+          "component": "FRD",
+          "role": "reference",
+          "service": "Units installed"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "MM",
+          "to": "FIN",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Materials planner",
+          "raci": "R"
+        },
+        {
+          "role": "Finance",
+          "raci": "A"
+        },
+        {
+          "role": "Field supervisor",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "MaterialItem",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "financial",
+          "text": "Material is a component of construction cost on the enumerated basis; it is not a plug figure derived from the estimate."
+        },
+        {
+          "kind": "operational",
+          "text": "Material issued but not recorded as installed is either still on the vehicle, scrapped, or in the ground unrecorded. All three matter and the third is the one that corrupts the asset record."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Actual Cost to Planning Estimate",
+          "definition": "SMRP 5.3.3, material component.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Stores Inventory Turns",
+          "definition": "SMRP 5.5.9, which the issue side of this process feeds.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Stock issue against reservation",
+        "Direct-charge non-stock purchase",
+        "Return to store of unused material",
+        "Free-issue material to an external party"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Known posting sequence with a defined reconciliation.",
+        "artifact": "models/5.2-capture-and-settle-cost.bpmn"
+      },
+      "en17007": {
+        "process": "SPP",
+        "title": "Deliver spare parts",
+        "clause": "6.16"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.16 SPP and cl. 6.8 BUD",
+          "status": "verified"
+        },
+        {
+          "for": "controls.financial",
+          "cite": "18 CFR Part 101 Uniform System of Accounts (Part 201 for gas) - Electric Plant Instruction 3",
+          "status": "regulation"
+        },
+        {
+          "for": "measures",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.3.3, 5.5.9",
+          "status": "consensus"
+        }
+      ],
+      "provenance": {
+        "basis": "regulation",
+        "primary": "18 CFR Part 101 Uniform System of Accounts (Part 201 for gas)"
+      }
+    },
+    {
+      "uid": 10132,
+      "id": "5.2.3",
+      "name": "Post contracted cost",
+      "group": {
+        "id": "5.2",
+        "name": "Capture and settle cost",
+        "uid": 10129
+      },
+      "intent": "Post what an external party charged for the work it delivered.",
+      "activities": [
+        "Match the invoice to the contract and to the work delivered",
+        "Check the rate against the schedule of rates or the quotation",
+        "Post accepted contracted cost to the work order",
+        "Hold and query what does not match"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "A contractor invoice or valuation is presented against the work.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Contractor invoice or valuation",
+          "party": "FIN",
+          "data": null
+        },
+        {
+          "what": "Contract, rates and the work delivered",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Acceptance of the delivered work",
+          "party": "MAI",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Contracted cost posted to the work order",
+          "party": "FIN",
+          "data": "Work"
+        },
+        {
+          "what": "Query raised against the contractor",
+          "party": "FIN",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "FIN",
+          "role": "owning",
+          "service": "Contracted cost posting"
+        },
+        {
+          "component": "MAI",
+          "role": "contributing",
+          "service": "Acceptance of delivery"
+        },
+        {
+          "component": "MM",
+          "role": "reference",
+          "service": "Free-issue material charged against the contract"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "MAI",
+          "to": "FIN",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Finance",
+          "raci": "A"
+        },
+        {
+          "role": "Contract manager",
+          "raci": "R"
+        },
+        {
+          "role": "Maintenance manager",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "financial",
+          "text": "Contracted cost is a component of construction cost like any other and is charged to the work order, not to a contract account that never reaches the asset."
+        },
+        {
+          "kind": "operational",
+          "text": "Payment before acceptance leaves the operator with nothing to withhold. Acceptance at 5.1.2 gates this posting."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Actual Cost to Planning Estimate",
+          "definition": "SMRP 5.3.3, contracted component.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Contractor performance",
+          "definition": "EN 15341 cl. 12 organisation and support indicators.",
+          "cite": "EN 15341:2019+A1:2022 Maintenance Key Performance Indicators"
+        }
+      ],
+      "variants": [
+        "Against a schedule of rates",
+        "Against a fixed-price quotation",
+        "Day-work or emergency rates",
+        "Held - does not match the contract or the delivery"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Known matching sequence with a defined query path.",
+        "artifact": "models/5.2-capture-and-settle-cost.bpmn"
+      },
+      "en17007": {
+        "process": "SER",
+        "title": "Provide external maintenance services",
+        "clause": "6.15"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.15 SER.3 Manage contracts and evaluate companies and services",
+          "status": "verified"
+        },
+        {
+          "for": "controls.financial",
+          "cite": "18 CFR Part 101 Uniform System of Accounts (Part 201 for gas) - Electric Plant Instruction 3",
+          "status": "regulation"
+        },
+        {
+          "for": "measures",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.3.3; EN 15341:2019+A1:2022 Maintenance Key Performance Indicators",
+          "status": "consensus"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319)"
+      }
+    },
+    {
+      "uid": 10133,
+      "id": "5.2.4",
+      "name": "Settle cost to work order and project",
+      "group": {
+        "id": "5.2",
+        "name": "Capture and settle cost",
+        "uid": 10129
+      },
+      "intent": "Settle the accumulated cost to the work order and to the project above it.",
+      "activities": [
+        "Confirm all cost components are posted and none is outstanding",
+        "Apply the overhead treatment on its defined basis",
+        "Settle the work order to its project or programme",
+        "Fix the settled total as the actual for comparison"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "A closed work order has all its cost components posted.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Labour, material and contracted cost posted",
+          "party": "FIN",
+          "data": "Work"
+        },
+        {
+          "what": "Overhead allocation basis",
+          "party": "FIN",
+          "data": null
+        },
+        {
+          "what": "Project or programme the work belongs to",
+          "party": "FIN",
+          "data": "Work"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Settled work order cost",
+          "party": "FIN",
+          "data": "Work"
+        },
+        {
+          "what": "Cost settled to the project or programme",
+          "party": "FIN",
+          "data": "Work"
+        }
+      ],
+      "systems": [
+        {
+          "component": "FIN",
+          "role": "owning",
+          "service": "Cost settlement"
+        },
+        {
+          "component": "MAI",
+          "role": "reference",
+          "service": "Closed work order"
+        },
+        {
+          "component": "AM",
+          "role": "consuming",
+          "service": "Actual cost against the asset"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "FIN",
+          "to": "AM",
+          "payload": "MaintenanceOrder",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Finance",
+          "raci": "A"
+        },
+        {
+          "role": "Estimator",
+          "raci": "C"
+        },
+        {
+          "role": "Maintenance manager",
+          "raci": "I"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "financial",
+          "text": "Overhead may not be charged by adding an arbitrary percentage or amount to direct construction cost. It is allocated on a defined basis or not at all - the same rule that bound the estimate at 2.3.3."
+        },
+        {
+          "kind": "financial",
+          "text": "Settlement against an open work order that still has cost to come produces a false actual, and the variance against estimate is then measuring the settlement date rather than the work."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Actual Cost to Planning Estimate",
+          "definition": "SMRP 5.3.3 - this process produces the actual the measure compares.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Planning Variance Index",
+          "definition": "SMRP 5.3.5.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Settle to a maintenance cost centre",
+        "Settle to a capital project",
+        "Settle across both where the work is mixed",
+        "Held - cost still outstanding"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Known settlement sequence with a defined hold.",
+        "artifact": "models/5.2-capture-and-settle-cost.bpmn"
+      },
+      "en17007": {
+        "process": "BUD",
+        "title": "Budget maintenance of items",
+        "clause": "6.8"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.8 BUD.1 Define, compile cost elements and calculate or estimate actual costs",
+          "status": "verified"
+        },
+        {
+          "for": "controls.financial",
+          "cite": "18 CFR Part 101 Uniform System of Accounts (Part 201 for gas) - Electric Plant Instruction 4(B) overhead; Instruction 11 work order requirement",
+          "status": "regulation"
+        },
+        {
+          "for": "measures",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.3.3, 5.3.5",
+          "status": "consensus"
+        }
+      ],
+      "provenance": {
+        "basis": "regulation",
+        "primary": "18 CFR Part 101 Uniform System of Accounts (Part 201 for gas)"
+      }
+    },
+    {
+      "uid": 10134,
+      "id": "5.2.5",
+      "name": "Resolve costing exceptions",
+      "group": {
+        "id": "5.2",
+        "name": "Capture and settle cost",
+        "uid": 10129
+      },
+      "intent": "Clear the cost that will not settle, rather than leaving it to age.",
+      "activities": [
+        "Identify cost that cannot post or settle and why",
+        "Correct the charging error where there is one",
+        "Reallocate cost charged to the wrong work",
+        "Escalate what cannot be resolved before period close"
+      ],
+      "trigger": {
+        "kind": "conditional",
+        "text": "Cost fails to post or settle, or ages beyond the review threshold.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Failed or unsettled cost",
+          "party": "FIN",
+          "data": "Work"
+        },
+        {
+          "what": "Work order and charging account position",
+          "party": "FIN",
+          "data": "Work"
+        },
+        {
+          "what": "Period close timetable",
+          "party": "FIN",
+          "data": null
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Corrected or reallocated cost",
+          "party": "FIN",
+          "data": "Work"
+        },
+        {
+          "what": "Escalation of unresolved cost",
+          "party": "FIN",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "FIN",
+          "role": "owning",
+          "service": "Cost exception handling"
+        },
+        {
+          "component": "MAI",
+          "role": "contributing",
+          "service": "Work order correction"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "FIN",
+          "to": "MAI",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Finance",
+          "raci": "A"
+        },
+        {
+          "role": "Maintenance planner",
+          "raci": "R"
+        },
+        {
+          "role": "Estimator",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "financial",
+          "text": "Cost sitting in suspense at period close is cost that is either capitalised wrongly or expensed wrongly. Neither is neutral."
+        },
+        {
+          "kind": "operational",
+          "text": "A recurring exception of the same kind is a process defect, not an accounting one. Correct the cause rather than the instance."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Actual Cost to Planning Estimate",
+          "definition": "SMRP 5.3.3, excluding cost still in suspense.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Work Order Aging",
+          "definition": "SMRP 5.4.6, applied to orders held open for cost.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Charging error corrected",
+        "Cost reallocated to the correct work",
+        "Cost written off with recorded authority",
+        "Escalated - unresolved at period close"
+      ],
+      "notation": {
+        "class": "CMMN",
+        "why": "The handler chooses among correction, reallocation, write-off and escalation in an order that depends on what the exception is.",
+        "artifact": "models/5.2.5-costing-exceptions.cmmn"
+      },
+      "en17007": {
+        "process": "BUD",
+        "title": "Budget maintenance of items",
+        "clause": "6.8"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.8 BUD.5 Analyse, explain and, if applicable, take corrective actions",
+          "status": "verified"
+        },
+        {
+          "for": "controls.financial",
+          "cite": "18 CFR Part 101 Uniform System of Accounts (Part 201 for gas) - Electric Plant Instruction 11",
+          "status": "regulation"
+        },
+        {
+          "for": "exception handling",
+          "cite": "No standard specifies a cost exception process. Framed against BUD.5.",
+          "status": "judgment"
+        },
+        {
+          "for": "measures",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.3.3, 5.4.6",
+          "status": "consensus"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319)"
+      }
+    },
+    {
+      "uid": 10136,
+      "id": "5.3.1",
+      "name": "Determine capital versus expense treatment",
+      "group": {
+        "id": "5.3",
+        "name": "Capitalise and unitise completed work",
+        "uid": 10135
+      },
+      "intent": "Confirm against actuals the accounting treatment the work was authorised under.",
+      "activities": [
+        "Take the treatment determined before authorisation",
+        "Test it against what the work actually did to the plant",
+        "Re-determine where the scope changed in delivery",
+        "Fix the treatment for the entries that follow"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "A settled work order requires its accounting treatment confirmed.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Treatment determined at authorisation",
+          "party": "FIN",
+          "data": "Work"
+        },
+        {
+          "what": "Settled actual cost",
+          "party": "FIN",
+          "data": "Work"
+        },
+        {
+          "what": "What the work actually did to the plant",
+          "party": "AM",
+          "data": "WorkAsset"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Confirmed accounting treatment",
+          "party": "FIN",
+          "data": "Work"
+        },
+        {
+          "what": "Re-determination where scope changed",
+          "party": "FIN",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "FIN",
+          "role": "owning",
+          "service": "Treatment confirmation"
+        },
+        {
+          "component": "AM",
+          "role": "contributing",
+          "service": "Effect on plant"
+        },
+        {
+          "component": "MAI",
+          "role": "reference",
+          "service": "Scope as delivered"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "AM",
+          "to": "FIN",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Finance",
+          "raci": "A"
+        },
+        {
+          "role": "Asset engineer",
+          "raci": "C"
+        },
+        {
+          "role": "Estimator",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkAsset"
+      ],
+      "controls": [
+        {
+          "kind": "financial",
+          "text": "The determination is the same one made at 2.2.5 - retirement unit or minor item, and whether a minor item replaced independently effects a substantial betterment. What changes here is that it is tested against what was actually built."
+        },
+        {
+          "kind": "financial",
+          "text": "Work delivered differently from what was authorised carries a different treatment. Confirming rather than assuming is the control."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Actual Cost to Planning Estimate",
+          "definition": "SMRP 5.3.3, split capital and expense.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Rework",
+          "definition": "SMRP 4.1, applied to work orders reclassified after settlement.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Treatment confirmed as authorised",
+        "Re-determined - scope changed in delivery",
+        "Split treatment where the work did both",
+        "Referred to the accounting owner"
+      ],
+      "notation": {
+        "class": "DMN",
+        "why": "The output is an accounting classification tested against actuals, not a state change. It is the same rule set as 2.2.5 and must not fork.",
+        "artifact": "models/5.3.1-capitalisation-confirmation.dmn"
+      },
+      "en17007": {
+        "process": "BUD",
+        "title": "Budget maintenance of items",
+        "clause": "6.8"
+      },
+      "sources": [
+        {
+          "for": "determination",
+          "cite": "18 CFR Part 101 Uniform System of Accounts (Part 201 for gas) - Electric Plant Instruction 10(C)(1) and 10(C)(3); Definitions 18 minor item and 34 retirement unit",
+          "status": "regulation"
+        },
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.8 BUD",
+          "status": "verified"
+        },
+        {
+          "for": "RUS borrowers",
+          "cite": "7 CFR Part 1767 RUS accounting requirements for electric borrowers",
+          "status": "regulation"
+        },
+        {
+          "for": "shared rule set",
+          "cite": "The same determination as 2.2.5. Both call the same decision so an operator's policy change lands in one place.",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "regulation",
+        "primary": "18 CFR Part 101 Uniform System of Accounts (Part 201 for gas)"
+      }
+    },
+    {
+      "uid": 10137,
+      "id": "5.3.2",
+      "name": "Unitise completed capital work",
+      "group": {
+        "id": "5.3",
+        "name": "Capitalise and unitise completed work",
+        "uid": 10135
+      },
+      "intent": "Break the completed work into the units of property the accounts recognise.",
+      "activities": [
+        "Identify the retirement units added by the work",
+        "Identify the retirement units removed by the work",
+        "Distribute the settled cost across the units added",
+        "Record the units for the addition and retirement entries"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "Work with a confirmed capital treatment requires unitisation.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Settled cost and confirmed treatment",
+          "party": "FIN",
+          "data": "Work"
+        },
+        {
+          "what": "Units installed and removed on the as-built",
+          "party": "AM",
+          "data": "WorkAsset"
+        },
+        {
+          "what": "Property units listing",
+          "party": "FIN",
+          "data": null
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Units added with their cost",
+          "party": "AM",
+          "data": "WorkAsset"
+        },
+        {
+          "what": "Units retired with their original cost",
+          "party": "AM",
+          "data": "WorkAsset"
+        }
+      ],
+      "systems": [
+        {
+          "component": "FIN",
+          "role": "owning",
+          "service": "Unitisation"
+        },
+        {
+          "component": "AM",
+          "role": "contributing",
+          "service": "Units installed and removed"
+        },
+        {
+          "component": "DGN",
+          "role": "reference",
+          "service": "Unit-based design as built"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "AM",
+          "to": "FIN",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Finance",
+          "raci": "A"
+        },
+        {
+          "role": "Asset engineer",
+          "raci": "R"
+        },
+        {
+          "role": "Estimator",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkAsset"
+      ],
+      "controls": [
+        {
+          "kind": "financial",
+          "text": "All construction and retirements are recorded by work order, with retirement items kept separate from construction."
+        },
+        {
+          "kind": "operational",
+          "text": "Unitisation depends on the as-built at 5.4.3 recording what was actually installed and removed. Unitising against the design rather than the as-built puts the wrong units in the property record."
+        },
+        {
+          "kind": "financial",
+          "text": "No standard specifies unitisation mechanics. The federal accounts say what a retirement unit is and that additions and retirements must be recorded; how settled cost is distributed across units is the operator's method."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Actual Cost to Planning Estimate",
+          "definition": "SMRP 5.3.3.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Work Order Aging",
+          "definition": "SMRP 5.4.6, applied to orders awaiting unitisation.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Unit-based work unitised from the design",
+        "Line-item work unitised from the as-built",
+        "Addition with an accompanying retirement",
+        "Retirement with no replacement"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Known sequence from a confirmed treatment to recorded units.",
+        "artifact": "models/5.3-capitalise-and-unitise.bpmn"
+      },
+      "en17007": {
+        "process": "BUD",
+        "title": "Budget maintenance of items",
+        "clause": "6.8"
+      },
+      "sources": [
+        {
+          "for": "units of property",
+          "cite": "18 CFR Part 101 Uniform System of Accounts (Part 201 for gas) - Definitions 34 retirement unit and 18 minor item; Electric Plant Instruction 10(A) additions and retirements",
+          "status": "regulation"
+        },
+        {
+          "for": "work order requirement",
+          "cite": "18 CFR Part 101 Uniform System of Accounts (Part 201 for gas) - Electric Plant Instruction 11",
+          "status": "regulation"
+        },
+        {
+          "for": "mechanics",
+          "cite": "No standard specifies how settled cost is distributed across units. The federal accounts define the unit and require the entries; the distribution is the operator's method.",
+          "status": "judgment"
+        },
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.8 BUD",
+          "status": "verified"
+        }
+      ],
+      "provenance": {
+        "basis": "regulation",
+        "primary": "18 CFR Part 101 Uniform System of Accounts (Part 201 for gas)"
+      }
+    },
+    {
+      "uid": 10138,
+      "id": "5.3.3",
+      "name": "Post to fixed asset and property record",
+      "group": {
+        "id": "5.3",
+        "name": "Capitalise and unitise completed work",
+        "uid": 10135
+      },
+      "intent": "Post the additions and retirements to the fixed asset and property records.",
+      "activities": [
+        "Post the addition to the plant account and the property record",
+        "Post the retirement of the units removed at their original cost",
+        "Update the continuing plant inventory record",
+        "Reconcile the plant account to the property record"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "Units added and retired are identified and costed.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Units added with cost",
+          "party": "AM",
+          "data": "WorkAsset"
+        },
+        {
+          "what": "Units retired with original cost",
+          "party": "AM",
+          "data": "WorkAsset"
+        },
+        {
+          "what": "Plant account and property record position",
+          "party": "FIN",
+          "data": null
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Posted additions and retirements",
+          "party": "FIN",
+          "data": "WorkAsset"
+        },
+        {
+          "what": "Updated continuing plant inventory record",
+          "party": "AM",
+          "data": "WorkAsset"
+        }
+      ],
+      "systems": [
+        {
+          "component": "FIN",
+          "role": "owning",
+          "service": "Plant accounting"
+        },
+        {
+          "component": "AM",
+          "role": "consuming",
+          "service": "Continuing property record"
+        },
+        {
+          "component": "GINV",
+          "role": "reference",
+          "service": "Location of the plant recorded"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "FIN",
+          "to": "AM",
+          "payload": "MaintenanceOrder",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Finance",
+          "raci": "A"
+        },
+        {
+          "role": "Asset engineer",
+          "raci": "C"
+        },
+        {
+          "role": "Compliance owner",
+          "raci": "I"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkAsset",
+        "WorkLocation"
+      ],
+      "controls": [
+        {
+          "kind": "financial",
+          "text": "A continuing plant inventory record is required, and it is what makes a retirement postable at original cost rather than at an estimate."
+        },
+        {
+          "kind": "regulatory",
+          "text": "The continuing plant inventory ledger is retained for twenty-five years. The work order sheets behind it may be disposed of five years after clearance to plant account - so the record outlives its evidence by twenty years, which is why the record has to be right at posting."
+        },
+        {
+          "kind": "financial",
+          "text": "The plant account and the property record are reconciled. A difference between them is a real difference in what the utility believes it owns."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Actual Cost to Planning Estimate",
+          "definition": "SMRP 5.3.3.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Asset data quality",
+          "definition": "EN 15341 cl. 12 information and communication technology indicators.",
+          "cite": "EN 15341:2019+A1:2022 Maintenance Key Performance Indicators"
+        }
+      ],
+      "variants": [
+        "Addition posted to plant",
+        "Addition with retirement of the replaced units",
+        "Retirement with no replacement",
+        "Transfer between plant accounts or districts"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Known posting sequence with a defined reconciliation.",
+        "artifact": "models/5.3-capitalise-and-unitise.bpmn"
+      },
+      "en17007": {
+        "process": "BUD",
+        "title": "Budget maintenance of items",
+        "clause": "6.8"
+      },
+      "sources": [
+        {
+          "for": "continuing property record",
+          "cite": "18 CFR Part 101 Uniform System of Accounts (Part 201 for gas) - Definition 8 continuing plant inventory record; Electric Plant Instruction 10(A)",
+          "status": "regulation"
+        },
+        {
+          "for": "controls.regulatory",
+          "cite": "18 CFR 125.3 Preservation of records of public utilities and licensees - Item 16(b) continuing plant inventory ledger, 25 years; Item 17(a)(b) construction work in progress ledgers and work order sheets, 5 years after clearance to plant account",
+          "status": "regulation"
+        },
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.8 BUD",
+          "status": "verified"
+        },
+        {
+          "for": "measures",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.3.3; EN 15341:2019+A1:2022 Maintenance Key Performance Indicators",
+          "status": "consensus"
+        }
+      ],
+      "provenance": {
+        "basis": "regulation",
+        "primary": "18 CFR Part 101 Uniform System of Accounts (Part 201 for gas)"
+      }
+    },
+    {
+      "uid": 10139,
+      "id": "5.3.4",
+      "name": "Close funding project or programme",
+      "group": {
+        "id": "5.3",
+        "name": "Capitalise and unitise completed work",
+        "uid": 10135
+      },
+      "intent": "Close the funding project once everything charged to it is settled and posted.",
+      "activities": [
+        "Confirm every work order on the project is closed and settled",
+        "Confirm additions and retirements are posted",
+        "Compare outturn with the authorised estimate and record the variance",
+        "Close the project and release any uncommitted funding"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "The last work order on a project is settled and posted.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Settled cost of every work order on the project",
+          "party": "FIN",
+          "data": "Work"
+        },
+        {
+          "what": "Authorised estimate and baseline",
+          "party": "FIN",
+          "data": "Work"
+        },
+        {
+          "what": "Posted additions and retirements",
+          "party": "AM",
+          "data": "WorkAsset"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Closed project with recorded outturn",
+          "party": "FIN",
+          "data": "Work"
+        },
+        {
+          "what": "Released uncommitted funding",
+          "party": "FIN",
+          "data": null
+        },
+        {
+          "what": "Variance against the authorised estimate",
+          "party": "FIN",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "FIN",
+          "role": "owning",
+          "service": "Project close"
+        },
+        {
+          "component": "AM",
+          "role": "reference",
+          "service": "Posted plant"
+        },
+        {
+          "component": "MAI",
+          "role": "reference",
+          "service": "Work order closure"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "FIN",
+          "to": "MAI",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Finance",
+          "raci": "A"
+        },
+        {
+          "role": "Engineering manager",
+          "raci": "C"
+        },
+        {
+          "role": "Estimator",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "financial",
+          "text": "A project left open holds funding that another project could use and keeps cost in construction work in progress rather than in plant."
+        },
+        {
+          "kind": "operational",
+          "text": "The variance recorded here is the only honest feedback the estimating process at 2.3 ever receives. Recording it without feeding it back makes the whole estimating discipline unimprovable."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Actual Cost to Planning Estimate",
+          "definition": "SMRP 5.3.3 at project level.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Planning Variance Index",
+          "definition": "SMRP 5.3.5.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Close within tolerance",
+        "Close with a recorded overrun or underrun",
+        "Partial close by phase",
+        "Held - work orders still open"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Known terminal sequence with a defined hold.",
+        "artifact": "models/5.3-capitalise-and-unitise.bpmn"
+      },
+      "en17007": {
+        "process": "BUD",
+        "title": "Budget maintenance of items",
+        "clause": "6.8"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.8 BUD.4 Extract budgeted and actual expenditures and BUD.5 Analyse, explain and, if applicable, take corrective actions",
+          "status": "verified"
+        },
+        {
+          "for": "controls.financial",
+          "cite": "18 CFR Part 101 Uniform System of Accounts (Part 201 for gas) - Electric Plant Instruction 11; construction work in progress clears to plant account",
+          "status": "regulation"
+        },
+        {
+          "for": "retention",
+          "cite": "18 CFR 125.3 Preservation of records of public utilities and licensees - Item 17(c) authorisation records for plant expenditures, 5 years after clearance to plant account except where there are ongoing Commission proceedings",
+          "status": "regulation"
+        },
+        {
+          "for": "measures",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.3.3, 5.3.5",
+          "status": "consensus"
+        }
+      ],
+      "provenance": {
+        "basis": "regulation",
+        "primary": "18 CFR Part 101 Uniform System of Accounts (Part 201 for gas)"
+      }
+    },
+    {
+      "uid": 10141,
+      "id": "5.4.1",
+      "name": "Capture field redline against the issued design",
+      "group": {
+        "id": "5.4",
+        "name": "Produce digital as-built and update asset records",
+        "uid": 10140
+      },
+      "intent": "Capture what was actually built, against the design that was issued.",
+      "activities": [
+        "Take the design at the revision the work was released against",
+        "Record every departure from it as the crew found or made it",
+        "Capture the evidence that supports each departure",
+        "Return the redline against the work, not as a separate document"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "Work is complete and differs, or may differ, from the issued design.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Issued design at its released revision",
+          "party": "DGN",
+          "data": "Work"
+        },
+        {
+          "what": "Field observation of what was built",
+          "party": "FRD",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Photographs, measurements and test evidence",
+          "party": "FRD",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Redline against the issued design",
+          "party": "FRD",
+          "data": "Work"
+        },
+        {
+          "what": "Evidence supporting each departure",
+          "party": "AM",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "FRD",
+          "role": "owning",
+          "service": "Field record capture"
+        },
+        {
+          "component": "DGN",
+          "role": "reference",
+          "service": "Issued design revision"
+        },
+        {
+          "component": "AM",
+          "role": "consuming",
+          "service": "As-built evidence"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "FRD",
+          "to": "DGN",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Crew lead",
+          "raci": "R"
+        },
+        {
+          "role": "Field supervisor",
+          "raci": "A"
+        },
+        {
+          "role": "Designer",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkLocation",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "For gas the operator must make construction records, maps and operating history available to appropriate operating personnel. Note what that requires and what it does not: availability, not accuracy."
+        },
+        {
+          "kind": "operational",
+          "text": "A redline captured against the wrong design revision is worse than no redline. The revision released at 2.2.6 is the one it is captured against."
+        },
+        {
+          "kind": "regulatory",
+          "text": "For electric distribution there is no federal as-built requirement at all. 16 U.S.C. 824o excludes local distribution and NESC sets no record-keeping duty, so the obligation is the operator's or a state's."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Rework",
+          "definition": "SMRP 4.1, applied to as-builts returned for correction.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Asset data quality",
+          "definition": "EN 15341 cl. 12.",
+          "cite": "EN 15341:2019+A1:2022 Maintenance Key Performance Indicators"
+        }
+      ],
+      "variants": [
+        "No departure - built to design",
+        "Minor departure recorded on the redline",
+        "Material departure requiring design review",
+        "No design - work recorded against the asset directly"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Known capture sequence with a defined escalation for material departure.",
+        "artifact": "models/5.4-as-built-and-asset-records.bpmn"
+      },
+      "en17007": {
+        "process": "DOC",
+        "title": "Deliver the operational documentation",
+        "clause": "6.9"
+      },
+      "sources": [
+        {
+          "for": "controls.regulatory (gas)",
+          "cite": "49 CFR 192.605(b)(3) - making construction records, maps, and operating history available to appropriate operating personnel",
+          "status": "regulation"
+        },
+        {
+          "for": "controls.regulatory (electric)",
+          "cite": "No federal as-built or record-keeping requirement exists for electric distribution; 16 U.S.C. 824o excludes local distribution and NESC ANSI/IEEE C2-2023 sets none",
+          "status": "regulation"
+        },
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.9 DOC.4 Update the reference documentation",
+          "status": "verified"
+        },
+        {
+          "for": "field recording component",
+          "cite": "IEC 61968-6:2015 cl. 4.2 reference components FRD Field recording",
+          "status": "clause-verified"
+        }
+      ],
+      "provenance": {
+        "basis": "regulation",
+        "primary": "49 CFR 192.605(b)(3)"
+      }
+    },
+    {
+      "uid": 10142,
+      "id": "5.4.2",
+      "name": "Perform survey-grade asset location capture",
+      "group": {
+        "id": "5.4",
+        "name": "Produce digital as-built and update asset records",
+        "uid": 10140
+      },
+      "intent": "Capture the position of what was installed to a stated accuracy.",
+      "activities": [
+        "Determine the accuracy the asset class and its exposure require",
+        "Capture position while the asset is still exposed",
+        "Record the method and the accuracy actually achieved",
+        "Flag what could not be captured before cover"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "An asset is installed and its position must be captured before cover.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Asset installed and its class",
+          "party": "FRD",
+          "data": "WorkAsset"
+        },
+        {
+          "what": "Required positional accuracy for the class",
+          "party": "GINV",
+          "data": null
+        },
+        {
+          "what": "Survey control available at the site",
+          "party": "GINV",
+          "data": "WorkLocation"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Captured position with method and accuracy",
+          "party": "GINV",
+          "data": "WorkLocation"
+        },
+        {
+          "what": "Exception where position could not be captured",
+          "party": "FRD",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "FRD",
+          "role": "contributing",
+          "service": "Field position capture"
+        },
+        {
+          "component": "GINV",
+          "role": "owning",
+          "service": "Geographical inventory"
+        },
+        {
+          "component": "AM",
+          "role": "consuming",
+          "service": "Asset location"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "FRD",
+          "to": "GINV",
+          "payload": "MaintenanceOrder",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Crew lead",
+          "raci": "R"
+        },
+        {
+          "role": "Asset engineer",
+          "raci": "A"
+        },
+        {
+          "role": "Field supervisor",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "WorkAsset",
+        "WorkLocation"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "Position is captured while the asset is exposed. After cover the only options are a records-based estimate or an excavation, and the first is what puts wrong positions into the map."
+        },
+        {
+          "kind": "regulatory",
+          "text": "No federal standard sets positional accuracy for gas distribution or for electric. The quality levels in the subsurface utility engineering standard give a defensible vocabulary; the required level is the operator's or a state's to set."
+        },
+        {
+          "kind": "operational",
+          "text": "The accuracy ACHIEVED is recorded, not only the accuracy required. A map that does not carry its own uncertainty gets trusted beyond it."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Asset data quality",
+          "definition": "EN 15341 cl. 12.",
+          "cite": "EN 15341:2019+A1:2022 Maintenance Key Performance Indicators"
+        },
+        {
+          "name": "Rework",
+          "definition": "SMRP 4.1, applied to re-survey after cover.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Survey-grade capture while exposed",
+        "Handheld capture at a lower quality level",
+        "Records-based position where capture was missed",
+        "Captured by a third party under a joint-use or contract arrangement"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Known capture sequence with a defined exception before cover.",
+        "artifact": "models/5.4-as-built-and-asset-records.bpmn"
+      },
+      "en17007": {
+        "process": "DTA",
+        "title": "Manage data",
+        "clause": "6.10"
+      },
+      "sources": [
+        {
+          "for": "accuracy vocabulary",
+          "cite": "ASCE 38-22 Standard Guideline for Investigating and Documenting Existing Utilities - quality levels A to D for utility location information",
+          "status": "clause-verified"
+        },
+        {
+          "for": "no federal accuracy requirement",
+          "cite": "Neither 49 CFR 192 nor NESC sets a positional accuracy requirement for as-built records. The requirement is the operator's or a state's.",
+          "status": "clause-verified"
+        },
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.10 DTA.1 Store and validate the raw data in a library and/or a database",
+          "status": "verified"
+        },
+        {
+          "for": "measures",
+          "cite": "EN 15341:2019+A1:2022 Maintenance Key Performance Indicators; SMRP Best Practices, Pillar 5 Work Management 4.1",
+          "status": "consensus"
+        }
+      ],
+      "provenance": {
+        "basis": "consensus",
+        "primary": "ASCE 38-22 Standard Guideline for Investigating and Documenting Existing Utilities"
+      }
+    },
+    {
+      "uid": 10143,
+      "id": "5.4.3",
+      "name": "Record installed, removed and abandoned units",
+      "group": {
+        "id": "5.4",
+        "name": "Produce digital as-built and update asset records",
+        "uid": 10140
+      },
+      "intent": "Record what was installed, what was removed and what was left abandoned.",
+      "activities": [
+        "Record each unit installed with its identity and attributes",
+        "Record each unit removed and where it went",
+        "Record what was abandoned in place and why",
+        "Reconcile the three against the material issued at 5.2.2"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "An as-built redline requires its unit-level record.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Redline and field record",
+          "party": "FRD",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Material issued and returned",
+          "party": "MM",
+          "data": "MaterialItem"
+        },
+        {
+          "what": "Existing units at the location",
+          "party": "AM",
+          "data": "WorkAsset"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Units installed with identity and attributes",
+          "party": "AM",
+          "data": "WorkAsset"
+        },
+        {
+          "what": "Units removed with disposal route",
+          "party": "AM",
+          "data": "WorkAsset"
+        },
+        {
+          "what": "Units abandoned in place with the reason",
+          "party": "AM",
+          "data": "WorkAsset"
+        }
+      ],
+      "systems": [
+        {
+          "component": "AM",
+          "role": "owning",
+          "service": "Asset record"
+        },
+        {
+          "component": "FRD",
+          "role": "contributing",
+          "service": "Field record"
+        },
+        {
+          "component": "MM",
+          "role": "reference",
+          "service": "Material reconciliation"
+        },
+        {
+          "component": "FIN",
+          "role": "consuming",
+          "service": "Units for unitisation"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "FRD",
+          "to": "AM",
+          "payload": "MaintenanceOrder",
+          "verb": "change",
+          "pattern": "event"
+        },
+        {
+          "from": "AM",
+          "to": "FIN",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Asset engineer",
+          "raci": "A"
+        },
+        {
+          "role": "Field supervisor",
+          "raci": "R"
+        },
+        {
+          "role": "Materials planner",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "WorkAsset",
+        "MaterialItem",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "Abandonment is not a records footnote. For gas it is governed in its own right and what is abandoned in place remains a thing the operator must know about, because the next excavation will find it."
+        },
+        {
+          "kind": "operational",
+          "text": "Installed, removed and abandoned must reconcile with what was issued at 5.2.2. A difference is either material unaccounted for or an asset the record does not know about."
+        },
+        {
+          "kind": "financial",
+          "text": "These units are what 5.3.2 unitises against. Taking them from the design rather than the field puts the wrong units in a record kept for twenty-five years."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Asset data quality",
+          "definition": "EN 15341 cl. 12.",
+          "cite": "EN 15341:2019+A1:2022 Maintenance Key Performance Indicators"
+        },
+        {
+          "name": "Stores Inventory Turns",
+          "definition": "SMRP 5.5.9, where the reconciliation exposes issue error.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Installed only",
+        "Installed with removal of the replaced units",
+        "Abandoned in place under the applicable procedure",
+        "Removed with no replacement"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Known recording sequence with a defined reconciliation.",
+        "artifact": "models/5.4-as-built-and-asset-records.bpmn"
+      },
+      "en17007": {
+        "process": "DTA",
+        "title": "Manage data",
+        "clause": "6.10"
+      },
+      "sources": [
+        {
+          "for": "abandonment",
+          "cite": "49 CFR 192.727 Abandonment or deactivation of facilities",
+          "status": "regulation"
+        },
+        {
+          "for": "repair records",
+          "cite": "49 CFR 192.709(a) - each repair made to pipe retained for as long as the pipe remains in service; transmission only",
+          "status": "regulation"
+        },
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.10 DTA.1",
+          "status": "verified"
+        },
+        {
+          "for": "measures",
+          "cite": "EN 15341:2019+A1:2022 Maintenance Key Performance Indicators; SMRP Best Practices, Pillar 5 Work Management 5.5.9",
+          "status": "consensus"
+        }
+      ],
+      "provenance": {
+        "basis": "regulation",
+        "primary": "49 CFR 192.727 and 192.709"
+      }
+    },
+    {
+      "uid": 10144,
+      "id": "5.4.4",
+      "name": "Reconcile as-built against the design",
+      "group": {
+        "id": "5.4",
+        "name": "Produce digital as-built and update asset records",
+        "uid": 10140
+      },
+      "intent": "Reconcile the as-built against the design and resolve what disagrees.",
+      "activities": [
+        "Compare the as-built against the issued design revision",
+        "Classify each difference as recorded, resolvable or material",
+        "Return material differences to design for review",
+        "Record the reconciled position as the accepted as-built"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "An as-built record is complete and must be reconciled.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "As-built record with units and positions",
+          "party": "AM",
+          "data": "WorkAsset"
+        },
+        {
+          "what": "Issued design at its released revision",
+          "party": "DGN",
+          "data": "Work"
+        },
+        {
+          "what": "Evidence supporting each departure",
+          "party": "AM",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Reconciled as-built",
+          "party": "AM",
+          "data": "WorkAsset"
+        },
+        {
+          "what": "Material difference returned to design",
+          "party": "DGN",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "AM",
+          "role": "owning",
+          "service": "As-built reconciliation"
+        },
+        {
+          "component": "DGN",
+          "role": "contributing",
+          "service": "Design comparison"
+        },
+        {
+          "component": "GINV",
+          "role": "reference",
+          "service": "Recorded positions"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "AM",
+          "to": "DGN",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Asset engineer",
+          "raci": "R"
+        },
+        {
+          "role": "Engineering manager",
+          "raci": "A"
+        },
+        {
+          "role": "Designer",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkAsset",
+        "WorkLocation"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "A material difference is a design change discovered after the fact. It goes back through design review at 2.1.3, not into the record as though it were intended."
+        },
+        {
+          "kind": "operational",
+          "text": "Reconciliation that resolves every difference in favour of the as-built hides the ones that should have prompted a design change. The classification is the control."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Rework",
+          "definition": "SMRP 4.1, applied to as-builts returned for correction.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Asset data quality",
+          "definition": "EN 15341 cl. 12.",
+          "cite": "EN 15341:2019+A1:2022 Maintenance Key Performance Indicators"
+        }
+      ],
+      "variants": [
+        "No difference",
+        "Difference recorded and accepted",
+        "Material difference - returned to design review",
+        "Difference caused by an uncontrolled change - raised at 2.4.4"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Known comparison with a defined return path.",
+        "artifact": "models/5.4-as-built-and-asset-records.bpmn"
+      },
+      "en17007": {
+        "process": "MRQ",
+        "title": "Deliver maintenance requirements during items design and modification",
+        "clause": "6.12"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.12 MRQ.8 Verify conformity with the reliability, maintainability and logistic support requirements",
+          "status": "verified"
+        },
+        {
+          "for": "design change",
+          "cite": "ISO 9001:2015 cl. 8.3.6 Design and development changes",
+          "status": "clause-verified"
+        },
+        {
+          "for": "measures",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 4.1; EN 15341:2019+A1:2022 Maintenance Key Performance Indicators",
+          "status": "consensus"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319)"
+      }
+    },
+    {
+      "uid": 10145,
+      "id": "5.4.5",
+      "name": "Review, approve and accept the as-built",
+      "group": {
+        "id": "5.4",
+        "name": "Produce digital as-built and update asset records",
+        "uid": 10140
+      },
+      "intent": "Have the as-built reviewed and accepted by someone accountable for it.",
+      "activities": [
+        "Review the as-built against its evidence",
+        "Confirm the accuracy achieved is recorded and adequate",
+        "Accept, or return with what is missing",
+        "Record who accepted it and when"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "A reconciled as-built is presented for acceptance.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Reconciled as-built with evidence",
+          "party": "AM",
+          "data": "WorkAsset"
+        },
+        {
+          "what": "Accuracy achieved and its method",
+          "party": "GINV",
+          "data": "WorkLocation"
+        },
+        {
+          "what": "Acceptance criteria for the asset class",
+          "party": "AM",
+          "data": null
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Accepted as-built with named acceptor",
+          "party": "AM",
+          "data": "WorkAsset"
+        },
+        {
+          "what": "Return with what is missing",
+          "party": "FRD",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "AM",
+          "role": "owning",
+          "service": "As-built acceptance"
+        },
+        {
+          "component": "FRD",
+          "role": "consuming",
+          "service": "Return for correction"
+        },
+        {
+          "component": "GINV",
+          "role": "reference",
+          "service": "Positional evidence"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "AM",
+          "to": "FRD",
+          "payload": "MaintenanceOrder",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Asset engineer",
+          "raci": "A"
+        },
+        {
+          "role": "Engineering manager",
+          "raci": "C"
+        },
+        {
+          "role": "Field supervisor",
+          "raci": "I"
+        }
+      ],
+      "data_objects": [
+        "WorkAsset",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "Acceptance is by a named person against stated criteria. An as-built that enters the record because nobody rejected it is the mechanism by which map quality decays."
+        },
+        {
+          "kind": "regulatory",
+          "text": "The record accepted here is what 192.605(b)(3) makes available to operating personnel, and what the next crew will dig against."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Rework",
+          "definition": "SMRP 4.1.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Work Order Aging",
+          "definition": "SMRP 5.4.6, applied to work held for as-built acceptance.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Accepted",
+        "Accepted with a recorded limitation",
+        "Returned for correction",
+        "Escalated where the record cannot be made adequate"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Known acceptance sequence with a defined return.",
+        "artifact": "models/5.4-as-built-and-asset-records.bpmn"
+      },
+      "en17007": {
+        "process": "DOC",
+        "title": "Deliver the operational documentation",
+        "clause": "6.9"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.9 DOC.4 Update the reference documentation",
+          "status": "verified"
+        },
+        {
+          "for": "availability duty",
+          "cite": "49 CFR 192.605(b)(3)",
+          "status": "regulation"
+        },
+        {
+          "for": "acceptance criteria",
+          "cite": "No standard specifies as-built acceptance criteria. The criteria are the operator's.",
+          "status": "judgment"
+        },
+        {
+          "for": "measures",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 4.1, 5.4.6",
+          "status": "consensus"
+        }
+      ],
+      "provenance": {
+        "basis": "regulation",
+        "primary": "49 CFR 192.605(b)(3)"
+      }
+    },
+    {
+      "uid": 10146,
+      "id": "5.4.6",
+      "name": "Update asset register and segmentation",
+      "group": {
+        "id": "5.4",
+        "name": "Produce digital as-built and update asset records",
+        "uid": 10140
+      },
+      "intent": "Update the asset register and its segmentation from the accepted as-built.",
+      "activities": [
+        "Create, amend or retire the asset records the work changed",
+        "Update attributes, class and criticality where they changed",
+        "Re-segment the linear asset where its measure basis changed",
+        "Apply the maintenance strategy to what is now in service"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "An as-built has been accepted and the register must follow it.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Accepted as-built",
+          "party": "AM",
+          "data": "WorkAsset"
+        },
+        {
+          "what": "Existing register entries at the location",
+          "party": "AM",
+          "data": "WorkAsset"
+        },
+        {
+          "what": "Maintenance strategy for the asset class",
+          "party": "AM",
+          "data": null
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Updated asset register",
+          "party": "AM",
+          "data": "WorkAsset"
+        },
+        {
+          "what": "Re-segmented linear asset",
+          "party": "GINV",
+          "data": "WorkLocation"
+        },
+        {
+          "what": "Maintenance strategy applied to new plant",
+          "party": "MAI",
+          "data": "Work"
+        }
+      ],
+      "systems": [
+        {
+          "component": "AM",
+          "role": "owning",
+          "service": "Asset register"
+        },
+        {
+          "component": "GINV",
+          "role": "contributing",
+          "service": "Linear segmentation"
+        },
+        {
+          "component": "MAI",
+          "role": "consuming",
+          "service": "Strategy applied to new plant"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "AM",
+          "to": "MAI",
+          "payload": "WorkRequest",
+          "verb": "create",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Asset engineer",
+          "raci": "A"
+        },
+        {
+          "role": "Maintenance planner",
+          "raci": "C"
+        },
+        {
+          "role": "Compliance owner",
+          "raci": "I"
+        }
+      ],
+      "data_objects": [
+        "WorkAsset",
+        "WorkLocation",
+        "Work"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "New plant with no maintenance strategy applied is new plant that generates no programmed work. The gap is silent until the first failure or the first audit."
+        },
+        {
+          "kind": "operational",
+          "text": "Re-segmenting a linear asset moves the boundaries that condition, defect and work history are recorded against. History has to move with the boundary or it becomes unattributable."
+        },
+        {
+          "kind": "regulatory",
+          "text": "For gas, the distribution integrity programme depends on knowledge of the system. The register updated here is that knowledge."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Asset data quality",
+          "definition": "EN 15341 cl. 12.",
+          "cite": "EN 15341:2019+A1:2022 Maintenance Key Performance Indicators"
+        },
+        {
+          "name": "Planned Work",
+          "definition": "SMRP 5.3.1, which cannot count work never generated.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Amend an existing asset",
+        "Create a new asset in service",
+        "Retire an asset removed or abandoned",
+        "Re-segment a linear asset"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Known update sequence with a defined strategy application.",
+        "artifact": "models/5.4-as-built-and-asset-records.bpmn"
+      },
+      "en17007": {
+        "process": "DTA",
+        "title": "Manage data",
+        "clause": "6.10"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.10 DTA.1 and DTA.3 Draw up and maintain an up-to-date list of critical items",
+          "status": "verified"
+        },
+        {
+          "for": "controls.regulatory (gas)",
+          "cite": "49 CFR 192.1007(a) - a distribution integrity management programme requires the operator to demonstrate an understanding of its gas distribution system",
+          "status": "regulation"
+        },
+        {
+          "for": "asset data model",
+          "cite": "IEC 61968-11:2013 CIM extensions for distribution",
+          "status": "clause-verified"
+        },
+        {
+          "for": "measures",
+          "cite": "EN 15341:2019+A1:2022 Maintenance Key Performance Indicators; SMRP Best Practices, Pillar 5 Work Management 5.3.1",
+          "status": "consensus"
+        }
+      ],
+      "provenance": {
+        "basis": "regulation",
+        "primary": "49 CFR 192.1007"
+      }
+    },
+    {
+      "uid": 10147,
+      "id": "5.4.7",
+      "name": "Publish as-built change to the network model",
+      "group": {
+        "id": "5.4",
+        "name": "Produce digital as-built and update asset records",
+        "uid": 10140
+      },
+      "intent": "Publish the change so the network model and everyone downstream sees it.",
+      "activities": [
+        "Publish the asset and connectivity change to the network model",
+        "Confirm the spatial and non-spatial records agree",
+        "Notify the functions whose work depends on the change",
+        "Record the publication and resolve anything that rejected it"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "The asset register has been updated and the change must be published.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Updated asset and connectivity records",
+          "party": "AM",
+          "data": "WorkAsset"
+        },
+        {
+          "what": "Current network model state",
+          "party": "GINV",
+          "data": "WorkLocation"
+        },
+        {
+          "what": "Subscribers to network change",
+          "party": "NO",
+          "data": null
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Published network model change",
+          "party": "GINV",
+          "data": "WorkLocation"
+        },
+        {
+          "what": "Rejection to resolve where the model would not accept it",
+          "party": "AM",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "GINV",
+          "role": "owning",
+          "service": "Network model publication"
+        },
+        {
+          "component": "AM",
+          "role": "contributing",
+          "service": "Asset change"
+        },
+        {
+          "component": "NO",
+          "role": "consuming",
+          "service": "Operational network model"
+        },
+        {
+          "component": "SCHD",
+          "role": "consuming",
+          "service": "Location for future work"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "AM",
+          "to": "GINV",
+          "payload": "MaintenanceOrder",
+          "verb": "change",
+          "pattern": "event"
+        },
+        {
+          "from": "GINV",
+          "to": "NO",
+          "payload": "ServiceOrder",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Asset engineer",
+          "raci": "R"
+        },
+        {
+          "role": "Engineering manager",
+          "raci": "A"
+        },
+        {
+          "role": "Compliance owner",
+          "raci": "I"
+        }
+      ],
+      "data_objects": [
+        "WorkAsset",
+        "WorkLocation"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "Network operations plans switching against the model. A model that does not carry a change made in the field is how a clearance gets issued against plant that is no longer there."
+        },
+        {
+          "kind": "regulatory",
+          "text": "For gas, construction records and maps must be available to appropriate operating personnel. Publication is what makes them available rather than merely stored."
+        },
+        {
+          "kind": "operational",
+          "text": "A rejected publication leaves the register and the model disagreeing. Rejections are resolved, not retried until they succeed."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Asset data quality",
+          "definition": "EN 15341 cl. 12.",
+          "cite": "EN 15341:2019+A1:2022 Maintenance Key Performance Indicators"
+        },
+        {
+          "name": "Work Order Aging",
+          "definition": "SMRP 5.4.6, applied to work held for publication.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Published to the network model",
+        "Published with a connectivity change",
+        "Rejected by the model - resolved and republished",
+        "Published to a third party under a joint-use arrangement"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Known publication sequence with a defined rejection path.",
+        "artifact": "models/5.4-as-built-and-asset-records.bpmn"
+      },
+      "en17007": {
+        "process": "DOC",
+        "title": "Deliver the operational documentation",
+        "clause": "6.9"
+      },
+      "sources": [
+        {
+          "for": "controls.regulatory",
+          "cite": "49 CFR 192.605(b)(3) - making construction records, maps, and operating history available to appropriate operating personnel",
+          "status": "regulation"
+        },
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.9 DOC.6 Manage the way in which operational documentation is made available",
+          "status": "verified"
+        },
+        {
+          "for": "network operations interface",
+          "cite": "IEC 61968-3 Ed. 3.0:2021 Interface for network operations",
+          "status": "clause-verified"
+        },
+        {
+          "for": "measures",
+          "cite": "EN 15341:2019+A1:2022 Maintenance Key Performance Indicators; SMRP Best Practices, Pillar 5 Work Management 5.4.6",
+          "status": "consensus"
+        }
+      ],
+      "provenance": {
+        "basis": "regulation",
+        "primary": "49 CFR 192.605(b)(3)"
+      }
+    }
+  ]
+}

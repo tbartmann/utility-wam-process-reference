@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_P_5_1" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <process id="P_5_1" name="5.1 Verify and close work" isExecutable="false">
+    <documentation>Tier-4 activities under 5.1.1 to 5.1.4. EN 17007 cl. 6.5.8 ACT.7 is the process. For gas the review is a duty rather than a preference: 49 CFR 192.605(b)(8) requires the operator to periodically review the work done by its personnel to determine the effectiveness and adequacy of the procedures used.</documentation>
+    <startEvent id="n_51_start" name="Crew reports work complete"><messageEventDefinition id="n_51_start_md"/></startEvent>
+    <serviceTask id="n_51_collect" name="Collect the completion record"><documentation>5.1.1.</documentation></serviceTask>
+    <userTask id="n_51_ev" name="Check evidence against the acceptance criteria"><documentation>5.1.1. The criteria were set at 2.5.1. Without them completion is whoever says so.</documentation></userTask>
+    <exclusiveGateway id="n_51_evg" name="Evidence complete"/>
+    <userTask id="n_51_hold" name="Hold for the missing evidence"><documentation>5.1.1. Held, not closed with a note to follow.</documentation></userTask>
+    <userTask id="n_51_qual" name="Apply the quality and compliance check"><documentation>5.1.2. Self-check, independent inspection, or regulatory witness by work type.</documentation></userTask>
+    <serviceTask id="n_51_obl" name="Discharge the obligation the work was raised against"><documentation>5.1.2. Evidence is recorded against the obligation, not only the work.</documentation></serviceTask>
+    <exclusiveGateway id="n_51_qg" name="Standard met"/>
+    <userTask id="n_51_nc" name="Raise the nonconformity"><documentation>5.1.3.</documentation></userTask>
+    <exclusiveGateway id="n_51_disp" name="Disposition"/>
+    <userTask id="n_51_conc" name="Accept under recorded concession"><documentation>5.1.3. Not available where a regulatory obligation is what failed.</documentation></userTask>
+    <sendTask id="n_51_rework" name="Raise rework linked to the original work"><documentation>5.1.3. Linked, or the rework rate stops meaning anything.</documentation></sendTask>
+    <endEvent id="n_51_endrw" name="Rework raised"/>
+    <serviceTask id="n_51_conf" name="Confirm verification, compliance and evidence"><documentation>5.1.4.</documentation></serviceTask>
+    <serviceTask id="n_51_close" name="Close the tasks and the work order"><documentation>5.1.4.</documentation></serviceTask>
+    <sendTask id="n_51_rel" name="Release reservations, permits and clearances"><documentation>5.1.4. Closure that does not release them leaves material committed and windows blocked.</documentation></sendTask>
+    <serviceTask id="n_51_ret" name="Enter the record into retention"><documentation>5.1.4. For gas the repair record on pipe is retained for as long as the pipe remains in service. The clock starts here.</documentation></serviceTask>
+    <sendTask id="n_51_settle" name="Signal cost settlement"><documentation>5.1.4. Hooks to 5.2.</documentation></sendTask>
+    <endEvent id="n_51_end" name="Work closed"/>
+    <sequenceFlow id="f_n_51_start_n_51_collect" sourceRef="n_51_start" targetRef="n_51_collect" name=""/>
+    <sequenceFlow id="f_n_51_collect_n_51_ev" sourceRef="n_51_collect" targetRef="n_51_ev" name=""/>
+    <sequenceFlow id="f_n_51_ev_n_51_evg" sourceRef="n_51_ev" targetRef="n_51_evg" name=""/>
+    <sequenceFlow id="f_n_51_evg_n_51_hold" sourceRef="n_51_evg" targetRef="n_51_hold" name="evidence missing"><conditionExpression xsi:type="tFormalExpression"><![CDATA[evidenceComplete = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_51_hold_n_51_ev" sourceRef="n_51_hold" targetRef="n_51_ev" name="evidence returned"/>
+    <sequenceFlow id="f_n_51_evg_n_51_qual" sourceRef="n_51_evg" targetRef="n_51_qual" name="complete"/>
+    <sequenceFlow id="f_n_51_qual_n_51_obl" sourceRef="n_51_qual" targetRef="n_51_obl" name=""/>
+    <sequenceFlow id="f_n_51_obl_n_51_qg" sourceRef="n_51_obl" targetRef="n_51_qg" name=""/>
+    <sequenceFlow id="f_n_51_qg_n_51_nc" sourceRef="n_51_qg" targetRef="n_51_nc" name="standard not met"><conditionExpression xsi:type="tFormalExpression"><![CDATA[conformity = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_51_nc_n_51_disp" sourceRef="n_51_nc" targetRef="n_51_disp" name=""/>
+    <sequenceFlow id="f_n_51_disp_n_51_conc" sourceRef="n_51_disp" targetRef="n_51_conc" name="concession, non-regulatory only"><conditionExpression xsi:type="tFormalExpression"><![CDATA[disposition = "concession"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_51_disp_n_51_rework" sourceRef="n_51_disp" targetRef="n_51_rework" name="correct or rework"/>
+    <sequenceFlow id="f_n_51_conc_n_51_conf" sourceRef="n_51_conc" targetRef="n_51_conf" name=""/>
+    <sequenceFlow id="f_n_51_rework_n_51_endrw" sourceRef="n_51_rework" targetRef="n_51_endrw" name=""/>
+    <sequenceFlow id="f_n_51_qg_n_51_conf" sourceRef="n_51_qg" targetRef="n_51_conf" name="standard met"/>
+    <sequenceFlow id="f_n_51_conf_n_51_close" sourceRef="n_51_conf" targetRef="n_51_close" name=""/>
+    <sequenceFlow id="f_n_51_close_n_51_rel" sourceRef="n_51_close" targetRef="n_51_rel" name=""/>
+    <sequenceFlow id="f_n_51_close_n_51_ret" sourceRef="n_51_close" targetRef="n_51_ret" name=""/>
+    <sequenceFlow id="f_n_51_ret_n_51_settle" sourceRef="n_51_ret" targetRef="n_51_settle" name=""/>
+    <sequenceFlow id="f_n_51_settle_n_51_end" sourceRef="n_51_settle" targetRef="n_51_end" name=""/>
+  </process>
+  <bpmndi:BPMNDiagram id="dg_P_5_1">
+    <bpmndi:BPMNPlane id="pl_P_5_1" bpmnElement="P_5_1">
+      <bpmndi:BPMNShape id="sh_n_51_start" bpmnElement="n_51_start"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_51_collect" bpmnElement="n_51_collect"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_51_ev" bpmnElement="n_51_ev"><dc:Bounds x="425" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_51_evg" bpmnElement="n_51_evg"><dc:Bounds x="637" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_51_hold" bpmnElement="n_51_hold"><dc:Bounds x="595" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_51_qual" bpmnElement="n_51_qual"><dc:Bounds x="765" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_51_obl" bpmnElement="n_51_obl"><dc:Bounds x="935" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_51_qg" bpmnElement="n_51_qg"><dc:Bounds x="1147" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_51_nc" bpmnElement="n_51_nc"><dc:Bounds x="1105" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_51_disp" bpmnElement="n_51_disp"><dc:Bounds x="1317" y="432" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_51_conc" bpmnElement="n_51_conc"><dc:Bounds x="1275" y="530" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_51_rework" bpmnElement="n_51_rework"><dc:Bounds x="1445" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_51_endrw" bpmnElement="n_51_endrw"><dc:Bounds x="1662" y="437" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_51_conf" bpmnElement="n_51_conf"><dc:Bounds x="1275" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_51_close" bpmnElement="n_51_close"><dc:Bounds x="1445" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_51_rel" bpmnElement="n_51_rel"><dc:Bounds x="1615" y="90" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_51_ret" bpmnElement="n_51_ret"><dc:Bounds x="1615" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_51_settle" bpmnElement="n_51_settle"><dc:Bounds x="1785" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_51_end" bpmnElement="n_51_end"><dc:Bounds x="2002" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ed_f_n_51_start_n_51_collect" bpmnElement="f_n_51_start_n_51_collect"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_51_collect_n_51_ev" bpmnElement="f_n_51_collect_n_51_ev"><di:waypoint x="385" y="235"/><di:waypoint x="425" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_51_ev_n_51_evg" bpmnElement="f_n_51_ev_n_51_evg"><di:waypoint x="555" y="235"/><di:waypoint x="637" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_51_evg_n_51_hold" bpmnElement="f_n_51_evg_n_51_hold"><di:waypoint x="683" y="235"/><di:waypoint x="570" y="235"/><di:waypoint x="570" y="455"/><di:waypoint x="595" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_51_hold_n_51_ev" bpmnElement="f_n_51_hold_n_51_ev"><di:waypoint x="725" y="455"/><di:waypoint x="400" y="455"/><di:waypoint x="400" y="235"/><di:waypoint x="425" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_51_evg_n_51_qual" bpmnElement="f_n_51_evg_n_51_qual"><di:waypoint x="683" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_51_qual_n_51_obl" bpmnElement="f_n_51_qual_n_51_obl"><di:waypoint x="895" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_51_obl_n_51_qg" bpmnElement="f_n_51_obl_n_51_qg"><di:waypoint x="1065" y="235"/><di:waypoint x="1147" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_51_qg_n_51_nc" bpmnElement="f_n_51_qg_n_51_nc"><di:waypoint x="1193" y="235"/><di:waypoint x="1080" y="235"/><di:waypoint x="1080" y="455"/><di:waypoint x="1105" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_51_nc_n_51_disp" bpmnElement="f_n_51_nc_n_51_disp"><di:waypoint x="1235" y="455"/><di:waypoint x="1317" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_51_disp_n_51_conc" bpmnElement="f_n_51_disp_n_51_conc"><di:waypoint x="1363" y="455"/><di:waypoint x="1250" y="455"/><di:waypoint x="1250" y="565"/><di:waypoint x="1275" y="565"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_51_disp_n_51_rework" bpmnElement="f_n_51_disp_n_51_rework"><di:waypoint x="1363" y="455"/><di:waypoint x="1445" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_51_conc_n_51_conf" bpmnElement="f_n_51_conc_n_51_conf"><di:waypoint x="1405" y="565"/><di:waypoint x="1250" y="565"/><di:waypoint x="1250" y="235"/><di:waypoint x="1275" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_51_rework_n_51_endrw" bpmnElement="f_n_51_rework_n_51_endrw"><di:waypoint x="1575" y="455"/><di:waypoint x="1662" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_51_qg_n_51_conf" bpmnElement="f_n_51_qg_n_51_conf"><di:waypoint x="1193" y="235"/><di:waypoint x="1275" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_51_conf_n_51_close" bpmnElement="f_n_51_conf_n_51_close"><di:waypoint x="1405" y="235"/><di:waypoint x="1445" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_51_close_n_51_rel" bpmnElement="f_n_51_close_n_51_rel"><di:waypoint x="1575" y="235"/><di:waypoint x="1590" y="235"/><di:waypoint x="1590" y="125"/><di:waypoint x="1615" y="125"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_51_close_n_51_ret" bpmnElement="f_n_51_close_n_51_ret"><di:waypoint x="1575" y="235"/><di:waypoint x="1615" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_51_ret_n_51_settle" bpmnElement="f_n_51_ret_n_51_settle"><di:waypoint x="1745" y="235"/><di:waypoint x="1785" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_51_settle_n_51_end" bpmnElement="f_n_51_settle_n_51_end"><di:waypoint x="1915" y="235"/><di:waypoint x="2002" y="235"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>
