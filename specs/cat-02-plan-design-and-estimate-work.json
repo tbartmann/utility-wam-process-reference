@@ -352,8 +352,8 @@
         },
         {
           "for": "controls.regulatory (electric)",
-          "cite": "NESC ANSI/IEEE C2-2023 sets safety criteria and contains no design-review, approval or documentation requirement",
-          "status": "clause-verified"
+          "cite": "NESC ANSI/IEEE C2-2023 is a safety code; design review, approval and documentation are not among its rules",
+          "status": "judgment"
         },
         {
           "for": "design process for RUS borrowers",
@@ -1328,7 +1328,7 @@
         {
           "for": "consensus standard",
           "cite": "ASTM E2516-11(2024) Standard Classification for Cost Estimate Classification System",
-          "status": "clause-verified"
+          "status": "consensus"
         },
         {
           "for": "basis of estimate",
@@ -2008,7 +2008,7 @@
         {
           "for": "contract basis",
           "cite": "EN 13269:2016 Guideline on preparation of maintenance contracts",
-          "status": "clause-verified"
+          "status": "consensus"
         },
         {
           "for": "measures",
@@ -4332,6 +4332,14 @@
         "basis": "consensus",
         "primary": "Common Ground Alliance Best Practices v22.0, March 2026"
       }
+    }
+  ],
+  "merge_corrections": [
+    {
+      "date": "2026-08-29",
+      "by": "Claude",
+      "what": "citation form: a status may not claim more than the citation string supports. 'clause-verified' without a clause dropped to 'consensus'; an asserted absence dropped to 'judgment'.",
+      "count": 3
     }
   ]
 }

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/" id="Slow_and_surplus" name="13.5.6 Identify slow-moving and surplus inventory" namespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <description>The output is a class and a recommended action - values. Thresholds for slow and dead are operator judgment and arrive as inputs; EN 17007 cl. 6.10 DTA.5 is the data process behind the review. The boundary this table has to hold is financial: 18 CFR Part 101 unitisation belongs to 5.3, disposal of faulty items is cl. 6.11 SPP.12 and physical waste is 19.3. A surplus class is a recommendation about stock. It is not a plant retirement, and material carrying a plant account must not be disposed of from this screen.</description>
+  <inputData id="in_ageBand" name="Age against the operator's band"><variable id="in_ageBand_v" name="Age against the operator's band" typeRef="string"/></inputData>
+  <inputData id="in_movement" name="Movement in the review window"><variable id="in_movement_v" name="Movement in the review window" typeRef="boolean"/></inputData>
+  <inputData id="in_openDemand" name="Open programme demand exists"><variable id="in_openDemand_v" name="Open programme demand exists" typeRef="boolean"/></inputData>
+  <inputData id="in_plantAccount" name="Carries a plant account"><variable id="in_plantAccount_v" name="Carries a plant account" typeRef="boolean"/></inputData>
+  <inputData id="in_returnable" name="Returnable to the vendor under contract"><variable id="in_returnable_v" name="Returnable to the vendor under contract" typeRef="boolean"/></inputData>
+  <decision id="d_13_5_6" name="Surplus class and action">
+    <variable id="d_13_5_6_v" name="Surplus class and action" typeRef="string"/>
+    <decisionTable id="d_13_5_6_dt" hitPolicy="FIRST" preferredOrientation="Rule-as-Row">
+      <input id="d_13_5_6_i1" label="Carries a plant account"><inputExpression id="d_13_5_6_i1_e" typeRef="boolean"><text>in_plantAccount</text></inputExpression></input>
+      <input id="d_13_5_6_i2" label="Open programme demand"><inputExpression id="d_13_5_6_i2_e" typeRef="boolean"><text>in_openDemand</text></inputExpression></input>
+      <input id="d_13_5_6_i3" label="Movement in the window"><inputExpression id="d_13_5_6_i3_e" typeRef="boolean"><text>in_movement</text></inputExpression></input>
+      <input id="d_13_5_6_i4" label="Age band"><inputExpression id="d_13_5_6_i4_e" typeRef="string"><text>in_ageBand</text></inputExpression></input>
+      <input id="d_13_5_6_i5" label="Returnable to vendor"><inputExpression id="d_13_5_6_i5_e" typeRef="boolean"><text>in_returnable</text></inputExpression></input>
+      <output id="d_13_5_6_o" label="Surplus class and action" name="Surplus class and action" typeRef="string"/>
+      <rule id="d_13_5_6_r1">
+        <description>Material carrying a plant account is the property record's, not the storeroom's. 5.3 decides what happens to it under 18 CFR Part 101. Disposing of it from a slow-moving screen is how a retirement gets made by somebody with no authority to make one.</description>
+        <inputEntry id="d_13_5_6_r1_ie1"><text>true</text></inputEntry>
+        <inputEntry id="d_13_5_6_r1_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_13_5_6_r1_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_13_5_6_r1_ie4"><text>-</text></inputEntry>
+        <inputEntry id="d_13_5_6_r1_ie5"><text>-</text></inputEntry>
+        <outputEntry id="d_13_5_6_r1_oe"><text>"referToUnitisation"</text></outputEntry>
+      </rule>
+      <rule id="d_13_5_6_r2">
+        <description>Not moving because the programme it was bought for has not started. Age says nothing useful about this item.</description>
+        <inputEntry id="d_13_5_6_r2_ie1"><text>false</text></inputEntry>
+        <inputEntry id="d_13_5_6_r2_ie2"><text>true</text></inputEntry>
+        <inputEntry id="d_13_5_6_r2_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_13_5_6_r2_ie4"><text>-</text></inputEntry>
+        <inputEntry id="d_13_5_6_r2_ie5"><text>-</text></inputEntry>
+        <outputEntry id="d_13_5_6_r2_oe"><text>"holdForProgramme"</text></outputEntry>
+      </rule>
+      <rule id="d_13_5_6_r3">
+        <description>Moving, but slowly. Monitored, not actioned.</description>
+        <inputEntry id="d_13_5_6_r3_ie1"><text>false</text></inputEntry>
+        <inputEntry id="d_13_5_6_r3_ie2"><text>false</text></inputEntry>
+        <inputEntry id="d_13_5_6_r3_ie3"><text>true</text></inputEntry>
+        <inputEntry id="d_13_5_6_r3_ie4"><text>-</text></inputEntry>
+        <inputEntry id="d_13_5_6_r3_ie5"><text>-</text></inputEntry>
+        <outputEntry id="d_13_5_6_r3_oe"><text>"slowMonitor"</text></outputEntry>
+      </rule>
+      <rule id="d_13_5_6_r4">
+        <description>Still inside the operator's age band.</description>
+        <inputEntry id="d_13_5_6_r4_ie1"><text>false</text></inputEntry>
+        <inputEntry id="d_13_5_6_r4_ie2"><text>false</text></inputEntry>
+        <inputEntry id="d_13_5_6_r4_ie3"><text>false</text></inputEntry>
+        <inputEntry id="d_13_5_6_r4_ie4"><text>"withinBand"</text></inputEntry>
+        <inputEntry id="d_13_5_6_r4_ie5"><text>-</text></inputEntry>
+        <outputEntry id="d_13_5_6_r4_oe"><text>"slowMonitor"</text></outputEntry>
+      </rule>
+      <rule id="d_13_5_6_r5">
+        <description>Beyond the band and the contract takes it back. The cheapest exit and the one most often missed because nobody checks the contract.</description>
+        <inputEntry id="d_13_5_6_r5_ie1"><text>false</text></inputEntry>
+        <inputEntry id="d_13_5_6_r5_ie2"><text>false</text></inputEntry>
+        <inputEntry id="d_13_5_6_r5_ie3"><text>false</text></inputEntry>
+        <inputEntry id="d_13_5_6_r5_ie4"><text>"beyondBand"</text></inputEntry>
+        <inputEntry id="d_13_5_6_r5_ie5"><text>true</text></inputEntry>
+        <outputEntry id="d_13_5_6_r5_oe"><text>"returnToVendor"</text></outputEntry>
+      </rule>
+      <rule id="d_13_5_6_r6">
+        <description>Beyond the band with no return route. Transfer to a location that wants it, or dispose - and disposal of a faulty item is SPP.12 while the physical waste route is 19.3.</description>
+        <inputEntry id="d_13_5_6_r6_ie1"><text>false</text></inputEntry>
+        <inputEntry id="d_13_5_6_r6_ie2"><text>false</text></inputEntry>
+        <inputEntry id="d_13_5_6_r6_ie3"><text>false</text></inputEntry>
+        <inputEntry id="d_13_5_6_r6_ie4"><text>"beyondBand"</text></inputEntry>
+        <inputEntry id="d_13_5_6_r6_ie5"><text>false</text></inputEntry>
+        <outputEntry id="d_13_5_6_r6_oe"><text>"transferOrDispose"</text></outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram id="drd_Slow_and_surplus">
+      <dmndi:DMNShape id="sh_in_ageBand" dmnElementRef="in_ageBand"><dc:Bounds x="60" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_movement" dmnElementRef="in_movement"><dc:Bounds x="245" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_openDemand" dmnElementRef="in_openDemand"><dc:Bounds x="430" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_plantAccount" dmnElementRef="in_plantAccount"><dc:Bounds x="615" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_returnable" dmnElementRef="in_returnable"><dc:Bounds x="800" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_d_13_5_6" dmnElementRef="d_13_5_6"><dc:Bounds x="60" y="240" width="180" height="70"/></dmndi:DMNShape>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</definitions>

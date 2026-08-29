@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/" id="Start_stop_transfer" name="10.5.1 Receive start, stop or transfer request" namespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <description>The output is a classification. ISO/IEC 20000-1:2018 cl. 8.6.2 service request management is the labelled ITSM analogue for intake; the classification itself is the operator's. The rule that earns its place: a transfer is TWO premises under one request, and treating it as two unrelated orders is how an account ends up stranded at the premise the customer left.</description>
+  <inputData id="in_startPremise" name="Premise to start at"><variable id="in_startPremise_v" name="Premise to start at" typeRef="boolean"/></inputData>
+  <inputData id="in_stopPremise" name="Premise to stop at"><variable id="in_stopPremise_v" name="Premise to stop at" typeRef="boolean"/></inputData>
+  <inputData id="in_sameCustomer" name="Same requesting person"><variable id="in_sameCustomer_v" name="Same requesting person" typeRef="boolean"/></inputData>
+  <inputData id="in_identityBound" name="Requesting person bound to the account"><variable id="in_identityBound_v" name="Requesting person bound to the account" typeRef="boolean"/></inputData>
+  <decision id="d_10_5_1" name="Move classification">
+    <variable id="d_10_5_1_v" name="Move classification" typeRef="string"/>
+    <decisionTable id="d_10_5_1_dt" hitPolicy="FIRST" preferredOrientation="Rule-as-Row">
+      <input id="d_10_5_1_i1" label="Requesting person bound"><inputExpression id="d_10_5_1_i1_e" typeRef="boolean"><text>in_identityBound</text></inputExpression></input>
+      <input id="d_10_5_1_i2" label="Premise to start at"><inputExpression id="d_10_5_1_i2_e" typeRef="boolean"><text>in_startPremise</text></inputExpression></input>
+      <input id="d_10_5_1_i3" label="Premise to stop at"><inputExpression id="d_10_5_1_i3_e" typeRef="boolean"><text>in_stopPremise</text></inputExpression></input>
+      <input id="d_10_5_1_i4" label="Same requesting person"><inputExpression id="d_10_5_1_i4_e" typeRef="boolean"><text>in_sameCustomer</text></inputExpression></input>
+      <output id="d_10_5_1_o" label="Move classification" name="Move classification" typeRef="string"/>
+      <rule id="d_10_5_1_r1">
+        <description>Held, not refused. 10.1.1 binds identity and the request resumes when it does.</description>
+        <inputEntry id="d_10_5_1_r1_ie1"><text>false</text></inputEntry>
+        <inputEntry id="d_10_5_1_r1_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_10_5_1_r1_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_10_5_1_r1_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_10_5_1_r1_oe"><text>"holdIncompleteIdentity"</text></outputEntry>
+      </rule>
+      <rule id="d_10_5_1_r2">
+        <description>One request, two premises, one person. 10.5.4 raises the paired orders and 10.5.5 will not close the request until both halves are back.</description>
+        <inputEntry id="d_10_5_1_r2_ie1"><text>true</text></inputEntry>
+        <inputEntry id="d_10_5_1_r2_ie2"><text>true</text></inputEntry>
+        <inputEntry id="d_10_5_1_r2_ie3"><text>true</text></inputEntry>
+        <inputEntry id="d_10_5_1_r2_ie4"><text>true</text></inputEntry>
+        <outputEntry id="d_10_5_1_r2_oe"><text>"transfer"</text></outputEntry>
+      </rule>
+      <rule id="d_10_5_1_r3">
+        <description>Two premises but two people. These are two requests that happen to share a date, and pairing them would bind two accounts that have nothing to do with each other.</description>
+        <inputEntry id="d_10_5_1_r3_ie1"><text>true</text></inputEntry>
+        <inputEntry id="d_10_5_1_r3_ie2"><text>true</text></inputEntry>
+        <inputEntry id="d_10_5_1_r3_ie3"><text>true</text></inputEntry>
+        <inputEntry id="d_10_5_1_r3_ie4"><text>false</text></inputEntry>
+        <outputEntry id="d_10_5_1_r3_oe"><text>"stopAndSeparateStart"</text></outputEntry>
+      </rule>
+      <rule id="d_10_5_1_r4">
+        <description>A turn-on at one premise.</description>
+        <inputEntry id="d_10_5_1_r4_ie1"><text>true</text></inputEntry>
+        <inputEntry id="d_10_5_1_r4_ie2"><text>true</text></inputEntry>
+        <inputEntry id="d_10_5_1_r4_ie3"><text>false</text></inputEntry>
+        <inputEntry id="d_10_5_1_r4_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_10_5_1_r4_oe"><text>"start"</text></outputEntry>
+      </rule>
+      <rule id="d_10_5_1_r5">
+        <description>A turn-off at one premise.</description>
+        <inputEntry id="d_10_5_1_r5_ie1"><text>true</text></inputEntry>
+        <inputEntry id="d_10_5_1_r5_ie2"><text>false</text></inputEntry>
+        <inputEntry id="d_10_5_1_r5_ie3"><text>true</text></inputEntry>
+        <inputEntry id="d_10_5_1_r5_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_10_5_1_r5_oe"><text>"stop"</text></outputEntry>
+      </rule>
+      <rule id="d_10_5_1_r6">
+        <description>Neither premise is identified. A new premise that needs a service line built is 10.6, not a start on an empty lot.</description>
+        <inputEntry id="d_10_5_1_r6_ie1"><text>true</text></inputEntry>
+        <inputEntry id="d_10_5_1_r6_ie2"><text>false</text></inputEntry>
+        <inputEntry id="d_10_5_1_r6_ie3"><text>false</text></inputEntry>
+        <inputEntry id="d_10_5_1_r6_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_10_5_1_r6_oe"><text>"holdNoPremise"</text></outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram id="drd_Start_stop_transfer">
+      <dmndi:DMNShape id="sh_in_startPremise" dmnElementRef="in_startPremise"><dc:Bounds x="60" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_stopPremise" dmnElementRef="in_stopPremise"><dc:Bounds x="245" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_sameCustomer" dmnElementRef="in_sameCustomer"><dc:Bounds x="430" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_identityBound" dmnElementRef="in_identityBound"><dc:Bounds x="615" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_d_10_5_1" dmnElementRef="d_10_5_1"><dc:Bounds x="60" y="240" width="180" height="70"/></dmndi:DMNShape>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</definitions>

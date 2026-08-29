@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/" id="Qualify_new_service" name="10.6.1 Receive and qualify new service request" namespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <description>The output is simple, extension or design-required - a classification that decides whether category 2.0 is involved at all. A new service is asset creation rather than EN 17007 maintenance; COR.1 still classifies the request. ISO 9001:2015 cl. 8.3 design and development is cited by title as the analogue for what happens after 'design-required', and its content is not paraphrased. Generation and storage do not come through here - that is 10.6.6.</description>
+  <inputData id="in_mainAtFrontage" name="Distribution main or line at the frontage"><variable id="in_mainAtFrontage_v" name="Distribution main or line at the frontage" typeRef="boolean"/></inputData>
+  <inputData id="in_loadWithinStandard" name="Load within the standard service offering"><variable id="in_loadWithinStandard_v" name="Load within the standard service offering" typeRef="boolean"/></inputData>
+  <inputData id="in_crossingRequired" name="Road, rail or water crossing required"><variable id="in_crossingRequired_v" name="Road, rail or water crossing required" typeRef="boolean"/></inputData>
+  <inputData id="in_generationRequested" name="Generation or storage export requested"><variable id="in_generationRequested_v" name="Generation or storage export requested" typeRef="boolean"/></inputData>
+  <decision id="d_10_6_1" name="Service request class">
+    <variable id="d_10_6_1_v" name="Service request class" typeRef="string"/>
+    <decisionTable id="d_10_6_1_dt" hitPolicy="FIRST" preferredOrientation="Rule-as-Row">
+      <input id="d_10_6_1_i1" label="Generation or storage export requested"><inputExpression id="d_10_6_1_i1_e" typeRef="boolean"><text>in_generationRequested</text></inputExpression></input>
+      <input id="d_10_6_1_i2" label="Main or line at the frontage"><inputExpression id="d_10_6_1_i2_e" typeRef="boolean"><text>in_mainAtFrontage</text></inputExpression></input>
+      <input id="d_10_6_1_i3" label="Load within the standard offering"><inputExpression id="d_10_6_1_i3_e" typeRef="boolean"><text>in_loadWithinStandard</text></inputExpression></input>
+      <input id="d_10_6_1_i4" label="Crossing required"><inputExpression id="d_10_6_1_i4_e" typeRef="boolean"><text>in_crossingRequired</text></inputExpression></input>
+      <output id="d_10_6_1_o" label="Service request class" name="Service request class" typeRef="string"/>
+      <rule id="d_10_6_1_r1">
+        <description>Export changes what the network has to tolerate. 10.6.6 reviews it and 10.6.7 commissions it; neither is a service set.</description>
+        <inputEntry id="d_10_6_1_r1_ie1"><text>true</text></inputEntry>
+        <inputEntry id="d_10_6_1_r1_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_10_6_1_r1_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_10_6_1_r1_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_10_6_1_r1_oe"><text>"interconnectionReview"</text></outputEntry>
+      </rule>
+      <rule id="d_10_6_1_r2">
+        <description>A service line from an existing main to a standard load. 10.6.2 surveys the route and 10.6.4 builds it without a design cycle.</description>
+        <inputEntry id="d_10_6_1_r2_ie1"><text>false</text></inputEntry>
+        <inputEntry id="d_10_6_1_r2_ie2"><text>true</text></inputEntry>
+        <inputEntry id="d_10_6_1_r2_ie3"><text>true</text></inputEntry>
+        <inputEntry id="d_10_6_1_r2_ie4"><text>false</text></inputEntry>
+        <outputEntry id="d_10_6_1_r2_oe"><text>"simpleSet"</text></outputEntry>
+      </rule>
+      <rule id="d_10_6_1_r3">
+        <description>A crossing is a permit and an engineered detail whatever the load. 2.0 designs it.</description>
+        <inputEntry id="d_10_6_1_r3_ie1"><text>false</text></inputEntry>
+        <inputEntry id="d_10_6_1_r3_ie2"><text>true</text></inputEntry>
+        <inputEntry id="d_10_6_1_r3_ie3"><text>true</text></inputEntry>
+        <inputEntry id="d_10_6_1_r3_ie4"><text>true</text></inputEntry>
+        <outputEntry id="d_10_6_1_r3_oe"><text>"designRequired"</text></outputEntry>
+      </rule>
+      <rule id="d_10_6_1_r4">
+        <description>Load outside the standard offering. Transformer sizing, regulator selection or pressure class is an engineering determination, not a catalogue pick.</description>
+        <inputEntry id="d_10_6_1_r4_ie1"><text>false</text></inputEntry>
+        <inputEntry id="d_10_6_1_r4_ie2"><text>true</text></inputEntry>
+        <inputEntry id="d_10_6_1_r4_ie3"><text>false</text></inputEntry>
+        <inputEntry id="d_10_6_1_r4_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_10_6_1_r4_oe"><text>"designRequired"</text></outputEntry>
+      </rule>
+      <rule id="d_10_6_1_r5">
+        <description>No main or line at the frontage. The network has to be extended before a service can be set, which makes this 2.0 work with a contribution attached at 10.6.3.</description>
+        <inputEntry id="d_10_6_1_r5_ie1"><text>false</text></inputEntry>
+        <inputEntry id="d_10_6_1_r5_ie2"><text>false</text></inputEntry>
+        <inputEntry id="d_10_6_1_r5_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_10_6_1_r5_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_10_6_1_r5_oe"><text>"extension"</text></outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram id="drd_Qualify_new_service">
+      <dmndi:DMNShape id="sh_in_mainAtFrontage" dmnElementRef="in_mainAtFrontage"><dc:Bounds x="60" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_loadWithinStandard" dmnElementRef="in_loadWithinStandard"><dc:Bounds x="245" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_crossingRequired" dmnElementRef="in_crossingRequired"><dc:Bounds x="430" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_generationRequested" dmnElementRef="in_generationRequested"><dc:Bounds x="615" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_d_10_6_1" dmnElementRef="d_10_6_1"><dc:Bounds x="60" y="240" width="180" height="70"/></dmndi:DMNShape>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</definitions>

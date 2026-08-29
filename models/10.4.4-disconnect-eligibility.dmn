@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/" id="Disconnect_eligibility" name="10.4.4 Apply disconnection eligibility and protection rules" namespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <description>The output is eligible, protected or incomplete - a value, not a state change of the meter. The table deliberately carries no winter date, no medical-certificate period and no notice count, because no source in this reference supplies one: 16 U.S.C. 824o puts local distribution outside the ERO and the Source Authority Pack contains no customer-protection statute. Every rule therefore tests whether the operator's OWN bound rule is satisfied, and the second decision returns which authority that rule came from. This is the same shape as 7.2.2, which returns who sets a vegetation clearance rather than inventing the distance.</description>
+  <inputData id="in_protectionFlag" name="Protection flag on the account"><variable id="in_protectionFlag_v" name="Protection flag on the account" typeRef="boolean"/></inputData>
+  <inputData id="in_noticeRuleSatisfied" name="Operator's notice rule satisfied"><variable id="in_noticeRuleSatisfied_v" name="Operator's notice rule satisfied" typeRef="boolean"/></inputData>
+  <inputData id="in_arrangementActive" name="Payment arrangement active"><variable id="in_arrangementActive_v" name="Payment arrangement active" typeRef="boolean"/></inputData>
+  <inputData id="in_tariffThresholdMet" name="Tariff arrears threshold met"><variable id="in_tariffThresholdMet_v" name="Tariff arrears threshold met" typeRef="boolean"/></inputData>
+  <inputData id="in_occupancyKnown" name="Premise occupancy known"><variable id="in_occupancyKnown_v" name="Premise occupancy known" typeRef="boolean"/></inputData>
+  <inputData id="in_ruleSource" name="Authority the operator is bound by"><variable id="in_ruleSource_v" name="Authority the operator is bound by" typeRef="string"/></inputData>
+  <knowledgeSource id="ks_state" name="State commission rules and the operator's tariff"><description>This is where residential disconnection obligation actually lives. There is no federal nonpay-disconnect code for distribution customers, and this reference does not hold any state one. Winter moratoria, medical certificates, notice periods and arrears thresholds are all set by the commission the operator answers to and by the filed tariff. The rules below test whether that rule is satisfied; they do not restate it.</description></knowledgeSource>
+  <decision id="d_10_4_4" name="Disconnection eligibility">
+    <variable id="d_10_4_4_v" name="Disconnection eligibility" typeRef="string"/>
+    <informationRequirement id="ir_d_10_4_4_ks_state"><requiredInput href="#ks_state"/></informationRequirement>
+    <decisionTable id="d_10_4_4_dt" hitPolicy="FIRST" preferredOrientation="Rule-as-Row">
+      <input id="d_10_4_4_i1" label="Protection flag on the account"><inputExpression id="d_10_4_4_i1_e" typeRef="boolean"><text>in_protectionFlag</text></inputExpression></input>
+      <input id="d_10_4_4_i2" label="Payment arrangement active"><inputExpression id="d_10_4_4_i2_e" typeRef="boolean"><text>in_arrangementActive</text></inputExpression></input>
+      <input id="d_10_4_4_i3" label="Occupancy known"><inputExpression id="d_10_4_4_i3_e" typeRef="boolean"><text>in_occupancyKnown</text></inputExpression></input>
+      <input id="d_10_4_4_i4" label="Operator's notice rule satisfied"><inputExpression id="d_10_4_4_i4_e" typeRef="boolean"><text>in_noticeRuleSatisfied</text></inputExpression></input>
+      <input id="d_10_4_4_i5" label="Tariff arrears threshold met"><inputExpression id="d_10_4_4_i5_e" typeRef="boolean"><text>in_tariffThresholdMet</text></inputExpression></input>
+      <output id="d_10_4_4_o" label="Disconnection eligibility" name="Disconnection eligibility" typeRef="string"/>
+      <rule id="d_10_4_4_r1">
+        <description>A protection recorded against the account stops the order before anything else is tested. Which protections exist, and what evidence sustains them, is the commission's rule and the tariff's.</description>
+        <inputEntry id="d_10_4_4_r1_ie1"><text>true</text></inputEntry>
+        <inputEntry id="d_10_4_4_r1_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_10_4_4_r1_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_10_4_4_r1_ie4"><text>-</text></inputEntry>
+        <inputEntry id="d_10_4_4_r1_ie5"><text>-</text></inputEntry>
+        <outputEntry id="d_10_4_4_r1_oe"><text>"protected"</text></outputEntry>
+      </rule>
+      <rule id="d_10_4_4_r2">
+        <description>An active arrangement the customer is keeping is a protection. Cutting through one is a collections failure however overdue the original balance.</description>
+        <inputEntry id="d_10_4_4_r2_ie1"><text>-</text></inputEntry>
+        <inputEntry id="d_10_4_4_r2_ie2"><text>true</text></inputEntry>
+        <inputEntry id="d_10_4_4_r2_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_10_4_4_r2_ie4"><text>-</text></inputEntry>
+        <inputEntry id="d_10_4_4_r2_ie5"><text>-</text></inputEntry>
+        <outputEntry id="d_10_4_4_r2_oe"><text>"protected"</text></outputEntry>
+      </rule>
+      <rule id="d_10_4_4_r3">
+        <description>Unknown occupancy. A cut at a premise whose occupant is not established is a risk to somebody who may not be the debtor. 10.5.2 resolves it.</description>
+        <inputEntry id="d_10_4_4_r3_ie1"><text>-</text></inputEntry>
+        <inputEntry id="d_10_4_4_r3_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_10_4_4_r3_ie3"><text>false</text></inputEntry>
+        <inputEntry id="d_10_4_4_r3_ie4"><text>-</text></inputEntry>
+        <inputEntry id="d_10_4_4_r3_ie5"><text>-</text></inputEntry>
+        <outputEntry id="d_10_4_4_r3_oe"><text>"incomplete"</text></outputEntry>
+      </rule>
+      <rule id="d_10_4_4_r4">
+        <description>The notice rule the operator is bound by has not been satisfied. Incomplete, not protected: the difference is whether the account can become eligible by the operator doing something.</description>
+        <inputEntry id="d_10_4_4_r4_ie1"><text>-</text></inputEntry>
+        <inputEntry id="d_10_4_4_r4_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_10_4_4_r4_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_10_4_4_r4_ie4"><text>false</text></inputEntry>
+        <inputEntry id="d_10_4_4_r4_ie5"><text>-</text></inputEntry>
+        <outputEntry id="d_10_4_4_r4_oe"><text>"incomplete"</text></outputEntry>
+      </rule>
+      <rule id="d_10_4_4_r5">
+        <description>The arrears threshold in the filed tariff is not met. There is nothing to collect at the premise yet.</description>
+        <inputEntry id="d_10_4_4_r5_ie1"><text>-</text></inputEntry>
+        <inputEntry id="d_10_4_4_r5_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_10_4_4_r5_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_10_4_4_r5_ie4"><text>-</text></inputEntry>
+        <inputEntry id="d_10_4_4_r5_ie5"><text>false</text></inputEntry>
+        <outputEntry id="d_10_4_4_r5_oe"><text>"incomplete"</text></outputEntry>
+      </rule>
+      <rule id="d_10_4_4_r6">
+        <description>Every gate the operator is bound by is satisfied. 10.4.1 may issue the order; 10.4.2 must confirm the result is still true when the crew arrives, because a payment posted in between protects the customer only if somebody looks.</description>
+        <inputEntry id="d_10_4_4_r6_ie1"><text>false</text></inputEntry>
+        <inputEntry id="d_10_4_4_r6_ie2"><text>false</text></inputEntry>
+        <inputEntry id="d_10_4_4_r6_ie3"><text>true</text></inputEntry>
+        <inputEntry id="d_10_4_4_r6_ie4"><text>true</text></inputEntry>
+        <inputEntry id="d_10_4_4_r6_ie5"><text>true</text></inputEntry>
+        <outputEntry id="d_10_4_4_r6_oe"><text>"eligible"</text></outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <decision id="d_10_4_4_src" name="Authority for the rule">
+    <variable id="d_10_4_4_src_v" name="Authority for the rule" typeRef="string"/>
+    <informationRequirement id="ir_d_10_4_4_src_ks_state"><requiredInput href="#ks_state"/></informationRequirement>
+    <decisionTable id="d_10_4_4_src_dt" hitPolicy="UNIQUE" preferredOrientation="Rule-as-Row">
+      <input id="d_10_4_4_src_i1" label="Authority the operator is bound by"><inputExpression id="d_10_4_4_src_i1_e" typeRef="string"><text>in_ruleSource</text></inputExpression></input>
+      <output id="d_10_4_4_src_o" label="Authority for the rule" name="Authority for the rule" typeRef="string"/>
+      <rule id="d_10_4_4_src_r1">
+        <description>The usual case for residential nonpay disconnection.</description>
+        <inputEntry id="d_10_4_4_src_r1_ie1"><text>"statePUC"</text></inputEntry>
+        <outputEntry id="d_10_4_4_src_r1_oe"><text>"state commission order or regulation"</text></outputEntry>
+      </rule>
+      <rule id="d_10_4_4_src_r2">
+        <description>Thresholds, reconnect clocks and deposit rules commonly sit here rather than in the commission's own rules.</description>
+        <inputEntry id="d_10_4_4_src_r2_ie1"><text>"tariff"</text></inputEntry>
+        <outputEntry id="d_10_4_4_src_r2_oe"><text>"filed tariff"</text></outputEntry>
+      </rule>
+      <rule id="d_10_4_4_src_r3">
+        <description>Recorded as operator policy so an auditor can see it is not law. If a category 10.4 decision is running on operator policy alone, that is a finding, not a configuration detail.</description>
+        <inputEntry id="d_10_4_4_src_r3_ie1"><text>"operator"</text></inputEntry>
+        <outputEntry id="d_10_4_4_src_r3_oe"><text>"operator policy, no external rule identified"</text></outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram id="drd_Disconnect_eligibility">
+      <dmndi:DMNShape id="sh_in_protectionFlag" dmnElementRef="in_protectionFlag"><dc:Bounds x="60" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_noticeRuleSatisfied" dmnElementRef="in_noticeRuleSatisfied"><dc:Bounds x="245" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_arrangementActive" dmnElementRef="in_arrangementActive"><dc:Bounds x="430" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_tariffThresholdMet" dmnElementRef="in_tariffThresholdMet"><dc:Bounds x="615" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_occupancyKnown" dmnElementRef="in_occupancyKnown"><dc:Bounds x="800" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_ruleSource" dmnElementRef="in_ruleSource"><dc:Bounds x="985" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_d_10_4_4" dmnElementRef="d_10_4_4"><dc:Bounds x="60" y="240" width="180" height="70"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_d_10_4_4_src" dmnElementRef="d_10_4_4_src"><dc:Bounds x="260" y="240" width="180" height="70"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_ks_state" dmnElementRef="ks_state"><dc:Bounds x="900" y="100" width="160" height="55"/></dmndi:DMNShape>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</definitions>

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/CMMN/20151109/MODEL" xmlns:cmmndi="http://www.omg.org/spec/CMMN/20151109/CMMNDI" xmlns:dc="http://www.omg.org/spec/CMMN/20151109/DC" xmlns:di="http://www.omg.org/spec/CMMN/20151109/DI" id="defs_Interconnection_review" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <case id="Interconnection_review" name="10.6.6 Review and approve distributed energy resource interconnection">
+    <caseFileModel id="Interconnection_review_cfm">
+      <caseFileItem id="cf_app" name="Interconnection application and one-line"/>
+      <caseFileItem id="cf_host" name="Hosting capacity and protection at the location"/>
+      <caseFileItem id="cf_der" name="Existing DER at the premise"/>
+      <caseFileItem id="cf_cond" name="Conditions carried on the application"/>
+    </caseFileModel>
+    <casePlanModel id="Interconnection_review_plan" name="10.6.6 Review and approve distributed energy resource interconnection" autoComplete="true">
+      <documentation>Two competent engineers will not sequence screens, studies and conditions the same way, which is the CMMN test. The case is drawn without naming a test method or a screen threshold: IEEE 1547 is the usual interconnection standard and is not in the Source Authority Pack, FERC's small generator procedures are wholesale, and 16 U.S.C. 824o keeps local distribution outside the ERO - so distribution interconnection rule is the state's and the operator's. What the case does fix is the boundary: it ends at a decision, never at an energised resource. Permission to operate is granted at 10.6.7 after a witness, and it is not a clearance. Camunda 8 dropped CMMN, so a runtime for this file means Flowable or an equivalent.</documentation>
+      <planItem id="pi_t_intake" name="Check the application is complete" definitionRef="t_intake_def">
+        <itemControl id="ic_t_intake">
+          <requiredRule id="rr_t_intake"><condition><![CDATA[true]]></condition></requiredRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_screen" name="Screen against the operator's interconnection rules" definitionRef="t_screen_def">
+        <itemControl id="ic_t_screen">
+          <requiredRule id="rr_t_screen"><condition><![CDATA[true]]></condition></requiredRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_aggregate" name="Assess aggregate DER already on the circuit" definitionRef="t_aggregate_def">
+        <itemControl id="ic_t_aggregate">
+          <requiredRule id="rr_t_aggregate"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_aggregate"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_protect" name="Review protection and anti-islanding requirements" definitionRef="t_protect_def">
+        <itemControl id="ic_t_protect">
+          <requiredRule id="rr_t_protect"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_protect"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_study" name="Commission an impact or facilities study" definitionRef="t_study_def">
+        <itemControl id="ic_t_study">
+          <requiredRule id="rr_t_study"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_study"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_upgrade" name="Identify network upgrades and who pays for them" definitionRef="t_upgrade_def">
+        <itemControl id="ic_t_upgrade">
+          <requiredRule id="rr_t_upgrade"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_upgrade"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_cond" name="Draft the conditions the approval will carry" definitionRef="t_cond_def">
+        <itemControl id="ic_t_cond">
+          <requiredRule id="rr_t_cond"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_cond"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_withdraw" name="Record withdrawal or expiry" definitionRef="t_withdraw_def">
+        <itemControl id="ic_t_withdraw">
+          <requiredRule id="rr_t_withdraw"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_withdraw"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_issue" name="Issue the determination" definitionRef="t_issue_def">
+        <itemControl id="ic_t_issue">
+          <requiredRule id="rr_t_issue"><condition><![CDATA[true]]></condition></requiredRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_m_screened" name="Screens complete" definitionRef="m_screened_def"/>
+      <planItem id="pi_m_studied" name="Study returned" definitionRef="m_studied_def"/>
+      <planItem id="pi_m_determined" name="Determination issued" definitionRef="m_determined_def"/>
+      <humanTask id="t_intake_def" name="Check the application is complete" isBlocking="true"><documentation>Required. An incomplete application consumes a study slot and returns nothing.</documentation></humanTask>
+      <humanTask id="t_screen_def" name="Screen against the operator's interconnection rules" isBlocking="true"><documentation>Required. The screens are the state's and the operator's; this reference names none of them and no threshold appears in this file.</documentation></humanTask>
+      <humanTask id="t_aggregate_def" name="Assess aggregate DER already on the circuit" isBlocking="true"><documentation>Discretionary. The premise's own existing DER and everything else on the section change the answer, and an engineer decides when that matters.</documentation></humanTask>
+      <humanTask id="t_protect_def" name="Review protection and anti-islanding requirements" isBlocking="true"><documentation>Discretionary in sequence, not in substance. The requirement comes from the operator's rules; the order in which it is reached is the engineer's.</documentation></humanTask>
+      <humanTask id="t_study_def" name="Commission an impact or facilities study" isBlocking="true"><documentation>Discretionary. Ordered when a screen fails or the aggregate case is unclear.</documentation></humanTask>
+      <humanTask id="t_upgrade_def" name="Identify network upgrades and who pays for them" isBlocking="true"><documentation>Discretionary. Cost allocation is tariff. If upgrades are built, that is 2.0 design and 19.1 commissioning, not this case.</documentation></humanTask>
+      <humanTask id="t_cond_def" name="Draft the conditions the approval will carry" isBlocking="true"><documentation>Discretionary. Whatever is written here is what 10.6.7 witnesses against, so a condition nobody can inspect is a condition nobody will enforce.</documentation></humanTask>
+      <humanTask id="t_withdraw_def" name="Record withdrawal or expiry" isBlocking="true"><documentation>Discretionary. An application that goes quiet still has to leave the queue, or the hosting-capacity picture stays wrong for everyone behind it.</documentation></humanTask>
+      <humanTask id="t_issue_def" name="Issue the determination" isBlocking="true"><documentation>Required. Approve, approve with conditions, or study required. The case ends at a determination.</documentation></humanTask>
+      <milestone id="m_screened_def" name="Screens complete"><documentation>Every screen the operator applies has an answer, pass or fail.</documentation></milestone>
+      <milestone id="m_studied_def" name="Study returned"><documentation>Reached only when a study was ordered. Not every case passes through it.</documentation></milestone>
+      <milestone id="m_determined_def" name="Determination issued"><documentation>Approve, condition or study-required. The resource is not connected and not energised: 10.6.7 witnesses the build and allows operation, and closing 10.6.6 without it is an approval without a connection.</documentation></milestone>
+    </casePlanModel>
+  </case>
+  <cmmndi:CMMNDI>
+    <cmmndi:CMMNDiagram id="dg_Interconnection_review">
+      <cmmndi:CMMNShape id="sh_plan" cmmnElementRef="Interconnection_review_plan"><dc:Bounds x="40" y="40" width="1200" height="300"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_intake" cmmnElementRef="pi_t_intake"><dc:Bounds x="80" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_screen" cmmnElementRef="pi_t_screen"><dc:Bounds x="270" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_aggregate" cmmnElementRef="pi_t_aggregate"><dc:Bounds x="460" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_protect" cmmnElementRef="pi_t_protect"><dc:Bounds x="80" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_study" cmmnElementRef="pi_t_study"><dc:Bounds x="270" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_upgrade" cmmnElementRef="pi_t_upgrade"><dc:Bounds x="460" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_cond" cmmnElementRef="pi_t_cond"><dc:Bounds x="80" y="290" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_withdraw" cmmnElementRef="pi_t_withdraw"><dc:Bounds x="270" y="290" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_issue" cmmnElementRef="pi_t_issue"><dc:Bounds x="460" y="290" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_m_screened" cmmnElementRef="pi_m_screened"><dc:Bounds x="80" y="390" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_m_studied" cmmnElementRef="pi_m_studied"><dc:Bounds x="270" y="390" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_m_determined" cmmnElementRef="pi_m_determined"><dc:Bounds x="460" y="390" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+    </cmmndi:CMMNDiagram>
+  </cmmndi:CMMNDI>
+</definitions>

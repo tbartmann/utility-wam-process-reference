@@ -1,0 +1,4598 @@
+{
+  "category": {
+    "uid": 10298,
+    "id": "10.0",
+    "name": "Serve Customers in the Field",
+    "band": "Specialised Operations"
+  },
+  "platform": "Grok",
+  "model": "grok-4.6",
+  "round": 3,
+  "date": "2026-08-29",
+  "schema": "eam/specs/SCHEMA.md",
+  "derivation": "STANDARDS-DERIVED. Every field traces to a standard, a regulation or a recognised industry body per campaign/SOURCE_AUTHORITY_PACK.md. Citation statuses observe source_status_ceiling. Field service management is not a standards domain; where the pack says so, the field is judgment.",
+  "field_set": "EN 17007:2017 cl. 5.2 maintenance process profile, corroborated by ISO 9001:2015 cl. 4.4.1 a) to h).",
+  "gaps": [
+    "FSM is not a standards domain. IEC 61968-6 standardises ServiceOrder exchange, not how 10.2 is scheduled, dispatched or executed. ISO/IEC 20000-1:2018 is cited only as a labelled ITSM analogue for intake (8.6.2) and service level (8.3.3), never for scheduling, dispatch or execution.",
+    "There is no federal nonpay-disconnection or winter/medical-protection code for distribution customers. The pack lists no customer-protection statute (no HEFPA, no 52 Pa. Code Chapter 56, no CPUC D.12-03-054). 10.4.4 is therefore state PUC and tariff, named as judgment, with 16 U.S.C. 824o cited only to keep NERC out.",
+    "Deposit, doorstep-payment and reconnect-clock rules are tariff. 18 CFR 101 is plant accounting, not a customer-deposit code.",
+    "IEEE 1547 (DER interconnection) is not in the pack and is not cited. FERC SGIP is wholesale. 10.6.6/10.6.7 interconnection method is judgment plus 16 U.S.C. 824o and IEC 61968-6 NE.",
+    "There is no CIM Customer class in the Work package. 10.1 uses WorkLocation plus CS. IEC 61968-6 is electric-scoped; gas borrows it.",
+    "IEC 61968-9:2024 Ed. 3 is cited by title for meter operate. Its body is paywalled and is not paraphrased.",
+    "APQC 14.4.2 (pcf_id 19329) Install/remove/energize/re-energize meters sits under metering. This model splits it across 6.3 (endpoint), 10.4/10.5 (operate at the premise) and 10.6.4 (set). APQC 14.3.1 (19308) is the assignment-pack touch on 10.1.",
+    "10.2 is a specialised application of 3.4/4.1, not a second scheduler. 10.3.3 is the customer message; 9.0 owns the outage. 10.6.5 commissions the service at the premise; 19.1.3 coordinates energisation of network assets. 10.6.1 classifies; 2.0 designs.",
+    "EN 17007 has no customer, deposit, disconnection-protection or interconnection process. COR.1, ACT.*, DOC.6, DTA.1, BUD.3, MAN.5, MRQ.6 and IMP.7 are the closest names and several are stretches, recorded as such.",
+    "cl. 4.2 has no document or health-and-safety component. Notices sit on CS, site hazards on CS, clearances on NO.",
+    "CGA 3-16 is locate-request content, not a service-order content model. No spanning gas/electric service-order content model exists."
+  ],
+  "processes": [
+    {
+      "uid": 10300,
+      "id": "10.1.1",
+      "name": "Identify customer, account and premise",
+      "group": {
+        "id": "10.1",
+        "name": "Maintain customer and premise information",
+        "uid": 10299
+      },
+      "intent": "Bind the person asking, the account and the premise so later field work hits the right place.",
+      "activities": [
+        "Match the contact to an account",
+        "Bind the account to a premise and service point",
+        "Resolve conflicts where names, meters or addresses disagree",
+        "Hand a single identity to the service order"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "A customer contact or a field order needs a bound identity.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Contact or order as received",
+          "party": "CS",
+          "data": "Work"
+        },
+        {
+          "what": "Premise and service-point record",
+          "party": "GINV",
+          "data": "WorkLocation"
+        },
+        {
+          "what": "Meter or endpoint at the premise",
+          "party": "MR&C",
+          "data": "WorkAsset"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Bound customer, account and premise",
+          "party": "CS",
+          "data": "WorkLocation"
+        },
+        {
+          "what": "Unresolved identity exception",
+          "party": "CS",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "CS",
+          "role": "owning",
+          "service": "Account and contact"
+        },
+        {
+          "component": "GINV",
+          "role": "reference",
+          "service": "Premise and service point"
+        },
+        {
+          "component": "MR&C",
+          "role": "reference",
+          "service": "Meter at the premise"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "CS",
+          "to": "GINV",
+          "payload": "ServiceOrder",
+          "verb": "get",
+          "pattern": "request-reply"
+        },
+        {
+          "from": "CS",
+          "to": "MR&C",
+          "payload": "ServiceOrder",
+          "verb": "get",
+          "pattern": "request-reply"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Customer service representative",
+          "raci": "R"
+        },
+        {
+          "role": "Data steward",
+          "raci": "A"
+        },
+        {
+          "role": "Field technician",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkLocation",
+        "WorkAsset",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "There is no CIM Customer class in the Work package. Identity here is WorkLocation plus the account held on CS. IEC 61968-6 is electric-scoped; gas borrows it."
+        },
+        {
+          "kind": "operational",
+          "text": "A wrong premise on a disconnect or turn-on is a safety event, not a data-quality inconvenience."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Work Order Cycle Time",
+          "definition": "SMRP 5.4.7. Identity failure is time lost before the visit.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Rework",
+          "definition": "SMRP 4.1. Work done at the wrong premise.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Known account at a known premise",
+        "Mover with a new name on an old premise",
+        "Premise found, no account yet"
+      ],
+      "notation": {
+        "class": "SPEC",
+        "why": "Standing identity capability; each contact is a use, not a process instance with its own end."
+      },
+      "en17007": {
+        "process": "DTA.1",
+        "title": "Store and validate the raw data in a library and/or a database",
+        "clause": "6.10"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.10 DTA.1",
+          "status": "verified"
+        },
+        {
+          "for": "components",
+          "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 ServiceOrder, WorkRequest, MaintenanceOrder; Annex A verbs",
+          "status": "clause-verified"
+        },
+        {
+          "for": "data_objects",
+          "cite": "IEC 61968-11:2013 CIM extensions for distribution, Work package",
+          "status": "clause-verified"
+        },
+        {
+          "for": "matching rules",
+          "cite": "Account-to-premise matching is not standardised",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "EN 17007:2017 cl. 6.10 DTA.1"
+      }
+    },
+    {
+      "uid": 10301,
+      "id": "10.1.2",
+      "name": "Record customer interaction and history",
+      "group": {
+        "id": "10.1",
+        "name": "Maintain customer and premise information",
+        "uid": 10299
+      },
+      "intent": "Keep a usable record of what was said, promised and done at this premise.",
+      "activities": [
+        "Record the contact, channel and subject",
+        "Attach it to the bound premise and account",
+        "Capture any commitment that later constrains the schedule",
+        "Make the history visible to the next field visit"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "A customer contact or a field outcome needs to be on the history.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Bound identity",
+          "party": "CS",
+          "data": "WorkLocation"
+        },
+        {
+          "what": "Contact or field outcome",
+          "party": "CS",
+          "data": "Work"
+        },
+        {
+          "what": "Commitment given",
+          "party": "CS",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Interaction on the premise history",
+          "party": "CS",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Commitment visible to scheduling",
+          "party": "SCHD",
+          "data": "Work"
+        }
+      ],
+      "systems": [
+        {
+          "component": "CS",
+          "role": "owning",
+          "service": "Interaction history"
+        },
+        {
+          "component": "SCHD",
+          "role": "receiving",
+          "service": "Commitments as constraints"
+        },
+        {
+          "component": "FRD",
+          "role": "originating",
+          "service": "Field-captured notes"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "CS",
+          "to": "SCHD",
+          "payload": "ServiceOrder",
+          "verb": "change",
+          "pattern": "event"
+        },
+        {
+          "from": "FRD",
+          "to": "CS",
+          "payload": "ServiceOrder",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Customer service representative",
+          "raci": "R"
+        },
+        {
+          "role": "Customer operations manager",
+          "raci": "A"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkLocation",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "Commitments not written here are invisible to 3.3 and 10.2.2. IEC 61968-6 standardises the exchange, not the history content."
+        },
+        {
+          "kind": "operational",
+          "text": "There is no work-request content model spanning gas and electric. Minimum history fields are the operator's."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Work Order Cycle Time",
+          "definition": "SMRP 5.4.7. History that has to be re-asked lengthens the visit.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Reactive Work",
+          "definition": "SMRP 5.4.1. Repeat contacts on the same premise.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Inbound contact centre",
+        "Field-captured note",
+        "Written complaint"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "A contact is recorded against the premise on a repeating path.",
+        "artifact": "models/10.1-customer-and-premise.bpmn"
+      },
+      "en17007": {
+        "process": "DTA.1",
+        "title": "Store and validate the raw data in a library and/or a database",
+        "clause": "6.10"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.10 DTA.1",
+          "status": "verified"
+        },
+        {
+          "for": "interfaces",
+          "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 ServiceOrder, WorkRequest, MaintenanceOrder; Annex A verbs",
+          "status": "clause-verified"
+        },
+        {
+          "for": "content model",
+          "cite": "No spanning work-request content model; CGA 3-16 is locate-only",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "EN 17007:2017 cl. 6.10 DTA.1"
+      }
+    },
+    {
+      "uid": 10302,
+      "id": "10.1.3",
+      "name": "Maintain access, hazard and site notes",
+      "group": {
+        "id": "10.1",
+        "name": "Maintain customer and premise information",
+        "uid": 10299
+      },
+      "intent": "Keep the notes that tell the next crew how to enter and what can hurt them.",
+      "activities": [
+        "Record access method, animals, locks and shared entry",
+        "Record site hazards relevant to the next visit",
+        "Retire notes that no longer apply",
+        "Make current notes visible at dispatch"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "A visit or a customer report has changed how the site is entered.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Current access and hazard notes",
+          "party": "CS",
+          "data": "WorkLocation"
+        },
+        {
+          "what": "Field observation",
+          "party": "FRD",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Premise identity",
+          "party": "GINV",
+          "data": "WorkLocation"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Updated access and hazard notes",
+          "party": "CS",
+          "data": "WorkLocation"
+        },
+        {
+          "what": "Notes published to dispatch",
+          "party": "SCHD",
+          "data": "Work"
+        }
+      ],
+      "systems": [
+        {
+          "component": "CS",
+          "role": "owning",
+          "service": "Site notes"
+        },
+        {
+          "component": "FRD",
+          "role": "originating",
+          "service": "Field observation"
+        },
+        {
+          "component": "SCHD",
+          "role": "receiving",
+          "service": "Notes at dispatch"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "FRD",
+          "to": "CS",
+          "payload": "ServiceOrder",
+          "verb": "change",
+          "pattern": "event"
+        },
+        {
+          "from": "CS",
+          "to": "SCHD",
+          "payload": "ServiceOrder",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Field technician",
+          "raci": "R"
+        },
+        {
+          "role": "Customer operations manager",
+          "raci": "A"
+        },
+        {
+          "role": "Scheduler",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "WorkLocation",
+        "WorkActivityRecord",
+        "Work"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "29 CFR 1910.269(c) job briefing needs these notes. They are a dispatch-gating input, not decoration. There is no cl. 4.2 health-and-safety component; notes sit on CS."
+        },
+        {
+          "kind": "operational",
+          "text": "A stale dog note or a missing lock-box code is how a briefing starts false."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Wrench Time",
+          "definition": "SMRP 5.6.1. Time spent finding a way in is not work on the plant.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Schedule Compliance",
+          "definition": "SMRP 5.4.3/5.4.4. No-access misses caused by bad notes.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Animal or occupant hazard",
+        "Locked or gated access",
+        "Shared access with a third party"
+      ],
+      "notation": {
+        "class": "SPEC",
+        "why": "Standing site-note file; updated when observed, not a bounded instance."
+      },
+      "en17007": {
+        "process": "HSE.2",
+        "title": "Identify risks",
+        "clause": "6.7"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.7 HSE.2",
+          "status": "verified"
+        },
+        {
+          "for": "job briefing",
+          "cite": "29 CFR 1910.269(c) job briefing; (a)(3) host and contract employer information transfer",
+          "status": "regulation"
+        },
+        {
+          "for": "interfaces",
+          "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 ServiceOrder, WorkRequest, MaintenanceOrder; Annex A verbs",
+          "status": "clause-verified"
+        },
+        {
+          "for": "note content",
+          "cite": "Site-note content is not standardised",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "regulation",
+        "primary": "29 CFR 1910.269(c) job briefing; (a)(3) host and contract employer information transfer"
+      }
+    },
+    {
+      "uid": 10303,
+      "id": "10.1.4",
+      "name": "Maintain contact and notification preference",
+      "group": {
+        "id": "10.1",
+        "name": "Maintain customer and premise information",
+        "uid": 10299
+      },
+      "intent": "Keep how, and whether, this customer may be notified.",
+      "activities": [
+        "Record channel, number and language",
+        "Record do-not-contact and quiet hours",
+        "Apply the preference to appointment, en-route and outage notices",
+        "Retire channels that have failed"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "The customer has stated or changed how they may be reached.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Bound account and premise",
+          "party": "CS",
+          "data": "WorkLocation"
+        },
+        {
+          "what": "Stated preference",
+          "party": "CS",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Current notification preference",
+          "party": "CS",
+          "data": "WorkLocation"
+        },
+        {
+          "what": "Failed channel retired",
+          "party": "CS",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "CS",
+          "role": "owning",
+          "service": "Notification preference"
+        },
+        {
+          "component": "TCM",
+          "role": "consuming",
+          "service": "Outage notice channel"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "CS",
+          "to": "TCM",
+          "payload": "ServiceOrder",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Customer service representative",
+          "raci": "R"
+        },
+        {
+          "role": "Customer operations manager",
+          "raci": "A"
+        }
+      ],
+      "data_objects": [
+        "WorkLocation",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "No federal notification-preference standard for distribution customers. Channel rules are tariff and state. 49 CFR 192.615 is emergency communication, not a preference file."
+        },
+        {
+          "kind": "operational",
+          "text": "A preference that 10.3 cannot honour is not a preference. Quiet hours do not waive 192.615 emergency notice."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Work Order Cycle Time",
+          "definition": "SMRP 5.4.7. Failed notice delays the appointment.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "SAIDI",
+          "definition": "IEEE 1366-2022. Restoration notice that never arrived does not shorten duration.",
+          "cite": "IEEE 1366-2022"
+        }
+      ],
+      "variants": [
+        "Voice",
+        "Short message",
+        "Do-not-contact except emergency"
+      ],
+      "notation": {
+        "class": "SPEC",
+        "why": "Standing preference record."
+      },
+      "en17007": {
+        "process": "DOC.5",
+        "title": "Ensure access to necessary information at all times",
+        "clause": "6.9"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.9 DOC.5",
+          "status": "verified"
+        },
+        {
+          "for": "gas emergency contrast",
+          "cite": "49 CFR 192.615 emergency plans",
+          "status": "regulation"
+        },
+        {
+          "for": "interfaces",
+          "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 ServiceOrder, WorkRequest, MaintenanceOrder; Annex A verbs",
+          "status": "clause-verified"
+        },
+        {
+          "for": "channels",
+          "cite": "Notification-channel design is not standardised",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "EN 17007:2017 cl. 6.9 DOC.5"
+      }
+    },
+    {
+      "uid": 10305,
+      "id": "10.2.1",
+      "name": "Create service order or service request",
+      "group": {
+        "id": "10.2",
+        "name": "Manage service orders",
+        "uid": 10304
+      },
+      "intent": "Turn a customer need into a ServiceOrder that field work can execute.",
+      "activities": [
+        "Classify the request against the service catalogue the operator publishes",
+        "Bind customer, premise and any meter",
+        "Create the ServiceOrder with the requested work",
+        "Hand it to schedule, or hold it if identity or eligibility is open"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "A customer or an agency has requested work at a premise.",
+        "cim": "ServiceOrder.create"
+      },
+      "inputs": [
+        {
+          "what": "Customer request",
+          "party": "CS",
+          "data": "Work"
+        },
+        {
+          "what": "Bound premise and account",
+          "party": "CS",
+          "data": "WorkLocation"
+        },
+        {
+          "what": "Eligibility or deposit block if any",
+          "party": "FIN",
+          "data": "Work"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "ServiceOrder ready to schedule",
+          "party": "SCHD",
+          "data": "Work"
+        },
+        {
+          "what": "Held request with the missing fact named",
+          "party": "CS",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "CS",
+          "role": "owning",
+          "service": "Service request capture"
+        },
+        {
+          "component": "SCHD",
+          "role": "receiving",
+          "service": "New ServiceOrder"
+        },
+        {
+          "component": "MAI",
+          "role": "reference",
+          "service": "Work type"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "CS",
+          "to": "SCHD",
+          "payload": "ServiceOrder",
+          "verb": "create",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Customer service representative",
+          "raci": "R"
+        },
+        {
+          "role": "Customer operations manager",
+          "raci": "A"
+        },
+        {
+          "role": "Scheduler",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkLocation",
+        "WorkTask"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "IEC 61968-6 cl. 5 names ServiceOrder as a payload. It does not specify catalogue, eligibility or minimum content. ISO/IEC 20000-1 cl. 8.6.2 is an ITSM analogue for intake, not a field-work standard."
+        },
+        {
+          "kind": "operational",
+          "text": "This is the customer thread. 1.1.1 captures demand that may not be a service order. Do not merge them."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Work Order Cycle Time",
+          "definition": "SMRP 5.4.7. From request to create.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Reactive Work",
+          "definition": "SMRP 5.4.1. Customer-originated service orders.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Customer-requested",
+        "Programme-generated at the premise",
+        "Agency-requested"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "A request becomes a ServiceOrder or a hold on a repeating path.",
+        "artifact": "models/10.2-manage-service-orders.bpmn"
+      },
+      "en17007": {
+        "process": "COR.1",
+        "title": "Classify the actual events",
+        "clause": "6.4.2"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.4.2 COR.1",
+          "status": "verified"
+        },
+        {
+          "for": "payload",
+          "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 ServiceOrder, WorkRequest, MaintenanceOrder; Annex A verbs",
+          "status": "clause-verified"
+        },
+        {
+          "for": "intake analogue",
+          "cite": "ISO/IEC 20000-1:2018 cl. 8.6.2 service request management - IT service management standard used as a structural analogue, not as domain authority",
+          "status": "clause-verified"
+        },
+        {
+          "for": "catalogue",
+          "cite": "Service catalogue content is operator judgment",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "IEC 61968-6:2015 cl. 5 ServiceOrder"
+      }
+    },
+    {
+      "uid": 10306,
+      "id": "10.2.2",
+      "name": "Schedule and dispatch service order",
+      "group": {
+        "id": "10.2",
+        "name": "Manage service orders",
+        "uid": 10304
+      },
+      "intent": "Place the ServiceOrder on a qualified resource and send it, without inventing a second scheduler.",
+      "activities": [
+        "Take the ready ServiceOrder and any appointment window",
+        "Place it using 3.4; do not build a parallel optimiser",
+        "Apply 1910.269 briefing, qualification and access notes as dispatch gates",
+        "Send it to the field or hold it against a named gate"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "A ServiceOrder is ready to place and send.",
+        "cim": "ServiceOrder.change"
+      },
+      "inputs": [
+        {
+          "what": "Ready ServiceOrder",
+          "party": "CS",
+          "data": "Work"
+        },
+        {
+          "what": "Appointment window if one was offered",
+          "party": "SCHD",
+          "data": "WorkTimeSchedule"
+        },
+        {
+          "what": "Crew qualification and access notes",
+          "party": "HR",
+          "data": "Crew"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Dispatched ServiceOrder",
+          "party": "FRD",
+          "data": "Work"
+        },
+        {
+          "what": "Hold with the named gate",
+          "party": "SCHD",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "SCHD",
+          "role": "owning",
+          "service": "Placement and dispatch"
+        },
+        {
+          "component": "HR",
+          "role": "reference",
+          "service": "Qualification"
+        },
+        {
+          "component": "FRD",
+          "role": "receiving",
+          "service": "Work on the device"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "SCHD",
+          "to": "FRD",
+          "payload": "ServiceOrder",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Scheduler",
+          "raci": "R"
+        },
+        {
+          "role": "Customer operations manager",
+          "raci": "A"
+        },
+        {
+          "role": "Dispatcher",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "Crew",
+        "WorkTimeSchedule",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "FSM is not a standards domain. ISO/IEC 20000-1 is not cited for scheduling or dispatch. Placement is 3.4; this process is the service-order application of it."
+        },
+        {
+          "kind": "regulatory",
+          "text": "29 CFR 1910.269(c) briefing, (a)(2) qualified employee and 10.1.3 access notes gate dispatch. A clearance, if required, is 18.4.4, not a permit."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Schedule Compliance",
+          "definition": "SMRP 5.4.3/5.4.4. Dispatched versus placed.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Wrench Time",
+          "definition": "SMRP 5.6.1. Holds at dispatch.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Inside an appointment window",
+        "Same-day unwindowed",
+        "Unattended, customer not required"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Ready ServiceOrder is sent or held against a named gate.",
+        "artifact": "models/10.2-manage-service-orders.bpmn"
+      },
+      "en17007": {
+        "process": "ACT.5",
+        "title": "Start the scheduled tasks",
+        "clause": "6.5.6"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.5.6 ACT.5",
+          "status": "verified"
+        },
+        {
+          "for": "schedule",
+          "cite": "EN 17007:2017 cl. 6.5.5 ACT.4",
+          "status": "verified"
+        },
+        {
+          "for": "dispatch gates",
+          "cite": "29 CFR 1910.269(c) job briefing; (a)(3) host and contract employer information transfer; 29 CFR 1910.269(a)(2) qualified employee; (l) minimum approach distance",
+          "status": "regulation"
+        },
+        {
+          "for": "clearance",
+          "cite": "29 CFR 1910.269(m) Deenergizing lines and equipment for employee protection; clearance produced by 18.4.4 against a plan approved at 18.2.2",
+          "status": "regulation"
+        },
+        {
+          "for": "method",
+          "cite": "How a ServiceOrder is placed is not standardised",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "EN 17007:2017 cl. 6.5.6 ACT.5"
+      }
+    },
+    {
+      "uid": 10307,
+      "id": "10.2.3",
+      "name": "Execute and complete service order",
+      "group": {
+        "id": "10.2",
+        "name": "Manage service orders",
+        "uid": 10304
+      },
+      "intent": "Do the requested work at the premise and close the ServiceOrder on the outcome.",
+      "activities": [
+        "Arrive, brief and confirm the premise",
+        "Perform the prescribed service work",
+        "Capture the outcome, meter reading and customer contact",
+        "Complete or return the ServiceOrder with the reason"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "The crew is on the ServiceOrder and the prescription is in force.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Dispatched ServiceOrder",
+          "party": "FRD",
+          "data": "Work"
+        },
+        {
+          "what": "Site notes and briefing inputs",
+          "party": "CS",
+          "data": "WorkLocation"
+        },
+        {
+          "what": "Meter or asset at the premise",
+          "party": "MR&C",
+          "data": "WorkAsset"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Completed ServiceOrder",
+          "party": "CS",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Unable or partial, with the reason",
+          "party": "SCHD",
+          "data": "Work"
+        }
+      ],
+      "systems": [
+        {
+          "component": "FRD",
+          "role": "owning",
+          "service": "Field execution"
+        },
+        {
+          "component": "MR&C",
+          "role": "reference",
+          "service": "Meter outcome"
+        },
+        {
+          "component": "CS",
+          "role": "receiving",
+          "service": "Completion to the customer record"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "FRD",
+          "to": "CS",
+          "payload": "ServiceOrder",
+          "verb": "close",
+          "pattern": "event"
+        },
+        {
+          "from": "FRD",
+          "to": "SCHD",
+          "payload": "ServiceOrder",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Field technician",
+          "raci": "R"
+        },
+        {
+          "role": "Customer operations manager",
+          "raci": "A"
+        },
+        {
+          "role": "Scheduler",
+          "raci": "I"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkAsset",
+        "WorkLocation",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "29 CFR 1910.269(c) briefing before the job. Gas indoor meter work: 192.353 location and 192.357 installation. Electric: qualified employee and MAD. Excavation: 1926 Subpart P competent person."
+        },
+        {
+          "kind": "operational",
+          "text": "Execution method is not a standards domain. IEC 61968-6 FRD records the outcome; it does not specify the work."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Schedule Compliance",
+          "definition": "SMRP 5.4.3/5.4.4. Completed on the day dispatched.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Wrench Time",
+          "definition": "SMRP 5.6.1. Time on the prescribed work.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Completed as prescribed",
+        "Partial - access or parts",
+        "Unable - customer not present"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "On-premise work then complete or return is a repeating path.",
+        "artifact": "models/10.2-manage-service-orders.bpmn"
+      },
+      "en17007": {
+        "process": "ACT.6",
+        "title": "Perform the maintenance tasks",
+        "clause": "6.5.7"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.5.7 ACT.6",
+          "status": "verified"
+        },
+        {
+          "for": "briefing",
+          "cite": "29 CFR 1910.269(c) job briefing; (a)(3) host and contract employer information transfer",
+          "status": "regulation"
+        },
+        {
+          "for": "gas meter",
+          "cite": "49 CFR 192.353 Customer meters and regulators: Location; 192.357 Installation",
+          "status": "regulation"
+        },
+        {
+          "for": "interfaces",
+          "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 ServiceOrder, WorkRequest, MaintenanceOrder; Annex A verbs",
+          "status": "clause-verified"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "EN 17007:2017 cl. 6.5.7 ACT.6"
+      }
+    },
+    {
+      "uid": 10308,
+      "id": "10.2.4",
+      "name": "Cancel, amend and reschedule service order",
+      "group": {
+        "id": "10.2",
+        "name": "Manage service orders",
+        "uid": 10304
+      },
+      "intent": "Change or drop the ServiceOrder and release the capacity it was holding.",
+      "activities": [
+        "Take the amend, cancel or no-access event",
+        "Release or move the reserved capacity through 3.3",
+        "Record who initiated the change",
+        "Close, rebook or return to the ready bank"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "The ServiceOrder cannot proceed as placed.",
+        "cim": "ServiceOrder.cancel"
+      },
+      "inputs": [
+        {
+          "what": "ServiceOrder to change",
+          "party": "SCHD",
+          "data": "Work"
+        },
+        {
+          "what": "Customer or field reason",
+          "party": "CS",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Cancelled, amended or rebooked ServiceOrder",
+          "party": "CS",
+          "data": "Work"
+        },
+        {
+          "what": "Capacity released",
+          "party": "SCHD",
+          "data": "WorkTimeSchedule"
+        }
+      ],
+      "systems": [
+        {
+          "component": "CS",
+          "role": "owning",
+          "service": "Customer-facing change"
+        },
+        {
+          "component": "SCHD",
+          "role": "owning",
+          "service": "Capacity against the order"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "CS",
+          "to": "SCHD",
+          "payload": "ServiceOrder",
+          "verb": "cancel",
+          "pattern": "event"
+        },
+        {
+          "from": "CS",
+          "to": "SCHD",
+          "payload": "ServiceOrder",
+          "verb": "change",
+          "pattern": "request-reply"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Customer service representative",
+          "raci": "R"
+        },
+        {
+          "role": "Scheduler",
+          "raci": "A"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkTimeSchedule",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "IEC 61968-6 Annex A supplies change and cancel. It does not say when an amend is allowed. Capacity must be released or 3.3.2 will hold ghost hours."
+        },
+        {
+          "kind": "operational",
+          "text": "Crew-caused no-access is a schedule miss. Customer-caused no-access is not. Mixing them hides both."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Schedule Compliance",
+          "definition": "SMRP 5.4.3/5.4.4. Crew-caused cancels.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Work Order Cycle Time",
+          "definition": "SMRP 5.4.7. Original request to successful rebook.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Customer-initiated amend",
+        "Cancel before dispatch",
+        "No-access in the field"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Change, cancel or rebook is a known message path.",
+        "artifact": "models/10.2-manage-service-orders.bpmn"
+      },
+      "en17007": {
+        "process": "ACT.4",
+        "title": "Schedule the tasks",
+        "clause": "6.5.5"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.5.5 ACT.4",
+          "status": "verified"
+        },
+        {
+          "for": "verbs",
+          "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 ServiceOrder, WorkRequest, MaintenanceOrder; Annex A verbs",
+          "status": "clause-verified"
+        },
+        {
+          "for": "measures",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management",
+          "status": "consensus"
+        },
+        {
+          "for": "amend policy",
+          "cite": "When a ServiceOrder may be moved is operator judgment",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "IEC 61968-6:2015 Annex A"
+      }
+    },
+    {
+      "uid": 10310,
+      "id": "10.3.1",
+      "name": "Confirm appointment and provide reminder",
+      "group": {
+        "id": "10.3",
+        "name": "Communicate with customers",
+        "uid": 10309
+      },
+      "intent": "Tell the customer the window is still on, using the preference on file.",
+      "activities": [
+        "Take the confirmed window from 3.3.3",
+        "Send confirm and reminder on the preferred channel",
+        "Record delivery or failure",
+        "Escalate a failed reminder before the window"
+      ],
+      "trigger": {
+        "kind": "timer",
+        "text": "A confirmed appointment is due for confirm or reminder.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Confirmed appointment window",
+          "party": "SCHD",
+          "data": "WorkTimeSchedule"
+        },
+        {
+          "what": "Notification preference",
+          "party": "CS",
+          "data": "WorkLocation"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Confirm or reminder record",
+          "party": "CS",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Failed delivery to retry",
+          "party": "CS",
+          "data": "Work"
+        }
+      ],
+      "systems": [
+        {
+          "component": "CS",
+          "role": "owning",
+          "service": "Appointment notice"
+        },
+        {
+          "component": "SCHD",
+          "role": "reference",
+          "service": "Window still held"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "SCHD",
+          "to": "CS",
+          "payload": "ServiceOrder",
+          "verb": "get",
+          "pattern": "request-reply"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Customer service representative",
+          "raci": "R"
+        },
+        {
+          "role": "Scheduler",
+          "raci": "A"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkTimeSchedule",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "No standard specifies reminder timing or channel. 3.3 owns the window; this process only tells the customer. A reminder that offers a new window is 3.3.1, not this."
+        },
+        {
+          "kind": "operational",
+          "text": "ISO/IEC 20000-1 cl. 8.3.3 is an ITSM analogue for a service level, not a reminder rule."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Schedule Compliance",
+          "definition": "SMRP 5.4.3/5.4.4. Reminded windows kept.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Work Order Cycle Time",
+          "definition": "SMRP 5.4.7. Failed reminder to rebook.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "First confirm at booking",
+        "Day-before reminder",
+        "Day-of reminder"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Timer against a held window, then send or retry.",
+        "artifact": "models/10.3-communicate-with-customers.bpmn"
+      },
+      "en17007": {
+        "process": "DOC.6",
+        "title": "Manage the way in which operational documentation is made available",
+        "clause": "6.9"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.9 DOC.6",
+          "status": "verified"
+        },
+        {
+          "for": "service level analogue",
+          "cite": "ISO/IEC 20000-1:2018 cl. 8.3.3 service level management - ITSM analogue, not domain authority",
+          "status": "clause-verified"
+        },
+        {
+          "for": "interfaces",
+          "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 ServiceOrder, WorkRequest, MaintenanceOrder; Annex A verbs",
+          "status": "clause-verified"
+        },
+        {
+          "for": "timing",
+          "cite": "Reminder timing is not standardised",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "EN 17007:2017 cl. 6.9 DOC.6"
+      }
+    },
+    {
+      "uid": 10311,
+      "id": "10.3.2",
+      "name": "Notify en-route and arrival",
+      "group": {
+        "id": "10.3",
+        "name": "Communicate with customers",
+        "uid": 10309
+      },
+      "intent": "Tell the customer the crew is coming, and that it has arrived.",
+      "activities": [
+        "Detect en-route and on-site from the crew",
+        "Send the notice on the preferred channel",
+        "Record delivery",
+        "Suppress if the preference is do-not-contact"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "The crew has gone en-route or has arrived.",
+        "cim": "ServiceOrder.change"
+      },
+      "inputs": [
+        {
+          "what": "Crew en-route or on-site",
+          "party": "FRD",
+          "data": "Work"
+        },
+        {
+          "what": "Notification preference",
+          "party": "CS",
+          "data": "WorkLocation"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "En-route or arrival notice record",
+          "party": "CS",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "FRD",
+          "role": "originating",
+          "service": "Crew status"
+        },
+        {
+          "component": "CS",
+          "role": "owning",
+          "service": "Customer notice"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "FRD",
+          "to": "CS",
+          "payload": "ServiceOrder",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Field technician",
+          "raci": "R"
+        },
+        {
+          "role": "Customer operations manager",
+          "raci": "A"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkLocation",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "FSM status-to-customer notice is not a standards domain. IEC 61968-6 FRD can carry the status; the notice is operator practice."
+        },
+        {
+          "kind": "operational",
+          "text": "An arrival notice that lands after the knock is not a notice."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Wrench Time",
+          "definition": "SMRP 5.6.1. Wait for a customer who was not told.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Schedule Compliance",
+          "definition": "SMRP 5.4.3/5.4.4. No-access after a missed arrival notice.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "En-route",
+        "On-site",
+        "Delay while already en-route"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Status event to notice is a repeating path.",
+        "artifact": "models/10.3-communicate-with-customers.bpmn"
+      },
+      "en17007": {
+        "process": "DOC.6",
+        "title": "Manage the way in which operational documentation is made available",
+        "clause": "6.9"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.9 DOC.6",
+          "status": "verified"
+        },
+        {
+          "for": "status exchange",
+          "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 ServiceOrder, WorkRequest, MaintenanceOrder; Annex A verbs",
+          "status": "clause-verified"
+        },
+        {
+          "for": "measures",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management",
+          "status": "consensus"
+        },
+        {
+          "for": "notice design",
+          "cite": "En-route notice is not standardised",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "judgment",
+        "primary": "EN 17007:2017 cl. 6.9 DOC.6"
+      }
+    },
+    {
+      "uid": 10312,
+      "id": "10.3.3",
+      "name": "Notify outage, restoration and delay",
+      "group": {
+        "id": "10.3",
+        "name": "Communicate with customers",
+        "uid": 10309
+      },
+      "intent": "Tell affected customers the lights or the gas are off, and when they are back.",
+      "activities": [
+        "Identify the customers on the affected section",
+        "Send outage, delay or restoration on the preferred channel",
+        "Keep 192.615 emergency notice distinct from convenience updates",
+        "Record what was sent"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "An outage, a delay or a restoration has been declared.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Affected section and customers",
+          "party": "TCM",
+          "data": "Work"
+        },
+        {
+          "what": "Notification preference",
+          "party": "CS",
+          "data": "WorkLocation"
+        },
+        {
+          "what": "Restoration or delay estimate",
+          "party": "NO",
+          "data": "Work"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Outage or restoration notice record",
+          "party": "CS",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Unreachable customer exception",
+          "party": "CS",
+          "data": "Work"
+        }
+      ],
+      "systems": [
+        {
+          "component": "TCM",
+          "role": "originating",
+          "service": "Outage event"
+        },
+        {
+          "component": "CS",
+          "role": "owning",
+          "service": "Customer notice"
+        },
+        {
+          "component": "NO",
+          "role": "reference",
+          "service": "Restoration estimate"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "TCM",
+          "to": "CS",
+          "payload": "WorkRequest",
+          "verb": "create",
+          "pattern": "event"
+        },
+        {
+          "from": "NO",
+          "to": "CS",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Control room operator",
+          "raci": "C"
+        },
+        {
+          "role": "Customer operations manager",
+          "raci": "A"
+        },
+        {
+          "role": "Customer service representative",
+          "raci": "R"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkLocation",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "Gas: 49 CFR 192.615 emergency plans include communication. Electric distribution notice is state and operator. 9.0 owns the outage; this process is the customer message, not restoration."
+        },
+        {
+          "kind": "operational",
+          "text": "IEEE 1366 measures duration. It does not specify a notice. A restoration notice is not a restoration."
+        }
+      ],
+      "measures": [
+        {
+          "name": "SAIDI",
+          "definition": "IEEE 1366-2022. Notice does not change duration; restoration does.",
+          "cite": "IEEE 1366-2022"
+        },
+        {
+          "name": "SAIFI",
+          "definition": "IEEE 1366-2022. Count of customers notified is not the index.",
+          "cite": "IEEE 1366-2022"
+        }
+      ],
+      "variants": [
+        "Unplanned outage",
+        "Planned outage window",
+        "Restoration complete"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Event to affected customers is a repeating path.",
+        "artifact": "models/10.3-communicate-with-customers.bpmn"
+      },
+      "en17007": {
+        "process": "DOC.6",
+        "title": "Manage the way in which operational documentation is made available",
+        "clause": "6.9"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.9 DOC.6",
+          "status": "verified"
+        },
+        {
+          "for": "gas emergency",
+          "cite": "49 CFR 192.615 emergency plans",
+          "status": "regulation"
+        },
+        {
+          "for": "indices",
+          "cite": "IEEE 1366-2022",
+          "status": "consensus"
+        },
+        {
+          "for": "electric notice",
+          "cite": "Electric outage-notice content is not federally standardised",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "regulation",
+        "primary": "49 CFR 192.615"
+      }
+    },
+    {
+      "uid": 10313,
+      "id": "10.3.4",
+      "name": "Capture customer feedback",
+      "group": {
+        "id": "10.3",
+        "name": "Communicate with customers",
+        "uid": 10309
+      },
+      "intent": "Record what the customer said about the visit and put it where operations can see it.",
+      "activities": [
+        "Offer or receive feedback against the ServiceOrder",
+        "Classify complaint, compliment or survey",
+        "Attach it to the premise history",
+        "Raise follow-on work or a complaint case where needed"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "The customer has given feedback on a field visit.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Completed ServiceOrder",
+          "party": "CS",
+          "data": "Work"
+        },
+        {
+          "what": "Customer statement",
+          "party": "CS",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Feedback on the premise history",
+          "party": "CS",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Follow-on work or complaint case",
+          "party": "MAI",
+          "data": "Work"
+        }
+      ],
+      "systems": [
+        {
+          "component": "CS",
+          "role": "owning",
+          "service": "Feedback capture"
+        },
+        {
+          "component": "MAI",
+          "role": "receiving",
+          "service": "Follow-on work"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "CS",
+          "to": "MAI",
+          "payload": "WorkRequest",
+          "verb": "create",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Customer service representative",
+          "raci": "R"
+        },
+        {
+          "role": "Customer operations manager",
+          "raci": "A"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "No standard specifies field-visit feedback. SMRP 4.1 Rework is the operations measure a complaint may move. CSAT instruments are not in the pack and are not cited."
+        },
+        {
+          "kind": "operational",
+          "text": "Feedback that never reaches 10.1.2 is lost to the next visit."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Rework",
+          "definition": "SMRP 4.1. Complaints that become a second visit.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Work Order Cycle Time",
+          "definition": "SMRP 5.4.7. Complaint to close.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Post-job survey",
+        "Complaint",
+        "Compliment"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Feedback is classified and filed or raised as work.",
+        "artifact": "models/10.3-communicate-with-customers.bpmn"
+      },
+      "en17007": {
+        "process": "MAN.6",
+        "title": "Define, select, analyse and communicate the information",
+        "clause": "6.2"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.2 MAN.6",
+          "status": "verified"
+        },
+        {
+          "for": "rework",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management",
+          "status": "consensus"
+        },
+        {
+          "for": "interfaces",
+          "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 ServiceOrder, WorkRequest, MaintenanceOrder; Annex A verbs",
+          "status": "clause-verified"
+        },
+        {
+          "for": "instrument",
+          "cite": "Feedback instruments are not in the Source Authority Pack",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "EN 17007:2017 cl. 6.2 MAN.6"
+      }
+    },
+    {
+      "uid": 10315,
+      "id": "10.4.1",
+      "name": "Issue collections or disconnection order",
+      "group": {
+        "id": "10.4",
+        "name": "Perform collections and disconnection field work",
+        "uid": 10314
+      },
+      "intent": "Raise the field order only after eligibility has been tested.",
+      "activities": [
+        "Take the collections case and the 10.4.4 eligibility result",
+        "Refuse to issue if protected or incomplete",
+        "Create the ServiceOrder for field disconnect or collect",
+        "Put the notice history on the order"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "A collections case is ready for a field order.",
+        "cim": "ServiceOrder.create"
+      },
+      "inputs": [
+        {
+          "what": "Collections case",
+          "party": "FIN",
+          "data": "Work"
+        },
+        {
+          "what": "Eligibility result from 10.4.4",
+          "party": "CS",
+          "data": "Work"
+        },
+        {
+          "what": "Bound premise and meter",
+          "party": "CS",
+          "data": "WorkLocation"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Disconnect or collect ServiceOrder",
+          "party": "SCHD",
+          "data": "Work"
+        },
+        {
+          "what": "Blocked issue with the protection named",
+          "party": "FIN",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "FIN",
+          "role": "originating",
+          "service": "Collections case"
+        },
+        {
+          "component": "CS",
+          "role": "owning",
+          "service": "Eligibility and notice history"
+        },
+        {
+          "component": "SCHD",
+          "role": "receiving",
+          "service": "Field order"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "FIN",
+          "to": "SCHD",
+          "payload": "ServiceOrder",
+          "verb": "create",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Collections officer",
+          "raci": "R"
+        },
+        {
+          "role": "Customer operations manager",
+          "raci": "A"
+        },
+        {
+          "role": "Scheduler",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkLocation",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "There is no federal disconnection-for-nonpay rule for distribution customers. Eligibility is state PUC and tariff. The pack names no customer-protection code. 10.4.4 must run first."
+        },
+        {
+          "kind": "operational",
+          "text": "Issuing the order is not performing the cut. 10.4.2 performs it. A protected account that still receives an order is a process failure."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Work Order Cycle Time",
+          "definition": "SMRP 5.4.7. Case to issued order.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Reactive Work",
+          "definition": "SMRP 5.4.1. Field collect versus planned disconnect.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Non-pay disconnect",
+        "Collect attempt without cut",
+        "Safety disconnect, not collections"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Eligible case becomes an order, or is blocked.",
+        "artifact": "models/10.4-collections-and-disconnect.bpmn"
+      },
+      "en17007": {
+        "process": "ACT.2",
+        "title": "Prepare for the maintenance tasks",
+        "clause": "6.5.3"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.5.3 ACT.2",
+          "status": "verified"
+        },
+        {
+          "for": "no federal nonpay rule",
+          "cite": "16 U.S.C. 824o does not create a disconnection code; none exists federally for distribution nonpay",
+          "status": "regulation"
+        },
+        {
+          "for": "interfaces",
+          "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 ServiceOrder, WorkRequest, MaintenanceOrder; Annex A verbs",
+          "status": "clause-verified"
+        },
+        {
+          "for": "eligibility",
+          "cite": "State PUC disconnection protection is not in the Source Authority Pack",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "judgment",
+        "primary": "EN 17007:2017 cl. 6.5.3 ACT.2"
+      }
+    },
+    {
+      "uid": 10316,
+      "id": "10.4.2",
+      "name": "Perform field disconnection and reconnection",
+      "group": {
+        "id": "10.4",
+        "name": "Perform collections and disconnection field work",
+        "uid": 10314
+      },
+      "intent": "Operate the meter, valve or cut that takes service off, or puts it back, at the premise.",
+      "activities": [
+        "Confirm premise, eligibility still valid, and briefing",
+        "Operate the disconnect or reconnect device",
+        "Capture open/closed state, reading and photo",
+        "Leave the site safe and the record unambiguous"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "A disconnect or reconnect ServiceOrder is in the field.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Disconnect or reconnect ServiceOrder",
+          "party": "FRD",
+          "data": "Work"
+        },
+        {
+          "what": "Meter or service valve",
+          "party": "MR&C",
+          "data": "WorkAsset"
+        },
+        {
+          "what": "Current eligibility",
+          "party": "CS",
+          "data": "Work"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Open or closed state with reading",
+          "party": "MR&C",
+          "data": "WorkAsset"
+        },
+        {
+          "what": "Field outcome on the ServiceOrder",
+          "party": "CS",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "FRD",
+          "role": "owning",
+          "service": "Field operate"
+        },
+        {
+          "component": "MR&C",
+          "role": "owning",
+          "service": "Meter state"
+        },
+        {
+          "component": "CS",
+          "role": "receiving",
+          "service": "Outcome"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "FRD",
+          "to": "MR&C",
+          "payload": "ServiceOrder",
+          "verb": "change",
+          "pattern": "event"
+        },
+        {
+          "from": "FRD",
+          "to": "CS",
+          "payload": "ServiceOrder",
+          "verb": "close",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Field technician",
+          "raci": "R"
+        },
+        {
+          "role": "Customer operations manager",
+          "raci": "A"
+        },
+        {
+          "role": "Meter operations supervisor",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkAsset",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "Gas: 1910.147 LOTO. Electric: 1910.269 qualified employee and MAD; a pole cut is not a meter pull. A clearance is 18.4.4 if the work deenergizes more than the service. 192.353/357 if the meter is moved."
+        },
+        {
+          "kind": "operational",
+          "text": "IEC 61968-9 is the meter-reading-and-control interface (Ed. 3, 2024). Cited by title only. Remote disconnect is still this process if no visit occurs - the record duty does not change."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Schedule Compliance",
+          "definition": "SMRP 5.4.3/5.4.4. Cut done on the order date.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Rework",
+          "definition": "SMRP 4.1. Wrong premise or state not as left.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Meter disconnect",
+        "Service-line valve",
+        "Pole or weatherhead cut"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "On-premise operate then record is a repeating path.",
+        "artifact": "models/10.4-collections-and-disconnect.bpmn"
+      },
+      "en17007": {
+        "process": "ACT.6",
+        "title": "Perform the maintenance tasks",
+        "clause": "6.5.7"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.5.7 ACT.6",
+          "status": "verified"
+        },
+        {
+          "for": "LOTO split",
+          "cite": "29 CFR 1910.147 LOTO applies to gas; electric T&D uses 1910.269(d)/(m) and complying with 1910.147 does not satisfy 1910.269(m)",
+          "status": "regulation"
+        },
+        {
+          "for": "electric qualified person",
+          "cite": "29 CFR 1910.269(a)(2) qualified employee; (l) minimum approach distance",
+          "status": "regulation"
+        },
+        {
+          "for": "meter interface",
+          "cite": "IEC 61968-9:2024 Ed. 3 Enterprise business function interfaces for utility operations",
+          "status": "consensus"
+        }
+      ],
+      "provenance": {
+        "basis": "regulation",
+        "primary": "29 CFR 1910.147 LOTO applies to gas; electric T&D uses 1910.269(d)/(m) and complying with 1910.147 does not satisfy 1910.269(m)"
+      }
+    },
+    {
+      "uid": 10317,
+      "id": "10.4.3",
+      "name": "Record customer contact and payment at premises",
+      "group": {
+        "id": "10.4",
+        "name": "Perform collections and disconnection field work",
+        "uid": 10314
+      },
+      "intent": "If the customer pays or talks at the door, put it on the order before anything is cut.",
+      "activities": [
+        "Attempt contact at the premise",
+        "Record payment, arrangement or refusal",
+        "Stop the cut if payment or a binding arrangement is taken",
+        "Hand the result to collections and to the ServiceOrder"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "The crew is at a collections visit and the customer is present.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Collections ServiceOrder",
+          "party": "FRD",
+          "data": "Work"
+        },
+        {
+          "what": "Amount owing and arrangement rules",
+          "party": "FIN",
+          "data": "Work"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Doorstep payment or arrangement",
+          "party": "FIN",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Cut stopped or continued",
+          "party": "FRD",
+          "data": "Work"
+        }
+      ],
+      "systems": [
+        {
+          "component": "FRD",
+          "role": "owning",
+          "service": "Doorstep contact"
+        },
+        {
+          "component": "FIN",
+          "role": "receiving",
+          "service": "Payment or arrangement"
+        },
+        {
+          "component": "CS",
+          "role": "receiving",
+          "service": "Contact on the history"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "FRD",
+          "to": "FIN",
+          "payload": "ServiceOrder",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Field technician",
+          "raci": "R"
+        },
+        {
+          "role": "Collections officer",
+          "raci": "A"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "financial",
+          "text": "Doorstep payment is cash-handling and credit, not in the pack. Rules are tariff and operator. The field action is: stop the cut if a binding arrangement is taken."
+        },
+        {
+          "kind": "operational",
+          "text": "A cut that proceeds after a recorded payment is a process failure, not a collections success."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Work Order Cycle Time",
+          "definition": "SMRP 5.4.7. Visit to payment posted.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Rework",
+          "definition": "SMRP 4.1. Cut that has to be reversed the same day.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Payment taken",
+        "Arrangement made",
+        "No contact at the door"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Contact then stop or continue the cut is a known path.",
+        "artifact": "models/10.4-collections-and-disconnect.bpmn"
+      },
+      "en17007": {
+        "process": "DTA.1",
+        "title": "Store and validate the raw data in a library and/or a database",
+        "clause": "6.10"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.10 DTA.1",
+          "status": "verified"
+        },
+        {
+          "for": "interfaces",
+          "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 ServiceOrder, WorkRequest, MaintenanceOrder; Annex A verbs",
+          "status": "clause-verified"
+        },
+        {
+          "for": "measures",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management",
+          "status": "consensus"
+        },
+        {
+          "for": "payment rules",
+          "cite": "Doorstep payment rules are not in the Source Authority Pack",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "judgment",
+        "primary": "EN 17007:2017 cl. 6.10 DTA.1"
+      }
+    },
+    {
+      "uid": 10318,
+      "id": "10.4.4",
+      "name": "Apply disconnection eligibility and protection rules",
+      "group": {
+        "id": "10.4",
+        "name": "Perform collections and disconnection field work",
+        "uid": 10314
+      },
+      "intent": "Decide whether this account may be disconnected today.",
+      "activities": [
+        "Load the account, notices given and any protection flag",
+        "Apply the state and tariff rules the operator is bound by",
+        "Return eligible, protected or incomplete",
+        "Block 10.4.1 if not eligible"
+      ],
+      "trigger": {
+        "kind": "conditional",
+        "text": "A collections case is about to become a field disconnect.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Account, balance and notice history",
+          "party": "FIN",
+          "data": "Work"
+        },
+        {
+          "what": "Protection flags on the account",
+          "party": "CS",
+          "data": "Work"
+        },
+        {
+          "what": "Premise occupancy",
+          "party": "CS",
+          "data": "WorkLocation"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Eligible, protected or incomplete",
+          "party": "CS",
+          "data": "Work"
+        },
+        {
+          "what": "Reason code on the case",
+          "party": "FIN",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "CS",
+          "role": "owning",
+          "service": "Eligibility decision"
+        },
+        {
+          "component": "FIN",
+          "role": "originating",
+          "service": "Collections case"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "FIN",
+          "to": "CS",
+          "payload": "ServiceOrder",
+          "verb": "get",
+          "pattern": "request-reply"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Collections officer",
+          "raci": "R"
+        },
+        {
+          "role": "Customer operations manager",
+          "raci": "A"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkLocation",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "No federal nonpay-disconnect code binds distribution. Winter, medical and notice rules are state PUC and tariff. The pack lists no customer-protection statute. Name the state rule the operator is under; do not imply a national one."
+        },
+        {
+          "kind": "operational",
+          "text": "The output is a value - eligible, protected, incomplete. That is why this is a decision, not a field visit."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Rework",
+          "definition": "SMRP 4.1. Disconnects later reversed as protected.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Work Order Cycle Time",
+          "definition": "SMRP 5.4.7. Case held as incomplete.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Winter or temperature protected",
+        "Medical or life-support certified",
+        "Eligible to disconnect today"
+      ],
+      "notation": {
+        "class": "DMN",
+        "why": "The output is eligible, protected or incomplete - a value, not a state change of the meter.",
+        "artifact": "models/10.4.4-disconnect-eligibility.dmn"
+      },
+      "en17007": {
+        "process": "MAN.5",
+        "title": "Oversee the actions",
+        "clause": "6.2"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.2 MAN.5",
+          "status": "verified"
+        },
+        {
+          "for": "no federal code",
+          "cite": "16 U.S.C. 824o - local distribution is outside the ERO; no federal nonpay-disconnect rule is in the pack",
+          "status": "regulation"
+        },
+        {
+          "for": "decision shape",
+          "cite": "Eligibility rules are state PUC and tariff, not in the Source Authority Pack",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "judgment",
+        "primary": "EN 17007:2017 cl. 6.2 MAN.5"
+      }
+    },
+    {
+      "uid": 10319,
+      "id": "10.4.5",
+      "name": "Perform reconnection after payment",
+      "group": {
+        "id": "10.4",
+        "name": "Perform collections and disconnection field work",
+        "uid": 10314
+      },
+      "intent": "Put service back once payment or a binding arrangement is posted.",
+      "activities": [
+        "Confirm payment or arrangement is posted",
+        "Raise the reconnect ServiceOrder",
+        "Operate the device and capture the on state and reading",
+        "Confirm to the customer that service is back"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "Payment or a binding arrangement has posted on a disconnected account.",
+        "cim": "ServiceOrder.create"
+      },
+      "inputs": [
+        {
+          "what": "Posted payment or arrangement",
+          "party": "FIN",
+          "data": "Work"
+        },
+        {
+          "what": "Disconnected meter or valve state",
+          "party": "MR&C",
+          "data": "WorkAsset"
+        },
+        {
+          "what": "Premise identity",
+          "party": "CS",
+          "data": "WorkLocation"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Service on, with reading",
+          "party": "MR&C",
+          "data": "WorkAsset"
+        },
+        {
+          "what": "Reconnect confirmation to the customer",
+          "party": "CS",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "FIN",
+          "role": "originating",
+          "service": "Payment posted"
+        },
+        {
+          "component": "SCHD",
+          "role": "owning",
+          "service": "Reconnect order"
+        },
+        {
+          "component": "FRD",
+          "role": "owning",
+          "service": "Field or remote operate"
+        },
+        {
+          "component": "MR&C",
+          "role": "owning",
+          "service": "On state"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "FIN",
+          "to": "SCHD",
+          "payload": "ServiceOrder",
+          "verb": "create",
+          "pattern": "event"
+        },
+        {
+          "from": "FRD",
+          "to": "MR&C",
+          "payload": "ServiceOrder",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Scheduler",
+          "raci": "R"
+        },
+        {
+          "role": "Customer operations manager",
+          "raci": "A"
+        },
+        {
+          "role": "Field technician",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkAsset",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "Reconnect is the reverse operate of 10.4.2 and takes the same OSHA and 192.353/357 constraints. State tariffs often set a reconnect clock; none is in the pack."
+        },
+        {
+          "kind": "operational",
+          "text": "Do not reconnect a premise that 10.5 would refuse as a start. Occupancy and identity still bind."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Work Order Cycle Time",
+          "definition": "SMRP 5.4.7. Payment posted to service on.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Schedule Compliance",
+          "definition": "SMRP 5.4.3/5.4.4. Reconnect on the promised clock.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Same-day reconnect",
+        "Next scheduled day",
+        "Remote reconnect, no visit"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Payment then reconnect operate is a repeating path.",
+        "artifact": "models/10.4-collections-and-disconnect.bpmn"
+      },
+      "en17007": {
+        "process": "ACT.6",
+        "title": "Perform the maintenance tasks",
+        "clause": "6.5.7"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.5.7 ACT.6",
+          "status": "verified"
+        },
+        {
+          "for": "gas meter",
+          "cite": "49 CFR 192.353; 192.357",
+          "status": "regulation"
+        },
+        {
+          "for": "electric qualified person",
+          "cite": "29 CFR 1910.269(a)(2) qualified employee; (l) minimum approach distance",
+          "status": "regulation"
+        },
+        {
+          "for": "clock",
+          "cite": "Reconnect clocks are tariff, not in the pack",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "EN 17007:2017 cl. 6.5.7 ACT.6"
+      }
+    },
+    {
+      "uid": 10321,
+      "id": "10.5.1",
+      "name": "Receive start, stop or transfer request",
+      "group": {
+        "id": "10.5",
+        "name": "Start, stop and transfer service",
+        "uid": 10320
+      },
+      "intent": "Take the move request and classify it as start, stop or transfer.",
+      "activities": [
+        "Receive the request and the requested date",
+        "Classify start, stop or transfer",
+        "Bind the requesting person",
+        "Hold if identity is incomplete"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "A customer has asked to start, stop or transfer service.",
+        "cim": "ServiceOrder.create"
+      },
+      "inputs": [
+        {
+          "what": "Move request",
+          "party": "CS",
+          "data": "Work"
+        },
+        {
+          "what": "Claimed premise",
+          "party": "GINV",
+          "data": "WorkLocation"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Classified start, stop or transfer",
+          "party": "CS",
+          "data": "Work"
+        },
+        {
+          "what": "Incomplete identity hold",
+          "party": "CS",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "CS",
+          "role": "owning",
+          "service": "Move-request capture"
+        },
+        {
+          "component": "GINV",
+          "role": "reference",
+          "service": "Premise"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "CS",
+          "to": "GINV",
+          "payload": "ServiceOrder",
+          "verb": "get",
+          "pattern": "request-reply"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Customer service representative",
+          "raci": "R"
+        },
+        {
+          "role": "Customer operations manager",
+          "raci": "A"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkLocation",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "ISO/IEC 20000-1 cl. 8.6.2 is the labelled intake analogue. Classification is operator. A transfer is two premises, not two unrelated orders."
+        },
+        {
+          "kind": "operational",
+          "text": "This is not 1.1.1 hazard capture. A smell-of-gas report during a move still goes to 1.1.1, not here."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Work Order Cycle Time",
+          "definition": "SMRP 5.4.7. Request to classified.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Reactive Work",
+          "definition": "SMRP 5.4.1. Same-day emergency starts.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Start",
+        "Stop",
+        "Transfer between premises"
+      ],
+      "notation": {
+        "class": "DMN",
+        "why": "The output is start, stop or transfer - a classification.",
+        "artifact": "models/10.5.1-start-stop-transfer.dmn"
+      },
+      "en17007": {
+        "process": "COR.1",
+        "title": "Classify the actual events",
+        "clause": "6.4.2"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.4.2 COR.1",
+          "status": "verified"
+        },
+        {
+          "for": "intake analogue",
+          "cite": "ISO/IEC 20000-1:2018 cl. 8.6.2 service request management - IT service management standard used as a structural analogue, not as domain authority",
+          "status": "clause-verified"
+        },
+        {
+          "for": "interfaces",
+          "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 ServiceOrder, WorkRequest, MaintenanceOrder; Annex A verbs",
+          "status": "clause-verified"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "EN 17007:2017 cl. 6.4.2 COR.1"
+      }
+    },
+    {
+      "uid": 10322,
+      "id": "10.5.2",
+      "name": "Establish or verify the premise record",
+      "group": {
+        "id": "10.5",
+        "name": "Start, stop and transfer service",
+        "uid": 10320
+      },
+      "intent": "Make sure the premise the move is about actually exists and is the right one.",
+      "activities": [
+        "Find or create the premise and service point",
+        "Verify meter, address and access notes",
+        "Flag shared meters and unknown occupancy",
+        "Hand a verified premise to credit and to the field order"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "A classified move request needs a verified premise.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Classified move request",
+          "party": "CS",
+          "data": "Work"
+        },
+        {
+          "what": "Facility and address records",
+          "party": "GINV",
+          "data": "WorkLocation"
+        },
+        {
+          "what": "Meter at the address",
+          "party": "MR&C",
+          "data": "WorkAsset"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Verified premise",
+          "party": "CS",
+          "data": "WorkLocation"
+        },
+        {
+          "what": "Premise exception",
+          "party": "GINV",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "GINV",
+          "role": "owning",
+          "service": "Premise record"
+        },
+        {
+          "component": "CS",
+          "role": "receiving",
+          "service": "Verified premise"
+        },
+        {
+          "component": "MR&C",
+          "role": "reference",
+          "service": "Meter"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "CS",
+          "to": "GINV",
+          "payload": "ServiceOrder",
+          "verb": "get",
+          "pattern": "request-reply"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Data steward",
+          "raci": "A"
+        },
+        {
+          "role": "Customer service representative",
+          "raci": "R"
+        }
+      ],
+      "data_objects": [
+        "WorkLocation",
+        "WorkAsset",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "10.1.1 binds identity. This process verifies the place for a move. A new premise that needs a service line is 10.6, not a start on an empty lot."
+        },
+        {
+          "kind": "operational",
+          "text": "Shared meters and master-meter premises are operator configuration. No standard specifies them."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Rework",
+          "definition": "SMRP 4.1. Turn-on at the wrong unit.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Work Order Cycle Time",
+          "definition": "SMRP 5.4.7. Held on an unverified premise.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Existing premise, known meter",
+        "New unit in an existing building",
+        "Shared or master meter"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Find or create then verify, or except.",
+        "artifact": "models/10.5-start-stop-and-transfer.bpmn"
+      },
+      "en17007": {
+        "process": "DTA.1",
+        "title": "Store and validate the raw data in a library and/or a database",
+        "clause": "6.10"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.10 DTA.1",
+          "status": "verified"
+        },
+        {
+          "for": "components",
+          "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 ServiceOrder, WorkRequest, MaintenanceOrder; Annex A verbs",
+          "status": "clause-verified"
+        },
+        {
+          "for": "data_objects",
+          "cite": "IEC 61968-11:2013 CIM extensions for distribution, Work package",
+          "status": "clause-verified"
+        },
+        {
+          "for": "shared meters",
+          "cite": "Shared-meter configuration is not standardised",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "EN 17007:2017 cl. 6.10 DTA.1"
+      }
+    },
+    {
+      "uid": 10323,
+      "id": "10.5.3",
+      "name": "Evaluate deposit and credit requirement",
+      "group": {
+        "id": "10.5",
+        "name": "Start, stop and transfer service",
+        "uid": 10320
+      },
+      "intent": "Decide whether this start or transfer requires a deposit, and how much.",
+      "activities": [
+        "Take credit history, tariff and any waiver",
+        "Compute deposit required, waived or transferred",
+        "Block the field order if a required deposit is unpaid",
+        "Record the decision on the request"
+      ],
+      "trigger": {
+        "kind": "conditional",
+        "text": "A start or transfer is ready for credit decision.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Verified premise and requesting person",
+          "party": "CS",
+          "data": "WorkLocation"
+        },
+        {
+          "what": "Tariff deposit rule",
+          "party": "FIN",
+          "data": "Work"
+        },
+        {
+          "what": "Prior account and credit",
+          "party": "FIN",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Deposit required, waived or transferred",
+          "party": "FIN",
+          "data": "Work"
+        },
+        {
+          "what": "Block on the field order if unpaid",
+          "party": "SCHD",
+          "data": "Work"
+        }
+      ],
+      "systems": [
+        {
+          "component": "FIN",
+          "role": "owning",
+          "service": "Deposit decision"
+        },
+        {
+          "component": "CS",
+          "role": "reference",
+          "service": "Applicant"
+        },
+        {
+          "component": "SCHD",
+          "role": "receiving",
+          "service": "Credit block"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "FIN",
+          "to": "SCHD",
+          "payload": "ServiceOrder",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Credit analyst",
+          "raci": "R"
+        },
+        {
+          "role": "Customer operations manager",
+          "raci": "A"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "financial",
+          "text": "Deposit rules are tariff and state. None is in the pack. 18 CFR 101 is plant accounting, not a customer deposit code. The decision is still required before a start."
+        },
+        {
+          "kind": "operational",
+          "text": "The output is a value - required, waived, transferred. A start that bypasses an unpaid required deposit is a credit leak, not a field success."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Work Order Cycle Time",
+          "definition": "SMRP 5.4.7. Held for deposit.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Planning and Control indicators",
+          "definition": "EN 15341 cl. 12 O&S9-O&S22 applied to requests blocked here.",
+          "cite": "EN 15341:2019+A1:2022 Maintenance KPIs, cl. 12 O&S9-O&S22 Planning and Control"
+        }
+      ],
+      "variants": [
+        "Deposit required",
+        "Waived under tariff",
+        "Credit transferred from the last premise"
+      ],
+      "notation": {
+        "class": "DMN",
+        "why": "The output is required, waived or transferred - a value.",
+        "artifact": "models/10.5.3-deposit-and-credit.dmn"
+      },
+      "en17007": {
+        "process": "BUD.3",
+        "title": "Create a budget estimate for infrequent or exceptional maintenance tasks",
+        "clause": "6.8"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.8 BUD.3 - closest named process; deposits are not maintenance budgets",
+          "status": "verified"
+        },
+        {
+          "for": "accounting contrast",
+          "cite": "18 CFR Part 101 Electric Plant Instructions - plant accounting, not customer deposits",
+          "status": "regulation"
+        },
+        {
+          "for": "rules",
+          "cite": "Deposit amounts and waivers are tariff, not in the pack",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "judgment",
+        "primary": "EN 17007:2017 cl. 6.8 BUD.3"
+      }
+    },
+    {
+      "uid": 10324,
+      "id": "10.5.4",
+      "name": "Raise turn-on, turn-off or transfer field order",
+      "group": {
+        "id": "10.5",
+        "name": "Start, stop and transfer service",
+        "uid": 10320
+      },
+      "intent": "Create the ServiceOrder that the field will actually perform for the move.",
+      "activities": [
+        "Take the verified premise and the credit result",
+        "Create turn-on, turn-off or paired transfer orders",
+        "Attach read-in or read-out as required",
+        "Release to 10.2.2"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "The move is credit-clear and the premise is verified.",
+        "cim": "ServiceOrder.create"
+      },
+      "inputs": [
+        {
+          "what": "Verified premise and move class",
+          "party": "CS",
+          "data": "Work"
+        },
+        {
+          "what": "Credit result",
+          "party": "FIN",
+          "data": "Work"
+        },
+        {
+          "what": "Meter to read or operate",
+          "party": "MR&C",
+          "data": "WorkAsset"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Turn-on, turn-off or transfer ServiceOrder",
+          "party": "SCHD",
+          "data": "Work"
+        },
+        {
+          "what": "Paired stop at the old premise, if transfer",
+          "party": "SCHD",
+          "data": "Work"
+        }
+      ],
+      "systems": [
+        {
+          "component": "CS",
+          "role": "owning",
+          "service": "Move order"
+        },
+        {
+          "component": "SCHD",
+          "role": "receiving",
+          "service": "Field ServiceOrder"
+        },
+        {
+          "component": "MR&C",
+          "role": "reference",
+          "service": "Meter"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "CS",
+          "to": "SCHD",
+          "payload": "ServiceOrder",
+          "verb": "create",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Customer service representative",
+          "raci": "R"
+        },
+        {
+          "role": "Scheduler",
+          "raci": "A"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkAsset",
+        "WorkTask"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "A transfer is two field orders with one customer request. Closing one without the other leaves a stranded account. Read-out is a 6.2 metering act consumed here, not duplicated."
+        },
+        {
+          "kind": "operational",
+          "text": "New service that needs a line built is 10.6. Do not raise a turn-on against an empty lot."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Schedule Compliance",
+          "definition": "SMRP 5.4.3/5.4.4. Move orders placed.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Work Order Cycle Time",
+          "definition": "SMRP 5.4.7. Request to field order.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Turn-on",
+        "Turn-off",
+        "Paired transfer with read-in and read-out"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Clear request becomes one or two ServiceOrders.",
+        "artifact": "models/10.5-start-stop-and-transfer.bpmn"
+      },
+      "en17007": {
+        "process": "ACT.2",
+        "title": "Prepare for the maintenance tasks",
+        "clause": "6.5.3"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.5.3 ACT.2",
+          "status": "verified"
+        },
+        {
+          "for": "payload",
+          "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 ServiceOrder, WorkRequest, MaintenanceOrder; Annex A verbs",
+          "status": "clause-verified"
+        },
+        {
+          "for": "APQC",
+          "cite": "APQC PCF Utilities v7.2.1 14.4.2 (pcf_id 19329) Install/remove/energize/re-energize meters - structural precedent",
+          "status": "consensus"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "EN 17007:2017 cl. 6.5.3 ACT.2"
+      }
+    },
+    {
+      "uid": 10325,
+      "id": "10.5.5",
+      "name": "Confirm service change and close the request",
+      "group": {
+        "id": "10.5",
+        "name": "Start, stop and transfer service",
+        "uid": 10320
+      },
+      "intent": "Confirm the field result to the customer and close the move request.",
+      "activities": [
+        "Take the field outcome and the reading",
+        "Update account state to on, off or transferred",
+        "Confirm to the customer",
+        "Close the request or return it if the field failed"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "The turn-on, turn-off or transfer field order has an outcome.",
+        "cim": "ServiceOrder.close"
+      },
+      "inputs": [
+        {
+          "what": "Field outcome and reading",
+          "party": "FRD",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Move request",
+          "party": "CS",
+          "data": "Work"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Account state on, off or transferred",
+          "party": "CS",
+          "data": "Work"
+        },
+        {
+          "what": "Confirmation to the customer",
+          "party": "CS",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "CS",
+          "role": "owning",
+          "service": "Move close"
+        },
+        {
+          "component": "FRD",
+          "role": "originating",
+          "service": "Field outcome"
+        },
+        {
+          "component": "FIN",
+          "role": "receiving",
+          "service": "Account state for billing"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "FRD",
+          "to": "CS",
+          "payload": "ServiceOrder",
+          "verb": "close",
+          "pattern": "event"
+        },
+        {
+          "from": "CS",
+          "to": "FIN",
+          "payload": "ServiceOrder",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Customer service representative",
+          "raci": "R"
+        },
+        {
+          "role": "Customer operations manager",
+          "raci": "A"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "EN 17007 ACT.7 finishes the task. Billing start/stop is FIN, not this process. A close without a reading where a read was required is incomplete."
+        },
+        {
+          "kind": "operational",
+          "text": "Failed field visits re-enter 10.2.4. Do not close the request as if the move happened."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Work Order Cycle Time",
+          "definition": "SMRP 5.4.7. Request to confirmed close.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Rework",
+          "definition": "SMRP 4.1. Closed then reopened after a bad outcome.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Confirmed on",
+        "Confirmed off",
+        "Failed visit, request still open"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Outcome to confirm or return is a repeating path.",
+        "artifact": "models/10.5-start-stop-and-transfer.bpmn"
+      },
+      "en17007": {
+        "process": "ACT.7",
+        "title": "Finish the tasks",
+        "clause": "6.5.8"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.5.8 ACT.7",
+          "status": "verified"
+        },
+        {
+          "for": "interfaces",
+          "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 ServiceOrder, WorkRequest, MaintenanceOrder; Annex A verbs",
+          "status": "clause-verified"
+        },
+        {
+          "for": "measures",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management",
+          "status": "consensus"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "EN 17007:2017 cl. 6.5.8 ACT.7"
+      }
+    },
+    {
+      "uid": 10327,
+      "id": "10.6.1",
+      "name": "Receive and qualify new service request",
+      "group": {
+        "id": "10.6",
+        "name": "Connect new service",
+        "uid": 10326
+      },
+      "intent": "Decide whether this request is a simple set, an extension, or work that needs design.",
+      "activities": [
+        "Receive the load, fuel and location",
+        "Classify simple set, extension or design-required",
+        "Refuse or hold if the request is not qualified",
+        "Hand qualified requests to survey"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "A customer has asked for a new service that does not yet exist.",
+        "cim": "WorkRequest.create"
+      },
+      "inputs": [
+        {
+          "what": "New service request and load",
+          "party": "CS",
+          "data": "Work"
+        },
+        {
+          "what": "Network near the location",
+          "party": "GINV",
+          "data": "WorkLocation"
+        },
+        {
+          "what": "Existing services at the site",
+          "party": "AM",
+          "data": "WorkAsset"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Qualified request with class",
+          "party": "DGN",
+          "data": "Work"
+        },
+        {
+          "what": "Unqualified or held request",
+          "party": "CS",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "CS",
+          "role": "owning",
+          "service": "Request capture"
+        },
+        {
+          "component": "DGN",
+          "role": "receiving",
+          "service": "Qualified request"
+        },
+        {
+          "component": "GINV",
+          "role": "reference",
+          "service": "Nearby network"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "CS",
+          "to": "DGN",
+          "payload": "WorkRequest",
+          "verb": "create",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Service planner",
+          "raci": "R"
+        },
+        {
+          "role": "Customer operations manager",
+          "raci": "A"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkLocation",
+        "WorkAsset",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "A new service is asset creation, not EN 17007 maintenance. COR.1 still classifies the request. Design itself is 2.0. Interconnection of generation is 10.6.6, not this."
+        },
+        {
+          "kind": "operational",
+          "text": "ISO 9001:2015 cl. 8.3 is the design-process analogue for what happens after this classification. Cited by title only."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Work Order Cycle Time",
+          "definition": "SMRP 5.4.7. Request to qualified.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Backlog",
+          "definition": "SMRP 5.4.8/5.4.9. Unqualified holds.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Simple meter set on existing plant",
+        "Service extension",
+        "Load that needs a design"
+      ],
+      "notation": {
+        "class": "DMN",
+        "why": "The output is simple, extension or design-required - a classification.",
+        "artifact": "models/10.6.1-qualify-new-service.dmn"
+      },
+      "en17007": {
+        "process": "COR.1",
+        "title": "Classify the actual events",
+        "clause": "6.4.2"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.4.2 COR.1",
+          "status": "verified"
+        },
+        {
+          "for": "design analogue",
+          "cite": "ISO 9001:2015 cl. 8.3 Design and development of products and services",
+          "status": "clause-verified"
+        },
+        {
+          "for": "interfaces",
+          "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 ServiceOrder, WorkRequest, MaintenanceOrder; Annex A verbs",
+          "status": "clause-verified"
+        },
+        {
+          "for": "classes",
+          "cite": "Simple versus design-required is operator judgment",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "EN 17007:2017 cl. 6.4.2 COR.1"
+      }
+    },
+    {
+      "uid": 10328,
+      "id": "10.6.2",
+      "name": "Survey premises and determine service route",
+      "group": {
+        "id": "10.6",
+        "name": "Connect new service",
+        "uid": 10326
+      },
+      "intent": "Walk the site and pick the route the service will actually take.",
+      "activities": [
+        "Visit or remotely survey the premise",
+        "Identify existing plant, obstacles and the proposed route",
+        "Record the route as a design input",
+        "Flag locates and permits the route will need"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "A qualified new-service request needs a route.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Qualified request",
+          "party": "DGN",
+          "data": "Work"
+        },
+        {
+          "what": "Existing facilities",
+          "party": "GINV",
+          "data": "WorkLocation"
+        },
+        {
+          "what": "Site constraints",
+          "party": "FRD",
+          "data": "WorkLocation"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Proposed service route",
+          "party": "DGN",
+          "data": "WorkLocation"
+        },
+        {
+          "what": "Locate and permit flags",
+          "party": "MAI",
+          "data": "Work"
+        }
+      ],
+      "systems": [
+        {
+          "component": "DGN",
+          "role": "owning",
+          "service": "Route"
+        },
+        {
+          "component": "GINV",
+          "role": "reference",
+          "service": "Existing plant"
+        },
+        {
+          "component": "FRD",
+          "role": "originating",
+          "service": "Site survey"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "FRD",
+          "to": "DGN",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Service planner",
+          "raci": "R"
+        },
+        {
+          "role": "Designer",
+          "raci": "A"
+        },
+        {
+          "role": "Field technician",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkLocation"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "CGA Best Practices Chapter 2 Planning and Design: 2-2 gathering information, 2-3 identifying existing facilities. ASCE 38-22 is the SUE standard named by CGA 2-14. 2.1.1 is the general site survey; this is the service-route application."
+        },
+        {
+          "kind": "operational",
+          "text": "49 CFR 192.361 will constrain a gas route (cover, building entry). NESC constrains an electric route. Neither is paraphrased into a design."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Work Order Cycle Time",
+          "definition": "SMRP 5.4.7. Qualified to routed.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Rework",
+          "definition": "SMRP 4.1. Routes that cannot be built as surveyed.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Overhead route",
+        "Underground route",
+        "Use of existing duct or riser"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Survey then a recorded route is a repeating path.",
+        "artifact": "models/10.6-connect-new-service.bpmn"
+      },
+      "en17007": {
+        "process": "ACT.2",
+        "title": "Prepare for the maintenance tasks",
+        "clause": "6.5.3"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.5.3 ACT.2",
+          "status": "verified"
+        },
+        {
+          "for": "CGA planning",
+          "cite": "CGA Best Practices v22.0 Chapter 2 Planning and Design, practices 2-2 and 2-3",
+          "status": "consensus"
+        },
+        {
+          "for": "SUE",
+          "cite": "ASCE 38-22 Standard Guideline for Investigating and Documenting Existing Utilities",
+          "status": "consensus"
+        },
+        {
+          "for": "gas route constraint",
+          "cite": "49 CFR 192.361 Service lines: Installation",
+          "status": "regulation"
+        }
+      ],
+      "provenance": {
+        "basis": "consensus",
+        "primary": "CGA Best Practices v22.0 Chapter 2"
+      }
+    },
+    {
+      "uid": 10329,
+      "id": "10.6.3",
+      "name": "Estimate and agree customer contribution",
+      "group": {
+        "id": "10.6",
+        "name": "Connect new service",
+        "uid": 10326
+      },
+      "intent": "Price the customer share, get agreement, and do not start the line without it.",
+      "activities": [
+        "Estimate construction cost for this service",
+        "Apply the tariff allowance and compute the contribution",
+        "Agree the amount with the customer",
+        "Hold construction until the contribution is secured"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "A routed new service needs a price the customer will pay.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Route and bill of materials",
+          "party": "DGN",
+          "data": "Work"
+        },
+        {
+          "what": "Tariff allowance",
+          "party": "FIN",
+          "data": "Work"
+        },
+        {
+          "what": "Estimate class inputs",
+          "party": "DGN",
+          "data": "Work"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Agreed customer contribution",
+          "party": "FIN",
+          "data": "Work"
+        },
+        {
+          "what": "Hold on construction if unpaid",
+          "party": "CON",
+          "data": "Work"
+        }
+      ],
+      "systems": [
+        {
+          "component": "DGN",
+          "role": "originating",
+          "service": "Estimate"
+        },
+        {
+          "component": "FIN",
+          "role": "owning",
+          "service": "Contribution"
+        },
+        {
+          "component": "CON",
+          "role": "receiving",
+          "service": "Paid-to-build flag"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "DGN",
+          "to": "FIN",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "request-reply"
+        },
+        {
+          "from": "FIN",
+          "to": "CON",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Service planner",
+          "raci": "R"
+        },
+        {
+          "role": "Customer operations manager",
+          "raci": "A"
+        },
+        {
+          "role": "Finance controller",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "financial",
+          "text": "18 CFR 101 is plant accounting. Contribution-in-aid-of-construction is tariff, not a FERC construction-cost rule. AACE RPs are guidelines, not standards, and are not required here for a service set."
+        },
+        {
+          "kind": "operational",
+          "text": "Building before the contribution is secured is a credit decision, not a construction one. 2.3 estimates general work; this is the customer-share application."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Work Order Cycle Time",
+          "definition": "SMRP 5.4.7. Route to agreed contribution.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Backlog",
+          "definition": "SMRP 5.4.8/5.4.9. Jobs held for payment.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Contribution required",
+        "Tariff allowance covers the job",
+        "Staged payment"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Estimate, agree, hold or release.",
+        "artifact": "models/10.6-connect-new-service.bpmn"
+      },
+      "en17007": {
+        "process": "BUD.3",
+        "title": "Create a budget estimate for infrequent or exceptional maintenance tasks",
+        "clause": "6.8"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.8 BUD.3",
+          "status": "verified"
+        },
+        {
+          "for": "plant accounting",
+          "cite": "18 CFR Part 101 Electric Plant Instructions",
+          "status": "regulation"
+        },
+        {
+          "for": "interfaces",
+          "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 ServiceOrder, WorkRequest, MaintenanceOrder; Annex A verbs",
+          "status": "clause-verified"
+        },
+        {
+          "for": "CIAC",
+          "cite": "Customer contribution amounts are tariff, not in the pack",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "EN 17007:2017 cl. 6.8 BUD.3"
+      }
+    },
+    {
+      "uid": 10330,
+      "id": "10.6.4",
+      "name": "Install service line and set meter",
+      "group": {
+        "id": "10.6",
+        "name": "Connect new service",
+        "uid": 10326
+      },
+      "intent": "Build the service and set the meter, under the locates, the specification and the safety envelope.",
+      "activities": [
+        "Confirm locates, permits and any clearance",
+        "Install the service line to the specification",
+        "Set the meter and any required EFV or shut-off valve",
+        "Leave the installation ready to commission"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "The contribution is secured and the job is released to construct.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Released construction package",
+          "party": "CON",
+          "data": "Work"
+        },
+        {
+          "what": "Locate ticket and permits",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Meter to set",
+          "party": "MM",
+          "data": "WorkAsset"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Installed service and set meter",
+          "party": "FRD",
+          "data": "WorkAsset"
+        },
+        {
+          "what": "As-left exceptions",
+          "party": "CON",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "CON",
+          "role": "owning",
+          "service": "Service construction"
+        },
+        {
+          "component": "FRD",
+          "role": "owning",
+          "service": "Field install"
+        },
+        {
+          "component": "MM",
+          "role": "reference",
+          "service": "Meter stock"
+        },
+        {
+          "component": "NO",
+          "role": "reference",
+          "service": "Clearance if required"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "CON",
+          "to": "FRD",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        },
+        {
+          "from": "NO",
+          "to": "CON",
+          "payload": "WorkRequest",
+          "verb": "get",
+          "pattern": "request-reply"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Field technician",
+          "raci": "R"
+        },
+        {
+          "role": "Construction supervisor",
+          "raci": "A"
+        },
+        {
+          "role": "Network operator",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkAsset",
+        "WorkLocation",
+        "MaterialItem"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "Gas: 192.361, 192.353, 192.383 EFV on new or replaced service lines, 192.385 shut-off valve. 811 is state one-call, not 192.614. Excavation: 1926 Subpart P. Electric: qualified employee and MAD. Clearance from 18.4.4 if the line must be deenergized."
+        },
+        {
+          "kind": "operational",
+          "text": "6.3 programmes the endpoint. This process sets the physical meter. 19.1 commissions network assets. Do not collapse the three."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Schedule Compliance",
+          "definition": "SMRP 5.4.3/5.4.4. Installed on the construction date.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Rework",
+          "definition": "SMRP 4.1. Failed pressure or set that has to be redone.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "New buried service line",
+        "Meter set on existing plant",
+        "Replacement service with EFV"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Released package is installed or excepted.",
+        "artifact": "models/10.6-connect-new-service.bpmn"
+      },
+      "en17007": {
+        "process": "ACT.6",
+        "title": "Perform the maintenance tasks",
+        "clause": "6.5.7"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.5.7 ACT.6",
+          "status": "verified"
+        },
+        {
+          "for": "gas Subpart H",
+          "cite": "49 CFR Part 192 Subpart H Customer Meters, Service Regulators, and Service Lines secs. 192.353, 192.361, 192.383, 192.385",
+          "status": "regulation"
+        },
+        {
+          "for": "locate",
+          "cite": "CGA Best Practices v22.0 Chapter 3 and 5 - 811 locate request",
+          "status": "consensus"
+        },
+        {
+          "for": "excavation",
+          "cite": "29 CFR 1926 Subpart P secs. 1926.650-652",
+          "status": "regulation"
+        },
+        {
+          "for": "clearance",
+          "cite": "29 CFR 1910.269(m) Deenergizing lines and equipment for employee protection; clearance produced by 18.4.4 against a plan approved at 18.2.2",
+          "status": "regulation"
+        }
+      ],
+      "provenance": {
+        "basis": "regulation",
+        "primary": "49 CFR Part 192 Subpart H Customer Meters, Service Regulators, and Service Lines"
+      }
+    },
+    {
+      "uid": 10331,
+      "id": "10.6.5",
+      "name": "Commission service and confirm connection",
+      "group": {
+        "id": "10.6",
+        "name": "Connect new service",
+        "uid": 10326
+      },
+      "intent": "Introduce gas or voltage, prove the service, and tell the customer it is on.",
+      "activities": [
+        "Introduce gas or energise the service",
+        "Prove tightness, polarity or rotation as the commodity requires",
+        "Record EFV presence, meter number and as-left state",
+        "Confirm to the customer and hand the meter to 6.3 if it still needs a network"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "The service is installed and is ready to introduce energy.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Installed service and set meter",
+          "party": "FRD",
+          "data": "WorkAsset"
+        },
+        {
+          "what": "Clearance or switching state",
+          "party": "NO",
+          "data": "Work"
+        },
+        {
+          "what": "Customer occupancy",
+          "party": "CS",
+          "data": "WorkLocation"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Commissioned service, as-left record",
+          "party": "AM",
+          "data": "WorkAsset"
+        },
+        {
+          "what": "Confirmation to the customer",
+          "party": "CS",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "FRD",
+          "role": "owning",
+          "service": "Commission at the premise"
+        },
+        {
+          "component": "NO",
+          "role": "owning",
+          "service": "Energise or pressurise"
+        },
+        {
+          "component": "AM",
+          "role": "receiving",
+          "service": "In-service record"
+        },
+        {
+          "component": "CS",
+          "role": "receiving",
+          "service": "Customer confirm"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "FRD",
+          "to": "AM",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        },
+        {
+          "from": "NO",
+          "to": "FRD",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Field technician",
+          "raci": "R"
+        },
+        {
+          "role": "Network operator",
+          "raci": "A"
+        },
+        {
+          "role": "Customer service representative",
+          "raci": "I"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkAsset",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "Gas: 192.379 new service lines not in use until put into service. 192.383(b) EFV before the line is activated. 19.1.3 coordinates energisation of network assets; this process commissions the service at the premise. Do not treat them as one."
+        },
+        {
+          "kind": "operational",
+          "text": "Idle pending occupancy is a valid as-left. Confirming 'on' to an empty house is a safety lie."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Work Order Cycle Time",
+          "definition": "SMRP 5.4.7. Install to confirmed on.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Rework",
+          "definition": "SMRP 4.1. Failed tightness or energisation.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Energised or pressurised and occupied",
+        "Idle pending occupancy",
+        "EFV documented at activation"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Introduce energy, prove, confirm.",
+        "artifact": "models/10.6-connect-new-service.bpmn"
+      },
+      "en17007": {
+        "process": "ACT.7",
+        "title": "Finish the tasks",
+        "clause": "6.5.8"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.5.8 ACT.7",
+          "status": "verified"
+        },
+        {
+          "for": "not in use",
+          "cite": "49 CFR 192.379 New service lines not in use",
+          "status": "regulation"
+        },
+        {
+          "for": "EFV at activation",
+          "cite": "49 CFR 192.383(b)",
+          "status": "regulation"
+        },
+        {
+          "for": "energisation coordination",
+          "cite": "APQC PCF Utilities v7.2.1 10.2.6.2 (pcf_id 19236) - 19.1.3 is the network half",
+          "status": "consensus"
+        }
+      ],
+      "provenance": {
+        "basis": "regulation",
+        "primary": "49 CFR 192.379"
+      }
+    },
+    {
+      "uid": 10332,
+      "id": "10.6.6",
+      "name": "Review and approve distributed energy resource interconnection",
+      "group": {
+        "id": "10.6",
+        "name": "Connect new service",
+        "uid": 10326
+      },
+      "intent": "Decide whether this generating or storage interconnection may connect, and on what terms.",
+      "activities": [
+        "Take the application, one-line and the requested export",
+        "Screen against the operator's interconnection rules",
+        "Return approve, approve-with-conditions, or study-required",
+        "Do not energise from here - that is 10.6.7"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "An interconnection application has been submitted.",
+        "cim": "WorkRequest.create"
+      },
+      "inputs": [
+        {
+          "what": "Application and one-line",
+          "party": "CS",
+          "data": "Work"
+        },
+        {
+          "what": "Hosting capacity and protection at the location",
+          "party": "NE",
+          "data": "WorkLocation"
+        },
+        {
+          "what": "Existing DER at the premise",
+          "party": "AM",
+          "data": "WorkAsset"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Approve, condition or study",
+          "party": "DGN",
+          "data": "Work"
+        },
+        {
+          "what": "Conditions carried on the application",
+          "party": "MAI",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "NE",
+          "role": "reference",
+          "service": "Hosting and protection"
+        },
+        {
+          "component": "DGN",
+          "role": "owning",
+          "service": "Interconnection review"
+        },
+        {
+          "component": "CS",
+          "role": "originating",
+          "service": "Application"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "CS",
+          "to": "DGN",
+          "payload": "WorkRequest",
+          "verb": "create",
+          "pattern": "event"
+        },
+        {
+          "from": "NE",
+          "to": "DGN",
+          "payload": "WorkRequest",
+          "verb": "get",
+          "pattern": "request-reply"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Interconnection engineer",
+          "raci": "R"
+        },
+        {
+          "role": "Network planning manager",
+          "raci": "A"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkLocation",
+        "WorkAsset",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "IEEE 1547 is the usual interconnection standard and is not in the Source Authority Pack, so it is not cited. FERC SGIP is wholesale. Distribution interconnection rules are state. EN 17007 MRQ.6 is maintenance input to someone else's design, not an interconnection code."
+        },
+        {
+          "kind": "operational",
+          "text": "16 U.S.C. 824o still excludes local distribution from the ERO. This process is not a NERC interconnection study."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Work Order Cycle Time",
+          "definition": "SMRP 5.4.7. Application to decision.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Backlog",
+          "definition": "SMRP 5.4.8/5.4.9. Applications in study.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Inverter-based, no export",
+        "Exporting inverter",
+        "Study-required or rotating machine"
+      ],
+      "notation": {
+        "class": "CMMN",
+        "why": "Two competent engineers will not sequence screens, studies and conditions the same way. CMMN is justified; Camunda 8 dropped it, so a runtime means Flowable.",
+        "artifact": "models/10.6.6-interconnection-review.cmmn"
+      },
+      "en17007": {
+        "process": "MRQ.6",
+        "title": "Participate in the analysis and choice of options and validate the solutions",
+        "clause": "6.12"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.12 MRQ.6",
+          "status": "verified"
+        },
+        {
+          "for": "distribution exclusion",
+          "cite": "16 U.S.C. 824o",
+          "status": "regulation"
+        },
+        {
+          "for": "network planning",
+          "cite": "IEC 61968-6:2015 cl. 4.2 NE Network extension planning",
+          "status": "clause-verified"
+        },
+        {
+          "for": "IEEE 1547 absent",
+          "cite": "IEEE 1547 is not in the Source Authority Pack and is not cited",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "judgment",
+        "primary": "EN 17007:2017 cl. 6.12 MRQ.6"
+      }
+    },
+    {
+      "uid": 10333,
+      "id": "10.6.7",
+      "name": "Witness, inspect and commission the interconnection",
+      "group": {
+        "id": "10.6",
+        "name": "Connect new service",
+        "uid": 10326
+      },
+      "intent": "Prove the interconnection as built, then allow it to operate.",
+      "activities": [
+        "Inspect the as-built against the approval",
+        "Witness the tests the approval required",
+        "Allow operation, or fail and hold export",
+        "Record the commissioning and tell 19.1 if network assets changed"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "The interconnection is built and is offered for witness.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Approval and conditions from 10.6.6",
+          "party": "DGN",
+          "data": "Work"
+        },
+        {
+          "what": "As-built at the premise",
+          "party": "FRD",
+          "data": "WorkAsset"
+        },
+        {
+          "what": "Clearance or switching if required",
+          "party": "NO",
+          "data": "Work"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Commissioned interconnection, or failed test",
+          "party": "AM",
+          "data": "WorkAsset"
+        },
+        {
+          "what": "Permission to operate, or hold",
+          "party": "NO",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "FRD",
+          "role": "owning",
+          "service": "Witness and inspect"
+        },
+        {
+          "component": "NO",
+          "role": "owning",
+          "service": "Permission to operate"
+        },
+        {
+          "component": "AM",
+          "role": "receiving",
+          "service": "In-service DER record"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "FRD",
+          "to": "NO",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        },
+        {
+          "from": "FRD",
+          "to": "AM",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Interconnection engineer",
+          "raci": "A"
+        },
+        {
+          "role": "Field technician",
+          "raci": "R"
+        },
+        {
+          "role": "Network operator",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkAsset",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "If energisation of utility plant is required, 18.4.4 issues the clearance and 19.1.3 coordinates. Permission to operate is not a clearance. IEEE 1547 test methods are not cited; they are not in the pack."
+        },
+        {
+          "kind": "operational",
+          "text": "A failed witness leaves the resource off. Closing 10.6.6 without 10.6.7 is an approval without a connection."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Rework",
+          "definition": "SMRP 4.1. Failed witness tests.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Work Order Cycle Time",
+          "definition": "SMRP 5.4.7. Built to permission to operate.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Witness pass, permission to operate",
+        "Fail and retest",
+        "Commission without export"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Inspect, witness, allow or hold is a repeating path.",
+        "artifact": "models/10.6-connect-new-service.bpmn"
+      },
+      "en17007": {
+        "process": "IMP.7",
+        "title": "Verify conformity with the reliability, maintainability, safety and logistic support requirements",
+        "clause": "6.6"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.6 IMP.7",
+          "status": "verified"
+        },
+        {
+          "for": "clearance",
+          "cite": "29 CFR 1910.269(m) Deenergizing lines and equipment for employee protection; clearance produced by 18.4.4 against a plan approved at 18.2.2",
+          "status": "regulation"
+        },
+        {
+          "for": "interfaces",
+          "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 ServiceOrder, WorkRequest, MaintenanceOrder; Annex A verbs",
+          "status": "clause-verified"
+        },
+        {
+          "for": "test methods",
+          "cite": "Interconnection test methods are not in the Source Authority Pack",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "EN 17007:2017 cl. 6.6 IMP.7"
+      }
+    }
+  ],
+  "merge_corrections": [
+    {
+      "date": "2026-08-29",
+      "by": "Claude",
+      "what": "citation form: a status may not claim more than the citation string supports. 'clause-verified' without a clause dropped to 'consensus'; an asserted absence dropped to 'judgment'.",
+      "count": 3
+    }
+  ]
+}

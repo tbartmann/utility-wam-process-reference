@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/" id="Demand_class" name="13.5.1 Classify demand pattern and variability" namespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <description>The output is a demand class - a value. No source in the Source Authority Pack classifies spare-part demand; EN 17007 cl. 6.10 DTA.5 evaluates data related to spare parts and stops there. So the class NAMES are operator judgment and, more to the point, the boundaries between them are inputs rather than constants. The method that then forecasts an intermittent item is 13.5.2, which is specified and not modelled for the same reason.</description>
+  <inputData id="in_periodsWithDemand" name="Periods with demand in the window"><variable id="in_periodsWithDemand_v" name="Periods with demand in the window" typeRef="number"/></inputData>
+  <inputData id="in_periodsObserved" name="Periods observed"><variable id="in_periodsObserved_v" name="Periods observed" typeRef="number"/></inputData>
+  <inputData id="in_intervalThreshold" name="Operator's interval threshold"><variable id="in_intervalThreshold_v" name="Operator's interval threshold" typeRef="number"/></inputData>
+  <inputData id="in_sizeVariability" name="Operator's size-variability band"><variable id="in_sizeVariability_v" name="Operator's size-variability band" typeRef="string"/></inputData>
+  <inputData id="in_historyAdequate" name="History long enough to classify"><variable id="in_historyAdequate_v" name="History long enough to classify" typeRef="boolean"/></inputData>
+  <knowledgeSource id="ks_op" name="The operator's classification thresholds"><description>Where the line falls between regular, intermittent and lumpy is set by the operator and reviewed with its planners. This reference states no threshold because no source in the pack supplies one, and a number invented here would be copied into service levels and stock cover as though it were a standard.</description></knowledgeSource>
+  <decision id="d_13_5_1" name="Demand class">
+    <variable id="d_13_5_1_v" name="Demand class" typeRef="string"/>
+    <informationRequirement id="ir_d_13_5_1_ks_op"><requiredInput href="#ks_op"/></informationRequirement>
+    <decisionTable id="d_13_5_1_dt" hitPolicy="FIRST" preferredOrientation="Rule-as-Row">
+      <input id="d_13_5_1_i1" label="History long enough"><inputExpression id="d_13_5_1_i1_e" typeRef="boolean"><text>in_historyAdequate</text></inputExpression></input>
+      <input id="d_13_5_1_i2" label="Demand interval against the operator's threshold"><inputExpression id="d_13_5_1_i2_e" typeRef="string"><text>in_intervalThreshold</text></inputExpression></input>
+      <input id="d_13_5_1_i3" label="Size variability against the operator's band"><inputExpression id="d_13_5_1_i3_e" typeRef="string"><text>in_sizeVariability</text></inputExpression></input>
+      <output id="d_13_5_1_o" label="Demand class" name="Demand class" typeRef="string"/>
+      <rule id="d_13_5_1_r1">
+        <description>A new or recently catalogued item. Unclassified is an honest answer and it routes to 13.5.7 criticality rather than to a forecast that has nothing to work with.</description>
+        <inputEntry id="d_13_5_1_r1_ie1"><text>false</text></inputEntry>
+        <inputEntry id="d_13_5_1_r1_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_13_5_1_r1_ie3"><text>-</text></inputEntry>
+        <outputEntry id="d_13_5_1_r1_oe"><text>"unclassified"</text></outputEntry>
+      </rule>
+      <rule id="d_13_5_1_r2">
+        <description>Demand in most periods and a steady size. Ordinary reorder-point handling at 13.5.3 works on this class and on very little else.</description>
+        <inputEntry id="d_13_5_1_r2_ie1"><text>true</text></inputEntry>
+        <inputEntry id="d_13_5_1_r2_ie2"><text>"below"</text></inputEntry>
+        <inputEntry id="d_13_5_1_r2_ie3"><text>"low"</text></inputEntry>
+        <outputEntry id="d_13_5_1_r2_oe"><text>"regular"</text></outputEntry>
+      </rule>
+      <rule id="d_13_5_1_r3">
+        <description>Demand most periods but the size jumps. The interval is not the problem; the quantity is.</description>
+        <inputEntry id="d_13_5_1_r3_ie1"><text>true</text></inputEntry>
+        <inputEntry id="d_13_5_1_r3_ie2"><text>"below"</text></inputEntry>
+        <inputEntry id="d_13_5_1_r3_ie3"><text>"high"</text></inputEntry>
+        <outputEntry id="d_13_5_1_r3_oe"><text>"erratic"</text></outputEntry>
+      </rule>
+      <rule id="d_13_5_1_r4">
+        <description>Long gaps, consistent size when it comes. This is the class 13.5.2 exists for.</description>
+        <inputEntry id="d_13_5_1_r4_ie1"><text>true</text></inputEntry>
+        <inputEntry id="d_13_5_1_r4_ie2"><text>"above"</text></inputEntry>
+        <inputEntry id="d_13_5_1_r4_ie3"><text>"low"</text></inputEntry>
+        <outputEntry id="d_13_5_1_r4_oe"><text>"intermittent"</text></outputEntry>
+      </rule>
+      <rule id="d_13_5_1_r5">
+        <description>Long gaps and jumping sizes - the hardest class to hold stock against, and the one where criticality at 13.5.7 usually decides the answer rather than arithmetic.</description>
+        <inputEntry id="d_13_5_1_r5_ie1"><text>true</text></inputEntry>
+        <inputEntry id="d_13_5_1_r5_ie2"><text>"above"</text></inputEntry>
+        <inputEntry id="d_13_5_1_r5_ie3"><text>"high"</text></inputEntry>
+        <outputEntry id="d_13_5_1_r5_oe"><text>"lumpy"</text></outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram id="drd_Demand_class">
+      <dmndi:DMNShape id="sh_in_periodsWithDemand" dmnElementRef="in_periodsWithDemand"><dc:Bounds x="60" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_periodsObserved" dmnElementRef="in_periodsObserved"><dc:Bounds x="245" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_intervalThreshold" dmnElementRef="in_intervalThreshold"><dc:Bounds x="430" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_sizeVariability" dmnElementRef="in_sizeVariability"><dc:Bounds x="615" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_historyAdequate" dmnElementRef="in_historyAdequate"><dc:Bounds x="800" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_d_13_5_1" dmnElementRef="d_13_5_1"><dc:Bounds x="60" y="240" width="180" height="70"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_ks_op" dmnElementRef="ks_op"><dc:Bounds x="900" y="100" width="160" height="55"/></dmndi:DMNShape>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</definitions>

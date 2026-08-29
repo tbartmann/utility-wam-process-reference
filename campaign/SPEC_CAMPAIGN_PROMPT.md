@@ -73,7 +73,11 @@ fixed; you inherit the fixes, but you also need to know they happened.
    pack has the detail. The one thing that will affect your round directly: a **clearance**
    is produced by **18.4.4**, against a switching plan approved at 18.2.2, under 29 CFR
    1910.269(m). It is not a permit and it does not arrive from nowhere. Cite it.
-6. **Every category now carries a `lifecycle` field** in `model.json` saying which asset
+6. **Citation form is now checked, not just citation status.** Two claims are verified
+   against the citation string itself: `clause-verified` must name a clause, and a
+   citation that asserts an absence must be `judgment`. Twenty-six citations were
+   repaired across the merged categories — most of them mine. See the self-check list.
+7. **Every category now carries a `lifecycle` field** in `model.json` saying which asset
    lifecycle stage it serves. Read yours; it tells you which of the two axes your category
    sits on and therefore which framework to test it against.
 
@@ -213,6 +217,19 @@ rejected a submission.
       run 18:7, 26:11, 21:9, 20:6 and 22:11. A group with two BPMN files is an
       error. See `specs/SCHEMA.md`. *Two submissions got this wrong because the
       rule was implicit in the worked example and never stated.*
+- [ ] **`clause-verified` names a clause.** The status means you confirmed a clause
+      number and title. `IEEE 1366-2022` on its own confirms nothing about a clause;
+      its honest status is `consensus` — the body publishes this standard, and that is
+      the whole claim. A locator can be a clause, an Annex, a Table, a CFR section, a
+      NESC Rule, a named UML package in IEC 61968-11, a numbered GFMAM subject, a
+      numbered CGA practice or a FERC account. **Name the clause or drop the status.
+      Never invent the number.** *Sixty-one citations across five merged categories
+      claimed this status while naming no clause, mine included.*
+- [ ] **An absence is a `judgment`.** A citation that opens "No federal requirement…",
+      "Neither X nor Y sets…" is your inference, whatever authoritative document you
+      name beside it. If a document does support the absence — a scope clause, an
+      applicability section — cite that document at its own status and keep the
+      conclusion as a separate `judgment` entry.
 - [ ] **Variants are different for every process, and none is merely the commodity.**
       A variant is a named way the work differs in practice — the route, the method, the
       outcome — such that a utility recognises its own operation. `model.json` already

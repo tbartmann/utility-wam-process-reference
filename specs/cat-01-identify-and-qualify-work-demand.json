@@ -715,7 +715,7 @@
         {
           "for": "measures",
           "cite": "IEEE 1366 Guide for Electric Power Distribution Reliability Indices",
-          "status": "clause-verified"
+          "status": "consensus"
         },
         {
           "for": "process",
@@ -1230,7 +1230,7 @@
         {
           "for": "minimum content (absence of a standard)",
           "cite": "No standards body publishes a work request content model spanning gas and electric. IEC 61968-6 is the closest and is electric-only. The two public consensus content sets are domain-specific: CGA Best Practices for locate requests and ANSI/GPTC G-192-11 sec. 6.1 for leak records.",
-          "status": "consensus"
+          "status": "judgment"
         },
         {
           "for": "work order definition",
@@ -3101,6 +3101,14 @@
         "basis": "standard",
         "primary": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319)"
       }
+    }
+  ],
+  "merge_corrections": [
+    {
+      "date": "2026-08-29",
+      "by": "Claude",
+      "what": "citation form: a status may not claim more than the citation string supports. 'clause-verified' without a clause dropped to 'consensus'; an asserted absence dropped to 'judgment'.",
+      "count": 2
     }
   ]
 }

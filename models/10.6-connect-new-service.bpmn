@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_P_10_6" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <process id="P_10_6" name="10.6 Connect new service" isExecutable="false">
+    <documentation>Tier-4 activities under 10.6.2, 10.6.3, 10.6.4, 10.6.5 and 10.6.7. Qualification is 10.6.1 and the interconnection review is 10.6.6; both are called. This is the one path in the category where federal rule is thick, and it is gas rule: 49 CFR 192.361 installation, 192.383 excess flow valve, 192.385 shut-off valve and 192.379, which keeps a new service line out of service until it is put into service. Electric distribution has no federal equivalent, because 16 U.S.C. 824o excludes local distribution.</documentation>
+    <laneSet id="P_10_6_lanes">
+      <lane id="l_106_dgn" name="Design and estimating">
+        <flowNodeRef>n_106_start</flowNodeRef>
+        <flowNodeRef>n_106_surv</flowNodeRef>
+        <flowNodeRef>n_106_route</flowNodeRef>
+        <flowNodeRef>n_106_flag</flowNodeRef>
+        <flowNodeRef>n_106_est</flowNodeRef>
+        <flowNodeRef>n_106_contrib</flowNodeRef>
+        <flowNodeRef>n_106_pg</flowNodeRef>
+        <flowNodeRef>n_106_hold</flowNodeRef>
+      </lane>
+      <lane id="l_106_con" name="Construction">
+        <flowNodeRef>n_106_loc</flowNodeRef>
+        <flowNodeRef>n_106_inst</flowNodeRef>
+        <flowNodeRef>n_106_set</flowNodeRef>
+        <flowNodeRef>n_106_comm</flowNodeRef>
+        <flowNodeRef>n_106_asleft</flowNodeRef>
+        <flowNodeRef>n_106_occ</flowNodeRef>
+        <flowNodeRef>n_106_idle</flowNodeRef>
+        <flowNodeRef>n_106_cnf</flowNodeRef>
+        <flowNodeRef>n_106_end</flowNodeRef>
+      </lane>
+      <lane id="l_106_no" name="Network operations">
+        <flowNodeRef>n_106_der</flowNodeRef>
+        <flowNodeRef>n_106_insp</flowNodeRef>
+        <flowNodeRef>n_106_wit</flowNodeRef>
+        <flowNodeRef>n_106_wg</flowNodeRef>
+        <flowNodeRef>n_106_fail</flowNodeRef>
+        <flowNodeRef>n_106_pto</flowNodeRef>
+        <flowNodeRef>n_106_net</flowNodeRef>
+        <flowNodeRef>n_106_tell</flowNodeRef>
+        <flowNodeRef>n_106_derend</flowNodeRef>
+      </lane>
+    </laneSet>
+    <startEvent id="n_106_start" name="Qualified new-service request"><messageEventDefinition id="n_106_start_md"/></startEvent>
+    <userTask id="n_106_surv" name="Survey the premises"><documentation>10.6.2. CGA Best Practices v22.0 Chapter 2: practice 2-2 gathering information, 2-3 identifying existing facilities. 2.1.1 is the general site survey; this is the service-route case of it.</documentation></userTask>
+    <serviceTask id="n_106_route" name="Record the proposed route as a design input"><documentation>10.6.2. ASCE 38-22 supplies the quality-level vocabulary for what is known about existing utilities. 49 CFR 192.361 will constrain a gas route on cover and building entry; the NESC constrains an electric one. Neither is paraphrased into a design here.</documentation></serviceTask>
+    <sendTask id="n_106_flag" name="Flag the locates and permits the route needs"><documentation>10.6.2. The 811 locate request is state one-call statute, not 49 CFR 192.614.</documentation></sendTask>
+    <userTask id="n_106_est" name="Estimate the construction cost for this service"><documentation>10.6.3.</documentation></userTask>
+    <userTask id="n_106_contrib" name="Apply the tariff allowance and agree the share"><documentation>10.6.3. Contribution in aid of construction is tariff. 18 CFR Part 101 is plant accounting, not a construction-cost rule, and no amount is drawn here.</documentation></userTask>
+    <exclusiveGateway id="n_106_pg" name="Contribution secured"/>
+    <userTask id="n_106_hold" name="Hold construction"><documentation>10.6.3. Building before the contribution is secured is a credit decision taken by a construction crew.</documentation></userTask>
+    <userTask id="n_106_loc" name="Confirm locates, permits and any clearance"><documentation>10.6.4. Where utility plant must be deenergized, the clearance is issued at 18.4.4 against a switching plan approved at 18.2.2. Excavation is 29 CFR 1926 Subpart P.</documentation></userTask>
+    <userTask id="n_106_inst" name="Install the service line to the specification"><documentation>10.6.4. Gas: 49 CFR 192.361 service line installation.</documentation></userTask>
+    <userTask id="n_106_set" name="Set the meter and any required valve"><documentation>10.6.4. Gas: 192.383 excess flow valve on new and replaced service lines, 192.385 shut-off valve, 192.353 meter location. 6.3 programmes the endpoint and 19.1 commissions network assets - this step sets the physical meter and nothing else.</documentation></userTask>
+    <userTask id="n_106_comm" name="Introduce energy and prove the service"><documentation>10.6.5. Gas: 192.379 keeps a new service line not in use until it is put into service, and 192.383(b) requires the excess flow valve before activation. Electric: prove polarity or rotation as the connection requires.</documentation></userTask>
+    <serviceTask id="n_106_asleft" name="Record valve presence, meter number and as-left"><documentation>10.6.5.</documentation></serviceTask>
+    <exclusiveGateway id="n_106_occ" name="Premise occupied"/>
+    <endEvent id="n_106_idle" name="Left idle pending occupancy"><documentation>10.6.5. A valid as-left. Confirming 'on' to an empty house is a safety lie.</documentation></endEvent>
+    <sendTask id="n_106_cnf" name="Confirm the connection to the customer"><documentation>10.6.5.</documentation></sendTask>
+    <endEvent id="n_106_end" name="Service commissioned"/>
+    <startEvent id="n_106_der" name="Interconnection offered for witness"><messageEventDefinition id="n_106_der_md"/></startEvent>
+    <userTask id="n_106_insp" name="Inspect the as-built against the approval"><documentation>10.6.7. The approval and its conditions come from 10.6.6.</documentation></userTask>
+    <userTask id="n_106_wit" name="Witness the tests the approval required"><documentation>10.6.7. IEEE 1547 is not in the Source Authority Pack, so no test method is named here. What the approval required is what is witnessed.</documentation></userTask>
+    <exclusiveGateway id="n_106_wg" name="Witness passed"/>
+    <endEvent id="n_106_fail" name="Export held, resource off"><documentation>10.6.7. A failed witness leaves the resource off.</documentation></endEvent>
+    <sendTask id="n_106_pto" name="Allow operation and record the commissioning"><documentation>10.6.7. Permission to operate is not a clearance. If utility plant had to be energised for it, 18.4.4 issued the clearance and 19.1.3 coordinated.</documentation></sendTask>
+    <exclusiveGateway id="n_106_net" name="Network assets changed"/>
+    <sendTask id="n_106_tell" name="Tell 19.1 the network asset changed"><documentation>10.6.7.</documentation></sendTask>
+    <endEvent id="n_106_derend" name="Interconnection in service"/>
+    <sequenceFlow id="f_n_106_start_n_106_surv" sourceRef="n_106_start" targetRef="n_106_surv" name=""/>
+    <sequenceFlow id="f_n_106_surv_n_106_route" sourceRef="n_106_surv" targetRef="n_106_route" name=""/>
+    <sequenceFlow id="f_n_106_route_n_106_flag" sourceRef="n_106_route" targetRef="n_106_flag" name=""/>
+    <sequenceFlow id="f_n_106_flag_n_106_est" sourceRef="n_106_flag" targetRef="n_106_est" name=""/>
+    <sequenceFlow id="f_n_106_est_n_106_contrib" sourceRef="n_106_est" targetRef="n_106_contrib" name=""/>
+    <sequenceFlow id="f_n_106_contrib_n_106_pg" sourceRef="n_106_contrib" targetRef="n_106_pg" name=""/>
+    <sequenceFlow id="f_n_106_pg_n_106_hold" sourceRef="n_106_pg" targetRef="n_106_hold" name="not secured"><conditionExpression xsi:type="tFormalExpression"><![CDATA[contributionSecured = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_106_hold_n_106_pg" sourceRef="n_106_hold" targetRef="n_106_pg" name="secured"/>
+    <sequenceFlow id="f_n_106_pg_n_106_loc" sourceRef="n_106_pg" targetRef="n_106_loc" name="secured"/>
+    <sequenceFlow id="f_n_106_loc_n_106_inst" sourceRef="n_106_loc" targetRef="n_106_inst" name=""/>
+    <sequenceFlow id="f_n_106_inst_n_106_set" sourceRef="n_106_inst" targetRef="n_106_set" name=""/>
+    <sequenceFlow id="f_n_106_set_n_106_comm" sourceRef="n_106_set" targetRef="n_106_comm" name=""/>
+    <sequenceFlow id="f_n_106_comm_n_106_asleft" sourceRef="n_106_comm" targetRef="n_106_asleft" name=""/>
+    <sequenceFlow id="f_n_106_asleft_n_106_occ" sourceRef="n_106_asleft" targetRef="n_106_occ" name=""/>
+    <sequenceFlow id="f_n_106_occ_n_106_idle" sourceRef="n_106_occ" targetRef="n_106_idle" name="not occupied"><conditionExpression xsi:type="tFormalExpression"><![CDATA[occupied = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_106_occ_n_106_cnf" sourceRef="n_106_occ" targetRef="n_106_cnf" name="occupied"/>
+    <sequenceFlow id="f_n_106_cnf_n_106_end" sourceRef="n_106_cnf" targetRef="n_106_end" name=""/>
+    <sequenceFlow id="f_n_106_der_n_106_insp" sourceRef="n_106_der" targetRef="n_106_insp" name=""/>
+    <sequenceFlow id="f_n_106_insp_n_106_wit" sourceRef="n_106_insp" targetRef="n_106_wit" name=""/>
+    <sequenceFlow id="f_n_106_wit_n_106_wg" sourceRef="n_106_wit" targetRef="n_106_wg" name=""/>
+    <sequenceFlow id="f_n_106_wg_n_106_fail" sourceRef="n_106_wg" targetRef="n_106_fail" name="failed"><conditionExpression xsi:type="tFormalExpression"><![CDATA[witnessPassed = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_106_wg_n_106_pto" sourceRef="n_106_wg" targetRef="n_106_pto" name="passed"/>
+    <sequenceFlow id="f_n_106_pto_n_106_net" sourceRef="n_106_pto" targetRef="n_106_net" name=""/>
+    <sequenceFlow id="f_n_106_net_n_106_tell" sourceRef="n_106_net" targetRef="n_106_tell" name="network asset changed"><conditionExpression xsi:type="tFormalExpression"><![CDATA[networkAssetChanged = true]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_106_tell_n_106_derend" sourceRef="n_106_tell" targetRef="n_106_derend" name=""/>
+    <sequenceFlow id="f_n_106_net_n_106_derend" sourceRef="n_106_net" targetRef="n_106_derend" name="customer side only"/>
+  </process>
+  <bpmndi:BPMNDiagram id="dg_P_10_6">
+    <bpmndi:BPMNPlane id="pl_P_10_6" bpmnElement="P_10_6">
+      <bpmndi:BPMNShape id="sh_n_106_start" bpmnElement="n_106_start"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_106_surv" bpmnElement="n_106_surv"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_106_route" bpmnElement="n_106_route"><dc:Bounds x="425" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_106_flag" bpmnElement="n_106_flag"><dc:Bounds x="595" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_106_est" bpmnElement="n_106_est"><dc:Bounds x="765" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_106_contrib" bpmnElement="n_106_contrib"><dc:Bounds x="935" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_106_pg" bpmnElement="n_106_pg"><dc:Bounds x="1147" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_106_hold" bpmnElement="n_106_hold"><dc:Bounds x="1105" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_106_loc" bpmnElement="n_106_loc"><dc:Bounds x="1275" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_106_inst" bpmnElement="n_106_inst"><dc:Bounds x="1445" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_106_set" bpmnElement="n_106_set"><dc:Bounds x="1615" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_106_comm" bpmnElement="n_106_comm"><dc:Bounds x="1785" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_106_asleft" bpmnElement="n_106_asleft"><dc:Bounds x="1955" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_106_occ" bpmnElement="n_106_occ"><dc:Bounds x="2167" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_106_idle" bpmnElement="n_106_idle"><dc:Bounds x="2172" y="107" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_106_cnf" bpmnElement="n_106_cnf"><dc:Bounds x="2295" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_106_end" bpmnElement="n_106_end"><dc:Bounds x="2512" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_106_der" bpmnElement="n_106_der"><dc:Bounds x="1322" y="657" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_106_insp" bpmnElement="n_106_insp"><dc:Bounds x="1445" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_106_wit" bpmnElement="n_106_wit"><dc:Bounds x="1615" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_106_wg" bpmnElement="n_106_wg"><dc:Bounds x="1827" y="652" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_106_fail" bpmnElement="n_106_fail"><dc:Bounds x="1832" y="877" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_106_pto" bpmnElement="n_106_pto"><dc:Bounds x="1955" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_106_net" bpmnElement="n_106_net"><dc:Bounds x="2167" y="652" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_106_tell" bpmnElement="n_106_tell"><dc:Bounds x="2125" y="860" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_106_derend" bpmnElement="n_106_derend"><dc:Bounds x="2342" y="657" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ed_f_n_106_start_n_106_surv" bpmnElement="f_n_106_start_n_106_surv"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_106_surv_n_106_route" bpmnElement="f_n_106_surv_n_106_route"><di:waypoint x="385" y="235"/><di:waypoint x="425" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_106_route_n_106_flag" bpmnElement="f_n_106_route_n_106_flag"><di:waypoint x="555" y="235"/><di:waypoint x="595" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_106_flag_n_106_est" bpmnElement="f_n_106_flag_n_106_est"><di:waypoint x="725" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_106_est_n_106_contrib" bpmnElement="f_n_106_est_n_106_contrib"><di:waypoint x="895" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_106_contrib_n_106_pg" bpmnElement="f_n_106_contrib_n_106_pg"><di:waypoint x="1065" y="235"/><di:waypoint x="1147" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_106_pg_n_106_hold" bpmnElement="f_n_106_pg_n_106_hold"><di:waypoint x="1193" y="235"/><di:waypoint x="1080" y="235"/><di:waypoint x="1080" y="455"/><di:waypoint x="1105" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_106_hold_n_106_pg" bpmnElement="f_n_106_hold_n_106_pg"><di:waypoint x="1235" y="455"/><di:waypoint x="1122" y="455"/><di:waypoint x="1122" y="235"/><di:waypoint x="1147" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_106_pg_n_106_loc" bpmnElement="f_n_106_pg_n_106_loc"><di:waypoint x="1193" y="235"/><di:waypoint x="1275" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_106_loc_n_106_inst" bpmnElement="f_n_106_loc_n_106_inst"><di:waypoint x="1405" y="235"/><di:waypoint x="1445" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_106_inst_n_106_set" bpmnElement="f_n_106_inst_n_106_set"><di:waypoint x="1575" y="235"/><di:waypoint x="1615" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_106_set_n_106_comm" bpmnElement="f_n_106_set_n_106_comm"><di:waypoint x="1745" y="235"/><di:waypoint x="1785" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_106_comm_n_106_asleft" bpmnElement="f_n_106_comm_n_106_asleft"><di:waypoint x="1915" y="235"/><di:waypoint x="1955" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_106_asleft_n_106_occ" bpmnElement="f_n_106_asleft_n_106_occ"><di:waypoint x="2085" y="235"/><di:waypoint x="2167" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_106_occ_n_106_idle" bpmnElement="f_n_106_occ_n_106_idle"><di:waypoint x="2213" y="235"/><di:waypoint x="2147" y="235"/><di:waypoint x="2147" y="125"/><di:waypoint x="2172" y="125"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_106_occ_n_106_cnf" bpmnElement="f_n_106_occ_n_106_cnf"><di:waypoint x="2213" y="235"/><di:waypoint x="2295" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_106_cnf_n_106_end" bpmnElement="f_n_106_cnf_n_106_end"><di:waypoint x="2425" y="235"/><di:waypoint x="2512" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_106_der_n_106_insp" bpmnElement="f_n_106_der_n_106_insp"><di:waypoint x="1358" y="675"/><di:waypoint x="1445" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_106_insp_n_106_wit" bpmnElement="f_n_106_insp_n_106_wit"><di:waypoint x="1575" y="675"/><di:waypoint x="1615" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_106_wit_n_106_wg" bpmnElement="f_n_106_wit_n_106_wg"><di:waypoint x="1745" y="675"/><di:waypoint x="1827" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_106_wg_n_106_fail" bpmnElement="f_n_106_wg_n_106_fail"><di:waypoint x="1873" y="675"/><di:waypoint x="1807" y="675"/><di:waypoint x="1807" y="895"/><di:waypoint x="1832" y="895"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_106_wg_n_106_pto" bpmnElement="f_n_106_wg_n_106_pto"><di:waypoint x="1873" y="675"/><di:waypoint x="1955" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_106_pto_n_106_net" bpmnElement="f_n_106_pto_n_106_net"><di:waypoint x="2085" y="675"/><di:waypoint x="2167" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_106_net_n_106_tell" bpmnElement="f_n_106_net_n_106_tell"><di:waypoint x="2213" y="675"/><di:waypoint x="2100" y="675"/><di:waypoint x="2100" y="895"/><di:waypoint x="2125" y="895"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_106_tell_n_106_derend" bpmnElement="f_n_106_tell_n_106_derend"><di:waypoint x="2255" y="895"/><di:waypoint x="2317" y="895"/><di:waypoint x="2317" y="675"/><di:waypoint x="2342" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_106_net_n_106_derend" bpmnElement="f_n_106_net_n_106_derend"><di:waypoint x="2213" y="675"/><di:waypoint x="2342" y="675"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

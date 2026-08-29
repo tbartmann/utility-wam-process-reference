@@ -1,0 +1,5753 @@
+{
+  "category": {
+    "uid": 10415,
+    "id": "13.0",
+    "name": "Manage Materials and Supply Chain",
+    "band": "Foundations and Enabling"
+  },
+  "platform": "Grok",
+  "model": "grok-4.6",
+  "round": 4,
+  "date": "2026-08-29",
+  "schema": "eam/specs/SCHEMA.md",
+  "derivation": "STANDARDS-DERIVED. Citation statuses observe source_status_ceiling. EN 17007 SPP is the spine. IEC 61968-6 cl. 4.2 has no procurement component; goods sit on MM and invoices on FIN. ASCM SCOR v14 is named in the pack as structural precedent only and is not used as content. PIDX is excluded.",
+  "field_set": "EN 17007:2017 cl. 5.2 maintenance process profile, corroborated by ISO 9001:2015 cl. 4.4.1 a) to h).",
+  "gaps": [
+    "IEC 61968-6:2015 cl. 4.2 has no procurement, document or health-and-safety component. Requisitions, orders and catalogues sit on MM; invoices on FIN. The absence is recorded rather than inventing a code.",
+    "ASCM SCOR v14 is listed in the pack as structural precedent only, not a content source. It is not cited for process. APQC 4.0 Deliver Physical Products (pcf_id 10215) is cross-industry manufacturing; only APQC 10 and 14 carry utility content. 14.4.1 Procure meter components (19326) is the assignment-pack touch and is partial.",
+    "PIDX is excluded by the pack. There is no standardised supplier catalogue, ASN, PO-ACK or invoice payload for this domain. 13.7 exchange processes are judgment on channel.",
+    "Vehicle stock (13.3) is not a standards domain. CIM has Vehicle and MaterialItem; IEC 61968-6 has MM, not a fleet component. Truck lists, truck-to-truck transfer, in-transit type and fleet search are judgment.",
+    "No pack standard specifies intermittent-demand forecasting, safety-stock arithmetic, multi-echelon positioning, insurance-spare definition, item-master content, commodity-code scheme, consignment/VMI, or a supplier scorecard. SPP.1/SPP.2/DTA.5 are the closest names.",
+    "18 CFR 101 continuing plant inventory is the PROPERTY record (5.3 / 12.1), not storeroom stock. Cycle-count adjustments are not unitisation.",
+    "NERC CIP-013 is bulk-power cyber supply chain, pack-scoped to 16.0. 16 U.S.C. 824o keeps it off distribution materials. 13.7.1 qualifies goods suppliers, not field contractors (16.1) and not CIP vendors.",
+    "EN 17007 SPP is spare parts for maintenance. Construction material, compatible units and customer-contribution jobs still flow through 13 because that is where MM lives; SPP titles are a stretch for construction line items and are labelled by using ACT.2 at 13.1.1.",
+    "2.5.4 defines that the job needs material; 13.1.1 explodes it to stock items. 13.2.2 issues at the window; 13.3.3 charges van consumption. 13.4.3 matches the PO; 13.2.1 puts away. 13.4.4 matches the invoice. Those splits are deliberate.",
+    "EN 13306 Annex E criticality is paywalled and cited by title only at 13.5.7. EN 13269 is contracting and is scoped by the pack to 16.0."
+  ],
+  "processes": [
+    {
+      "uid": 10417,
+      "id": "13.1.1",
+      "name": "Determine work order material requirement",
+      "group": {
+        "id": "13.1",
+        "name": "Plan material requirements",
+        "uid": 10416
+      },
+      "intent": "Explode the job's material need into stock items and quantities the storeroom can reserve.",
+      "activities": [
+        "Take the job plan or compatible-unit design",
+        "Explode to item, quantity and needed date",
+        "Flag long-lead and missing catalogue items",
+        "Hand the requirement to reserve or to purchase"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "A job plan or design has a material list to explode.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Job plan or compatible-unit design",
+          "party": "DGN",
+          "data": "Work"
+        },
+        {
+          "what": "Item master",
+          "party": "MM",
+          "data": "MaterialItem"
+        },
+        {
+          "what": "Needed date on the work",
+          "party": "MAI",
+          "data": "WorkTask"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Item-level requirement on the work",
+          "party": "MM",
+          "data": "MaterialItem"
+        },
+        {
+          "what": "Missing or non-catalogue item",
+          "party": "MM",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "DGN",
+          "role": "originating",
+          "service": "Design and compatible units"
+        },
+        {
+          "component": "MM",
+          "role": "owning",
+          "service": "Item explosion"
+        },
+        {
+          "component": "MAI",
+          "role": "reference",
+          "service": "Work"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "DGN",
+          "to": "MM",
+          "payload": "WorkRequest",
+          "verb": "create",
+          "pattern": "event"
+        },
+        {
+          "from": "MAI",
+          "to": "MM",
+          "payload": "WorkRequest",
+          "verb": "get",
+          "pattern": "request-reply"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Planner",
+          "raci": "R"
+        },
+        {
+          "role": "Materials planner",
+          "raci": "A"
+        },
+        {
+          "role": "Storekeeper",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkTask",
+        "MaterialItem",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "2.5.4 states that the job needs material. This process turns that into stock items. IEC 61968-6 cl. 4.2.5 names Compatible Units; catalogue content has no authority."
+        },
+        {
+          "kind": "operational",
+          "text": "cl. 4.2 has no procurement component. Requirements sit on MM, not on an invented purchasing system."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Work Order Cycle Time",
+          "definition": "SMRP 5.4.7. Jobs waiting on an unexploded list.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Schedule Compliance",
+          "definition": "SMRP 5.4.3/5.4.4. Work released without a complete list later misses.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Compatible-unit pick list",
+        "Line-item bill",
+        "Pre-built kit"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "A job list is exploded or excepted on a repeating path.",
+        "artifact": "models/13.1-plan-material-requirements.bpmn"
+      },
+      "en17007": {
+        "process": "ACT.2",
+        "title": "Prepare for the maintenance tasks",
+        "clause": "6.5.3"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.5.3 ACT.2",
+          "status": "verified"
+        },
+        {
+          "for": "CU",
+          "cite": "IEC 61968-6:2015 cl. 4.2.5 Design - Compatible Units associated with a Design Location",
+          "status": "clause-verified"
+        },
+        {
+          "for": "MM",
+          "cite": "IEC 61968-6:2015 cl. 4.2 MM Materials management; cl. 5 payloads; Annex A verbs",
+          "status": "clause-verified"
+        },
+        {
+          "for": "explosion",
+          "cite": "How a CU or job plan explodes to stock items is operator judgment",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "EN 17007:2017 cl. 6.5.3 ACT.2"
+      }
+    },
+    {
+      "uid": 10418,
+      "id": "13.1.2",
+      "name": "Reserve stock against work",
+      "group": {
+        "id": "13.1",
+        "name": "Plan material requirements",
+        "uid": 10416
+      },
+      "intent": "Hold quantity against the work so another job cannot take it.",
+      "activities": [
+        "Take the item-level requirement",
+        "Test on-hand and already reserved",
+        "Reserve what can be held",
+        "Raise a purchase request for the shortfall"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "An exploded requirement is ready to hold against stock.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Item-level requirement",
+          "party": "MM",
+          "data": "MaterialItem"
+        },
+        {
+          "what": "On-hand and already reserved",
+          "party": "MM",
+          "data": "MaterialItem"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Reservation on the work",
+          "party": "MM",
+          "data": "MaterialItem"
+        },
+        {
+          "what": "Shortfall to purchase",
+          "party": "MM",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "MM",
+          "role": "owning",
+          "service": "Reservation"
+        },
+        {
+          "component": "MAI",
+          "role": "reference",
+          "service": "Work being reserved for"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "MAI",
+          "to": "MM",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Storekeeper",
+          "raci": "R"
+        },
+        {
+          "role": "Materials planner",
+          "raci": "A"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "MaterialItem",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "EN 17007 SPP.3 is reserve or issue a purchase request. Soft versus hard allocation is not in the standard and is operator judgment."
+        },
+        {
+          "kind": "operational",
+          "text": "A reservation that does not reduce available quantity is not a reservation."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Schedule Compliance",
+          "definition": "SMRP 5.4.3/5.4.4. Work whose reserve was given away.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Backlog",
+          "definition": "SMRP 5.4.8/5.4.9. Work held for unreserved material.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Soft reserve",
+        "Hard allocation",
+        "Partial, remainder to purchase"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Requirement is reserved or sent to purchase.",
+        "artifact": "models/13.1-plan-material-requirements.bpmn"
+      },
+      "en17007": {
+        "process": "SPP.3",
+        "title": "Reserve or issue a purchase request for spare items",
+        "clause": "6.16"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.16 SPP.3",
+          "status": "verified"
+        },
+        {
+          "for": "interfaces",
+          "cite": "IEC 61968-6:2015 cl. 4.2 MM Materials management; cl. 5 payloads; Annex A verbs",
+          "status": "clause-verified"
+        },
+        {
+          "for": "allocation",
+          "cite": "Soft versus hard reservation is not standardised",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "EN 17007:2017 cl. 6.16 SPP.3"
+      }
+    },
+    {
+      "uid": 10419,
+      "id": "13.1.3",
+      "name": "Forecast material demand",
+      "group": {
+        "id": "13.1",
+        "name": "Plan material requirements",
+        "uid": 10416
+      },
+      "intent": "Project independent and dependent demand so stocking and purchase have a number to hit.",
+      "activities": [
+        "Gather independent demand and work-driven dependent demand",
+        "Project by item and period",
+        "Separate cycle, project and event load",
+        "Publish the forecast to stocking policy and to purchase"
+      ],
+      "trigger": {
+        "kind": "timer",
+        "text": "The materials forecast for the next period is due.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Work programme and CU volumes",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Independent demand and history",
+          "party": "MM",
+          "data": "MaterialItem"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Forecast by item and period",
+          "party": "MM",
+          "data": "MaterialItem"
+        },
+        {
+          "what": "Unforecastable items flagged",
+          "party": "MM",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "MM",
+          "role": "owning",
+          "service": "Material forecast"
+        },
+        {
+          "component": "MAI",
+          "role": "originating",
+          "service": "Work-driven demand"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "MAI",
+          "to": "MM",
+          "payload": "WorkRequest",
+          "verb": "get",
+          "pattern": "batch"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Materials planner",
+          "raci": "R"
+        },
+        {
+          "role": "Inventory analyst",
+          "raci": "A"
+        }
+      ],
+      "data_objects": [
+        "MaterialItem",
+        "Work",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "3.1.1 forecasts WORK demand. This process forecasts MATERIAL demand. Do not collapse them. Methods for intermittent demand sit in 13.5.2."
+        },
+        {
+          "kind": "operational",
+          "text": "ASCM SCOR v14 is named in the pack as structural precedent only and is not used as content."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Backlog",
+          "definition": "SMRP 5.4.8/5.4.9. Work later waiting on unforecast items.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Planning and Control indicators",
+          "definition": "EN 15341 cl. 12 O&S9-O&S22 applied to material readiness.",
+          "cite": "EN 15341:2019+A1:2022 Maintenance KPIs, cl. 12 O&S9-O&S22 Planning and Control"
+        }
+      ],
+      "variants": [
+        "Cycle-driven dependent demand",
+        "Project lump",
+        "Storm-rebuild overlay"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "A planning cycle produces a published forecast.",
+        "artifact": "models/13.1-plan-material-requirements.bpmn"
+      },
+      "en17007": {
+        "process": "SPP.1",
+        "title": "Determine the spare items to keep in stock for maintenance",
+        "clause": "6.16"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.16 SPP.1",
+          "status": "verified"
+        },
+        {
+          "for": "landscape",
+          "cite": "GFMAM Asset Management Landscape 3rd ed. v3.0, 2024-06, subject 6.8 Supply Chain Management",
+          "status": "verified"
+        },
+        {
+          "for": "interfaces",
+          "cite": "IEC 61968-6:2015 cl. 4.2 MM Materials management; cl. 5 payloads; Annex A verbs",
+          "status": "clause-verified"
+        },
+        {
+          "for": "method",
+          "cite": "Material-forecast method is not in the pack",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "EN 17007:2017 cl. 6.16 SPP.1"
+      }
+    },
+    {
+      "uid": 10420,
+      "id": "13.1.4",
+      "name": "Manage long-lead and critical items",
+      "group": {
+        "id": "13.1",
+        "name": "Plan material requirements",
+        "uid": 10416
+      },
+      "intent": "Give items that cannot be bought in the job's lead time a named owner and a named action.",
+      "activities": [
+        "Identify items whose lead time exceeds the work horizon",
+        "Name the covering action - stock, blanket, or accept the wait",
+        "Track open orders and promised dates",
+        "Escalate a promise that will miss the work"
+      ],
+      "trigger": {
+        "kind": "conditional",
+        "text": "An item's lead time exceeds the date the work needs it.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Lead time and criticality on the item",
+          "party": "MM",
+          "data": "MaterialItem"
+        },
+        {
+          "what": "Work needed-by date",
+          "party": "MAI",
+          "data": "Work"
+        },
+        {
+          "what": "Open purchase promises",
+          "party": "MM",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Covering action on the item",
+          "party": "MM",
+          "data": "MaterialItem"
+        },
+        {
+          "what": "Miss-risk escalation",
+          "party": "MAI",
+          "data": "Work"
+        }
+      ],
+      "systems": [
+        {
+          "component": "MM",
+          "role": "owning",
+          "service": "Long-lead register"
+        },
+        {
+          "component": "MAI",
+          "role": "receiving",
+          "service": "Work at risk"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "MM",
+          "to": "MAI",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Materials planner",
+          "raci": "R"
+        },
+        {
+          "role": "Inventory analyst",
+          "raci": "A"
+        },
+        {
+          "role": "Buyer",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "MaterialItem",
+        "Work",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "No pack standard defines long-lead or critical spare. SPP.1 is determine what to keep in stock. The register and the actions are operator judgment."
+        },
+        {
+          "kind": "operational",
+          "text": "CIP-013 is NERC supply-chain risk for bulk-power cyber and is scoped to 16.0. It is not a distribution long-lead process."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Schedule Compliance",
+          "definition": "SMRP 5.4.3/5.4.4. Work missed because the long-lead item was late.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Backlog",
+          "definition": "SMRP 5.4.8/5.4.9. Jobs parked on long-lead.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Stock as insurance spare",
+        "Blanket with a promised slot",
+        "Accept the wait and date the work to it"
+      ],
+      "notation": {
+        "class": "SPEC",
+        "why": "Standing register of long-lead items; no single instance boundary."
+      },
+      "en17007": {
+        "process": "SPP.1",
+        "title": "Determine the spare items to keep in stock for maintenance",
+        "clause": "6.16"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.16 SPP.1",
+          "status": "verified"
+        },
+        {
+          "for": "CIP-013 out of scope",
+          "cite": "NERC CIP-013 - pack places it on 16.0, bulk-power only",
+          "status": "judgment"
+        },
+        {
+          "for": "interfaces",
+          "cite": "IEC 61968-6:2015 cl. 4.2 MM Materials management; cl. 5 payloads; Annex A verbs",
+          "status": "clause-verified"
+        },
+        {
+          "for": "register",
+          "cite": "Long-lead register content is operator judgment",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "EN 17007:2017 cl. 6.16 SPP.1"
+      }
+    },
+    {
+      "uid": 10422,
+      "id": "13.2.1",
+      "name": "Receive material",
+      "group": {
+        "id": "13.2",
+        "name": "Operate storerooms and warehouses",
+        "uid": 10421
+      },
+      "intent": "Take the delivery into a stocking location and make it available or hold it.",
+      "activities": [
+        "Match the delivery to the order or return",
+        "Count, inspect and identify the item",
+        "Put away to a location or hold as quarantine",
+        "Update on-hand"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "A delivery or a crew return has arrived at the dock.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Purchase order or return document",
+          "party": "MM",
+          "data": "MaterialItem"
+        },
+        {
+          "what": "Physical delivery",
+          "party": "MM",
+          "data": "MaterialItem"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "On-hand in a location",
+          "party": "MM",
+          "data": "MaterialItem"
+        },
+        {
+          "what": "Quarantine or quantity exception",
+          "party": "MM",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "MM",
+          "role": "owning",
+          "service": "Receipt"
+        },
+        {
+          "component": "FIN",
+          "role": "reference",
+          "service": "Open purchase order"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "FIN",
+          "to": "MM",
+          "payload": "WorkRequest",
+          "verb": "get",
+          "pattern": "request-reply"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Storekeeper",
+          "raci": "R"
+        },
+        {
+          "role": "Materials manager",
+          "raci": "A"
+        }
+      ],
+      "data_objects": [
+        "MaterialItem",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "EN 17007 SPP.6 is receive ordered or repaired spare items. Three-way match to invoice is 13.4.4. Receipt without identity is not stock."
+        },
+        {
+          "kind": "operational",
+          "text": "Hazardous goods beyond ordinary spares are 19.3. This process receives maintenance and construction material, not PCB or oil waste."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Work Order Cycle Time",
+          "definition": "SMRP 5.4.7. Dock to available-to-issue.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Rework",
+          "definition": "SMRP 4.1. Receipts that have to be reversed.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Purchase-order receipt",
+        "Return from a crew",
+        "Vendor direct to a yard"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "A delivery is put away or quarantined.",
+        "artifact": "models/13.2-operate-storerooms.bpmn"
+      },
+      "en17007": {
+        "process": "SPP.6",
+        "title": "Receive ordered or repaired spare items",
+        "clause": "6.16"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.16 SPP.6",
+          "status": "verified"
+        },
+        {
+          "for": "interfaces",
+          "cite": "IEC 61968-6:2015 cl. 4.2 MM Materials management; cl. 5 payloads; Annex A verbs",
+          "status": "clause-verified"
+        },
+        {
+          "for": "data_objects",
+          "cite": "IEC 61968-11:2013 CIM Work package - MaterialItem, RepairItem, Tool, Vehicle",
+          "status": "clause-verified"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "EN 17007:2017 cl. 6.16 SPP.6"
+      }
+    },
+    {
+      "uid": 10423,
+      "id": "13.2.2",
+      "name": "Issue material to work or crew",
+      "group": {
+        "id": "13.2",
+        "name": "Operate storerooms and warehouses",
+        "uid": 10421
+      },
+      "intent": "Hand reserved or requested material to the work or the crew that will use it.",
+      "activities": [
+        "Take the reservation or a walk-up request",
+        "Pick from the location",
+        "Issue to the work or to the crew",
+        "Reduce on-hand and the reserve"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "Work or a crew is ready to take material from the window.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Reservation or request",
+          "party": "MM",
+          "data": "MaterialItem"
+        },
+        {
+          "what": "On-hand by location",
+          "party": "MM",
+          "data": "MaterialItem"
+        },
+        {
+          "what": "Work or crew to charge",
+          "party": "MAI",
+          "data": "Work"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Issue against the work or crew",
+          "party": "MM",
+          "data": "MaterialItem"
+        },
+        {
+          "what": "Short pick",
+          "party": "MAI",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "MM",
+          "role": "owning",
+          "service": "Issue"
+        },
+        {
+          "component": "MAI",
+          "role": "receiving",
+          "service": "Material on the work"
+        },
+        {
+          "component": "FRD",
+          "role": "receiving",
+          "service": "Material on the crew"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "MM",
+          "to": "MAI",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        },
+        {
+          "from": "MM",
+          "to": "FRD",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Storekeeper",
+          "raci": "R"
+        },
+        {
+          "role": "Materials manager",
+          "raci": "A"
+        },
+        {
+          "role": "Crew supervisor",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "MaterialItem",
+        "Crew",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "EN 17007 SPP.9 is deliver spare items. Issue without a charge-to (work or crew) loses the consumption 5.3 later has to cost."
+        },
+        {
+          "kind": "operational",
+          "text": "Vehicle stock issue is 13.3.3. This process is the window, not the truck."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Wrench Time",
+          "definition": "SMRP 5.6.1. Crews waiting at the window.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Schedule Compliance",
+          "definition": "SMRP 5.4.3/5.4.4. Work that could not be issued.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "To a work order",
+        "To a crew without a work order",
+        "To a kitting area"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "A pick is issued or shorted.",
+        "artifact": "models/13.2-operate-storerooms.bpmn"
+      },
+      "en17007": {
+        "process": "SPP.9",
+        "title": "Deliver spare items",
+        "clause": "6.16"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.16 SPP.9",
+          "status": "verified"
+        },
+        {
+          "for": "interfaces",
+          "cite": "IEC 61968-6:2015 cl. 4.2 MM Materials management; cl. 5 payloads; Annex A verbs",
+          "status": "clause-verified"
+        },
+        {
+          "for": "data_objects",
+          "cite": "IEC 61968-11:2013 CIM Work package - MaterialItem, RepairItem, Tool, Vehicle",
+          "status": "clause-verified"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "EN 17007:2017 cl. 6.16 SPP.9"
+      }
+    },
+    {
+      "uid": 10424,
+      "id": "13.2.3",
+      "name": "Return material to stock",
+      "group": {
+        "id": "13.2",
+        "name": "Operate storerooms and warehouses",
+        "uid": 10421
+      },
+      "intent": "Put unused or over-issued material back, or quarantine it if it cannot go back to available.",
+      "activities": [
+        "Identify the returned item and the work it came from",
+        "Inspect condition",
+        "Return to available or quarantine",
+        "Relieve the work of the quantity"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "Unused or over-issued material is being handed back.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Returned item and originating work",
+          "party": "FRD",
+          "data": "MaterialItem"
+        },
+        {
+          "what": "Item master and shelf-life",
+          "party": "MM",
+          "data": "MaterialItem"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Returned to available or quarantine",
+          "party": "MM",
+          "data": "MaterialItem"
+        },
+        {
+          "what": "Quantity relieved on the work",
+          "party": "MAI",
+          "data": "Work"
+        }
+      ],
+      "systems": [
+        {
+          "component": "MM",
+          "role": "owning",
+          "service": "Return-to-stock"
+        },
+        {
+          "component": "FRD",
+          "role": "originating",
+          "service": "Field return"
+        },
+        {
+          "component": "MAI",
+          "role": "receiving",
+          "service": "Work relieved"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "FRD",
+          "to": "MM",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Storekeeper",
+          "raci": "R"
+        },
+        {
+          "role": "Materials manager",
+          "raci": "A"
+        }
+      ],
+      "data_objects": [
+        "MaterialItem",
+        "Work",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "EN 17007 SPP.7 is add spare items to stock. SPP.10 assesses replaced items. Uninspected returns that go straight to available corrupt 13.2.5."
+        },
+        {
+          "kind": "operational",
+          "text": "Salvage and hazardous waste are 19.3, not this window."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Rework",
+          "definition": "SMRP 4.1. Material issued twice because a return was not posted.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Planning and Control indicators",
+          "definition": "EN 15341 cl. 12 O&S9-O&S22 applied to available stock quality.",
+          "cite": "EN 15341:2019+A1:2022 Maintenance KPIs, cl. 12 O&S9-O&S22 Planning and Control"
+        }
+      ],
+      "variants": [
+        "Unused as-new",
+        "Over-issue",
+        "Quarantine pending inspect"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "A return is restocked or quarantined.",
+        "artifact": "models/13.2-operate-storerooms.bpmn"
+      },
+      "en17007": {
+        "process": "SPP.7",
+        "title": "Add the spare items to stock",
+        "clause": "6.16"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.16 SPP.7",
+          "status": "verified"
+        },
+        {
+          "for": "assess",
+          "cite": "EN 17007:2017 cl. 6.16 SPP.10 Assess replaced items",
+          "status": "verified"
+        },
+        {
+          "for": "interfaces",
+          "cite": "IEC 61968-6:2015 cl. 4.2 MM Materials management; cl. 5 payloads; Annex A verbs",
+          "status": "clause-verified"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "EN 17007:2017 cl. 6.16 SPP.7"
+      }
+    },
+    {
+      "uid": 10425,
+      "id": "13.2.4",
+      "name": "Transfer material between locations",
+      "group": {
+        "id": "13.2",
+        "name": "Operate storerooms and warehouses",
+        "uid": 10421
+      },
+      "intent": "Move quantity from one stocking location to another without calling it an issue.",
+      "activities": [
+        "Authorise the move",
+        "Pick at the from-location",
+        "Receive at the to-location",
+        "Leave in-transit visible until received"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "Stock is required at a location that does not hold it.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "From-location on-hand",
+          "party": "MM",
+          "data": "MaterialItem"
+        },
+        {
+          "what": "To-location need",
+          "party": "MM",
+          "data": "MaterialItem"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Quantity in transit then on-hand at destination",
+          "party": "MM",
+          "data": "MaterialItem"
+        },
+        {
+          "what": "In-transit exception",
+          "party": "MM",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "MM",
+          "role": "owning",
+          "service": "Location transfer"
+        },
+        {
+          "component": "MAI",
+          "role": "reference",
+          "service": "Work waiting on the destination"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "MM",
+          "to": "MM",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Storekeeper",
+          "raci": "R"
+        },
+        {
+          "role": "Materials planner",
+          "raci": "A"
+        }
+      ],
+      "data_objects": [
+        "MaterialItem",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "EN 17007 SPP.2 is manage stocks. A transfer is not an issue and not a sale. 13.3.5 is vehicle-to-vehicle; this is storeroom and yard."
+        },
+        {
+          "kind": "operational",
+          "text": "In-transit that is not a location is how 13.3.9 and 13.2.5 disagree."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Wrench Time",
+          "definition": "SMRP 5.6.1. Crews waiting on a transfer that has not landed.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Work Order Cycle Time",
+          "definition": "SMRP 5.4.7. Request to available at destination.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Storeroom to storeroom",
+        "Yard to storeroom",
+        "Emergency same-day transfer"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Pick, transit, receive.",
+        "artifact": "models/13.2-operate-storerooms.bpmn"
+      },
+      "en17007": {
+        "process": "SPP.2",
+        "title": "Manage stocks",
+        "clause": "6.16"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.16 SPP.2",
+          "status": "verified"
+        },
+        {
+          "for": "interfaces",
+          "cite": "IEC 61968-6:2015 cl. 4.2 MM Materials management; cl. 5 payloads; Annex A verbs",
+          "status": "clause-verified"
+        },
+        {
+          "for": "in-transit",
+          "cite": "In-transit accounting is not standardised in the pack",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "EN 17007:2017 cl. 6.16 SPP.2"
+      }
+    },
+    {
+      "uid": 10426,
+      "id": "13.2.5",
+      "name": "Perform cycle count and stock adjustment",
+      "group": {
+        "id": "13.2",
+        "name": "Operate storerooms and warehouses",
+        "uid": 10421
+      },
+      "intent": "Count what is in the location and correct the record, with a reason.",
+      "activities": [
+        "Select locations or items to count",
+        "Count without the book quantity in view",
+        "Compare to the record",
+        "Post an adjustment with a reason or recount"
+      ],
+      "trigger": {
+        "kind": "timer",
+        "text": "A count cycle is due, or a variance has been found.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Book quantity by location",
+          "party": "MM",
+          "data": "MaterialItem"
+        },
+        {
+          "what": "Count result",
+          "party": "MM",
+          "data": "MaterialItem"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Posted adjustment with reason",
+          "party": "MM",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Recount held",
+          "party": "MM",
+          "data": "MaterialItem"
+        }
+      ],
+      "systems": [
+        {
+          "component": "MM",
+          "role": "owning",
+          "service": "Count and adjust"
+        },
+        {
+          "component": "FIN",
+          "role": "receiving",
+          "service": "Inventory value change"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "MM",
+          "to": "FIN",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Storekeeper",
+          "raci": "R"
+        },
+        {
+          "role": "Materials manager",
+          "raci": "A"
+        },
+        {
+          "role": "Inventory analyst",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "MaterialItem",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "financial",
+          "text": "18 CFR 101 continuing plant inventory is the PROPERTY record, not the storeroom. Do not treat a cycle-count adjustment as unitisation. Storeroom valuation method is operator and accounting policy."
+        },
+        {
+          "kind": "operational",
+          "text": "EN 17007 SPP.2 does not specify count method. Blind count versus wall-to-wall is judgment."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Rework",
+          "definition": "SMRP 4.1. Work issued against a quantity that was not there.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Planning and Control indicators",
+          "definition": "EN 15341 cl. 12 O&S9-O&S22 applied to stock-record accuracy.",
+          "cite": "EN 15341:2019+A1:2022 Maintenance KPIs, cl. 12 O&S9-O&S22 Planning and Control"
+        }
+      ],
+      "variants": [
+        "Blind cycle count",
+        "Wall-to-wall",
+        "Adjustment with a named reason"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Count, compare, adjust or recount.",
+        "artifact": "models/13.2-operate-storerooms.bpmn"
+      },
+      "en17007": {
+        "process": "SPP.2",
+        "title": "Manage stocks",
+        "clause": "6.16"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.16 SPP.2",
+          "status": "verified"
+        },
+        {
+          "for": "plant inventory contrast",
+          "cite": "18 CFR 101 EPI 11 and Definition 8 continuing plant inventory record",
+          "status": "regulation"
+        },
+        {
+          "for": "interfaces",
+          "cite": "IEC 61968-6:2015 cl. 4.2 MM Materials management; cl. 5 payloads; Annex A verbs",
+          "status": "clause-verified"
+        },
+        {
+          "for": "count method",
+          "cite": "Cycle-count method is not in the pack",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "EN 17007:2017 cl. 6.16 SPP.2"
+      }
+    },
+    {
+      "uid": 10428,
+      "id": "13.3.1",
+      "name": "Establish each vehicle as a stocking location",
+      "group": {
+        "id": "13.3",
+        "name": "Manage mobile and vehicle inventory",
+        "uid": 10427
+      },
+      "intent": "Make the vehicle a place MM can hold quantity, not a hole that stock disappears into.",
+      "activities": [
+        "Name the vehicle as a location",
+        "Bind it to a crew and a home storeroom",
+        "Set whether it may hold consignment",
+        "Retire the location when the vehicle leaves the fleet"
+      ],
+      "trigger": {
+        "kind": "none",
+        "text": "Standing rule: every stocking vehicle is a location.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Vehicle identity",
+          "party": "MM",
+          "data": "Vehicle"
+        },
+        {
+          "what": "Home storeroom",
+          "party": "MM",
+          "data": "MaterialItem"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Vehicle stocking location",
+          "party": "MM",
+          "data": "Vehicle"
+        },
+        {
+          "what": "Retired location",
+          "party": "MM",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "MM",
+          "role": "owning",
+          "service": "Vehicle as location"
+        },
+        {
+          "component": "HR",
+          "role": "reference",
+          "service": "Crew assignment"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "HR",
+          "to": "MM",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Materials manager",
+          "raci": "A"
+        },
+        {
+          "role": "Fleet supervisor",
+          "raci": "R"
+        }
+      ],
+      "data_objects": [
+        "Vehicle",
+        "MaterialItem",
+        "Crew"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "No standard specifies vehicle stock. CIM has Vehicle and MaterialItem. IEC 61968-6 has MM, not a fleet component. A truck that is not a location cannot be counted, reserved or replenished."
+        },
+        {
+          "kind": "operational",
+          "text": "3.5.2 assigns the vehicle to the crew. This process makes it a stock location. Do not merge them."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Wrench Time",
+          "definition": "SMRP 5.6.1. Stock on a truck that the record cannot see.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Rework",
+          "definition": "SMRP 4.1. Issues against a vehicle that was never a location.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "One vehicle, one location",
+        "Shared bin on a trailer",
+        "Seasonal extra body"
+      ],
+      "notation": {
+        "class": "SPEC",
+        "why": "Standing location master; revised when the fleet changes."
+      },
+      "en17007": {
+        "process": "SPP.2",
+        "title": "Manage stocks",
+        "clause": "6.16"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.16 SPP.2",
+          "status": "verified"
+        },
+        {
+          "for": "CIM Vehicle",
+          "cite": "IEC 61968-11:2013 CIM Work package - MaterialItem, RepairItem, Tool, Vehicle",
+          "status": "clause-verified"
+        },
+        {
+          "for": "no fleet component",
+          "cite": "IEC 61968-6:2015 cl. 4.2 MM Materials management; cl. 5 payloads; Annex A verbs",
+          "status": "clause-verified"
+        },
+        {
+          "for": "vehicle stock",
+          "cite": "Vehicle-as-location is not standardised",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "judgment",
+        "primary": "EN 17007:2017 cl. 6.16 SPP.2"
+      }
+    },
+    {
+      "uid": 10429,
+      "id": "13.3.2",
+      "name": "Define and maintain standard vehicle stock lists",
+      "group": {
+        "id": "13.3",
+        "name": "Manage mobile and vehicle inventory",
+        "uid": 10427
+      },
+      "intent": "State what a given truck type should carry, as a list MM can replenish to.",
+      "activities": [
+        "Name the truck type and the list",
+        "Set min and max by item",
+        "Revise after a miss or a programme change",
+        "Publish the list to replenishment"
+      ],
+      "trigger": {
+        "kind": "manual",
+        "text": "A truck type needs a stock list, or an existing list is wrong.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Truck type and work it does",
+          "party": "MM",
+          "data": "Vehicle"
+        },
+        {
+          "what": "Item master",
+          "party": "MM",
+          "data": "MaterialItem"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Published stock list with min and max",
+          "party": "MM",
+          "data": "MaterialItem"
+        },
+        {
+          "what": "List revision record",
+          "party": "MM",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "MM",
+          "role": "owning",
+          "service": "Standard lists"
+        },
+        {
+          "component": "MAI",
+          "role": "reference",
+          "service": "Work the truck type does"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "MAI",
+          "to": "MM",
+          "payload": "WorkRequest",
+          "verb": "get",
+          "pattern": "request-reply"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Materials planner",
+          "raci": "R"
+        },
+        {
+          "role": "Materials manager",
+          "raci": "A"
+        },
+        {
+          "role": "Crew supervisor",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Vehicle",
+        "MaterialItem"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "No standard specifies a trouble-truck or construction-crew stock list. SPP.1 is determine what to keep in stock. Content of the list is operator judgment."
+        },
+        {
+          "kind": "operational",
+          "text": "A list that 13.3.7 cannot replenish to is a poster, not a process."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Wrench Time",
+          "definition": "SMRP 5.6.1. Missing standard-list items on the job.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Schedule Compliance",
+          "definition": "SMRP 5.4.3/5.4.4. Work missed for want of van stock.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Trouble-truck list",
+        "Construction-crew list",
+        "Metering-van list"
+      ],
+      "notation": {
+        "class": "SPEC",
+        "why": "Standing list per truck type."
+      },
+      "en17007": {
+        "process": "SPP.1",
+        "title": "Determine the spare items to keep in stock for maintenance",
+        "clause": "6.16"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.16 SPP.1",
+          "status": "verified"
+        },
+        {
+          "for": "interfaces",
+          "cite": "IEC 61968-6:2015 cl. 4.2 MM Materials management; cl. 5 payloads; Annex A verbs",
+          "status": "clause-verified"
+        },
+        {
+          "for": "list content",
+          "cite": "Vehicle stock-list content is not standardised",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "judgment",
+        "primary": "EN 17007:2017 cl. 6.16 SPP.1"
+      }
+    },
+    {
+      "uid": 10430,
+      "id": "13.3.3",
+      "name": "Record field material consumption against work",
+      "group": {
+        "id": "13.3",
+        "name": "Manage mobile and vehicle inventory",
+        "uid": 10427
+      },
+      "intent": "Charge what left the truck to the work that used it.",
+      "activities": [
+        "Capture item and quantity used",
+        "Bind it to the work",
+        "Reduce vehicle on-hand",
+        "Leave unused quantity on the vehicle"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "Material has been used from the vehicle on a job.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Vehicle on-hand",
+          "party": "MM",
+          "data": "MaterialItem"
+        },
+        {
+          "what": "Work being performed",
+          "party": "FRD",
+          "data": "Work"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Consumption on the work",
+          "party": "MAI",
+          "data": "MaterialItem"
+        },
+        {
+          "what": "Reduced vehicle on-hand",
+          "party": "MM",
+          "data": "MaterialItem"
+        }
+      ],
+      "systems": [
+        {
+          "component": "FRD",
+          "role": "originating",
+          "service": "Field use"
+        },
+        {
+          "component": "MM",
+          "role": "owning",
+          "service": "Vehicle on-hand"
+        },
+        {
+          "component": "MAI",
+          "role": "receiving",
+          "service": "Charge to work"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "FRD",
+          "to": "MM",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        },
+        {
+          "from": "FRD",
+          "to": "MAI",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Field technician",
+          "raci": "R"
+        },
+        {
+          "role": "Materials manager",
+          "raci": "A"
+        },
+        {
+          "role": "Crew supervisor",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "MaterialItem",
+        "Vehicle"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "IEC 61968-6 FRD is field recording. Consumption not charged to work cannot be unitised at 5.3. Offline capture is vendor-defined and is not specified here."
+        },
+        {
+          "kind": "operational",
+          "text": "Used-from-truck without a prior issue is still a consumption. Pretending it was never on the truck breaks 13.3.8."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Rework",
+          "definition": "SMRP 4.1. Uncharged consumption found at count.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Wrench Time",
+          "definition": "SMRP 5.6.1. Time spent reconstructing what was used.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Issued from truck to the work",
+        "Used without a prior issue",
+        "Scrapped on site"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Use is charged and on-hand reduced.",
+        "artifact": "models/13.3-mobile-inventory.bpmn"
+      },
+      "en17007": {
+        "process": "SPP.9",
+        "title": "Deliver spare items",
+        "clause": "6.16"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.16 SPP.9",
+          "status": "verified"
+        },
+        {
+          "for": "FRD",
+          "cite": "IEC 61968-6:2015 cl. 4.2 MM Materials management; cl. 5 payloads; Annex A verbs",
+          "status": "clause-verified"
+        },
+        {
+          "for": "offline",
+          "cite": "Offline mobile capture is vendor-defined; pack section I",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "EN 17007:2017 cl. 6.16 SPP.9"
+      }
+    },
+    {
+      "uid": 10431,
+      "id": "13.3.4",
+      "name": "Search and view stock held across the fleet",
+      "group": {
+        "id": "13.3",
+        "name": "Manage mobile and vehicle inventory",
+        "uid": 10427
+      },
+      "intent": "Show where an item sits on vehicles and in storerooms so a crew can go and get it.",
+      "activities": [
+        "Accept an item or a nearby-job query",
+        "Return on-hand by location including vehicles",
+        "Exclude in-transit and quarantine",
+        "Hand the result to 13.3.5 or 13.3.6"
+      ],
+      "trigger": {
+        "kind": "manual",
+        "text": "A planner or a crew needs to see where an item is right now.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Item to find",
+          "party": "MM",
+          "data": "MaterialItem"
+        },
+        {
+          "what": "On-hand by location including vehicles",
+          "party": "MM",
+          "data": "Vehicle"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Location list with quantity",
+          "party": "MM",
+          "data": "MaterialItem"
+        }
+      ],
+      "systems": [
+        {
+          "component": "MM",
+          "role": "owning",
+          "service": "Stock visibility"
+        },
+        {
+          "component": "FRD",
+          "role": "consuming",
+          "service": "Field search"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "FRD",
+          "to": "MM",
+          "payload": "WorkRequest",
+          "verb": "get",
+          "pattern": "request-reply"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Field technician",
+          "raci": "R"
+        },
+        {
+          "role": "Materials planner",
+          "raci": "A"
+        }
+      ],
+      "data_objects": [
+        "MaterialItem",
+        "Vehicle"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "No standard specifies fleet-wide stock visibility. IEC 61968-6 get/reply can carry it. A search that hides vehicles is not this process."
+        },
+        {
+          "kind": "operational",
+          "text": "Visibility is not a reservation. Seeing stock on another truck does not hold it."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Wrench Time",
+          "definition": "SMRP 5.6.1. Time spent driving to a storeroom that was not the nearest hold.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Schedule Compliance",
+          "definition": "SMRP 5.4.3/5.4.4. Jobs delayed for want of a known nearby item.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Search by item",
+        "Search by vehicle near the job",
+        "Show true zero on-hand"
+      ],
+      "notation": {
+        "class": "SPEC",
+        "why": "Standing query; no instance boundary."
+      },
+      "en17007": {
+        "process": "SPP.2",
+        "title": "Manage stocks",
+        "clause": "6.16"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.16 SPP.2",
+          "status": "verified"
+        },
+        {
+          "for": "get/reply",
+          "cite": "IEC 61968-6:2015 cl. 4.2 MM Materials management; cl. 5 payloads; Annex A verbs",
+          "status": "clause-verified"
+        },
+        {
+          "for": "fleet view",
+          "cite": "Fleet-wide stock view is not standardised",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "judgment",
+        "primary": "EN 17007:2017 cl. 6.16 SPP.2"
+      }
+    },
+    {
+      "uid": 10432,
+      "id": "13.3.5",
+      "name": "Transfer material vehicle-to-vehicle in the field",
+      "group": {
+        "id": "13.3",
+        "name": "Manage mobile and vehicle inventory",
+        "uid": 10427
+      },
+      "intent": "Move quantity from one truck to another and keep both records true.",
+      "activities": [
+        "Agree the item and quantity",
+        "Issue from the giving vehicle",
+        "Receive on the taking vehicle",
+        "Leave a gap if one side does not confirm"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "Two crews need to pass stock in the field.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Giving vehicle on-hand",
+          "party": "MM",
+          "data": "MaterialItem"
+        },
+        {
+          "what": "Taking vehicle location",
+          "party": "MM",
+          "data": "Vehicle"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Reduced giving on-hand and increased taking on-hand",
+          "party": "MM",
+          "data": "MaterialItem"
+        },
+        {
+          "what": "Unconfirmed one-sided move",
+          "party": "MM",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "MM",
+          "role": "owning",
+          "service": "Vehicle-to-vehicle transfer"
+        },
+        {
+          "component": "FRD",
+          "role": "originating",
+          "service": "Field confirmation"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "FRD",
+          "to": "MM",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Field technician",
+          "raci": "R"
+        },
+        {
+          "role": "Crew supervisor",
+          "raci": "A"
+        }
+      ],
+      "data_objects": [
+        "MaterialItem",
+        "Vehicle",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "No standard specifies field truck-to-truck transfer. SPP.2 is manage stocks. A one-sided confirmation is an in-transit hole, not a transfer."
+        },
+        {
+          "kind": "operational",
+          "text": "This is not 13.2.4 storeroom transfer and not a 13.2.2 issue to work."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Rework",
+          "definition": "SMRP 4.1. Both trucks claiming, or neither claiming, the same item.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Wrench Time",
+          "definition": "SMRP 5.6.1. Time spent arguing about who has the fitting.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Two crews on the same site",
+        "Meet on the road",
+        "After-hours hand-off"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Issue from one vehicle, receive on the other.",
+        "artifact": "models/13.3-mobile-inventory.bpmn"
+      },
+      "en17007": {
+        "process": "SPP.2",
+        "title": "Manage stocks",
+        "clause": "6.16"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.16 SPP.2",
+          "status": "verified"
+        },
+        {
+          "for": "interfaces",
+          "cite": "IEC 61968-6:2015 cl. 4.2 MM Materials management; cl. 5 payloads; Annex A verbs",
+          "status": "clause-verified"
+        },
+        {
+          "for": "field transfer",
+          "cite": "Vehicle-to-vehicle transfer is not standardised",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "judgment",
+        "primary": "EN 17007:2017 cl. 6.16 SPP.2"
+      }
+    },
+    {
+      "uid": 10433,
+      "id": "13.3.6",
+      "name": "Request and source material from nearby stock",
+      "group": {
+        "id": "13.3",
+        "name": "Manage mobile and vehicle inventory",
+        "uid": 10427
+      },
+      "intent": "When the truck is short, choose the nearest honest source and get the item moving.",
+      "activities": [
+        "Name the short item and the job",
+        "See nearby vehicle, storeroom or buy-local options",
+        "Choose a source and raise the transfer or purchase",
+        "Track until the item is on this vehicle or this job"
+      ],
+      "trigger": {
+        "kind": "conditional",
+        "text": "The vehicle does not hold an item the current job needs.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Short item and job",
+          "party": "FRD",
+          "data": "Work"
+        },
+        {
+          "what": "Nearby on-hand",
+          "party": "MM",
+          "data": "MaterialItem"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Chosen source and moving request",
+          "party": "MM",
+          "data": "MaterialItem"
+        },
+        {
+          "what": "Job still short",
+          "party": "MAI",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "FRD",
+          "role": "originating",
+          "service": "Short on the job"
+        },
+        {
+          "component": "MM",
+          "role": "owning",
+          "service": "Sourcing choice"
+        },
+        {
+          "component": "SCHD",
+          "role": "receiving",
+          "service": "Delay if the job must wait"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "FRD",
+          "to": "MM",
+          "payload": "WorkRequest",
+          "verb": "create",
+          "pattern": "event"
+        },
+        {
+          "from": "MM",
+          "to": "SCHD",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Field technician",
+          "raci": "R"
+        },
+        {
+          "role": "Materials planner",
+          "raci": "A"
+        },
+        {
+          "role": "Scheduler",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "MaterialItem",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "Two competent people will not pick nearby-truck versus storeroom versus buy-local in the same order. That is why this is a case, not a single flow."
+        },
+        {
+          "kind": "operational",
+          "text": "Buy-local is still a 13.4 purchase. It does not skip receipt."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Wrench Time",
+          "definition": "SMRP 5.6.1. Time from short to item in hand.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Schedule Compliance",
+          "definition": "SMRP 5.4.3/5.4.4. Job delayed while sourcing.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Nearby truck",
+        "Nearby storeroom",
+        "Buy local and receipt on the job"
+      ],
+      "notation": {
+        "class": "CMMN",
+        "why": "Two competent people will sequence nearby-truck, storeroom and buy-local differently. CMMN is justified; Camunda 8 dropped it, so a runtime means Flowable.",
+        "artifact": "models/13.3.6-source-nearby.cmmn"
+      },
+      "en17007": {
+        "process": "SPP.9",
+        "title": "Deliver spare items",
+        "clause": "6.16"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.16 SPP.9",
+          "status": "verified"
+        },
+        {
+          "for": "interfaces",
+          "cite": "IEC 61968-6:2015 cl. 4.2 MM Materials management; cl. 5 payloads; Annex A verbs",
+          "status": "clause-verified"
+        },
+        {
+          "for": "choice",
+          "cite": "Field sourcing choice is not standardised",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "judgment",
+        "primary": "EN 17007:2017 cl. 6.16 SPP.9"
+      }
+    },
+    {
+      "uid": 10434,
+      "id": "13.3.7",
+      "name": "Replenish vehicle stock from storeroom",
+      "group": {
+        "id": "13.3",
+        "name": "Manage mobile and vehicle inventory",
+        "uid": 10427
+      },
+      "intent": "Top the truck back up to its list from the home storeroom.",
+      "activities": [
+        "Compare vehicle on-hand to the standard list",
+        "Create a replenishment pick",
+        "Issue from the storeroom to the vehicle location",
+        "Confirm on the vehicle"
+      ],
+      "trigger": {
+        "kind": "timer",
+        "text": "The vehicle is due to be topped up, or it has fallen below min.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Standard list min and max",
+          "party": "MM",
+          "data": "MaterialItem"
+        },
+        {
+          "what": "Vehicle on-hand",
+          "party": "MM",
+          "data": "Vehicle"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Replenishment on the vehicle",
+          "party": "MM",
+          "data": "MaterialItem"
+        },
+        {
+          "what": "Short at the storeroom",
+          "party": "MM",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "MM",
+          "role": "owning",
+          "service": "Replenishment"
+        },
+        {
+          "component": "FRD",
+          "role": "receiving",
+          "service": "Confirm on the vehicle"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "MM",
+          "to": "FRD",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Storekeeper",
+          "raci": "R"
+        },
+        {
+          "role": "Materials planner",
+          "raci": "A"
+        },
+        {
+          "role": "Crew supervisor",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Vehicle",
+        "MaterialItem"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "This is SPP.9 delivery to a vehicle location, not an issue to work. Confirming on the vehicle is what keeps 13.3.8 honest."
+        },
+        {
+          "kind": "operational",
+          "text": "Post-storm restock is the same process with a bigger list, not a different one."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Wrench Time",
+          "definition": "SMRP 5.6.1. Next day's missing van stock.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Schedule Compliance",
+          "definition": "SMRP 5.4.3/5.4.4. First jobs delayed for an empty truck.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Min-max auto pick",
+        "Manual top-up at the window",
+        "Post-event restock"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Compare to list, pick, confirm on the vehicle.",
+        "artifact": "models/13.3-mobile-inventory.bpmn"
+      },
+      "en17007": {
+        "process": "SPP.9",
+        "title": "Deliver spare items",
+        "clause": "6.16"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.16 SPP.9",
+          "status": "verified"
+        },
+        {
+          "for": "interfaces",
+          "cite": "IEC 61968-6:2015 cl. 4.2 MM Materials management; cl. 5 payloads; Annex A verbs",
+          "status": "clause-verified"
+        },
+        {
+          "for": "cadence",
+          "cite": "Replenishment cadence is operator judgment",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "EN 17007:2017 cl. 6.16 SPP.9"
+      }
+    },
+    {
+      "uid": 10435,
+      "id": "13.3.8",
+      "name": "Perform vehicle stock count and reconciliation",
+      "group": {
+        "id": "13.3",
+        "name": "Manage mobile and vehicle inventory",
+        "uid": 10427
+      },
+      "intent": "Count what is on the truck and correct the vehicle location, with a reason.",
+      "activities": [
+        "Select the vehicle and the list to count",
+        "Count on the vehicle",
+        "Compare to book quantity",
+        "Post an adjustment or recount"
+      ],
+      "trigger": {
+        "kind": "timer",
+        "text": "A vehicle count is due, or a variance has been found.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Book quantity on the vehicle",
+          "party": "MM",
+          "data": "MaterialItem"
+        },
+        {
+          "what": "Count on the vehicle",
+          "party": "FRD",
+          "data": "MaterialItem"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Posted vehicle adjustment",
+          "party": "MM",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Recount held",
+          "party": "MM",
+          "data": "Vehicle"
+        }
+      ],
+      "systems": [
+        {
+          "component": "MM",
+          "role": "owning",
+          "service": "Vehicle count"
+        },
+        {
+          "component": "FRD",
+          "role": "originating",
+          "service": "Count in the field"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "FRD",
+          "to": "MM",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Field technician",
+          "raci": "R"
+        },
+        {
+          "role": "Materials manager",
+          "raci": "A"
+        }
+      ],
+      "data_objects": [
+        "Vehicle",
+        "MaterialItem",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "Same discipline as 13.2.5, on a vehicle location. Uncounted trucks are how 13.3.3 consumption goes missing."
+        },
+        {
+          "kind": "operational",
+          "text": "A count that ignores in-transit 13.3.9 will manufacture a variance."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Rework",
+          "definition": "SMRP 4.1. Van-stock variances that become phantom shortages.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Planning and Control indicators",
+          "definition": "EN 15341 cl. 12 O&S9-O&S22 applied to vehicle-record accuracy.",
+          "cite": "EN 15341:2019+A1:2022 Maintenance KPIs, cl. 12 O&S9-O&S22 Planning and Control"
+        }
+      ],
+      "variants": [
+        "End-of-week count",
+        "Random audit",
+        "Count on change of crew"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Count, compare, adjust.",
+        "artifact": "models/13.3-mobile-inventory.bpmn"
+      },
+      "en17007": {
+        "process": "SPP.2",
+        "title": "Manage stocks",
+        "clause": "6.16"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.16 SPP.2",
+          "status": "verified"
+        },
+        {
+          "for": "interfaces",
+          "cite": "IEC 61968-6:2015 cl. 4.2 MM Materials management; cl. 5 payloads; Annex A verbs",
+          "status": "clause-verified"
+        },
+        {
+          "for": "cadence",
+          "cite": "Vehicle-count cadence is not standardised",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "EN 17007:2017 cl. 6.16 SPP.2"
+      }
+    },
+    {
+      "uid": 10436,
+      "id": "13.3.9",
+      "name": "Account for stock in transit",
+      "group": {
+        "id": "13.3",
+        "name": "Manage mobile and vehicle inventory",
+        "uid": 10427
+      },
+      "intent": "Keep quantity that has left one location and not yet landed at the next visible as in transit.",
+      "activities": [
+        "Create the in-transit state when a transfer leaves",
+        "Hold it off both on-hands",
+        "Clear it when the destination confirms",
+        "Age and escalate what does not land"
+      ],
+      "trigger": {
+        "kind": "none",
+        "text": "Standing in-transit account for every open transfer.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Open transfers between locations or vehicles",
+          "party": "MM",
+          "data": "MaterialItem"
+        },
+        {
+          "what": "Destination confirmations",
+          "party": "FRD",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "In-transit quantity",
+          "party": "MM",
+          "data": "MaterialItem"
+        },
+        {
+          "what": "Aged in-transit exception",
+          "party": "MM",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "MM",
+          "role": "owning",
+          "service": "In-transit account"
+        },
+        {
+          "component": "FRD",
+          "role": "originating",
+          "service": "Destination confirm"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "FRD",
+          "to": "MM",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Materials planner",
+          "raci": "R"
+        },
+        {
+          "role": "Materials manager",
+          "raci": "A"
+        }
+      ],
+      "data_objects": [
+        "MaterialItem",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "No pack standard names an in-transit stock type. Without it, 13.2.4, 13.3.5 and 13.3.7 cannot be counted. 18 CFR 101 plant inventory is not this account."
+        },
+        {
+          "kind": "operational",
+          "text": "Lost-in-transit is an adjustment with a reason, not a silent shrink."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Rework",
+          "definition": "SMRP 4.1. Double-counted or vanished in-transit.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Work Order Cycle Time",
+          "definition": "SMRP 5.4.7. Time spent in transit beyond the promised window.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Storeroom to vehicle",
+        "Yard to yard",
+        "Lost-in-transit exception"
+      ],
+      "notation": {
+        "class": "SPEC",
+        "why": "Standing in-transit account."
+      },
+      "en17007": {
+        "process": "SPP.2",
+        "title": "Manage stocks",
+        "clause": "6.16"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.16 SPP.2",
+          "status": "verified"
+        },
+        {
+          "for": "plant inventory contrast",
+          "cite": "18 CFR 101 EPI 11 continuing plant inventory record - not in-transit stores",
+          "status": "regulation"
+        },
+        {
+          "for": "in-transit type",
+          "cite": "In-transit stock type is not in the pack",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "judgment",
+        "primary": "EN 17007:2017 cl. 6.16 SPP.2"
+      }
+    },
+    {
+      "uid": 10438,
+      "id": "13.4.1",
+      "name": "Raise purchase requisition",
+      "group": {
+        "id": "13.4",
+        "name": "Procure goods and services",
+        "uid": 10437
+      },
+      "intent": "Ask purchasing to buy the shortfall, from a reservation or from a planner.",
+      "activities": [
+        "Take the shortfall or independent need",
+        "Create the requisition against the item",
+        "Route for the operator's approval",
+        "Hand approved requisitions to 13.4.2"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "A shortfall or a planned need requires a buy.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Shortfall from reservation or forecast",
+          "party": "MM",
+          "data": "MaterialItem"
+        },
+        {
+          "what": "Item master and preferred supplier",
+          "party": "MM",
+          "data": "MaterialItem"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Approved purchase requisition",
+          "party": "MM",
+          "data": "MaterialItem"
+        },
+        {
+          "what": "Rejected or held requisition",
+          "party": "MM",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "MM",
+          "role": "owning",
+          "service": "Requisition"
+        },
+        {
+          "component": "FIN",
+          "role": "reference",
+          "service": "Approval of spend"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "MM",
+          "to": "FIN",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "request-reply"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Materials planner",
+          "raci": "R"
+        },
+        {
+          "role": "Buyer",
+          "raci": "A"
+        },
+        {
+          "role": "Finance controller",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "MaterialItem",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "EN 17007 SPP.3 is reserve or issue a purchase request. cl. 4.2 has no procurement component; the requisition sits on MM. EN 17007 has no approval process - MAN.4 is budget setting, not a PO gate."
+        },
+        {
+          "kind": "operational",
+          "text": "16.0 qualifies contractors. This requisition is for goods and catalogue services, not a field crew."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Backlog",
+          "definition": "SMRP 5.4.8/5.4.9. Work waiting on an unraised buy.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Work Order Cycle Time",
+          "definition": "SMRP 5.4.7. Shortfall to approved requisition.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Stock replenishment",
+        "Direct to a job",
+        "Emergency buy"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Shortfall becomes an approved requisition.",
+        "artifact": "models/13.4-procure.bpmn"
+      },
+      "en17007": {
+        "process": "SPP.3",
+        "title": "Reserve or issue a purchase request for spare items",
+        "clause": "6.16"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.16 SPP.3",
+          "status": "verified"
+        },
+        {
+          "for": "no procurement component",
+          "cite": "IEC 61968-6:2015 cl. 4.2 MM Materials management; cl. 5 payloads; Annex A verbs",
+          "status": "clause-verified"
+        },
+        {
+          "for": "no EN 17007 approval",
+          "cite": "EN 17007:2017 clause 6 - approval only at SER.4 and DOC.5",
+          "status": "verified"
+        },
+        {
+          "for": "approval routing",
+          "cite": "Spend-approval routing is operator judgment",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "EN 17007:2017 cl. 6.16 SPP.3"
+      }
+    },
+    {
+      "uid": 10439,
+      "id": "13.4.2",
+      "name": "Convert requisition to purchase order",
+      "group": {
+        "id": "13.4",
+        "name": "Procure goods and services",
+        "uid": 10437
+      },
+      "intent": "Place the order on a supplier against a contract or a quote.",
+      "activities": [
+        "Select supplier and price from the catalogue or a quote",
+        "Create the purchase order",
+        "Send it on 13.7.3",
+        "Record the promised date against the work"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "An approved requisition is ready to become an order.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Approved requisition",
+          "party": "MM",
+          "data": "MaterialItem"
+        },
+        {
+          "what": "Contract or quote price",
+          "party": "MM",
+          "data": "MaterialItem"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Purchase order with promised date",
+          "party": "MM",
+          "data": "MaterialItem"
+        },
+        {
+          "what": "Promise on the waiting work",
+          "party": "MAI",
+          "data": "Work"
+        }
+      ],
+      "systems": [
+        {
+          "component": "MM",
+          "role": "owning",
+          "service": "Purchase order"
+        },
+        {
+          "component": "FIN",
+          "role": "reference",
+          "service": "Committed spend"
+        },
+        {
+          "component": "MAI",
+          "role": "receiving",
+          "service": "Promised date"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "MM",
+          "to": "MAI",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Buyer",
+          "raci": "R"
+        },
+        {
+          "role": "Materials manager",
+          "raci": "A"
+        }
+      ],
+      "data_objects": [
+        "MaterialItem",
+        "Work"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "EN 17007 SPP.4 is order spare items from suppliers. SPP.5 is the contract. PIDX is commercial B2B and is not cited. How the order is transmitted is 13.7.3."
+        },
+        {
+          "kind": "operational",
+          "text": "A blanket release is still this process. It is not a new contract - that is 13.7.1/SPP.5."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Schedule Compliance",
+          "definition": "SMRP 5.4.3/5.4.4. Work dated to a promise this process recorded.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Work Order Cycle Time",
+          "definition": "SMRP 5.4.7. Requisition to order sent.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Catalogue item",
+        "Non-catalogue quote",
+        "Blanket release"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Approved requisition becomes a sent order.",
+        "artifact": "models/13.4-procure.bpmn"
+      },
+      "en17007": {
+        "process": "SPP.4",
+        "title": "Order spare items from suppliers",
+        "clause": "6.16"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.16 SPP.4",
+          "status": "verified"
+        },
+        {
+          "for": "contracts",
+          "cite": "EN 17007:2017 cl. 6.16 SPP.5",
+          "status": "verified"
+        },
+        {
+          "for": "PIDX excluded",
+          "cite": "Source Authority Pack - do not cite PIDX",
+          "status": "judgment"
+        },
+        {
+          "for": "externally provided",
+          "cite": "ANSI/ASTM/ISO 55001-2024 cl. 8.3 externally provided processes",
+          "status": "clause-verified"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "EN 17007:2017 cl. 6.16 SPP.4"
+      }
+    },
+    {
+      "uid": 10440,
+      "id": "13.4.3",
+      "name": "Receive against purchase order",
+      "group": {
+        "id": "13.4",
+        "name": "Procure goods and services",
+        "uid": 10437
+      },
+      "intent": "Match what landed to what was ordered, then hand it to 13.2.1 put-away.",
+      "activities": [
+        "Match delivery to the purchase order",
+        "Record quantity and exceptions",
+        "Hand accepted quantity to put-away",
+        "Notify the waiting work of arrival"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "A supplier delivery against a purchase order has arrived.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Open purchase order",
+          "party": "MM",
+          "data": "MaterialItem"
+        },
+        {
+          "what": "Physical delivery",
+          "party": "MM",
+          "data": "MaterialItem"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Accepted quantity to put-away",
+          "party": "MM",
+          "data": "MaterialItem"
+        },
+        {
+          "what": "Over, short or reject",
+          "party": "MM",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "MM",
+          "role": "owning",
+          "service": "PO receipt"
+        },
+        {
+          "component": "FIN",
+          "role": "receiving",
+          "service": "Receipt for later match"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "MM",
+          "to": "FIN",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Storekeeper",
+          "raci": "R"
+        },
+        {
+          "role": "Buyer",
+          "raci": "A"
+        }
+      ],
+      "data_objects": [
+        "MaterialItem",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "13.2.1 put-away is the stock event. This process is the purchase-order match. Doing both as one step hides over-shipment."
+        },
+        {
+          "kind": "operational",
+          "text": "Evaluated receipt settlement still needs this match, even if no invoice will arrive."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Work Order Cycle Time",
+          "definition": "SMRP 5.4.7. Dock to accepted against the order.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Rework",
+          "definition": "SMRP 4.1. Receipts against the wrong order.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Full quantity",
+        "Partial",
+        "Over-shipment"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Match delivery to order, accept or except.",
+        "artifact": "models/13.4-procure.bpmn"
+      },
+      "en17007": {
+        "process": "SPP.6",
+        "title": "Receive ordered or repaired spare items",
+        "clause": "6.16"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.16 SPP.6",
+          "status": "verified"
+        },
+        {
+          "for": "interfaces",
+          "cite": "IEC 61968-6:2015 cl. 4.2 MM Materials management; cl. 5 payloads; Annex A verbs",
+          "status": "clause-verified"
+        },
+        {
+          "for": "match",
+          "cite": "Three-way match is operator/accounting practice, not a pack standard",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "EN 17007:2017 cl. 6.16 SPP.6"
+      }
+    },
+    {
+      "uid": 10441,
+      "id": "13.4.4",
+      "name": "Process supplier invoice and payment",
+      "group": {
+        "id": "13.4",
+        "name": "Procure goods and services",
+        "uid": 10437
+      },
+      "intent": "Match invoice to order and receipt, then pay, or hold the exception.",
+      "activities": [
+        "Take the invoice",
+        "Match to purchase order and receipt",
+        "Post the match or the exception",
+        "Pay the accepted amount"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "A supplier invoice has been presented.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Invoice",
+          "party": "FIN",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Purchase order and receipt",
+          "party": "MM",
+          "data": "MaterialItem"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Accepted payable",
+          "party": "FIN",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Match exception",
+          "party": "MM",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "FIN",
+          "role": "owning",
+          "service": "Invoice and payment"
+        },
+        {
+          "component": "MM",
+          "role": "reference",
+          "service": "Order and receipt"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "MM",
+          "to": "FIN",
+          "payload": "WorkRequest",
+          "verb": "get",
+          "pattern": "request-reply"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Accounts payable clerk",
+          "raci": "R"
+        },
+        {
+          "role": "Finance controller",
+          "raci": "A"
+        },
+        {
+          "role": "Buyer",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "MaterialItem",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "financial",
+          "text": "EN 17007 BUD.4 extracts budgeted and actual expenditures. It is not an invoice-match standard. 18 CFR 101 governs plant cost, not AP. Payment terms are contract."
+        },
+        {
+          "kind": "operational",
+          "text": "cl. 4.2 has no procurement component. Invoice sits on FIN; the match reads MM."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Work Order Cycle Time",
+          "definition": "SMRP 5.4.7. Receipt to paid, where that blocks a hold.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Planning and Control indicators",
+          "definition": "EN 15341 cl. 12 O&S9-O&S22 applied to unmatched invoices.",
+          "cite": "EN 15341:2019+A1:2022 Maintenance KPIs, cl. 12 O&S9-O&S22 Planning and Control"
+        }
+      ],
+      "variants": [
+        "Three-way match",
+        "Two-way match",
+        "Exception invoice"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Invoice is matched and paid, or held.",
+        "artifact": "models/13.4-procure.bpmn"
+      },
+      "en17007": {
+        "process": "BUD.4",
+        "title": "Extract budgeted and actual expenditures",
+        "clause": "6.8"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.8 BUD.4",
+          "status": "verified"
+        },
+        {
+          "for": "plant cost contrast",
+          "cite": "18 CFR Part 101 Electric Plant Instructions",
+          "status": "regulation"
+        },
+        {
+          "for": "interfaces",
+          "cite": "IEC 61968-6:2015 cl. 4.2 MM Materials management; cl. 5 payloads; Annex A verbs",
+          "status": "clause-verified"
+        },
+        {
+          "for": "match rules",
+          "cite": "Invoice-match rules are not in the pack",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "EN 17007:2017 cl. 6.8 BUD.4"
+      }
+    },
+    {
+      "uid": 10443,
+      "id": "13.5.1",
+      "name": "Classify demand pattern and variability",
+      "group": {
+        "id": "13.5",
+        "name": "Optimise inventory investment",
+        "uid": 10442
+      },
+      "intent": "Say whether each item is regular, intermittent or lumpy, so the forecast method is not a guess.",
+      "activities": [
+        "Take demand history",
+        "Classify regular, intermittent or lumpy",
+        "Record the class on the item",
+        "Hand the class to 13.5.2 and 13.5.3"
+      ],
+      "trigger": {
+        "kind": "timer",
+        "text": "Item demand class is due for review.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Demand history",
+          "party": "MM",
+          "data": "MaterialItem"
+        },
+        {
+          "what": "Item master",
+          "party": "MM",
+          "data": "MaterialItem"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Demand class on the item",
+          "party": "MM",
+          "data": "MaterialItem"
+        }
+      ],
+      "systems": [
+        {
+          "component": "MM",
+          "role": "owning",
+          "service": "Demand class"
+        },
+        {
+          "component": "MAI",
+          "role": "reference",
+          "service": "Work that drove the history"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "MAI",
+          "to": "MM",
+          "payload": "WorkRequest",
+          "verb": "get",
+          "pattern": "batch"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Inventory analyst",
+          "raci": "R"
+        },
+        {
+          "role": "Materials manager",
+          "raci": "A"
+        }
+      ],
+      "data_objects": [
+        "MaterialItem"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "No pack standard classifies spare-part demand. DTA.5 is evaluate data related to spare parts. Croston-style versus parametric is 13.5.2, not this class."
+        },
+        {
+          "kind": "operational",
+          "text": "ASCM SCOR is not used as content. Class names here are operator judgment."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Planning and Control indicators",
+          "definition": "EN 15341 cl. 12 O&S9-O&S22 applied to forecast fitness.",
+          "cite": "EN 15341:2019+A1:2022 Maintenance KPIs, cl. 12 O&S9-O&S22 Planning and Control"
+        },
+        {
+          "name": "Backlog",
+          "definition": "SMRP 5.4.8/5.4.9. Stockouts on items in the wrong class.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Fast regular",
+        "Intermittent",
+        "Project lumpy"
+      ],
+      "notation": {
+        "class": "DMN",
+        "why": "The output is a demand class - a value.",
+        "artifact": "models/13.5.1-demand-class.dmn"
+      },
+      "en17007": {
+        "process": "DTA.5",
+        "title": "Evaluate and analyse data related to spare parts",
+        "clause": "6.10"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.10 DTA.5",
+          "status": "verified"
+        },
+        {
+          "for": "landscape",
+          "cite": "GFMAM Asset Management Landscape 3rd ed. v3.0, 2024-06, subject 6.8 Supply Chain Management",
+          "status": "verified"
+        },
+        {
+          "for": "classes",
+          "cite": "Demand-pattern classes are not in the pack",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "judgment",
+        "primary": "EN 17007:2017 cl. 6.10 DTA.5"
+      }
+    },
+    {
+      "uid": 10444,
+      "id": "13.5.2",
+      "name": "Forecast intermittent demand (non-parametric)",
+      "group": {
+        "id": "13.5",
+        "name": "Optimise inventory investment",
+        "uid": 10442
+      },
+      "intent": "Forecast items whose demand does not support a smooth average, without pretending it does.",
+      "activities": [
+        "Take the intermittent class",
+        "Apply the operator's non-parametric method",
+        "Record a forecast or a min-cover",
+        "Do not force a smooth average on zero-heavy history"
+      ],
+      "trigger": {
+        "kind": "timer",
+        "text": "Intermittent items are due to be forecast.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Demand class and history",
+          "party": "MM",
+          "data": "MaterialItem"
+        },
+        {
+          "what": "Lead time on the item",
+          "party": "MM",
+          "data": "MaterialItem"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Intermittent forecast or min-cover",
+          "party": "MM",
+          "data": "MaterialItem"
+        },
+        {
+          "what": "Items left with no honest forecast",
+          "party": "MM",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "MM",
+          "role": "owning",
+          "service": "Intermittent forecast"
+        },
+        {
+          "component": "MAI",
+          "role": "reference",
+          "service": "Work that consumed the item"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "MM",
+          "to": "MM",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Inventory analyst",
+          "raci": "R"
+        },
+        {
+          "role": "Materials manager",
+          "raci": "A"
+        }
+      ],
+      "data_objects": [
+        "MaterialItem",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "No pack standard specifies Croston, SBA or bootstrap. Those names are operator method and are not cited as standards. Forcing a normal average onto intermittent spares is how 13.5.4 overstates service level."
+        },
+        {
+          "kind": "operational",
+          "text": "This is material demand. 3.1.3 what-if is work-capacity simulation, not this."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Backlog",
+          "definition": "SMRP 5.4.8/5.4.9. Stockouts on intermittent items.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Planning and Control indicators",
+          "definition": "EN 15341 cl. 12 O&S9-O&S22 applied to intermittent service level.",
+          "cite": "EN 15341:2019+A1:2022 Maintenance KPIs, cl. 12 O&S9-O&S22 Planning and Control"
+        }
+      ],
+      "variants": [
+        "Non-parametric interval-and-size",
+        "Bootstrap from history",
+        "Min-cover, no point forecast"
+      ],
+      "notation": {
+        "class": "SPEC",
+        "why": "A determination: the output is a forecast value. No pack source states an intermittent-demand method, so a DMN would invent the rule. Specified, not modelled."
+      },
+      "en17007": {
+        "process": "DTA.5",
+        "title": "Evaluate and analyse data related to spare parts",
+        "clause": "6.10"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.10 DTA.5",
+          "status": "verified"
+        },
+        {
+          "for": "SPP.1",
+          "cite": "EN 17007:2017 cl. 6.16 SPP.1",
+          "status": "verified"
+        },
+        {
+          "for": "method",
+          "cite": "Intermittent-forecast algorithms are not in the pack",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "judgment",
+        "primary": "EN 17007:2017 cl. 6.10 DTA.5"
+      }
+    },
+    {
+      "uid": 10445,
+      "id": "13.5.3",
+      "name": "Set stocking policy and reorder points",
+      "group": {
+        "id": "13.5",
+        "name": "Optimise inventory investment",
+        "uid": 10442
+      },
+      "intent": "Say for each item whether it is stocked, and at what point it is bought again.",
+      "activities": [
+        "Take class, forecast and lead time",
+        "Choose stocked or not-stocked",
+        "Set reorder point or review period",
+        "Publish the policy to 13.4.1"
+      ],
+      "trigger": {
+        "kind": "timer",
+        "text": "Stocking policy is due for review, or lead time has changed.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Demand class, forecast and lead time",
+          "party": "MM",
+          "data": "MaterialItem"
+        },
+        {
+          "what": "Criticality from 13.1.4",
+          "party": "MM",
+          "data": "MaterialItem"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Stocking policy and reorder point",
+          "party": "MM",
+          "data": "MaterialItem"
+        }
+      ],
+      "systems": [
+        {
+          "component": "MM",
+          "role": "owning",
+          "service": "Stocking policy"
+        },
+        {
+          "component": "MAI",
+          "role": "reference",
+          "service": "Work horizon the policy must cover"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "MM",
+          "to": "MM",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Inventory analyst",
+          "raci": "R"
+        },
+        {
+          "role": "Materials manager",
+          "raci": "A"
+        }
+      ],
+      "data_objects": [
+        "MaterialItem"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "EN 17007 SPP.1 is determine the spare items to keep in stock. Reorder-point arithmetic is not in the clause and is not paraphrased. Min-max versus periodic review is operator judgment."
+        },
+        {
+          "kind": "operational",
+          "text": "Not-stocked plus expedite is a policy, not an absence of one."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Backlog",
+          "definition": "SMRP 5.4.8/5.4.9. Work waiting on not-stocked items that should have been stocked.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Schedule Compliance",
+          "definition": "SMRP 5.4.3/5.4.4. Jobs missed at a zero reorder point.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Min-max",
+        "Reorder point",
+        "Periodic review"
+      ],
+      "notation": {
+        "class": "DMN",
+        "why": "The output is a policy and a point - values.",
+        "artifact": "models/13.5.3-stocking-policy.dmn"
+      },
+      "en17007": {
+        "process": "SPP.1",
+        "title": "Determine the spare items to keep in stock for maintenance",
+        "clause": "6.16"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.16 SPP.1",
+          "status": "verified"
+        },
+        {
+          "for": "interfaces",
+          "cite": "IEC 61968-6:2015 cl. 4.2 MM Materials management; cl. 5 payloads; Annex A verbs",
+          "status": "clause-verified"
+        },
+        {
+          "for": "arithmetic",
+          "cite": "Reorder-point arithmetic is not in the pack",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "EN 17007:2017 cl. 6.16 SPP.1"
+      }
+    },
+    {
+      "uid": 10446,
+      "id": "13.5.4",
+      "name": "Optimise safety stock to service-level targets",
+      "group": {
+        "id": "13.5",
+        "name": "Optimise inventory investment",
+        "uid": 10442
+      },
+      "intent": "Hold the extra quantity that the service-level target requires, and no more.",
+      "activities": [
+        "Take the service-level target and the demand class",
+        "Compute safety stock under the operator method",
+        "Publish it onto the reorder policy",
+        "Review after a miss or a surplus"
+      ],
+      "trigger": {
+        "kind": "timer",
+        "text": "Safety stock is due for review against the service-level target.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Service-level target and demand class",
+          "party": "MM",
+          "data": "MaterialItem"
+        },
+        {
+          "what": "Lead-time variability",
+          "party": "MM",
+          "data": "MaterialItem"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Safety stock on the item",
+          "party": "MM",
+          "data": "MaterialItem"
+        }
+      ],
+      "systems": [
+        {
+          "component": "MM",
+          "role": "owning",
+          "service": "Safety stock"
+        },
+        {
+          "component": "MAI",
+          "role": "reference",
+          "service": "Work the service level is for"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "MM",
+          "to": "MM",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Inventory analyst",
+          "raci": "R"
+        },
+        {
+          "role": "Materials manager",
+          "raci": "A"
+        }
+      ],
+      "data_objects": [
+        "MaterialItem"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "No pack standard sets a fill-rate or cycle-service target for spares. ISO/IEC 20000-1 cl. 8.3.3 is an ITSM analogue and is not cited for stock. The method is judgment."
+        },
+        {
+          "kind": "operational",
+          "text": "Safety stock that ignores intermittent class will overstate service level."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Schedule Compliance",
+          "definition": "SMRP 5.4.3/5.4.4. Work hit because safety stock was not there.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Planning and Control indicators",
+          "definition": "EN 15341 cl. 12 O&S9-O&S22 applied to material service level.",
+          "cite": "EN 15341:2019+A1:2022 Maintenance KPIs, cl. 12 O&S9-O&S22 Planning and Control"
+        }
+      ],
+      "variants": [
+        "Fill-rate target",
+        "Cycle-service target",
+        "Time-to-serve for critical items"
+      ],
+      "notation": {
+        "class": "SPEC",
+        "why": "A determination, not standing data: the output is a stock level. No source in the pack states safety-stock arithmetic, so a DMN would mean inventing the rule. Specified, not modelled."
+      },
+      "en17007": {
+        "process": "SPP.1",
+        "title": "Determine the spare items to keep in stock for maintenance",
+        "clause": "6.16"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.16 SPP.1",
+          "status": "verified"
+        },
+        {
+          "for": "measures",
+          "cite": "EN 15341:2019+A1:2022 Maintenance KPIs, cl. 12 O&S9-O&S22 Planning and Control",
+          "status": "clause-verified"
+        },
+        {
+          "for": "targets",
+          "cite": "Service-level targets and safety-stock arithmetic are not in the pack",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "judgment",
+        "primary": "EN 17007:2017 cl. 6.16 SPP.1"
+      }
+    },
+    {
+      "uid": 10447,
+      "id": "13.5.5",
+      "name": "Position stock across the location network",
+      "group": {
+        "id": "13.5",
+        "name": "Optimise inventory investment",
+        "uid": 10442
+      },
+      "intent": "Decide which locations hold the item, including forward yards and vehicles.",
+      "activities": [
+        "Take the stocking policy and the location network",
+        "Assign which locations hold the item",
+        "Set min and max by location",
+        "Publish to replenishment and to 13.3.2"
+      ],
+      "trigger": {
+        "kind": "manual",
+        "text": "The location network or the item's policy has changed.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Stocking policy",
+          "party": "MM",
+          "data": "MaterialItem"
+        },
+        {
+          "what": "Location network including vehicles",
+          "party": "MM",
+          "data": "Vehicle"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Item-by-location min and max",
+          "party": "MM",
+          "data": "MaterialItem"
+        }
+      ],
+      "systems": [
+        {
+          "component": "MM",
+          "role": "owning",
+          "service": "Network position"
+        },
+        {
+          "component": "SCHD",
+          "role": "reference",
+          "service": "Where work actually starts"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "MM",
+          "to": "MM",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Inventory analyst",
+          "raci": "R"
+        },
+        {
+          "role": "Materials manager",
+          "raci": "A"
+        }
+      ],
+      "data_objects": [
+        "MaterialItem",
+        "Vehicle"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "SPP.2 is manage stocks. Multi-echelon positioning is not in the pack. Central versus forward versus on-vehicle is operator judgment."
+        },
+        {
+          "kind": "operational",
+          "text": "Positioning that ignores 13.3.2 will fight the van list."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Wrench Time",
+          "definition": "SMRP 5.6.1. Travel to a central hold that should have been forward.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Backlog",
+          "definition": "SMRP 5.4.8/5.4.9. Local stockouts with central surplus.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Central warehouse only",
+        "Forward yards",
+        "On-vehicle as well as yard"
+      ],
+      "notation": {
+        "class": "SPEC",
+        "why": "A determination: the output is an allocation across locations. No pack source states multi-echelon positioning, so a DMN would invent the rule."
+      },
+      "en17007": {
+        "process": "SPP.2",
+        "title": "Manage stocks",
+        "clause": "6.16"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.16 SPP.2",
+          "status": "verified"
+        },
+        {
+          "for": "interfaces",
+          "cite": "IEC 61968-6:2015 cl. 4.2 MM Materials management; cl. 5 payloads; Annex A verbs",
+          "status": "clause-verified"
+        },
+        {
+          "for": "multi-echelon",
+          "cite": "Multi-echelon positioning is not in the pack",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "judgment",
+        "primary": "EN 17007:2017 cl. 6.16 SPP.2"
+      }
+    },
+    {
+      "uid": 10448,
+      "id": "13.5.6",
+      "name": "Identify slow-moving and surplus inventory",
+      "group": {
+        "id": "13.5",
+        "name": "Optimise inventory investment",
+        "uid": 10442
+      },
+      "intent": "Name quantity that is not earning its keep, and say whether it is held, transferred or disposed.",
+      "activities": [
+        "Compute age and movement",
+        "Classify slow, dead or surplus-to-programme",
+        "Recommend hold, transfer, return-to-vendor or dispose",
+        "Do not dump plant-account material here"
+      ],
+      "trigger": {
+        "kind": "timer",
+        "text": "Slow-moving and surplus review is due.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "On-hand, age and movement",
+          "party": "MM",
+          "data": "MaterialItem"
+        },
+        {
+          "what": "Open programme demand",
+          "party": "MAI",
+          "data": "Work"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Slow, dead or surplus class",
+          "party": "MM",
+          "data": "MaterialItem"
+        },
+        {
+          "what": "Recommended action",
+          "party": "MM",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "MM",
+          "role": "owning",
+          "service": "Surplus class"
+        },
+        {
+          "component": "FIN",
+          "role": "receiving",
+          "service": "Write-down candidate"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "MM",
+          "to": "FIN",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Inventory analyst",
+          "raci": "R"
+        },
+        {
+          "role": "Materials manager",
+          "raci": "A"
+        },
+        {
+          "role": "Finance controller",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "MaterialItem",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "financial",
+          "text": "Disposal of faulty items is EN 17007 SPP.12 and physical waste is 19.3. A surplus class is not a plant retirement. 18 CFR 101 unitisation is 5.3, not this."
+        },
+        {
+          "kind": "operational",
+          "text": "DTA.5 is the data process. Thresholds for slow and dead are operator judgment."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Planning and Control indicators",
+          "definition": "EN 15341 cl. 12 O&S9-O&S22 applied to surplus age.",
+          "cite": "EN 15341:2019+A1:2022 Maintenance KPIs, cl. 12 O&S9-O&S22 Planning and Control"
+        },
+        {
+          "name": "Backlog",
+          "definition": "SMRP 5.4.8/5.4.9. Capital locked in dead stock that crowding hides.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Slow mover",
+        "Dead stock",
+        "Surplus after a programme"
+      ],
+      "notation": {
+        "class": "DMN",
+        "why": "The output is a class and an action - values.",
+        "artifact": "models/13.5.6-slow-and-surplus.dmn"
+      },
+      "en17007": {
+        "process": "DTA.5",
+        "title": "Evaluate and analyse data related to spare parts",
+        "clause": "6.10"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.10 DTA.5",
+          "status": "verified"
+        },
+        {
+          "for": "disposal contrast",
+          "cite": "EN 17007:2017 cl. 6.16 SPP.12",
+          "status": "verified"
+        },
+        {
+          "for": "plant contrast",
+          "cite": "18 CFR Part 101",
+          "status": "regulation"
+        },
+        {
+          "for": "thresholds",
+          "cite": "Slow and dead thresholds are not in the pack",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "EN 17007:2017 cl. 6.10 DTA.5"
+      }
+    },
+    {
+      "uid": 10449,
+      "id": "13.5.7",
+      "name": "Manage critical spares and insurance spares",
+      "group": {
+        "id": "13.5",
+        "name": "Optimise inventory investment",
+        "uid": 10442
+      },
+      "intent": "Hold the spare whose absence stops the network, on purpose, and review that hold.",
+      "activities": [
+        "Name the item and the asset it protects",
+        "Record why it is insurance or critical",
+        "Set a hold that 13.5.6 cannot silently surplus",
+        "Review after the asset is retired"
+      ],
+      "trigger": {
+        "kind": "manual",
+        "text": "An item is nominated as critical or insurance, or the protected asset has changed.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Item and protected asset",
+          "party": "AM",
+          "data": "WorkAsset"
+        },
+        {
+          "what": "Lead time and consequence",
+          "party": "MM",
+          "data": "MaterialItem"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Critical or insurance flag and hold",
+          "party": "MM",
+          "data": "MaterialItem"
+        },
+        {
+          "what": "Review when the asset is retired",
+          "party": "AM",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "MM",
+          "role": "owning",
+          "service": "Critical-spare hold"
+        },
+        {
+          "component": "AM",
+          "role": "reference",
+          "service": "Protected asset"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "AM",
+          "to": "MM",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Reliability engineer",
+          "raci": "C"
+        },
+        {
+          "role": "Materials manager",
+          "raci": "A"
+        },
+        {
+          "role": "Inventory analyst",
+          "raci": "R"
+        }
+      ],
+      "data_objects": [
+        "MaterialItem",
+        "WorkAsset"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "No pack standard defines insurance spare. SPP.1 is determine what to keep in stock. Criticality is EN 13306 Annex E, paywalled - cited by title only, not paraphrased."
+        },
+        {
+          "kind": "operational",
+          "text": "An insurance spare that 13.5.6 can surplus without this flag is not managed."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Schedule Compliance",
+          "definition": "SMRP 5.4.3/5.4.4. Outage stretched for want of the insurance spare.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "SAIDI",
+          "definition": "IEEE 1366-2022. Duration when the critical spare was not there.",
+          "cite": "IEEE 1366-2022"
+        }
+      ],
+      "variants": [
+        "Insurance spare for a named asset",
+        "Critical with a long lead time",
+        "No-stock, expedite-only"
+      ],
+      "notation": {
+        "class": "SPEC",
+        "why": "A determination: the output is a criticality class. EN 13306 Annex E is paywalled and was not read, so a DMN would invent the rule."
+      },
+      "en17007": {
+        "process": "SPP.1",
+        "title": "Determine the spare items to keep in stock for maintenance",
+        "clause": "6.16"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.16 SPP.1",
+          "status": "verified"
+        },
+        {
+          "for": "criticality title",
+          "cite": "EN 13306:2017 Annex E Criticality matrix",
+          "status": "clause-verified"
+        },
+        {
+          "for": "interfaces",
+          "cite": "IEC 61968-6:2015 cl. 4.2 MM Materials management; cl. 5 payloads; Annex A verbs",
+          "status": "clause-verified"
+        },
+        {
+          "for": "definition",
+          "cite": "Insurance-spare definition is not in the pack",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "EN 17007:2017 cl. 6.16 SPP.1"
+      }
+    },
+    {
+      "uid": 10451,
+      "id": "13.6.1",
+      "name": "Create and maintain item master",
+      "group": {
+        "id": "13.6",
+        "name": "Maintain item and catalogue information",
+        "uid": 10450
+      },
+      "intent": "Give each stocked or purchased thing a single identity MM can use.",
+      "activities": [
+        "Create the item with unit and description",
+        "Prevent duplicates",
+        "Inactivate items no longer bought or held",
+        "Publish the master to reserve, buy and count"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "A new thing must be bought or held, or an existing item is wrong.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Proposed item description",
+          "party": "MM",
+          "data": "MaterialItem"
+        },
+        {
+          "what": "Existing master for duplicate check",
+          "party": "MM",
+          "data": "MaterialItem"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Active item master",
+          "party": "MM",
+          "data": "MaterialItem"
+        },
+        {
+          "what": "Duplicate or inactive record",
+          "party": "MM",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "MM",
+          "role": "owning",
+          "service": "Item master"
+        },
+        {
+          "component": "DGN",
+          "role": "reference",
+          "service": "Compatible-unit identity, not to be forked"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "MM",
+          "to": "MM",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Item master steward",
+          "raci": "R"
+        },
+        {
+          "role": "Materials manager",
+          "raci": "A"
+        }
+      ],
+      "data_objects": [
+        "MaterialItem"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "DTA.5 and DOC.2 are the closest EN 17007 processes. No pack standard specifies item-master content. Compatible-unit identity lives in DGN; stock identity lives here. Do not fork them silently."
+        },
+        {
+          "kind": "operational",
+          "text": "ASTM F2897 barcodes appear in UPDM for gas. Cited as a gas identifier option, not as a required catalogue."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Rework",
+          "definition": "SMRP 4.1. Duplicate items that split on-hand.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Work Order Cycle Time",
+          "definition": "SMRP 5.4.7. Jobs waiting on an item that could not be created.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "New item",
+        "Inactive",
+        "Duplicate merge"
+      ],
+      "notation": {
+        "class": "SPEC",
+        "why": "Standing item master. It is reference data the whole category reads; there is no instance with a start and an end."
+      },
+      "en17007": {
+        "process": "DTA.5",
+        "title": "Evaluate and analyse data related to spare parts",
+        "clause": "6.10"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.10 DTA.5",
+          "status": "verified"
+        },
+        {
+          "for": "classify",
+          "cite": "EN 17007:2017 cl. 6.9 DOC.2",
+          "status": "verified"
+        },
+        {
+          "for": "gas barcode",
+          "cite": "UPDM 2026 ASTM F2897 barcodes - identifier option, not a catalogue standard",
+          "status": "judgment"
+        },
+        {
+          "for": "content",
+          "cite": "Item-master content is not in the pack",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "EN 17007:2017 cl. 6.10 DTA.5"
+      }
+    },
+    {
+      "uid": 10452,
+      "id": "13.6.2",
+      "name": "Maintain commodity and classification codes",
+      "group": {
+        "id": "13.6",
+        "name": "Maintain item and catalogue information",
+        "uid": 10450
+      },
+      "intent": "Keep the codes that group items for buy, report and account.",
+      "activities": [
+        "Assign a commodity or class to the item",
+        "Keep the class list current",
+        "Map classes used in reporting",
+        "Do not treat class as a substitute for the item"
+      ],
+      "trigger": {
+        "kind": "manual",
+        "text": "An item needs a class, or the class list has changed.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Item master",
+          "party": "MM",
+          "data": "MaterialItem"
+        },
+        {
+          "what": "Class list",
+          "party": "MM",
+          "data": "MaterialItem"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Class on the item",
+          "party": "MM",
+          "data": "MaterialItem"
+        }
+      ],
+      "systems": [
+        {
+          "component": "MM",
+          "role": "owning",
+          "service": "Classification"
+        },
+        {
+          "component": "FIN",
+          "role": "consuming",
+          "service": "Class for account"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "MM",
+          "to": "FIN",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Item master steward",
+          "raci": "R"
+        },
+        {
+          "role": "Materials manager",
+          "raci": "A"
+        }
+      ],
+      "data_objects": [
+        "MaterialItem"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "DOC.2 is classify and structure documentation. UNSPSC or an internal commodity tree is operator choice; neither is in the pack as a required scheme."
+        },
+        {
+          "kind": "operational",
+          "text": "A class is not a compatible unit. CU lives on the design."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Planning and Control indicators",
+          "definition": "EN 15341 cl. 12 O&S9-O&S22 applied to class-level stock views.",
+          "cite": "EN 15341:2019+A1:2022 Maintenance KPIs, cl. 12 O&S9-O&S22 Planning and Control"
+        },
+        {
+          "name": "Rework",
+          "definition": "SMRP 4.1. Misclassified items that bought on the wrong contract.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Internal commodity",
+        "Compatible-unit class",
+        "Reporting class only"
+      ],
+      "notation": {
+        "class": "SPEC",
+        "why": "Standing classification."
+      },
+      "en17007": {
+        "process": "DOC.2",
+        "title": "Classify and structure the documentation",
+        "clause": "6.9"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.9 DOC.2",
+          "status": "verified"
+        },
+        {
+          "for": "CU contrast",
+          "cite": "IEC 61968-6:2015 cl. 4.2.5 Design - Compatible Units associated with a Design Location",
+          "status": "clause-verified"
+        },
+        {
+          "for": "scheme",
+          "cite": "Commodity-code scheme is not in the pack",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "EN 17007:2017 cl. 6.9 DOC.2"
+      }
+    },
+    {
+      "uid": 10453,
+      "id": "13.6.3",
+      "name": "Maintain manufacturer and equivalent parts",
+      "group": {
+        "id": "13.6",
+        "name": "Maintain item and catalogue information",
+        "uid": 10450
+      },
+      "intent": "Record the OEM number and any approved equivalent, and the supersession that replaced it.",
+      "activities": [
+        "Record manufacturer and manufacturer part",
+        "Record approved equivalents",
+        "Record supersession",
+        "Stop buys of superseded numbers"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "A manufacturer number, equivalent or supersession has changed.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Item master",
+          "party": "MM",
+          "data": "MaterialItem"
+        },
+        {
+          "what": "Manufacturer data",
+          "party": "MM",
+          "data": "MaterialItem"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "OEM, equivalent and supersession on the item",
+          "party": "MM",
+          "data": "MaterialItem"
+        }
+      ],
+      "systems": [
+        {
+          "component": "MM",
+          "role": "owning",
+          "service": "Equivalence"
+        },
+        {
+          "component": "MAI",
+          "role": "reference",
+          "service": "What the job plan may actually fit"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "MM",
+          "to": "MM",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Item master steward",
+          "raci": "R"
+        },
+        {
+          "role": "Materials manager",
+          "raci": "A"
+        },
+        {
+          "role": "Buyer",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "MaterialItem"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "No pack standard specifies OEM-equivalent rules. Buying a superseded number is a 13.4.2 failure caused here."
+        },
+        {
+          "kind": "operational",
+          "text": "Equivalence is not interchangeability in the field. The job plan still names what may be fitted."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Rework",
+          "definition": "SMRP 4.1. Wrong equivalent fitted because the master allowed it.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Backlog",
+          "definition": "SMRP 5.4.8/5.4.9. Buys stuck on a superseded number.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "OEM only",
+        "Approved equivalent",
+        "Supersession"
+      ],
+      "notation": {
+        "class": "SPEC",
+        "why": "Standing equivalence file."
+      },
+      "en17007": {
+        "process": "DTA.5",
+        "title": "Evaluate and analyse data related to spare parts",
+        "clause": "6.10"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.10 DTA.5",
+          "status": "verified"
+        },
+        {
+          "for": "interfaces",
+          "cite": "IEC 61968-6:2015 cl. 4.2 MM Materials management; cl. 5 payloads; Annex A verbs",
+          "status": "clause-verified"
+        },
+        {
+          "for": "rules",
+          "cite": "OEM-equivalent rules are not in the pack",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "judgment",
+        "primary": "EN 17007:2017 cl. 6.10 DTA.5"
+      }
+    },
+    {
+      "uid": 10454,
+      "id": "13.6.4",
+      "name": "Maintain pricing and contract catalogue",
+      "group": {
+        "id": "13.6",
+        "name": "Maintain item and catalogue information",
+        "uid": 10450
+      },
+      "intent": "Keep the price the buyer is allowed to use, from the contract or the quote.",
+      "activities": [
+        "Load contract or quote price onto the item",
+        "Record validity dates",
+        "Retire expired prices",
+        "Publish the live price to 13.4.2"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "A contract price, quote or expiry has changed.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Contract or quote",
+          "party": "MM",
+          "data": "MaterialItem"
+        },
+        {
+          "what": "Item master",
+          "party": "MM",
+          "data": "MaterialItem"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Live price on the item",
+          "party": "MM",
+          "data": "MaterialItem"
+        },
+        {
+          "what": "Expired price retired",
+          "party": "MM",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "MM",
+          "role": "owning",
+          "service": "Price catalogue"
+        },
+        {
+          "component": "FIN",
+          "role": "reference",
+          "service": "Committed price"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "MM",
+          "to": "FIN",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Buyer",
+          "raci": "R"
+        },
+        {
+          "role": "Materials manager",
+          "raci": "A"
+        }
+      ],
+      "data_objects": [
+        "MaterialItem",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "EN 17007 SPP.5 is establish and monitor contracts with suppliers. Catalogue punch-out is 13.7.2. Price content is contract, not a standard."
+        },
+        {
+          "kind": "operational",
+          "text": "A live price that 13.4.2 cannot see is not a catalogue."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Work Order Cycle Time",
+          "definition": "SMRP 5.4.7. Buys held for want of a price.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Rework",
+          "definition": "SMRP 4.1. Orders at a lapsed price.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Contract price",
+        "Quote",
+        "Expired and blocked"
+      ],
+      "notation": {
+        "class": "SPEC",
+        "why": "Standing price file."
+      },
+      "en17007": {
+        "process": "SPP.5",
+        "title": "Establish and monitor contracts with suppliers",
+        "clause": "6.16"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.16 SPP.5",
+          "status": "verified"
+        },
+        {
+          "for": "externally provided",
+          "cite": "ANSI/ASTM/ISO 55001-2024 cl. 8.3 externally provided processes",
+          "status": "clause-verified"
+        },
+        {
+          "for": "price content",
+          "cite": "Catalogue price content is contract, not a pack standard",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "EN 17007:2017 cl. 6.16 SPP.5"
+      }
+    },
+    {
+      "uid": 10456,
+      "id": "13.7.1",
+      "name": "Onboard and qualify suppliers",
+      "group": {
+        "id": "13.7",
+        "name": "Integrate with suppliers",
+        "uid": 10455
+      },
+      "intent": "Decide that this organisation may sell goods into MM, and on what terms.",
+      "activities": [
+        "Collect identity, insurance and quality evidence",
+        "Decide qualified, conditional or rejected",
+        "Record the commodities they may supply",
+        "Hand qualified suppliers to contract and to 13.4.2"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "A new supplier is proposed, or a qualified supplier is due for review.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Supplier evidence",
+          "party": "MM",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Commodities to be supplied",
+          "party": "MM",
+          "data": "MaterialItem"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Qualified supplier and commodity scope",
+          "party": "MM",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Rejected or suspended supplier",
+          "party": "MM",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "MM",
+          "role": "owning",
+          "service": "Supplier qualification"
+        },
+        {
+          "component": "FIN",
+          "role": "reference",
+          "service": "Payee identity"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "MM",
+          "to": "FIN",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Buyer",
+          "raci": "R"
+        },
+        {
+          "role": "Materials manager",
+          "raci": "A"
+        }
+      ],
+      "data_objects": [
+        "MaterialItem",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "16.1 qualifies contractors who do field work. This process qualifies goods suppliers. EN 17007 SER.1 is external maintenance services - not this. SPP.5 is the goods-contract process. ISO 55001 cl. 8.3 is externally provided processes."
+        },
+        {
+          "kind": "regulatory",
+          "text": "NERC CIP-013 is bulk-power cyber supply chain, pack-scoped to 16.0. 16 U.S.C. 824o keeps it off local distribution materials."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Rework",
+          "definition": "SMRP 4.1. Buys placed on an unqualified supplier.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Work Order Cycle Time",
+          "definition": "SMRP 5.4.7. First buy waiting on qualification.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Goods manufacturer",
+        "Distributor",
+        "Specialist fabricator"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Evidence in, qualified or rejected.",
+        "artifact": "models/13.7-integrate-suppliers.bpmn"
+      },
+      "en17007": {
+        "process": "SPP.5",
+        "title": "Establish and monitor contracts with suppliers",
+        "clause": "6.16"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.16 SPP.5",
+          "status": "verified"
+        },
+        {
+          "for": "externally provided",
+          "cite": "ANSI/ASTM/ISO 55001-2024 cl. 8.3 externally provided processes",
+          "status": "clause-verified"
+        },
+        {
+          "for": "CIP-013 not this",
+          "cite": "NERC CIP-013 - pack places it on 16.0; 16 U.S.C. 824o excludes local distribution",
+          "status": "regulation"
+        },
+        {
+          "for": "SER contrast",
+          "cite": "EN 17007:2017 cl. 6.15 SER.1 is external maintenance services, not goods",
+          "status": "verified"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "EN 17007:2017 cl. 6.16 SPP.5"
+      }
+    },
+    {
+      "uid": 10457,
+      "id": "13.7.2",
+      "name": "Exchange catalogue and pricing content",
+      "group": {
+        "id": "13.7",
+        "name": "Integrate with suppliers",
+        "uid": 10455
+      },
+      "intent": "Move the supplier's catalogue into the price file 13.6.4 holds.",
+      "activities": [
+        "Receive catalogue content from the supplier",
+        "Validate against the item master",
+        "Load accepted prices",
+        "Reject rows that do not match an item"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "A supplier has sent catalogue or price content.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Supplier catalogue file",
+          "party": "MM",
+          "data": "MaterialItem"
+        },
+        {
+          "what": "Item master",
+          "party": "MM",
+          "data": "MaterialItem"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Loaded prices",
+          "party": "MM",
+          "data": "MaterialItem"
+        },
+        {
+          "what": "Rejected unmatched rows",
+          "party": "MM",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "MM",
+          "role": "owning",
+          "service": "Catalogue load"
+        },
+        {
+          "component": "FIN",
+          "role": "reference",
+          "service": "Contract the prices came from"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "MM",
+          "to": "MM",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Buyer",
+          "raci": "R"
+        },
+        {
+          "role": "Item master steward",
+          "raci": "A"
+        }
+      ],
+      "data_objects": [
+        "MaterialItem",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "PIDX is excluded by the pack. IEC 61968-6 does not specify a catalogue payload. File drop versus punch-out is operator judgment."
+        },
+        {
+          "kind": "operational",
+          "text": "A load that creates items silently bypasses 13.6.1."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Rework",
+          "definition": "SMRP 4.1. Prices loaded against the wrong item.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Work Order Cycle Time",
+          "definition": "SMRP 5.4.7. Buys waiting on a catalogue load.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Full catalogue load",
+        "Delta file",
+        "Manual row"
+      ],
+      "notation": {
+        "class": "SPEC",
+        "why": "Standing catalogue exchange; each load is a use of it."
+      },
+      "en17007": {
+        "process": "SPP.5",
+        "title": "Establish and monitor contracts with suppliers",
+        "clause": "6.16"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.16 SPP.5",
+          "status": "verified"
+        },
+        {
+          "for": "PIDX excluded",
+          "cite": "Source Authority Pack section B - do not cite PIDX",
+          "status": "judgment"
+        },
+        {
+          "for": "payload",
+          "cite": "Catalogue payload is not in IEC 61968-6",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "judgment",
+        "primary": "EN 17007:2017 cl. 6.16 SPP.5"
+      }
+    },
+    {
+      "uid": 10458,
+      "id": "13.7.3",
+      "name": "Transmit orders and receive acknowledgement",
+      "group": {
+        "id": "13.7",
+        "name": "Integrate with suppliers",
+        "uid": 10455
+      },
+      "intent": "Send the purchase order and record that the supplier has it.",
+      "activities": [
+        "Transmit the order",
+        "Receive acknowledgement or a reject",
+        "Record the acknowledged date",
+        "Escalate a silent order"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "A purchase order is ready to send.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Purchase order",
+          "party": "MM",
+          "data": "MaterialItem"
+        },
+        {
+          "what": "Supplier channel on file",
+          "party": "MM",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Acknowledged order and date",
+          "party": "MM",
+          "data": "MaterialItem"
+        },
+        {
+          "what": "Unacknowledged or rejected order",
+          "party": "MM",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "MM",
+          "role": "owning",
+          "service": "Order transmission"
+        },
+        {
+          "component": "MAI",
+          "role": "receiving",
+          "service": "Acknowledged promise on waiting work"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "MM",
+          "to": "MM",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Buyer",
+          "raci": "R"
+        },
+        {
+          "role": "Materials manager",
+          "raci": "A"
+        }
+      ],
+      "data_objects": [
+        "MaterialItem",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "IEC 61968-6 Annex A verbs cover create/change/cancel on Work payloads, not a supplier purchase-order ACK. Transmission channel is operator judgment. PIDX is not cited."
+        },
+        {
+          "kind": "operational",
+          "text": "An order that was sent but never acknowledged is not a promise."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Schedule Compliance",
+          "definition": "SMRP 5.4.3/5.4.4. Work dated to an unacknowledged promise.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Work Order Cycle Time",
+          "definition": "SMRP 5.4.7. Send to ACK.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Electronic order",
+        "Portal",
+        "Phone then written confirm"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Send, ACK or escalate.",
+        "artifact": "models/13.7-integrate-suppliers.bpmn"
+      },
+      "en17007": {
+        "process": "SPP.4",
+        "title": "Order spare items from suppliers",
+        "clause": "6.16"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.16 SPP.4",
+          "status": "verified"
+        },
+        {
+          "for": "verbs",
+          "cite": "IEC 61968-6:2015 cl. 4.2 MM Materials management; cl. 5 payloads; Annex A verbs",
+          "status": "clause-verified"
+        },
+        {
+          "for": "channel",
+          "cite": "Order-transmission channel is not standardised in the pack",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "EN 17007:2017 cl. 6.16 SPP.4"
+      }
+    },
+    {
+      "uid": 10459,
+      "id": "13.7.4",
+      "name": "Receive advance shipment and delivery confirmation",
+      "group": {
+        "id": "13.7",
+        "name": "Integrate with suppliers",
+        "uid": 10455
+      },
+      "intent": "Know what is coming, then confirm that it came, before 13.4.3 matches the order.",
+      "activities": [
+        "Receive the advance notice",
+        "Compare it to the order",
+        "Confirm delivery at the dock",
+        "Hand confirmed deliveries to 13.4.3"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "A supplier has sent an advance notice, or a delivery has arrived.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Advance shipment notice",
+          "party": "MM",
+          "data": "MaterialItem"
+        },
+        {
+          "what": "Open purchase order",
+          "party": "MM",
+          "data": "MaterialItem"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Confirmed delivery",
+          "party": "MM",
+          "data": "MaterialItem"
+        },
+        {
+          "what": "Failed or missing notice",
+          "party": "MM",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "MM",
+          "role": "owning",
+          "service": "Advance notice and confirm"
+        },
+        {
+          "component": "FIN",
+          "role": "reference",
+          "service": "Open purchase order"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "MM",
+          "to": "MM",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Storekeeper",
+          "raci": "R"
+        },
+        {
+          "role": "Buyer",
+          "raci": "A"
+        }
+      ],
+      "data_objects": [
+        "MaterialItem",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "No pack standard specifies ASN content. SPP.6 is the receive. An ASN is not a receipt and does not update on-hand."
+        },
+        {
+          "kind": "operational",
+          "text": "Delivery confirmation without 13.4.3 still leaves the purchase order open."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Work Order Cycle Time",
+          "definition": "SMRP 5.4.7. ASN to dock confirm.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Rework",
+          "definition": "SMRP 4.1. Dock surprise where the ASN was wrong.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "ASN then dock confirm",
+        "Delivery ticket only",
+        "Failed ASN"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Notice, compare, confirm.",
+        "artifact": "models/13.7-integrate-suppliers.bpmn"
+      },
+      "en17007": {
+        "process": "SPP.6",
+        "title": "Receive ordered or repaired spare items",
+        "clause": "6.16"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.16 SPP.6",
+          "status": "verified"
+        },
+        {
+          "for": "interfaces",
+          "cite": "IEC 61968-6:2015 cl. 4.2 MM Materials management; cl. 5 payloads; Annex A verbs",
+          "status": "clause-verified"
+        },
+        {
+          "for": "ASN content",
+          "cite": "Advance-shipment content is not in the pack",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "EN 17007:2017 cl. 6.16 SPP.6"
+      }
+    },
+    {
+      "uid": 10460,
+      "id": "13.7.5",
+      "name": "Exchange invoice and payment information",
+      "group": {
+        "id": "13.7",
+        "name": "Integrate with suppliers",
+        "uid": 10455
+      },
+      "intent": "Move invoice and remittance data between supplier and FIN so 13.4.4 can match.",
+      "activities": [
+        "Receive the invoice message",
+        "Hand it to 13.4.4 match",
+        "Send remittance on payment",
+        "Record failures to deliver"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "An invoice or a remittance is ready to exchange.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Invoice or remittance message",
+          "party": "FIN",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Open receipt and order",
+          "party": "MM",
+          "data": "MaterialItem"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Invoice on the match queue",
+          "party": "FIN",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Failed exchange",
+          "party": "FIN",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "FIN",
+          "role": "owning",
+          "service": "Invoice exchange"
+        },
+        {
+          "component": "MM",
+          "role": "reference",
+          "service": "Order and receipt"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "FIN",
+          "to": "MM",
+          "payload": "WorkRequest",
+          "verb": "get",
+          "pattern": "request-reply"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Accounts payable clerk",
+          "raci": "R"
+        },
+        {
+          "role": "Finance controller",
+          "raci": "A"
+        }
+      ],
+      "data_objects": [
+        "MaterialItem",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "This is the message. 13.4.4 is the match and the payment. PIDX is not cited. Channel is operator judgment."
+        },
+        {
+          "kind": "financial",
+          "text": "Evaluated receipt settlement still needs a remittance record, even with no invoice image."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Work Order Cycle Time",
+          "definition": "SMRP 5.4.7. Invoice in to match-ready.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Planning and Control indicators",
+          "definition": "EN 15341 cl. 12 O&S9-O&S22 applied to failed invoice exchange.",
+          "cite": "EN 15341:2019+A1:2022 Maintenance KPIs, cl. 12 O&S9-O&S22 Planning and Control"
+        }
+      ],
+      "variants": [
+        "Electronic invoice",
+        "Paper image",
+        "Evaluated receipt, remittance only"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Message in, onto the match queue.",
+        "artifact": "models/13.7-integrate-suppliers.bpmn"
+      },
+      "en17007": {
+        "process": "BUD.4",
+        "title": "Extract budgeted and actual expenditures",
+        "clause": "6.8"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.8 BUD.4",
+          "status": "verified"
+        },
+        {
+          "for": "PIDX excluded",
+          "cite": "Source Authority Pack - do not cite PIDX",
+          "status": "judgment"
+        },
+        {
+          "for": "channel",
+          "cite": "Invoice-exchange channel is not standardised",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "EN 17007:2017 cl. 6.8 BUD.4"
+      }
+    },
+    {
+      "uid": 10461,
+      "id": "13.7.6",
+      "name": "Manage consignment and vendor-managed inventory",
+      "group": {
+        "id": "13.7",
+        "name": "Integrate with suppliers",
+        "uid": 10455
+      },
+      "intent": "Hold the supplier's stock in our location, or let them hold the min, without calling it ours until used.",
+      "activities": [
+        "Agree the consignment or VMI terms",
+        "Receive onto a consignment location",
+        "Consume to work, then it becomes ours",
+        "Reconcile with the supplier"
+      ],
+      "trigger": {
+        "kind": "manual",
+        "text": "A consignment or vendor-managed arrangement is in force.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Contract terms",
+          "party": "MM",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Consignment on-hand",
+          "party": "MM",
+          "data": "MaterialItem"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Consumption that transfers ownership",
+          "party": "MM",
+          "data": "MaterialItem"
+        },
+        {
+          "what": "Reconciliation with the supplier",
+          "party": "FIN",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "MM",
+          "role": "owning",
+          "service": "Consignment location"
+        },
+        {
+          "component": "FIN",
+          "role": "receiving",
+          "service": "Ownership transfer"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "MM",
+          "to": "FIN",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Materials planner",
+          "raci": "R"
+        },
+        {
+          "role": "Materials manager",
+          "raci": "A"
+        },
+        {
+          "role": "Buyer",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "MaterialItem",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "No pack standard specifies consignment or VMI. SPP.2 is manage stocks. Ownership stays with the supplier until consumption. Counting it as ours at receipt is a valuation error."
+        },
+        {
+          "kind": "financial",
+          "text": "18 CFR 101 plant inventory is not consignment in a yard."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Rework",
+          "definition": "SMRP 4.1. Consignment counted as owned.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Wrench Time",
+          "definition": "SMRP 5.6.1. Empty consignment bin the supplier was supposed to hold.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Consignment in our yard",
+        "Vendor-managed min-max",
+        "Consignment on a vehicle"
+      ],
+      "notation": {
+        "class": "SPEC",
+        "why": "Standing consignment or VMI arrangement."
+      },
+      "en17007": {
+        "process": "SPP.2",
+        "title": "Manage stocks",
+        "clause": "6.16"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.16 SPP.2",
+          "status": "verified"
+        },
+        {
+          "for": "plant contrast",
+          "cite": "18 CFR Part 101",
+          "status": "regulation"
+        },
+        {
+          "for": "terms",
+          "cite": "Consignment and VMI terms are not in the pack",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "judgment",
+        "primary": "EN 17007:2017 cl. 6.16 SPP.2"
+      }
+    },
+    {
+      "uid": 10462,
+      "id": "13.7.7",
+      "name": "Measure supplier delivery and quality performance",
+      "group": {
+        "id": "13.7",
+        "name": "Integrate with suppliers",
+        "uid": 10455
+      },
+      "intent": "Score whether the supplier landed the right thing, on the promised date, in usable condition.",
+      "activities": [
+        "Take receipts, rejects and promised dates",
+        "Compute on-time, quality and lead-time adherence",
+        "Publish the score to 13.7.1 review",
+        "Do not invent a pack KPI that does not exist"
+      ],
+      "trigger": {
+        "kind": "timer",
+        "text": "Supplier performance for the period is due.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Receipts, rejects and promises",
+          "party": "MM",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Qualified supplier list",
+          "party": "MM",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Supplier score for the period",
+          "party": "MM",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Review trigger to 13.7.1",
+          "party": "MM",
+          "data": "Work"
+        }
+      ],
+      "systems": [
+        {
+          "component": "MM",
+          "role": "owning",
+          "service": "Supplier score"
+        },
+        {
+          "component": "FIN",
+          "role": "reference",
+          "service": "Spend with the supplier"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "MM",
+          "to": "FIN",
+          "payload": "WorkRequest",
+          "verb": "get",
+          "pattern": "batch"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Buyer",
+          "raci": "R"
+        },
+        {
+          "role": "Materials manager",
+          "raci": "A"
+        }
+      ],
+      "data_objects": [
+        "WorkActivityRecord",
+        "MaterialItem"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "EN 17007 SPP.5 is monitor contracts. EN 15341 and SMRP measure OUR work, not the supplier. Using SMRP schedule compliance as a supplier score is a labelled analogy, not a supplier KPI standard."
+        },
+        {
+          "kind": "operational",
+          "text": "A score that never feeds 13.7.1 suspension is a report, not this process."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Schedule Compliance",
+          "definition": "SMRP 5.4.3/5.4.4. Applied analogously to promised versus actual landing - labelled as such.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Rework",
+          "definition": "SMRP 4.1. Rejected receipts.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "On-time landing",
+        "Quality reject rate",
+        "Lead-time adherence"
+      ],
+      "notation": {
+        "class": "SPEC",
+        "why": "A determination, not standing data: the output is a supplier score. No source in the pack states a scorecard rule, so a DMN would mean inventing it. Specified, not modelled."
+      },
+      "en17007": {
+        "process": "SPP.5",
+        "title": "Establish and monitor contracts with suppliers",
+        "clause": "6.16"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 cl. 6.16 SPP.5",
+          "status": "verified"
+        },
+        {
+          "for": "oversee",
+          "cite": "EN 17007:2017 cl. 6.2 MAN.5",
+          "status": "verified"
+        },
+        {
+          "for": "our KPIs not theirs",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management",
+          "status": "consensus"
+        },
+        {
+          "for": "supplier KPI",
+          "cite": "No pack standard defines a supplier scorecard",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "EN 17007:2017 cl. 6.16 SPP.5"
+      }
+    }
+  ],
+  "merge_corrections": [
+    {
+      "date": "2026-08-29",
+      "by": "Claude",
+      "what": "citation form: a status may not claim more than the citation string supports. 'clause-verified' without a clause dropped to 'consensus'; an asserted absence dropped to 'judgment'.",
+      "count": 3
+    },
+    {
+      "date": "2026-08-29",
+      "by": "Claude",
+      "what": "notation.why on six SPEC processes said 'standing' where the work is a determination. The class is right and unchanged; the reason was not. Five of them produce a value - a forecast, a stock level, an allocation, a criticality class, a supplier score - and pass the DMN test on shape. They are SPEC because no source states the rule, and inventing one would breach the derivation rule. SCHEMA.md now carries that as the second SPEC case.",
+      "count": 6
+    }
+  ]
+}

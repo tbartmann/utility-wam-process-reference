@@ -2671,7 +2671,7 @@
         {
           "for": "reliability measure",
           "cite": "IEEE 1366-2022 - result measure, not a process standard",
-          "status": "clause-verified"
+          "status": "consensus"
         },
         {
           "for": "rebuild method",
@@ -3486,6 +3486,12 @@
       "what": "27 EN 17007 citations raised from clause-verified to verified.",
       "why": "EN 17007:2017 is the one standard this project holds in full - it is in Tim Evidence/ and clause 6 was read end to end on 2026-08-29, which is how the level-2 catalogue went from 11 processes to 101 and how two wrong clause numbers were found. A clause-and-code citation to it is verified, not clause-verified. The ceiling only ever lowers a status; raising one is deliberate, and this is it.",
       "not_a_content_change": "No cite text, field or process was altered."
+    },
+    {
+      "date": "2026-08-29",
+      "by": "Claude",
+      "what": "citation form: a status may not claim more than the citation string supports. 'clause-verified' without a clause dropped to 'consensus'; an asserted absence dropped to 'judgment'.",
+      "count": 1
     }
   ]
 }

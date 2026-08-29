@@ -500,7 +500,7 @@
         {
           "for": "reliability indices",
           "cite": "IEEE 1366-2022",
-          "status": "clause-verified"
+          "status": "consensus"
         },
         {
           "for": "data_objects",
@@ -825,7 +825,7 @@
         {
           "for": "measures",
           "cite": "IEEE 1366-2022",
-          "status": "clause-verified"
+          "status": "consensus"
         },
         {
           "for": "model",
@@ -1157,7 +1157,7 @@
         {
           "for": "transmission contrast",
           "cite": "NERC FAC-003 Transmission Vegetation Management - bulk-power transmission only; not a distribution rule",
-          "status": "clause-verified"
+          "status": "consensus"
         }
       ],
       "provenance": {
@@ -1307,7 +1307,7 @@
         {
           "for": "reliability indices",
           "cite": "IEEE 1366-2022",
-          "status": "clause-verified"
+          "status": "consensus"
         },
         {
           "for": "interfaces",
@@ -1966,7 +1966,7 @@
         {
           "for": "measures",
           "cite": "IEEE 1366-2022",
-          "status": "clause-verified"
+          "status": "consensus"
         },
         {
           "for": "interfaces",
@@ -3414,12 +3414,12 @@
         {
           "for": "indices",
           "cite": "IEEE 1366-2022",
-          "status": "clause-verified"
+          "status": "consensus"
         },
         {
           "for": "event information",
           "cite": "IEEE 1782-2022 Collecting and categorising distribution interruption event information",
-          "status": "clause-verified"
+          "status": "consensus"
         },
         {
           "for": "cause codes",
@@ -3577,12 +3577,12 @@
         {
           "for": "transmission vegetation",
           "cite": "NERC FAC-003 Transmission Vegetation Management - bulk-power transmission only; not a distribution rule",
-          "status": "clause-verified"
+          "status": "consensus"
         },
         {
           "for": "IEEE 1366 voluntary federally",
           "cite": "IEEE 1366-2022",
-          "status": "clause-verified"
+          "status": "consensus"
         }
       ],
       "provenance": {
@@ -3605,6 +3605,12 @@
         "NERC FAC-003 cited only as a negative, paired with 16 U.S.C. 824o. Exactly the discipline the pack asks for and the first time a platform has done it unprompted."
       ],
       "models_built_here": "Eleven artifacts, 5 BPMN, 5 DMN, 1 CMMN. Grok specified them and cannot build them; only this side has the generator."
+    },
+    {
+      "date": "2026-08-29",
+      "by": "Claude",
+      "what": "citation form: a status may not claim more than the citation string supports. 'clause-verified' without a clause dropped to 'consensus'; an asserted absence dropped to 'judgment'.",
+      "count": 9
     }
   ]
 }

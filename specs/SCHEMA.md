@@ -93,6 +93,22 @@ Nothing is cited as `verified` that was read only in paraphrase. Where a widely
 repeated "fact" could not be traced to primary text, it is left out rather than
 softened — see the decision record's list of things not to take on trust.
 
+Two of those claims are checked against the citation string itself, because a status the
+string cannot support is worth nothing:
+
+* **`clause-verified` must name a clause.** The status means the clause number and title
+  were confirmed. A citation that names only the standard - `IEEE 1366-2022`,
+  `IEC 61968-9:2024 Ed. 3` - has confirmed nothing about a clause, and its honest status
+  is `consensus`: the body publishes this standard, and that is the whole claim. A
+  locator may be a clause, an Annex, a Table, a CFR section, a NESC Rule, a named UML
+  package in IEC 61968-11, a numbered GFMAM subject, a numbered CGA practice or a FERC
+  account. Name the clause or drop the status; never invent the number.
+* **An absence is a `judgment`.** A citation that opens by asserting no document requires
+  a thing is an inference, whatever authoritative document is named beside it. If a
+  document does support the absence - a scope clause, an applicability section,
+  16 U.S.C. 824o excluding local distribution - cite that document and let the clause
+  make the claim, and keep the conclusion drawn from it as a separate `judgment` entry.
+
 ## Notation selection rule
 
 | Class | When | Test |
@@ -100,10 +116,18 @@ softened — see the decision record's list of things not to take on trust.
 | BPMN | The sequence is known before the instance starts, and repeats. | Can you draw the happy path without saying "it depends who is handling it"? |
 | DMN | The work is a determination from inputs against rules. | Is the output a value — a classification, priority, due date, route — rather than a state change? |
 | CMMN | A skilled person chooses what to do next from available actions. | Would two competent people legitimately handle it in a different order? |
-| SPEC | A standing capability with no instance boundary. | Is there an instance with a start and an end? If not, specification only. |
+| SPEC | A standing capability with no instance boundary, **or** a determination whose rule cannot be stated from a source. | Is there an instance with a start and an end? If not, specification only. If there is, but writing the DMN would mean inventing the rule, specification only — and say which of the two reasons applies. |
 
 EN 17007 Table 2 states its own notation is BPMN 2.0, which is the standards-body
 precedent for drawing maintenance processes in BPMN at this level.
+
+The second SPEC case exists because the derivation rule outranks the notation rule. A
+forecast, a safety-stock level and a criticality class are all determinations and all
+pass the DMN test on shape — but no source in the pack states the arithmetic, and a DMN
+decision table whose rules were invented would be worse than no model. Category 3.0's
+scenario simulation is already in the reference on this basis. What the rule requires is
+that `notation.why` says which case applies, because "standing" and "unsourceable" are
+different claims and only one of them is about the shape of the work.
 
 ## Vocabulary sources
 

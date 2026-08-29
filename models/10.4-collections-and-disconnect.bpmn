@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_P_10_4" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <process id="P_10_4" name="10.4 Perform collections and disconnection field work" isExecutable="false">
+    <documentation>Tier-4 activities under 10.4.1, 10.4.2, 10.4.3 and 10.4.5. The eligibility decision is 10.4.4 and is called, not repeated. Three things this path insists on. Issuing an order is not performing a cut. A protected account that still receives an order is a process failure, not a collections success. And a cut that proceeds after a recorded doorstep payment is the same failure at the other end of the day.</documentation>
+    <laneSet id="P_10_4_lanes">
+      <lane id="l_104_fin" name="Collections">
+        <flowNodeRef>n_104_start</flowNodeRef>
+        <flowNodeRef>n_104_elig</flowNodeRef>
+        <flowNodeRef>n_104_eg</flowNodeRef>
+        <flowNodeRef>n_104_block</flowNodeRef>
+        <flowNodeRef>n_104_ord</flowNodeRef>
+        <flowNodeRef>n_104_stop</flowNodeRef>
+        <flowNodeRef>n_104_stopend</flowNodeRef>
+        <flowNodeRef>n_104_rc</flowNodeRef>
+        <flowNodeRef>n_104_rcconf</flowNodeRef>
+        <flowNodeRef>n_104_rcocc</flowNodeRef>
+        <flowNodeRef>n_104_rcref</flowNodeRef>
+        <flowNodeRef>n_104_rcord</flowNodeRef>
+        <flowNodeRef>n_104_rccnf</flowNodeRef>
+      </lane>
+      <lane id="l_104_frd" name="Field">
+        <flowNodeRef>n_104_disp</flowNodeRef>
+        <flowNodeRef>n_104_conf</flowNodeRef>
+        <flowNodeRef>n_104_cg</flowNodeRef>
+        <flowNodeRef>n_104_cont</flowNodeRef>
+        <flowNodeRef>n_104_pay</flowNodeRef>
+        <flowNodeRef>n_104_op</flowNodeRef>
+        <flowNodeRef>n_104_capt</flowNodeRef>
+        <flowNodeRef>n_104_safe</flowNodeRef>
+        <flowNodeRef>n_104_end</flowNodeRef>
+        <flowNodeRef>n_104_rcop</flowNodeRef>
+        <flowNodeRef>n_104_rcend</flowNodeRef>
+      </lane>
+    </laneSet>
+    <startEvent id="n_104_start" name="Collections case ready for a field order"><messageEventDefinition id="n_104_start_md"/></startEvent>
+    <businessRuleTask id="n_104_elig" name="Apply disconnection eligibility (10.4.4)"><documentation>10.4.1. Eligibility is state PUC and tariff. There is no federal nonpay-disconnect code for distribution customers.</documentation></businessRuleTask>
+    <exclusiveGateway id="n_104_eg" name="Eligible"/>
+    <endEvent id="n_104_block" name="Issue blocked, protection named"><documentation>10.4.1. Blocked with the protection named, so the block can be audited.</documentation></endEvent>
+    <serviceTask id="n_104_ord" name="Create the disconnect or collect ServiceOrder"><documentation>10.4.1. ServiceOrder.create. The notice history travels on the order.</documentation></serviceTask>
+    <callActivity id="n_104_disp" name="Dispatch through 10.2.2"><documentation>10.4.1. Same dispatch gates as any other order.</documentation></callActivity>
+    <userTask id="n_104_conf" name="Confirm premise, eligibility still valid, briefing"><documentation>10.4.2. Eligibility is confirmed AT the premise: a payment posted after the order was issued protects the customer only if somebody looks.</documentation></userTask>
+    <exclusiveGateway id="n_104_cg" name="Customer present"/>
+    <userTask id="n_104_cont" name="Attempt contact at the premise"><documentation>10.4.3.</documentation></userTask>
+    <exclusiveGateway id="n_104_pay" name="Payment or binding arrangement taken"/>
+    <sendTask id="n_104_stop" name="Stop the cut and hand the result to collections"><documentation>10.4.3. Doorstep cash handling and credit rules are tariff and operator; none is in the Source Authority Pack.</documentation></sendTask>
+    <endEvent id="n_104_stopend" name="Cut stopped"/>
+    <userTask id="n_104_op" name="Operate the disconnect device"><documentation>10.4.2. Gas takes 29 CFR 1910.147 lockout/tagout. Electric takes 1910.269(a)(2) qualified employee and (l) minimum approach distance; complying with 1910.147 does not satisfy 1910.269(m). Where the work deenergizes more than the service itself, the clearance is issued at 18.4.4 - a pole cut is not a meter pull.</documentation></userTask>
+    <serviceTask id="n_104_capt" name="Capture open state, reading and photograph"><documentation>10.4.2. IEC 61968-9 is the meter reading and control interface; remote disconnect is still this process, and the record duty does not change because nobody drove to the premise.</documentation></serviceTask>
+    <serviceTask id="n_104_safe" name="Leave the site safe and the record unambiguous"><documentation>10.4.2.</documentation></serviceTask>
+    <endEvent id="n_104_end" name="Field outcome on the ServiceOrder"/>
+    <startEvent id="n_104_rc" name="Payment posted on a disconnected account"><messageEventDefinition id="n_104_rc_md"/></startEvent>
+    <serviceTask id="n_104_rcconf" name="Confirm the payment or arrangement is posted"><documentation>10.4.5.</documentation></serviceTask>
+    <exclusiveGateway id="n_104_rcocc" name="Occupancy and identity still bind"/>
+    <endEvent id="n_104_rcref" name="Refer to 10.5 as a start"><documentation>10.4.5. Do not reconnect a premise that 10.5 would refuse as a start.</documentation></endEvent>
+    <serviceTask id="n_104_rcord" name="Raise the reconnect ServiceOrder"><documentation>10.4.5. ServiceOrder.create.</documentation></serviceTask>
+    <userTask id="n_104_rcop" name="Operate the device and capture the on state"><documentation>10.4.5. The reverse operate of 10.4.2 and it takes the same OSHA constraints. Gas also takes 49 CFR 192.353 location and 192.357 installation.</documentation></userTask>
+    <sendTask id="n_104_rccnf" name="Confirm to the customer that service is back"><documentation>10.4.5. State tariffs commonly set a reconnect clock. None is in the pack, so none is drawn.</documentation></sendTask>
+    <endEvent id="n_104_rcend" name="Service on, with reading"/>
+    <sequenceFlow id="f_n_104_start_n_104_elig" sourceRef="n_104_start" targetRef="n_104_elig" name=""/>
+    <sequenceFlow id="f_n_104_elig_n_104_eg" sourceRef="n_104_elig" targetRef="n_104_eg" name=""/>
+    <sequenceFlow id="f_n_104_eg_n_104_block" sourceRef="n_104_eg" targetRef="n_104_block" name="protected or incomplete"><conditionExpression xsi:type="tFormalExpression"><![CDATA[eligibility != "eligible"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_104_eg_n_104_ord" sourceRef="n_104_eg" targetRef="n_104_ord" name="eligible"/>
+    <sequenceFlow id="f_n_104_ord_n_104_disp" sourceRef="n_104_ord" targetRef="n_104_disp" name=""/>
+    <sequenceFlow id="f_n_104_disp_n_104_conf" sourceRef="n_104_disp" targetRef="n_104_conf" name=""/>
+    <sequenceFlow id="f_n_104_conf_n_104_cg" sourceRef="n_104_conf" targetRef="n_104_cg" name=""/>
+    <sequenceFlow id="f_n_104_cg_n_104_cont" sourceRef="n_104_cg" targetRef="n_104_cont" name="customer present"><conditionExpression xsi:type="tFormalExpression"><![CDATA[customerPresent = true]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_104_cont_n_104_pay" sourceRef="n_104_cont" targetRef="n_104_pay" name=""/>
+    <sequenceFlow id="f_n_104_pay_n_104_stop" sourceRef="n_104_pay" targetRef="n_104_stop" name="payment or arrangement"><conditionExpression xsi:type="tFormalExpression"><![CDATA[bindingArrangement = true]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_104_stop_n_104_stopend" sourceRef="n_104_stop" targetRef="n_104_stopend" name=""/>
+    <sequenceFlow id="f_n_104_pay_n_104_op" sourceRef="n_104_pay" targetRef="n_104_op" name="refused or none"/>
+    <sequenceFlow id="f_n_104_cg_n_104_op" sourceRef="n_104_cg" targetRef="n_104_op" name="no contact"/>
+    <sequenceFlow id="f_n_104_op_n_104_capt" sourceRef="n_104_op" targetRef="n_104_capt" name=""/>
+    <sequenceFlow id="f_n_104_capt_n_104_safe" sourceRef="n_104_capt" targetRef="n_104_safe" name=""/>
+    <sequenceFlow id="f_n_104_safe_n_104_end" sourceRef="n_104_safe" targetRef="n_104_end" name=""/>
+    <sequenceFlow id="f_n_104_rc_n_104_rcconf" sourceRef="n_104_rc" targetRef="n_104_rcconf" name=""/>
+    <sequenceFlow id="f_n_104_rcconf_n_104_rcocc" sourceRef="n_104_rcconf" targetRef="n_104_rcocc" name=""/>
+    <sequenceFlow id="f_n_104_rcocc_n_104_rcref" sourceRef="n_104_rcocc" targetRef="n_104_rcref" name="occupancy or identity open"><conditionExpression xsi:type="tFormalExpression"><![CDATA[occupancyBound = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_104_rcocc_n_104_rcord" sourceRef="n_104_rcocc" targetRef="n_104_rcord" name="bound"/>
+    <sequenceFlow id="f_n_104_rcord_n_104_rcop" sourceRef="n_104_rcord" targetRef="n_104_rcop" name=""/>
+    <sequenceFlow id="f_n_104_rcop_n_104_rccnf" sourceRef="n_104_rcop" targetRef="n_104_rccnf" name=""/>
+    <sequenceFlow id="f_n_104_rccnf_n_104_rcend" sourceRef="n_104_rccnf" targetRef="n_104_rcend" name=""/>
+  </process>
+  <bpmndi:BPMNDiagram id="dg_P_10_4">
+    <bpmndi:BPMNPlane id="pl_P_10_4" bpmnElement="P_10_4">
+      <bpmndi:BPMNShape id="sh_n_104_start" bpmnElement="n_104_start"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_104_elig" bpmnElement="n_104_elig"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_104_eg" bpmnElement="n_104_eg"><dc:Bounds x="467" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_104_block" bpmnElement="n_104_block"><dc:Bounds x="472" y="107" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_104_ord" bpmnElement="n_104_ord"><dc:Bounds x="595" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_104_disp" bpmnElement="n_104_disp"><dc:Bounds x="765" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_104_conf" bpmnElement="n_104_conf"><dc:Bounds x="935" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_104_cg" bpmnElement="n_104_cg"><dc:Bounds x="1147" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_104_cont" bpmnElement="n_104_cont"><dc:Bounds x="1105" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_104_pay" bpmnElement="n_104_pay"><dc:Bounds x="1317" y="432" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_104_stop" bpmnElement="n_104_stop"><dc:Bounds x="1445" y="530" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_104_stopend" bpmnElement="n_104_stopend"><dc:Bounds x="1662" y="547" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_104_op" bpmnElement="n_104_op"><dc:Bounds x="1445" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_104_capt" bpmnElement="n_104_capt"><dc:Bounds x="1615" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_104_safe" bpmnElement="n_104_safe"><dc:Bounds x="1785" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_104_end" bpmnElement="n_104_end"><dc:Bounds x="2002" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_104_rc" bpmnElement="n_104_rc"><dc:Bounds x="982" y="767" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_104_rcconf" bpmnElement="n_104_rcconf"><dc:Bounds x="1105" y="750" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_104_rcocc" bpmnElement="n_104_rcocc"><dc:Bounds x="1317" y="762" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_104_rcref" bpmnElement="n_104_rcref"><dc:Bounds x="1322" y="877" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_104_rcord" bpmnElement="n_104_rcord"><dc:Bounds x="1445" y="750" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_104_rcop" bpmnElement="n_104_rcop"><dc:Bounds x="1615" y="750" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_104_rccnf" bpmnElement="n_104_rccnf"><dc:Bounds x="1785" y="750" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_104_rcend" bpmnElement="n_104_rcend"><dc:Bounds x="2002" y="767" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ed_f_n_104_start_n_104_elig" bpmnElement="f_n_104_start_n_104_elig"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_104_elig_n_104_eg" bpmnElement="f_n_104_elig_n_104_eg"><di:waypoint x="385" y="235"/><di:waypoint x="467" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_104_eg_n_104_block" bpmnElement="f_n_104_eg_n_104_block"><di:waypoint x="513" y="235"/><di:waypoint x="447" y="235"/><di:waypoint x="447" y="125"/><di:waypoint x="472" y="125"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_104_eg_n_104_ord" bpmnElement="f_n_104_eg_n_104_ord"><di:waypoint x="513" y="235"/><di:waypoint x="595" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_104_ord_n_104_disp" bpmnElement="f_n_104_ord_n_104_disp"><di:waypoint x="725" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_104_disp_n_104_conf" bpmnElement="f_n_104_disp_n_104_conf"><di:waypoint x="895" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_104_conf_n_104_cg" bpmnElement="f_n_104_conf_n_104_cg"><di:waypoint x="1065" y="235"/><di:waypoint x="1147" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_104_cg_n_104_cont" bpmnElement="f_n_104_cg_n_104_cont"><di:waypoint x="1193" y="235"/><di:waypoint x="1080" y="235"/><di:waypoint x="1080" y="455"/><di:waypoint x="1105" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_104_cont_n_104_pay" bpmnElement="f_n_104_cont_n_104_pay"><di:waypoint x="1235" y="455"/><di:waypoint x="1317" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_104_pay_n_104_stop" bpmnElement="f_n_104_pay_n_104_stop"><di:waypoint x="1363" y="455"/><di:waypoint x="1420" y="455"/><di:waypoint x="1420" y="565"/><di:waypoint x="1445" y="565"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_104_stop_n_104_stopend" bpmnElement="f_n_104_stop_n_104_stopend"><di:waypoint x="1575" y="565"/><di:waypoint x="1662" y="565"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_104_pay_n_104_op" bpmnElement="f_n_104_pay_n_104_op"><di:waypoint x="1363" y="455"/><di:waypoint x="1420" y="455"/><di:waypoint x="1420" y="235"/><di:waypoint x="1445" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_104_cg_n_104_op" bpmnElement="f_n_104_cg_n_104_op"><di:waypoint x="1193" y="235"/><di:waypoint x="1445" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_104_op_n_104_capt" bpmnElement="f_n_104_op_n_104_capt"><di:waypoint x="1575" y="235"/><di:waypoint x="1615" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_104_capt_n_104_safe" bpmnElement="f_n_104_capt_n_104_safe"><di:waypoint x="1745" y="235"/><di:waypoint x="1785" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_104_safe_n_104_end" bpmnElement="f_n_104_safe_n_104_end"><di:waypoint x="1915" y="235"/><di:waypoint x="2002" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_104_rc_n_104_rcconf" bpmnElement="f_n_104_rc_n_104_rcconf"><di:waypoint x="1018" y="785"/><di:waypoint x="1105" y="785"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_104_rcconf_n_104_rcocc" bpmnElement="f_n_104_rcconf_n_104_rcocc"><di:waypoint x="1235" y="785"/><di:waypoint x="1317" y="785"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_104_rcocc_n_104_rcref" bpmnElement="f_n_104_rcocc_n_104_rcref"><di:waypoint x="1363" y="785"/><di:waypoint x="1297" y="785"/><di:waypoint x="1297" y="895"/><di:waypoint x="1322" y="895"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_104_rcocc_n_104_rcord" bpmnElement="f_n_104_rcocc_n_104_rcord"><di:waypoint x="1363" y="785"/><di:waypoint x="1445" y="785"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_104_rcord_n_104_rcop" bpmnElement="f_n_104_rcord_n_104_rcop"><di:waypoint x="1575" y="785"/><di:waypoint x="1615" y="785"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_104_rcop_n_104_rccnf" bpmnElement="f_n_104_rcop_n_104_rccnf"><di:waypoint x="1745" y="785"/><di:waypoint x="1785" y="785"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_104_rccnf_n_104_rcend" bpmnElement="f_n_104_rccnf_n_104_rcend"><di:waypoint x="1915" y="785"/><di:waypoint x="2002" y="785"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

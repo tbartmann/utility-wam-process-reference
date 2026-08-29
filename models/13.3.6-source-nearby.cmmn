@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/CMMN/20151109/MODEL" xmlns:cmmndi="http://www.omg.org/spec/CMMN/20151109/CMMNDI" xmlns:dc="http://www.omg.org/spec/CMMN/20151109/DC" xmlns:di="http://www.omg.org/spec/CMMN/20151109/DI" id="defs_Source_nearby" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <case id="Source_nearby" name="13.3.6 Request and source material from nearby stock">
+    <caseFileModel id="Source_nearby_cfm">
+      <caseFileItem id="cf_short" name="Short item and the job waiting on it"/>
+      <caseFileItem id="cf_fleet" name="Stock visible across the fleet"/>
+      <caseFileItem id="cf_store" name="Storeroom on-hand and hours"/>
+    </caseFileModel>
+    <casePlanModel id="Source_nearby_plan" name="13.3.6 Request and source material from nearby stock" autoComplete="true">
+      <documentation>Two competent people will not put nearby-truck, storeroom and buy-local in the same order, and the right order changes with the hour of the day and how far the crew is from the yard. That is the CMMN test. No standard specifies field sourcing at all, so the case names the options and the tracking duty and prescribes no sequence. Camunda 8 dropped CMMN, so a runtime for this file means Flowable or an equivalent.</documentation>
+      <planItem id="pi_t_name" name="Name the short item and the job" definitionRef="t_name_def">
+        <itemControl id="ic_t_name">
+          <requiredRule id="rr_t_name"><condition><![CDATA[true]]></condition></requiredRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_look" name="Look across nearby vehicles" definitionRef="t_look_def">
+        <itemControl id="ic_t_look">
+          <requiredRule id="rr_t_look"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_look"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_store" name="Check the storeroom and its hours" definitionRef="t_store_def">
+        <itemControl id="ic_t_store">
+          <requiredRule id="rr_t_store"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_store"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_local" name="Price a local purchase" definitionRef="t_local_def">
+        <itemControl id="ic_t_local">
+          <requiredRule id="rr_t_local"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_local"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_defer" name="Reschedule the job instead" definitionRef="t_defer_def">
+        <itemControl id="ic_t_defer">
+          <requiredRule id="rr_t_defer"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_defer"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_raise" name="Raise the transfer or the purchase" definitionRef="t_raise_def">
+        <itemControl id="ic_t_raise">
+          <requiredRule id="rr_t_raise"><condition><![CDATA[true]]></condition></requiredRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_track" name="Track until the item is on this vehicle or this job" definitionRef="t_track_def">
+        <itemControl id="ic_t_track">
+          <repetitionRule id="rep_t_track"><condition><![CDATA[true]]></condition></repetitionRule>
+          <requiredRule id="rr_t_track"><condition><![CDATA[true]]></condition></requiredRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_m_sourced" name="Source chosen and moving" definitionRef="m_sourced_def"/>
+      <planItem id="pi_m_onsite" name="Item with the job" definitionRef="m_onsite_def"/>
+      <planItem id="pi_m_short" name="Job still short" definitionRef="m_short_def"/>
+      <humanTask id="t_name_def" name="Name the short item and the job" isBlocking="true"><documentation>Required. A shortage that is not attached to a job cannot be prioritised against the other shortages competing for the same van.</documentation></humanTask>
+      <humanTask id="t_look_def" name="Look across nearby vehicles" isBlocking="true"><documentation>Discretionary. 13.3.4 is the standing fleet-wide search this uses.</documentation></humanTask>
+      <humanTask id="t_store_def" name="Check the storeroom and its hours" isBlocking="true"><documentation>Discretionary. A storeroom that closed an hour ago is not a source.</documentation></humanTask>
+      <humanTask id="t_local_def" name="Price a local purchase" isBlocking="true"><documentation>Discretionary. Buy-local still goes through 13.4 and still lands on an item, or the spend never reaches the work.</documentation></humanTask>
+      <humanTask id="t_defer_def" name="Reschedule the job instead" isBlocking="true"><documentation>Discretionary and frequently the right answer. Sourcing an item at three times the cost to save a half-day is a decision somebody should make on purpose.</documentation></humanTask>
+      <humanTask id="t_raise_def" name="Raise the transfer or the purchase" isBlocking="true"><documentation>Required. 13.3.5 moves it between vehicles; 13.4.1 buys it.</documentation></humanTask>
+      <humanTask id="t_track_def" name="Track until the item is on this vehicle or this job" isBlocking="true"><documentation>Required and repeating. An unsourced shortage that stops being tracked becomes a job that fails twice.</documentation></humanTask>
+      <milestone id="m_sourced_def" name="Source chosen and moving"><documentation>A transfer or a purchase exists with an owner.</documentation></milestone>
+      <milestone id="m_onsite_def" name="Item with the job"><documentation>The only ending that helps the crew.</documentation></milestone>
+      <milestone id="m_short_def" name="Job still short"><documentation>A legitimate ending. It hands the job back to 3.3 for rescheduling rather than leaving a crew standing at a site.</documentation></milestone>
+    </casePlanModel>
+  </case>
+  <cmmndi:CMMNDI>
+    <cmmndi:CMMNDiagram id="dg_Source_nearby">
+      <cmmndi:CMMNShape id="sh_plan" cmmnElementRef="Source_nearby_plan"><dc:Bounds x="40" y="40" width="1010" height="300"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_name" cmmnElementRef="pi_t_name"><dc:Bounds x="80" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_look" cmmnElementRef="pi_t_look"><dc:Bounds x="270" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_store" cmmnElementRef="pi_t_store"><dc:Bounds x="460" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_local" cmmnElementRef="pi_t_local"><dc:Bounds x="80" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_defer" cmmnElementRef="pi_t_defer"><dc:Bounds x="270" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_raise" cmmnElementRef="pi_t_raise"><dc:Bounds x="460" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_track" cmmnElementRef="pi_t_track"><dc:Bounds x="80" y="290" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_m_sourced" cmmnElementRef="pi_m_sourced"><dc:Bounds x="270" y="290" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_m_onsite" cmmnElementRef="pi_m_onsite"><dc:Bounds x="460" y="290" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_m_short" cmmnElementRef="pi_m_short"><dc:Bounds x="80" y="390" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+    </cmmndi:CMMNDiagram>
+  </cmmndi:CMMNDI>
+</definitions>

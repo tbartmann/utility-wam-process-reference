@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_P_10_3" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <process id="P_10_3" name="10.3 Communicate with customers" isExecutable="false">
+    <documentation>Tier-4 activities under 10.3.1 to 10.3.4. No standard specifies reminder timing, channel or notice content for a field visit, and IEEE 1366 measures interruption duration rather than prescribing a notice. What the path does carry is the one regulatory distinction that matters: for gas, 49 CFR 192.615 emergency communication is a duty, and it must not be run through the same queue as a convenience update.</documentation>
+    <laneSet id="P_10_3_lanes">
+      <lane id="l_103_cs" name="Customer service">
+        <flowNodeRef>n_103_t</flowNodeRef>
+        <flowNodeRef>n_103_win</flowNodeRef>
+        <flowNodeRef>n_103_pref</flowNodeRef>
+        <flowNodeRef>n_103_send</flowNodeRef>
+        <flowNodeRef>n_103_dg</flowNodeRef>
+        <flowNodeRef>n_103_fail</flowNodeRef>
+        <flowNodeRef>n_103_rec</flowNodeRef>
+        <flowNodeRef>n_103_end</flowNodeRef>
+        <flowNodeRef>n_103_fb</flowNodeRef>
+        <flowNodeRef>n_103_fcls</flowNodeRef>
+        <flowNodeRef>n_103_fatt</flowNodeRef>
+        <flowNodeRef>n_103_fg</flowNodeRef>
+        <flowNodeRef>n_103_fwork</flowNodeRef>
+        <flowNodeRef>n_103_fend</flowNodeRef>
+      </lane>
+      <lane id="l_103_no" name="Network operations">
+        <flowNodeRef>n_103_e</flowNodeRef>
+        <flowNodeRef>n_103_o</flowNodeRef>
+        <flowNodeRef>n_103_aff</flowNodeRef>
+        <flowNodeRef>n_103_emg</flowNodeRef>
+        <flowNodeRef>n_103_615</flowNodeRef>
+        <flowNodeRef>n_103_unre</flowNodeRef>
+      </lane>
+    </laneSet>
+    <startEvent id="n_103_t" name="Appointment due for confirm or reminder"><timerEventDefinition id="n_103_t_td"/></startEvent>
+    <serviceTask id="n_103_win" name="Take the confirmed window from 3.3.3"><documentation>10.3.1. 3.3 owns the window. A message that offers a NEW window is 3.3.1, not a reminder.</documentation></serviceTask>
+    <startEvent id="n_103_e" name="Crew en-route or arrived"><messageEventDefinition id="n_103_e_md"/></startEvent>
+    <startEvent id="n_103_o" name="Outage, delay or restoration declared"><messageEventDefinition id="n_103_o_md"/></startEvent>
+    <serviceTask id="n_103_aff" name="Identify customers on the affected section"><documentation>10.3.3. 9.0 owns the outage. This path is the customer message about it.</documentation></serviceTask>
+    <exclusiveGateway id="n_103_emg" name="Gas emergency notice"/>
+    <sendTask id="n_103_615" name="Send under the 192.615 emergency plan"><documentation>10.3.3. 49 CFR 192.615 requires the emergency plan to provide for communication. Keeping it distinct from convenience updates is the point: a suppression rule written for marketing must never reach it.</documentation></sendTask>
+    <businessRuleTask id="n_103_pref" name="Apply the contact and notification preference"><documentation>10.1.4 holds the preference. Do-not-contact suppresses a convenience notice and does not suppress an emergency one.</documentation></businessRuleTask>
+    <sendTask id="n_103_send" name="Send on the preferred channel"><documentation>10.3.1 to 10.3.3.</documentation></sendTask>
+    <exclusiveGateway id="n_103_dg" name="Delivered"/>
+    <userTask id="n_103_fail" name="Escalate the failed delivery before the window"><documentation>10.3.1. An arrival notice that lands after the knock is not a notice.</documentation></userTask>
+    <endEvent id="n_103_unre" name="Unreachable customer exception"><documentation>10.3.3.</documentation></endEvent>
+    <serviceTask id="n_103_rec" name="Record what was sent and when"><documentation>10.3.1 to 10.3.3.</documentation></serviceTask>
+    <startEvent id="n_103_fb" name="Customer gives feedback on a visit"><messageEventDefinition id="n_103_fb_md"/></startEvent>
+    <userTask id="n_103_fcls" name="Classify complaint, compliment or survey"><documentation>10.3.4. CSAT instruments are not in the Source Authority Pack and are not cited.</documentation></userTask>
+    <serviceTask id="n_103_fatt" name="Attach it to the premise history through 10.1.2"><documentation>10.3.4. Feedback that never reaches 10.1.2 is lost to the next visit.</documentation></serviceTask>
+    <exclusiveGateway id="n_103_fg" name="Follow-on needed"/>
+    <sendTask id="n_103_fwork" name="Raise follow-on work or a complaint case"><documentation>10.3.4. SMRP Best Practices Pillar 5 4.1 Rework is the operations measure a complaint may move.</documentation></sendTask>
+    <endEvent id="n_103_end" name="Communication recorded"/>
+    <endEvent id="n_103_fend" name="Feedback filed"/>
+    <sequenceFlow id="f_n_103_t_n_103_win" sourceRef="n_103_t" targetRef="n_103_win" name=""/>
+    <sequenceFlow id="f_n_103_win_n_103_pref" sourceRef="n_103_win" targetRef="n_103_pref" name=""/>
+    <sequenceFlow id="f_n_103_e_n_103_pref" sourceRef="n_103_e" targetRef="n_103_pref" name=""/>
+    <sequenceFlow id="f_n_103_o_n_103_aff" sourceRef="n_103_o" targetRef="n_103_aff" name=""/>
+    <sequenceFlow id="f_n_103_aff_n_103_emg" sourceRef="n_103_aff" targetRef="n_103_emg" name=""/>
+    <sequenceFlow id="f_n_103_emg_n_103_615" sourceRef="n_103_emg" targetRef="n_103_615" name="gas emergency"><conditionExpression xsi:type="tFormalExpression"><![CDATA[noticeClass = "emergency"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_103_615_n_103_rec" sourceRef="n_103_615" targetRef="n_103_rec" name=""/>
+    <sequenceFlow id="f_n_103_emg_n_103_pref" sourceRef="n_103_emg" targetRef="n_103_pref" name="convenience notice"/>
+    <sequenceFlow id="f_n_103_pref_n_103_send" sourceRef="n_103_pref" targetRef="n_103_send" name=""/>
+    <sequenceFlow id="f_n_103_send_n_103_dg" sourceRef="n_103_send" targetRef="n_103_dg" name=""/>
+    <sequenceFlow id="f_n_103_dg_n_103_fail" sourceRef="n_103_dg" targetRef="n_103_fail" name="delivery failed"><conditionExpression xsi:type="tFormalExpression"><![CDATA[delivered = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_103_fail_n_103_send" sourceRef="n_103_fail" targetRef="n_103_send" name="retry on another channel"/>
+    <sequenceFlow id="f_n_103_fail_n_103_unre" sourceRef="n_103_fail" targetRef="n_103_unre" name="no channel left"/>
+    <sequenceFlow id="f_n_103_dg_n_103_rec" sourceRef="n_103_dg" targetRef="n_103_rec" name="delivered"/>
+    <sequenceFlow id="f_n_103_rec_n_103_end" sourceRef="n_103_rec" targetRef="n_103_end" name=""/>
+    <sequenceFlow id="f_n_103_fb_n_103_fcls" sourceRef="n_103_fb" targetRef="n_103_fcls" name=""/>
+    <sequenceFlow id="f_n_103_fcls_n_103_fatt" sourceRef="n_103_fcls" targetRef="n_103_fatt" name=""/>
+    <sequenceFlow id="f_n_103_fatt_n_103_fg" sourceRef="n_103_fatt" targetRef="n_103_fg" name=""/>
+    <sequenceFlow id="f_n_103_fg_n_103_fwork" sourceRef="n_103_fg" targetRef="n_103_fwork" name="follow-on or complaint"><conditionExpression xsi:type="tFormalExpression"><![CDATA[followOnNeeded = true]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_103_fwork_n_103_fend" sourceRef="n_103_fwork" targetRef="n_103_fend" name=""/>
+    <sequenceFlow id="f_n_103_fg_n_103_fend" sourceRef="n_103_fg" targetRef="n_103_fend" name="filed only"/>
+  </process>
+  <bpmndi:BPMNDiagram id="dg_P_10_3">
+    <bpmndi:BPMNPlane id="pl_P_10_3" bpmnElement="P_10_3">
+      <bpmndi:BPMNShape id="sh_n_103_t" bpmnElement="n_103_t"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_103_win" bpmnElement="n_103_win"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_103_e" bpmnElement="n_103_e"><dc:Bounds x="132" y="437" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_103_o" bpmnElement="n_103_o"><dc:Bounds x="132" y="657" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_103_aff" bpmnElement="n_103_aff"><dc:Bounds x="255" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_103_emg" bpmnElement="n_103_emg"><dc:Bounds x="467" y="652" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_103_615" bpmnElement="n_103_615"><dc:Bounds x="425" y="750" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_103_pref" bpmnElement="n_103_pref"><dc:Bounds x="595" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_103_send" bpmnElement="n_103_send"><dc:Bounds x="765" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_103_dg" bpmnElement="n_103_dg"><dc:Bounds x="977" y="432" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_103_fail" bpmnElement="n_103_fail"><dc:Bounds x="935" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_103_unre" bpmnElement="n_103_unre"><dc:Bounds x="1152" y="657" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_103_rec" bpmnElement="n_103_rec"><dc:Bounds x="1105" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_103_fb" bpmnElement="n_103_fb"><dc:Bounds x="132" y="987" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_103_fcls" bpmnElement="n_103_fcls"><dc:Bounds x="255" y="970" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_103_fatt" bpmnElement="n_103_fatt"><dc:Bounds x="425" y="970" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_103_fg" bpmnElement="n_103_fg"><dc:Bounds x="637" y="982" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_103_fwork" bpmnElement="n_103_fwork"><dc:Bounds x="765" y="970" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_103_end" bpmnElement="n_103_end"><dc:Bounds x="1322" y="437" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_103_fend" bpmnElement="n_103_fend"><dc:Bounds x="982" y="987" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ed_f_n_103_t_n_103_win" bpmnElement="f_n_103_t_n_103_win"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_103_win_n_103_pref" bpmnElement="f_n_103_win_n_103_pref"><di:waypoint x="385" y="235"/><di:waypoint x="570" y="235"/><di:waypoint x="570" y="455"/><di:waypoint x="595" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_103_e_n_103_pref" bpmnElement="f_n_103_e_n_103_pref"><di:waypoint x="168" y="455"/><di:waypoint x="595" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_103_o_n_103_aff" bpmnElement="f_n_103_o_n_103_aff"><di:waypoint x="168" y="675"/><di:waypoint x="255" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_103_aff_n_103_emg" bpmnElement="f_n_103_aff_n_103_emg"><di:waypoint x="385" y="675"/><di:waypoint x="467" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_103_emg_n_103_615" bpmnElement="f_n_103_emg_n_103_615"><di:waypoint x="513" y="675"/><di:waypoint x="400" y="675"/><di:waypoint x="400" y="785"/><di:waypoint x="425" y="785"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_103_615_n_103_rec" bpmnElement="f_n_103_615_n_103_rec"><di:waypoint x="555" y="785"/><di:waypoint x="1080" y="785"/><di:waypoint x="1080" y="455"/><di:waypoint x="1105" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_103_emg_n_103_pref" bpmnElement="f_n_103_emg_n_103_pref"><di:waypoint x="513" y="675"/><di:waypoint x="570" y="675"/><di:waypoint x="570" y="455"/><di:waypoint x="595" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_103_pref_n_103_send" bpmnElement="f_n_103_pref_n_103_send"><di:waypoint x="725" y="455"/><di:waypoint x="765" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_103_send_n_103_dg" bpmnElement="f_n_103_send_n_103_dg"><di:waypoint x="895" y="455"/><di:waypoint x="977" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_103_dg_n_103_fail" bpmnElement="f_n_103_dg_n_103_fail"><di:waypoint x="1023" y="455"/><di:waypoint x="910" y="455"/><di:waypoint x="910" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_103_fail_n_103_send" bpmnElement="f_n_103_fail_n_103_send"><di:waypoint x="1065" y="235"/><di:waypoint x="740" y="235"/><di:waypoint x="740" y="455"/><di:waypoint x="765" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_103_fail_n_103_unre" bpmnElement="f_n_103_fail_n_103_unre"><di:waypoint x="1065" y="235"/><di:waypoint x="1127" y="235"/><di:waypoint x="1127" y="675"/><di:waypoint x="1152" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_103_dg_n_103_rec" bpmnElement="f_n_103_dg_n_103_rec"><di:waypoint x="1023" y="455"/><di:waypoint x="1105" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_103_rec_n_103_end" bpmnElement="f_n_103_rec_n_103_end"><di:waypoint x="1235" y="455"/><di:waypoint x="1322" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_103_fb_n_103_fcls" bpmnElement="f_n_103_fb_n_103_fcls"><di:waypoint x="168" y="1005"/><di:waypoint x="255" y="1005"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_103_fcls_n_103_fatt" bpmnElement="f_n_103_fcls_n_103_fatt"><di:waypoint x="385" y="1005"/><di:waypoint x="425" y="1005"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_103_fatt_n_103_fg" bpmnElement="f_n_103_fatt_n_103_fg"><di:waypoint x="555" y="1005"/><di:waypoint x="637" y="1005"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_103_fg_n_103_fwork" bpmnElement="f_n_103_fg_n_103_fwork"><di:waypoint x="683" y="1005"/><di:waypoint x="765" y="1005"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_103_fwork_n_103_fend" bpmnElement="f_n_103_fwork_n_103_fend"><di:waypoint x="895" y="1005"/><di:waypoint x="982" y="1005"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_103_fg_n_103_fend" bpmnElement="f_n_103_fg_n_103_fend"><di:waypoint x="683" y="1005"/><di:waypoint x="982" y="1005"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

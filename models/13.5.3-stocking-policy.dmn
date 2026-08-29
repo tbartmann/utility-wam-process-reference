@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/" id="Stocking_policy" name="13.5.3 Set stocking policy and reorder points" namespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <description>The output is a policy - a value. EN 17007 cl. 6.11 SPP.1 determines the spare items to keep in stock; the clause was read and it contains no reorder-point arithmetic, so none is written here. The table decides WHICH policy governs an item and leaves the number to the policy's own calculation, which 13.5.4 specifies and does not model. Not-stocked plus expedite is a policy, not an absence of one, and drawing it as a decision outcome is the point of the file.</description>
+  <inputData id="in_demandClass" name="Demand class from 13.5.1"><variable id="in_demandClass_v" name="Demand class from 13.5.1" typeRef="string"/></inputData>
+  <inputData id="in_criticality" name="Criticality from 13.1.4 and 13.5.7"><variable id="in_criticality_v" name="Criticality from 13.1.4 and 13.5.7" typeRef="string"/></inputData>
+  <inputData id="in_leadTimeBand" name="Lead time against the operator's band"><variable id="in_leadTimeBand_v" name="Lead time against the operator's band" typeRef="string"/></inputData>
+  <inputData id="in_singleSource" name="Single-sourced or obsolescent"><variable id="in_singleSource_v" name="Single-sourced or obsolescent" typeRef="boolean"/></inputData>
+  <knowledgeSource id="ks_spp1" name="EN 17007:2017 cl. 6.11 SPP.1 Determine the spare items to keep in stock"><description>The named process. It establishes that the determination exists and who owns it. Min-max against periodic review, and the arithmetic inside either, is operator judgment and is not in the clause.</description></knowledgeSource>
+  <decision id="d_13_5_3" name="Stocking policy">
+    <variable id="d_13_5_3_v" name="Stocking policy" typeRef="string"/>
+    <informationRequirement id="ir_d_13_5_3_ks_spp1"><requiredInput href="#ks_spp1"/></informationRequirement>
+    <decisionTable id="d_13_5_3_dt" hitPolicy="FIRST" preferredOrientation="Rule-as-Row">
+      <input id="d_13_5_3_i1" label="Criticality"><inputExpression id="d_13_5_3_i1_e" typeRef="string"><text>in_criticality</text></inputExpression></input>
+      <input id="d_13_5_3_i2" label="Single-sourced or obsolescent"><inputExpression id="d_13_5_3_i2_e" typeRef="boolean"><text>in_singleSource</text></inputExpression></input>
+      <input id="d_13_5_3_i3" label="Demand class"><inputExpression id="d_13_5_3_i3_e" typeRef="string"><text>in_demandClass</text></inputExpression></input>
+      <input id="d_13_5_3_i4" label="Lead time band"><inputExpression id="d_13_5_3_i4_e" typeRef="string"><text>in_leadTimeBand</text></inputExpression></input>
+      <output id="d_13_5_3_o" label="Stocking policy" name="Stocking policy" typeRef="string"/>
+      <rule id="d_13_5_3_r1">
+        <description>Held because the consequence of not holding it is unacceptable, not because it moves. Reorder logic does not apply and applying it anyway is how insurance spares get written off in a slow-moving review.</description>
+        <inputEntry id="d_13_5_3_r1_ie1"><text>"insurance"</text></inputEntry>
+        <inputEntry id="d_13_5_3_r1_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_13_5_3_r1_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_13_5_3_r1_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_13_5_3_r1_oe"><text>"insuranceSpare"</text></outputEntry>
+      </rule>
+      <rule id="d_13_5_3_r2">
+        <description>Single-sourced or going obsolete. The decision is how many to buy once, not when to reorder.</description>
+        <inputEntry id="d_13_5_3_r2_ie1"><text>-</text></inputEntry>
+        <inputEntry id="d_13_5_3_r2_ie2"><text>true</text></inputEntry>
+        <inputEntry id="d_13_5_3_r2_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_13_5_3_r2_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_13_5_3_r2_oe"><text>"lifetimeBuy"</text></outputEntry>
+      </rule>
+      <rule id="d_13_5_3_r3">
+        <description>Critical and moving. A continuous-review policy with the point calculated under 13.5.4.</description>
+        <inputEntry id="d_13_5_3_r3_ie1"><text>"high"</text></inputEntry>
+        <inputEntry id="d_13_5_3_r3_ie2"><text>false</text></inputEntry>
+        <inputEntry id="d_13_5_3_r3_ie3"><text>"regular","erratic"</text></inputEntry>
+        <inputEntry id="d_13_5_3_r3_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_13_5_3_r3_oe"><text>"minMax"</text></outputEntry>
+      </rule>
+      <rule id="d_13_5_3_r4">
+        <description>Critical but barely moving. Held on consequence with the quantity set by judgment, and reviewed at 13.5.7 rather than by a forecast.</description>
+        <inputEntry id="d_13_5_3_r4_ie1"><text>"high"</text></inputEntry>
+        <inputEntry id="d_13_5_3_r4_ie2"><text>false</text></inputEntry>
+        <inputEntry id="d_13_5_3_r4_ie3"><text>"intermittent","lumpy","unclassified"</text></inputEntry>
+        <inputEntry id="d_13_5_3_r4_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_13_5_3_r4_oe"><text>"stockedOnCriticality"</text></outputEntry>
+      </rule>
+      <rule id="d_13_5_3_r5">
+        <description>Moves predictably and arrives quickly. Reviewed on a cycle rather than watched continuously.</description>
+        <inputEntry id="d_13_5_3_r5_ie1"><text>-</text></inputEntry>
+        <inputEntry id="d_13_5_3_r5_ie2"><text>false</text></inputEntry>
+        <inputEntry id="d_13_5_3_r5_ie3"><text>"regular"</text></inputEntry>
+        <inputEntry id="d_13_5_3_r5_ie4"><text>"short"</text></inputEntry>
+        <outputEntry id="d_13_5_3_r5_oe"><text>"periodicReview"</text></outputEntry>
+      </rule>
+      <rule id="d_13_5_3_r6">
+        <description>A long lead time is what makes a reorder point worth maintaining.</description>
+        <inputEntry id="d_13_5_3_r6_ie1"><text>-</text></inputEntry>
+        <inputEntry id="d_13_5_3_r6_ie2"><text>false</text></inputEntry>
+        <inputEntry id="d_13_5_3_r6_ie3"><text>"regular","erratic"</text></inputEntry>
+        <inputEntry id="d_13_5_3_r6_ie4"><text>"long"</text></inputEntry>
+        <outputEntry id="d_13_5_3_r6_oe"><text>"minMax"</text></outputEntry>
+      </rule>
+      <rule id="d_13_5_3_r7">
+        <description>Rarely wanted and quickly obtained. Not stocked WITH an expedite route named - which is a policy, and is the honest version of what most catalogues call an absence.</description>
+        <inputEntry id="d_13_5_3_r7_ie1"><text>-</text></inputEntry>
+        <inputEntry id="d_13_5_3_r7_ie2"><text>false</text></inputEntry>
+        <inputEntry id="d_13_5_3_r7_ie3"><text>"intermittent","lumpy"</text></inputEntry>
+        <inputEntry id="d_13_5_3_r7_ie4"><text>"short"</text></inputEntry>
+        <outputEntry id="d_13_5_3_r7_oe"><text>"notStockedExpedite"</text></outputEntry>
+      </rule>
+      <rule id="d_13_5_3_r8">
+        <description>No rule fits. Better a named exception than a default that quietly stocks or quietly does not.</description>
+        <inputEntry id="d_13_5_3_r8_ie1"><text>-</text></inputEntry>
+        <inputEntry id="d_13_5_3_r8_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_13_5_3_r8_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_13_5_3_r8_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_13_5_3_r8_oe"><text>"reviewManually"</text></outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram id="drd_Stocking_policy">
+      <dmndi:DMNShape id="sh_in_demandClass" dmnElementRef="in_demandClass"><dc:Bounds x="60" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_criticality" dmnElementRef="in_criticality"><dc:Bounds x="245" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_leadTimeBand" dmnElementRef="in_leadTimeBand"><dc:Bounds x="430" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_singleSource" dmnElementRef="in_singleSource"><dc:Bounds x="615" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_d_13_5_3" dmnElementRef="d_13_5_3"><dc:Bounds x="60" y="240" width="180" height="70"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_ks_spp1" dmnElementRef="ks_spp1"><dc:Bounds x="900" y="100" width="160" height="55"/></dmndi:DMNShape>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</definitions>

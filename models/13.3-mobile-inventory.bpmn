@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_P_13_3" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <process id="P_13_3" name="13.3 Manage mobile and vehicle inventory" isExecutable="false">
+    <documentation>Tier-4 activities under 13.3.3, 13.3.5, 13.3.7 and 13.3.8. Vehicle stock is not a standards domain: CIM carries Vehicle and MaterialItem, IEC 61968-6 cl. 4.2 has MM and no fleet component, and the standard vehicle list, the in-transit type and the fleet-wide search are all specified rather than drawn. What the path insists on is that the truck is a real stocking location. Used-from-truck without a prior issue is still a consumption; pretending the item was never on the truck is what makes the next vehicle count wrong.</documentation>
+    <laneSet id="P_13_3_lanes">
+      <lane id="l_133_crew" name="Crew">
+        <flowNodeRef>n_133_use</flowNodeRef>
+        <flowNodeRef>n_133_cap</flowNodeRef>
+        <flowNodeRef>n_133_bind</flowNodeRef>
+        <flowNodeRef>n_133_red</flowNodeRef>
+        <flowNodeRef>n_133_uend</flowNodeRef>
+        <flowNodeRef>n_133_tt</flowNodeRef>
+        <flowNodeRef>n_133_agree</flowNodeRef>
+        <flowNodeRef>n_133_give</flowNodeRef>
+        <flowNodeRef>n_133_cg</flowNodeRef>
+        <flowNodeRef>n_133_gap</flowNodeRef>
+        <flowNodeRef>n_133_take</flowNodeRef>
+        <flowNodeRef>n_133_tend</flowNodeRef>
+        <flowNodeRef>n_133_conf</flowNodeRef>
+        <flowNodeRef>n_133_cnt</flowNodeRef>
+      </lane>
+      <lane id="l_133_mm" name="Materials management">
+        <flowNodeRef>n_133_rt</flowNodeRef>
+        <flowNodeRef>n_133_cmp</flowNodeRef>
+        <flowNodeRef>n_133_pick</flowNodeRef>
+        <flowNodeRef>n_133_isv</flowNodeRef>
+        <flowNodeRef>n_133_sg</flowNodeRef>
+        <flowNodeRef>n_133_ssh</flowNodeRef>
+        <flowNodeRef>n_133_rend</flowNodeRef>
+        <flowNodeRef>n_133_ct</flowNodeRef>
+        <flowNodeRef>n_133_sel</flowNodeRef>
+        <flowNodeRef>n_133_ccmp</flowNodeRef>
+        <flowNodeRef>n_133_cg2</flowNodeRef>
+        <flowNodeRef>n_133_rec</flowNodeRef>
+        <flowNodeRef>n_133_adj</flowNodeRef>
+        <flowNodeRef>n_133_cend</flowNodeRef>
+      </lane>
+    </laneSet>
+    <startEvent id="n_133_use" name="Material used from the vehicle on a job"><messageEventDefinition id="n_133_use_md"/></startEvent>
+    <serviceTask id="n_133_cap" name="Capture item and quantity used"><documentation>13.3.3. IEC 61968-6 FRD is the field recording component. Offline capture is vendor-defined and is not specified here.</documentation></serviceTask>
+    <serviceTask id="n_133_bind" name="Bind the consumption to the work"><documentation>13.3.3. Consumption not charged to work cannot be unitised at 5.3.</documentation></serviceTask>
+    <serviceTask id="n_133_red" name="Reduce vehicle on-hand, leave the unused quantity"><documentation>13.3.3.</documentation></serviceTask>
+    <endEvent id="n_133_uend" name="Consumption on the work"/>
+    <startEvent id="n_133_tt" name="Two crews need to pass stock in the field"><messageEventDefinition id="n_133_tt_md"/></startEvent>
+    <userTask id="n_133_agree" name="Agree the item and quantity"><documentation>13.3.5.</documentation></userTask>
+    <serviceTask id="n_133_give" name="Issue from the giving vehicle"><documentation>13.3.5.</documentation></serviceTask>
+    <exclusiveGateway id="n_133_cg" name="Taking vehicle confirmed"/>
+    <userTask id="n_133_gap" name="Leave the one-sided move visible as a gap"><documentation>13.3.5. A one-sided confirmation is an in-transit hole, not a transfer, and closing it quietly is how stock disappears twice.</documentation></userTask>
+    <serviceTask id="n_133_take" name="Increase on-hand on the taking vehicle"><documentation>13.3.5. Not a 13.2.4 storeroom transfer and not a 13.2.2 issue to work.</documentation></serviceTask>
+    <endEvent id="n_133_tend" name="Both vehicles true"/>
+    <startEvent id="n_133_rt" name="Vehicle due for top-up or below min"><timerEventDefinition id="n_133_rt_td"/></startEvent>
+    <serviceTask id="n_133_cmp" name="Compare vehicle on-hand to the standard list"><documentation>13.3.7. The list itself is 13.3.2, a standing record.</documentation></serviceTask>
+    <serviceTask id="n_133_pick" name="Create the replenishment pick"><documentation>13.3.7.</documentation></serviceTask>
+    <serviceTask id="n_133_isv" name="Issue from the storeroom to the vehicle location"><documentation>13.3.7. SPP.9 delivery to a vehicle location, not an issue to work. Post-storm restock is this process with a bigger list, not a different one.</documentation></serviceTask>
+    <exclusiveGateway id="n_133_sg" name="Storeroom covered the list"/>
+    <sendTask id="n_133_ssh" name="Raise the storeroom shortfall"><documentation>13.3.7. Into 13.4.1 or 13.3.6.</documentation></sendTask>
+    <userTask id="n_133_conf" name="Confirm receipt on the vehicle"><documentation>13.3.7. Confirming on the vehicle is what keeps the next count honest.</documentation></userTask>
+    <endEvent id="n_133_rend" name="Vehicle replenished"/>
+    <startEvent id="n_133_ct" name="Vehicle count due or a variance found"><timerEventDefinition id="n_133_ct_td"/></startEvent>
+    <userTask id="n_133_sel" name="Select the vehicle and the list to count"><documentation>13.3.8.</documentation></userTask>
+    <userTask id="n_133_cnt" name="Count on the vehicle"><documentation>13.3.8. Same discipline as 13.2.5. Uncounted trucks are how 13.3.3 consumption goes missing without anybody noticing.</documentation></userTask>
+    <serviceTask id="n_133_ccmp" name="Compare to book quantity, including in-transit"><documentation>13.3.8. A count that ignores 13.3.9 in-transit will manufacture a variance and then chase it.</documentation></serviceTask>
+    <exclusiveGateway id="n_133_cg2" name="Variance within tolerance"/>
+    <userTask id="n_133_rec" name="Hold for recount"><documentation>13.3.8.</documentation></userTask>
+    <serviceTask id="n_133_adj" name="Post the vehicle adjustment with a reason"><documentation>13.3.8.</documentation></serviceTask>
+    <endEvent id="n_133_cend" name="Vehicle record true"/>
+    <sequenceFlow id="f_n_133_use_n_133_cap" sourceRef="n_133_use" targetRef="n_133_cap" name=""/>
+    <sequenceFlow id="f_n_133_cap_n_133_bind" sourceRef="n_133_cap" targetRef="n_133_bind" name=""/>
+    <sequenceFlow id="f_n_133_bind_n_133_red" sourceRef="n_133_bind" targetRef="n_133_red" name=""/>
+    <sequenceFlow id="f_n_133_red_n_133_uend" sourceRef="n_133_red" targetRef="n_133_uend" name=""/>
+    <sequenceFlow id="f_n_133_tt_n_133_agree" sourceRef="n_133_tt" targetRef="n_133_agree" name=""/>
+    <sequenceFlow id="f_n_133_agree_n_133_give" sourceRef="n_133_agree" targetRef="n_133_give" name=""/>
+    <sequenceFlow id="f_n_133_give_n_133_cg" sourceRef="n_133_give" targetRef="n_133_cg" name=""/>
+    <sequenceFlow id="f_n_133_cg_n_133_gap" sourceRef="n_133_cg" targetRef="n_133_gap" name="not confirmed"><conditionExpression xsi:type="tFormalExpression"><![CDATA[receiptConfirmed = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_133_cg_n_133_take" sourceRef="n_133_cg" targetRef="n_133_take" name="confirmed"/>
+    <sequenceFlow id="f_n_133_take_n_133_tend" sourceRef="n_133_take" targetRef="n_133_tend" name=""/>
+    <sequenceFlow id="f_n_133_rt_n_133_cmp" sourceRef="n_133_rt" targetRef="n_133_cmp" name=""/>
+    <sequenceFlow id="f_n_133_cmp_n_133_pick" sourceRef="n_133_cmp" targetRef="n_133_pick" name=""/>
+    <sequenceFlow id="f_n_133_pick_n_133_isv" sourceRef="n_133_pick" targetRef="n_133_isv" name=""/>
+    <sequenceFlow id="f_n_133_isv_n_133_sg" sourceRef="n_133_isv" targetRef="n_133_sg" name=""/>
+    <sequenceFlow id="f_n_133_sg_n_133_ssh" sourceRef="n_133_sg" targetRef="n_133_ssh" name="storeroom short"><conditionExpression xsi:type="tFormalExpression"><![CDATA[storeroomCovered = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_133_sg_n_133_conf" sourceRef="n_133_sg" targetRef="n_133_conf" name="covered"/>
+    <sequenceFlow id="f_n_133_ssh_n_133_conf" sourceRef="n_133_ssh" targetRef="n_133_conf" name="confirm what arrived"/>
+    <sequenceFlow id="f_n_133_conf_n_133_rend" sourceRef="n_133_conf" targetRef="n_133_rend" name=""/>
+    <sequenceFlow id="f_n_133_ct_n_133_sel" sourceRef="n_133_ct" targetRef="n_133_sel" name=""/>
+    <sequenceFlow id="f_n_133_sel_n_133_cnt" sourceRef="n_133_sel" targetRef="n_133_cnt" name=""/>
+    <sequenceFlow id="f_n_133_cnt_n_133_ccmp" sourceRef="n_133_cnt" targetRef="n_133_ccmp" name=""/>
+    <sequenceFlow id="f_n_133_ccmp_n_133_cg2" sourceRef="n_133_ccmp" targetRef="n_133_cg2" name=""/>
+    <sequenceFlow id="f_n_133_cg2_n_133_rec" sourceRef="n_133_cg2" targetRef="n_133_rec" name="outside tolerance"><conditionExpression xsi:type="tFormalExpression"><![CDATA[withinTolerance = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_133_rec_n_133_cnt" sourceRef="n_133_rec" targetRef="n_133_cnt" name="recount"/>
+    <sequenceFlow id="f_n_133_cg2_n_133_adj" sourceRef="n_133_cg2" targetRef="n_133_adj" name="within tolerance"/>
+    <sequenceFlow id="f_n_133_adj_n_133_cend" sourceRef="n_133_adj" targetRef="n_133_cend" name=""/>
+  </process>
+  <bpmndi:BPMNDiagram id="dg_P_13_3">
+    <bpmndi:BPMNPlane id="pl_P_13_3" bpmnElement="P_13_3">
+      <bpmndi:BPMNShape id="sh_n_133_use" bpmnElement="n_133_use"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_133_cap" bpmnElement="n_133_cap"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_133_bind" bpmnElement="n_133_bind"><dc:Bounds x="425" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_133_red" bpmnElement="n_133_red"><dc:Bounds x="595" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_133_uend" bpmnElement="n_133_uend"><dc:Bounds x="812" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_133_tt" bpmnElement="n_133_tt"><dc:Bounds x="132" y="437" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_133_agree" bpmnElement="n_133_agree"><dc:Bounds x="255" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_133_give" bpmnElement="n_133_give"><dc:Bounds x="425" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_133_cg" bpmnElement="n_133_cg"><dc:Bounds x="637" y="432" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_133_gap" bpmnElement="n_133_gap"><dc:Bounds x="595" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_133_take" bpmnElement="n_133_take"><dc:Bounds x="765" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_133_tend" bpmnElement="n_133_tend"><dc:Bounds x="982" y="437" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_133_rt" bpmnElement="n_133_rt"><dc:Bounds x="132" y="877" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_133_cmp" bpmnElement="n_133_cmp"><dc:Bounds x="255" y="860" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_133_pick" bpmnElement="n_133_pick"><dc:Bounds x="425" y="860" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_133_isv" bpmnElement="n_133_isv"><dc:Bounds x="595" y="860" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_133_sg" bpmnElement="n_133_sg"><dc:Bounds x="807" y="872" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_133_ssh" bpmnElement="n_133_ssh"><dc:Bounds x="765" y="1080" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_133_conf" bpmnElement="n_133_conf"><dc:Bounds x="935" y="860" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_133_rend" bpmnElement="n_133_rend"><dc:Bounds x="1152" y="877" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_133_ct" bpmnElement="n_133_ct"><dc:Bounds x="132" y="1317" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_133_sel" bpmnElement="n_133_sel"><dc:Bounds x="255" y="1300" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_133_cnt" bpmnElement="n_133_cnt"><dc:Bounds x="425" y="1300" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_133_ccmp" bpmnElement="n_133_ccmp"><dc:Bounds x="595" y="1300" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_133_cg2" bpmnElement="n_133_cg2"><dc:Bounds x="807" y="1312" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_133_rec" bpmnElement="n_133_rec"><dc:Bounds x="765" y="1520" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_133_adj" bpmnElement="n_133_adj"><dc:Bounds x="935" y="1300" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_133_cend" bpmnElement="n_133_cend"><dc:Bounds x="1152" y="1317" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ed_f_n_133_use_n_133_cap" bpmnElement="f_n_133_use_n_133_cap"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_133_cap_n_133_bind" bpmnElement="f_n_133_cap_n_133_bind"><di:waypoint x="385" y="235"/><di:waypoint x="425" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_133_bind_n_133_red" bpmnElement="f_n_133_bind_n_133_red"><di:waypoint x="555" y="235"/><di:waypoint x="595" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_133_red_n_133_uend" bpmnElement="f_n_133_red_n_133_uend"><di:waypoint x="725" y="235"/><di:waypoint x="812" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_133_tt_n_133_agree" bpmnElement="f_n_133_tt_n_133_agree"><di:waypoint x="168" y="455"/><di:waypoint x="255" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_133_agree_n_133_give" bpmnElement="f_n_133_agree_n_133_give"><di:waypoint x="385" y="455"/><di:waypoint x="425" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_133_give_n_133_cg" bpmnElement="f_n_133_give_n_133_cg"><di:waypoint x="555" y="455"/><di:waypoint x="637" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_133_cg_n_133_gap" bpmnElement="f_n_133_cg_n_133_gap"><di:waypoint x="683" y="455"/><di:waypoint x="570" y="455"/><di:waypoint x="570" y="675"/><di:waypoint x="595" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_133_cg_n_133_take" bpmnElement="f_n_133_cg_n_133_take"><di:waypoint x="683" y="455"/><di:waypoint x="765" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_133_take_n_133_tend" bpmnElement="f_n_133_take_n_133_tend"><di:waypoint x="895" y="455"/><di:waypoint x="982" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_133_rt_n_133_cmp" bpmnElement="f_n_133_rt_n_133_cmp"><di:waypoint x="168" y="895"/><di:waypoint x="255" y="895"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_133_cmp_n_133_pick" bpmnElement="f_n_133_cmp_n_133_pick"><di:waypoint x="385" y="895"/><di:waypoint x="425" y="895"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_133_pick_n_133_isv" bpmnElement="f_n_133_pick_n_133_isv"><di:waypoint x="555" y="895"/><di:waypoint x="595" y="895"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_133_isv_n_133_sg" bpmnElement="f_n_133_isv_n_133_sg"><di:waypoint x="725" y="895"/><di:waypoint x="807" y="895"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_133_sg_n_133_ssh" bpmnElement="f_n_133_sg_n_133_ssh"><di:waypoint x="853" y="895"/><di:waypoint x="740" y="895"/><di:waypoint x="740" y="1115"/><di:waypoint x="765" y="1115"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_133_sg_n_133_conf" bpmnElement="f_n_133_sg_n_133_conf"><di:waypoint x="853" y="895"/><di:waypoint x="935" y="895"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_133_ssh_n_133_conf" bpmnElement="f_n_133_ssh_n_133_conf"><di:waypoint x="895" y="1115"/><di:waypoint x="910" y="1115"/><di:waypoint x="910" y="895"/><di:waypoint x="935" y="895"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_133_conf_n_133_rend" bpmnElement="f_n_133_conf_n_133_rend"><di:waypoint x="1065" y="895"/><di:waypoint x="1152" y="895"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_133_ct_n_133_sel" bpmnElement="f_n_133_ct_n_133_sel"><di:waypoint x="168" y="1335"/><di:waypoint x="255" y="1335"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_133_sel_n_133_cnt" bpmnElement="f_n_133_sel_n_133_cnt"><di:waypoint x="385" y="1335"/><di:waypoint x="425" y="1335"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_133_cnt_n_133_ccmp" bpmnElement="f_n_133_cnt_n_133_ccmp"><di:waypoint x="555" y="1335"/><di:waypoint x="595" y="1335"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_133_ccmp_n_133_cg2" bpmnElement="f_n_133_ccmp_n_133_cg2"><di:waypoint x="725" y="1335"/><di:waypoint x="807" y="1335"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_133_cg2_n_133_rec" bpmnElement="f_n_133_cg2_n_133_rec"><di:waypoint x="853" y="1335"/><di:waypoint x="740" y="1335"/><di:waypoint x="740" y="1555"/><di:waypoint x="765" y="1555"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_133_rec_n_133_cnt" bpmnElement="f_n_133_rec_n_133_cnt"><di:waypoint x="895" y="1555"/><di:waypoint x="400" y="1555"/><di:waypoint x="400" y="1335"/><di:waypoint x="425" y="1335"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_133_cg2_n_133_adj" bpmnElement="f_n_133_cg2_n_133_adj"><di:waypoint x="853" y="1335"/><di:waypoint x="935" y="1335"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_133_adj_n_133_cend" bpmnElement="f_n_133_adj_n_133_cend"><di:waypoint x="1065" y="1335"/><di:waypoint x="1152" y="1335"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_P_13_2" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <process id="P_13_2" name="13.2 Operate storerooms and warehouses" isExecutable="false">
+    <documentation>Tier-4 activities under 13.2.1 to 13.2.5. EN 17007 cl. 6.11 supplies the process names throughout: SPP.6 receive ordered or repaired spare items, SPP.9 deliver spare items, SPP.7 add spare items to stock, SPP.2 manage stocks. Two disciplines are drawn rather than assumed. An uninspected return that goes straight to available corrupts the next count, and an issue without a charge-to loses the consumption that 5.3 has to unitise later.</documentation>
+    <laneSet id="P_13_2_lanes">
+      <lane id="l_132_dock" name="Receiving and returns">
+        <flowNodeRef>n_132_start</flowNodeRef>
+        <flowNodeRef>n_132_match</flowNodeRef>
+        <flowNodeRef>n_132_count</flowNodeRef>
+        <flowNodeRef>n_132_qg</flowNodeRef>
+        <flowNodeRef>n_132_quar</flowNodeRef>
+        <flowNodeRef>n_132_put</flowNodeRef>
+        <flowNodeRef>n_132_ret</flowNodeRef>
+        <flowNodeRef>n_132_rid</flowNodeRef>
+        <flowNodeRef>n_132_rins</flowNodeRef>
+        <flowNodeRef>n_132_rg</flowNodeRef>
+        <flowNodeRef>n_132_rel</flowNodeRef>
+      </lane>
+      <lane id="l_132_win" name="Issue window">
+        <flowNodeRef>n_132_iss</flowNodeRef>
+        <flowNodeRef>n_132_take</flowNodeRef>
+        <flowNodeRef>n_132_pick</flowNodeRef>
+        <flowNodeRef>n_132_pg</flowNodeRef>
+        <flowNodeRef>n_132_shrt</flowNodeRef>
+        <flowNodeRef>n_132_chg</flowNodeRef>
+      </lane>
+      <lane id="l_132_ctl" name="Stock control">
+        <flowNodeRef>n_132_tr</flowNodeRef>
+        <flowNodeRef>n_132_auth</flowNodeRef>
+        <flowNodeRef>n_132_tpick</flowNodeRef>
+        <flowNodeRef>n_132_transit</flowNodeRef>
+        <flowNodeRef>n_132_trec</flowNodeRef>
+        <flowNodeRef>n_132_ct</flowNodeRef>
+        <flowNodeRef>n_132_sel</flowNodeRef>
+        <flowNodeRef>n_132_blind</flowNodeRef>
+        <flowNodeRef>n_132_cmp</flowNodeRef>
+        <flowNodeRef>n_132_cg2</flowNodeRef>
+        <flowNodeRef>n_132_rec2</flowNodeRef>
+        <flowNodeRef>n_132_adj</flowNodeRef>
+        <flowNodeRef>n_132_end</flowNodeRef>
+      </lane>
+    </laneSet>
+    <startEvent id="n_132_start" name="Delivery or crew return at the dock"><messageEventDefinition id="n_132_start_md"/></startEvent>
+    <serviceTask id="n_132_match" name="Match to the order or the return"><documentation>13.2.1. The purchase-order match itself is 13.4.3. Doing both as one step hides over-shipment.</documentation></serviceTask>
+    <userTask id="n_132_count" name="Count, inspect and identify the item"><documentation>13.2.1. Receipt without identity is not stock, it is a pile.</documentation></userTask>
+    <exclusiveGateway id="n_132_qg" name="Accepted"/>
+    <serviceTask id="n_132_quar" name="Hold as quarantine"><documentation>13.2.1. Quantity and condition exceptions both land here.</documentation></serviceTask>
+    <serviceTask id="n_132_put" name="Put away to a location and update on-hand"><documentation>13.2.1. Hazardous goods beyond ordinary spares are 19.3; this dock receives maintenance and construction material.</documentation></serviceTask>
+    <startEvent id="n_132_iss" name="Work or crew ready to take material"><messageEventDefinition id="n_132_iss_md"/></startEvent>
+    <serviceTask id="n_132_take" name="Take the reservation or the walk-up request"><documentation>13.2.2. Vehicle stock issue is 13.3.3; this is the window, not the truck.</documentation></serviceTask>
+    <userTask id="n_132_pick" name="Pick from the location"><documentation>13.2.2.</documentation></userTask>
+    <exclusiveGateway id="n_132_pg" name="Full quantity picked"/>
+    <sendTask id="n_132_shrt" name="Record the short pick against the work"><documentation>13.2.2. A short pick the crew discovers on site is a lost day.</documentation></sendTask>
+    <serviceTask id="n_132_chg" name="Issue to the work or crew and reduce on-hand"><documentation>13.2.2. Issue without a charge-to loses the consumption 5.3 later has to cost.</documentation></serviceTask>
+    <startEvent id="n_132_ret" name="Unused or over-issued material handed back"><messageEventDefinition id="n_132_ret_md"/></startEvent>
+    <serviceTask id="n_132_rid" name="Identify the item and the work it came from"><documentation>13.2.3.</documentation></serviceTask>
+    <userTask id="n_132_rins" name="Inspect condition"><documentation>13.2.3. SPP.10 assesses replaced items. Salvage and hazardous waste are 19.3.</documentation></userTask>
+    <exclusiveGateway id="n_132_rg" name="Serviceable"/>
+    <serviceTask id="n_132_rel" name="Relieve the work of the quantity"><documentation>13.2.3.</documentation></serviceTask>
+    <startEvent id="n_132_tr" name="Stock required where it is not held"><messageEventDefinition id="n_132_tr_md"/></startEvent>
+    <userTask id="n_132_auth" name="Authorise the move"><documentation>13.2.4. A transfer is not an issue and not a sale. 13.3.5 is vehicle-to-vehicle.</documentation></userTask>
+    <userTask id="n_132_tpick" name="Pick at the from-location"><documentation>13.2.4.</documentation></userTask>
+    <serviceTask id="n_132_transit" name="Hold the quantity in a visible in-transit location"><documentation>13.2.4. In-transit that is not a real location is how 13.3.9 and 13.2.5 come to disagree about the same stock.</documentation></serviceTask>
+    <serviceTask id="n_132_trec" name="Receive at the to-location"><documentation>13.2.4.</documentation></serviceTask>
+    <startEvent id="n_132_ct" name="Count cycle due or a variance found"><timerEventDefinition id="n_132_ct_td"/></startEvent>
+    <userTask id="n_132_sel" name="Select the locations or items to count"><documentation>13.2.5.</documentation></userTask>
+    <userTask id="n_132_blind" name="Count without the book quantity in view"><documentation>13.2.5. SPP.2 does not specify a count method; blind versus wall-to-wall is judgment. What blind counting protects is the count, not the counter.</documentation></userTask>
+    <serviceTask id="n_132_cmp" name="Compare to the record"><documentation>13.2.5. A count that ignores in-transit will manufacture a variance.</documentation></serviceTask>
+    <exclusiveGateway id="n_132_cg2" name="Variance within tolerance"/>
+    <userTask id="n_132_rec2" name="Hold for recount"><documentation>13.2.5.</documentation></userTask>
+    <serviceTask id="n_132_adj" name="Post the adjustment with a reason"><documentation>13.2.5. 18 CFR Part 101 continuing plant inventory is the PROPERTY record and belongs to 5.3. A cycle-count adjustment is not unitisation and must not be posted as one. Storeroom valuation method is operator and accounting policy.</documentation></serviceTask>
+    <endEvent id="n_132_end" name="Stock record true"/>
+    <sequenceFlow id="f_n_132_start_n_132_match" sourceRef="n_132_start" targetRef="n_132_match" name=""/>
+    <sequenceFlow id="f_n_132_match_n_132_count" sourceRef="n_132_match" targetRef="n_132_count" name=""/>
+    <sequenceFlow id="f_n_132_count_n_132_qg" sourceRef="n_132_count" targetRef="n_132_qg" name=""/>
+    <sequenceFlow id="f_n_132_qg_n_132_quar" sourceRef="n_132_qg" targetRef="n_132_quar" name="quantity or condition exception"><conditionExpression xsi:type="tFormalExpression"><![CDATA[accepted = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_132_qg_n_132_put" sourceRef="n_132_qg" targetRef="n_132_put" name="accepted"/>
+    <sequenceFlow id="f_n_132_put_n_132_end" sourceRef="n_132_put" targetRef="n_132_end" name=""/>
+    <sequenceFlow id="f_n_132_quar_n_132_end" sourceRef="n_132_quar" targetRef="n_132_end" name=""/>
+    <sequenceFlow id="f_n_132_iss_n_132_take" sourceRef="n_132_iss" targetRef="n_132_take" name=""/>
+    <sequenceFlow id="f_n_132_take_n_132_pick" sourceRef="n_132_take" targetRef="n_132_pick" name=""/>
+    <sequenceFlow id="f_n_132_pick_n_132_pg" sourceRef="n_132_pick" targetRef="n_132_pg" name=""/>
+    <sequenceFlow id="f_n_132_pg_n_132_shrt" sourceRef="n_132_pg" targetRef="n_132_shrt" name="short"><conditionExpression xsi:type="tFormalExpression"><![CDATA[quantityPicked < quantityRequested]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_132_pg_n_132_chg" sourceRef="n_132_pg" targetRef="n_132_chg" name="full"/>
+    <sequenceFlow id="f_n_132_shrt_n_132_chg" sourceRef="n_132_shrt" targetRef="n_132_chg" name="issue what was picked"/>
+    <sequenceFlow id="f_n_132_chg_n_132_end" sourceRef="n_132_chg" targetRef="n_132_end" name=""/>
+    <sequenceFlow id="f_n_132_ret_n_132_rid" sourceRef="n_132_ret" targetRef="n_132_rid" name=""/>
+    <sequenceFlow id="f_n_132_rid_n_132_rins" sourceRef="n_132_rid" targetRef="n_132_rins" name=""/>
+    <sequenceFlow id="f_n_132_rins_n_132_rg" sourceRef="n_132_rins" targetRef="n_132_rg" name=""/>
+    <sequenceFlow id="f_n_132_rg_n_132_quar" sourceRef="n_132_rg" targetRef="n_132_quar" name="not serviceable"><conditionExpression xsi:type="tFormalExpression"><![CDATA[serviceable = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_132_rg_n_132_rel" sourceRef="n_132_rg" targetRef="n_132_rel" name="serviceable"/>
+    <sequenceFlow id="f_n_132_rel_n_132_put" sourceRef="n_132_rel" targetRef="n_132_put" name="return to available"/>
+    <sequenceFlow id="f_n_132_tr_n_132_auth" sourceRef="n_132_tr" targetRef="n_132_auth" name=""/>
+    <sequenceFlow id="f_n_132_auth_n_132_tpick" sourceRef="n_132_auth" targetRef="n_132_tpick" name=""/>
+    <sequenceFlow id="f_n_132_tpick_n_132_transit" sourceRef="n_132_tpick" targetRef="n_132_transit" name=""/>
+    <sequenceFlow id="f_n_132_transit_n_132_trec" sourceRef="n_132_transit" targetRef="n_132_trec" name=""/>
+    <sequenceFlow id="f_n_132_trec_n_132_end" sourceRef="n_132_trec" targetRef="n_132_end" name=""/>
+    <sequenceFlow id="f_n_132_ct_n_132_sel" sourceRef="n_132_ct" targetRef="n_132_sel" name=""/>
+    <sequenceFlow id="f_n_132_sel_n_132_blind" sourceRef="n_132_sel" targetRef="n_132_blind" name=""/>
+    <sequenceFlow id="f_n_132_blind_n_132_cmp" sourceRef="n_132_blind" targetRef="n_132_cmp" name=""/>
+    <sequenceFlow id="f_n_132_cmp_n_132_cg2" sourceRef="n_132_cmp" targetRef="n_132_cg2" name=""/>
+    <sequenceFlow id="f_n_132_cg2_n_132_rec2" sourceRef="n_132_cg2" targetRef="n_132_rec2" name="outside tolerance"><conditionExpression xsi:type="tFormalExpression"><![CDATA[withinTolerance = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_132_rec2_n_132_blind" sourceRef="n_132_rec2" targetRef="n_132_blind" name="recount"/>
+    <sequenceFlow id="f_n_132_cg2_n_132_adj" sourceRef="n_132_cg2" targetRef="n_132_adj" name="within tolerance"/>
+    <sequenceFlow id="f_n_132_adj_n_132_end" sourceRef="n_132_adj" targetRef="n_132_end" name=""/>
+  </process>
+  <bpmndi:BPMNDiagram id="dg_P_13_2">
+    <bpmndi:BPMNPlane id="pl_P_13_2" bpmnElement="P_13_2">
+      <bpmndi:BPMNShape id="sh_n_132_start" bpmnElement="n_132_start"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_132_match" bpmnElement="n_132_match"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_132_count" bpmnElement="n_132_count"><dc:Bounds x="425" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_132_qg" bpmnElement="n_132_qg"><dc:Bounds x="637" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_132_quar" bpmnElement="n_132_quar"><dc:Bounds x="595" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_132_put" bpmnElement="n_132_put"><dc:Bounds x="765" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_132_iss" bpmnElement="n_132_iss"><dc:Bounds x="132" y="657" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_132_take" bpmnElement="n_132_take"><dc:Bounds x="255" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_132_pick" bpmnElement="n_132_pick"><dc:Bounds x="425" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_132_pg" bpmnElement="n_132_pg"><dc:Bounds x="637" y="652" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_132_shrt" bpmnElement="n_132_shrt"><dc:Bounds x="595" y="860" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_132_chg" bpmnElement="n_132_chg"><dc:Bounds x="765" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_132_ret" bpmnElement="n_132_ret"><dc:Bounds x="132" y="1097" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_132_rid" bpmnElement="n_132_rid"><dc:Bounds x="255" y="1080" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_132_rins" bpmnElement="n_132_rins"><dc:Bounds x="425" y="1080" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_132_rg" bpmnElement="n_132_rg"><dc:Bounds x="637" y="1092" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_132_rel" bpmnElement="n_132_rel"><dc:Bounds x="765" y="1080" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_132_tr" bpmnElement="n_132_tr"><dc:Bounds x="132" y="1427" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_132_auth" bpmnElement="n_132_auth"><dc:Bounds x="255" y="1410" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_132_tpick" bpmnElement="n_132_tpick"><dc:Bounds x="425" y="1410" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_132_transit" bpmnElement="n_132_transit"><dc:Bounds x="595" y="1410" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_132_trec" bpmnElement="n_132_trec"><dc:Bounds x="765" y="1410" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_132_ct" bpmnElement="n_132_ct"><dc:Bounds x="132" y="1757" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_132_sel" bpmnElement="n_132_sel"><dc:Bounds x="255" y="1740" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_132_blind" bpmnElement="n_132_blind"><dc:Bounds x="425" y="1740" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_132_cmp" bpmnElement="n_132_cmp"><dc:Bounds x="595" y="1740" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_132_cg2" bpmnElement="n_132_cg2"><dc:Bounds x="807" y="1752" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_132_rec2" bpmnElement="n_132_rec2"><dc:Bounds x="765" y="1960" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_132_adj" bpmnElement="n_132_adj"><dc:Bounds x="935" y="1740" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_132_end" bpmnElement="n_132_end"><dc:Bounds x="1152" y="987" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ed_f_n_132_start_n_132_match" bpmnElement="f_n_132_start_n_132_match"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_132_match_n_132_count" bpmnElement="f_n_132_match_n_132_count"><di:waypoint x="385" y="235"/><di:waypoint x="425" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_132_count_n_132_qg" bpmnElement="f_n_132_count_n_132_qg"><di:waypoint x="555" y="235"/><di:waypoint x="637" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_132_qg_n_132_quar" bpmnElement="f_n_132_qg_n_132_quar"><di:waypoint x="683" y="235"/><di:waypoint x="570" y="235"/><di:waypoint x="570" y="455"/><di:waypoint x="595" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_132_qg_n_132_put" bpmnElement="f_n_132_qg_n_132_put"><di:waypoint x="683" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_132_put_n_132_end" bpmnElement="f_n_132_put_n_132_end"><di:waypoint x="895" y="235"/><di:waypoint x="1127" y="235"/><di:waypoint x="1127" y="1005"/><di:waypoint x="1152" y="1005"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_132_quar_n_132_end" bpmnElement="f_n_132_quar_n_132_end"><di:waypoint x="725" y="455"/><di:waypoint x="1127" y="455"/><di:waypoint x="1127" y="1005"/><di:waypoint x="1152" y="1005"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_132_iss_n_132_take" bpmnElement="f_n_132_iss_n_132_take"><di:waypoint x="168" y="675"/><di:waypoint x="255" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_132_take_n_132_pick" bpmnElement="f_n_132_take_n_132_pick"><di:waypoint x="385" y="675"/><di:waypoint x="425" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_132_pick_n_132_pg" bpmnElement="f_n_132_pick_n_132_pg"><di:waypoint x="555" y="675"/><di:waypoint x="637" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_132_pg_n_132_shrt" bpmnElement="f_n_132_pg_n_132_shrt"><di:waypoint x="683" y="675"/><di:waypoint x="570" y="675"/><di:waypoint x="570" y="895"/><di:waypoint x="595" y="895"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_132_pg_n_132_chg" bpmnElement="f_n_132_pg_n_132_chg"><di:waypoint x="683" y="675"/><di:waypoint x="765" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_132_shrt_n_132_chg" bpmnElement="f_n_132_shrt_n_132_chg"><di:waypoint x="725" y="895"/><di:waypoint x="740" y="895"/><di:waypoint x="740" y="675"/><di:waypoint x="765" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_132_chg_n_132_end" bpmnElement="f_n_132_chg_n_132_end"><di:waypoint x="895" y="675"/><di:waypoint x="1127" y="675"/><di:waypoint x="1127" y="1005"/><di:waypoint x="1152" y="1005"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_132_ret_n_132_rid" bpmnElement="f_n_132_ret_n_132_rid"><di:waypoint x="168" y="1115"/><di:waypoint x="255" y="1115"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_132_rid_n_132_rins" bpmnElement="f_n_132_rid_n_132_rins"><di:waypoint x="385" y="1115"/><di:waypoint x="425" y="1115"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_132_rins_n_132_rg" bpmnElement="f_n_132_rins_n_132_rg"><di:waypoint x="555" y="1115"/><di:waypoint x="637" y="1115"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_132_rg_n_132_quar" bpmnElement="f_n_132_rg_n_132_quar"><di:waypoint x="683" y="1115"/><di:waypoint x="570" y="1115"/><di:waypoint x="570" y="455"/><di:waypoint x="595" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_132_rg_n_132_rel" bpmnElement="f_n_132_rg_n_132_rel"><di:waypoint x="683" y="1115"/><di:waypoint x="765" y="1115"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_132_rel_n_132_put" bpmnElement="f_n_132_rel_n_132_put"><di:waypoint x="895" y="1115"/><di:waypoint x="740" y="1115"/><di:waypoint x="740" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_132_tr_n_132_auth" bpmnElement="f_n_132_tr_n_132_auth"><di:waypoint x="168" y="1445"/><di:waypoint x="255" y="1445"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_132_auth_n_132_tpick" bpmnElement="f_n_132_auth_n_132_tpick"><di:waypoint x="385" y="1445"/><di:waypoint x="425" y="1445"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_132_tpick_n_132_transit" bpmnElement="f_n_132_tpick_n_132_transit"><di:waypoint x="555" y="1445"/><di:waypoint x="595" y="1445"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_132_transit_n_132_trec" bpmnElement="f_n_132_transit_n_132_trec"><di:waypoint x="725" y="1445"/><di:waypoint x="765" y="1445"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_132_trec_n_132_end" bpmnElement="f_n_132_trec_n_132_end"><di:waypoint x="895" y="1445"/><di:waypoint x="1127" y="1445"/><di:waypoint x="1127" y="1005"/><di:waypoint x="1152" y="1005"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_132_ct_n_132_sel" bpmnElement="f_n_132_ct_n_132_sel"><di:waypoint x="168" y="1775"/><di:waypoint x="255" y="1775"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_132_sel_n_132_blind" bpmnElement="f_n_132_sel_n_132_blind"><di:waypoint x="385" y="1775"/><di:waypoint x="425" y="1775"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_132_blind_n_132_cmp" bpmnElement="f_n_132_blind_n_132_cmp"><di:waypoint x="555" y="1775"/><di:waypoint x="595" y="1775"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_132_cmp_n_132_cg2" bpmnElement="f_n_132_cmp_n_132_cg2"><di:waypoint x="725" y="1775"/><di:waypoint x="807" y="1775"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_132_cg2_n_132_rec2" bpmnElement="f_n_132_cg2_n_132_rec2"><di:waypoint x="853" y="1775"/><di:waypoint x="740" y="1775"/><di:waypoint x="740" y="1995"/><di:waypoint x="765" y="1995"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_132_rec2_n_132_blind" bpmnElement="f_n_132_rec2_n_132_blind"><di:waypoint x="895" y="1995"/><di:waypoint x="400" y="1995"/><di:waypoint x="400" y="1775"/><di:waypoint x="425" y="1775"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_132_cg2_n_132_adj" bpmnElement="f_n_132_cg2_n_132_adj"><di:waypoint x="853" y="1775"/><di:waypoint x="935" y="1775"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_132_adj_n_132_end" bpmnElement="f_n_132_adj_n_132_end"><di:waypoint x="1065" y="1775"/><di:waypoint x="1127" y="1775"/><di:waypoint x="1127" y="1005"/><di:waypoint x="1152" y="1005"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

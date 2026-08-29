@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_P_10_5" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <process id="P_10_5" name="10.5 Start, stop and transfer service" isExecutable="false">
+    <documentation>Tier-4 activities under 10.5.2, 10.5.4 and 10.5.5. Classification is 10.5.1 and the credit decision is 10.5.3; both are called. The path exists to hold one thing together: a transfer is TWO field orders against one customer request, and closing one without the other leaves a stranded account paying for a premise nobody occupies.</documentation>
+    <laneSet id="P_10_5_lanes">
+      <lane id="l_105_cs" name="Customer service">
+        <flowNodeRef>n_105_start</flowNodeRef>
+        <flowNodeRef>n_105_find</flowNodeRef>
+        <flowNodeRef>n_105_ver</flowNodeRef>
+        <flowNodeRef>n_105_vg</flowNodeRef>
+        <flowNodeRef>n_105_exc</flowNodeRef>
+        <flowNodeRef>n_105_kind</flowNodeRef>
+        <flowNodeRef>n_105_one</flowNodeRef>
+        <flowNodeRef>n_105_pair</flowNodeRef>
+        <flowNodeRef>n_105_read</flowNodeRef>
+        <flowNodeRef>n_105_rel</flowNodeRef>
+        <flowNodeRef>n_105_st</flowNodeRef>
+        <flowNodeRef>n_105_pg</flowNodeRef>
+        <flowNodeRef>n_105_wait</flowNodeRef>
+        <flowNodeRef>n_105_cnf</flowNodeRef>
+        <flowNodeRef>n_105_end</flowNodeRef>
+      </lane>
+      <lane id="l_105_fin" name="Credit">
+        <flowNodeRef>n_105_cred</flowNodeRef>
+        <flowNodeRef>n_105_cg</flowNodeRef>
+        <flowNodeRef>n_105_chold</flowNodeRef>
+      </lane>
+      <lane id="l_105_frd" name="Field">
+        <flowNodeRef>n_105_out</flowNodeRef>
+        <flowNodeRef>n_105_og</flowNodeRef>
+        <flowNodeRef>n_105_ret</flowNodeRef>
+      </lane>
+    </laneSet>
+    <startEvent id="n_105_start" name="Classified move request"><messageEventDefinition id="n_105_start_md"/></startEvent>
+    <serviceTask id="n_105_find" name="Find or create the premise and service point"><documentation>10.5.2. 10.1.1 bound identity. This verifies the place.</documentation></serviceTask>
+    <userTask id="n_105_ver" name="Verify meter, address and access notes"><documentation>10.5.2.</documentation></userTask>
+    <exclusiveGateway id="n_105_vg" name="Premise verified"/>
+    <userTask id="n_105_exc" name="Raise the premise exception"><documentation>10.5.2. Shared meters, master-metered premises and unknown occupancy are operator configuration; no standard specifies them. A new premise that needs a service line built is 10.6, not a start on an empty lot.</documentation></userTask>
+    <businessRuleTask id="n_105_cred" name="Evaluate deposit and credit (10.5.3)"><documentation>10.5.4. Deposit rules are tariff and state.</documentation></businessRuleTask>
+    <exclusiveGateway id="n_105_cg" name="Credit clear"/>
+    <userTask id="n_105_chold" name="Hold the field order until the deposit is secured"><documentation>10.5.4. A start that bypasses an unpaid required deposit is a credit leak, not a field success.</documentation></userTask>
+    <exclusiveGateway id="n_105_kind" name="Start, stop or transfer"/>
+    <serviceTask id="n_105_one" name="Create the turn-on or turn-off ServiceOrder"><documentation>10.5.4. ServiceOrder.create.</documentation></serviceTask>
+    <serviceTask id="n_105_pair" name="Create the paired transfer orders"><documentation>10.5.4. Two orders, one request: the stop at the old premise and the start at the new one are raised together or not at all.</documentation></serviceTask>
+    <serviceTask id="n_105_read" name="Attach read-in or read-out as required"><documentation>10.5.4. The read itself is a 6.2 metering act consumed here, not duplicated.</documentation></serviceTask>
+    <sendTask id="n_105_rel" name="Release to 10.2.2 for placement"><documentation>10.5.4.</documentation></sendTask>
+    <startEvent id="n_105_out" name="Field order has an outcome"><messageEventDefinition id="n_105_out_md"/></startEvent>
+    <exclusiveGateway id="n_105_og" name="Field succeeded"/>
+    <sendTask id="n_105_ret" name="Return through 10.2.4"><documentation>10.5.5. Do not close the request as if the move happened.</documentation></sendTask>
+    <serviceTask id="n_105_st" name="Update account state to on, off or transferred"><documentation>10.5.5. EN 17007 cl. 6.5.8 ACT.7 finishes the task. Billing start and stop is FIN, not this process.</documentation></serviceTask>
+    <exclusiveGateway id="n_105_pg" name="Both halves of a transfer closed"/>
+    <userTask id="n_105_wait" name="Hold the request open for the other half"><documentation>10.5.5. This is the stranded-account guard.</documentation></userTask>
+    <sendTask id="n_105_cnf" name="Confirm the change to the customer"><documentation>10.5.5.</documentation></sendTask>
+    <endEvent id="n_105_end" name="Request closed"/>
+    <sequenceFlow id="f_n_105_start_n_105_find" sourceRef="n_105_start" targetRef="n_105_find" name=""/>
+    <sequenceFlow id="f_n_105_find_n_105_ver" sourceRef="n_105_find" targetRef="n_105_ver" name=""/>
+    <sequenceFlow id="f_n_105_ver_n_105_vg" sourceRef="n_105_ver" targetRef="n_105_vg" name=""/>
+    <sequenceFlow id="f_n_105_vg_n_105_exc" sourceRef="n_105_vg" targetRef="n_105_exc" name="not verified"><conditionExpression xsi:type="tFormalExpression"><![CDATA[premiseVerified = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_105_exc_n_105_ver" sourceRef="n_105_exc" targetRef="n_105_ver" name="resolved"/>
+    <sequenceFlow id="f_n_105_vg_n_105_cred" sourceRef="n_105_vg" targetRef="n_105_cred" name="verified"/>
+    <sequenceFlow id="f_n_105_cred_n_105_cg" sourceRef="n_105_cred" targetRef="n_105_cg" name=""/>
+    <sequenceFlow id="f_n_105_cg_n_105_chold" sourceRef="n_105_cg" targetRef="n_105_chold" name="deposit required and unpaid"><conditionExpression xsi:type="tFormalExpression"><![CDATA[depositOutcome = "required"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_105_chold_n_105_cg" sourceRef="n_105_chold" targetRef="n_105_cg" name="deposit secured"/>
+    <sequenceFlow id="f_n_105_cg_n_105_kind" sourceRef="n_105_cg" targetRef="n_105_kind" name="clear"/>
+    <sequenceFlow id="f_n_105_kind_n_105_pair" sourceRef="n_105_kind" targetRef="n_105_pair" name="transfer"><conditionExpression xsi:type="tFormalExpression"><![CDATA[moveType = "transfer"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_105_kind_n_105_one" sourceRef="n_105_kind" targetRef="n_105_one" name="start or stop"/>
+    <sequenceFlow id="f_n_105_pair_n_105_read" sourceRef="n_105_pair" targetRef="n_105_read" name=""/>
+    <sequenceFlow id="f_n_105_one_n_105_read" sourceRef="n_105_one" targetRef="n_105_read" name=""/>
+    <sequenceFlow id="f_n_105_read_n_105_rel" sourceRef="n_105_read" targetRef="n_105_rel" name=""/>
+    <sequenceFlow id="f_n_105_rel_n_105_out" sourceRef="n_105_rel" targetRef="n_105_out" name=""/>
+    <sequenceFlow id="f_n_105_out_n_105_og" sourceRef="n_105_out" targetRef="n_105_og" name=""/>
+    <sequenceFlow id="f_n_105_og_n_105_ret" sourceRef="n_105_og" targetRef="n_105_ret" name="field failed"><conditionExpression xsi:type="tFormalExpression"><![CDATA[fieldSucceeded = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_105_og_n_105_st" sourceRef="n_105_og" targetRef="n_105_st" name="succeeded"/>
+    <sequenceFlow id="f_n_105_st_n_105_pg" sourceRef="n_105_st" targetRef="n_105_pg" name=""/>
+    <sequenceFlow id="f_n_105_pg_n_105_wait" sourceRef="n_105_pg" targetRef="n_105_wait" name="one half outstanding"><conditionExpression xsi:type="tFormalExpression"><![CDATA[transferComplete = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_105_wait_n_105_pg" sourceRef="n_105_wait" targetRef="n_105_pg" name="other half closed"/>
+    <sequenceFlow id="f_n_105_pg_n_105_cnf" sourceRef="n_105_pg" targetRef="n_105_cnf" name="complete"/>
+    <sequenceFlow id="f_n_105_cnf_n_105_end" sourceRef="n_105_cnf" targetRef="n_105_end" name=""/>
+  </process>
+  <bpmndi:BPMNDiagram id="dg_P_10_5">
+    <bpmndi:BPMNPlane id="pl_P_10_5" bpmnElement="P_10_5">
+      <bpmndi:BPMNShape id="sh_n_105_start" bpmnElement="n_105_start"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_105_find" bpmnElement="n_105_find"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_105_ver" bpmnElement="n_105_ver"><dc:Bounds x="425" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_105_vg" bpmnElement="n_105_vg"><dc:Bounds x="637" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_105_exc" bpmnElement="n_105_exc"><dc:Bounds x="595" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_105_cred" bpmnElement="n_105_cred"><dc:Bounds x="765" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_105_cg" bpmnElement="n_105_cg"><dc:Bounds x="977" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_105_chold" bpmnElement="n_105_chold"><dc:Bounds x="935" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_105_kind" bpmnElement="n_105_kind"><dc:Bounds x="1147" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_105_one" bpmnElement="n_105_one"><dc:Bounds x="1275" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_105_pair" bpmnElement="n_105_pair"><dc:Bounds x="1275" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_105_read" bpmnElement="n_105_read"><dc:Bounds x="1445" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_105_rel" bpmnElement="n_105_rel"><dc:Bounds x="1615" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_105_out" bpmnElement="n_105_out"><dc:Bounds x="1832" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_105_og" bpmnElement="n_105_og"><dc:Bounds x="1997" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_105_ret" bpmnElement="n_105_ret"><dc:Bounds x="1955" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_105_st" bpmnElement="n_105_st"><dc:Bounds x="2125" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_105_pg" bpmnElement="n_105_pg"><dc:Bounds x="2337" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_105_wait" bpmnElement="n_105_wait"><dc:Bounds x="2295" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_105_cnf" bpmnElement="n_105_cnf"><dc:Bounds x="2465" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_105_end" bpmnElement="n_105_end"><dc:Bounds x="2682" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ed_f_n_105_start_n_105_find" bpmnElement="f_n_105_start_n_105_find"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_105_find_n_105_ver" bpmnElement="f_n_105_find_n_105_ver"><di:waypoint x="385" y="235"/><di:waypoint x="425" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_105_ver_n_105_vg" bpmnElement="f_n_105_ver_n_105_vg"><di:waypoint x="555" y="235"/><di:waypoint x="637" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_105_vg_n_105_exc" bpmnElement="f_n_105_vg_n_105_exc"><di:waypoint x="683" y="235"/><di:waypoint x="570" y="235"/><di:waypoint x="570" y="455"/><di:waypoint x="595" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_105_exc_n_105_ver" bpmnElement="f_n_105_exc_n_105_ver"><di:waypoint x="725" y="455"/><di:waypoint x="400" y="455"/><di:waypoint x="400" y="235"/><di:waypoint x="425" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_105_vg_n_105_cred" bpmnElement="f_n_105_vg_n_105_cred"><di:waypoint x="683" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_105_cred_n_105_cg" bpmnElement="f_n_105_cred_n_105_cg"><di:waypoint x="895" y="235"/><di:waypoint x="977" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_105_cg_n_105_chold" bpmnElement="f_n_105_cg_n_105_chold"><di:waypoint x="1023" y="235"/><di:waypoint x="910" y="235"/><di:waypoint x="910" y="455"/><di:waypoint x="935" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_105_chold_n_105_cg" bpmnElement="f_n_105_chold_n_105_cg"><di:waypoint x="1065" y="455"/><di:waypoint x="952" y="455"/><di:waypoint x="952" y="235"/><di:waypoint x="977" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_105_cg_n_105_kind" bpmnElement="f_n_105_cg_n_105_kind"><di:waypoint x="1023" y="235"/><di:waypoint x="1147" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_105_kind_n_105_pair" bpmnElement="f_n_105_kind_n_105_pair"><di:waypoint x="1193" y="235"/><di:waypoint x="1250" y="235"/><di:waypoint x="1250" y="455"/><di:waypoint x="1275" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_105_kind_n_105_one" bpmnElement="f_n_105_kind_n_105_one"><di:waypoint x="1193" y="235"/><di:waypoint x="1275" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_105_pair_n_105_read" bpmnElement="f_n_105_pair_n_105_read"><di:waypoint x="1405" y="455"/><di:waypoint x="1420" y="455"/><di:waypoint x="1420" y="235"/><di:waypoint x="1445" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_105_one_n_105_read" bpmnElement="f_n_105_one_n_105_read"><di:waypoint x="1405" y="235"/><di:waypoint x="1445" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_105_read_n_105_rel" bpmnElement="f_n_105_read_n_105_rel"><di:waypoint x="1575" y="235"/><di:waypoint x="1615" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_105_rel_n_105_out" bpmnElement="f_n_105_rel_n_105_out"><di:waypoint x="1745" y="235"/><di:waypoint x="1832" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_105_out_n_105_og" bpmnElement="f_n_105_out_n_105_og"><di:waypoint x="1868" y="235"/><di:waypoint x="1997" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_105_og_n_105_ret" bpmnElement="f_n_105_og_n_105_ret"><di:waypoint x="2043" y="235"/><di:waypoint x="1930" y="235"/><di:waypoint x="1930" y="455"/><di:waypoint x="1955" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_105_og_n_105_st" bpmnElement="f_n_105_og_n_105_st"><di:waypoint x="2043" y="235"/><di:waypoint x="2125" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_105_st_n_105_pg" bpmnElement="f_n_105_st_n_105_pg"><di:waypoint x="2255" y="235"/><di:waypoint x="2337" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_105_pg_n_105_wait" bpmnElement="f_n_105_pg_n_105_wait"><di:waypoint x="2383" y="235"/><di:waypoint x="2270" y="235"/><di:waypoint x="2270" y="455"/><di:waypoint x="2295" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_105_wait_n_105_pg" bpmnElement="f_n_105_wait_n_105_pg"><di:waypoint x="2425" y="455"/><di:waypoint x="2312" y="455"/><di:waypoint x="2312" y="235"/><di:waypoint x="2337" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_105_pg_n_105_cnf" bpmnElement="f_n_105_pg_n_105_cnf"><di:waypoint x="2383" y="235"/><di:waypoint x="2465" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_105_cnf_n_105_end" bpmnElement="f_n_105_cnf_n_105_end"><di:waypoint x="2595" y="235"/><di:waypoint x="2682" y="235"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

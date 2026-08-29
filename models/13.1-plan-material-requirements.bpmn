@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_P_13_1" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <process id="P_13_1" name="13.1 Plan material requirements" isExecutable="false">
+    <documentation>Tier-4 activities under 13.1.1, 13.1.2 and 13.1.3. 2.5.4 states that the job needs material; this path turns that statement into stock items, reservations and a shortfall somebody has to buy. IEC 61968-6 cl. 4.2.5 names Compatible Units as a component and supplies no catalogue content, so the explosion rule is the operator's. EN 17007 cl. 6.11 SPP.3 is reserve or issue a purchase request, which is exactly the fork this path ends on.</documentation>
+    <laneSet id="P_13_1_lanes">
+      <lane id="l_131_plan" name="Work planning">
+        <flowNodeRef>n_131_start</flowNodeRef>
+        <flowNodeRef>n_131_exp</flowNodeRef>
+        <flowNodeRef>n_131_cg</flowNodeRef>
+        <flowNodeRef>n_131_nc</flowNodeRef>
+        <flowNodeRef>n_131_ll</flowNodeRef>
+        <flowNodeRef>n_131_hand</flowNodeRef>
+      </lane>
+      <lane id="l_131_mm" name="Materials management">
+        <flowNodeRef>n_131_test</flowNodeRef>
+        <flowNodeRef>n_131_rg</flowNodeRef>
+        <flowNodeRef>n_131_res</flowNodeRef>
+        <flowNodeRef>n_131_short</flowNodeRef>
+        <flowNodeRef>n_131_end</flowNodeRef>
+        <flowNodeRef>n_131_t</flowNodeRef>
+        <flowNodeRef>n_131_gath</flowNodeRef>
+        <flowNodeRef>n_131_sep</flowNodeRef>
+        <flowNodeRef>n_131_proj</flowNodeRef>
+        <flowNodeRef>n_131_ug</flowNodeRef>
+        <flowNodeRef>n_131_uf</flowNodeRef>
+        <flowNodeRef>n_131_pub</flowNodeRef>
+        <flowNodeRef>n_131_fend</flowNodeRef>
+      </lane>
+    </laneSet>
+    <startEvent id="n_131_start" name="Job plan or design with a material list"><messageEventDefinition id="n_131_start_md"/></startEvent>
+    <serviceTask id="n_131_exp" name="Explode to item, quantity and needed date"><documentation>13.1.1. From the job plan or the compatible-unit design.</documentation></serviceTask>
+    <exclusiveGateway id="n_131_cg" name="Every item in the catalogue"/>
+    <userTask id="n_131_nc" name="Raise the missing or non-catalogue item"><documentation>13.1.1. Handled at 13.6.1, which is a standing master rather than a step in this path. A requirement against an item that does not exist cannot be reserved and cannot be bought.</documentation></userTask>
+    <sendTask id="n_131_ll" name="Flag long-lead items to 13.1.4"><documentation>13.1.1. Long-lead is a standing register. Discovering the lead time when the crew is booked is not planning.</documentation></sendTask>
+    <serviceTask id="n_131_hand" name="Hand the requirement to reservation"><documentation>13.1.1.</documentation></serviceTask>
+    <serviceTask id="n_131_test" name="Test on-hand against what is already reserved"><documentation>13.1.2. Available, not on-hand: a reservation that does not reduce available quantity is not a reservation, it is a note.</documentation></serviceTask>
+    <exclusiveGateway id="n_131_rg" name="Coverage"/>
+    <serviceTask id="n_131_res" name="Reserve what can be held"><documentation>13.1.2. Soft versus hard allocation is not in SPP.3 and is operator judgment.</documentation></serviceTask>
+    <sendTask id="n_131_short" name="Raise a purchase request for the shortfall"><documentation>13.1.2. Into 13.4.1.</documentation></sendTask>
+    <endEvent id="n_131_end" name="Requirement reserved or on order"/>
+    <startEvent id="n_131_t" name="Materials forecast due for the period"><timerEventDefinition id="n_131_t_td"/></startEvent>
+    <serviceTask id="n_131_gath" name="Gather independent and work-driven demand"><documentation>13.1.3. 3.1.1 forecasts WORK demand. This forecasts MATERIAL demand. Collapsing them makes a storm look like a staffing problem.</documentation></serviceTask>
+    <userTask id="n_131_sep" name="Separate cycle, project and event load"><documentation>13.1.3. Three different shapes that answer to three different policies.</documentation></userTask>
+    <serviceTask id="n_131_proj" name="Project by item and period"><documentation>13.1.3.</documentation></serviceTask>
+    <exclusiveGateway id="n_131_ug" name="Forecastable"/>
+    <sendTask id="n_131_uf" name="Flag the item as unforecastable"><documentation>13.1.3. Intermittent method is 13.5.2 and is specified rather than modelled, because no source in the pack states one.</documentation></sendTask>
+    <sendTask id="n_131_pub" name="Publish the forecast to policy and to purchase"><documentation>13.1.3. To 13.5.3 and 13.4.1.</documentation></sendTask>
+    <endEvent id="n_131_fend" name="Forecast published"/>
+    <sequenceFlow id="f_n_131_start_n_131_exp" sourceRef="n_131_start" targetRef="n_131_exp" name=""/>
+    <sequenceFlow id="f_n_131_exp_n_131_cg" sourceRef="n_131_exp" targetRef="n_131_cg" name=""/>
+    <sequenceFlow id="f_n_131_cg_n_131_nc" sourceRef="n_131_cg" targetRef="n_131_nc" name="item not in the catalogue"><conditionExpression xsi:type="tFormalExpression"><![CDATA[inCatalogue = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_131_nc_n_131_cg" sourceRef="n_131_nc" targetRef="n_131_cg" name="item created"/>
+    <sequenceFlow id="f_n_131_cg_n_131_hand" sourceRef="n_131_cg" targetRef="n_131_hand" name="all items known"/>
+    <sequenceFlow id="f_n_131_hand_n_131_ll" sourceRef="n_131_hand" targetRef="n_131_ll" name="long lead identified"/>
+    <sequenceFlow id="f_n_131_hand_n_131_test" sourceRef="n_131_hand" targetRef="n_131_test" name=""/>
+    <sequenceFlow id="f_n_131_test_n_131_rg" sourceRef="n_131_test" targetRef="n_131_rg" name=""/>
+    <sequenceFlow id="f_n_131_rg_n_131_res" sourceRef="n_131_rg" targetRef="n_131_res" name="available covers all or part"/>
+    <sequenceFlow id="f_n_131_rg_n_131_short" sourceRef="n_131_rg" targetRef="n_131_short" name="shortfall remains"><conditionExpression xsi:type="tFormalExpression"><![CDATA[shortfall > 0]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_131_res_n_131_end" sourceRef="n_131_res" targetRef="n_131_end" name=""/>
+    <sequenceFlow id="f_n_131_short_n_131_end" sourceRef="n_131_short" targetRef="n_131_end" name=""/>
+    <sequenceFlow id="f_n_131_t_n_131_gath" sourceRef="n_131_t" targetRef="n_131_gath" name=""/>
+    <sequenceFlow id="f_n_131_gath_n_131_sep" sourceRef="n_131_gath" targetRef="n_131_sep" name=""/>
+    <sequenceFlow id="f_n_131_sep_n_131_proj" sourceRef="n_131_sep" targetRef="n_131_proj" name=""/>
+    <sequenceFlow id="f_n_131_proj_n_131_ug" sourceRef="n_131_proj" targetRef="n_131_ug" name=""/>
+    <sequenceFlow id="f_n_131_ug_n_131_uf" sourceRef="n_131_ug" targetRef="n_131_uf" name="no usable pattern"><conditionExpression xsi:type="tFormalExpression"><![CDATA[forecastable = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_131_ug_n_131_pub" sourceRef="n_131_ug" targetRef="n_131_pub" name="forecastable"/>
+    <sequenceFlow id="f_n_131_uf_n_131_pub" sourceRef="n_131_uf" targetRef="n_131_pub" name=""/>
+    <sequenceFlow id="f_n_131_pub_n_131_fend" sourceRef="n_131_pub" targetRef="n_131_fend" name=""/>
+  </process>
+  <bpmndi:BPMNDiagram id="dg_P_13_1">
+    <bpmndi:BPMNPlane id="pl_P_13_1" bpmnElement="P_13_1">
+      <bpmndi:BPMNShape id="sh_n_131_start" bpmnElement="n_131_start"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_131_exp" bpmnElement="n_131_exp"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_131_cg" bpmnElement="n_131_cg"><dc:Bounds x="467" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_131_nc" bpmnElement="n_131_nc"><dc:Bounds x="425" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_131_ll" bpmnElement="n_131_ll"><dc:Bounds x="595" y="90" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_131_hand" bpmnElement="n_131_hand"><dc:Bounds x="595" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_131_test" bpmnElement="n_131_test"><dc:Bounds x="765" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_131_rg" bpmnElement="n_131_rg"><dc:Bounds x="977" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_131_res" bpmnElement="n_131_res"><dc:Bounds x="1105" y="90" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_131_short" bpmnElement="n_131_short"><dc:Bounds x="1105" y="310" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_131_end" bpmnElement="n_131_end"><dc:Bounds x="1322" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_131_t" bpmnElement="n_131_t"><dc:Bounds x="132" y="657" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_131_gath" bpmnElement="n_131_gath"><dc:Bounds x="255" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_131_sep" bpmnElement="n_131_sep"><dc:Bounds x="425" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_131_proj" bpmnElement="n_131_proj"><dc:Bounds x="595" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_131_ug" bpmnElement="n_131_ug"><dc:Bounds x="807" y="652" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_131_uf" bpmnElement="n_131_uf"><dc:Bounds x="765" y="860" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_131_pub" bpmnElement="n_131_pub"><dc:Bounds x="935" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_131_fend" bpmnElement="n_131_fend"><dc:Bounds x="1152" y="657" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ed_f_n_131_start_n_131_exp" bpmnElement="f_n_131_start_n_131_exp"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_131_exp_n_131_cg" bpmnElement="f_n_131_exp_n_131_cg"><di:waypoint x="385" y="235"/><di:waypoint x="467" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_131_cg_n_131_nc" bpmnElement="f_n_131_cg_n_131_nc"><di:waypoint x="513" y="235"/><di:waypoint x="400" y="235"/><di:waypoint x="400" y="455"/><di:waypoint x="425" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_131_nc_n_131_cg" bpmnElement="f_n_131_nc_n_131_cg"><di:waypoint x="555" y="455"/><di:waypoint x="442" y="455"/><di:waypoint x="442" y="235"/><di:waypoint x="467" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_131_cg_n_131_hand" bpmnElement="f_n_131_cg_n_131_hand"><di:waypoint x="513" y="235"/><di:waypoint x="595" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_131_hand_n_131_ll" bpmnElement="f_n_131_hand_n_131_ll"><di:waypoint x="725" y="235"/><di:waypoint x="570" y="235"/><di:waypoint x="570" y="125"/><di:waypoint x="595" y="125"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_131_hand_n_131_test" bpmnElement="f_n_131_hand_n_131_test"><di:waypoint x="725" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_131_test_n_131_rg" bpmnElement="f_n_131_test_n_131_rg"><di:waypoint x="895" y="235"/><di:waypoint x="977" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_131_rg_n_131_res" bpmnElement="f_n_131_rg_n_131_res"><di:waypoint x="1023" y="235"/><di:waypoint x="1080" y="235"/><di:waypoint x="1080" y="125"/><di:waypoint x="1105" y="125"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_131_rg_n_131_short" bpmnElement="f_n_131_rg_n_131_short"><di:waypoint x="1023" y="235"/><di:waypoint x="1080" y="235"/><di:waypoint x="1080" y="345"/><di:waypoint x="1105" y="345"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_131_res_n_131_end" bpmnElement="f_n_131_res_n_131_end"><di:waypoint x="1235" y="125"/><di:waypoint x="1297" y="125"/><di:waypoint x="1297" y="235"/><di:waypoint x="1322" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_131_short_n_131_end" bpmnElement="f_n_131_short_n_131_end"><di:waypoint x="1235" y="345"/><di:waypoint x="1297" y="345"/><di:waypoint x="1297" y="235"/><di:waypoint x="1322" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_131_t_n_131_gath" bpmnElement="f_n_131_t_n_131_gath"><di:waypoint x="168" y="675"/><di:waypoint x="255" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_131_gath_n_131_sep" bpmnElement="f_n_131_gath_n_131_sep"><di:waypoint x="385" y="675"/><di:waypoint x="425" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_131_sep_n_131_proj" bpmnElement="f_n_131_sep_n_131_proj"><di:waypoint x="555" y="675"/><di:waypoint x="595" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_131_proj_n_131_ug" bpmnElement="f_n_131_proj_n_131_ug"><di:waypoint x="725" y="675"/><di:waypoint x="807" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_131_ug_n_131_uf" bpmnElement="f_n_131_ug_n_131_uf"><di:waypoint x="853" y="675"/><di:waypoint x="740" y="675"/><di:waypoint x="740" y="895"/><di:waypoint x="765" y="895"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_131_ug_n_131_pub" bpmnElement="f_n_131_ug_n_131_pub"><di:waypoint x="853" y="675"/><di:waypoint x="935" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_131_uf_n_131_pub" bpmnElement="f_n_131_uf_n_131_pub"><di:waypoint x="895" y="895"/><di:waypoint x="910" y="895"/><di:waypoint x="910" y="675"/><di:waypoint x="935" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_131_pub_n_131_fend" bpmnElement="f_n_131_pub_n_131_fend"><di:waypoint x="1065" y="675"/><di:waypoint x="1152" y="675"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_P_13_4" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <process id="P_13_4" name="13.4 Procure goods and services" isExecutable="false">
+    <documentation>Tier-4 activities under 13.4.1 to 13.4.4. IEC 61968-6 cl. 4.2 has no procurement component at all - the absence is recorded rather than papered over with an invented code - so requisitions, orders and catalogues sit on MM and invoices on FIN. EN 17007 cl. 6.11 supplies SPP.3 issue a purchase request, SPP.4 order spare items from suppliers and SPP.5 the supply contract, and it supplies no approval process: cl. 6.8 MAN.4 is budget setting, not requisition approval, so the approval route below is the operator's. The path buys goods and catalogue services. Field crews are qualified and contracted at 16.0.</documentation>
+    <laneSet id="P_13_4_lanes">
+      <lane id="l_134_mm" name="Materials management">
+        <flowNodeRef>n_134_start</flowNodeRef>
+        <flowNodeRef>n_134_req</flowNodeRef>
+        <flowNodeRef>n_134_appr</flowNodeRef>
+        <flowNodeRef>n_134_ag</flowNodeRef>
+        <flowNodeRef>n_134_rej</flowNodeRef>
+        <flowNodeRef>n_134_sup</flowNodeRef>
+        <flowNodeRef>n_134_po</flowNodeRef>
+        <flowNodeRef>n_134_send</flowNodeRef>
+        <flowNodeRef>n_134_prom</flowNodeRef>
+        <flowNodeRef>n_134_del</flowNodeRef>
+        <flowNodeRef>n_134_mat</flowNodeRef>
+        <flowNodeRef>n_134_mg</flowNodeRef>
+        <flowNodeRef>n_134_exc</flowNodeRef>
+        <flowNodeRef>n_134_acc</flowNodeRef>
+        <flowNodeRef>n_134_not</flowNodeRef>
+        <flowNodeRef>n_134_end</flowNodeRef>
+      </lane>
+      <lane id="l_134_fin" name="Finance">
+        <flowNodeRef>n_134_inv</flowNodeRef>
+        <flowNodeRef>n_134_three</flowNodeRef>
+        <flowNodeRef>n_134_ig</flowNodeRef>
+        <flowNodeRef>n_134_hold</flowNodeRef>
+        <flowNodeRef>n_134_pay</flowNodeRef>
+      </lane>
+    </laneSet>
+    <startEvent id="n_134_start" name="Shortfall or planned need requires a buy"><messageEventDefinition id="n_134_start_md"/></startEvent>
+    <serviceTask id="n_134_req" name="Create the requisition against the item"><documentation>13.4.1. Against an item, not against a description. 13.6.1 holds the master.</documentation></serviceTask>
+    <userTask id="n_134_appr" name="Route for the operator's approval"><documentation>13.4.1. The route is the operator's - EN 17007 has none.</documentation></userTask>
+    <exclusiveGateway id="n_134_ag" name="Approved"/>
+    <endEvent id="n_134_rej" name="Rejected or held requisition"><documentation>13.4.1.</documentation></endEvent>
+    <userTask id="n_134_sup" name="Select supplier and price"><documentation>13.4.2. From the catalogue at 13.6.4 or from a quote. The supplier must be qualified at 13.7.1 for the commodity.</documentation></userTask>
+    <serviceTask id="n_134_po" name="Create the purchase order"><documentation>13.4.2. A blanket release is still this step. It is not a new contract - that is 13.7.1 and SPP.5.</documentation></serviceTask>
+    <callActivity id="n_134_send" name="Transmit and acknowledge through 13.7.3"><documentation>13.4.2. An order that was sent but never acknowledged is not a promise.</documentation></callActivity>
+    <sendTask id="n_134_prom" name="Record the promised date against the waiting work"><documentation>13.4.2. The reason 13.1.2 raised the shortfall was a job with a date.</documentation></sendTask>
+    <startEvent id="n_134_del" name="Supplier delivery against the order"><messageEventDefinition id="n_134_del_md"/></startEvent>
+    <serviceTask id="n_134_mat" name="Match the delivery to the purchase order"><documentation>13.4.3. This is the order match. 13.2.1 is the stock event, and doing both as one step hides over-shipment.</documentation></serviceTask>
+    <exclusiveGateway id="n_134_mg" name="Matches the order"/>
+    <userTask id="n_134_exc" name="Record over, short or reject"><documentation>13.4.3.</documentation></userTask>
+    <sendTask id="n_134_acc" name="Hand the accepted quantity to put-away"><documentation>13.4.3. Into 13.2.1.</documentation></sendTask>
+    <sendTask id="n_134_not" name="Notify the waiting work of arrival"><documentation>13.4.3.</documentation></sendTask>
+    <startEvent id="n_134_inv" name="Supplier invoice presented"><messageEventDefinition id="n_134_inv_md"/></startEvent>
+    <serviceTask id="n_134_three" name="Match invoice to order and receipt"><documentation>13.4.4. EN 17007 cl. 6.8 BUD.4 extracts budgeted and actual expenditures; it is not an invoice-match standard. Evaluated receipt settlement still needs the order-to-receipt match even when no invoice arrives.</documentation></serviceTask>
+    <exclusiveGateway id="n_134_ig" name="Three-way match holds"/>
+    <userTask id="n_134_hold" name="Post the match exception"><documentation>13.4.4. Held against the difference, not paid on trust.</documentation></userTask>
+    <serviceTask id="n_134_pay" name="Post the payable and pay the accepted amount"><documentation>13.4.4. Payment terms are contract. 18 CFR Part 101 governs plant cost, not accounts payable.</documentation></serviceTask>
+    <endEvent id="n_134_end" name="Goods received and settled"/>
+    <sequenceFlow id="f_n_134_start_n_134_req" sourceRef="n_134_start" targetRef="n_134_req" name=""/>
+    <sequenceFlow id="f_n_134_req_n_134_appr" sourceRef="n_134_req" targetRef="n_134_appr" name=""/>
+    <sequenceFlow id="f_n_134_appr_n_134_ag" sourceRef="n_134_appr" targetRef="n_134_ag" name=""/>
+    <sequenceFlow id="f_n_134_ag_n_134_rej" sourceRef="n_134_ag" targetRef="n_134_rej" name="not approved"><conditionExpression xsi:type="tFormalExpression"><![CDATA[approved = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_134_ag_n_134_sup" sourceRef="n_134_ag" targetRef="n_134_sup" name="approved"/>
+    <sequenceFlow id="f_n_134_sup_n_134_po" sourceRef="n_134_sup" targetRef="n_134_po" name=""/>
+    <sequenceFlow id="f_n_134_po_n_134_send" sourceRef="n_134_po" targetRef="n_134_send" name=""/>
+    <sequenceFlow id="f_n_134_send_n_134_prom" sourceRef="n_134_send" targetRef="n_134_prom" name=""/>
+    <sequenceFlow id="f_n_134_prom_n_134_del" sourceRef="n_134_prom" targetRef="n_134_del" name=""/>
+    <sequenceFlow id="f_n_134_del_n_134_mat" sourceRef="n_134_del" targetRef="n_134_mat" name=""/>
+    <sequenceFlow id="f_n_134_mat_n_134_mg" sourceRef="n_134_mat" targetRef="n_134_mg" name=""/>
+    <sequenceFlow id="f_n_134_mg_n_134_exc" sourceRef="n_134_mg" targetRef="n_134_exc" name="over, short or reject"><conditionExpression xsi:type="tFormalExpression"><![CDATA[matchesOrder = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_134_exc_n_134_acc" sourceRef="n_134_exc" targetRef="n_134_acc" name="accept what matched"/>
+    <sequenceFlow id="f_n_134_mg_n_134_acc" sourceRef="n_134_mg" targetRef="n_134_acc" name="matches"/>
+    <sequenceFlow id="f_n_134_acc_n_134_not" sourceRef="n_134_acc" targetRef="n_134_not" name=""/>
+    <sequenceFlow id="f_n_134_not_n_134_end" sourceRef="n_134_not" targetRef="n_134_end" name=""/>
+    <sequenceFlow id="f_n_134_inv_n_134_three" sourceRef="n_134_inv" targetRef="n_134_three" name=""/>
+    <sequenceFlow id="f_n_134_three_n_134_ig" sourceRef="n_134_three" targetRef="n_134_ig" name=""/>
+    <sequenceFlow id="f_n_134_ig_n_134_hold" sourceRef="n_134_ig" targetRef="n_134_hold" name="does not match"><conditionExpression xsi:type="tFormalExpression"><![CDATA[threeWayMatch = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_134_hold_n_134_three" sourceRef="n_134_hold" targetRef="n_134_three" name="difference resolved"/>
+    <sequenceFlow id="f_n_134_ig_n_134_pay" sourceRef="n_134_ig" targetRef="n_134_pay" name="matches"/>
+    <sequenceFlow id="f_n_134_pay_n_134_end" sourceRef="n_134_pay" targetRef="n_134_end" name=""/>
+  </process>
+  <bpmndi:BPMNDiagram id="dg_P_13_4">
+    <bpmndi:BPMNPlane id="pl_P_13_4" bpmnElement="P_13_4">
+      <bpmndi:BPMNShape id="sh_n_134_start" bpmnElement="n_134_start"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_134_req" bpmnElement="n_134_req"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_134_appr" bpmnElement="n_134_appr"><dc:Bounds x="425" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_134_ag" bpmnElement="n_134_ag"><dc:Bounds x="637" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_134_rej" bpmnElement="n_134_rej"><dc:Bounds x="642" y="437" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_134_sup" bpmnElement="n_134_sup"><dc:Bounds x="765" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_134_po" bpmnElement="n_134_po"><dc:Bounds x="935" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_134_send" bpmnElement="n_134_send"><dc:Bounds x="1105" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_134_prom" bpmnElement="n_134_prom"><dc:Bounds x="1275" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_134_del" bpmnElement="n_134_del"><dc:Bounds x="1492" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_134_mat" bpmnElement="n_134_mat"><dc:Bounds x="1615" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_134_mg" bpmnElement="n_134_mg"><dc:Bounds x="1827" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_134_exc" bpmnElement="n_134_exc"><dc:Bounds x="1785" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_134_acc" bpmnElement="n_134_acc"><dc:Bounds x="1955" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_134_not" bpmnElement="n_134_not"><dc:Bounds x="2125" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_134_inv" bpmnElement="n_134_inv"><dc:Bounds x="1492" y="767" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_134_three" bpmnElement="n_134_three"><dc:Bounds x="1615" y="750" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_134_ig" bpmnElement="n_134_ig"><dc:Bounds x="1827" y="762" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_134_hold" bpmnElement="n_134_hold"><dc:Bounds x="1785" y="970" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_134_pay" bpmnElement="n_134_pay"><dc:Bounds x="1955" y="750" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_134_end" bpmnElement="n_134_end"><dc:Bounds x="2342" y="437" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ed_f_n_134_start_n_134_req" bpmnElement="f_n_134_start_n_134_req"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_134_req_n_134_appr" bpmnElement="f_n_134_req_n_134_appr"><di:waypoint x="385" y="235"/><di:waypoint x="425" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_134_appr_n_134_ag" bpmnElement="f_n_134_appr_n_134_ag"><di:waypoint x="555" y="235"/><di:waypoint x="637" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_134_ag_n_134_rej" bpmnElement="f_n_134_ag_n_134_rej"><di:waypoint x="683" y="235"/><di:waypoint x="617" y="235"/><di:waypoint x="617" y="455"/><di:waypoint x="642" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_134_ag_n_134_sup" bpmnElement="f_n_134_ag_n_134_sup"><di:waypoint x="683" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_134_sup_n_134_po" bpmnElement="f_n_134_sup_n_134_po"><di:waypoint x="895" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_134_po_n_134_send" bpmnElement="f_n_134_po_n_134_send"><di:waypoint x="1065" y="235"/><di:waypoint x="1105" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_134_send_n_134_prom" bpmnElement="f_n_134_send_n_134_prom"><di:waypoint x="1235" y="235"/><di:waypoint x="1275" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_134_prom_n_134_del" bpmnElement="f_n_134_prom_n_134_del"><di:waypoint x="1405" y="235"/><di:waypoint x="1492" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_134_del_n_134_mat" bpmnElement="f_n_134_del_n_134_mat"><di:waypoint x="1528" y="235"/><di:waypoint x="1615" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_134_mat_n_134_mg" bpmnElement="f_n_134_mat_n_134_mg"><di:waypoint x="1745" y="235"/><di:waypoint x="1827" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_134_mg_n_134_exc" bpmnElement="f_n_134_mg_n_134_exc"><di:waypoint x="1873" y="235"/><di:waypoint x="1760" y="235"/><di:waypoint x="1760" y="455"/><di:waypoint x="1785" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_134_exc_n_134_acc" bpmnElement="f_n_134_exc_n_134_acc"><di:waypoint x="1915" y="455"/><di:waypoint x="1930" y="455"/><di:waypoint x="1930" y="235"/><di:waypoint x="1955" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_134_mg_n_134_acc" bpmnElement="f_n_134_mg_n_134_acc"><di:waypoint x="1873" y="235"/><di:waypoint x="1955" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_134_acc_n_134_not" bpmnElement="f_n_134_acc_n_134_not"><di:waypoint x="2085" y="235"/><di:waypoint x="2125" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_134_not_n_134_end" bpmnElement="f_n_134_not_n_134_end"><di:waypoint x="2255" y="235"/><di:waypoint x="2317" y="235"/><di:waypoint x="2317" y="455"/><di:waypoint x="2342" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_134_inv_n_134_three" bpmnElement="f_n_134_inv_n_134_three"><di:waypoint x="1528" y="785"/><di:waypoint x="1615" y="785"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_134_three_n_134_ig" bpmnElement="f_n_134_three_n_134_ig"><di:waypoint x="1745" y="785"/><di:waypoint x="1827" y="785"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_134_ig_n_134_hold" bpmnElement="f_n_134_ig_n_134_hold"><di:waypoint x="1873" y="785"/><di:waypoint x="1760" y="785"/><di:waypoint x="1760" y="1005"/><di:waypoint x="1785" y="1005"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_134_hold_n_134_three" bpmnElement="f_n_134_hold_n_134_three"><di:waypoint x="1915" y="1005"/><di:waypoint x="1590" y="1005"/><di:waypoint x="1590" y="785"/><di:waypoint x="1615" y="785"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_134_ig_n_134_pay" bpmnElement="f_n_134_ig_n_134_pay"><di:waypoint x="1873" y="785"/><di:waypoint x="1955" y="785"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_134_pay_n_134_end" bpmnElement="f_n_134_pay_n_134_end"><di:waypoint x="2085" y="785"/><di:waypoint x="2317" y="785"/><di:waypoint x="2317" y="455"/><di:waypoint x="2342" y="455"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

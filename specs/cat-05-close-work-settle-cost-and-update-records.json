@@ -2248,7 +2248,7 @@
         },
         {
           "for": "controls.regulatory (electric)",
-          "cite": "No federal as-built or record-keeping requirement exists for electric distribution; 16 U.S.C. 824o excludes local distribution and NESC ANSI/IEEE C2-2023 sets none",
+          "cite": "16 U.S.C. 824o(a)(1) - the bulk-power system excludes facilities used in the local distribution of electric energy",
           "status": "regulation"
         },
         {
@@ -2407,12 +2407,12 @@
         {
           "for": "accuracy vocabulary",
           "cite": "ASCE 38-22 Standard Guideline for Investigating and Documenting Existing Utilities - quality levels A to D for utility location information",
-          "status": "clause-verified"
+          "status": "consensus"
         },
         {
           "for": "no federal accuracy requirement",
           "cite": "Neither 49 CFR 192 nor NESC sets a positional accuracy requirement for as-built records. The requirement is the operator's or a state's.",
-          "status": "clause-verified"
+          "status": "judgment"
         },
         {
           "for": "process",
@@ -3080,7 +3080,7 @@
         },
         {
           "for": "asset data model",
-          "cite": "IEC 61968-11:2013 CIM extensions for distribution",
+          "cite": "IEC 61968-11:2013 CIM extensions for distribution, Assets package",
           "status": "clause-verified"
         },
         {
@@ -3256,7 +3256,7 @@
         {
           "for": "network operations interface",
           "cite": "IEC 61968-3 Ed. 3.0:2021 Interface for network operations",
-          "status": "clause-verified"
+          "status": "consensus"
         },
         {
           "for": "measures",
@@ -3268,6 +3268,14 @@
         "basis": "regulation",
         "primary": "49 CFR 192.605(b)(3)"
       }
+    }
+  ],
+  "merge_corrections": [
+    {
+      "date": "2026-08-29",
+      "by": "Claude",
+      "what": "citation form: a status may not claim more than the citation string supports. 'clause-verified' without a clause dropped to 'consensus'; an asserted absence dropped to 'judgment'.",
+      "count": 5
     }
   ]
 }

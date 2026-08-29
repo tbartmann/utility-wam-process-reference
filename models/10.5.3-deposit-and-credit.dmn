@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/" id="Deposit_and_credit" name="10.5.3 Evaluate deposit and credit requirement" namespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <description>The output is required, waived or transferred - a value. No amount appears in this table and none can: deposit amounts, waiver criteria and refund clocks are the filed tariff's, and 18 CFR Part 101 is plant accounting rather than a customer-deposit code. What the table does decide is the thing the field cares about, which is whether an unpaid required deposit blocks the order.</description>
+  <inputData id="in_tariffRequires" name="Tariff requires a deposit for this class"><variable id="in_tariffRequires_v" name="Tariff requires a deposit for this class" typeRef="boolean"/></inputData>
+  <inputData id="in_creditOutcome" name="Credit assessment outcome under the tariff"><variable id="in_creditOutcome_v" name="Credit assessment outcome under the tariff" typeRef="string"/></inputData>
+  <inputData id="in_depositHeld" name="Deposit already held for this customer"><variable id="in_depositHeld_v" name="Deposit already held for this customer" typeRef="boolean"/></inputData>
+  <inputData id="in_transferEligible" name="Tariff allows the held deposit to transfer"><variable id="in_transferEligible_v" name="Tariff allows the held deposit to transfer" typeRef="boolean"/></inputData>
+  <knowledgeSource id="ks_tariff" name="The filed tariff and the state commission's credit rules"><description>Amounts, waiver criteria, refund periods and what counts as satisfactory credit are all set here. This reference holds none of them and states none.</description></knowledgeSource>
+  <decision id="d_10_5_3" name="Deposit requirement">
+    <variable id="d_10_5_3_v" name="Deposit requirement" typeRef="string"/>
+    <informationRequirement id="ir_d_10_5_3_ks_tariff"><requiredInput href="#ks_tariff"/></informationRequirement>
+    <decisionTable id="d_10_5_3_dt" hitPolicy="FIRST" preferredOrientation="Rule-as-Row">
+      <input id="d_10_5_3_i1" label="Tariff requires a deposit for this class"><inputExpression id="d_10_5_3_i1_e" typeRef="boolean"><text>in_tariffRequires</text></inputExpression></input>
+      <input id="d_10_5_3_i2" label="Credit assessment outcome"><inputExpression id="d_10_5_3_i2_e" typeRef="string"><text>in_creditOutcome</text></inputExpression></input>
+      <input id="d_10_5_3_i3" label="Deposit already held"><inputExpression id="d_10_5_3_i3_e" typeRef="boolean"><text>in_depositHeld</text></inputExpression></input>
+      <input id="d_10_5_3_i4" label="Tariff allows transfer"><inputExpression id="d_10_5_3_i4_e" typeRef="boolean"><text>in_transferEligible</text></inputExpression></input>
+      <output id="d_10_5_3_o" label="Deposit requirement" name="Deposit requirement" typeRef="string"/>
+      <rule id="d_10_5_3_r1">
+        <description>The tariff asks for no deposit from this customer class.</description>
+        <inputEntry id="d_10_5_3_r1_ie1"><text>false</text></inputEntry>
+        <inputEntry id="d_10_5_3_r1_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_10_5_3_r1_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_10_5_3_r1_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_10_5_3_r1_oe"><text>"none"</text></outputEntry>
+      </rule>
+      <rule id="d_10_5_3_r2">
+        <description>A deposit already held moves with the customer where the tariff allows it. Asking twice for the same security is a tariff breach, not prudence.</description>
+        <inputEntry id="d_10_5_3_r2_ie1"><text>true</text></inputEntry>
+        <inputEntry id="d_10_5_3_r2_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_10_5_3_r2_ie3"><text>true</text></inputEntry>
+        <inputEntry id="d_10_5_3_r2_ie4"><text>true</text></inputEntry>
+        <outputEntry id="d_10_5_3_r2_oe"><text>"transferred"</text></outputEntry>
+      </rule>
+      <rule id="d_10_5_3_r3">
+        <description>Waived on credit under the tariff's own test. The test is the tariff's; the outcome is what arrives here.</description>
+        <inputEntry id="d_10_5_3_r3_ie1"><text>true</text></inputEntry>
+        <inputEntry id="d_10_5_3_r3_ie2"><text>"satisfactory"</text></inputEntry>
+        <inputEntry id="d_10_5_3_r3_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_10_5_3_r3_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_10_5_3_r3_oe"><text>"waived"</text></outputEntry>
+      </rule>
+      <rule id="d_10_5_3_r4">
+        <description>Required. 10.5.4 must hold the field order until it is secured - a start that bypasses an unpaid required deposit is a credit leak dressed as good service.</description>
+        <inputEntry id="d_10_5_3_r4_ie1"><text>true</text></inputEntry>
+        <inputEntry id="d_10_5_3_r4_ie2"><text>"unsatisfactory","notAssessed"</text></inputEntry>
+        <inputEntry id="d_10_5_3_r4_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_10_5_3_r4_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_10_5_3_r4_oe"><text>"required"</text></outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram id="drd_Deposit_and_credit">
+      <dmndi:DMNShape id="sh_in_tariffRequires" dmnElementRef="in_tariffRequires"><dc:Bounds x="60" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_creditOutcome" dmnElementRef="in_creditOutcome"><dc:Bounds x="245" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_depositHeld" dmnElementRef="in_depositHeld"><dc:Bounds x="430" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_transferEligible" dmnElementRef="in_transferEligible"><dc:Bounds x="615" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_d_10_5_3" dmnElementRef="d_10_5_3"><dc:Bounds x="60" y="240" width="180" height="70"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_ks_tariff" dmnElementRef="ks_tariff"><dc:Bounds x="900" y="100" width="160" height="55"/></dmndi:DMNShape>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</definitions>

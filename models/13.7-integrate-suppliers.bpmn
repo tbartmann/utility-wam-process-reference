@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_P_13_7" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <process id="P_13_7" name="13.7 Integrate with suppliers" isExecutable="false">
+    <documentation>Tier-4 activities under 13.7.1, 13.7.3, 13.7.4 and 13.7.5. There is no standardised supplier catalogue, acknowledgement, shipment-notice or invoice payload for this domain: PIDX is excluded by the Source Authority Pack and IEC 61968-6 Annex A's verbs act on Work payloads rather than purchase orders. So the channel is operator judgment throughout and the path draws the obligations rather than the message formats. Two of those obligations do real work. An order that was sent but never acknowledged is not a promise, and an advance shipment notice is not a receipt and must not move on-hand.</documentation>
+    <laneSet id="P_13_7_lanes">
+      <lane id="l_137_mm" name="Materials management">
+        <flowNodeRef>n_137_start</flowNodeRef>
+        <flowNodeRef>n_137_ev</flowNodeRef>
+        <flowNodeRef>n_137_qg</flowNodeRef>
+        <flowNodeRef>n_137_rejs</flowNodeRef>
+        <flowNodeRef>n_137_scope</flowNodeRef>
+        <flowNodeRef>n_137_hand</flowNodeRef>
+        <flowNodeRef>n_137_po</flowNodeRef>
+        <flowNodeRef>n_137_tx</flowNodeRef>
+        <flowNodeRef>n_137_wait</flowNodeRef>
+        <flowNodeRef>n_137_ack</flowNodeRef>
+        <flowNodeRef>n_137_nak</flowNodeRef>
+        <flowNodeRef>n_137_sil</flowNodeRef>
+        <flowNodeRef>n_137_esc</flowNodeRef>
+        <flowNodeRef>n_137_date</flowNodeRef>
+        <flowNodeRef>n_137_asn</flowNodeRef>
+        <flowNodeRef>n_137_cmp</flowNodeRef>
+        <flowNodeRef>n_137_conf</flowNodeRef>
+        <flowNodeRef>n_137_to43</flowNodeRef>
+        <flowNodeRef>n_137_end</flowNodeRef>
+      </lane>
+      <lane id="l_137_fin" name="Finance">
+        <flowNodeRef>n_137_im</flowNodeRef>
+        <flowNodeRef>n_137_rx</flowNodeRef>
+        <flowNodeRef>n_137_q</flowNodeRef>
+        <flowNodeRef>n_137_rem</flowNodeRef>
+        <flowNodeRef>n_137_fail</flowNodeRef>
+      </lane>
+    </laneSet>
+    <startEvent id="n_137_start" name="Supplier proposed or due for review"><messageEventDefinition id="n_137_start_md"/></startEvent>
+    <userTask id="n_137_ev" name="Collect identity, insurance and quality evidence"><documentation>13.7.1. 16.1 qualifies contractors who do field work; EN 17007 cl. 6.13 SER.1 is external maintenance services. This qualifies goods suppliers, which is a different question with different evidence.</documentation></userTask>
+    <exclusiveGateway id="n_137_qg" name="Qualification outcome"/>
+    <endEvent id="n_137_rejs" name="Rejected or suspended supplier"><documentation>13.7.1.</documentation></endEvent>
+    <serviceTask id="n_137_scope" name="Record the commodities they may supply"><documentation>13.7.1. Qualified for what, not qualified in general. NERC CIP-013 is bulk-power cyber supply chain and the pack scopes it to 16.0; 16 U.S.C. 824o keeps it off local distribution materials.</documentation></serviceTask>
+    <sendTask id="n_137_hand" name="Hand the qualified supplier to contract and to 13.4.2"><documentation>13.7.1. The contract itself is SPP.5.</documentation></sendTask>
+    <startEvent id="n_137_po" name="Purchase order ready to send"><messageEventDefinition id="n_137_po_md"/></startEvent>
+    <sendTask id="n_137_tx" name="Transmit the order on the supplier's channel"><documentation>13.7.3.</documentation></sendTask>
+    <eventBasedGateway id="n_137_wait" name="Acknowledgement or silence"/>
+    <receiveTask id="n_137_ack" name="Receive the acknowledgement"><documentation>13.7.3.</documentation></receiveTask>
+    <receiveTask id="n_137_nak" name="Receive the reject"><documentation>13.7.3.</documentation></receiveTask>
+    <startEvent id="n_137_sil" name="Acknowledgement window elapsed"><timerEventDefinition id="n_137_sil_td"/></startEvent>
+    <userTask id="n_137_esc" name="Escalate the silent order"><documentation>13.7.3. Silence is the failure mode that costs a job, because everybody downstream is holding a date nobody committed to.</documentation></userTask>
+    <serviceTask id="n_137_date" name="Record the acknowledged date"><documentation>13.7.3.</documentation></serviceTask>
+    <startEvent id="n_137_asn" name="Advance shipment notice received"><messageEventDefinition id="n_137_asn_md"/></startEvent>
+    <serviceTask id="n_137_cmp" name="Compare the notice to the order"><documentation>13.7.4. No pack standard specifies ASN content.</documentation></serviceTask>
+    <userTask id="n_137_conf" name="Confirm the delivery at the dock"><documentation>13.7.4. An ASN is not a receipt and does not update on-hand. Delivery confirmation without 13.4.3 leaves the purchase order open.</documentation></userTask>
+    <sendTask id="n_137_to43" name="Hand the confirmed delivery to 13.4.3"><documentation>13.7.4.</documentation></sendTask>
+    <startEvent id="n_137_im" name="Invoice or remittance to exchange"><messageEventDefinition id="n_137_im_md"/></startEvent>
+    <serviceTask id="n_137_rx" name="Receive the invoice message"><documentation>13.7.5. This is the message. 13.4.4 is the match and the payment.</documentation></serviceTask>
+    <sendTask id="n_137_q" name="Put it on the 13.4.4 match queue"><documentation>13.7.5.</documentation></sendTask>
+    <sendTask id="n_137_rem" name="Send the remittance on payment"><documentation>13.7.5. Evaluated receipt settlement still needs a remittance record even with no invoice image.</documentation></sendTask>
+    <userTask id="n_137_fail" name="Record the failure to deliver the message"><documentation>13.7.5.</documentation></userTask>
+    <endEvent id="n_137_end" name="Supplier exchange complete"/>
+    <sequenceFlow id="f_n_137_start_n_137_ev" sourceRef="n_137_start" targetRef="n_137_ev" name=""/>
+    <sequenceFlow id="f_n_137_ev_n_137_qg" sourceRef="n_137_ev" targetRef="n_137_qg" name=""/>
+    <sequenceFlow id="f_n_137_qg_n_137_rejs" sourceRef="n_137_qg" targetRef="n_137_rejs" name="rejected"><conditionExpression xsi:type="tFormalExpression"><![CDATA[qualification = "rejected"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_137_qg_n_137_scope" sourceRef="n_137_qg" targetRef="n_137_scope" name="qualified or conditional"/>
+    <sequenceFlow id="f_n_137_scope_n_137_hand" sourceRef="n_137_scope" targetRef="n_137_hand" name=""/>
+    <sequenceFlow id="f_n_137_hand_n_137_end" sourceRef="n_137_hand" targetRef="n_137_end" name=""/>
+    <sequenceFlow id="f_n_137_po_n_137_tx" sourceRef="n_137_po" targetRef="n_137_tx" name=""/>
+    <sequenceFlow id="f_n_137_tx_n_137_wait" sourceRef="n_137_tx" targetRef="n_137_wait" name=""/>
+    <sequenceFlow id="f_n_137_wait_n_137_ack" sourceRef="n_137_wait" targetRef="n_137_ack" name="acknowledged"/>
+    <sequenceFlow id="f_n_137_wait_n_137_nak" sourceRef="n_137_wait" targetRef="n_137_nak" name="rejected"/>
+    <sequenceFlow id="f_n_137_ack_n_137_date" sourceRef="n_137_ack" targetRef="n_137_date" name=""/>
+    <sequenceFlow id="f_n_137_date_n_137_end" sourceRef="n_137_date" targetRef="n_137_end" name=""/>
+    <sequenceFlow id="f_n_137_nak_n_137_esc" sourceRef="n_137_nak" targetRef="n_137_esc" name=""/>
+    <sequenceFlow id="f_n_137_sil_n_137_esc" sourceRef="n_137_sil" targetRef="n_137_esc" name=""/>
+    <sequenceFlow id="f_n_137_esc_n_137_end" sourceRef="n_137_esc" targetRef="n_137_end" name=""/>
+    <sequenceFlow id="f_n_137_asn_n_137_cmp" sourceRef="n_137_asn" targetRef="n_137_cmp" name=""/>
+    <sequenceFlow id="f_n_137_cmp_n_137_conf" sourceRef="n_137_cmp" targetRef="n_137_conf" name=""/>
+    <sequenceFlow id="f_n_137_conf_n_137_to43" sourceRef="n_137_conf" targetRef="n_137_to43" name=""/>
+    <sequenceFlow id="f_n_137_to43_n_137_end" sourceRef="n_137_to43" targetRef="n_137_end" name=""/>
+    <sequenceFlow id="f_n_137_im_n_137_rx" sourceRef="n_137_im" targetRef="n_137_rx" name=""/>
+    <sequenceFlow id="f_n_137_rx_n_137_q" sourceRef="n_137_rx" targetRef="n_137_q" name=""/>
+    <sequenceFlow id="f_n_137_q_n_137_rem" sourceRef="n_137_q" targetRef="n_137_rem" name=""/>
+    <sequenceFlow id="f_n_137_rem_n_137_end" sourceRef="n_137_rem" targetRef="n_137_end" name=""/>
+    <sequenceFlow id="f_n_137_rem_n_137_fail" sourceRef="n_137_rem" targetRef="n_137_fail" name="delivery failed"><conditionExpression xsi:type="tFormalExpression"><![CDATA[messageDelivered = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_137_fail_n_137_end" sourceRef="n_137_fail" targetRef="n_137_end" name=""/>
+  </process>
+  <bpmndi:BPMNDiagram id="dg_P_13_7">
+    <bpmndi:BPMNPlane id="pl_P_13_7" bpmnElement="P_13_7">
+      <bpmndi:BPMNShape id="sh_n_137_start" bpmnElement="n_137_start"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_137_ev" bpmnElement="n_137_ev"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_137_qg" bpmnElement="n_137_qg"><dc:Bounds x="467" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_137_rejs" bpmnElement="n_137_rejs"><dc:Bounds x="472" y="437" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_137_scope" bpmnElement="n_137_scope"><dc:Bounds x="595" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_137_hand" bpmnElement="n_137_hand"><dc:Bounds x="765" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_137_po" bpmnElement="n_137_po"><dc:Bounds x="132" y="657" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_137_tx" bpmnElement="n_137_tx"><dc:Bounds x="255" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_137_wait" bpmnElement="n_137_wait"><dc:Bounds x="467" y="652" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_137_ack" bpmnElement="n_137_ack"><dc:Bounds x="595" y="530" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_137_nak" bpmnElement="n_137_nak"><dc:Bounds x="595" y="750" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_137_sil" bpmnElement="n_137_sil"><dc:Bounds x="642" y="877" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_137_esc" bpmnElement="n_137_esc"><dc:Bounds x="765" y="860" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_137_date" bpmnElement="n_137_date"><dc:Bounds x="765" y="530" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_137_asn" bpmnElement="n_137_asn"><dc:Bounds x="132" y="1207" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_137_cmp" bpmnElement="n_137_cmp"><dc:Bounds x="255" y="1190" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_137_conf" bpmnElement="n_137_conf"><dc:Bounds x="425" y="1190" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_137_to43" bpmnElement="n_137_to43"><dc:Bounds x="595" y="1190" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_137_im" bpmnElement="n_137_im"><dc:Bounds x="132" y="1537" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_137_rx" bpmnElement="n_137_rx"><dc:Bounds x="255" y="1520" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_137_q" bpmnElement="n_137_q"><dc:Bounds x="425" y="1520" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_137_rem" bpmnElement="n_137_rem"><dc:Bounds x="595" y="1520" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_137_fail" bpmnElement="n_137_fail"><dc:Bounds x="765" y="1630" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_137_end" bpmnElement="n_137_end"><dc:Bounds x="982" y="987" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ed_f_n_137_start_n_137_ev" bpmnElement="f_n_137_start_n_137_ev"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_137_ev_n_137_qg" bpmnElement="f_n_137_ev_n_137_qg"><di:waypoint x="385" y="235"/><di:waypoint x="467" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_137_qg_n_137_rejs" bpmnElement="f_n_137_qg_n_137_rejs"><di:waypoint x="513" y="235"/><di:waypoint x="447" y="235"/><di:waypoint x="447" y="455"/><di:waypoint x="472" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_137_qg_n_137_scope" bpmnElement="f_n_137_qg_n_137_scope"><di:waypoint x="513" y="235"/><di:waypoint x="595" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_137_scope_n_137_hand" bpmnElement="f_n_137_scope_n_137_hand"><di:waypoint x="725" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_137_hand_n_137_end" bpmnElement="f_n_137_hand_n_137_end"><di:waypoint x="895" y="235"/><di:waypoint x="957" y="235"/><di:waypoint x="957" y="1005"/><di:waypoint x="982" y="1005"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_137_po_n_137_tx" bpmnElement="f_n_137_po_n_137_tx"><di:waypoint x="168" y="675"/><di:waypoint x="255" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_137_tx_n_137_wait" bpmnElement="f_n_137_tx_n_137_wait"><di:waypoint x="385" y="675"/><di:waypoint x="467" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_137_wait_n_137_ack" bpmnElement="f_n_137_wait_n_137_ack"><di:waypoint x="513" y="675"/><di:waypoint x="570" y="675"/><di:waypoint x="570" y="565"/><di:waypoint x="595" y="565"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_137_wait_n_137_nak" bpmnElement="f_n_137_wait_n_137_nak"><di:waypoint x="513" y="675"/><di:waypoint x="570" y="675"/><di:waypoint x="570" y="785"/><di:waypoint x="595" y="785"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_137_ack_n_137_date" bpmnElement="f_n_137_ack_n_137_date"><di:waypoint x="725" y="565"/><di:waypoint x="765" y="565"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_137_date_n_137_end" bpmnElement="f_n_137_date_n_137_end"><di:waypoint x="895" y="565"/><di:waypoint x="957" y="565"/><di:waypoint x="957" y="1005"/><di:waypoint x="982" y="1005"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_137_nak_n_137_esc" bpmnElement="f_n_137_nak_n_137_esc"><di:waypoint x="725" y="785"/><di:waypoint x="740" y="785"/><di:waypoint x="740" y="895"/><di:waypoint x="765" y="895"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_137_sil_n_137_esc" bpmnElement="f_n_137_sil_n_137_esc"><di:waypoint x="678" y="895"/><di:waypoint x="765" y="895"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_137_esc_n_137_end" bpmnElement="f_n_137_esc_n_137_end"><di:waypoint x="895" y="895"/><di:waypoint x="957" y="895"/><di:waypoint x="957" y="1005"/><di:waypoint x="982" y="1005"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_137_asn_n_137_cmp" bpmnElement="f_n_137_asn_n_137_cmp"><di:waypoint x="168" y="1225"/><di:waypoint x="255" y="1225"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_137_cmp_n_137_conf" bpmnElement="f_n_137_cmp_n_137_conf"><di:waypoint x="385" y="1225"/><di:waypoint x="425" y="1225"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_137_conf_n_137_to43" bpmnElement="f_n_137_conf_n_137_to43"><di:waypoint x="555" y="1225"/><di:waypoint x="595" y="1225"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_137_to43_n_137_end" bpmnElement="f_n_137_to43_n_137_end"><di:waypoint x="725" y="1225"/><di:waypoint x="957" y="1225"/><di:waypoint x="957" y="1005"/><di:waypoint x="982" y="1005"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_137_im_n_137_rx" bpmnElement="f_n_137_im_n_137_rx"><di:waypoint x="168" y="1555"/><di:waypoint x="255" y="1555"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_137_rx_n_137_q" bpmnElement="f_n_137_rx_n_137_q"><di:waypoint x="385" y="1555"/><di:waypoint x="425" y="1555"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_137_q_n_137_rem" bpmnElement="f_n_137_q_n_137_rem"><di:waypoint x="555" y="1555"/><di:waypoint x="595" y="1555"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_137_rem_n_137_end" bpmnElement="f_n_137_rem_n_137_end"><di:waypoint x="725" y="1555"/><di:waypoint x="957" y="1555"/><di:waypoint x="957" y="1005"/><di:waypoint x="982" y="1005"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_137_rem_n_137_fail" bpmnElement="f_n_137_rem_n_137_fail"><di:waypoint x="725" y="1555"/><di:waypoint x="740" y="1555"/><di:waypoint x="740" y="1665"/><di:waypoint x="765" y="1665"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_137_fail_n_137_end" bpmnElement="f_n_137_fail_n_137_end"><di:waypoint x="895" y="1665"/><di:waypoint x="957" y="1665"/><di:waypoint x="957" y="1005"/><di:waypoint x="982" y="1005"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>
