@@ -105,6 +105,57 @@ is in the standing prompt and it is enforced by a validator, not by taste.
 
 ---
 
+## Progressing Claude
+
+Claude is not pasted a prompt in an ongoing session — it has the repository, the tools and
+the history, so **"run round N" is enough**. What it needs is a reminder that its round is
+two jobs, not one.
+
+**Job 1 — specify its own category.** Round 1 was 2.0; then 5.0, 8.0, 11.0, 14.0.
+
+**Job 2 — be the gate.** ChatGPT and Grok cannot run the validators. Every submission that
+lands in `_Collab/10_inbox/` has to be validated, merged, built and committed by Claude,
+and *a submission that does not pass is not merged*. This is the half of the campaign that
+keeps three platforms producing one reference instead of three.
+
+### If the session has ended and you need a fresh one
+
+Paste this into a new Claude session with the repository folder connected:
+
+---
+
+Continue the Utility Work and Asset Management process specification campaign. The working
+repository is at `C:\__Tim Method 2026`, and the public mirror is
+`github.com/tbartmann/utility-wam-process-reference`.
+
+Read these first, in this order: `_Collab/00_prompts/SPEC_CAMPAIGN_PROMPT.md`,
+`_Collab/00_prompts/ROUND_KICKOFF.md`, `_Collab/SOURCE_AUTHORITY_PACK.md`,
+`build/eam/specs/SCHEMA.md` and `build/eam/vocabulary.json`. Then look at
+`build/eam/specs/` to see which categories are already specified, and
+`_Collab/10_inbox/` to see what is waiting.
+
+This is round `<N>`. Do both jobs:
+
+1. **Merge what has landed.** For each `SPEC_*.json` in the inbox, run
+   `python3 validate_spec.py` against it. If it passes, move it into `build/eam/specs/`,
+   build its deck with `build_process_spec.py`, and run `validate_models.py` and
+   `validate_deck.py`. If it fails, do not merge it — report exactly what failed and what
+   the platform has to change. Never fix a submission silently; a correction the author
+   does not see is a correction they will make again next round.
+2. **Specify your own category** — `<ID> <NAME>` — to the same standard as
+   `build/eam/specs/cat-02-plan-design-and-estimate-work.json`, then generate its models,
+   build its deck, and run all three validators clean before committing.
+
+The derivation rule governs everything: content enters the reference only if a standard, a
+regulation or a recognised industry body says it, and a citation status is never upgraded.
+Do not add, move or renumber categories, groups or processes.
+
+Commit with a message that says what changed and why. Then report, in chat: what passed,
+what failed and why, which processes were hardest to source, and anything in the Source
+Authority Pack that turned out to be wrong or missing.
+
+---
+
 ## Round 1 values
 
 | Platform | `<N>` | `<ID> <NAME>` | `<G>` | `<P>` |
