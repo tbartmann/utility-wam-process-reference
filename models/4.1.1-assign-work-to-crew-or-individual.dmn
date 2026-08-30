@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/" id="Assign_work" name="4.1.1 Assign work to crew or individual" namespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <description>Returns an assignment or a named reason there cannot be one. A table rather than a flow because the output is a value - who the work goes to - and the dispatching that follows is 4.1.2's.
+
+The order of the rows is the point. QUALIFICATION IS TESTED BEFORE AVAILABILITY, because an available unqualified worker is not a weaker match, it is not a match: 29 CFR 1910.269 requires a qualified employee for work on or near energised lines, and 49 CFR 192 Subpart N requires a qualified individual for a covered task. A table that ranked on availability first would produce a defensible-looking assignment that is unlawful.
+
+What this reference does NOT state, and the table therefore does not encode: any optimisation rule. Travel, utilisation and cost weighting are 3.4's and are the operator's. This returns eligibility and a candidate, not an optimum.</description>
+  <inputData id="in_ready" name="Work is ready for assignment"><variable id="in_ready_v" name="Work is ready for assignment" typeRef="boolean"/></inputData>
+  <inputData id="in_qualified" name="A qualified resource exists for every task"><variable id="in_qualified_v" name="A qualified resource exists for every task" typeRef="boolean"/></inputData>
+  <inputData id="in_available" name="That resource is available in the window"><variable id="in_available_v" name="That resource is available in the window" typeRef="boolean"/></inputData>
+  <inputData id="in_constraint" name="Location, access or operating constraint blocks it"><variable id="in_constraint_v" name="Location, access or operating constraint blocks it" typeRef="boolean"/></inputData>
+  <knowledgeSource id="ks_qual" name="29 CFR 1910.269(a)(2) training and qualified employees; 49 CFR 192 Subpart N operator qualification; 14.2.4 restrict assignment on lapsed qualification"><description>Qualification is a precondition of assignment rather than a ranking factor. 14.2.4 holds the operator's currency record and 16.1.4 the contractor's; this table consumes whichever applies.</description></knowledgeSource>
+  <decision id="d_4_1_1" name="Assignment outcome">
+    <variable id="d_4_1_1_v" name="Assignment outcome" typeRef="string"/>
+    <informationRequirement id="ir_d_4_1_1_ks_qual"><requiredInput href="#ks_qual"/></informationRequirement>
+    <decisionTable id="d_4_1_1_dt" hitPolicy="FIRST" preferredOrientation="Rule-as-Row">
+      <input id="d_4_1_1_i1" label="Ready for assignment"><inputExpression id="d_4_1_1_i1_e" typeRef="boolean"><text>in_ready</text></inputExpression></input>
+      <input id="d_4_1_1_i2" label="Qualified resource exists"><inputExpression id="d_4_1_1_i2_e" typeRef="boolean"><text>in_qualified</text></inputExpression></input>
+      <input id="d_4_1_1_i3" label="Available in the window"><inputExpression id="d_4_1_1_i3_e" typeRef="boolean"><text>in_available</text></inputExpression></input>
+      <input id="d_4_1_1_i4" label="Blocking constraint"><inputExpression id="d_4_1_1_i4_e" typeRef="boolean"><text>in_constraint</text></inputExpression></input>
+      <output id="d_4_1_1_o" label="Assignment outcome" name="Assignment outcome" typeRef="string"/>
+      <rule id="d_4_1_1_r1">
+        <description>Prerequisites unresolved. Back to 2.5 or 2.6; dispatching work whose prerequisites are open is what 4.2.1 then has to stop on site.</description>
+        <inputEntry id="d_4_1_1_r1_ie1"><text>false</text></inputEntry>
+        <inputEntry id="d_4_1_1_r1_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_4_1_1_r1_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_4_1_1_r1_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_4_1_1_r1_oe"><text>"notReady"</text></outputEntry>
+      </rule>
+      <rule id="d_4_1_1_r2">
+        <description>No qualified resource exists for at least one task. NOT an availability problem and not solvable by reassignment - it goes to 14.2 or 16.1, or the scope is split. 1910.269(a)(2) and 192 Subpart N make this a hard stop.</description>
+        <inputEntry id="d_4_1_1_r2_ie1"><text>true</text></inputEntry>
+        <inputEntry id="d_4_1_1_r2_ie2"><text>false</text></inputEntry>
+        <inputEntry id="d_4_1_1_r2_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_4_1_1_r2_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_4_1_1_r2_oe"><text>"noQualifiedResource"</text></outputEntry>
+      </rule>
+      <rule id="d_4_1_1_r3">
+        <description>Qualified and available, but access, outage state or an operating constraint prevents it. Returns to 3.4 for a different window rather than dispatching into a known block.</description>
+        <inputEntry id="d_4_1_1_r3_ie1"><text>true</text></inputEntry>
+        <inputEntry id="d_4_1_1_r3_ie2"><text>true</text></inputEntry>
+        <inputEntry id="d_4_1_1_r3_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_4_1_1_r3_ie4"><text>true</text></inputEntry>
+        <outputEntry id="d_4_1_1_r3_oe"><text>"blocked"</text></outputEntry>
+      </rule>
+      <rule id="d_4_1_1_r4">
+        <description>Qualified but not available in the window. A capacity question for 3.1.4 and 3.2.3, and the only row on this table that a scheduler can solve by moving other work.</description>
+        <inputEntry id="d_4_1_1_r4_ie1"><text>true</text></inputEntry>
+        <inputEntry id="d_4_1_1_r4_ie2"><text>true</text></inputEntry>
+        <inputEntry id="d_4_1_1_r4_ie3"><text>false</text></inputEntry>
+        <inputEntry id="d_4_1_1_r4_ie4"><text>false</text></inputEntry>
+        <outputEntry id="d_4_1_1_r4_oe"><text>"queueForCapacity"</text></outputEntry>
+      </rule>
+      <rule id="d_4_1_1_r5">
+        <description>Assign and notify. Which of several eligible resources is chosen is the operator's optimisation and this reference states none.</description>
+        <inputEntry id="d_4_1_1_r5_ie1"><text>true</text></inputEntry>
+        <inputEntry id="d_4_1_1_r5_ie2"><text>true</text></inputEntry>
+        <inputEntry id="d_4_1_1_r5_ie3"><text>true</text></inputEntry>
+        <inputEntry id="d_4_1_1_r5_ie4"><text>false</text></inputEntry>
+        <outputEntry id="d_4_1_1_r5_oe"><text>"assign"</text></outputEntry>
+      </rule>
+      <rule id="d_4_1_1_r6">
+        <description>Readiness or qualification not established. A named exception rather than a default, because the default here assigns unqualified work.</description>
+        <inputEntry id="d_4_1_1_r6_ie1"><text>-</text></inputEntry>
+        <inputEntry id="d_4_1_1_r6_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_4_1_1_r6_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_4_1_1_r6_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_4_1_1_r6_oe"><text>"determineManually"</text></outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram id="drd_Assign_work">
+      <dmndi:DMNShape id="sh_in_ready" dmnElementRef="in_ready"><dc:Bounds x="60" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_qualified" dmnElementRef="in_qualified"><dc:Bounds x="245" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_available" dmnElementRef="in_available"><dc:Bounds x="430" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_constraint" dmnElementRef="in_constraint"><dc:Bounds x="615" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_d_4_1_1" dmnElementRef="d_4_1_1"><dc:Bounds x="60" y="240" width="180" height="70"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_ks_qual" dmnElementRef="ks_qual"><dc:Bounds x="900" y="100" width="160" height="55"/></dmndi:DMNShape>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</definitions>

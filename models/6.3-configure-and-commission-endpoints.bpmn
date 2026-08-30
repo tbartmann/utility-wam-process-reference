@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_P_6_3" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <process id="P_6_3" name="6.3 Programme and commission endpoints" isExecutable="false">
+    <documentation>6.3.1, 6.3.2, 6.3.3 and 6.3.5 are drawn; 6.3.4 is the acceptance determination and has its own table.
+
+READ-BACK IS DRAWN AS ITS OWN STEP because writing a parameter and confirming it landed are different events, and the gap between them is where a meter ends up billing on a multiplier nobody intended. 6.3.1 loads then reads back; 6.3.2 verifies version and configuration AFTER the change and rolls back on failure.
+
+ROLLBACK IS A DRAWN PATH, NOT AN EXCEPTION NOTE. A firmware change that fails part-way leaves a device that is neither the old version nor the new one, and the prior state has to be restored before anything else is attempted. This is the only place in the reference where a configuration change has an explicit reverse.
+
+Commissioning can happen in the field or later from the operating centre, and both are drawn from the same entry rather than as separate processes - the endpoint does not know where the registration was initiated.</documentation>
+    <laneSet id="P_6_3_lanes">
+      <lane id="l_63_prog" name="Programming and configuration">
+        <flowNodeRef>n_63_start</flowNodeRef>
+        <flowNodeRef>n_63_id</flowNodeRef>
+        <flowNodeRef>n_63_load</flowNodeRef>
+        <flowNodeRef>n_63_rb</flowNodeRef>
+        <flowNodeRef>n_63_rbok</flowNodeRef>
+        <flowNodeRef>n_63_rbf</flowNodeRef>
+        <flowNodeRef>n_63_fw</flowNodeRef>
+        <flowNodeRef>n_63_pkg</flowNodeRef>
+        <flowNodeRef>n_63_ver</flowNodeRef>
+        <flowNodeRef>n_63_roll</flowNodeRef>
+      </lane>
+      <lane id="l_63_ops" name="Metering operations centre">
+        <flowNodeRef>n_63_reg</flowNodeRef>
+        <flowNodeRef>n_63_resp</flowNodeRef>
+        <flowNodeRef>n_63_acc</flowNodeRef>
+        <flowNodeRef>n_63_gw</flowNodeRef>
+        <flowNodeRef>n_63_corr</flowNodeRef>
+        <flowNodeRef>n_63_aud</flowNodeRef>
+        <flowNodeRef>n_63_end</flowNodeRef>
+      </lane>
+    </laneSet>
+    <startEvent id="n_63_start" name="A device needs programming or commissioning"><messageEventDefinition id="n_63_start_md"/></startEvent>
+    <userTask id="n_63_id" name="Verify device identity and the approved parameter set"><documentation>6.3.1.</documentation></userTask>
+    <serviceTask id="n_63_load" name="Load the authorised parameters"><documentation>6.3.1.</documentation></serviceTask>
+    <serviceTask id="n_63_rb" name="Read back the programmed values"><documentation>6.3.1. A separate act from writing them. The gap between the two is where a wrong multiplier survives.</documentation></serviceTask>
+    <exclusiveGateway id="n_63_rbok" name="Read-back matches"/>
+    <serviceTask id="n_63_rbf" name="Record the programming exception"><documentation>6.3.1.</documentation></serviceTask>
+    <exclusiveGateway id="n_63_fw" name="Firmware or configuration change required"/>
+    <serviceTask id="n_63_pkg" name="Apply the authorised package"><documentation>6.3.2.</documentation></serviceTask>
+    <exclusiveGateway id="n_63_ver" name="Version and configuration verified"><documentation>6.3.2.</documentation></exclusiveGateway>
+    <serviceTask id="n_63_roll" name="Roll back to the prior state"><documentation>6.3.2. A drawn path. A half-applied firmware change leaves a device that is neither version, and nothing else may be attempted until it is one of them.</documentation></serviceTask>
+    <serviceTask id="n_63_reg" name="Register the endpoint to the communication service"><documentation>6.3.3.</documentation></serviceTask>
+    <receiveTask id="n_63_resp" name="Initiate communication and receive a response"><documentation>6.3.3.</documentation></receiveTask>
+    <businessRuleTask id="n_63_acc" name="Validate installation, read and signal (6.3.4)"><documentation>6.3.4. Identity, read and communication assessed together - two out of three is not an acceptance.</documentation></businessRuleTask>
+    <exclusiveGateway id="n_63_gw" name="Accepted"/>
+    <sendTask id="n_63_corr" name="Raise correction work to the field"><documentation>6.3.4, back into 6.2.</documentation></sendTask>
+    <serviceTask id="n_63_aud" name="Store the programming and commissioning audit record"><documentation>6.3.5. Including the failed attempt and its correction - an audit trail showing only successes is not one.</documentation></serviceTask>
+    <endEvent id="n_63_end" name="Endpoint commissioned"/>
+    <sequenceFlow id="f_n_63_start_n_63_id" sourceRef="n_63_start" targetRef="n_63_id" name=""/>
+    <sequenceFlow id="f_n_63_id_n_63_load" sourceRef="n_63_id" targetRef="n_63_load" name=""/>
+    <sequenceFlow id="f_n_63_load_n_63_rb" sourceRef="n_63_load" targetRef="n_63_rb" name=""/>
+    <sequenceFlow id="f_n_63_rb_n_63_rbok" sourceRef="n_63_rb" targetRef="n_63_rbok" name=""/>
+    <sequenceFlow id="f_n_63_rbok_n_63_rbf" sourceRef="n_63_rbok" targetRef="n_63_rbf" name="mismatch"><conditionExpression xsi:type="tFormalExpression"><![CDATA[readBackMatches = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_63_rbf_n_63_aud" sourceRef="n_63_rbf" targetRef="n_63_aud" name=""/>
+    <sequenceFlow id="f_n_63_rbok_n_63_fw" sourceRef="n_63_rbok" targetRef="n_63_fw" name="matches"/>
+    <sequenceFlow id="f_n_63_fw_n_63_pkg" sourceRef="n_63_fw" targetRef="n_63_pkg" name="package required"><conditionExpression xsi:type="tFormalExpression"><![CDATA[packageRequired = true]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_63_pkg_n_63_ver" sourceRef="n_63_pkg" targetRef="n_63_ver" name=""/>
+    <sequenceFlow id="f_n_63_ver_n_63_roll" sourceRef="n_63_ver" targetRef="n_63_roll" name="not verified"><conditionExpression xsi:type="tFormalExpression"><![CDATA[verified = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_63_roll_n_63_aud" sourceRef="n_63_roll" targetRef="n_63_aud" name=""/>
+    <sequenceFlow id="f_n_63_ver_n_63_reg" sourceRef="n_63_ver" targetRef="n_63_reg" name="verified"/>
+    <sequenceFlow id="f_n_63_fw_n_63_reg" sourceRef="n_63_fw" targetRef="n_63_reg" name="no package required"/>
+    <sequenceFlow id="f_n_63_reg_n_63_resp" sourceRef="n_63_reg" targetRef="n_63_resp" name=""/>
+    <sequenceFlow id="f_n_63_resp_n_63_acc" sourceRef="n_63_resp" targetRef="n_63_acc" name=""/>
+    <sequenceFlow id="f_n_63_acc_n_63_gw" sourceRef="n_63_acc" targetRef="n_63_gw" name=""/>
+    <sequenceFlow id="f_n_63_gw_n_63_corr" sourceRef="n_63_gw" targetRef="n_63_corr" name="not accepted"><conditionExpression xsi:type="tFormalExpression"><![CDATA[acceptance != "accept"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_63_corr_n_63_aud" sourceRef="n_63_corr" targetRef="n_63_aud" name=""/>
+    <sequenceFlow id="f_n_63_gw_n_63_aud" sourceRef="n_63_gw" targetRef="n_63_aud" name="accepted"/>
+    <sequenceFlow id="f_n_63_aud_n_63_end" sourceRef="n_63_aud" targetRef="n_63_end" name=""/>
+  </process>
+  <bpmndi:BPMNDiagram id="dg_P_6_3">
+    <bpmndi:BPMNPlane id="pl_P_6_3" bpmnElement="P_6_3">
+      <bpmndi:BPMNShape id="sh_n_63_start" bpmnElement="n_63_start"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_63_id" bpmnElement="n_63_id"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_63_load" bpmnElement="n_63_load"><dc:Bounds x="425" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_63_rb" bpmnElement="n_63_rb"><dc:Bounds x="595" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_63_rbok" bpmnElement="n_63_rbok"><dc:Bounds x="807" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_63_rbf" bpmnElement="n_63_rbf"><dc:Bounds x="765" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_63_fw" bpmnElement="n_63_fw"><dc:Bounds x="977" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_63_pkg" bpmnElement="n_63_pkg"><dc:Bounds x="1105" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_63_ver" bpmnElement="n_63_ver"><dc:Bounds x="1317" y="432" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_63_roll" bpmnElement="n_63_roll"><dc:Bounds x="1275" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_63_reg" bpmnElement="n_63_reg"><dc:Bounds x="1445" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_63_resp" bpmnElement="n_63_resp"><dc:Bounds x="1615" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_63_acc" bpmnElement="n_63_acc"><dc:Bounds x="1785" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_63_gw" bpmnElement="n_63_gw"><dc:Bounds x="1997" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_63_corr" bpmnElement="n_63_corr"><dc:Bounds x="1955" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_63_aud" bpmnElement="n_63_aud"><dc:Bounds x="2125" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_63_end" bpmnElement="n_63_end"><dc:Bounds x="2342" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ed_f_n_63_start_n_63_id" bpmnElement="f_n_63_start_n_63_id"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_63_id_n_63_load" bpmnElement="f_n_63_id_n_63_load"><di:waypoint x="385" y="235"/><di:waypoint x="425" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_63_load_n_63_rb" bpmnElement="f_n_63_load_n_63_rb"><di:waypoint x="555" y="235"/><di:waypoint x="595" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_63_rb_n_63_rbok" bpmnElement="f_n_63_rb_n_63_rbok"><di:waypoint x="725" y="235"/><di:waypoint x="807" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_63_rbok_n_63_rbf" bpmnElement="f_n_63_rbok_n_63_rbf"><di:waypoint x="853" y="235"/><di:waypoint x="740" y="235"/><di:waypoint x="740" y="455"/><di:waypoint x="765" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_63_rbf_n_63_aud" bpmnElement="f_n_63_rbf_n_63_aud"><di:waypoint x="895" y="455"/><di:waypoint x="2100" y="455"/><di:waypoint x="2100" y="235"/><di:waypoint x="2125" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_63_rbok_n_63_fw" bpmnElement="f_n_63_rbok_n_63_fw"><di:waypoint x="853" y="235"/><di:waypoint x="977" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_63_fw_n_63_pkg" bpmnElement="f_n_63_fw_n_63_pkg"><di:waypoint x="1023" y="235"/><di:waypoint x="1080" y="235"/><di:waypoint x="1080" y="455"/><di:waypoint x="1105" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_63_pkg_n_63_ver" bpmnElement="f_n_63_pkg_n_63_ver"><di:waypoint x="1235" y="455"/><di:waypoint x="1317" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_63_ver_n_63_roll" bpmnElement="f_n_63_ver_n_63_roll"><di:waypoint x="1363" y="455"/><di:waypoint x="1250" y="455"/><di:waypoint x="1250" y="675"/><di:waypoint x="1275" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_63_roll_n_63_aud" bpmnElement="f_n_63_roll_n_63_aud"><di:waypoint x="1405" y="675"/><di:waypoint x="2100" y="675"/><di:waypoint x="2100" y="235"/><di:waypoint x="2125" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_63_ver_n_63_reg" bpmnElement="f_n_63_ver_n_63_reg"><di:waypoint x="1363" y="455"/><di:waypoint x="1420" y="455"/><di:waypoint x="1420" y="235"/><di:waypoint x="1445" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_63_fw_n_63_reg" bpmnElement="f_n_63_fw_n_63_reg"><di:waypoint x="1023" y="235"/><di:waypoint x="1445" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_63_reg_n_63_resp" bpmnElement="f_n_63_reg_n_63_resp"><di:waypoint x="1575" y="235"/><di:waypoint x="1615" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_63_resp_n_63_acc" bpmnElement="f_n_63_resp_n_63_acc"><di:waypoint x="1745" y="235"/><di:waypoint x="1785" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_63_acc_n_63_gw" bpmnElement="f_n_63_acc_n_63_gw"><di:waypoint x="1915" y="235"/><di:waypoint x="1997" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_63_gw_n_63_corr" bpmnElement="f_n_63_gw_n_63_corr"><di:waypoint x="2043" y="235"/><di:waypoint x="1930" y="235"/><di:waypoint x="1930" y="455"/><di:waypoint x="1955" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_63_corr_n_63_aud" bpmnElement="f_n_63_corr_n_63_aud"><di:waypoint x="2085" y="455"/><di:waypoint x="2100" y="455"/><di:waypoint x="2100" y="235"/><di:waypoint x="2125" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_63_gw_n_63_aud" bpmnElement="f_n_63_gw_n_63_aud"><di:waypoint x="2043" y="235"/><di:waypoint x="2125" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_63_aud_n_63_end" bpmnElement="f_n_63_aud_n_63_end"><di:waypoint x="2255" y="235"/><di:waypoint x="2342" y="235"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

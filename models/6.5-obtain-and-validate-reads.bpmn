@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_P_6_5" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <process id="P_6_5" name="6.5 Obtain and validate measurement data" isExecutable="false">
+    <documentation>Only 6.5.1 is drawn as a flow. 6.5.2 validation and 6.5.3 estimation are determinations with their own tables, and 6.5.4 anomaly investigation is a case - which is the right shape for a group whose work is almost entirely judgement applied to a number.
+
+THE THREE COLLECTION METHODS ARE ONE PATH because they differ in how the read arrives and not in what happens to it. A walk-up read, a drive-by collection and a fixed-network read all produce a value that then faces exactly the same validation at 6.5.2. Drawing three paths would have implied three sets of rules.
+
+The identity confirmation before capture is the same discipline as 6.2's service point check and for the same reason: a read attributed to the wrong meter is a wrong bill that looks entirely normal.</documentation>
+    <laneSet id="P_6_5_lanes">
+      <lane id="l_65_field" name="Meter reading">
+        <flowNodeRef>n_65_start</flowNodeRef>
+        <flowNodeRef>n_65_pop</flowNodeRef>
+        <flowNodeRef>n_65_meth</flowNodeRef>
+        <flowNodeRef>n_65_walk</flowNodeRef>
+        <flowNodeRef>n_65_drive</flowNodeRef>
+        <flowNodeRef>n_65_fixed</flowNodeRef>
+        <flowNodeRef>n_65_sub</flowNodeRef>
+      </lane>
+      <lane id="l_65_mdm" name="Measurement data management">
+        <flowNodeRef>n_65_val</flowNodeRef>
+        <flowNodeRef>n_65_gw</flowNodeRef>
+        <flowNodeRef>n_65_est</flowNodeRef>
+        <flowNodeRef>n_65_case</flowNodeRef>
+        <flowNodeRef>n_65_rel</flowNodeRef>
+        <flowNodeRef>n_65_end</flowNodeRef>
+      </lane>
+    </laneSet>
+    <startEvent id="n_65_start" name="A reading population is due"><conditionalEventDefinition id="n_65_start_cd"><condition/></conditionalEventDefinition></startEvent>
+    <serviceTask id="n_65_pop" name="Select the assigned reading population"><documentation>6.5.1.</documentation></serviceTask>
+    <exclusiveGateway id="n_65_meth" name="Collection method"/>
+    <userTask id="n_65_walk" name="Confirm identity and read at the meter"><documentation>6.5.1. Walk-up. Identity confirmed before capture, for the same reason 6.2 verifies the service point.</documentation></userTask>
+    <serviceTask id="n_65_drive" name="Collect by drive-by"><documentation>6.5.1.</documentation></serviceTask>
+    <serviceTask id="n_65_fixed" name="Collect from the fixed network"><documentation>6.5.1. No field visit, and the identity assurance comes from 6.3.4's acceptance instead of from a person.</documentation></serviceTask>
+    <serviceTask id="n_65_sub" name="Submit the reading result"><documentation>6.5.1.</documentation></serviceTask>
+    <businessRuleTask id="n_65_val" name="Validate the read (6.5.2)"><documentation>6.5.2. Same rules whatever the collection method.</documentation></businessRuleTask>
+    <exclusiveGateway id="n_65_gw" name="Outcome"/>
+    <businessRuleTask id="n_65_est" name="Estimate consumption (6.5.3)"><documentation>6.5.3. Marked as estimated when released - an estimate that enters billing unmarked cannot be corrected afterwards.</documentation></businessRuleTask>
+    <callActivity id="n_65_case" name="Investigate the anomaly (6.5.4)"><documentation>6.5.4.</documentation></callActivity>
+    <sendTask id="n_65_rel" name="Release the value for billing"><documentation>6.5.2 and 6.5.3. Accepted or estimated, and flagged as which.</documentation></sendTask>
+    <endEvent id="n_65_end" name="Measurement data released"/>
+    <sequenceFlow id="f_n_65_start_n_65_pop" sourceRef="n_65_start" targetRef="n_65_pop" name=""/>
+    <sequenceFlow id="f_n_65_pop_n_65_meth" sourceRef="n_65_pop" targetRef="n_65_meth" name=""/>
+    <sequenceFlow id="f_n_65_meth_n_65_walk" sourceRef="n_65_meth" targetRef="n_65_walk" name="manual walk-up"><conditionExpression xsi:type="tFormalExpression"><![CDATA[method = "walk"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_65_meth_n_65_drive" sourceRef="n_65_meth" targetRef="n_65_drive" name="drive-by"><conditionExpression xsi:type="tFormalExpression"><![CDATA[method = "amr"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_65_meth_n_65_fixed" sourceRef="n_65_meth" targetRef="n_65_fixed" name="fixed network"><conditionExpression xsi:type="tFormalExpression"><![CDATA[method = "ami"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_65_walk_n_65_sub" sourceRef="n_65_walk" targetRef="n_65_sub" name=""/>
+    <sequenceFlow id="f_n_65_drive_n_65_sub" sourceRef="n_65_drive" targetRef="n_65_sub" name=""/>
+    <sequenceFlow id="f_n_65_fixed_n_65_sub" sourceRef="n_65_fixed" targetRef="n_65_sub" name=""/>
+    <sequenceFlow id="f_n_65_sub_n_65_val" sourceRef="n_65_sub" targetRef="n_65_val" name=""/>
+    <sequenceFlow id="f_n_65_val_n_65_gw" sourceRef="n_65_val" targetRef="n_65_gw" name=""/>
+    <sequenceFlow id="f_n_65_gw_n_65_est" sourceRef="n_65_gw" targetRef="n_65_est" name="no usable read"><conditionExpression xsi:type="tFormalExpression"><![CDATA[outcome = "reject"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_65_gw_n_65_case" sourceRef="n_65_gw" targetRef="n_65_case" name="suspect, cause unclear"><conditionExpression xsi:type="tFormalExpression"><![CDATA[outcome = "suspect"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_65_gw_n_65_rel" sourceRef="n_65_gw" targetRef="n_65_rel" name="accepted"/>
+    <sequenceFlow id="f_n_65_est_n_65_rel" sourceRef="n_65_est" targetRef="n_65_rel" name=""/>
+    <sequenceFlow id="f_n_65_case_n_65_rel" sourceRef="n_65_case" targetRef="n_65_rel" name=""/>
+    <sequenceFlow id="f_n_65_rel_n_65_end" sourceRef="n_65_rel" targetRef="n_65_end" name=""/>
+  </process>
+  <bpmndi:BPMNDiagram id="dg_P_6_5">
+    <bpmndi:BPMNPlane id="pl_P_6_5" bpmnElement="P_6_5">
+      <bpmndi:BPMNShape id="sh_n_65_start" bpmnElement="n_65_start"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_65_pop" bpmnElement="n_65_pop"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_65_meth" bpmnElement="n_65_meth"><dc:Bounds x="467" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_65_walk" bpmnElement="n_65_walk"><dc:Bounds x="595" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_65_drive" bpmnElement="n_65_drive"><dc:Bounds x="595" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_65_fixed" bpmnElement="n_65_fixed"><dc:Bounds x="595" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_65_sub" bpmnElement="n_65_sub"><dc:Bounds x="765" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_65_val" bpmnElement="n_65_val"><dc:Bounds x="935" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_65_gw" bpmnElement="n_65_gw"><dc:Bounds x="1147" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_65_est" bpmnElement="n_65_est"><dc:Bounds x="1105" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_65_case" bpmnElement="n_65_case"><dc:Bounds x="1105" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_65_rel" bpmnElement="n_65_rel"><dc:Bounds x="1275" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_65_end" bpmnElement="n_65_end"><dc:Bounds x="1492" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ed_f_n_65_start_n_65_pop" bpmnElement="f_n_65_start_n_65_pop"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_65_pop_n_65_meth" bpmnElement="f_n_65_pop_n_65_meth"><di:waypoint x="385" y="235"/><di:waypoint x="467" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_65_meth_n_65_walk" bpmnElement="f_n_65_meth_n_65_walk"><di:waypoint x="513" y="235"/><di:waypoint x="595" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_65_meth_n_65_drive" bpmnElement="f_n_65_meth_n_65_drive"><di:waypoint x="513" y="235"/><di:waypoint x="570" y="235"/><di:waypoint x="570" y="455"/><di:waypoint x="595" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_65_meth_n_65_fixed" bpmnElement="f_n_65_meth_n_65_fixed"><di:waypoint x="513" y="235"/><di:waypoint x="570" y="235"/><di:waypoint x="570" y="675"/><di:waypoint x="595" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_65_walk_n_65_sub" bpmnElement="f_n_65_walk_n_65_sub"><di:waypoint x="725" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_65_drive_n_65_sub" bpmnElement="f_n_65_drive_n_65_sub"><di:waypoint x="725" y="455"/><di:waypoint x="740" y="455"/><di:waypoint x="740" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_65_fixed_n_65_sub" bpmnElement="f_n_65_fixed_n_65_sub"><di:waypoint x="725" y="675"/><di:waypoint x="740" y="675"/><di:waypoint x="740" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_65_sub_n_65_val" bpmnElement="f_n_65_sub_n_65_val"><di:waypoint x="895" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_65_val_n_65_gw" bpmnElement="f_n_65_val_n_65_gw"><di:waypoint x="1065" y="235"/><di:waypoint x="1147" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_65_gw_n_65_est" bpmnElement="f_n_65_gw_n_65_est"><di:waypoint x="1193" y="235"/><di:waypoint x="1080" y="235"/><di:waypoint x="1080" y="455"/><di:waypoint x="1105" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_65_gw_n_65_case" bpmnElement="f_n_65_gw_n_65_case"><di:waypoint x="1193" y="235"/><di:waypoint x="1080" y="235"/><di:waypoint x="1080" y="675"/><di:waypoint x="1105" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_65_gw_n_65_rel" bpmnElement="f_n_65_gw_n_65_rel"><di:waypoint x="1193" y="235"/><di:waypoint x="1275" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_65_est_n_65_rel" bpmnElement="f_n_65_est_n_65_rel"><di:waypoint x="1235" y="455"/><di:waypoint x="1250" y="455"/><di:waypoint x="1250" y="235"/><di:waypoint x="1275" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_65_case_n_65_rel" bpmnElement="f_n_65_case_n_65_rel"><di:waypoint x="1235" y="675"/><di:waypoint x="1250" y="675"/><di:waypoint x="1250" y="235"/><di:waypoint x="1275" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_65_rel_n_65_end" bpmnElement="f_n_65_rel_n_65_end"><di:waypoint x="1405" y="235"/><di:waypoint x="1492" y="235"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/CMMN/20151109/MODEL" xmlns:cmmndi="http://www.omg.org/spec/CMMN/20151109/CMMNDI" xmlns:dc="http://www.omg.org/spec/CMMN/20151109/DC" xmlns:di="http://www.omg.org/spec/CMMN/20151109/DI" id="defs_Repair_refurbish_condemn" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <case id="Repair_refurbish_condemn" name="6.4.5 Repair, refurbish or condemn meters">
+    <caseFileModel id="Repair_refurbish_condemn_cfm">
+      <caseFileItem id="cf_result" name="Certification disposition from 6.4.3 and the test observations"/>
+      <caseFileItem id="cf_unit" name="Physical condition, age and population context"/>
+      <caseFileItem id="cf_economics" name="Repair cost, parts availability and replacement cost"/>
+    </caseFileModel>
+    <casePlanModel id="Repair_refurbish_condemn_plan" name="6.4.5 Repair, refurbish or condemn meters" autoComplete="true">
+      <documentation>The disposition of a failed meter depends on the test result, the physical condition, the availability of parts, the age of the population and what the unit would cost to replace - and those arrive in no fixed order. Two competent shop supervisors reach the same defensible answer by different routes. That is the CMMN test.
+
+THIS IS WHERE A METER IS CONDEMNED, AND NOWHERE ELSE. 6.1.4 retires the RECORD when the unit leaves service; this case ends the UNIT. Keeping them apart is what lets a meter be retired in January, tested in March and returned to stock in April - which is the normal case, not the exception.
+
+RETEST AFTER REPAIR IS REQUIRED, not discretionary. A repaired meter carries no valid certification until it has been tested again, and issuing one on the strength of the repair is how an uncertified device reaches a customer's premise.</documentation>
+      <planItem id="pi_t_review" name="Review the test result and the physical condition" definitionRef="t_review_def">
+        <itemControl id="ic_t_review">
+          <requiredRule id="rr_t_review"><condition><![CDATA[true]]></condition></requiredRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_parts" name="Establish parts and repair feasibility" definitionRef="t_parts_def">
+        <itemControl id="ic_t_parts">
+          <requiredRule id="rr_t_parts"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_parts"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_economics" name="Weigh repair against replacement" definitionRef="t_economics_def">
+        <itemControl id="ic_t_economics">
+          <requiredRule id="rr_t_economics"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_economics"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_repair" name="Perform or commission the approved repair" definitionRef="t_repair_def">
+        <itemControl id="ic_t_repair">
+          <requiredRule id="rr_t_repair"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_repair"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_refurb" name="Refurbish for reuse" definitionRef="t_refurb_def">
+        <itemControl id="ic_t_refurb">
+          <requiredRule id="rr_t_refurb"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_refurb"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_retest" name="Retest the repaired or refurbished meter" definitionRef="t_retest_def">
+        <itemControl id="ic_t_retest">
+          <requiredRule id="rr_t_retest"><condition><![CDATA[true]]></condition></requiredRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_condemn" name="Condemn the unit" definitionRef="t_condemn_def">
+        <itemControl id="ic_t_condemn">
+          <requiredRule id="rr_t_condemn"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_condemn"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_record" name="Record return to stock or condemnation" definitionRef="t_record_def">
+        <itemControl id="ic_t_record">
+          <requiredRule id="rr_t_record"><condition><![CDATA[true]]></condition></requiredRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_m_disposition" name="Disposition determined" definitionRef="m_disposition_def"/>
+      <planItem id="pi_m_closed" name="Unit returned to stock or condemned" definitionRef="m_closed_def"/>
+      <humanTask id="t_review_def" name="Review the test result and the physical condition" isBlocking="true"><documentation>Required. The certification says what it measured; the physical inspection says whether it is worth measuring again.</documentation></humanTask>
+      <humanTask id="t_parts_def" name="Establish parts and repair feasibility" isBlocking="true"><documentation>Discretionary. Often the answer on its own - an obsolete meter with no parts is condemned whatever its error was.</documentation></humanTask>
+      <humanTask id="t_economics_def" name="Weigh repair against replacement" isBlocking="true"><documentation>Discretionary. No source states a threshold; the operator's own economics decide and this reference does not supply a figure.</documentation></humanTask>
+      <humanTask id="t_repair_def" name="Perform or commission the approved repair" isBlocking="true"><documentation>Discretionary. Where it is done externally, 16.0 governs the contractor and the chain of custody continues to run.</documentation></humanTask>
+      <humanTask id="t_refurb_def" name="Refurbish for reuse" isBlocking="true"><documentation>Discretionary. Distinct from repair: the unit was serviceable and is being restored to a standard, not fixed.</documentation></humanTask>
+      <humanTask id="t_retest_def" name="Retest the repaired or refurbished meter" isBlocking="true"><documentation>Required whenever anything was done to it. Through 6.4.2 and 6.4.3 - a repaired meter has NO valid certification until it is retested, and issuing one on the strength of the repair puts an uncertified device on a customer's premise.</documentation></humanTask>
+      <humanTask id="t_condemn_def" name="Condemn the unit" isBlocking="true"><documentation>Discretionary as a choice, final as an outcome. The unit then goes to 19.3.1 for waste classification - a meter can be PCB-bearing or contain other regulated material and does not simply become scrap.</documentation></humanTask>
+      <humanTask id="t_record_def" name="Record return to stock or condemnation" isBlocking="true"><documentation>Required. 6.1.3 needs to know whether this unit is issuable again, and the record is the only thing that says so.</documentation></humanTask>
+      <milestone id="m_disposition_def" name="Disposition determined"><documentation>Repair, refurbish or condemn - with the reason.</documentation></milestone>
+      <milestone id="m_closed_def" name="Unit returned to stock or condemned"><documentation>And, if returned, carrying a fresh certification.</documentation></milestone>
+    </casePlanModel>
+  </case>
+  <cmmndi:CMMNDI>
+    <cmmndi:CMMNDiagram id="dg_Repair_refurbish_condemn">
+      <cmmndi:CMMNShape id="sh_plan" cmmnElementRef="Repair_refurbish_condemn_plan"><dc:Bounds x="40" y="40" width="1010" height="300"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_review" cmmnElementRef="pi_t_review"><dc:Bounds x="80" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_parts" cmmnElementRef="pi_t_parts"><dc:Bounds x="270" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_economics" cmmnElementRef="pi_t_economics"><dc:Bounds x="460" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_repair" cmmnElementRef="pi_t_repair"><dc:Bounds x="80" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_refurb" cmmnElementRef="pi_t_refurb"><dc:Bounds x="270" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_retest" cmmnElementRef="pi_t_retest"><dc:Bounds x="460" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_condemn" cmmnElementRef="pi_t_condemn"><dc:Bounds x="80" y="290" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_record" cmmnElementRef="pi_t_record"><dc:Bounds x="270" y="290" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_m_disposition" cmmnElementRef="pi_m_disposition"><dc:Bounds x="460" y="290" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_m_closed" cmmnElementRef="pi_m_closed"><dc:Bounds x="80" y="390" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+    </cmmndi:CMMNDiagram>
+  </cmmndi:CMMNDI>
+</definitions>

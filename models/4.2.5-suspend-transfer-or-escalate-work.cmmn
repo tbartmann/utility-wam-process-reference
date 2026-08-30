@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/CMMN/20151109/MODEL" xmlns:cmmndi="http://www.omg.org/spec/CMMN/20151109/CMMNDI" xmlns:dc="http://www.omg.org/spec/CMMN/20151109/DC" xmlns:di="http://www.omg.org/spec/CMMN/20151109/DI" id="defs_Suspend_transfer_escalate" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <case id="Suspend_transfer_escalate" name="4.2.5 Suspend, transfer or escalate work">
+    <caseFileModel id="Suspend_transfer_escalate_cfm">
+      <caseFileItem id="cf_reason" name="Why the work cannot continue"/>
+      <caseFileItem id="cf_site" name="Current site and asset condition"/>
+      <caseFileItem id="cf_scope" name="Scope completed and scope remaining"/>
+    </caseFileModel>
+    <casePlanModel id="Suspend_transfer_escalate_plan" name="4.2.5 Suspend, transfer or escalate work" autoComplete="true">
+      <documentation>Work stops for reasons that arrive without warning - a hidden condition, a material shortfall, weather, an injury, an operating change - and what happens next depends on which. Two competent supervisors sequence the same stoppage differently. That is the CMMN test.
+
+MAKING THE SITE AND ASSET SAFE IS REQUIRED AND COMES BEFORE THE ROUTE IS CHOSEN. Whether the work is suspended, transferred or escalated does not change the state the site is in, and deciding the administrative route while an excavation is open is the wrong order. This is the item that separates a stoppage from an abandonment.
+
+Recording the REMAINING scope, not the original, is what makes the work resumable. A suspended job whose record still describes the whole task sends the next crew to redo what was already done, or to assume it was.</documentation>
+      <planItem id="pi_t_reason" name="Identify why the work cannot continue" definitionRef="t_reason_def">
+        <itemControl id="ic_t_reason">
+          <requiredRule id="rr_t_reason"><condition><![CDATA[true]]></condition></requiredRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_safe" name="Make the site and asset safe" definitionRef="t_safe_def">
+        <itemControl id="ic_t_safe">
+          <requiredRule id="rr_t_safe"><condition><![CDATA[true]]></condition></requiredRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_route" name="Choose suspension, transfer or escalation" definitionRef="t_route_def">
+        <itemControl id="ic_t_route">
+          <requiredRule id="rr_t_route"><condition><![CDATA[true]]></condition></requiredRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_clearance" name="Hold, transfer or release the clearance" definitionRef="t_clearance_def">
+        <itemControl id="ic_t_clearance">
+          <requiredRule id="rr_t_clearance"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_clearance"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_incident" name="Raise an incident or near-miss" definitionRef="t_incident_def">
+        <itemControl id="ic_t_incident">
+          <requiredRule id="rr_t_incident"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_incident"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_materials" name="Raise the material or equipment shortfall" definitionRef="t_materials_def">
+        <itemControl id="ic_t_materials">
+          <requiredRule id="rr_t_materials"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_materials"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_scope" name="Record the remaining scope and current condition" definitionRef="t_scope_def">
+        <itemControl id="ic_t_scope">
+          <requiredRule id="rr_t_scope"><condition><![CDATA[true]]></condition></requiredRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_notify" name="Notify the receiving role" definitionRef="t_notify_def">
+        <itemControl id="ic_t_notify">
+          <requiredRule id="rr_t_notify"><condition><![CDATA[true]]></condition></requiredRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_m_safe" name="Site safe" definitionRef="m_safe_def"/>
+      <planItem id="pi_m_handed" name="Ownership transferred" definitionRef="m_handed_def"/>
+      <humanTask id="t_reason_def" name="Identify why the work cannot continue" isBlocking="true"><documentation>Required. Condition, materials, weather, safety, operating change or access - and each routes differently.</documentation></humanTask>
+      <humanTask id="t_safe_def" name="Make the site and asset safe" isBlocking="true"><documentation>Required, and before the route is chosen. Excavation, isolation, temporary restoration, exposed conductors - the state does not care which administrative route is picked.</documentation></humanTask>
+      <humanTask id="t_route_def" name="Choose suspension, transfer or escalation" isBlocking="true"><documentation>Required. Suspend keeps it with this crew, transfer moves it, escalate hands the decision up. Three different records.</documentation></humanTask>
+      <humanTask id="t_clearance_def" name="Hold, transfer or release the clearance" isBlocking="true"><documentation>Discretionary. 18.4.6 transfers, 18.5.2 releases. A suspended job that keeps a clearance overnight is a decision, and it should be one.</documentation></humanTask>
+      <humanTask id="t_incident_def" name="Raise an incident or near-miss" isBlocking="true"><documentation>Discretionary. Where the stoppage was caused by one, 4.4.3 owns the report and this case triggers it rather than absorbing it.</documentation></humanTask>
+      <humanTask id="t_materials_def" name="Raise the material or equipment shortfall" isBlocking="true"><documentation>Discretionary. To 13.0, and it is the commonest single cause of a suspension.</documentation></humanTask>
+      <humanTask id="t_scope_def" name="Record the remaining scope and current condition" isBlocking="true"><documentation>Required. Remaining, not original - otherwise the resumption repeats work or assumes it was done.</documentation></humanTask>
+      <humanTask id="t_notify_def" name="Notify the receiving role" isBlocking="true"><documentation>Required. Somebody owns it after the crew leaves, and the record has to say who.</documentation></humanTask>
+      <milestone id="m_safe_def" name="Site safe"><documentation>Whatever the administrative outcome.</documentation></milestone>
+      <milestone id="m_handed_def" name="Ownership transferred"><documentation>Suspended with an owner, transferred to a crew, or escalated to an authority.</documentation></milestone>
+    </casePlanModel>
+  </case>
+  <cmmndi:CMMNDI>
+    <cmmndi:CMMNDiagram id="dg_Suspend_transfer_escalate">
+      <cmmndi:CMMNShape id="sh_plan" cmmnElementRef="Suspend_transfer_escalate_plan"><dc:Bounds x="40" y="40" width="1010" height="300"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_reason" cmmnElementRef="pi_t_reason"><dc:Bounds x="80" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_safe" cmmnElementRef="pi_t_safe"><dc:Bounds x="270" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_route" cmmnElementRef="pi_t_route"><dc:Bounds x="460" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_clearance" cmmnElementRef="pi_t_clearance"><dc:Bounds x="80" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_incident" cmmnElementRef="pi_t_incident"><dc:Bounds x="270" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_materials" cmmnElementRef="pi_t_materials"><dc:Bounds x="460" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_scope" cmmnElementRef="pi_t_scope"><dc:Bounds x="80" y="290" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_notify" cmmnElementRef="pi_t_notify"><dc:Bounds x="270" y="290" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_m_safe" cmmnElementRef="pi_m_safe"><dc:Bounds x="460" y="290" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_m_handed" cmmnElementRef="pi_m_handed"><dc:Bounds x="80" y="390" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+    </cmmndi:CMMNDiagram>
+  </cmmndi:CMMNDI>
+</definitions>

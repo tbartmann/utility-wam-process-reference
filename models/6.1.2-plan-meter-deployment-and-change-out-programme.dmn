@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/" id="Meter_deployment_eligibility" name="6.1.2 Plan meter deployment and change-out programme" namespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <description>Returns whether a meter is ELIGIBLE for a change-out tranche and on what basis. A table because the output is an eligibility value; the work that follows is 1.4.3's campaign generation and 6.2.1's field act.
+
+NO SOURCE IN THIS REFERENCE STATES A METER LIFE, AN ACCURACY DRIFT CURVE OR A SAMPLE PLAN. Those come from State weights-and-measures rules, from tariff, and from the operator's own testing programme, and they vary by jurisdiction and by meter class. The table therefore returns the BASIS on which a meter qualifies - age, accuracy history, condition, communication failure or programme - and never the threshold itself.
+
+The row order encodes one real thing: a meter that has FAILED is not a candidate for a scheduled tranche, it is corrective work. Sweeping a known-failed device into a change-out programme delays it behind a population.</description>
+  <inputData id="in_failed" name="Meter has failed test, or communication is lost"><variable id="in_failed_v" name="Meter has failed test, or communication is lost" typeRef="boolean"/></inputData>
+  <inputData id="in_conditionDefect" name="A condition defect has been confirmed in the field"><variable id="in_conditionDefect_v" name="A condition defect has been confirmed in the field" typeRef="boolean"/></inputData>
+  <inputData id="in_basis" name="Programme basis the operator applies"><variable id="in_basis_v" name="Programme basis the operator applies" typeRef="string"/></inputData>
+  <inputData id="in_qualifies" name="Meets the operator's threshold for that basis"><variable id="in_qualifies_v" name="Meets the operator's threshold for that basis" typeRef="boolean"/></inputData>
+  <knowledgeSource id="ks_meterprog" name="State weights-and-measures rules and the operator's testing programme; APQC PCF Utilities 14.4.3 Manage and test meters"><description>No federal rule sets a meter life or an accuracy interval for distribution metering. The thresholds are the jurisdiction's and the operator's; this reference states none and the table returns the basis rather than the number.</description></knowledgeSource>
+  <decision id="d_6_1_2" name="Change-out eligibility">
+    <variable id="d_6_1_2_v" name="Change-out eligibility" typeRef="string"/>
+    <informationRequirement id="ir_d_6_1_2_ks_meterprog"><requiredInput href="#ks_meterprog"/></informationRequirement>
+    <decisionTable id="d_6_1_2_dt" hitPolicy="FIRST" preferredOrientation="Rule-as-Row">
+      <input id="d_6_1_2_i1" label="Failed or unreachable"><inputExpression id="d_6_1_2_i1_e" typeRef="boolean"><text>in_failed</text></inputExpression></input>
+      <input id="d_6_1_2_i2" label="Confirmed condition defect"><inputExpression id="d_6_1_2_i2_e" typeRef="boolean"><text>in_conditionDefect</text></inputExpression></input>
+      <input id="d_6_1_2_i3" label="Programme basis"><inputExpression id="d_6_1_2_i3_e" typeRef="string"><text>in_basis</text></inputExpression></input>
+      <input id="d_6_1_2_i4" label="Meets the threshold"><inputExpression id="d_6_1_2_i4_e" typeRef="boolean"><text>in_qualifies</text></inputExpression></input>
+      <output id="d_6_1_2_o" label="Change-out eligibility" name="Change-out eligibility" typeRef="string"/>
+      <rule id="d_6_1_2_r1">
+        <description>Failed test or lost communication. This is corrective work through 1.1, NOT a tranche candidate - putting it in a programme queues a known failure behind a population.</description>
+        <inputEntry id="d_6_1_2_r1_ie1"><text>true</text></inputEntry>
+        <inputEntry id="d_6_1_2_r1_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_6_1_2_r1_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_6_1_2_r1_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_6_1_2_r1_oe"><text>"correctiveNotProgramme"</text></outputEntry>
+      </rule>
+      <rule id="d_6_1_2_r2">
+        <description>A condition defect confirmed at 6.2.4. Targeted replacement, sequenced ahead of the scheduled population.</description>
+        <inputEntry id="d_6_1_2_r2_ie1"><text>false</text></inputEntry>
+        <inputEntry id="d_6_1_2_r2_ie2"><text>true</text></inputEntry>
+        <inputEntry id="d_6_1_2_r2_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_6_1_2_r2_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_6_1_2_r2_oe"><text>"targetedReplacement"</text></outputEntry>
+      </rule>
+      <rule id="d_6_1_2_r3">
+        <description>Initial population deployment - an AMI or AMR rollout, where eligibility is coverage rather than condition.</description>
+        <inputEntry id="d_6_1_2_r3_ie1"><text>false</text></inputEntry>
+        <inputEntry id="d_6_1_2_r3_ie2"><text>false</text></inputEntry>
+        <inputEntry id="d_6_1_2_r3_ie3"><text>"initialDeployment"</text></inputEntry>
+        <inputEntry id="d_6_1_2_r3_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_6_1_2_r3_oe"><text>"eligibleDeployment"</text></outputEntry>
+      </rule>
+      <rule id="d_6_1_2_r4">
+        <description>Meets the operator's age or accuracy threshold. The threshold itself is the operator's and is not stated here.</description>
+        <inputEntry id="d_6_1_2_r4_ie1"><text>false</text></inputEntry>
+        <inputEntry id="d_6_1_2_r4_ie2"><text>false</text></inputEntry>
+        <inputEntry id="d_6_1_2_r4_ie3"><text>"age","accuracy"</text></inputEntry>
+        <inputEntry id="d_6_1_2_r4_ie4"><text>true</text></inputEntry>
+        <outputEntry id="d_6_1_2_r4_oe"><text>"eligibleProgramme"</text></outputEntry>
+      </rule>
+      <rule id="d_6_1_2_r5">
+        <description>Below the threshold on the stated basis. Reassessed on the next cycle.</description>
+        <inputEntry id="d_6_1_2_r5_ie1"><text>false</text></inputEntry>
+        <inputEntry id="d_6_1_2_r5_ie2"><text>false</text></inputEntry>
+        <inputEntry id="d_6_1_2_r5_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_6_1_2_r5_ie4"><text>false</text></inputEntry>
+        <outputEntry id="d_6_1_2_r5_oe"><text>"notYetEligible"</text></outputEntry>
+      </rule>
+      <rule id="d_6_1_2_r6">
+        <description>Basis not established. A named exception rather than a default, because defaulting here builds a tranche nobody can justify to a regulator.</description>
+        <inputEntry id="d_6_1_2_r6_ie1"><text>-</text></inputEntry>
+        <inputEntry id="d_6_1_2_r6_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_6_1_2_r6_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_6_1_2_r6_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_6_1_2_r6_oe"><text>"determineManually"</text></outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram id="drd_Meter_deployment_eligibility">
+      <dmndi:DMNShape id="sh_in_failed" dmnElementRef="in_failed"><dc:Bounds x="60" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_conditionDefect" dmnElementRef="in_conditionDefect"><dc:Bounds x="245" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_basis" dmnElementRef="in_basis"><dc:Bounds x="430" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_qualifies" dmnElementRef="in_qualifies"><dc:Bounds x="615" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_d_6_1_2" dmnElementRef="d_6_1_2"><dc:Bounds x="60" y="240" width="180" height="70"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_ks_meterprog" dmnElementRef="ks_meterprog"><dc:Bounds x="900" y="100" width="160" height="55"/></dmndi:DMNShape>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</definitions>

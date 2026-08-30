@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_P_19_2" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <process id="P_19_2" name="19.2 Decommission and remove assets from service" isExecutable="false">
+    <documentation>19.2.1, 19.2.2, 19.2.3, 19.2.5 and 19.2.6 are drawn. 19.2.4 is a decision and has its own table.
+
+THIS IS NOT 18.5. The asset is not coming back, and 19.2.2 says so in its own activity list. An isolation for planned work ends in 18.5.3 reversing the switching; an isolation for decommissioning ends in a physical end-state that 18.5 has no route to. Same clearance from 18.4.4, opposite destination.
+
+The purge branch is commodity-split and the electric side is drawn as an absence rather than as an equivalent. 49 CFR 192.629 governs purging a pipeline; there is no federal purge rule for electric plant because there is nothing to purge. 192.727(b) also allows a small enough volume to be abandoned without purging, which is drawn as its own path rather than as a footnote.
+
+Neither end of this group edits a register. 19.2.5 hands disposition evidence to 12.1.6 and 19.2.6 hands as-left connectivity to 12.2.3. The asset register and the spatial model are 12.0's to change.</documentation>
+    <laneSet id="P_19_2_lanes">
+      <lane id="l_192_am" name="Asset management">
+        <flowNodeRef>n_192_start</flowNodeRef>
+        <flowNodeRef>n_192_conf</flowNodeRef>
+        <flowNodeRef>n_192_dec</flowNodeRef>
+        <flowNodeRef>n_192_rec</flowNodeRef>
+        <flowNodeRef>n_192_npms</flowNodeRef>
+        <flowNodeRef>n_192_file</flowNodeRef>
+        <flowNodeRef>n_192_hand</flowNodeRef>
+        <flowNodeRef>n_192_conn</flowNodeRef>
+        <flowNodeRef>n_192_pub</flowNodeRef>
+        <flowNodeRef>n_192_end</flowNodeRef>
+      </lane>
+      <lane id="l_192_ops" name="Network operations and field">
+        <flowNodeRef>n_192_req</flowNodeRef>
+        <flowNodeRef>n_192_clr</flowNodeRef>
+        <flowNodeRef>n_192_gw</flowNodeRef>
+        <flowNodeRef>n_192_pv</flowNodeRef>
+        <flowNodeRef>n_192_purge</flowNodeRef>
+        <flowNodeRef>n_192_elec</flowNodeRef>
+        <flowNodeRef>n_192_safe</flowNodeRef>
+      </lane>
+    </laneSet>
+    <startEvent id="n_192_start" name="A solution or a 17.3.5 clock requires removal"><messageEventDefinition id="n_192_start_md"/></startEvent>
+    <userTask id="n_192_conf" name="Confirm asset identity and the reason it is leaving"><documentation>19.2.1. Including the 17.3 classification, because 19.2.4 needs to know which rule applies before anything is cut.</documentation></userTask>
+    <sendTask id="n_192_req" name="Request isolation from 18.2"><documentation>19.2.2.</documentation></sendTask>
+    <receiveTask id="n_192_clr" name="Receive the clearance 18.4.4 issues"><documentation>19.2.2. Received, never issued.</documentation></receiveTask>
+    <exclusiveGateway id="n_192_gw" name="Commodity"/>
+    <exclusiveGateway id="n_192_pv" name="Purge required"><documentation>19.2.3. 192.727(b) does not require a purge where the volume is small enough.</documentation></exclusiveGateway>
+    <serviceTask id="n_192_purge" name="Purge under 49 CFR 192.629, then seal"><documentation>19.2.3, gas. The same 192.629 procedure as 18.4.3 and 8.6, on a different trigger.</documentation></serviceTask>
+    <serviceTask id="n_192_elec" name="Complete isolation under 1910.269(m)"><documentation>19.2.3, electric. No federal purge rule exists and none is implied.</documentation></serviceTask>
+    <userTask id="n_192_safe" name="Prove it is safe to cut or seal"><documentation>19.2.3.</documentation></userTask>
+    <businessRuleTask id="n_192_dec" name="Remove, abandon in place, or leave inactive (19.2.4)"><documentation>19.2.4. Returns the end-state AND the subdivision that authorised it.</documentation></businessRuleTask>
+    <serviceTask id="n_192_rec" name="Record what was removed, sealed, filled or left"><documentation>19.2.5. With residual risk where plant is abandoned in place.</documentation></serviceTask>
+    <exclusiveGateway id="n_192_npms" name="Waterway or offshore"/>
+    <sendTask id="n_192_file" name="File under 49 CFR 192.727(g)"><documentation>19.2.5.</documentation></sendTask>
+    <sendTask id="n_192_hand" name="Hand the evidence to 12.1.6"><documentation>19.2.5. Hand. 12.1.6 end-dates the register; this process does not.</documentation></sendTask>
+    <serviceTask id="n_192_conn" name="Record the as-left connectivity and isolation points"><documentation>19.2.6. Abandoned plant stays on the map, marked abandoned.</documentation></serviceTask>
+    <sendTask id="n_192_pub" name="Hand the as-left to 12.2.3 to publish"><documentation>19.2.6.</documentation></sendTask>
+    <endEvent id="n_192_end" name="Asset out of service, disposition recorded"/>
+    <sequenceFlow id="f_n_192_start_n_192_conf" sourceRef="n_192_start" targetRef="n_192_conf" name=""/>
+    <sequenceFlow id="f_n_192_conf_n_192_req" sourceRef="n_192_conf" targetRef="n_192_req" name=""/>
+    <sequenceFlow id="f_n_192_req_n_192_clr" sourceRef="n_192_req" targetRef="n_192_clr" name=""/>
+    <sequenceFlow id="f_n_192_clr_n_192_gw" sourceRef="n_192_clr" targetRef="n_192_gw" name=""/>
+    <sequenceFlow id="f_n_192_gw_n_192_pv" sourceRef="n_192_gw" targetRef="n_192_pv" name="gas"><conditionExpression xsi:type="tFormalExpression"><![CDATA[commodity = "gas"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_192_gw_n_192_elec" sourceRef="n_192_gw" targetRef="n_192_elec" name="electric"><conditionExpression xsi:type="tFormalExpression"><![CDATA[commodity = "electric"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_192_pv_n_192_purge" sourceRef="n_192_pv" targetRef="n_192_purge" name="purge required"/>
+    <sequenceFlow id="f_n_192_purge_n_192_safe" sourceRef="n_192_purge" targetRef="n_192_safe" name=""/>
+    <sequenceFlow id="f_n_192_pv_n_192_safe" sourceRef="n_192_pv" targetRef="n_192_safe" name="volume small enough, 192.727(b)"/>
+    <sequenceFlow id="f_n_192_elec_n_192_safe" sourceRef="n_192_elec" targetRef="n_192_safe" name=""/>
+    <sequenceFlow id="f_n_192_safe_n_192_dec" sourceRef="n_192_safe" targetRef="n_192_dec" name=""/>
+    <sequenceFlow id="f_n_192_dec_n_192_rec" sourceRef="n_192_dec" targetRef="n_192_rec" name=""/>
+    <sequenceFlow id="f_n_192_rec_n_192_npms" sourceRef="n_192_rec" targetRef="n_192_npms" name=""/>
+    <sequenceFlow id="f_n_192_npms_n_192_file" sourceRef="n_192_npms" targetRef="n_192_file" name="waterway or offshore"><conditionExpression xsi:type="tFormalExpression"><![CDATA[npmsFiling = true]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_192_file_n_192_hand" sourceRef="n_192_file" targetRef="n_192_hand" name=""/>
+    <sequenceFlow id="f_n_192_npms_n_192_hand" sourceRef="n_192_npms" targetRef="n_192_hand" name="neither"/>
+    <sequenceFlow id="f_n_192_hand_n_192_conn" sourceRef="n_192_hand" targetRef="n_192_conn" name=""/>
+    <sequenceFlow id="f_n_192_conn_n_192_pub" sourceRef="n_192_conn" targetRef="n_192_pub" name=""/>
+    <sequenceFlow id="f_n_192_pub_n_192_end" sourceRef="n_192_pub" targetRef="n_192_end" name=""/>
+  </process>
+  <bpmndi:BPMNDiagram id="dg_P_19_2">
+    <bpmndi:BPMNPlane id="pl_P_19_2" bpmnElement="P_19_2">
+      <bpmndi:BPMNShape id="sh_n_192_start" bpmnElement="n_192_start"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_192_conf" bpmnElement="n_192_conf"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_192_req" bpmnElement="n_192_req"><dc:Bounds x="425" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_192_clr" bpmnElement="n_192_clr"><dc:Bounds x="595" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_192_gw" bpmnElement="n_192_gw"><dc:Bounds x="807" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_192_pv" bpmnElement="n_192_pv"><dc:Bounds x="977" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_192_purge" bpmnElement="n_192_purge"><dc:Bounds x="935" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_192_elec" bpmnElement="n_192_elec"><dc:Bounds x="765" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_192_safe" bpmnElement="n_192_safe"><dc:Bounds x="1105" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_192_dec" bpmnElement="n_192_dec"><dc:Bounds x="1275" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_192_rec" bpmnElement="n_192_rec"><dc:Bounds x="1445" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_192_npms" bpmnElement="n_192_npms"><dc:Bounds x="1657" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_192_file" bpmnElement="n_192_file"><dc:Bounds x="1615" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_192_hand" bpmnElement="n_192_hand"><dc:Bounds x="1785" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_192_conn" bpmnElement="n_192_conn"><dc:Bounds x="1955" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_192_pub" bpmnElement="n_192_pub"><dc:Bounds x="2125" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_192_end" bpmnElement="n_192_end"><dc:Bounds x="2342" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ed_f_n_192_start_n_192_conf" bpmnElement="f_n_192_start_n_192_conf"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_192_conf_n_192_req" bpmnElement="f_n_192_conf_n_192_req"><di:waypoint x="385" y="235"/><di:waypoint x="425" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_192_req_n_192_clr" bpmnElement="f_n_192_req_n_192_clr"><di:waypoint x="555" y="235"/><di:waypoint x="595" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_192_clr_n_192_gw" bpmnElement="f_n_192_clr_n_192_gw"><di:waypoint x="725" y="235"/><di:waypoint x="807" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_192_gw_n_192_pv" bpmnElement="f_n_192_gw_n_192_pv"><di:waypoint x="853" y="235"/><di:waypoint x="977" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_192_gw_n_192_elec" bpmnElement="f_n_192_gw_n_192_elec"><di:waypoint x="853" y="235"/><di:waypoint x="740" y="235"/><di:waypoint x="740" y="675"/><di:waypoint x="765" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_192_pv_n_192_purge" bpmnElement="f_n_192_pv_n_192_purge"><di:waypoint x="1023" y="235"/><di:waypoint x="910" y="235"/><di:waypoint x="910" y="455"/><di:waypoint x="935" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_192_purge_n_192_safe" bpmnElement="f_n_192_purge_n_192_safe"><di:waypoint x="1065" y="455"/><di:waypoint x="1080" y="455"/><di:waypoint x="1080" y="235"/><di:waypoint x="1105" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_192_pv_n_192_safe" bpmnElement="f_n_192_pv_n_192_safe"><di:waypoint x="1023" y="235"/><di:waypoint x="1105" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_192_elec_n_192_safe" bpmnElement="f_n_192_elec_n_192_safe"><di:waypoint x="895" y="675"/><di:waypoint x="1080" y="675"/><di:waypoint x="1080" y="235"/><di:waypoint x="1105" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_192_safe_n_192_dec" bpmnElement="f_n_192_safe_n_192_dec"><di:waypoint x="1235" y="235"/><di:waypoint x="1275" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_192_dec_n_192_rec" bpmnElement="f_n_192_dec_n_192_rec"><di:waypoint x="1405" y="235"/><di:waypoint x="1445" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_192_rec_n_192_npms" bpmnElement="f_n_192_rec_n_192_npms"><di:waypoint x="1575" y="235"/><di:waypoint x="1657" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_192_npms_n_192_file" bpmnElement="f_n_192_npms_n_192_file"><di:waypoint x="1703" y="235"/><di:waypoint x="1590" y="235"/><di:waypoint x="1590" y="455"/><di:waypoint x="1615" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_192_file_n_192_hand" bpmnElement="f_n_192_file_n_192_hand"><di:waypoint x="1745" y="455"/><di:waypoint x="1760" y="455"/><di:waypoint x="1760" y="235"/><di:waypoint x="1785" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_192_npms_n_192_hand" bpmnElement="f_n_192_npms_n_192_hand"><di:waypoint x="1703" y="235"/><di:waypoint x="1785" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_192_hand_n_192_conn" bpmnElement="f_n_192_hand_n_192_conn"><di:waypoint x="1915" y="235"/><di:waypoint x="1955" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_192_conn_n_192_pub" bpmnElement="f_n_192_conn_n_192_pub"><di:waypoint x="2085" y="235"/><di:waypoint x="2125" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_192_pub_n_192_end" bpmnElement="f_n_192_pub_n_192_end"><di:waypoint x="2255" y="235"/><di:waypoint x="2342" y="235"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

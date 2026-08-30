@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/CMMN/20151109/MODEL" xmlns:cmmndi="http://www.omg.org/spec/CMMN/20151109/CMMNDI" xmlns:dc="http://www.omg.org/spec/CMMN/20151109/DC" xmlns:di="http://www.omg.org/spec/CMMN/20151109/DI" id="defs_Monitor_progress" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <case id="Monitor_progress" name="4.1.4 Monitor progress and exception">
+    <caseFileModel id="Monitor_progress_cfm">
+      <caseFileItem id="cf_work" name="The active work, its commitment and its elapsed time"/>
+      <caseFileItem id="cf_envelope" name="Safety envelope: clearance window, timer, permit deadline"/>
+      <caseFileItem id="cf_status" name="Field status, last contact and reported condition"/>
+    </caseFileModel>
+    <casePlanModel id="Monitor_progress_plan" name="4.1.4 Monitor progress and exception" autoComplete="true">
+      <documentation>An exception on active field work is investigated in an order that depends on which exception it turns out to be, and two competent dispatchers will not take the same one first. That is the CMMN test.
+
+What does not vary is the frame: progress is compared against BOTH the commitment AND the safety envelope, and they fail differently. A job running late against a customer appointment is a service problem. The same job running late against a clearance window, a lone-worker timer or a permit deadline is a safety or compliance problem, and the response is not negotiable in the same way.
+
+The intervention record is required rather than discretionary. A dispatcher who watched a job overrun and decided it was acceptable made a decision; if it is not recorded, the next reviewer sees only the overrun. Camunda 8 dropped CMMN, so a runtime for this file means Flowable or an equivalent.</documentation>
+      <planItem id="pi_t_compare" name="Compare progress with the commitment and the safety envelope" definitionRef="t_compare_def">
+        <itemControl id="ic_t_compare">
+          <requiredRule id="rr_t_compare"><condition><![CDATA[true]]></condition></requiredRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_classify" name="Classify the exception" definitionRef="t_classify_def">
+        <itemControl id="ic_t_classify">
+          <requiredRule id="rr_t_classify"><condition><![CDATA[true]]></condition></requiredRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_contact" name="Contact the crew" definitionRef="t_contact_def">
+        <itemControl id="ic_t_contact">
+          <requiredRule id="rr_t_contact"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_contact"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_reprioritise" name="Re-sequence the rest of the day" definitionRef="t_reprioritise_def">
+        <itemControl id="ic_t_reprioritise">
+          <requiredRule id="rr_t_reprioritise"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_reprioritise"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_support" name="Send support, materials or a second crew" definitionRef="t_support_def">
+        <itemControl id="ic_t_support">
+          <requiredRule id="rr_t_support"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_support"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_escalate" name="Escalate to the responsible authority" definitionRef="t_escalate_def">
+        <itemControl id="ic_t_escalate">
+          <requiredRule id="rr_t_escalate"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_escalate"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_recall" name="Hand to 4.1.5 for reassign, recall or cancel" definitionRef="t_recall_def">
+        <itemControl id="ic_t_recall">
+          <requiredRule id="rr_t_recall"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_recall"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_record" name="Retain the intervention record" definitionRef="t_record_def">
+        <itemControl id="ic_t_record">
+          <requiredRule id="rr_t_record"><condition><![CDATA[true]]></condition></requiredRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_m_classified" name="Exception classified" definitionRef="m_classified_def"/>
+      <planItem id="pi_m_resolved" name="Work back inside the envelope, or handed on" definitionRef="m_resolved_def"/>
+      <humanTask id="t_compare_def" name="Compare progress with the commitment and the safety envelope" isBlocking="true"><documentation>Required. Both, because they fail differently - one costs a customer, the other breaches a clearance or a permit.</documentation></humanTask>
+      <humanTask id="t_classify_def" name="Classify the exception" isBlocking="true"><documentation>Required. Late, blocked, unreachable, unsafe or scope-changed. Everything after this depends on which, and it is the step most often skipped in favour of just calling the crew.</documentation></humanTask>
+      <humanTask id="t_contact_def" name="Contact the crew" isBlocking="true"><documentation>Discretionary. The obvious first move and sometimes the wrong one - an unreachable crew on a lone-worker timer is 4.4.2's escalation, not a chase.</documentation></humanTask>
+      <humanTask id="t_reprioritise_def" name="Re-sequence the rest of the day" isBlocking="true"><documentation>Discretionary. Where the exception is time rather than safety.</documentation></humanTask>
+      <humanTask id="t_support_def" name="Send support, materials or a second crew" isBlocking="true"><documentation>Discretionary. Often cheaper than the recall it prevents.</documentation></humanTask>
+      <humanTask id="t_escalate_def" name="Escalate to the responsible authority" isBlocking="true"><documentation>Discretionary in choice, not in timing, where the envelope is a clearance window - 18.4.6 extends or transfers a clearance and it cannot be done after it lapses.</documentation></humanTask>
+      <humanTask id="t_recall_def" name="Hand to 4.1.5 for reassign, recall or cancel" isBlocking="true"><documentation>Discretionary. A separate case because the decision to pull a crew off has its own evidence and its own notifications.</documentation></humanTask>
+      <humanTask id="t_record_def" name="Retain the intervention record" isBlocking="true"><documentation>Required, including where the intervention was to do nothing. An unrecorded judgement is indistinguishable from inattention afterwards.</documentation></humanTask>
+      <milestone id="m_classified_def" name="Exception classified"><documentation>Time, safety, access or scope - and recorded as which.</documentation></milestone>
+      <milestone id="m_resolved_def" name="Work back inside the envelope, or handed on"><documentation>To 4.1.5, to 4.2.5, or to the authority that owns the envelope.</documentation></milestone>
+    </casePlanModel>
+  </case>
+  <cmmndi:CMMNDI>
+    <cmmndi:CMMNDiagram id="dg_Monitor_progress">
+      <cmmndi:CMMNShape id="sh_plan" cmmnElementRef="Monitor_progress_plan"><dc:Bounds x="40" y="40" width="1010" height="300"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_compare" cmmnElementRef="pi_t_compare"><dc:Bounds x="80" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_classify" cmmnElementRef="pi_t_classify"><dc:Bounds x="270" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_contact" cmmnElementRef="pi_t_contact"><dc:Bounds x="460" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_reprioritise" cmmnElementRef="pi_t_reprioritise"><dc:Bounds x="80" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_support" cmmnElementRef="pi_t_support"><dc:Bounds x="270" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_escalate" cmmnElementRef="pi_t_escalate"><dc:Bounds x="460" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_recall" cmmnElementRef="pi_t_recall"><dc:Bounds x="80" y="290" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_record" cmmnElementRef="pi_t_record"><dc:Bounds x="270" y="290" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_m_classified" cmmnElementRef="pi_m_classified"><dc:Bounds x="460" y="290" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_m_resolved" cmmnElementRef="pi_m_resolved"><dc:Bounds x="80" y="390" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+    </cmmndi:CMMNDiagram>
+  </cmmndi:CMMNDI>
+</definitions>

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/CMMN/20151109/MODEL" xmlns:cmmndi="http://www.omg.org/spec/CMMN/20151109/CMMNDI" xmlns:dc="http://www.omg.org/spec/CMMN/20151109/DC" xmlns:di="http://www.omg.org/spec/CMMN/20151109/DI" id="defs_Measurement_anomaly" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <case id="Measurement_anomaly" name="6.5.4 Investigate measurement anomalies">
+    <caseFileModel id="Measurement_anomaly_cfm">
+      <caseFileItem id="cf_anomaly" name="The anomaly, the read and its history"/>
+      <caseFileItem id="cf_device" name="Meter, register and communication path evidence"/>
+      <caseFileItem id="cf_premise" name="Premise, account and known changes of use"/>
+    </caseFileModel>
+    <casePlanModel id="Measurement_anomaly_plan" name="6.5.4 Investigate measurement anomalies" autoComplete="true">
+      <documentation>A consumption that does not fit its context has four common causes - the meter, the communication path, the customer's actual usage, and interference - and they present identically. The order in which an analyst tests them depends on what history is available. That is the CMMN test.
+
+THE CASE MUST BE ABLE TO END IN 'NOTHING IS WRONG'. A premise that became vacant, a seasonal change, a new appliance or a genuine change of use all produce exactly the anomaly signature this case opens on, and closing with no fault found is a correct outcome that should be recorded as one - otherwise the same premise is investigated every quarter.
+
+Where interference is suspected the case STOPS and hands to 6.6.1. It does not investigate theft itself, because the evidence handling is different: 6.6.2 is a controlled investigation with a chain of custody, and an analyst who has already corrected the data has disturbed it.</documentation>
+      <planItem id="pi_t_history" name="Review the anomaly against available history" definitionRef="t_history_def">
+        <itemControl id="ic_t_history">
+          <requiredRule id="rr_t_history"><condition><![CDATA[true]]></condition></requiredRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_device" name="Check device and register evidence" definitionRef="t_device_def">
+        <itemControl id="ic_t_device">
+          <requiredRule id="rr_t_device"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_device"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_comms" name="Check the communication path" definitionRef="t_comms_def">
+        <itemControl id="ic_t_comms">
+          <requiredRule id="rr_t_comms"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_comms"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_premise" name="Check premise and account context" definitionRef="t_premise_def">
+        <itemControl id="ic_t_premise">
+          <requiredRule id="rr_t_premise"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_premise"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_field" name="Raise field evidence work" definitionRef="t_field_def">
+        <itemControl id="ic_t_field">
+          <requiredRule id="rr_t_field"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_field"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_tamper" name="Hand to 6.6.1 where interference is suspected" definitionRef="t_tamper_def">
+        <itemControl id="ic_t_tamper">
+          <requiredRule id="rr_t_tamper"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_tamper"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_correct" name="Correct the data where authorised" definitionRef="t_correct_def">
+        <itemControl id="ic_t_correct">
+          <requiredRule id="rr_t_correct"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_correct"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_classify" name="Classify the cause and close" definitionRef="t_classify_def">
+        <itemControl id="ic_t_classify">
+          <requiredRule id="rr_t_classify"><condition><![CDATA[true]]></condition></requiredRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_m_cause" name="Cause classified" definitionRef="m_cause_def"/>
+      <planItem id="pi_m_settled" name="Data settled" definitionRef="m_settled_def"/>
+      <humanTask id="t_history_def" name="Review the anomaly against available history" isBlocking="true"><documentation>Required. Most anomalies resolve here, and the ones that do not are the ones worth a field visit.</documentation></humanTask>
+      <humanTask id="t_device_def" name="Check device and register evidence" isBlocking="true"><documentation>Discretionary. A failing register produces a plausible-looking drift that history alone will not separate from a change of use.</documentation></humanTask>
+      <humanTask id="t_comms_def" name="Check the communication path" isBlocking="true"><documentation>Discretionary. A path fault produces missing intervals that can look like reduced consumption - and 6.3.4's acceptance record says whether the path ever worked.</documentation></humanTask>
+      <humanTask id="t_premise_def" name="Check premise and account context" isBlocking="true"><documentation>Discretionary. Vacancy, seasonality, a new appliance, a change of use - 10.1 and 10.5 hold what changed.</documentation></humanTask>
+      <humanTask id="t_field_def" name="Raise field evidence work" isBlocking="true"><documentation>Discretionary. Through 6.2.4 where the question can only be answered at the meter.</documentation></humanTask>
+      <humanTask id="t_tamper_def" name="Hand to 6.6.1 where interference is suspected" isBlocking="true"><documentation>Discretionary in principle, decisive in effect: this case STOPS at that point. 6.6.2 runs a controlled investigation with a chain of custody, and an analyst who has already corrected the data has disturbed the evidence.</documentation></humanTask>
+      <humanTask id="t_correct_def" name="Correct the data where authorised" isBlocking="true"><documentation>Discretionary, and never where a tamper referral has been made.</documentation></humanTask>
+      <humanTask id="t_classify_def" name="Classify the cause and close" isBlocking="true"><documentation>Required, INCLUDING no fault found. An unclosed anomaly is investigated again next quarter on the same premise.</documentation></humanTask>
+      <milestone id="m_cause_def" name="Cause classified"><documentation>Device, communication, genuine consumption, or referred as suspected interference.</documentation></milestone>
+      <milestone id="m_settled_def" name="Data settled"><documentation>Corrected, estimated, accepted as genuine, or held pending 6.6.2.</documentation></milestone>
+    </casePlanModel>
+  </case>
+  <cmmndi:CMMNDI>
+    <cmmndi:CMMNDiagram id="dg_Measurement_anomaly">
+      <cmmndi:CMMNShape id="sh_plan" cmmnElementRef="Measurement_anomaly_plan"><dc:Bounds x="40" y="40" width="1010" height="300"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_history" cmmnElementRef="pi_t_history"><dc:Bounds x="80" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_device" cmmnElementRef="pi_t_device"><dc:Bounds x="270" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_comms" cmmnElementRef="pi_t_comms"><dc:Bounds x="460" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_premise" cmmnElementRef="pi_t_premise"><dc:Bounds x="80" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_field" cmmnElementRef="pi_t_field"><dc:Bounds x="270" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_tamper" cmmnElementRef="pi_t_tamper"><dc:Bounds x="460" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_correct" cmmnElementRef="pi_t_correct"><dc:Bounds x="80" y="290" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_classify" cmmnElementRef="pi_t_classify"><dc:Bounds x="270" y="290" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_m_cause" cmmnElementRef="pi_m_cause"><dc:Bounds x="460" y="290" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_m_settled" cmmnElementRef="pi_m_settled"><dc:Bounds x="80" y="390" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+    </cmmndi:CMMNDiagram>
+  </cmmndi:CMMNDI>
+</definitions>

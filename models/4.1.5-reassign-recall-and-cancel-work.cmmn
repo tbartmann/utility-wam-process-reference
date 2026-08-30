@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/CMMN/20151109/MODEL" xmlns:cmmndi="http://www.omg.org/spec/CMMN/20151109/CMMNDI" xmlns:dc="http://www.omg.org/spec/CMMN/20151109/DC" xmlns:di="http://www.omg.org/spec/CMMN/20151109/DI" id="defs_Reassign_recall_cancel" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <case id="Reassign_recall_cancel" name="4.1.5 Reassign, recall and cancel work">
+    <caseFileModel id="Reassign_recall_cancel_cfm">
+      <caseFileItem id="cf_reason" name="The authorised change or operational need"/>
+      <caseFileItem id="cf_progress" name="How far the work has got and what is open on site"/>
+      <caseFileItem id="cf_resources" name="Current and candidate replacement resources"/>
+    </caseFileModel>
+    <casePlanModel id="Reassign_recall_cancel_plan" name="4.1.5 Reassign, recall and cancel work" autoComplete="true">
+      <documentation>Reassigning, recalling and cancelling look like one decision and are three, with different consequences and different notification sets. Which is right depends on how far the work has got, and two competent dispatchers will weigh a half-completed job differently. That is the CMMN test.
+
+THE STATE THE WORK IS LEFT IN IS THE REQUIRED ITEM, not the reassignment. A crew recalled from an open excavation, a partially isolated section, or a site with temporary restoration in place leaves a hazard behind that outlives the work order. 4.2.5 handles the make-safe when the crew itself suspends; when the recall comes from the office, this case has to ask the same question and get an answer before the crew moves.
+
+Unresolved risk is recorded even when it is accepted. That is what lets the next dispatcher see that a site was left mid-job rather than finished. Camunda 8 dropped CMMN, so a runtime for this file means Flowable or an equivalent.</documentation>
+      <planItem id="pi_t_progress" name="Establish what is open on site" definitionRef="t_progress_def">
+        <itemControl id="ic_t_progress">
+          <requiredRule id="rr_t_progress"><condition><![CDATA[true]]></condition></requiredRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_choose" name="Choose reassign, recall or cancel" definitionRef="t_choose_def">
+        <itemControl id="ic_t_choose">
+          <requiredRule id="rr_t_choose"><condition><![CDATA[true]]></condition></requiredRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_safe" name="Make the site and asset safe before the crew leaves" definitionRef="t_safe_def">
+        <itemControl id="ic_t_safe">
+          <requiredRule id="rr_t_safe"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_safe"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_clearance" name="Release or transfer any held clearance" definitionRef="t_clearance_def">
+        <itemControl id="ic_t_clearance">
+          <requiredRule id="rr_t_clearance"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_clearance"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_replace" name="Notify the replacement resource" definitionRef="t_replace_def">
+        <itemControl id="ic_t_replace">
+          <requiredRule id="rr_t_replace"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_replace"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_notify" name="Notify the current resource and affected parties" definitionRef="t_notify_def">
+        <itemControl id="ic_t_notify">
+          <requiredRule id="rr_t_notify"><condition><![CDATA[true]]></condition></requiredRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_state" name="Update the work and schedule state" definitionRef="t_state_def">
+        <itemControl id="ic_t_state">
+          <requiredRule id="rr_t_state"><condition><![CDATA[true]]></condition></requiredRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_risk" name="Record unresolved risk" definitionRef="t_risk_def">
+        <itemControl id="ic_t_risk">
+          <requiredRule id="rr_t_risk"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_risk"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_m_decided" name="Route chosen" definitionRef="m_decided_def"/>
+      <planItem id="pi_m_safe" name="Site left in a known state" definitionRef="m_safe_def"/>
+      <humanTask id="t_progress_def" name="Establish what is open on site" isBlocking="true"><documentation>Required, and first. Excavation, isolation, temporary restoration and any held clearance - the things that do not stop existing when the crew leaves.</documentation></humanTask>
+      <humanTask id="t_choose_def" name="Choose reassign, recall or cancel" isBlocking="true"><documentation>Required. Three different acts: reassign moves it, recall stops it and keeps it, cancel ends it. They notify different people and leave different records.</documentation></humanTask>
+      <humanTask id="t_safe_def" name="Make the site and asset safe before the crew leaves" isBlocking="true"><documentation>Discretionary only where nothing is open. Where anything is, this is the item the case cannot close without.</documentation></humanTask>
+      <humanTask id="t_clearance_def" name="Release or transfer any held clearance" isBlocking="true"><documentation>Discretionary. Through 18.5.2 or 18.4.6 - a recalled crew that keeps a clearance blocks the section for everyone else.</documentation></humanTask>
+      <humanTask id="t_replace_def" name="Notify the replacement resource" isBlocking="true"><documentation>Discretionary. Only on reassign, and the replacement gets the remaining scope rather than the original.</documentation></humanTask>
+      <humanTask id="t_notify_def" name="Notify the current resource and affected parties" isBlocking="true"><documentation>Required. Including the customer where an appointment was made - 10.3 owns the contact, this case triggers it.</documentation></humanTask>
+      <humanTask id="t_state_def" name="Update the work and schedule state" isBlocking="true"><documentation>Required. Remaining scope, current condition, and the reason - so the work is resumable rather than merely stopped.</documentation></humanTask>
+      <humanTask id="t_risk_def" name="Record unresolved risk" isBlocking="true"><documentation>Discretionary in form, not in fact. Accepted risk is still recorded, and it is what tells the next crew the site was left mid-job.</documentation></humanTask>
+      <milestone id="m_decided_def" name="Route chosen"><documentation>Reassign, recall or cancel.</documentation></milestone>
+      <milestone id="m_safe_def" name="Site left in a known state"><documentation>Nothing open, or everything open recorded.</documentation></milestone>
+    </casePlanModel>
+  </case>
+  <cmmndi:CMMNDI>
+    <cmmndi:CMMNDiagram id="dg_Reassign_recall_cancel">
+      <cmmndi:CMMNShape id="sh_plan" cmmnElementRef="Reassign_recall_cancel_plan"><dc:Bounds x="40" y="40" width="1010" height="300"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_progress" cmmnElementRef="pi_t_progress"><dc:Bounds x="80" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_choose" cmmnElementRef="pi_t_choose"><dc:Bounds x="270" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_safe" cmmnElementRef="pi_t_safe"><dc:Bounds x="460" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_clearance" cmmnElementRef="pi_t_clearance"><dc:Bounds x="80" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_replace" cmmnElementRef="pi_t_replace"><dc:Bounds x="270" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_notify" cmmnElementRef="pi_t_notify"><dc:Bounds x="460" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_state" cmmnElementRef="pi_t_state"><dc:Bounds x="80" y="290" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_risk" cmmnElementRef="pi_t_risk"><dc:Bounds x="270" y="290" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_m_decided" cmmnElementRef="pi_m_decided"><dc:Bounds x="460" y="290" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_m_safe" cmmnElementRef="pi_m_safe"><dc:Bounds x="80" y="390" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+    </cmmndi:CMMNDiagram>
+  </cmmndi:CMMNDI>
+</definitions>

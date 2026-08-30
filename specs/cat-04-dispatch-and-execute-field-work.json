@@ -1,0 +1,5749 @@
+{
+ "category": {
+  "uid": 10084,
+  "id": "4.0",
+  "name": "Dispatch and Execute Field Work",
+  "band": "Work Lifecycle"
+ },
+ "platform": "ChatGPT",
+ "model": "GPT-5",
+ "round": 1,
+ "date": "2026-08-29",
+ "merge_corrections": [
+  {
+   "date": "2026-08-30",
+   "by": "Claude",
+   "what": "NO CORRECTION NEEDED. Zero errors and zero warnings. The rework replaced the seven repeated control texts with sixty-four unique ones, one per process, and narrowed the repeated OSHA citation to the subsection that constrains each process rather than the section as a whole. Both were the rejection grounds and both are fixed.",
+   "accepted_from_submitter": [
+    "Sixty-four controls, every one unique across thirty-two processes - from a file that previously carried seven texts for the whole category.",
+    "29 CFR 1910.269 cited at the subsection that bites rather than at the section: (c) job briefing where the process is a briefing, (l) minimum approach distance where it is proximity, (a)(3) host and contract employer information transfer where a contractor is on site.",
+    "18.4.4 named as the issuer of a clearance rather than 4.0 claiming to issue one - the cross-category boundary held without being restated in the brief.",
+    "MUTCD cited for work-zone traffic control, which is the correct authority and is public law."
+   ],
+   "models_built_here": "Twelve artifacts, 6 BPMN, 3 DMN and 3 CMMN. The specification names them; only this side has the generator.",
+   "open_finding_notation_why": "OPEN FINDING, ADDED AFTER THE MERGE NOTE ABOVE WAS WRITTEN. That note said no correction was needed, and on the two rejection grounds it was right. Building the behaviour models surfaced a third instance of the same defect family: notation.why - the rationale for why a process is drawn in a given notation - is one text on 24 of the 32 processes. It states the notation RULE ('the process has a repeatable start, ordered activities and a defined completion outcome') rather than which repeatable start THIS process has. Nothing in it is false; it is the BPMN test, correctly applied. But fifteen of the seventeen merged categories carry a distinct rationale on every process and none shares one on more than two. Recorded rather than fixed, and now a WARNING in validate_spec.py - the third check of this shape after control reuse and judgment-citation reuse. The pattern across all three is the same: a category-level truth put where a process-level one belongs, in a file that passed every other check because the field was populated."
+  }
+ ],
+ "derivation": "STANDARDS-DERIVED. IEC 61968 defines exchanged work information, OSHA constrains field execution, and EN 17007 provides the process spine. Unsourced field-service detail is labelled judgment.",
+ "field_set": "EN 17007:2017 cl. 5.2 maintenance process profile, corroborated by ISO 9001 cl. 4.4.1 a) to h).",
+ "gaps": [
+  "Field service management, mobile workforce management and service dispatch are not standards domains. Detailed assignment, dispatch, execution and exception sequences are judgment.",
+  "Offline operation, synchronisation conflict resolution, electronic forms, field evidence capture and field-device provisioning are vendor-defined.",
+  "No standard specifies complete work-package content. Field review can confirm required local content but cannot claim a universal package definition.",
+  "Lone-worker timers and escalation intervals have no permitted cross-commodity standard in the Source Authority Pack.",
+  "IEC 61968-3 establishes network-operations interface scope but the pack supplies no detailed method for verifying control-room points after a field change.",
+  "Temporary and permanent restoration methods, permit deadlines and jurisdiction acceptance vary by issuing authority; MUTCD governs traffic control, not the restoration permit.",
+  "The APQC crosswalk says pcf_id 19225 Monitor work performance in flight has no model group, but 4.1.4 Monitor progress and exception appears to cover that function. The crosswalk and taxonomy need reconciliation.",
+  "A clearance is produced by 18.4.4 against a switching plan approved at 18.2.2 under 29 CFR 1910.269(m). Process 4.4.4 validates and consumes it; it does not issue it."
+ ],
+ "processes": [
+  {
+   "uid": 10086,
+   "id": "4.1.1",
+   "name": "Assign work to crew or individual",
+   "group": {
+    "id": "4.1",
+    "name": "Assign and dispatch work",
+    "uid": 10085
+   },
+   "intent": "Select a qualified available resource for ready work without breaking its priority or safety constraints.",
+   "activities": [
+    "Confirm the work is ready for assignment",
+    "Match required skills and authority to available resources",
+    "Check location, schedule and operating constraints",
+    "Record the assignment and notify affected roles"
+   ],
+   "trigger": {
+    "kind": "message",
+    "text": "Ready work enters the dispatch horizon.",
+    "cim": "WorkRequest.change"
+   },
+   "inputs": [
+    {
+     "what": "Authorised work, scope and current status",
+     "party": "MAI",
+     "data": "Work"
+    },
+    {
+     "what": "Asset, location and prior field record",
+     "party": "GINV",
+     "data": "WorkLocation"
+    },
+    {
+     "what": "Assigned resource and operating constraints",
+     "party": "SCHD",
+     "data": "Crew"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Recorded crew or individual assignment",
+     "party": "SCHD",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Ready assignment for dispatch",
+     "party": "MAI",
+     "data": "Work"
+    }
+   ],
+   "systems": [
+    {
+     "component": "SCHD",
+     "role": "owning",
+     "service": "Dispatch and active-work control"
+    },
+    {
+     "component": "FRD",
+     "role": "receiving",
+     "service": "Field work status"
+    },
+    {
+     "component": "MAI",
+     "role": "reference",
+     "service": "Authorised work"
+    },
+    {
+     "component": "HR",
+     "role": "reference",
+     "service": "Qualification and availability"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "MAI",
+     "to": "FRD",
+     "payload": "WorkRequest",
+     "verb": "change",
+     "pattern": "event"
+    },
+    {
+     "from": "FRD",
+     "to": "MAI",
+     "payload": "MaintenanceOrder",
+     "verb": "reply",
+     "pattern": "request-reply"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Dispatcher",
+     "raci": "R"
+    },
+    {
+     "role": "Field operations manager",
+     "raci": "A"
+    },
+    {
+     "role": "Field supervisor",
+     "raci": "C"
+    },
+    {
+     "role": "Workforce coordinator",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkTask",
+    "WorkActivityRecord",
+    "WorkLocation"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "Assign only work that is ready and whose qualification, authority, location and operating constraints match the selected resource."
+    },
+    {
+     "kind": "operational",
+     "text": "Preserve the work priority and record the selected crew or individual before dispatch."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Assignment schedule compliance",
+     "definition": "Apply SMRP 5.4.4 to ready assignments released against the approved schedule; formula not reproduced.",
+     "cite": "SMRP Best Practices 7th Edition, metric 5.4.4"
+    }
+   ],
+   "variants": [
+    "Assignment to a named crew",
+    "Assignment to one qualified individual",
+    "No eligible resource - return for schedule action"
+   ],
+   "notation": {
+    "class": "DMN",
+    "why": "The output is an assignment, classification or eligibility value.",
+    "artifact": "models/4.1.1-assign-work-to-crew-or-individual.dmn"
+   },
+   "en17007": {
+    "process": "ACT.4",
+    "title": "Schedule the tasks",
+    "clause": "6.5.5"
+   },
+   "sources": [
+    {
+     "for": "process alignment",
+     "cite": "EN 17007:2017 Maintenance process and associated indicators, ACT.4 Schedule the tasks, cl. 6.5.5",
+     "status": "verified"
+    },
+    {
+     "for": "components, messages and work data",
+     "cite": "IEC 61968-6:2015 cl. 4.2 and cl. 5; IEC 61968-11:2013 CIM Work package",
+     "status": "clause-verified"
+    },
+    {
+     "for": "taxonomy coverage",
+     "cite": "APQC PCF Utilities v7.2.1 10.2.4, 10.2.5, 10.3.2 and 10.3.3, used as structural precedent for construction and maintenance execution",
+     "status": "consensus"
+    },
+    {
+     "for": "measure",
+     "cite": "SMRP Best Practices 7th Edition, metric 5.4.4",
+     "status": "consensus"
+    },
+    {
+     "for": "activities and variants",
+     "cite": "No permitted source defines the rule for matching ready work to a qualified available field resource.",
+     "status": "judgment"
+    },
+    {
+     "for": "electric qualification constraint",
+     "cite": "29 CFR 1910.269(a)(2) qualified employee",
+     "status": "regulation"
+    }
+   ],
+   "provenance": {
+    "basis": "judgment",
+    "primary": "29 CFR 1910.269 and IEC 61968-6:2015"
+   }
+  },
+  {
+   "uid": 10087,
+   "id": "4.1.2",
+   "name": "Dispatch work to the field",
+   "group": {
+    "id": "4.1",
+    "name": "Assign and dispatch work",
+    "uid": 10085
+   },
+   "intent": "Deliver authorised work and current constraints to the assigned field resource.",
+   "activities": [
+    "Confirm the assignment remains valid",
+    "Assemble the current work information and constraints",
+    "Transmit the dispatch message",
+    "Record delivery or communication failure"
+   ],
+   "trigger": {
+    "kind": "message",
+    "text": "Assigned work reaches its release time.",
+    "cim": "WorkRequest.change"
+   },
+   "inputs": [
+    {
+     "what": "Authorised work, scope and current status",
+     "party": "MAI",
+     "data": "Work"
+    },
+    {
+     "what": "Asset, location and prior field record",
+     "party": "GINV",
+     "data": "WorkLocation"
+    },
+    {
+     "what": "Assigned resource and operating constraints",
+     "party": "SCHD",
+     "data": "Crew"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Dispatched work with delivery status",
+     "party": "SCHD",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Dispatch communication exception requiring action",
+     "party": "MAI",
+     "data": "Work"
+    }
+   ],
+   "systems": [
+    {
+     "component": "SCHD",
+     "role": "owning",
+     "service": "Dispatch and active-work control"
+    },
+    {
+     "component": "FRD",
+     "role": "receiving",
+     "service": "Field work status"
+    },
+    {
+     "component": "MAI",
+     "role": "reference",
+     "service": "Authorised work"
+    },
+    {
+     "component": "HR",
+     "role": "reference",
+     "service": "Qualification and availability"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "MAI",
+     "to": "FRD",
+     "payload": "WorkRequest",
+     "verb": "change",
+     "pattern": "event"
+    },
+    {
+     "from": "FRD",
+     "to": "MAI",
+     "payload": "MaintenanceOrder",
+     "verb": "reply",
+     "pattern": "request-reply"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Dispatcher",
+     "raci": "R"
+    },
+    {
+     "role": "Field supervisor",
+     "raci": "A"
+    },
+    {
+     "role": "Assigned crew",
+     "raci": "I"
+    },
+    {
+     "role": "Network operator",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkTask",
+    "WorkActivityRecord",
+    "WorkLocation"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "Dispatch only the current authorised scope, asset and location information with all active constraints."
+    },
+    {
+     "kind": "operational",
+     "text": "A failed or unacknowledged transmission remains a dispatch exception and does not start field work."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Dispatch delivery compliance",
+     "definition": "Apply SMRP 5.4.4 to dispatched work delivered against the approved schedule; formula not reproduced.",
+     "cite": "SMRP Best Practices 7th Edition, metric 5.4.4"
+    }
+   ],
+   "variants": [
+    "Routine scheduled dispatch",
+    "Priority dispatch inserted into the active day",
+    "Dispatch held because a prerequisite changed"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "The process has a repeatable start, ordered activities and a defined completion outcome.",
+    "artifact": "models/4.1-dispatch-and-assign.bpmn"
+   },
+   "en17007": {
+    "process": "ACT.5",
+    "title": "Start the scheduled tasks",
+    "clause": "6.5.6"
+   },
+   "sources": [
+    {
+     "for": "process alignment",
+     "cite": "EN 17007:2017 Maintenance process and associated indicators, ACT.5 Start the scheduled tasks, cl. 6.5.6",
+     "status": "verified"
+    },
+    {
+     "for": "components, messages and work data",
+     "cite": "IEC 61968-6:2015 cl. 4.2 and cl. 5; IEC 61968-11:2013 CIM Work package",
+     "status": "clause-verified"
+    },
+    {
+     "for": "taxonomy coverage",
+     "cite": "APQC PCF Utilities v7.2.1 10.2.4, 10.2.5, 10.3.2 and 10.3.3, used as structural precedent for construction and maintenance execution",
+     "status": "consensus"
+    },
+    {
+     "for": "measure",
+     "cite": "SMRP Best Practices 7th Edition, metric 5.4.4",
+     "status": "consensus"
+    },
+    {
+     "for": "activities and variants",
+     "cite": "No permitted source defines field-dispatch message assembly, delivery evidence or communication-failure handling.",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "judgment",
+    "primary": "29 CFR 1910.269 and IEC 61968-6:2015"
+   }
+  },
+  {
+   "uid": 10088,
+   "id": "4.1.3",
+   "name": "Acknowledge, en-route and on-site confirmation",
+   "group": {
+    "id": "4.1",
+    "name": "Assign and dispatch work",
+    "uid": 10085
+   },
+   "intent": "Maintain the crew commitment and location-status milestones needed to manage active work.",
+   "activities": [
+    "Receive and record crew acknowledgement",
+    "Record departure or en-route status",
+    "Record arrival on site",
+    "Raise an exception when a milestone is missed"
+   ],
+   "trigger": {
+    "kind": "message",
+    "text": "The field resource receives dispatched work.",
+    "cim": "WorkRequest.change"
+   },
+   "inputs": [
+    {
+     "what": "Authorised work, scope and current status",
+     "party": "MAI",
+     "data": "Work"
+    },
+    {
+     "what": "Asset, location and prior field record",
+     "party": "GINV",
+     "data": "WorkLocation"
+    },
+    {
+     "what": "Assigned resource and operating constraints",
+     "party": "SCHD",
+     "data": "Crew"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Acknowledged, en-route or on-site status",
+     "party": "SCHD",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Missed milestone exception for dispatcher action",
+     "party": "MAI",
+     "data": "Work"
+    }
+   ],
+   "systems": [
+    {
+     "component": "SCHD",
+     "role": "owning",
+     "service": "Dispatch and active-work control"
+    },
+    {
+     "component": "FRD",
+     "role": "receiving",
+     "service": "Field work status"
+    },
+    {
+     "component": "MAI",
+     "role": "reference",
+     "service": "Authorised work"
+    },
+    {
+     "component": "HR",
+     "role": "reference",
+     "service": "Qualification and availability"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "MAI",
+     "to": "FRD",
+     "payload": "WorkRequest",
+     "verb": "change",
+     "pattern": "event"
+    },
+    {
+     "from": "FRD",
+     "to": "MAI",
+     "payload": "MaintenanceOrder",
+     "verb": "reply",
+     "pattern": "request-reply"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Assigned field worker",
+     "raci": "R"
+    },
+    {
+     "role": "Dispatcher",
+     "raci": "A"
+    },
+    {
+     "role": "Field supervisor",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkTask",
+    "WorkActivityRecord",
+    "WorkLocation"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "Record acknowledgement, departure and arrival against the assigned work and resource; do not infer a milestone from elapsed time."
+    },
+    {
+     "kind": "operational",
+     "text": "A missed milestone creates a dispatch exception with an owner and response."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Milestone cycle time",
+     "definition": "Apply SMRP 5.4.7 from acknowledgement through the required location milestone; formula not reproduced.",
+     "cite": "SMRP Best Practices 7th Edition, metric 5.4.7"
+    }
+   ],
+   "variants": [
+    "Accepted and progressed normally",
+    "Acknowledgement not received",
+    "Crew accepts but cannot reach or enter the site"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "The process has a repeatable start, ordered activities and a defined completion outcome.",
+    "artifact": "models/4.1-dispatch-and-assign.bpmn"
+   },
+   "en17007": {
+    "process": "ACT.5",
+    "title": "Start the scheduled tasks",
+    "clause": "6.5.6"
+   },
+   "sources": [
+    {
+     "for": "process alignment",
+     "cite": "EN 17007:2017 Maintenance process and associated indicators, ACT.5 Start the scheduled tasks, cl. 6.5.6",
+     "status": "verified"
+    },
+    {
+     "for": "components, messages and work data",
+     "cite": "IEC 61968-6:2015 cl. 4.2 and cl. 5; IEC 61968-11:2013 CIM Work package",
+     "status": "clause-verified"
+    },
+    {
+     "for": "taxonomy coverage",
+     "cite": "APQC PCF Utilities v7.2.1 10.2.4, 10.2.5, 10.3.2 and 10.3.3, used as structural precedent for construction and maintenance execution",
+     "status": "consensus"
+    },
+    {
+     "for": "measure",
+     "cite": "SMRP Best Practices 7th Edition, metric 5.4.7",
+     "status": "consensus"
+    },
+    {
+     "for": "activities and variants",
+     "cite": "No permitted source defines acknowledgement, en-route or on-site milestones for utility field work.",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "judgment",
+    "primary": "29 CFR 1910.269 and IEC 61968-6:2015"
+   }
+  },
+  {
+   "uid": 10089,
+   "id": "4.1.4",
+   "name": "Monitor progress and exception",
+   "group": {
+    "id": "4.1",
+    "name": "Assign and dispatch work",
+    "uid": 10085
+   },
+   "intent": "Maintain an accurate view of active work and intervene when progress leaves the expected path.",
+   "activities": [
+    "Receive active-work status and elapsed time",
+    "Compare progress with the commitment and safety envelope",
+    "Classify the exception",
+    "Notify or escalate the required response",
+    "Retain the intervention record"
+   ],
+   "trigger": {
+    "kind": "signal",
+    "text": "Active work reports a status change or misses an expected milestone.",
+    "cim": "WorkRequest.change"
+   },
+   "inputs": [
+    {
+     "what": "Authorised work, scope and current status",
+     "party": "MAI",
+     "data": "Work"
+    },
+    {
+     "what": "Asset, location and prior field record",
+     "party": "GINV",
+     "data": "WorkLocation"
+    },
+    {
+     "what": "Assigned resource and operating constraints",
+     "party": "SCHD",
+     "data": "Crew"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Current progress and controlled exception response",
+     "party": "SCHD",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Escalated progress exception with intervention owner",
+     "party": "MAI",
+     "data": "Work"
+    }
+   ],
+   "systems": [
+    {
+     "component": "SCHD",
+     "role": "owning",
+     "service": "Dispatch and active-work control"
+    },
+    {
+     "component": "FRD",
+     "role": "receiving",
+     "service": "Field work status"
+    },
+    {
+     "component": "MAI",
+     "role": "reference",
+     "service": "Authorised work"
+    },
+    {
+     "component": "HR",
+     "role": "reference",
+     "service": "Qualification and availability"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "MAI",
+     "to": "FRD",
+     "payload": "WorkRequest",
+     "verb": "change",
+     "pattern": "event"
+    },
+    {
+     "from": "FRD",
+     "to": "MAI",
+     "payload": "MaintenanceOrder",
+     "verb": "reply",
+     "pattern": "request-reply"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Dispatcher",
+     "raci": "R"
+    },
+    {
+     "role": "Field operations manager",
+     "raci": "A"
+    },
+    {
+     "role": "Field supervisor",
+     "raci": "C"
+    },
+    {
+     "role": "Network operator",
+     "raci": "I"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkTask",
+    "WorkActivityRecord",
+    "WorkLocation"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "Compare reported progress with the commitment and current safety envelope; elapsed time alone does not establish an exception."
+    },
+    {
+     "kind": "operational",
+     "text": "Retain the classified exception, intervention and responsible role with the active work record."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Active work aging",
+     "definition": "Apply SMRP 5.4.6 to active work awaiting progress or exception disposition; formula not reproduced.",
+     "cite": "SMRP Best Practices 7th Edition, metric 5.4.6"
+    }
+   ],
+   "variants": [
+    "Work progressing within commitment",
+    "Delay requiring customer or schedule update",
+    "Safety or operating exception requiring immediate escalation"
+   ],
+   "notation": {
+    "class": "CMMN",
+    "why": "The responsible person selects actions according to evolving field evidence and operating conditions.",
+    "artifact": "models/4.1.4-monitor-progress-and-exception.cmmn"
+   },
+   "en17007": {
+    "process": "MAN.5",
+    "title": "Oversee the actions",
+    "clause": "6.2"
+   },
+   "sources": [
+    {
+     "for": "process alignment",
+     "cite": "EN 17007:2017 Maintenance process and associated indicators, MAN.5 Oversee the actions, cl. 6.2",
+     "status": "verified"
+    },
+    {
+     "for": "components, messages and work data",
+     "cite": "IEC 61968-6:2015 cl. 4.2 and cl. 5; IEC 61968-11:2013 CIM Work package",
+     "status": "clause-verified"
+    },
+    {
+     "for": "taxonomy coverage",
+     "cite": "APQC PCF Utilities v7.2.1 10.2.4, 10.2.5, 10.3.2 and 10.3.3, used as structural precedent for construction and maintenance execution",
+     "status": "consensus"
+    },
+    {
+     "for": "measure",
+     "cite": "SMRP Best Practices 7th Edition, metric 5.4.6",
+     "status": "consensus"
+    },
+    {
+     "for": "activities and variants",
+     "cite": "No permitted source defines progress thresholds or exception-response routing for active field work.",
+     "status": "judgment"
+    },
+    {
+     "for": "rebriefing on safety-significant change",
+     "cite": "29 CFR 1910.269(c)(3)(ii) additional job briefing when significant changes affect safety",
+     "status": "regulation"
+    }
+   ],
+   "provenance": {
+    "basis": "judgment",
+    "primary": "29 CFR 1910.269 and IEC 61968-6:2015"
+   }
+  },
+  {
+   "uid": 10090,
+   "id": "4.1.5",
+   "name": "Reassign, recall and cancel work",
+   "group": {
+    "id": "4.1",
+    "name": "Assign and dispatch work",
+    "uid": 10085
+   },
+   "intent": "Change or terminate a field assignment while preserving crew and work-state accountability.",
+   "activities": [
+    "Receive the authorised change or operational need",
+    "Determine whether to reassign, recall or cancel",
+    "Notify the current and replacement resources",
+    "Update the work and schedule state",
+    "Record acknowledgement and unresolved risk"
+   ],
+   "trigger": {
+    "kind": "signal",
+    "text": "An authorised change, emergency or resource loss affects dispatched work.",
+    "cim": "WorkRequest.change"
+   },
+   "inputs": [
+    {
+     "what": "Authorised work, scope and current status",
+     "party": "MAI",
+     "data": "Work"
+    },
+    {
+     "what": "Asset, location and prior field record",
+     "party": "GINV",
+     "data": "WorkLocation"
+    },
+    {
+     "what": "Assigned resource and operating constraints",
+     "party": "SCHD",
+     "data": "Crew"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Reassigned, recalled or cancelled work state",
+     "party": "SCHD",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Released or replacement resource commitment",
+     "party": "MAI",
+     "data": "Work"
+    }
+   ],
+   "systems": [
+    {
+     "component": "SCHD",
+     "role": "owning",
+     "service": "Dispatch and active-work control"
+    },
+    {
+     "component": "FRD",
+     "role": "receiving",
+     "service": "Field work status"
+    },
+    {
+     "component": "MAI",
+     "role": "reference",
+     "service": "Authorised work"
+    },
+    {
+     "component": "HR",
+     "role": "reference",
+     "service": "Qualification and availability"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "MAI",
+     "to": "FRD",
+     "payload": "WorkRequest",
+     "verb": "change",
+     "pattern": "event"
+    },
+    {
+     "from": "FRD",
+     "to": "MAI",
+     "payload": "MaintenanceOrder",
+     "verb": "reply",
+     "pattern": "request-reply"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Dispatcher",
+     "raci": "R"
+    },
+    {
+     "role": "Field operations manager",
+     "raci": "A"
+    },
+    {
+     "role": "Current field supervisor",
+     "raci": "C"
+    },
+    {
+     "role": "Replacement field supervisor",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkTask",
+    "WorkActivityRecord",
+    "WorkLocation"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "Reassign, recall or cancel only from an authorised operational change and notify the current resource before altering commitment."
+    },
+    {
+     "kind": "operational",
+     "text": "Do not release the original assignment until its acknowledgement or unresolved field risk is recorded."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Reassignment cycle time",
+     "definition": "Apply SMRP 5.4.7 from authorised assignment change through acknowledged disposition; formula not reproduced.",
+     "cite": "SMRP Best Practices 7th Edition, metric 5.4.7"
+    }
+   ],
+   "variants": [
+    "Reassign before travel begins",
+    "Recall after the crew is en route or on site",
+    "Cancel and release reserved capacity"
+   ],
+   "notation": {
+    "class": "CMMN",
+    "why": "The responsible person selects actions according to evolving field evidence and operating conditions.",
+    "artifact": "models/4.1.5-reassign-recall-and-cancel-work.cmmn"
+   },
+   "en17007": {
+    "process": "ACT.4",
+    "title": "Schedule the tasks",
+    "clause": "6.5.5"
+   },
+   "sources": [
+    {
+     "for": "process alignment",
+     "cite": "EN 17007:2017 Maintenance process and associated indicators, ACT.4 Schedule the tasks, cl. 6.5.5",
+     "status": "verified"
+    },
+    {
+     "for": "components, messages and work data",
+     "cite": "IEC 61968-6:2015 cl. 4.2 and cl. 5; IEC 61968-11:2013 CIM Work package",
+     "status": "clause-verified"
+    },
+    {
+     "for": "taxonomy coverage",
+     "cite": "APQC PCF Utilities v7.2.1 10.2.4, 10.2.5, 10.3.2 and 10.3.3, used as structural precedent for construction and maintenance execution",
+     "status": "consensus"
+    },
+    {
+     "for": "measure",
+     "cite": "SMRP Best Practices 7th Edition, metric 5.4.7",
+     "status": "consensus"
+    },
+    {
+     "for": "activities and variants",
+     "cite": "No permitted source defines reassignment, recall or cancellation branches for an active field commitment.",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "judgment",
+    "primary": "29 CFR 1910.269 and IEC 61968-6:2015"
+   }
+  },
+  {
+   "uid": 10092,
+   "id": "4.2.1",
+   "name": "Review work package and prerequisites",
+   "group": {
+    "id": "4.2",
+    "name": "Execute work in the field",
+    "uid": 10091
+   },
+   "intent": "Confirm the crew has current scope, instructions and prerequisites before starting field work.",
+   "activities": [
+    "Review scope, method, location and asset identity",
+    "Confirm permits, materials, equipment and qualifications",
+    "Confirm the approved switching or outage condition where applicable",
+    "Stop and refer any missing or conflicting prerequisite"
+   ],
+   "trigger": {
+    "kind": "message",
+    "text": "The crew is on site and prepares to start the assigned work.",
+    "cim": "WorkRequest.change"
+   },
+   "inputs": [
+    {
+     "what": "Authorised work, scope and current status",
+     "party": "MAI",
+     "data": "Work"
+    },
+    {
+     "what": "Asset, location and prior field record",
+     "party": "GINV",
+     "data": "WorkLocation"
+    },
+    {
+     "what": "Assigned resource and operating constraints",
+     "party": "FRD",
+     "data": "Crew"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Confirmed prerequisites or a recorded hold",
+     "party": "FRD",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Prerequisite hold routed to the responsible owner",
+     "party": "MAI",
+     "data": "Work"
+    }
+   ],
+   "systems": [
+    {
+     "component": "FRD",
+     "role": "owning",
+     "service": "Field execution"
+    },
+    {
+     "component": "MAI",
+     "role": "serving",
+     "service": "Work package and record"
+    },
+    {
+     "component": "GINV",
+     "role": "reference",
+     "service": "Asset and location context"
+    },
+    {
+     "component": "NO",
+     "role": "contributing",
+     "service": "Operating state"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "MAI",
+     "to": "FRD",
+     "payload": "WorkRequest",
+     "verb": "change",
+     "pattern": "event"
+    },
+    {
+     "from": "FRD",
+     "to": "MAI",
+     "payload": "MaintenanceOrder",
+     "verb": "reply",
+     "pattern": "request-reply"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Field worker",
+     "raci": "R"
+    },
+    {
+     "role": "Field supervisor",
+     "raci": "A"
+    },
+    {
+     "role": "Maintenance planner",
+     "raci": "C"
+    },
+    {
+     "role": "Network operator",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkTask",
+    "WorkActivityRecord",
+    "WorkLocation"
+   ],
+   "controls": [
+    {
+     "kind": "regulatory",
+     "text": "Field work cannot start while scope, asset identity, permits, materials, equipment, qualifications or operating prerequisites conflict."
+    },
+    {
+     "kind": "operational",
+     "text": "Record each missing prerequisite as a hold routed to its accountable owner."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Ready work yield",
+     "definition": "Apply SMRP 5.4.12 to work released from prerequisite review without a hold; formula not reproduced.",
+     "cite": "SMRP Best Practices 7th Edition, metric 5.4.12"
+    }
+   ],
+   "variants": [
+    "All prerequisites confirmed at first review",
+    "Document or material conflict requires clarification",
+    "Operating prerequisite not yet available"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "The process has a repeatable start, ordered activities and a defined completion outcome.",
+    "artifact": "models/4.2-prepare-and-start-work.bpmn"
+   },
+   "en17007": {
+    "process": "ACT.2",
+    "title": "Prepare for the maintenance tasks",
+    "clause": "6.5.3"
+   },
+   "sources": [
+    {
+     "for": "process alignment",
+     "cite": "EN 17007:2017 Maintenance process and associated indicators, ACT.2 Prepare for the maintenance tasks, cl. 6.5.3",
+     "status": "verified"
+    },
+    {
+     "for": "components, messages and work data",
+     "cite": "IEC 61968-6:2015 cl. 4.2 and cl. 5; IEC 61968-11:2013 CIM Work package",
+     "status": "clause-verified"
+    },
+    {
+     "for": "taxonomy coverage",
+     "cite": "APQC PCF Utilities v7.2.1 10.2.4, 10.2.5, 10.3.2 and 10.3.3, used as structural precedent for construction and maintenance execution",
+     "status": "consensus"
+    },
+    {
+     "for": "measure",
+     "cite": "SMRP Best Practices 7th Edition, metric 5.4.12",
+     "status": "consensus"
+    },
+    {
+     "for": "activities and variants",
+     "cite": "No permitted source defines the complete field-work prerequisite set or hold-routing method.",
+     "status": "judgment"
+    },
+    {
+     "for": "qualification and briefing prerequisites",
+     "cite": "29 CFR 1910.269(a)(2) qualified employee; 1910.269(c)(1) job briefing before each job",
+     "status": "regulation"
+    }
+   ],
+   "provenance": {
+    "basis": "regulation",
+    "primary": "29 CFR 1910.269 and IEC 61968-6:2015"
+   }
+  },
+  {
+   "uid": 10093,
+   "id": "4.2.2",
+   "name": "Perform pre-job safety assessment",
+   "group": {
+    "id": "4.2",
+    "name": "Execute work in the field",
+    "uid": 10091
+   },
+   "intent": "Identify job hazards, controls and responsibilities before work starts and when conditions change.",
+   "activities": [
+    "Identify the tasks, hazards and energy sources",
+    "Confirm roles, qualifications and emergency arrangements",
+    "Select controls and protective measures",
+    "Conduct the job briefing",
+    "Repeat the assessment when conditions materially change"
+   ],
+   "trigger": {
+    "kind": "manual",
+    "text": "The crew is ready to begin or conditions materially change.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Authorised work, scope and current status",
+     "party": "MAI",
+     "data": "Work"
+    },
+    {
+     "what": "Asset, location and prior field record",
+     "party": "GINV",
+     "data": "WorkLocation"
+    },
+    {
+     "what": "Assigned resource and operating constraints",
+     "party": "FRD",
+     "data": "Crew"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Recorded assessment, briefing and controls",
+     "party": "FRD",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Changed-condition trigger for a repeated briefing",
+     "party": "MAI",
+     "data": "Work"
+    }
+   ],
+   "systems": [
+    {
+     "component": "FRD",
+     "role": "owning",
+     "service": "Field execution"
+    },
+    {
+     "component": "MAI",
+     "role": "serving",
+     "service": "Work package and record"
+    },
+    {
+     "component": "GINV",
+     "role": "reference",
+     "service": "Asset and location context"
+    },
+    {
+     "component": "NO",
+     "role": "contributing",
+     "service": "Operating state"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "MAI",
+     "to": "FRD",
+     "payload": "WorkRequest",
+     "verb": "change",
+     "pattern": "event"
+    },
+    {
+     "from": "FRD",
+     "to": "MAI",
+     "payload": "MaintenanceOrder",
+     "verb": "reply",
+     "pattern": "request-reply"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Person in charge",
+     "raci": "R"
+    },
+    {
+     "role": "Field supervisor",
+     "raci": "A"
+    },
+    {
+     "role": "Qualified worker",
+     "raci": "C"
+    },
+    {
+     "role": "Safety advisor",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkTask",
+    "WorkActivityRecord",
+    "WorkLocation"
+   ],
+   "controls": [
+    {
+     "kind": "regulatory",
+     "text": "The person in charge conducts the job briefing required by 29 CFR 1910.269(c)(1) before electric utility work starts."
+    },
+    {
+     "kind": "operational",
+     "text": "Repeat the assessment and briefing when significant changes affect safety, as required by 1910.269(c)(3)(ii)."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Job briefing completion",
+     "definition": "Apply SMRP 5.3.1 to scheduled jobs with the required briefing record before start; formula not reproduced.",
+     "cite": "SMRP Best Practices 7th Edition, metric 5.3.1"
+    }
+   ],
+   "variants": [
+    "Routine recurring work with no significant change",
+    "Work with new or different hazards",
+    "Emergency work with an abbreviated but sufficient briefing"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "The process has a repeatable start, ordered activities and a defined completion outcome.",
+    "artifact": "models/4.2-prepare-and-start-work.bpmn"
+   },
+   "en17007": {
+    "process": "HSE.1",
+    "title": "Prepare the risk assessment",
+    "clause": "6.7"
+   },
+   "sources": [
+    {
+     "for": "process alignment",
+     "cite": "EN 17007:2017 Maintenance process and associated indicators, HSE.1 Prepare the risk assessment, cl. 6.7",
+     "status": "verified"
+    },
+    {
+     "for": "components, messages and work data",
+     "cite": "IEC 61968-6:2015 cl. 4.2 and cl. 5; IEC 61968-11:2013 CIM Work package",
+     "status": "clause-verified"
+    },
+    {
+     "for": "taxonomy coverage",
+     "cite": "APQC PCF Utilities v7.2.1 10.2.4, 10.2.5, 10.3.2 and 10.3.3, used as structural precedent for construction and maintenance execution",
+     "status": "consensus"
+    },
+    {
+     "for": "measure",
+     "cite": "SMRP Best Practices 7th Edition, metric 5.3.1",
+     "status": "consensus"
+    },
+    {
+     "for": "activities and variants",
+     "cite": "OSHA requires the briefing; no permitted source defines the utility hazard-assessment form or control-selection method.",
+     "status": "judgment"
+    },
+    {
+     "for": "job briefing",
+     "cite": "29 CFR 1910.269(c)(1)-(2) job briefing before each job; (c)(3)(ii) additional briefing when significant changes affect safety",
+     "status": "regulation"
+    }
+   ],
+   "provenance": {
+    "basis": "regulation",
+    "primary": "29 CFR 1910.269 and IEC 61968-6:2015"
+   }
+  },
+  {
+   "uid": 10094,
+   "id": "4.2.3",
+   "name": "Perform the work",
+   "group": {
+    "id": "4.2",
+    "name": "Execute work in the field",
+    "uid": 10091
+   },
+   "intent": "Execute the authorised field tasks within the approved method, safety controls and operating state.",
+   "activities": [
+    "Establish the controlled work area",
+    "Perform tasks in the authorised sequence",
+    "Monitor conditions and control effectiveness",
+    "Stop when scope, safety or operating state is no longer valid",
+    "Confirm the physical task result"
+   ],
+   "trigger": {
+    "kind": "manual",
+    "text": "The work package, briefing and required operating controls are confirmed.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Authorised work, scope and current status",
+     "party": "MAI",
+     "data": "Work"
+    },
+    {
+     "what": "Asset, location and prior field record",
+     "party": "GINV",
+     "data": "WorkLocation"
+    },
+    {
+     "what": "Assigned resource and operating constraints",
+     "party": "FRD",
+     "data": "Crew"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Physical work result and execution status",
+     "party": "FRD",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Unfinished scope or changed-condition hold",
+     "party": "MAI",
+     "data": "Work"
+    }
+   ],
+   "systems": [
+    {
+     "component": "FRD",
+     "role": "owning",
+     "service": "Field execution"
+    },
+    {
+     "component": "MAI",
+     "role": "serving",
+     "service": "Work package and record"
+    },
+    {
+     "component": "GINV",
+     "role": "reference",
+     "service": "Asset and location context"
+    },
+    {
+     "component": "NO",
+     "role": "contributing",
+     "service": "Operating state"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "MAI",
+     "to": "FRD",
+     "payload": "WorkRequest",
+     "verb": "change",
+     "pattern": "event"
+    },
+    {
+     "from": "FRD",
+     "to": "MAI",
+     "payload": "MaintenanceOrder",
+     "verb": "reply",
+     "pattern": "request-reply"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Field worker",
+     "raci": "R"
+    },
+    {
+     "role": "Person in charge",
+     "raci": "A"
+    },
+    {
+     "role": "Network operator",
+     "raci": "C"
+    },
+    {
+     "role": "Field supervisor",
+     "raci": "I"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkTask",
+    "WorkActivityRecord",
+    "WorkLocation"
+   ],
+   "controls": [
+    {
+     "kind": "regulatory",
+     "text": "Perform only authorised tasks within the approved method, work area and operating state."
+    },
+    {
+     "kind": "operational",
+     "text": "Stop execution when scope, safety controls or operating state no longer holds; unfinished work remains dispositioned."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Wrench Time",
+     "definition": "Use SMRP 5.6.1 for hands-on field execution time; formula not reproduced.",
+     "cite": "SMRP Best Practices 7th Edition, metric 5.6.1"
+    }
+   ],
+   "variants": [
+    "Planned maintenance task",
+    "Corrective repair after diagnosis",
+    "Construction task creating or modifying an asset"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "The process has a repeatable start, ordered activities and a defined completion outcome.",
+    "artifact": "models/4.2-prepare-and-start-work.bpmn"
+   },
+   "en17007": {
+    "process": "ACT.6",
+    "title": "Perform the maintenance tasks",
+    "clause": "6.5.7"
+   },
+   "sources": [
+    {
+     "for": "process alignment",
+     "cite": "EN 17007:2017 Maintenance process and associated indicators, ACT.6 Perform the maintenance tasks, cl. 6.5.7",
+     "status": "verified"
+    },
+    {
+     "for": "components, messages and work data",
+     "cite": "IEC 61968-6:2015 cl. 4.2 and cl. 5; IEC 61968-11:2013 CIM Work package",
+     "status": "clause-verified"
+    },
+    {
+     "for": "taxonomy coverage",
+     "cite": "APQC PCF Utilities v7.2.1 10.2.4, 10.2.5, 10.3.2 and 10.3.3, used as structural precedent for construction and maintenance execution",
+     "status": "consensus"
+    },
+    {
+     "for": "measure",
+     "cite": "SMRP Best Practices 7th Edition, metric 5.6.1",
+     "status": "consensus"
+    },
+    {
+     "for": "activities and variants",
+     "cite": "No permitted source defines the task sequence or stop-work state model for product-neutral utility field execution.",
+     "status": "judgment"
+    },
+    {
+     "for": "electric and gas execution constraints",
+     "cite": "29 CFR 1910.269(a)(2) qualified employee and (l) minimum approach distances for electric work; 29 CFR 1910.147 control of hazardous energy for gas work",
+     "status": "regulation"
+    }
+   ],
+   "provenance": {
+    "basis": "regulation",
+    "primary": "29 CFR 1910.269 and IEC 61968-6:2015"
+   }
+  },
+  {
+   "uid": 10095,
+   "id": "4.2.4",
+   "name": "Record work performed and actuals",
+   "group": {
+    "id": "4.2",
+    "name": "Execute work in the field",
+    "uid": 10091
+   },
+   "intent": "Record the tasks, labour, materials, equipment and field result attributable to the work.",
+   "activities": [
+    "Record tasks completed and methods used",
+    "Record labour time and participating resources",
+    "Record materials, tools and vehicles used",
+    "Record exceptions, follow-up and completion evidence",
+    "Submit the field actuals"
+   ],
+   "trigger": {
+    "kind": "message",
+    "text": "A task is completed, suspended or handed over.",
+    "cim": "WorkRequest.change"
+   },
+   "inputs": [
+    {
+     "what": "Authorised work, scope and current status",
+     "party": "MAI",
+     "data": "Work"
+    },
+    {
+     "what": "Asset, location and prior field record",
+     "party": "GINV",
+     "data": "WorkLocation"
+    },
+    {
+     "what": "Assigned resource and operating constraints",
+     "party": "FRD",
+     "data": "Crew"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Field actuals and task result",
+     "party": "FRD",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Submitted labour, material and equipment actuals",
+     "party": "MAI",
+     "data": "Work"
+    }
+   ],
+   "systems": [
+    {
+     "component": "FRD",
+     "role": "owning",
+     "service": "Field execution"
+    },
+    {
+     "component": "MAI",
+     "role": "serving",
+     "service": "Work package and record"
+    },
+    {
+     "component": "GINV",
+     "role": "reference",
+     "service": "Asset and location context"
+    },
+    {
+     "component": "NO",
+     "role": "contributing",
+     "service": "Operating state"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "MAI",
+     "to": "FRD",
+     "payload": "WorkRequest",
+     "verb": "change",
+     "pattern": "event"
+    },
+    {
+     "from": "FRD",
+     "to": "MAI",
+     "payload": "MaintenanceOrder",
+     "verb": "reply",
+     "pattern": "request-reply"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Field worker",
+     "raci": "R"
+    },
+    {
+     "role": "Field supervisor",
+     "raci": "A"
+    },
+    {
+     "role": "Work records coordinator",
+     "raci": "C"
+    },
+    {
+     "role": "Cost analyst",
+     "raci": "I"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkTask",
+    "WorkActivityRecord",
+    "WorkLocation"
+   ],
+   "controls": [
+    {
+     "kind": "regulatory",
+     "text": "Record only labour, material, equipment and task actuals attributable to the named work instance."
+    },
+    {
+     "kind": "operational",
+     "text": "Submit exceptions and follow-up with the field result; do not overwrite planned values with actuals."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Actual Hours to Planning Estimate",
+     "definition": "Use the SMRP Pillar 5 planning-versus-actual comparison; formula not reproduced.",
+     "cite": "SMRP Best Practices 7th Edition, Pillar 5 Work Management"
+    }
+   ],
+   "variants": [
+    "Complete actuals entered during the work",
+    "Actuals completed at the end of the shift",
+    "Correction submitted after supervisor review"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "The process has a repeatable start, ordered activities and a defined completion outcome.",
+    "artifact": "models/4.2-prepare-and-start-work.bpmn"
+   },
+   "en17007": {
+    "process": "ACT.7",
+    "title": "Finish the tasks",
+    "clause": "6.5.8"
+   },
+   "sources": [
+    {
+     "for": "process alignment",
+     "cite": "EN 17007:2017 Maintenance process and associated indicators, ACT.7 Finish the tasks, cl. 6.5.8",
+     "status": "verified"
+    },
+    {
+     "for": "components, messages and work data",
+     "cite": "IEC 61968-6:2015 cl. 4.2 and cl. 5; IEC 61968-11:2013 CIM Work package",
+     "status": "clause-verified"
+    },
+    {
+     "for": "taxonomy coverage",
+     "cite": "APQC PCF Utilities v7.2.1 10.2.4, 10.2.5, 10.3.2 and 10.3.3, used as structural precedent for construction and maintenance execution",
+     "status": "consensus"
+    },
+    {
+     "for": "measure",
+     "cite": "SMRP Best Practices 7th Edition, Pillar 5 Work Management",
+     "status": "consensus"
+    },
+    {
+     "for": "activities and variants",
+     "cite": "No permitted source defines the field-actuals capture procedure or exception-routing sequence.",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "regulation",
+    "primary": "29 CFR 1910.269 and IEC 61968-6:2015"
+   }
+  },
+  {
+   "uid": 10096,
+   "id": "4.2.5",
+   "name": "Suspend, transfer or escalate work",
+   "group": {
+    "id": "4.2",
+    "name": "Execute work in the field",
+    "uid": 10091
+   },
+   "intent": "Place work into a controlled non-complete state when the assigned crew cannot safely finish it.",
+   "activities": [
+    "Identify the reason work cannot continue",
+    "Make the site and asset safe",
+    "Choose suspension, transfer or escalation",
+    "Record remaining scope and current condition",
+    "Notify the responsible receiving role"
+   ],
+   "trigger": {
+    "kind": "conditional",
+    "text": "The crew cannot continue within the authorised scope or controls.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Authorised work, scope and current status",
+     "party": "MAI",
+     "data": "Work"
+    },
+    {
+     "what": "Asset, location and prior field record",
+     "party": "GINV",
+     "data": "WorkLocation"
+    },
+    {
+     "what": "Assigned resource and operating constraints",
+     "party": "FRD",
+     "data": "Crew"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Controlled suspension, transfer or escalation",
+     "party": "FRD",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Remaining scope and safe-condition handoff",
+     "party": "MAI",
+     "data": "Work"
+    }
+   ],
+   "systems": [
+    {
+     "component": "FRD",
+     "role": "owning",
+     "service": "Field execution"
+    },
+    {
+     "component": "MAI",
+     "role": "serving",
+     "service": "Work package and record"
+    },
+    {
+     "component": "GINV",
+     "role": "reference",
+     "service": "Asset and location context"
+    },
+    {
+     "component": "NO",
+     "role": "contributing",
+     "service": "Operating state"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "MAI",
+     "to": "FRD",
+     "payload": "WorkRequest",
+     "verb": "change",
+     "pattern": "event"
+    },
+    {
+     "from": "FRD",
+     "to": "MAI",
+     "payload": "MaintenanceOrder",
+     "verb": "reply",
+     "pattern": "request-reply"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Person in charge",
+     "raci": "R"
+    },
+    {
+     "role": "Field operations manager",
+     "raci": "A"
+    },
+    {
+     "role": "Receiving supervisor",
+     "raci": "C"
+    },
+    {
+     "role": "Network operator",
+     "raci": "I"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkTask",
+    "WorkActivityRecord",
+    "WorkLocation"
+   ],
+   "controls": [
+    {
+     "kind": "regulatory",
+     "text": "Before suspension or transfer, leave the site and asset in the recorded safe condition and identify remaining scope."
+    },
+    {
+     "kind": "operational",
+     "text": "The receiving role must receive current condition, open controls and unresolved risk before accountability transfers."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Suspended work aging",
+     "definition": "Apply SMRP 5.4.6 to suspended or transferred work awaiting disposition; formula not reproduced.",
+     "cite": "SMRP Best Practices 7th Edition, metric 5.4.6"
+    }
+   ],
+   "variants": [
+    "Suspend pending material or access",
+    "Transfer at a shift or specialist boundary",
+    "Escalate an unsafe or materially changed condition"
+   ],
+   "notation": {
+    "class": "CMMN",
+    "why": "The responsible person selects actions according to evolving field evidence and operating conditions.",
+    "artifact": "models/4.2.5-suspend-transfer-or-escalate-work.cmmn"
+   },
+   "en17007": {
+    "process": "ACT.6",
+    "title": "Perform the maintenance tasks",
+    "clause": "6.5.7"
+   },
+   "sources": [
+    {
+     "for": "process alignment",
+     "cite": "EN 17007:2017 Maintenance process and associated indicators, ACT.6 Perform the maintenance tasks, cl. 6.5.7",
+     "status": "verified"
+    },
+    {
+     "for": "components, messages and work data",
+     "cite": "IEC 61968-6:2015 cl. 4.2 and cl. 5; IEC 61968-11:2013 CIM Work package",
+     "status": "clause-verified"
+    },
+    {
+     "for": "taxonomy coverage",
+     "cite": "APQC PCF Utilities v7.2.1 10.2.4, 10.2.5, 10.3.2 and 10.3.3, used as structural precedent for construction and maintenance execution",
+     "status": "consensus"
+    },
+    {
+     "for": "measure",
+     "cite": "SMRP Best Practices 7th Edition, metric 5.4.6",
+     "status": "consensus"
+    },
+    {
+     "for": "activities and variants",
+     "cite": "No permitted source defines suspension, transfer and escalation states or the receiving-role handoff.",
+     "status": "judgment"
+    },
+    {
+     "for": "briefing after safety-significant change",
+     "cite": "29 CFR 1910.269(c)(3)(ii) additional job briefing when significant changes affect safety",
+     "status": "regulation"
+    }
+   ],
+   "provenance": {
+    "basis": "regulation",
+    "primary": "29 CFR 1910.269 and IEC 61968-6:2015"
+   }
+  },
+  {
+   "uid": 10097,
+   "id": "4.2.6",
+   "name": "Complete work in the field",
+   "group": {
+    "id": "4.2",
+    "name": "Execute work in the field",
+    "uid": 10091
+   },
+   "intent": "Confirm field tasks, safety controls, records and site condition are complete before crew release.",
+   "activities": [
+    "Confirm every authorised task is complete or dispositioned",
+    "Verify temporary protections and restoration status",
+    "Confirm required evidence and actuals are recorded",
+    "Release tools, crew and local controls",
+    "Mark field work complete"
+   ],
+   "trigger": {
+    "kind": "manual",
+    "text": "The crew reports that field execution is finished.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Authorised work, scope and current status",
+     "party": "MAI",
+     "data": "Work"
+    },
+    {
+     "what": "Asset, location and prior field record",
+     "party": "GINV",
+     "data": "WorkLocation"
+    },
+    {
+     "what": "Assigned resource and operating constraints",
+     "party": "FRD",
+     "data": "Crew"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Field-complete work with remaining follow-up identified",
+     "party": "FRD",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Crew-release record with open follow-up",
+     "party": "MAI",
+     "data": "Work"
+    }
+   ],
+   "systems": [
+    {
+     "component": "FRD",
+     "role": "owning",
+     "service": "Field execution"
+    },
+    {
+     "component": "MAI",
+     "role": "serving",
+     "service": "Work package and record"
+    },
+    {
+     "component": "GINV",
+     "role": "reference",
+     "service": "Asset and location context"
+    },
+    {
+     "component": "NO",
+     "role": "contributing",
+     "service": "Operating state"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "MAI",
+     "to": "FRD",
+     "payload": "WorkRequest",
+     "verb": "change",
+     "pattern": "event"
+    },
+    {
+     "from": "FRD",
+     "to": "MAI",
+     "payload": "MaintenanceOrder",
+     "verb": "reply",
+     "pattern": "request-reply"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Field supervisor",
+     "raci": "R"
+    },
+    {
+     "role": "Field operations manager",
+     "raci": "A"
+    },
+    {
+     "role": "Field worker",
+     "raci": "C"
+    },
+    {
+     "role": "Maintenance planner",
+     "raci": "I"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkTask",
+    "WorkActivityRecord",
+    "WorkLocation"
+   ],
+   "controls": [
+    {
+     "kind": "regulatory",
+     "text": "Mark field work complete only when every authorised task is complete or dispositioned and required evidence and actuals are present."
+    },
+    {
+     "kind": "operational",
+     "text": "Crew release does not release a network clearance; the holder follows 18.5 for release to network operations."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Field completion compliance",
+     "definition": "Apply SMRP 5.4.4 to work reaching field-complete against its approved schedule; formula not reproduced.",
+     "cite": "SMRP Best Practices 7th Edition, metric 5.4.4"
+    }
+   ],
+   "variants": [
+    "Fully complete with no follow-up",
+    "Field complete with permanent restoration outstanding",
+    "Field complete with inspection or commissioning follow-up"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "The process has a repeatable start, ordered activities and a defined completion outcome.",
+    "artifact": "models/4.2-prepare-and-start-work.bpmn"
+   },
+   "en17007": {
+    "process": "ACT.7",
+    "title": "Finish the tasks",
+    "clause": "6.5.8"
+   },
+   "sources": [
+    {
+     "for": "process alignment",
+     "cite": "EN 17007:2017 Maintenance process and associated indicators, ACT.7 Finish the tasks, cl. 6.5.8",
+     "status": "verified"
+    },
+    {
+     "for": "components, messages and work data",
+     "cite": "IEC 61968-6:2015 cl. 4.2 and cl. 5; IEC 61968-11:2013 CIM Work package",
+     "status": "clause-verified"
+    },
+    {
+     "for": "taxonomy coverage",
+     "cite": "APQC PCF Utilities v7.2.1 10.2.4, 10.2.5, 10.3.2 and 10.3.3, used as structural precedent for construction and maintenance execution",
+     "status": "consensus"
+    },
+    {
+     "for": "measure",
+     "cite": "SMRP Best Practices 7th Edition, metric 5.4.4",
+     "status": "consensus"
+    },
+    {
+     "for": "activities and variants",
+     "cite": "No permitted source defines the field-complete state or crew-release evidence set.",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "regulation",
+    "primary": "29 CFR 1910.269 and IEC 61968-6:2015"
+   }
+  },
+  {
+   "uid": 10099,
+   "id": "4.3.1",
+   "name": "Complete electronic forms and checklists",
+   "group": {
+    "id": "4.3",
+    "name": "Capture field data and evidence",
+    "uid": 10098
+   },
+   "intent": "Create the required structured field record for the work performed.",
+   "activities": [
+    "Open the form linked to the work and task",
+    "Complete required fields and conditional sections",
+    "Validate completeness and internal consistency",
+    "Submit or hold the form with a named exception"
+   ],
+   "trigger": {
+    "kind": "manual",
+    "text": "A work step requires a structured field record.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Authorised work, scope and current status",
+     "party": "MAI",
+     "data": "Work"
+    },
+    {
+     "what": "Asset, location and prior field record",
+     "party": "GINV",
+     "data": "WorkLocation"
+    },
+    {
+     "what": "Assigned resource and operating constraints",
+     "party": "FRD",
+     "data": "Crew"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Completed form or checklist with validation status",
+     "party": "FRD",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Named form exception for correction",
+     "party": "MAI",
+     "data": "Work"
+    }
+   ],
+   "systems": [
+    {
+     "component": "FRD",
+     "role": "owning",
+     "service": "Field evidence capture"
+    },
+    {
+     "component": "MAI",
+     "role": "consuming",
+     "service": "Work record"
+    },
+    {
+     "component": "AM",
+     "role": "consuming",
+     "service": "Asset history"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "MAI",
+     "to": "FRD",
+     "payload": "WorkRequest",
+     "verb": "change",
+     "pattern": "event"
+    },
+    {
+     "from": "FRD",
+     "to": "MAI",
+     "payload": "MaintenanceOrder",
+     "verb": "reply",
+     "pattern": "request-reply"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Field worker",
+     "raci": "R"
+    },
+    {
+     "role": "Field supervisor",
+     "raci": "A"
+    },
+    {
+     "role": "Records coordinator",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkTask",
+    "WorkActivityRecord",
+    "WorkLocation"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "Use the form linked to the correct work and task; required fields and conditional sections must pass validation before submission."
+    },
+    {
+     "kind": "operational",
+     "text": "A held form retains the named completeness or consistency exception for correction."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Form capture rework",
+     "definition": "Apply SMRP 4.1 to submitted forms returned for field correction; formula not reproduced.",
+     "cite": "SMRP Best Practices 7th Edition, metric 4.1"
+    }
+   ],
+   "variants": [
+    "Single form completed once",
+    "Checklist repeated for several assets or locations",
+    "Form held because required evidence is unavailable"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "The process has a repeatable start, ordered activities and a defined completion outcome.",
+    "artifact": "models/4.3-capture-field-data.bpmn"
+   },
+   "en17007": {
+    "process": "DTA.1",
+    "title": "Store and validate the raw data in a library and/or a database",
+    "clause": "6.10"
+   },
+   "sources": [
+    {
+     "for": "process alignment",
+     "cite": "EN 17007:2017 Maintenance process and associated indicators, DTA.1 Store and validate the raw data in a library and/or a database, cl. 6.10",
+     "status": "verified"
+    },
+    {
+     "for": "components, messages and work data",
+     "cite": "IEC 61968-6:2015 cl. 4.2 and cl. 5; IEC 61968-11:2013 CIM Work package",
+     "status": "clause-verified"
+    },
+    {
+     "for": "taxonomy coverage",
+     "cite": "APQC PCF Utilities v7.2.1 10.2.4, 10.2.5, 10.3.2 and 10.3.3, used as structural precedent for construction and maintenance execution",
+     "status": "consensus"
+    },
+    {
+     "for": "measure",
+     "cite": "SMRP Best Practices 7th Edition, metric 4.1",
+     "status": "consensus"
+    },
+    {
+     "for": "activities and variants",
+     "cite": "No permitted source defines electronic form fields, conditional logic or validation rules for utility field work.",
+     "status": "judgment"
+    },
+    {
+     "for": "detailed process limitation",
+     "cite": "The Source Authority Pack identifies field forms, offline behaviour, synchronisation and field capture as vendor-defined; decomposition is judgment.",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "judgment",
+    "primary": "IEC 61968-6:2015 and the Source Authority Pack field-service gap"
+   }
+  },
+  {
+   "uid": 10100,
+   "id": "4.3.2",
+   "name": "Capture photographs and annotations",
+   "group": {
+    "id": "4.3",
+    "name": "Capture field data and evidence",
+    "uid": 10098
+   },
+   "intent": "Link visual evidence and explanatory annotations to the correct work, asset, location and time.",
+   "activities": [
+    "Confirm the subject and evidence purpose",
+    "Capture the image without obscuring the relevant condition",
+    "Add location, orientation and annotation",
+    "Link the evidence to the work record",
+    "Reject and retake unusable evidence"
+   ],
+   "trigger": {
+    "kind": "manual",
+    "text": "A task, condition or control requires visual evidence.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Authorised work, scope and current status",
+     "party": "MAI",
+     "data": "Work"
+    },
+    {
+     "what": "Asset, location and prior field record",
+     "party": "GINV",
+     "data": "WorkLocation"
+    },
+    {
+     "what": "Assigned resource and operating constraints",
+     "party": "FRD",
+     "data": "Crew"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Linked photograph and annotation evidence",
+     "party": "FRD",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Rejected evidence item requiring retake",
+     "party": "MAI",
+     "data": "Work"
+    }
+   ],
+   "systems": [
+    {
+     "component": "FRD",
+     "role": "owning",
+     "service": "Field evidence capture"
+    },
+    {
+     "component": "MAI",
+     "role": "consuming",
+     "service": "Work record"
+    },
+    {
+     "component": "AM",
+     "role": "consuming",
+     "service": "Asset history"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "MAI",
+     "to": "FRD",
+     "payload": "WorkRequest",
+     "verb": "change",
+     "pattern": "event"
+    },
+    {
+     "from": "FRD",
+     "to": "MAI",
+     "payload": "MaintenanceOrder",
+     "verb": "reply",
+     "pattern": "request-reply"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Field worker",
+     "raci": "R"
+    },
+    {
+     "role": "Field supervisor",
+     "raci": "A"
+    },
+    {
+     "role": "Asset data steward",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkTask",
+    "WorkActivityRecord",
+    "WorkLocation"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "Capture the relevant condition without obscuring it and link the image to the correct work, asset, location and time."
+    },
+    {
+     "kind": "operational",
+     "text": "Reject and retake evidence that lacks usable subject, orientation or annotation."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Evidence retake rework",
+     "definition": "Apply SMRP 4.1 to photograph evidence rejected for retake; formula not reproduced.",
+     "cite": "SMRP Best Practices 7th Edition, metric 4.1"
+    }
+   ],
+   "variants": [
+    "As-found condition photograph",
+    "Work-in-progress or concealed-work evidence",
+    "As-left completion photograph"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "The process has a repeatable start, ordered activities and a defined completion outcome.",
+    "artifact": "models/4.3-capture-field-data.bpmn"
+   },
+   "en17007": {
+    "process": "IMP.1",
+    "title": "Collect data",
+    "clause": "6.6"
+   },
+   "sources": [
+    {
+     "for": "process alignment",
+     "cite": "EN 17007:2017 Maintenance process and associated indicators, IMP.1 Collect data, cl. 6.6",
+     "status": "verified"
+    },
+    {
+     "for": "components, messages and work data",
+     "cite": "IEC 61968-6:2015 cl. 4.2 and cl. 5; IEC 61968-11:2013 CIM Work package",
+     "status": "clause-verified"
+    },
+    {
+     "for": "taxonomy coverage",
+     "cite": "APQC PCF Utilities v7.2.1 10.2.4, 10.2.5, 10.3.2 and 10.3.3, used as structural precedent for construction and maintenance execution",
+     "status": "consensus"
+    },
+    {
+     "for": "measure",
+     "cite": "SMRP Best Practices 7th Edition, metric 4.1",
+     "status": "consensus"
+    },
+    {
+     "for": "activities and variants",
+     "cite": "No permitted source defines photograph composition, annotation or retake criteria for utility work evidence.",
+     "status": "judgment"
+    },
+    {
+     "for": "detailed process limitation",
+     "cite": "The Source Authority Pack identifies field forms, offline behaviour, synchronisation and field capture as vendor-defined; decomposition is judgment.",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "judgment",
+    "primary": "IEC 61968-6:2015 and the Source Authority Pack field-service gap"
+   }
+  },
+  {
+   "uid": 10101,
+   "id": "4.3.3",
+   "name": "Capture readings and measurements",
+   "group": {
+    "id": "4.3",
+    "name": "Capture field data and evidence",
+    "uid": 10098
+   },
+   "intent": "Record field observations with their unit, method, equipment and context.",
+   "activities": [
+    "Confirm the required parameter and method",
+    "Verify the instrument is eligible for use",
+    "Take and record the reading",
+    "Record unit, time, location and equipment",
+    "Flag an out-of-range or unreliable result"
+   ],
+   "trigger": {
+    "kind": "manual",
+    "text": "A task or inspection requires a field reading or measurement.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Authorised work, scope and current status",
+     "party": "MAI",
+     "data": "Work"
+    },
+    {
+     "what": "Asset, location and prior field record",
+     "party": "GINV",
+     "data": "WorkLocation"
+    },
+    {
+     "what": "Assigned resource and operating constraints",
+     "party": "FRD",
+     "data": "Crew"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Contextualised reading or measurement",
+     "party": "FRD",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Unreliable measurement requiring review",
+     "party": "MAI",
+     "data": "Work"
+    }
+   ],
+   "systems": [
+    {
+     "component": "FRD",
+     "role": "owning",
+     "service": "Field evidence capture"
+    },
+    {
+     "component": "MAI",
+     "role": "consuming",
+     "service": "Work record"
+    },
+    {
+     "component": "AM",
+     "role": "consuming",
+     "service": "Asset history"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "MAI",
+     "to": "FRD",
+     "payload": "WorkRequest",
+     "verb": "change",
+     "pattern": "event"
+    },
+    {
+     "from": "FRD",
+     "to": "MAI",
+     "payload": "MaintenanceOrder",
+     "verb": "reply",
+     "pattern": "request-reply"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Field worker",
+     "raci": "R"
+    },
+    {
+     "role": "Field supervisor",
+     "raci": "A"
+    },
+    {
+     "role": "Measurement specialist",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkTask",
+    "WorkActivityRecord",
+    "WorkLocation"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "Use an eligible instrument and the required method for the named parameter."
+    },
+    {
+     "kind": "operational",
+     "text": "Retain value, unit, time, location and equipment identity; flag an out-of-range or unreliable result."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Measurement recapture rework",
+     "definition": "Apply SMRP 4.1 to readings repeated because the original result was unusable; formula not reproduced.",
+     "cite": "SMRP Best Practices 7th Edition, metric 4.1"
+    }
+   ],
+   "variants": [
+    "Direct instrument reading",
+    "Repeated readings across a route or asset",
+    "Out-of-range result requiring immediate action"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "The process has a repeatable start, ordered activities and a defined completion outcome.",
+    "artifact": "models/4.3-capture-field-data.bpmn"
+   },
+   "en17007": {
+    "process": "IMP.1",
+    "title": "Collect data",
+    "clause": "6.6"
+   },
+   "sources": [
+    {
+     "for": "process alignment",
+     "cite": "EN 17007:2017 Maintenance process and associated indicators, IMP.1 Collect data, cl. 6.6",
+     "status": "verified"
+    },
+    {
+     "for": "components, messages and work data",
+     "cite": "IEC 61968-6:2015 cl. 4.2 and cl. 5; IEC 61968-11:2013 CIM Work package",
+     "status": "clause-verified"
+    },
+    {
+     "for": "taxonomy coverage",
+     "cite": "APQC PCF Utilities v7.2.1 10.2.4, 10.2.5, 10.3.2 and 10.3.3, used as structural precedent for construction and maintenance execution",
+     "status": "consensus"
+    },
+    {
+     "for": "measure",
+     "cite": "SMRP Best Practices 7th Edition, metric 4.1",
+     "status": "consensus"
+    },
+    {
+     "for": "activities and variants",
+     "cite": "No permitted source defines the field-reading method, context fields or reliability threshold across work types.",
+     "status": "judgment"
+    },
+    {
+     "for": "detailed process limitation",
+     "cite": "The Source Authority Pack identifies field forms, offline behaviour, synchronisation and field capture as vendor-defined; decomposition is judgment.",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "judgment",
+    "primary": "IEC 61968-6:2015 and the Source Authority Pack field-service gap"
+   }
+  },
+  {
+   "uid": 10102,
+   "id": "4.3.4",
+   "name": "Capture customer signature and acknowledgement",
+   "group": {
+    "id": "4.3",
+    "name": "Capture field data and evidence",
+    "uid": 10098
+   },
+   "intent": "Record customer acknowledgement where the authorised process requires it.",
+   "activities": [
+    "Present the work outcome or notice",
+    "Confirm the acknowledging person and context",
+    "Capture signature or refusal",
+    "Record delivery method, date and any exception"
+   ],
+   "trigger": {
+    "kind": "manual",
+    "text": "The work requires customer acknowledgement or notice evidence.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Authorised work, scope and current status",
+     "party": "MAI",
+     "data": "Work"
+    },
+    {
+     "what": "Asset, location and prior field record",
+     "party": "GINV",
+     "data": "WorkLocation"
+    },
+    {
+     "what": "Assigned resource and operating constraints",
+     "party": "FRD",
+     "data": "Crew"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Acknowledgement, refusal or unavailable-customer record",
+     "party": "FRD",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Customer refusal or delivery exception",
+     "party": "MAI",
+     "data": "Work"
+    }
+   ],
+   "systems": [
+    {
+     "component": "FRD",
+     "role": "owning",
+     "service": "Field evidence capture"
+    },
+    {
+     "component": "MAI",
+     "role": "consuming",
+     "service": "Work record"
+    },
+    {
+     "component": "AM",
+     "role": "consuming",
+     "service": "Asset history"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "MAI",
+     "to": "FRD",
+     "payload": "WorkRequest",
+     "verb": "change",
+     "pattern": "event"
+    },
+    {
+     "from": "FRD",
+     "to": "MAI",
+     "payload": "MaintenanceOrder",
+     "verb": "reply",
+     "pattern": "request-reply"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Field worker",
+     "raci": "R"
+    },
+    {
+     "role": "Customer service representative",
+     "raci": "A"
+    },
+    {
+     "role": "Field supervisor",
+     "raci": "C"
+    },
+    {
+     "role": "Customer representative",
+     "raci": "I"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkTask",
+    "WorkActivityRecord",
+    "WorkLocation"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "Capture acknowledgement only when the authorised process requires it and identify the acknowledging person and context."
+    },
+    {
+     "kind": "operational",
+     "text": "Record refusal, unavailable customer or alternate delivery as the outcome; do not manufacture a signature."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Acknowledgement exception rework",
+     "definition": "Apply SMRP 4.1 to acknowledgement records returned for field correction; formula not reproduced.",
+     "cite": "SMRP Best Practices 7th Edition, metric 4.1"
+    }
+   ],
+   "variants": [
+    "Signature captured in person",
+    "Customer refuses to sign",
+    "Customer unavailable and alternative notice recorded"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "The process has a repeatable start, ordered activities and a defined completion outcome.",
+    "artifact": "models/4.3-capture-field-data.bpmn"
+   },
+   "en17007": {
+    "process": "DTA.1",
+    "title": "Store and validate the raw data in a library and/or a database",
+    "clause": "6.10"
+   },
+   "sources": [
+    {
+     "for": "process alignment",
+     "cite": "EN 17007:2017 Maintenance process and associated indicators, DTA.1 Store and validate the raw data in a library and/or a database, cl. 6.10",
+     "status": "verified"
+    },
+    {
+     "for": "components, messages and work data",
+     "cite": "IEC 61968-6:2015 cl. 4.2 and cl. 5; IEC 61968-11:2013 CIM Work package",
+     "status": "clause-verified"
+    },
+    {
+     "for": "taxonomy coverage",
+     "cite": "APQC PCF Utilities v7.2.1 10.2.4, 10.2.5, 10.3.2 and 10.3.3, used as structural precedent for construction and maintenance execution",
+     "status": "consensus"
+    },
+    {
+     "for": "measure",
+     "cite": "SMRP Best Practices 7th Edition, metric 4.1",
+     "status": "consensus"
+    },
+    {
+     "for": "activities and variants",
+     "cite": "No permitted source defines when customer acknowledgement is required or how refusal and absence are recorded.",
+     "status": "judgment"
+    },
+    {
+     "for": "detailed process limitation",
+     "cite": "The Source Authority Pack identifies field forms, offline behaviour, synchronisation and field capture as vendor-defined; decomposition is judgment.",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "judgment",
+    "primary": "IEC 61968-6:2015 and the Source Authority Pack field-service gap"
+   }
+  },
+  {
+   "uid": 10103,
+   "id": "4.3.5",
+   "name": "Record as-found and as-left condition",
+   "group": {
+    "id": "4.3",
+    "name": "Capture field data and evidence",
+    "uid": 10098
+   },
+   "intent": "Preserve the condition before intervention and the verified condition after work.",
+   "activities": [
+    "Record the as-found asset and site condition",
+    "Link defects and deviations to the work",
+    "Record the as-left configuration and state",
+    "Compare the result with the acceptance requirement",
+    "Raise follow-up for unresolved conditions"
+   ],
+   "trigger": {
+    "kind": "manual",
+    "text": "Field work changes or assesses an asset or site condition.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Authorised work, scope and current status",
+     "party": "MAI",
+     "data": "Work"
+    },
+    {
+     "what": "Asset, location and prior field record",
+     "party": "GINV",
+     "data": "WorkLocation"
+    },
+    {
+     "what": "Assigned resource and operating constraints",
+     "party": "FRD",
+     "data": "Crew"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Linked as-found and as-left condition record",
+     "party": "FRD",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Unresolved condition requiring follow-up work",
+     "party": "MAI",
+     "data": "Work"
+    }
+   ],
+   "systems": [
+    {
+     "component": "FRD",
+     "role": "owning",
+     "service": "Field evidence capture"
+    },
+    {
+     "component": "MAI",
+     "role": "consuming",
+     "service": "Work record"
+    },
+    {
+     "component": "AM",
+     "role": "consuming",
+     "service": "Asset history"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "MAI",
+     "to": "FRD",
+     "payload": "WorkRequest",
+     "verb": "change",
+     "pattern": "event"
+    },
+    {
+     "from": "FRD",
+     "to": "MAI",
+     "payload": "MaintenanceOrder",
+     "verb": "reply",
+     "pattern": "request-reply"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Field worker",
+     "raci": "R"
+    },
+    {
+     "role": "Field supervisor",
+     "raci": "A"
+    },
+    {
+     "role": "Asset records steward",
+     "raci": "C"
+    },
+    {
+     "role": "Maintenance engineer",
+     "raci": "I"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkTask",
+    "WorkActivityRecord",
+    "WorkLocation"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "Record as-found condition before intervention and as-left configuration after work against the same asset and location."
+    },
+    {
+     "kind": "operational",
+     "text": "Raise follow-up when the as-left condition fails the acceptance requirement or an observed defect remains unresolved."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Condition record rework",
+     "definition": "Apply SMRP 4.1 to as-found or as-left records returned for correction; formula not reproduced.",
+     "cite": "SMRP Best Practices 7th Edition, metric 4.1"
+    }
+   ],
+   "variants": [
+    "Condition restored to the required state",
+    "Condition improved but temporary control remains",
+    "Different defect found and follow-up work raised"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "The process has a repeatable start, ordered activities and a defined completion outcome.",
+    "artifact": "models/4.3-capture-field-data.bpmn"
+   },
+   "en17007": {
+    "process": "IMP.1",
+    "title": "Collect data",
+    "clause": "6.6"
+   },
+   "sources": [
+    {
+     "for": "process alignment",
+     "cite": "EN 17007:2017 Maintenance process and associated indicators, IMP.1 Collect data, cl. 6.6",
+     "status": "verified"
+    },
+    {
+     "for": "components, messages and work data",
+     "cite": "IEC 61968-6:2015 cl. 4.2 and cl. 5; IEC 61968-11:2013 CIM Work package",
+     "status": "clause-verified"
+    },
+    {
+     "for": "taxonomy coverage",
+     "cite": "APQC PCF Utilities v7.2.1 10.2.4, 10.2.5, 10.3.2 and 10.3.3, used as structural precedent for construction and maintenance execution",
+     "status": "consensus"
+    },
+    {
+     "for": "measure",
+     "cite": "SMRP Best Practices 7th Edition, metric 4.1",
+     "status": "consensus"
+    },
+    {
+     "for": "activities and variants",
+     "cite": "No permitted source defines an as-found/as-left evidence set or acceptance-comparison method.",
+     "status": "judgment"
+    },
+    {
+     "for": "detailed process limitation",
+     "cite": "The Source Authority Pack identifies field forms, offline behaviour, synchronisation and field capture as vendor-defined; decomposition is judgment.",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "judgment",
+    "primary": "IEC 61968-6:2015 and the Source Authority Pack field-service gap"
+   }
+  },
+  {
+   "uid": 10104,
+   "id": "4.3.6",
+   "name": "Capture failure symptoms and preliminary codes",
+   "group": {
+    "id": "4.3",
+    "name": "Capture field data and evidence",
+    "uid": 10098
+   },
+   "intent": "Record observed symptoms and a preliminary classification without replacing formal diagnosis.",
+   "activities": [
+    "Describe observable symptoms and operating context",
+    "Select the applicable preliminary code",
+    "Record uncertainty and evidence",
+    "Route the record for diagnosis and failure-data review"
+   ],
+   "trigger": {
+    "kind": "manual",
+    "text": "Field work encounters a failed or degraded item.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Authorised work, scope and current status",
+     "party": "MAI",
+     "data": "Work"
+    },
+    {
+     "what": "Asset, location and prior field record",
+     "party": "GINV",
+     "data": "WorkLocation"
+    },
+    {
+     "what": "Assigned resource and operating constraints",
+     "party": "FRD",
+     "data": "Crew"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Failure symptoms and preliminary classification",
+     "party": "FRD",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Symptom record routed for formal diagnosis",
+     "party": "MAI",
+     "data": "Work"
+    }
+   ],
+   "systems": [
+    {
+     "component": "FRD",
+     "role": "owning",
+     "service": "Field evidence capture"
+    },
+    {
+     "component": "MAI",
+     "role": "consuming",
+     "service": "Work record"
+    },
+    {
+     "component": "AM",
+     "role": "consuming",
+     "service": "Asset history"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "MAI",
+     "to": "FRD",
+     "payload": "WorkRequest",
+     "verb": "change",
+     "pattern": "event"
+    },
+    {
+     "from": "FRD",
+     "to": "MAI",
+     "payload": "MaintenanceOrder",
+     "verb": "reply",
+     "pattern": "request-reply"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Field worker",
+     "raci": "R"
+    },
+    {
+     "role": "Maintenance engineer",
+     "raci": "A"
+    },
+    {
+     "role": "Reliability analyst",
+     "raci": "C"
+    },
+    {
+     "role": "Field supervisor",
+     "raci": "I"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkTask",
+    "WorkActivityRecord",
+    "WorkLocation"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "Record observable symptoms and uncertainty without presenting the preliminary code as a completed diagnosis."
+    },
+    {
+     "kind": "operational",
+     "text": "Route symptom evidence and preliminary classification to formal diagnosis and failure-data review."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Symptom coding rework",
+     "definition": "Apply SMRP 4.1 to symptom records returned for field clarification; formula not reproduced.",
+     "cite": "SMRP Best Practices 7th Edition, metric 4.1"
+    }
+   ],
+   "variants": [
+    "Known symptom with one applicable code",
+    "Several plausible codes - mark preliminary",
+    "No suitable code - retain narrative and request review"
+   ],
+   "notation": {
+    "class": "DMN",
+    "why": "The output is an assignment, classification or eligibility value.",
+    "artifact": "models/4.3.6-capture-failure-symptoms-and-preliminary-codes.dmn"
+   },
+   "en17007": {
+    "process": "COR.2",
+    "title": "Diagnose the state of the items in question",
+    "clause": "6.4.3"
+   },
+   "sources": [
+    {
+     "for": "process alignment",
+     "cite": "EN 17007:2017 Maintenance process and associated indicators, COR.2 Diagnose the state of the items in question, cl. 6.4.3",
+     "status": "verified"
+    },
+    {
+     "for": "components, messages and work data",
+     "cite": "IEC 61968-6:2015 cl. 4.2 and cl. 5; IEC 61968-11:2013 CIM Work package",
+     "status": "clause-verified"
+    },
+    {
+     "for": "taxonomy coverage",
+     "cite": "APQC PCF Utilities v7.2.1 10.2.4, 10.2.5, 10.3.2 and 10.3.3, used as structural precedent for construction and maintenance execution",
+     "status": "consensus"
+    },
+    {
+     "for": "measure",
+     "cite": "SMRP Best Practices 7th Edition, metric 4.1",
+     "status": "consensus"
+    },
+    {
+     "for": "activities and variants",
+     "cite": "No permitted source defines preliminary failure codes or the boundary between symptom capture and diagnosis.",
+     "status": "judgment"
+    },
+    {
+     "for": "detailed process limitation",
+     "cite": "The Source Authority Pack identifies field forms, offline behaviour, synchronisation and field capture as vendor-defined; decomposition is judgment.",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "judgment",
+    "primary": "IEC 61968-6:2015 and the Source Authority Pack field-service gap"
+   }
+  },
+  {
+   "uid": 10106,
+   "id": "4.4.1",
+   "name": "Perform job safety analysis and tailboard",
+   "group": {
+    "id": "4.4",
+    "name": "Manage field safety",
+    "uid": 10105
+   },
+   "intent": "Establish the shared job plan, hazards, controls and responsibilities before field execution.",
+   "activities": [
+    "Review work, location and operating information",
+    "Identify hazards and energy sources",
+    "Assign roles and protective controls",
+    "Conduct and record the tailboard",
+    "Repeat when work or conditions change"
+   ],
+   "trigger": {
+    "kind": "manual",
+    "text": "A crew assembles to begin work or a significant condition changes.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Authorised work, scope and current status",
+     "party": "MAI",
+     "data": "Work"
+    },
+    {
+     "what": "Asset, location and prior field record",
+     "party": "GINV",
+     "data": "WorkLocation"
+    },
+    {
+     "what": "Assigned resource and operating constraints",
+     "party": "FRD",
+     "data": "Crew"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Completed job safety analysis and tailboard",
+     "party": "FRD",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Rebrief trigger for changed work or conditions",
+     "party": "MAI",
+     "data": "Work"
+    }
+   ],
+   "systems": [
+    {
+     "component": "FRD",
+     "role": "owning",
+     "service": "Field safety record"
+    },
+    {
+     "component": "NO",
+     "role": "contributing",
+     "service": "Operating authority and clearance"
+    },
+    {
+     "component": "MAI",
+     "role": "consuming",
+     "service": "Work and safety record"
+    },
+    {
+     "component": "HR",
+     "role": "reference",
+     "service": "Qualification"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "MAI",
+     "to": "FRD",
+     "payload": "WorkRequest",
+     "verb": "change",
+     "pattern": "event"
+    },
+    {
+     "from": "FRD",
+     "to": "MAI",
+     "payload": "MaintenanceOrder",
+     "verb": "reply",
+     "pattern": "request-reply"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Employee in charge",
+     "raci": "R"
+    },
+    {
+     "role": "Field supervisor",
+     "raci": "A"
+    },
+    {
+     "role": "Qualified workers",
+     "raci": "C"
+    },
+    {
+     "role": "Network operator",
+     "raci": "I"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkTask",
+    "WorkActivityRecord",
+    "WorkLocation"
+   ],
+   "controls": [
+    {
+     "kind": "regulatory",
+     "text": "The employee in charge conducts the job briefing before each electric utility job under 29 CFR 1910.269(c)(1)."
+    },
+    {
+     "kind": "operational",
+     "text": "Repeat the tailboard when significant changes affect safety under 1910.269(c)(3)(ii), and record revised roles and controls."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Tailboard completion",
+     "definition": "Apply SMRP 5.3.1 to scheduled jobs with a completed tailboard before execution; formula not reproduced.",
+     "cite": "SMRP Best Practices 7th Edition, metric 5.3.1"
+    }
+   ],
+   "variants": [
+    "Initial briefing before the job",
+    "Briefing repeated after a significant change",
+    "Emergency briefing limited to essential immediate information"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "The process has a repeatable start, ordered activities and a defined completion outcome.",
+    "artifact": "models/4.4-work-safely-in-the-field.bpmn"
+   },
+   "en17007": {
+    "process": "HSE.1",
+    "title": "Prepare the risk assessment",
+    "clause": "6.7"
+   },
+   "sources": [
+    {
+     "for": "process alignment",
+     "cite": "EN 17007:2017 Maintenance process and associated indicators, HSE.1 Prepare the risk assessment, cl. 6.7",
+     "status": "verified"
+    },
+    {
+     "for": "components, messages and work data",
+     "cite": "IEC 61968-6:2015 cl. 4.2 and cl. 5; IEC 61968-11:2013 CIM Work package",
+     "status": "clause-verified"
+    },
+    {
+     "for": "taxonomy coverage",
+     "cite": "APQC PCF Utilities v7.2.1 10.2.4, 10.2.5, 10.3.2 and 10.3.3, used as structural precedent for construction and maintenance execution",
+     "status": "consensus"
+    },
+    {
+     "for": "measure",
+     "cite": "SMRP Best Practices 7th Edition, metric 5.3.1",
+     "status": "consensus"
+    },
+    {
+     "for": "activities and variants",
+     "cite": "OSHA requires a job briefing; no permitted source defines a utility tailboard form or recorded role set.",
+     "status": "judgment"
+    },
+    {
+     "for": "job briefing and rebriefing",
+     "cite": "29 CFR 1910.269(c)(1)-(2) job briefing before each job; (c)(3)(ii) additional briefing when significant changes affect safety",
+     "status": "regulation"
+    }
+   ],
+   "provenance": {
+    "basis": "regulation",
+    "primary": "29 CFR 1910.269 and IEC 61968-6:2015"
+   }
+  },
+  {
+   "uid": 10107,
+   "id": "4.4.2",
+   "name": "Operate lone-worker and safety timer controls",
+   "group": {
+    "id": "4.4",
+    "name": "Manage field safety",
+    "uid": 10105
+   },
+   "intent": "Maintain a timed welfare check and escalation path for work performed without immediate crew support.",
+   "activities": [
+    "Identify work subject to the lone-worker control",
+    "Start the required check-in or timer",
+    "Receive and record welfare confirmations",
+    "Escalate a missed confirmation",
+    "Close the control when the worker is clear"
+   ],
+   "trigger": {
+    "kind": "timer",
+    "text": "A worker begins an activity governed by a lone-worker control.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Authorised work, scope and current status",
+     "party": "MAI",
+     "data": "Work"
+    },
+    {
+     "what": "Asset, location and prior field record",
+     "party": "GINV",
+     "data": "WorkLocation"
+    },
+    {
+     "what": "Assigned resource and operating constraints",
+     "party": "FRD",
+     "data": "Crew"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Current welfare status and escalation record",
+     "party": "FRD",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Missed welfare check requiring escalation",
+     "party": "MAI",
+     "data": "Work"
+    }
+   ],
+   "systems": [
+    {
+     "component": "FRD",
+     "role": "owning",
+     "service": "Field safety record"
+    },
+    {
+     "component": "NO",
+     "role": "contributing",
+     "service": "Operating authority and clearance"
+    },
+    {
+     "component": "MAI",
+     "role": "consuming",
+     "service": "Work and safety record"
+    },
+    {
+     "component": "HR",
+     "role": "reference",
+     "service": "Qualification"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "MAI",
+     "to": "FRD",
+     "payload": "WorkRequest",
+     "verb": "change",
+     "pattern": "event"
+    },
+    {
+     "from": "FRD",
+     "to": "MAI",
+     "payload": "MaintenanceOrder",
+     "verb": "reply",
+     "pattern": "request-reply"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Lone worker",
+     "raci": "R"
+    },
+    {
+     "role": "Field supervisor",
+     "raci": "A"
+    },
+    {
+     "role": "Safety monitor",
+     "raci": "C"
+    },
+    {
+     "role": "Emergency coordinator",
+     "raci": "I"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkTask",
+    "WorkActivityRecord",
+    "WorkLocation"
+   ],
+   "controls": [
+    {
+     "kind": "regulatory",
+     "text": "Start the welfare timer only for work designated for lone-worker monitoring and tie it to the assigned worker and task."
+    },
+    {
+     "kind": "operational",
+     "text": "A missed confirmation initiates the defined escalation; the control closes only when the worker is confirmed clear."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Welfare-check compliance",
+     "definition": "Apply SMRP 5.4.4 to required lone-worker confirmations completed on schedule; formula not reproduced.",
+     "cite": "SMRP Best Practices 7th Edition, metric 5.4.4"
+    }
+   ],
+   "variants": [
+    "Scheduled check-in completed",
+    "Timer warning acknowledged before escalation",
+    "Missed check-in escalated to emergency response"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "The process has a repeatable start, ordered activities and a defined completion outcome.",
+    "artifact": "models/4.4-work-safely-in-the-field.bpmn"
+   },
+   "en17007": {
+    "process": "HSE.5",
+    "title": "Monitor risk management",
+    "clause": "6.7"
+   },
+   "sources": [
+    {
+     "for": "process alignment",
+     "cite": "EN 17007:2017 Maintenance process and associated indicators, HSE.5 Monitor risk management, cl. 6.7",
+     "status": "verified"
+    },
+    {
+     "for": "components, messages and work data",
+     "cite": "IEC 61968-6:2015 cl. 4.2 and cl. 5; IEC 61968-11:2013 CIM Work package",
+     "status": "clause-verified"
+    },
+    {
+     "for": "taxonomy coverage",
+     "cite": "APQC PCF Utilities v7.2.1 10.2.4, 10.2.5, 10.3.2 and 10.3.3, used as structural precedent for construction and maintenance execution",
+     "status": "consensus"
+    },
+    {
+     "for": "measure",
+     "cite": "SMRP Best Practices 7th Edition, metric 5.4.4",
+     "status": "consensus"
+    },
+    {
+     "for": "activities and variants",
+     "cite": "No permitted source defines lone-worker coverage, check interval or missed-confirmation escalation.",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "regulation",
+    "primary": "29 CFR 1910.269 and IEC 61968-6:2015"
+   }
+  },
+  {
+   "uid": 10108,
+   "id": "4.4.3",
+   "name": "Report incident, near-miss and hazard",
+   "group": {
+    "id": "4.4",
+    "name": "Manage field safety",
+    "uid": 10105
+   },
+   "intent": "Create an immediate, traceable report of an incident, near-miss or uncontrolled hazard.",
+   "activities": [
+    "Make the situation safe and obtain emergency help where needed",
+    "Classify incident, near-miss or hazard",
+    "Record people, place, time and immediate facts",
+    "Notify the required roles and authorities",
+    "Preserve evidence and create follow-up actions"
+   ],
+   "trigger": {
+    "kind": "signal",
+    "text": "A field worker observes an incident, near-miss or uncontrolled hazard.",
+    "cim": "WorkRequest.change"
+   },
+   "inputs": [
+    {
+     "what": "Authorised work, scope and current status",
+     "party": "MAI",
+     "data": "Work"
+    },
+    {
+     "what": "Asset, location and prior field record",
+     "party": "GINV",
+     "data": "WorkLocation"
+    },
+    {
+     "what": "Assigned resource and operating constraints",
+     "party": "FRD",
+     "data": "Crew"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Safety report, notifications and follow-up actions",
+     "party": "FRD",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Preserved incident evidence for investigation",
+     "party": "MAI",
+     "data": "Work"
+    }
+   ],
+   "systems": [
+    {
+     "component": "FRD",
+     "role": "owning",
+     "service": "Field safety record"
+    },
+    {
+     "component": "NO",
+     "role": "contributing",
+     "service": "Operating authority and clearance"
+    },
+    {
+     "component": "MAI",
+     "role": "consuming",
+     "service": "Work and safety record"
+    },
+    {
+     "component": "HR",
+     "role": "reference",
+     "service": "Qualification"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "MAI",
+     "to": "FRD",
+     "payload": "WorkRequest",
+     "verb": "change",
+     "pattern": "event"
+    },
+    {
+     "from": "FRD",
+     "to": "MAI",
+     "payload": "MaintenanceOrder",
+     "verb": "reply",
+     "pattern": "request-reply"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Person in charge",
+     "raci": "R"
+    },
+    {
+     "role": "Safety manager",
+     "raci": "A"
+    },
+    {
+     "role": "Emergency responder",
+     "raci": "C"
+    },
+    {
+     "role": "Regulatory reporting lead",
+     "raci": "I"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkTask",
+    "WorkActivityRecord",
+    "WorkLocation"
+   ],
+   "controls": [
+    {
+     "kind": "regulatory",
+     "text": "Make the situation safe and obtain emergency assistance before administrative reporting."
+    },
+    {
+     "kind": "operational",
+     "text": "Preserve the immediate facts, evidence, notifications and follow-up actions without assigning an unsupported cause."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Incident follow-up cycle time",
+     "definition": "Apply SMRP 5.4.7 from field report through accepted follow-up assignment; formula not reproduced.",
+     "cite": "SMRP Best Practices 7th Edition, metric 5.4.7"
+    }
+   ],
+   "variants": [
+    "Incident with injury or damage",
+    "Near-miss with no realised consequence",
+    "Hazard reported before an event occurs"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "The process has a repeatable start, ordered activities and a defined completion outcome.",
+    "artifact": "models/4.4-work-safely-in-the-field.bpmn"
+   },
+   "en17007": {
+    "process": "HSE.5",
+    "title": "Monitor risk management",
+    "clause": "6.7"
+   },
+   "sources": [
+    {
+     "for": "process alignment",
+     "cite": "EN 17007:2017 Maintenance process and associated indicators, HSE.5 Monitor risk management, cl. 6.7",
+     "status": "verified"
+    },
+    {
+     "for": "components, messages and work data",
+     "cite": "IEC 61968-6:2015 cl. 4.2 and cl. 5; IEC 61968-11:2013 CIM Work package",
+     "status": "clause-verified"
+    },
+    {
+     "for": "taxonomy coverage",
+     "cite": "APQC PCF Utilities v7.2.1 10.2.4, 10.2.5, 10.3.2 and 10.3.3, used as structural precedent for construction and maintenance execution",
+     "status": "consensus"
+    },
+    {
+     "for": "measure",
+     "cite": "SMRP Best Practices 7th Edition, metric 5.4.7",
+     "status": "consensus"
+    },
+    {
+     "for": "activities and variants",
+     "cite": "No permitted source defines the immediate field-report workflow or preliminary incident classification.",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "regulation",
+    "primary": "29 CFR 1910.269 and IEC 61968-6:2015"
+   }
+  },
+  {
+   "uid": 10109,
+   "id": "4.4.4",
+   "name": "Confirm isolation and permit-to-work",
+   "group": {
+    "id": "4.4",
+    "name": "Manage field safety",
+    "uid": 10105
+   },
+   "intent": "Verify the required isolation or clearance is issued, understood and valid before work begins.",
+   "activities": [
+    "Identify the energy-control regime for the work",
+    "Confirm the approved switching plan or isolation procedure",
+    "Verify the clearance or lockout state with the issuing authority",
+    "Record crew acceptance and limits",
+    "Block work when the control is absent or invalid"
+   ],
+   "trigger": {
+    "kind": "message",
+    "text": "Work is ready to start on or near an energy source.",
+    "cim": "WorkRequest.change"
+   },
+   "inputs": [
+    {
+     "what": "Authorised work, scope and current status",
+     "party": "MAI",
+     "data": "Work"
+    },
+    {
+     "what": "Asset, location and prior field record",
+     "party": "GINV",
+     "data": "WorkLocation"
+    },
+    {
+     "what": "Assigned resource and operating constraints",
+     "party": "FRD",
+     "data": "Crew"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Confirmed clearance or lockout state",
+     "party": "FRD",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Accepted clearance limits or blocking exception",
+     "party": "MAI",
+     "data": "Work"
+    }
+   ],
+   "systems": [
+    {
+     "component": "FRD",
+     "role": "owning",
+     "service": "Field safety record"
+    },
+    {
+     "component": "NO",
+     "role": "contributing",
+     "service": "Operating authority and clearance"
+    },
+    {
+     "component": "MAI",
+     "role": "consuming",
+     "service": "Work and safety record"
+    },
+    {
+     "component": "HR",
+     "role": "reference",
+     "service": "Qualification"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "MAI",
+     "to": "FRD",
+     "payload": "WorkRequest",
+     "verb": "change",
+     "pattern": "event"
+    },
+    {
+     "from": "FRD",
+     "to": "MAI",
+     "payload": "MaintenanceOrder",
+     "verb": "reply",
+     "pattern": "request-reply"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Employee in charge of clearance",
+     "raci": "R"
+    },
+    {
+     "role": "Field supervisor",
+     "raci": "A"
+    },
+    {
+     "role": "Network operator",
+     "raci": "C"
+    },
+    {
+     "role": "Field workers",
+     "raci": "I"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkTask",
+    "WorkActivityRecord",
+    "WorkLocation"
+   ],
+   "controls": [
+    {
+     "kind": "regulatory",
+     "text": "Electric work begins only after network operations at 18.4.4 issues the clearance under 29 CFR 1910.269(m) against the plan approved at 18.2.2."
+    },
+    {
+     "kind": "operational",
+     "text": "The employee in charge verifies and accepts the clearance limits; an absent, invalid or misunderstood clearance blocks work. Gas energy control remains under 29 CFR 1910.147."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Clearance verification completeness",
+     "definition": "Apply SMRP 5.3.1 to work requiring a verified clearance before start; formula not reproduced.",
+     "cite": "SMRP Best Practices 7th Edition, metric 5.3.1"
+    }
+   ],
+   "variants": [
+    "Electric transmission or distribution clearance under 1910.269(m)",
+    "Gas distribution lockout or tagout under 1910.147",
+    "Control absent or outside its limits - work blocked"
+   ],
+   "notation": {
+    "class": "DMN",
+    "why": "The output is an assignment, classification or eligibility value.",
+    "artifact": "models/4.4.4-confirm-isolation-and-permit-to-work.dmn"
+   },
+   "en17007": {
+    "process": "HSE.5",
+    "title": "Monitor risk management",
+    "clause": "6.7"
+   },
+   "sources": [
+    {
+     "for": "process alignment",
+     "cite": "EN 17007:2017 Maintenance process and associated indicators, HSE.5 Monitor risk management, cl. 6.7",
+     "status": "verified"
+    },
+    {
+     "for": "components, messages and work data",
+     "cite": "IEC 61968-6:2015 cl. 4.2 and cl. 5; IEC 61968-11:2013 CIM Work package",
+     "status": "clause-verified"
+    },
+    {
+     "for": "taxonomy coverage",
+     "cite": "APQC PCF Utilities v7.2.1 10.2.4, 10.2.5, 10.3.2 and 10.3.3, used as structural precedent for construction and maintenance execution",
+     "status": "consensus"
+    },
+    {
+     "for": "measure",
+     "cite": "SMRP Best Practices 7th Edition, metric 5.3.1",
+     "status": "consensus"
+    },
+    {
+     "for": "activities and variants",
+     "cite": "The clearance producer and federal sequence are sourced; crew acceptance evidence and the local gas lockout procedure remain operator-defined.",
+     "status": "judgment"
+    },
+    {
+     "for": "clearance producer and energy-control basis",
+     "cite": "29 CFR 1910.269(m) Deenergizing lines and equipment for employee protection; clearance produced by 18.4.4 against a switching plan approved at 18.2.2; 29 CFR 1910.147 control of hazardous energy for gas work",
+     "status": "regulation"
+    }
+   ],
+   "provenance": {
+    "basis": "regulation",
+    "primary": "29 CFR 1910.269 and IEC 61968-6:2015"
+   }
+  },
+  {
+   "uid": 10110,
+   "id": "4.4.5",
+   "name": "Verify SCADA points with the control room after field changes",
+   "group": {
+    "id": "4.4",
+    "name": "Manage field safety",
+    "uid": 10105
+   },
+   "intent": "Confirm that field state and control-room indication agree after an authorised change.",
+   "activities": [
+    "Identify the affected points and expected state",
+    "Report field completion to network operations",
+    "Compare field position with control-room indication",
+    "Resolve a disagreement before release",
+    "Record verification and outstanding exception"
+   ],
+   "trigger": {
+    "kind": "message",
+    "text": "A field change affects a monitored or controlled network point.",
+    "cim": "WorkRequest.change"
+   },
+   "inputs": [
+    {
+     "what": "Authorised work, scope and current status",
+     "party": "MAI",
+     "data": "Work"
+    },
+    {
+     "what": "Asset, location and prior field record",
+     "party": "GINV",
+     "data": "WorkLocation"
+    },
+    {
+     "what": "Assigned resource and operating constraints",
+     "party": "FRD",
+     "data": "Crew"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Verified point state or unresolved discrepancy",
+     "party": "FRD",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Control-room discrepancy requiring resolution",
+     "party": "MAI",
+     "data": "Work"
+    }
+   ],
+   "systems": [
+    {
+     "component": "FRD",
+     "role": "owning",
+     "service": "Field safety record"
+    },
+    {
+     "component": "NO",
+     "role": "contributing",
+     "service": "Operating authority and clearance"
+    },
+    {
+     "component": "MAI",
+     "role": "consuming",
+     "service": "Work and safety record"
+    },
+    {
+     "component": "HR",
+     "role": "reference",
+     "service": "Qualification"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "MAI",
+     "to": "FRD",
+     "payload": "WorkRequest",
+     "verb": "change",
+     "pattern": "event"
+    },
+    {
+     "from": "FRD",
+     "to": "MAI",
+     "payload": "MaintenanceOrder",
+     "verb": "reply",
+     "pattern": "request-reply"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Field technician",
+     "raci": "R"
+    },
+    {
+     "role": "Network operator",
+     "raci": "A"
+    },
+    {
+     "role": "Field supervisor",
+     "raci": "C"
+    },
+    {
+     "role": "Control systems engineer",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkTask",
+    "WorkActivityRecord",
+    "WorkLocation"
+   ],
+   "controls": [
+    {
+     "kind": "regulatory",
+     "text": "Compare the reported field position with the control-room indication for each affected point."
+    },
+    {
+     "kind": "operational",
+     "text": "Do not release the change while any field-to-control-room discrepancy remains unresolved and recorded."
+    }
+   ],
+   "measures": [
+    {
+     "name": "SCADA verification rework",
+     "definition": "Apply SMRP 4.1 to point checks repeated after a field-to-control-room discrepancy; formula not reproduced.",
+     "cite": "SMRP Best Practices 7th Edition, metric 4.1"
+    }
+   ],
+   "variants": [
+    "Field and control-room states agree",
+    "Stale or missing indication requires refresh",
+    "Indication disagrees with field state and blocks release"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "The process has a repeatable start, ordered activities and a defined completion outcome.",
+    "artifact": "models/4.4-work-safely-in-the-field.bpmn"
+   },
+   "en17007": {
+    "process": "ACT.7",
+    "title": "Finish the tasks",
+    "clause": "6.5.8"
+   },
+   "sources": [
+    {
+     "for": "process alignment",
+     "cite": "EN 17007:2017 Maintenance process and associated indicators, ACT.7 Finish the tasks, cl. 6.5.8",
+     "status": "verified"
+    },
+    {
+     "for": "components, messages and work data",
+     "cite": "IEC 61968-6:2015 cl. 4.2 and cl. 5; IEC 61968-11:2013 CIM Work package",
+     "status": "clause-verified"
+    },
+    {
+     "for": "taxonomy coverage",
+     "cite": "APQC PCF Utilities v7.2.1 10.2.4, 10.2.5, 10.3.2 and 10.3.3, used as structural precedent for construction and maintenance execution",
+     "status": "consensus"
+    },
+    {
+     "for": "measure",
+     "cite": "SMRP Best Practices 7th Edition, metric 4.1",
+     "status": "consensus"
+    },
+    {
+     "for": "activities and variants",
+     "cite": "No permitted source defines the field-to-SCADA point verification method or discrepancy-resolution workflow.",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "regulation",
+    "primary": "29 CFR 1910.269 and IEC 61968-6:2015"
+   }
+  },
+  {
+   "uid": 10112,
+   "id": "4.5.1",
+   "name": "Operate in disconnected and offline mode",
+   "group": {
+    "id": "4.5",
+    "name": "Enable mobile field operation",
+    "uid": 10111
+   },
+   "intent": "Preserve authorised field work and evidence when network connectivity is unavailable.",
+   "activities": [
+    "Use the last authorised work and reference data available on the device",
+    "Record actions and evidence locally",
+    "Mark functions that require a live service as unavailable",
+    "Protect pending records until reconnection"
+   ],
+   "trigger": {
+    "kind": "none",
+    "text": "Connectivity is unavailable while authorised field work continues.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Authorised work, scope and current status",
+     "party": "MAI",
+     "data": "Work"
+    },
+    {
+     "what": "Asset, location and prior field record",
+     "party": "GINV",
+     "data": "WorkLocation"
+    },
+    {
+     "what": "Assigned resource and operating constraints",
+     "party": "FRD",
+     "data": "Crew"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Protected offline work and pending field records",
+     "party": "FRD",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Pending records awaiting controlled synchronisation",
+     "party": "MAI",
+     "data": "Work"
+    }
+   ],
+   "systems": [
+    {
+     "component": "FRD",
+     "role": "owning",
+     "service": "Mobile field operation"
+    },
+    {
+     "component": "MAI",
+     "role": "serving",
+     "service": "Work and reference data"
+    },
+    {
+     "component": "GINV",
+     "role": "reference",
+     "service": "Location context"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "MAI",
+     "to": "FRD",
+     "payload": "WorkRequest",
+     "verb": "change",
+     "pattern": "event"
+    },
+    {
+     "from": "FRD",
+     "to": "MAI",
+     "payload": "MaintenanceOrder",
+     "verb": "reply",
+     "pattern": "request-reply"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Field worker",
+     "raci": "R"
+    },
+    {
+     "role": "Field supervisor",
+     "raci": "A"
+    },
+    {
+     "role": "Mobile support analyst",
+     "raci": "C"
+    },
+    {
+     "role": "Records coordinator",
+     "raci": "I"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkTask",
+    "WorkActivityRecord",
+    "WorkLocation"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "Use only the last authorised work and reference data available before connectivity was lost."
+    },
+    {
+     "kind": "operational",
+     "text": "Protect locally captured actions and evidence from loss or reassignment until controlled synchronisation."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Offline record aging",
+     "definition": "Apply SMRP 5.4.6 to protected offline records awaiting synchronisation; formula not reproduced.",
+     "cite": "SMRP Best Practices 7th Edition, metric 5.4.6"
+    }
+   ],
+   "variants": [
+    "Planned work completed fully offline",
+    "Intermittent connectivity during the task",
+    "Live-dependent action deferred until reconnection"
+   ],
+   "notation": {
+    "class": "SPEC",
+    "why": "This is a standing field capability without one repeatable instance boundary.",
+    "artifact": null
+   },
+   "en17007": {
+    "process": "TOL.5",
+    "title": "Determine and provide a maintenance management, decision support software tools and documentation system",
+    "clause": "6.17"
+   },
+   "sources": [
+    {
+     "for": "process alignment",
+     "cite": "EN 17007:2017 Maintenance process and associated indicators, TOL.5 Determine and provide a maintenance management, decision support software tools and documentation system, cl. 6.17",
+     "status": "verified"
+    },
+    {
+     "for": "components, messages and work data",
+     "cite": "IEC 61968-6:2015 cl. 4.2 and cl. 5; IEC 61968-11:2013 CIM Work package",
+     "status": "clause-verified"
+    },
+    {
+     "for": "taxonomy coverage",
+     "cite": "APQC PCF Utilities v7.2.1 10.2.4, 10.2.5, 10.3.2 and 10.3.3, used as structural precedent for construction and maintenance execution",
+     "status": "consensus"
+    },
+    {
+     "for": "measure",
+     "cite": "SMRP Best Practices 7th Edition, metric 5.4.6",
+     "status": "consensus"
+    },
+    {
+     "for": "activities and variants",
+     "cite": "No permitted source defines offline field-work capabilities, cached-data limits or pending-record protection.",
+     "status": "judgment"
+    },
+    {
+     "for": "detailed process limitation",
+     "cite": "The Source Authority Pack identifies field forms, offline behaviour, synchronisation and field capture as vendor-defined; decomposition is judgment.",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "judgment",
+    "primary": "IEC 61968-6:2015 and the Source Authority Pack field-service gap"
+   }
+  },
+  {
+   "uid": 10113,
+   "id": "4.5.2",
+   "name": "Synchronise field data on reconnection",
+   "group": {
+    "id": "4.5",
+    "name": "Enable mobile field operation",
+    "uid": 10111
+   },
+   "intent": "Transfer pending field records and resolve conflicts when connectivity returns.",
+   "activities": [
+    "Detect restored connectivity",
+    "Transmit pending records in controlled order",
+    "Confirm receipt and identify conflicts",
+    "Resolve or route each conflict",
+    "Retain the synchronisation result"
+   ],
+   "trigger": {
+    "kind": "signal",
+    "text": "A field device with pending records reconnects.",
+    "cim": "WorkRequest.change"
+   },
+   "inputs": [
+    {
+     "what": "Authorised work, scope and current status",
+     "party": "MAI",
+     "data": "Work"
+    },
+    {
+     "what": "Asset, location and prior field record",
+     "party": "GINV",
+     "data": "WorkLocation"
+    },
+    {
+     "what": "Assigned resource and operating constraints",
+     "party": "FRD",
+     "data": "Crew"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Synchronised records and conflict disposition",
+     "party": "FRD",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Unresolved data conflict routed for correction",
+     "party": "MAI",
+     "data": "Work"
+    }
+   ],
+   "systems": [
+    {
+     "component": "FRD",
+     "role": "owning",
+     "service": "Mobile field operation"
+    },
+    {
+     "component": "MAI",
+     "role": "serving",
+     "service": "Work and reference data"
+    },
+    {
+     "component": "GINV",
+     "role": "reference",
+     "service": "Location context"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "MAI",
+     "to": "FRD",
+     "payload": "WorkRequest",
+     "verb": "change",
+     "pattern": "event"
+    },
+    {
+     "from": "FRD",
+     "to": "MAI",
+     "payload": "MaintenanceOrder",
+     "verb": "reply",
+     "pattern": "request-reply"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Mobile support analyst",
+     "raci": "R"
+    },
+    {
+     "role": "Field supervisor",
+     "raci": "A"
+    },
+    {
+     "role": "Records coordinator",
+     "raci": "C"
+    },
+    {
+     "role": "Field worker",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkTask",
+    "WorkActivityRecord",
+    "WorkLocation"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "Transmit pending field records in controlled order and retain receipt status for each record."
+    },
+    {
+     "kind": "operational",
+     "text": "Resolve or route every version or authority conflict before treating synchronisation as complete."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Synchronisation rework",
+     "definition": "Apply SMRP 4.1 to field records retransmitted after a rejected or conflicting result; formula not reproduced.",
+     "cite": "SMRP Best Practices 7th Edition, metric 4.1"
+    }
+   ],
+   "variants": [
+    "No-conflict synchronisation",
+    "Server record changed while the device was offline",
+    "Partial transfer interrupted and safely resumed"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "The process has a repeatable start, ordered activities and a defined completion outcome.",
+    "artifact": "models/4.5-operate-mobile-and-offline.bpmn"
+   },
+   "en17007": {
+    "process": "DTA.10",
+    "title": "Save and provide access to data in a data processing system",
+    "clause": "6.10"
+   },
+   "sources": [
+    {
+     "for": "process alignment",
+     "cite": "EN 17007:2017 Maintenance process and associated indicators, DTA.10 Save and provide access to data in a data processing system, cl. 6.10",
+     "status": "verified"
+    },
+    {
+     "for": "components, messages and work data",
+     "cite": "IEC 61968-6:2015 cl. 4.2 and cl. 5; IEC 61968-11:2013 CIM Work package",
+     "status": "clause-verified"
+    },
+    {
+     "for": "taxonomy coverage",
+     "cite": "APQC PCF Utilities v7.2.1 10.2.4, 10.2.5, 10.3.2 and 10.3.3, used as structural precedent for construction and maintenance execution",
+     "status": "consensus"
+    },
+    {
+     "for": "measure",
+     "cite": "SMRP Best Practices 7th Edition, metric 4.1",
+     "status": "consensus"
+    },
+    {
+     "for": "activities and variants",
+     "cite": "No permitted source defines synchronisation order, conflict authority or retry handling for field records.",
+     "status": "judgment"
+    },
+    {
+     "for": "detailed process limitation",
+     "cite": "The Source Authority Pack identifies field forms, offline behaviour, synchronisation and field capture as vendor-defined; decomposition is judgment.",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "judgment",
+    "primary": "IEC 61968-6:2015 and the Source Authority Pack field-service gap"
+   }
+  },
+  {
+   "uid": 10114,
+   "id": "4.5.3",
+   "name": "Maintain map and spatial context in the field",
+   "group": {
+    "id": "4.5",
+    "name": "Enable mobile field operation",
+    "uid": 10111
+   },
+   "intent": "Keep the work location and available network context usable for field orientation.",
+   "activities": [
+    "Load the authorised work area and location context",
+    "Present the work, asset and access location",
+    "Record a field-observed spatial discrepancy",
+    "Preserve the discrepancy for controlled record correction"
+   ],
+   "trigger": {
+    "kind": "none",
+    "text": "Field work requires map or spatial context.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Authorised work, scope and current status",
+     "party": "MAI",
+     "data": "Work"
+    },
+    {
+     "what": "Asset, location and prior field record",
+     "party": "GINV",
+     "data": "WorkLocation"
+    },
+    {
+     "what": "Assigned resource and operating constraints",
+     "party": "FRD",
+     "data": "Crew"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Available spatial context and recorded discrepancy",
+     "party": "FRD",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Spatial discrepancy for governed record correction",
+     "party": "MAI",
+     "data": "Work"
+    }
+   ],
+   "systems": [
+    {
+     "component": "FRD",
+     "role": "owning",
+     "service": "Mobile field operation"
+    },
+    {
+     "component": "MAI",
+     "role": "serving",
+     "service": "Work and reference data"
+    },
+    {
+     "component": "GINV",
+     "role": "reference",
+     "service": "Location context"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "MAI",
+     "to": "FRD",
+     "payload": "WorkRequest",
+     "verb": "change",
+     "pattern": "event"
+    },
+    {
+     "from": "FRD",
+     "to": "MAI",
+     "payload": "MaintenanceOrder",
+     "verb": "reply",
+     "pattern": "request-reply"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Field worker",
+     "raci": "R"
+    },
+    {
+     "role": "Geospatial data steward",
+     "raci": "A"
+    },
+    {
+     "role": "Field supervisor",
+     "raci": "C"
+    },
+    {
+     "role": "Asset records steward",
+     "raci": "I"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkTask",
+    "WorkActivityRecord",
+    "WorkLocation"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "Present only authorised work-area and network context for field orientation; it is not an uncontrolled asset-record correction."
+    },
+    {
+     "kind": "operational",
+     "text": "Preserve each observed spatial discrepancy with location and evidence for the governed record process."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Spatial discrepancy cycle time",
+     "definition": "Apply SMRP 5.4.7 from field observation through governed record disposition; formula not reproduced.",
+     "cite": "SMRP Best Practices 7th Edition, metric 5.4.7"
+    }
+   ],
+   "variants": [
+    "Connected map and record lookup",
+    "Offline cached work-area context",
+    "Field discrepancy recorded without changing the authoritative map"
+   ],
+   "notation": {
+    "class": "SPEC",
+    "why": "This is a standing field capability without one repeatable instance boundary.",
+    "artifact": null
+   },
+   "en17007": {
+    "process": "DOC.5",
+    "title": "Ensure access to necessary information at all times",
+    "clause": "6.9"
+   },
+   "sources": [
+    {
+     "for": "process alignment",
+     "cite": "EN 17007:2017 Maintenance process and associated indicators, DOC.5 Ensure access to necessary information at all times, cl. 6.9",
+     "status": "verified"
+    },
+    {
+     "for": "components, messages and work data",
+     "cite": "IEC 61968-6:2015 cl. 4.2 and cl. 5; IEC 61968-11:2013 CIM Work package",
+     "status": "clause-verified"
+    },
+    {
+     "for": "taxonomy coverage",
+     "cite": "APQC PCF Utilities v7.2.1 10.2.4, 10.2.5, 10.3.2 and 10.3.3, used as structural precedent for construction and maintenance execution",
+     "status": "consensus"
+    },
+    {
+     "for": "measure",
+     "cite": "SMRP Best Practices 7th Edition, metric 5.4.7",
+     "status": "consensus"
+    },
+    {
+     "for": "activities and variants",
+     "cite": "No permitted source defines offline map currency, field orientation content or spatial-discrepancy handling.",
+     "status": "judgment"
+    },
+    {
+     "for": "detailed process limitation",
+     "cite": "The Source Authority Pack identifies field forms, offline behaviour, synchronisation and field capture as vendor-defined; decomposition is judgment.",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "judgment",
+    "primary": "IEC 61968-6:2015 and the Source Authority Pack field-service gap"
+   }
+  },
+  {
+   "uid": 10115,
+   "id": "4.5.4",
+   "name": "Manage field device provisioning and support",
+   "group": {
+    "id": "4.5",
+    "name": "Enable mobile field operation",
+    "uid": 10111
+   },
+   "intent": "Provide a controlled field device with required access, software and support state.",
+   "activities": [
+    "Assign the device to an authorised worker or pool",
+    "Apply approved access and application configuration",
+    "Confirm required reference data is available",
+    "Respond to loss, failure or support request",
+    "Remove access and recover the device at end of assignment"
+   ],
+   "trigger": {
+    "kind": "message",
+    "text": "A worker needs a provisioned device or reports a device failure.",
+    "cim": "WorkRequest.change"
+   },
+   "inputs": [
+    {
+     "what": "Authorised work, scope and current status",
+     "party": "MAI",
+     "data": "Work"
+    },
+    {
+     "what": "Asset, location and prior field record",
+     "party": "GINV",
+     "data": "WorkLocation"
+    },
+    {
+     "what": "Assigned resource and operating constraints",
+     "party": "FRD",
+     "data": "Crew"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Provisioned device or controlled support resolution",
+     "party": "FRD",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Revoked access and device custody result",
+     "party": "MAI",
+     "data": "Work"
+    }
+   ],
+   "systems": [
+    {
+     "component": "FRD",
+     "role": "owning",
+     "service": "Mobile field operation"
+    },
+    {
+     "component": "MAI",
+     "role": "serving",
+     "service": "Work and reference data"
+    },
+    {
+     "component": "GINV",
+     "role": "reference",
+     "service": "Location context"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "MAI",
+     "to": "FRD",
+     "payload": "WorkRequest",
+     "verb": "change",
+     "pattern": "event"
+    },
+    {
+     "from": "FRD",
+     "to": "MAI",
+     "payload": "MaintenanceOrder",
+     "verb": "reply",
+     "pattern": "request-reply"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Device support analyst",
+     "raci": "R"
+    },
+    {
+     "role": "Field technology manager",
+     "raci": "A"
+    },
+    {
+     "role": "Information security lead",
+     "raci": "C"
+    },
+    {
+     "role": "Field supervisor",
+     "raci": "I"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkTask",
+    "WorkActivityRecord",
+    "WorkLocation"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "Provision a device only to an authorised worker or controlled pool with approved access and application configuration."
+    },
+    {
+     "kind": "operational",
+     "text": "On loss, failure or end of assignment, revoke access and record recovery or unresolved custody."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Device provisioning cycle time",
+     "definition": "Apply SMRP 5.4.7 from authorised device request through ready or recovered state; formula not reproduced.",
+     "cite": "SMRP Best Practices 7th Edition, metric 5.4.7"
+    }
+   ],
+   "variants": [
+    "New device provisioned to a worker",
+    "Shared device prepared for the next user",
+    "Lost or failed device disabled and replaced"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "The process has a repeatable start, ordered activities and a defined completion outcome.",
+    "artifact": "models/4.5-operate-mobile-and-offline.bpmn"
+   },
+   "en17007": {
+    "process": "TOL.3",
+    "title": "Maintain and/or Update the support equipment",
+    "clause": "6.17"
+   },
+   "sources": [
+    {
+     "for": "process alignment",
+     "cite": "EN 17007:2017 Maintenance process and associated indicators, TOL.3 Maintain and/or Update the support equipment, cl. 6.17",
+     "status": "verified"
+    },
+    {
+     "for": "components, messages and work data",
+     "cite": "IEC 61968-6:2015 cl. 4.2 and cl. 5; IEC 61968-11:2013 CIM Work package",
+     "status": "clause-verified"
+    },
+    {
+     "for": "taxonomy coverage",
+     "cite": "APQC PCF Utilities v7.2.1 10.2.4, 10.2.5, 10.3.2 and 10.3.3, used as structural precedent for construction and maintenance execution",
+     "status": "consensus"
+    },
+    {
+     "for": "measure",
+     "cite": "SMRP Best Practices 7th Edition, metric 5.4.7",
+     "status": "consensus"
+    },
+    {
+     "for": "activities and variants",
+     "cite": "No permitted source defines field-device assignment, application provisioning, support or recovery workflow.",
+     "status": "judgment"
+    },
+    {
+     "for": "detailed process limitation",
+     "cite": "The Source Authority Pack identifies field forms, offline behaviour, synchronisation and field capture as vendor-defined; decomposition is judgment.",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "judgment",
+    "primary": "IEC 61968-6:2015 and the Source Authority Pack field-service gap"
+   }
+  },
+  {
+   "uid": 10117,
+   "id": "4.6.1",
+   "name": "Place temporary surface restoration",
+   "group": {
+    "id": "4.6",
+    "name": "Restore the work site",
+    "uid": 10116
+   },
+   "intent": "Leave an excavated or disturbed surface in a controlled temporary condition.",
+   "activities": [
+    "Assess the surface and public exposure",
+    "Select the authorised temporary treatment",
+    "Place and secure the temporary restoration",
+    "Record location, condition and inspection need"
+   ],
+   "trigger": {
+    "kind": "manual",
+    "text": "Field work ends before permanent surface restoration can be completed.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Authorised work, scope and current status",
+     "party": "MAI",
+     "data": "Work"
+    },
+    {
+     "what": "Asset, location and prior field record",
+     "party": "GINV",
+     "data": "WorkLocation"
+    },
+    {
+     "what": "Assigned resource and operating constraints",
+     "party": "FRD",
+     "data": "Crew"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Temporary restoration and recorded condition",
+     "party": "FRD",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Inspection need for the temporary surface",
+     "party": "MAI",
+     "data": "Work"
+    }
+   ],
+   "systems": [
+    {
+     "component": "FRD",
+     "role": "owning",
+     "service": "Site restoration record"
+    },
+    {
+     "component": "MAI",
+     "role": "consuming",
+     "service": "Restoration work"
+    },
+    {
+     "component": "GINV",
+     "role": "reference",
+     "service": "Work location"
+    },
+    {
+     "component": "CON",
+     "role": "contributing",
+     "service": "Permanent restoration"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "MAI",
+     "to": "FRD",
+     "payload": "WorkRequest",
+     "verb": "change",
+     "pattern": "event"
+    },
+    {
+     "from": "FRD",
+     "to": "MAI",
+     "payload": "MaintenanceOrder",
+     "verb": "reply",
+     "pattern": "request-reply"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Restoration crew leader",
+     "raci": "R"
+    },
+    {
+     "role": "Restoration coordinator",
+     "raci": "A"
+    },
+    {
+     "role": "Traffic-control lead",
+     "raci": "C"
+    },
+    {
+     "role": "Field supervisor",
+     "raci": "I"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkTask",
+    "WorkActivityRecord",
+    "WorkLocation"
+   ],
+   "controls": [
+    {
+     "kind": "regulatory",
+     "text": "Place temporary restoration that controls the recorded surface condition and public exposure until permanent work."
+    },
+    {
+     "kind": "operational",
+     "text": "Retain location, treatment, condition and required inspection so the temporary state has an accountable owner."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Temporary restoration cycle time",
+     "definition": "Apply SMRP 5.4.7 from disturbed surface through controlled temporary condition; formula not reproduced.",
+     "cite": "SMRP Best Practices 7th Edition, metric 5.4.7"
+    }
+   ],
+   "variants": [
+    "Temporary pavement patch",
+    "Temporary unpaved or landscaped surface",
+    "Barrier or plate retained pending permanent work"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "The process has a repeatable start, ordered activities and a defined completion outcome.",
+    "artifact": "models/4.6-restore-the-site.bpmn"
+   },
+   "en17007": {
+    "process": "ACT.6",
+    "title": "Perform the maintenance tasks",
+    "clause": "6.5.7"
+   },
+   "sources": [
+    {
+     "for": "process alignment",
+     "cite": "EN 17007:2017 Maintenance process and associated indicators, ACT.6 Perform the maintenance tasks, cl. 6.5.7",
+     "status": "verified"
+    },
+    {
+     "for": "components, messages and work data",
+     "cite": "IEC 61968-6:2015 cl. 4.2 and cl. 5; IEC 61968-11:2013 CIM Work package",
+     "status": "clause-verified"
+    },
+    {
+     "for": "taxonomy coverage",
+     "cite": "APQC PCF Utilities v7.2.1 10.2.4, 10.2.5, 10.3.2 and 10.3.3, used as structural precedent for construction and maintenance execution",
+     "status": "consensus"
+    },
+    {
+     "for": "measure",
+     "cite": "SMRP Best Practices 7th Edition, metric 5.4.7",
+     "status": "consensus"
+    },
+    {
+     "for": "activities and variants",
+     "cite": "No permitted source defines temporary surface treatment, inspection need or public-exposure acceptance criteria.",
+     "status": "judgment"
+    },
+    {
+     "for": "traffic and site protection",
+     "cite": "MUTCD 11th Edition with Revision 1, Part 6 Temporary Traffic Control; local permit conditions remain jurisdiction-specific",
+     "status": "regulation"
+    }
+   ],
+   "provenance": {
+    "basis": "regulation",
+    "primary": "MUTCD 11th Edition with Revision 1"
+   }
+  },
+  {
+   "uid": 10118,
+   "id": "4.6.2",
+   "name": "Maintain temporary restoration until permanent work",
+   "group": {
+    "id": "4.6",
+    "name": "Restore the work site",
+    "uid": 10116
+   },
+   "intent": "Inspect and repair temporary restoration until permanent restoration is accepted.",
+   "activities": [
+    "Schedule the required temporary-condition inspection",
+    "Inspect surface, barriers and public exposure",
+    "Repair or renew an unacceptable condition",
+    "Record inspection and next required action",
+    "Escalate when permanent work is at risk"
+   ],
+   "trigger": {
+    "kind": "timer",
+    "text": "A temporary restoration remains open.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Authorised work, scope and current status",
+     "party": "MAI",
+     "data": "Work"
+    },
+    {
+     "what": "Asset, location and prior field record",
+     "party": "GINV",
+     "data": "WorkLocation"
+    },
+    {
+     "what": "Assigned resource and operating constraints",
+     "party": "FRD",
+     "data": "Crew"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Maintained temporary condition and inspection record",
+     "party": "FRD",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Next temporary-restoration action and due time",
+     "party": "MAI",
+     "data": "Work"
+    }
+   ],
+   "systems": [
+    {
+     "component": "FRD",
+     "role": "owning",
+     "service": "Site restoration record"
+    },
+    {
+     "component": "MAI",
+     "role": "consuming",
+     "service": "Restoration work"
+    },
+    {
+     "component": "GINV",
+     "role": "reference",
+     "service": "Work location"
+    },
+    {
+     "component": "CON",
+     "role": "contributing",
+     "service": "Permanent restoration"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "MAI",
+     "to": "FRD",
+     "payload": "WorkRequest",
+     "verb": "change",
+     "pattern": "event"
+    },
+    {
+     "from": "FRD",
+     "to": "MAI",
+     "payload": "MaintenanceOrder",
+     "verb": "reply",
+     "pattern": "request-reply"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Restoration inspector",
+     "raci": "R"
+    },
+    {
+     "role": "Restoration coordinator",
+     "raci": "A"
+    },
+    {
+     "role": "Maintenance crew lead",
+     "raci": "C"
+    },
+    {
+     "role": "Jurisdiction representative",
+     "raci": "I"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkTask",
+    "WorkActivityRecord",
+    "WorkLocation"
+   ],
+   "controls": [
+    {
+     "kind": "regulatory",
+     "text": "Inspect temporary surfaces, barriers and public exposure at the required interval until permanent acceptance."
+    },
+    {
+     "kind": "operational",
+     "text": "Repair an unacceptable condition immediately or escalate it with the next action and due time."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Temporary restoration rework",
+     "definition": "Apply SMRP 4.1 to temporary surfaces repaired after an unacceptable inspection; formula not reproduced.",
+     "cite": "SMRP Best Practices 7th Edition, metric 4.1"
+    }
+   ],
+   "variants": [
+    "Temporary condition remains acceptable",
+    "Minor degradation repaired during inspection",
+    "Failure requires urgent make-safe work"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "The process has a repeatable start, ordered activities and a defined completion outcome.",
+    "artifact": "models/4.6-restore-the-site.bpmn"
+   },
+   "en17007": {
+    "process": "MAN.5",
+    "title": "Oversee the actions",
+    "clause": "6.2"
+   },
+   "sources": [
+    {
+     "for": "process alignment",
+     "cite": "EN 17007:2017 Maintenance process and associated indicators, MAN.5 Oversee the actions, cl. 6.2",
+     "status": "verified"
+    },
+    {
+     "for": "components, messages and work data",
+     "cite": "IEC 61968-6:2015 cl. 4.2 and cl. 5; IEC 61968-11:2013 CIM Work package",
+     "status": "clause-verified"
+    },
+    {
+     "for": "taxonomy coverage",
+     "cite": "APQC PCF Utilities v7.2.1 10.2.4, 10.2.5, 10.3.2 and 10.3.3, used as structural precedent for construction and maintenance execution",
+     "status": "consensus"
+    },
+    {
+     "for": "measure",
+     "cite": "SMRP Best Practices 7th Edition, metric 4.1",
+     "status": "consensus"
+    },
+    {
+     "for": "activities and variants",
+     "cite": "No permitted source defines inspection intervals, repair thresholds or escalation for temporary restoration.",
+     "status": "judgment"
+    },
+    {
+     "for": "traffic and site protection",
+     "cite": "MUTCD 11th Edition with Revision 1, Part 6 Temporary Traffic Control; local permit conditions remain jurisdiction-specific",
+     "status": "regulation"
+    }
+   ],
+   "provenance": {
+    "basis": "regulation",
+    "primary": "MUTCD 11th Edition with Revision 1"
+   }
+  },
+  {
+   "uid": 10119,
+   "id": "4.6.3",
+   "name": "Raise and schedule permanent restoration work",
+   "group": {
+    "id": "4.6",
+    "name": "Restore the work site",
+    "uid": 10116
+   },
+   "intent": "Create ready permanent-restoration work with the location, scope and deadline required for scheduling.",
+   "activities": [
+    "Confirm permanent restoration is required",
+    "Define surface, limits and reinstatement obligation",
+    "Record permit or jurisdiction deadline",
+    "Create and route the restoration work",
+    "Link it to the originating field work"
+   ],
+   "trigger": {
+    "kind": "message",
+    "text": "Temporary restoration or completed utility work requires permanent reinstatement.",
+    "cim": "WorkRequest.change"
+   },
+   "inputs": [
+    {
+     "what": "Authorised work, scope and current status",
+     "party": "MAI",
+     "data": "Work"
+    },
+    {
+     "what": "Asset, location and prior field record",
+     "party": "GINV",
+     "data": "WorkLocation"
+    },
+    {
+     "what": "Assigned resource and operating constraints",
+     "party": "FRD",
+     "data": "Crew"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Linked permanent-restoration work",
+     "party": "FRD",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Scheduling request with restoration deadline",
+     "party": "MAI",
+     "data": "Work"
+    }
+   ],
+   "systems": [
+    {
+     "component": "FRD",
+     "role": "owning",
+     "service": "Site restoration record"
+    },
+    {
+     "component": "MAI",
+     "role": "consuming",
+     "service": "Restoration work"
+    },
+    {
+     "component": "GINV",
+     "role": "reference",
+     "service": "Work location"
+    },
+    {
+     "component": "CON",
+     "role": "contributing",
+     "service": "Permanent restoration"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "MAI",
+     "to": "FRD",
+     "payload": "WorkRequest",
+     "verb": "change",
+     "pattern": "event"
+    },
+    {
+     "from": "FRD",
+     "to": "MAI",
+     "payload": "MaintenanceOrder",
+     "verb": "reply",
+     "pattern": "request-reply"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Restoration coordinator",
+     "raci": "R"
+    },
+    {
+     "role": "Field operations manager",
+     "raci": "A"
+    },
+    {
+     "role": "Permit coordinator",
+     "raci": "C"
+    },
+    {
+     "role": "Scheduler",
+     "raci": "I"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkTask",
+    "WorkActivityRecord",
+    "WorkLocation"
+   ],
+   "controls": [
+    {
+     "kind": "regulatory",
+     "text": "Create permanent-restoration work only from confirmed surface limits, reinstatement obligation and jurisdiction deadline."
+    },
+    {
+     "kind": "operational",
+     "text": "Link the new restoration work to the originating field work and route it to scheduling."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Permanent-restoration backlog",
+     "definition": "Use SMRP 5.4.8 and 5.4.9 for open permanent-restoration work awaiting execution; formulas not reproduced.",
+     "cite": "SMRP Best Practices 7th Edition, metrics 5.4.8 and 5.4.9"
+    }
+   ],
+   "variants": [
+    "Permanent restoration included in the original work",
+    "Separate follow-up work created",
+    "Restoration bundled by location or jurisdiction"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "The process has a repeatable start, ordered activities and a defined completion outcome.",
+    "artifact": "models/4.6-restore-the-site.bpmn"
+   },
+   "en17007": {
+    "process": "ACT.2",
+    "title": "Prepare for the maintenance tasks",
+    "clause": "6.5.3"
+   },
+   "sources": [
+    {
+     "for": "process alignment",
+     "cite": "EN 17007:2017 Maintenance process and associated indicators, ACT.2 Prepare for the maintenance tasks, cl. 6.5.3",
+     "status": "verified"
+    },
+    {
+     "for": "components, messages and work data",
+     "cite": "IEC 61968-6:2015 cl. 4.2 and cl. 5; IEC 61968-11:2013 CIM Work package",
+     "status": "clause-verified"
+    },
+    {
+     "for": "taxonomy coverage",
+     "cite": "APQC PCF Utilities v7.2.1 10.2.4, 10.2.5, 10.3.2 and 10.3.3, used as structural precedent for construction and maintenance execution",
+     "status": "consensus"
+    },
+    {
+     "for": "measure",
+     "cite": "SMRP Best Practices 7th Edition, metrics 5.4.8 and 5.4.9",
+     "status": "consensus"
+    },
+    {
+     "for": "activities and variants",
+     "cite": "No permitted source defines the content or routing of permanent-restoration work from completed field work.",
+     "status": "judgment"
+    },
+    {
+     "for": "traffic and site protection",
+     "cite": "MUTCD 11th Edition with Revision 1, Part 6 Temporary Traffic Control; local permit conditions remain jurisdiction-specific",
+     "status": "regulation"
+    }
+   ],
+   "provenance": {
+    "basis": "regulation",
+    "primary": "MUTCD 11th Edition with Revision 1"
+   }
+  },
+  {
+   "uid": 10120,
+   "id": "4.6.4",
+   "name": "Perform permanent surface restoration",
+   "group": {
+    "id": "4.6",
+    "name": "Restore the work site",
+    "uid": 10116
+   },
+   "intent": "Restore the disturbed surface to the authorised permanent condition.",
+   "activities": [
+    "Verify restoration scope and current site condition",
+    "Prepare the surface and limits",
+    "Place the permanent material and finish",
+    "Apply required traffic and public protection",
+    "Record completed condition and evidence"
+   ],
+   "trigger": {
+    "kind": "manual",
+    "text": "Permanent-restoration work is released and the site is ready.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Authorised work, scope and current status",
+     "party": "MAI",
+     "data": "Work"
+    },
+    {
+     "what": "Asset, location and prior field record",
+     "party": "GINV",
+     "data": "WorkLocation"
+    },
+    {
+     "what": "Assigned resource and operating constraints",
+     "party": "FRD",
+     "data": "Crew"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Permanent surface restoration and completion evidence",
+     "party": "FRD",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Completed condition for inspection or acceptance",
+     "party": "MAI",
+     "data": "Work"
+    }
+   ],
+   "systems": [
+    {
+     "component": "FRD",
+     "role": "owning",
+     "service": "Site restoration record"
+    },
+    {
+     "component": "MAI",
+     "role": "consuming",
+     "service": "Restoration work"
+    },
+    {
+     "component": "GINV",
+     "role": "reference",
+     "service": "Work location"
+    },
+    {
+     "component": "CON",
+     "role": "contributing",
+     "service": "Permanent restoration"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "MAI",
+     "to": "FRD",
+     "payload": "WorkRequest",
+     "verb": "change",
+     "pattern": "event"
+    },
+    {
+     "from": "FRD",
+     "to": "MAI",
+     "payload": "MaintenanceOrder",
+     "verb": "reply",
+     "pattern": "request-reply"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Restoration crew leader",
+     "raci": "R"
+    },
+    {
+     "role": "Restoration coordinator",
+     "raci": "A"
+    },
+    {
+     "role": "Traffic-control lead",
+     "raci": "C"
+    },
+    {
+     "role": "Jurisdiction inspector",
+     "raci": "I"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkTask",
+    "WorkActivityRecord",
+    "WorkLocation"
+   ],
+   "controls": [
+    {
+     "kind": "regulatory",
+     "text": "Perform permanent restoration to the authorised surface, limits and finish while maintaining required traffic and public protection."
+    },
+    {
+     "kind": "operational",
+     "text": "Retain completion evidence and final condition for jurisdiction inspection or internal acceptance."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Permanent restoration rework",
+     "definition": "Apply SMRP 4.1 to permanent surfaces corrected after failed acceptance; formula not reproduced.",
+     "cite": "SMRP Best Practices 7th Edition, metric 4.1"
+    }
+   ],
+   "variants": [
+    "Pavement restoration",
+    "Sidewalk or curb restoration",
+    "Unpaved or landscaped restoration"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "The process has a repeatable start, ordered activities and a defined completion outcome.",
+    "artifact": "models/4.6-restore-the-site.bpmn"
+   },
+   "en17007": {
+    "process": "ACT.6",
+    "title": "Perform the maintenance tasks",
+    "clause": "6.5.7"
+   },
+   "sources": [
+    {
+     "for": "process alignment",
+     "cite": "EN 17007:2017 Maintenance process and associated indicators, ACT.6 Perform the maintenance tasks, cl. 6.5.7",
+     "status": "verified"
+    },
+    {
+     "for": "components, messages and work data",
+     "cite": "IEC 61968-6:2015 cl. 4.2 and cl. 5; IEC 61968-11:2013 CIM Work package",
+     "status": "clause-verified"
+    },
+    {
+     "for": "taxonomy coverage",
+     "cite": "APQC PCF Utilities v7.2.1 10.2.4, 10.2.5, 10.3.2 and 10.3.3, used as structural precedent for construction and maintenance execution",
+     "status": "consensus"
+    },
+    {
+     "for": "measure",
+     "cite": "SMRP Best Practices 7th Edition, metric 4.1",
+     "status": "consensus"
+    },
+    {
+     "for": "activities and variants",
+     "cite": "No permitted source defines permanent-restoration method or finish; the issuing jurisdiction supplies acceptance criteria.",
+     "status": "judgment"
+    },
+    {
+     "for": "traffic and site protection",
+     "cite": "MUTCD 11th Edition with Revision 1, Part 6 Temporary Traffic Control; local permit conditions remain jurisdiction-specific",
+     "status": "regulation"
+    }
+   ],
+   "provenance": {
+    "basis": "regulation",
+    "primary": "MUTCD 11th Edition with Revision 1"
+   }
+  },
+  {
+   "uid": 10121,
+   "id": "4.6.5",
+   "name": "Obtain jurisdiction inspection and release",
+   "group": {
+    "id": "4.6",
+    "name": "Restore the work site",
+    "uid": 10116
+   },
+   "intent": "Obtain and record jurisdiction acceptance where the permit or authority requires it.",
+   "activities": [
+    "Confirm the applicable inspection and release requirement",
+    "Request inspection with the required evidence",
+    "Attend or support the inspection",
+    "Correct a rejected condition",
+    "Record acceptance or outstanding action"
+   ],
+   "trigger": {
+    "kind": "message",
+    "text": "Permanent restoration reaches the jurisdiction inspection point.",
+    "cim": "WorkRequest.change"
+   },
+   "inputs": [
+    {
+     "what": "Authorised work, scope and current status",
+     "party": "MAI",
+     "data": "Work"
+    },
+    {
+     "what": "Asset, location and prior field record",
+     "party": "GINV",
+     "data": "WorkLocation"
+    },
+    {
+     "what": "Assigned resource and operating constraints",
+     "party": "FRD",
+     "data": "Crew"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Jurisdiction acceptance or corrective action",
+     "party": "FRD",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Permit release or rejected-condition work",
+     "party": "MAI",
+     "data": "Work"
+    }
+   ],
+   "systems": [
+    {
+     "component": "FRD",
+     "role": "owning",
+     "service": "Site restoration record"
+    },
+    {
+     "component": "MAI",
+     "role": "consuming",
+     "service": "Restoration work"
+    },
+    {
+     "component": "GINV",
+     "role": "reference",
+     "service": "Work location"
+    },
+    {
+     "component": "CON",
+     "role": "contributing",
+     "service": "Permanent restoration"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "MAI",
+     "to": "FRD",
+     "payload": "WorkRequest",
+     "verb": "change",
+     "pattern": "event"
+    },
+    {
+     "from": "FRD",
+     "to": "MAI",
+     "payload": "MaintenanceOrder",
+     "verb": "reply",
+     "pattern": "request-reply"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Restoration contractor",
+     "raci": "R"
+    },
+    {
+     "role": "Permit holder",
+     "raci": "A"
+    },
+    {
+     "role": "Restoration coordinator",
+     "raci": "C"
+    },
+    {
+     "role": "Jurisdiction inspector",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkTask",
+    "WorkActivityRecord",
+    "WorkLocation"
+   ],
+   "controls": [
+    {
+     "kind": "regulatory",
+     "text": "Request jurisdiction inspection with the permit evidence and completed restoration condition required by the issuing authority."
+    },
+    {
+     "kind": "operational",
+     "text": "A rejected condition remains corrective work; only recorded acceptance releases the jurisdiction obligation."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Jurisdiction release cycle time",
+     "definition": "Apply SMRP 5.4.7 from inspection request through jurisdiction acceptance; formula not reproduced.",
+     "cite": "SMRP Best Practices 7th Edition, metric 5.4.7"
+    }
+   ],
+   "variants": [
+    "Accepted on first inspection",
+    "Conditional acceptance with minor action",
+    "Rejected and returned for corrective restoration"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "The process has a repeatable start, ordered activities and a defined completion outcome.",
+    "artifact": "models/4.6-restore-the-site.bpmn"
+   },
+   "en17007": {
+    "process": "ACT.7",
+    "title": "Finish the tasks",
+    "clause": "6.5.8"
+   },
+   "sources": [
+    {
+     "for": "process alignment",
+     "cite": "EN 17007:2017 Maintenance process and associated indicators, ACT.7 Finish the tasks, cl. 6.5.8",
+     "status": "verified"
+    },
+    {
+     "for": "components, messages and work data",
+     "cite": "IEC 61968-6:2015 cl. 4.2 and cl. 5; IEC 61968-11:2013 CIM Work package",
+     "status": "clause-verified"
+    },
+    {
+     "for": "taxonomy coverage",
+     "cite": "APQC PCF Utilities v7.2.1 10.2.4, 10.2.5, 10.3.2 and 10.3.3, used as structural precedent for construction and maintenance execution",
+     "status": "consensus"
+    },
+    {
+     "for": "measure",
+     "cite": "SMRP Best Practices 7th Edition, metric 5.4.7",
+     "status": "consensus"
+    },
+    {
+     "for": "activities and variants",
+     "cite": "No permitted source defines jurisdiction inspection scheduling, evidence submission or rejection correction.",
+     "status": "judgment"
+    },
+    {
+     "for": "traffic and site protection",
+     "cite": "MUTCD 11th Edition with Revision 1, Part 6 Temporary Traffic Control; local permit conditions remain jurisdiction-specific",
+     "status": "regulation"
+    }
+   ],
+   "provenance": {
+    "basis": "regulation",
+    "primary": "MUTCD 11th Edition with Revision 1"
+   }
+  },
+  {
+   "uid": 10122,
+   "id": "4.6.6",
+   "name": "Track restoration against permit deadline",
+   "group": {
+    "id": "4.6",
+    "name": "Restore the work site",
+    "uid": 10116
+   },
+   "intent": "Maintain visibility and escalation for restoration obligations approaching their permitted deadline.",
+   "activities": [
+    "Record the permit or jurisdiction deadline",
+    "Compare open restoration with the remaining time",
+    "Notify the responsible owner before breach",
+    "Escalate an at-risk or overdue obligation",
+    "Close tracking on accepted release"
+   ],
+   "trigger": {
+    "kind": "timer",
+    "text": "An open restoration obligation reaches a monitoring threshold.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Authorised work, scope and current status",
+     "party": "MAI",
+     "data": "Work"
+    },
+    {
+     "what": "Asset, location and prior field record",
+     "party": "GINV",
+     "data": "WorkLocation"
+    },
+    {
+     "what": "Assigned resource and operating constraints",
+     "party": "FRD",
+     "data": "Crew"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Current deadline status and escalation record",
+     "party": "FRD",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "At-risk or overdue restoration escalation",
+     "party": "MAI",
+     "data": "Work"
+    }
+   ],
+   "systems": [
+    {
+     "component": "FRD",
+     "role": "owning",
+     "service": "Site restoration record"
+    },
+    {
+     "component": "MAI",
+     "role": "consuming",
+     "service": "Restoration work"
+    },
+    {
+     "component": "GINV",
+     "role": "reference",
+     "service": "Work location"
+    },
+    {
+     "component": "CON",
+     "role": "contributing",
+     "service": "Permanent restoration"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "MAI",
+     "to": "FRD",
+     "payload": "WorkRequest",
+     "verb": "change",
+     "pattern": "event"
+    },
+    {
+     "from": "FRD",
+     "to": "MAI",
+     "payload": "MaintenanceOrder",
+     "verb": "reply",
+     "pattern": "request-reply"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Permit coordinator",
+     "raci": "R"
+    },
+    {
+     "role": "Field operations manager",
+     "raci": "A"
+    },
+    {
+     "role": "Restoration coordinator",
+     "raci": "C"
+    },
+    {
+     "role": "Jurisdiction representative",
+     "raci": "I"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkTask",
+    "WorkActivityRecord",
+    "WorkLocation"
+   ],
+   "controls": [
+    {
+     "kind": "regulatory",
+     "text": "Compare each open restoration obligation with its permit or jurisdiction deadline and named owner."
+    },
+    {
+     "kind": "operational",
+     "text": "Notify before breach and escalate at-risk or overdue work; close tracking only on accepted release."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Overdue restoration work",
+     "definition": "Apply SMRP 5.4.11 to restoration obligations past the permit or jurisdiction due date; formula not reproduced.",
+     "cite": "SMRP Best Practices 7th Edition, metric 5.4.11"
+    }
+   ],
+   "variants": [
+    "On track within the permit window",
+    "At risk and escalated before deadline",
+    "Overdue with jurisdiction notification required"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "The process has a repeatable start, ordered activities and a defined completion outcome.",
+    "artifact": "models/4.6-restore-the-site.bpmn"
+   },
+   "en17007": {
+    "process": "MAN.5",
+    "title": "Oversee the actions",
+    "clause": "6.2"
+   },
+   "sources": [
+    {
+     "for": "process alignment",
+     "cite": "EN 17007:2017 Maintenance process and associated indicators, MAN.5 Oversee the actions, cl. 6.2",
+     "status": "verified"
+    },
+    {
+     "for": "components, messages and work data",
+     "cite": "IEC 61968-6:2015 cl. 4.2 and cl. 5; IEC 61968-11:2013 CIM Work package",
+     "status": "clause-verified"
+    },
+    {
+     "for": "taxonomy coverage",
+     "cite": "APQC PCF Utilities v7.2.1 10.2.4, 10.2.5, 10.3.2 and 10.3.3, used as structural precedent for construction and maintenance execution",
+     "status": "consensus"
+    },
+    {
+     "for": "measure",
+     "cite": "SMRP Best Practices 7th Edition, metric 5.4.11",
+     "status": "consensus"
+    },
+    {
+     "for": "activities and variants",
+     "cite": "No permitted source defines warning lead time or escalation thresholds for restoration permit deadlines.",
+     "status": "judgment"
+    },
+    {
+     "for": "traffic and site protection",
+     "cite": "MUTCD 11th Edition with Revision 1, Part 6 Temporary Traffic Control; local permit conditions remain jurisdiction-specific",
+     "status": "regulation"
+    }
+   ],
+   "provenance": {
+    "basis": "regulation",
+    "primary": "MUTCD 11th Edition with Revision 1"
+   }
+  }
+ ]
+}

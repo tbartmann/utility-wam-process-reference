@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/" id="Confirm_isolation" name="4.4.4 Confirm isolation and permit-to-work" namespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <description>THIS TABLE VERIFIES. IT DOES NOT ISSUE. 18.4.4 is the only process in this model that issues a clearance, and it is the system operator who gives it under 29 CFR 1910.269(m)(3)(vi). What the crew does here is establish which energy-control regime governs, confirm the control actually exists and is valid, and BLOCK the work when it does not.
+
+The regimes do not substitute for one another and the rows say so. 1910.269(m) governs electric transmission and distribution. 1910.147 lockout/tagout reaches gas distribution work precisely because 1910.147(a)(1)(ii)(C) excludes electric utility installations. Complying with the wrong one is not partial compliance - 1910.269(m)(1) treats a conductor deenergized under anything other than (d) or (m) as still energized.
+
+And a permit is not a clearance. A permit comes from an external authority and is obtained at 2.6; a clearance is an internal act of the system operator. A crew holding a street-opening permit and no clearance has authority to dig and none to touch the plant.</description>
+  <inputData id="in_regime" name="Energy-control regime from 18.1.1"><variable id="in_regime_v" name="Energy-control regime from 18.1.1" typeRef="string"/></inputData>
+  <inputData id="in_controlExists" name="The clearance or lockout is in place"><variable id="in_controlExists_v" name="The clearance or lockout is in place" typeRef="boolean"/></inputData>
+  <inputData id="in_verified" name="Verified with the issuing authority"><variable id="in_verified_v" name="Verified with the issuing authority" typeRef="boolean"/></inputData>
+  <inputData id="in_withinLimits" name="Work is within the recorded limits of the control"><variable id="in_withinLimits_v" name="Work is within the recorded limits of the control" typeRef="boolean"/></inputData>
+  <knowledgeSource id="ks_269m3" name="29 CFR 1910.269(m)(1), (m)(3)(vi) and (m)(3)(viii); 29 CFR 1910.147(a)(1)(ii)(C); 18.4.4"><description>(m)(3)(vi) the system operator gives the clearance; (m)(3)(viii) only then may the lines be considered deenergized; (m)(1) anything else is treated as energized. 1910.147(a)(1)(ii)(C) is the exclusion that puts gas under lockout/tagout.</description></knowledgeSource>
+  <decision id="d_4_4_4" name="Authority to work">
+    <variable id="d_4_4_4_v" name="Authority to work" typeRef="string"/>
+    <informationRequirement id="ir_d_4_4_4_ks_269m3"><requiredInput href="#ks_269m3"/></informationRequirement>
+    <decisionTable id="d_4_4_4_dt" hitPolicy="FIRST" preferredOrientation="Rule-as-Row">
+      <input id="d_4_4_4_i1" label="Regime"><inputExpression id="d_4_4_4_i1_e" typeRef="string"><text>in_regime</text></inputExpression></input>
+      <input id="d_4_4_4_i2" label="Control in place"><inputExpression id="d_4_4_4_i2_e" typeRef="boolean"><text>in_controlExists</text></inputExpression></input>
+      <input id="d_4_4_4_i3" label="Verified with the issuer"><inputExpression id="d_4_4_4_i3_e" typeRef="boolean"><text>in_verified</text></inputExpression></input>
+      <input id="d_4_4_4_i4" label="Within recorded limits"><inputExpression id="d_4_4_4_i4_e" typeRef="boolean"><text>in_withinLimits</text></inputExpression></input>
+      <output id="d_4_4_4_o" label="Authority to work" name="Authority to work" typeRef="string"/>
+      <rule id="d_4_4_4_r1">
+        <description>No isolation required. Work proceeds on the live-line or no-contact method, and 1910.269(l) minimum approach distance governs instead. No clearance exists, so there is nothing for 18.5 to release.</description>
+        <inputEntry id="d_4_4_4_r1_ie1"><text>"noIsolation"</text></inputEntry>
+        <inputEntry id="d_4_4_4_r1_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_4_4_4_r1_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_4_4_4_r1_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_4_4_4_r1_oe"><text>"proceedLiveMethod"</text></outputEntry>
+      </rule>
+      <rule id="d_4_4_4_r2">
+        <description>BLOCK. No clearance and no lockout in place. 1910.269(m)(1) treats the plant as energized whatever has been done to it, and the crew requests one through 18.4.4 rather than proceeding.</description>
+        <inputEntry id="d_4_4_4_r2_ie1"><text>-</text></inputEntry>
+        <inputEntry id="d_4_4_4_r2_ie2"><text>false</text></inputEntry>
+        <inputEntry id="d_4_4_4_r2_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_4_4_4_r2_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_4_4_4_r2_oe"><text>"blockNoControl"</text></outputEntry>
+      </rule>
+      <rule id="d_4_4_4_r3">
+        <description>BLOCK. A control the crew believes exists but has not confirmed with the issuing authority is a belief. (m)(3)(vi) makes the giving of the clearance an act of the system operator, so the system operator is who confirms it.</description>
+        <inputEntry id="d_4_4_4_r3_ie1"><text>-</text></inputEntry>
+        <inputEntry id="d_4_4_4_r3_ie2"><text>true</text></inputEntry>
+        <inputEntry id="d_4_4_4_r3_ie3"><text>false</text></inputEntry>
+        <inputEntry id="d_4_4_4_r3_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_4_4_4_r3_oe"><text>"blockUnverified"</text></outputEntry>
+      </rule>
+      <rule id="d_4_4_4_r4">
+        <description>BLOCK. Valid control, but the work has moved outside the section, the equipment or the time it covers. 18.4.6 extends or transfers; the crew does not widen the scope of a clearance by working past it.</description>
+        <inputEntry id="d_4_4_4_r4_ie1"><text>-</text></inputEntry>
+        <inputEntry id="d_4_4_4_r4_ie2"><text>true</text></inputEntry>
+        <inputEntry id="d_4_4_4_r4_ie3"><text>true</text></inputEntry>
+        <inputEntry id="d_4_4_4_r4_ie4"><text>false</text></inputEntry>
+        <outputEntry id="d_4_4_4_r4_oe"><text>"blockOutsideLimits"</text></outputEntry>
+      </rule>
+      <rule id="d_4_4_4_r5">
+        <description>Proceed under 29 CFR 1910.147, which reaches gas because (a)(1)(ii)(C) excludes only electric utility installations. The gas section is proved safe by purge and atmosphere at 18.4.3, never by a test for voltage.</description>
+        <inputEntry id="d_4_4_4_r5_ie1"><text>"gasOperating"</text></inputEntry>
+        <inputEntry id="d_4_4_4_r5_ie2"><text>true</text></inputEntry>
+        <inputEntry id="d_4_4_4_r5_ie3"><text>true</text></inputEntry>
+        <inputEntry id="d_4_4_4_r5_ie4"><text>true</text></inputEntry>
+        <outputEntry id="d_4_4_4_r5_oe"><text>"proceedLotoGas"</text></outputEntry>
+      </rule>
+      <rule id="d_4_4_4_r6">
+        <description>Proceed. The clearance 18.4.4 issued is held, verified and covers this work. (m)(3)(viii) has been satisfied and the section may be treated as deenergized.</description>
+        <inputEntry id="d_4_4_4_r6_ie1"><text>-</text></inputEntry>
+        <inputEntry id="d_4_4_4_r6_ie2"><text>true</text></inputEntry>
+        <inputEntry id="d_4_4_4_r6_ie3"><text>true</text></inputEntry>
+        <inputEntry id="d_4_4_4_r6_ie4"><text>true</text></inputEntry>
+        <outputEntry id="d_4_4_4_r6_oe"><text>"proceedUnderClearance"</text></outputEntry>
+      </rule>
+      <rule id="d_4_4_4_r7">
+        <description>Regime not established. 18.1.1 returns it and this table consumes it - and the default here is the one (m)(1) punishes.</description>
+        <inputEntry id="d_4_4_4_r7_ie1"><text>-</text></inputEntry>
+        <inputEntry id="d_4_4_4_r7_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_4_4_4_r7_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_4_4_4_r7_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_4_4_4_r7_oe"><text>"determineManually"</text></outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram id="drd_Confirm_isolation">
+      <dmndi:DMNShape id="sh_in_regime" dmnElementRef="in_regime"><dc:Bounds x="60" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_controlExists" dmnElementRef="in_controlExists"><dc:Bounds x="245" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_verified" dmnElementRef="in_verified"><dc:Bounds x="430" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_withinLimits" dmnElementRef="in_withinLimits"><dc:Bounds x="615" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_d_4_4_4" dmnElementRef="d_4_4_4"><dc:Bounds x="60" y="240" width="180" height="70"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_ks_269m3" dmnElementRef="ks_269m3"><dc:Bounds x="900" y="100" width="160" height="55"/></dmndi:DMNShape>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</definitions>

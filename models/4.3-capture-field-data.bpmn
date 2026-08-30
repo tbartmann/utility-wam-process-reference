@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_P_4_3" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <process id="P_4_3" name="4.3 Capture field data and evidence" isExecutable="false">
+    <documentation>4.3.1 to 4.3.5 are drawn on one path; 4.3.6 is a classification and has its own table. They are one path because they are one act - the crew capturing what it found and what it left - and what differs between them is the evidence type and its validity test, not the sequence.
+
+EVERY BRANCH HAS A REJECT ROUTE, and that is the whole point of drawing this group. A form submitted incomplete, a photograph that obscures the condition, a reading from an instrument out of calibration, a signature from someone who cannot give one - each is worse than a gap, because each will be believed. So each is held with a named exception rather than accepted.
+
+The instrument-eligibility check on 4.3.3 is the one with a source behind it: 6.4.6 maintains test equipment calibration, and a reading from an ineligible instrument is not evidence of anything. As-found and as-left at 4.3.5 are what 12.4.1 and 5.4 consume, which is why the comparison against the acceptance requirement happens here rather than at closure.</documentation>
+    <laneSet id="P_4_3_lanes">
+      <lane id="l_43_crew" name="Field crew">
+        <flowNodeRef>n_43_start</flowNodeRef>
+        <flowNodeRef>n_43_kind</flowNodeRef>
+        <flowNodeRef>n_43_form</flowNodeRef>
+        <flowNodeRef>n_43_photo</flowNodeRef>
+        <flowNodeRef>n_43_read</flowNodeRef>
+        <flowNodeRef>n_43_sig</flowNodeRef>
+        <flowNodeRef>n_43_cond</flowNodeRef>
+        <flowNodeRef>n_43_val</flowNodeRef>
+        <flowNodeRef>n_43_hold</flowNodeRef>
+        <flowNodeRef>n_43_sym</flowNodeRef>
+      </lane>
+      <lane id="l_43_rec" name="Work record">
+        <flowNodeRef>n_43_link</flowNodeRef>
+        <flowNodeRef>n_43_cmp</flowNodeRef>
+        <flowNodeRef>n_43_fu</flowNodeRef>
+        <flowNodeRef>n_43_end</flowNodeRef>
+      </lane>
+    </laneSet>
+    <startEvent id="n_43_start" name="Work is under way and produces evidence"><conditionalEventDefinition id="n_43_start_cd"><condition/></conditionalEventDefinition></startEvent>
+    <exclusiveGateway id="n_43_kind" name="Evidence type"/>
+    <userTask id="n_43_form" name="Complete the form linked to the work and task"><documentation>4.3.1. Required fields and conditional sections; validated for internal consistency, not just completeness.</documentation></userTask>
+    <userTask id="n_43_photo" name="Capture the image and annotate it"><documentation>4.3.2. Location, orientation and annotation - an unlocated photograph of a defect is a photograph of nothing.</documentation></userTask>
+    <userTask id="n_43_read" name="Take the reading"><documentation>4.3.3. After verifying the instrument is eligible for use - 6.4.6 holds the calibration.</documentation></userTask>
+    <userTask id="n_43_sig" name="Capture signature, or refusal"><documentation>4.3.4. Refusal is a recorded outcome, with the delivery method and date.</documentation></userTask>
+    <userTask id="n_43_cond" name="Record as-found and as-left condition"><documentation>4.3.5. Both. As-left alone cannot show what the work changed.</documentation></userTask>
+    <exclusiveGateway id="n_43_val" name="Usable"/>
+    <serviceTask id="n_43_hold" name="Hold with a named exception, or retake"><documentation>All five. Held rather than accepted: unusable evidence that enters the record is worse than missing evidence, because it will be relied on.</documentation></serviceTask>
+    <serviceTask id="n_43_link" name="Link the evidence to the work record"><documentation>4.3.2 and 4.3.5. Unlinked evidence is not evidence of this work.</documentation></serviceTask>
+    <exclusiveGateway id="n_43_cmp" name="Meets the acceptance requirement"><documentation>4.3.5.</documentation></exclusiveGateway>
+    <sendTask id="n_43_fu" name="Raise follow-up for the unresolved condition"><documentation>4.3.5. Into 1.1.5 as follow-on work, which is where a field-found defect becomes demand.</documentation></sendTask>
+    <businessRuleTask id="n_43_sym" name="Capture symptoms and preliminary code (4.3.6)"><documentation>4.3.6. Preliminary, and recorded with its uncertainty - 12.4.2 does the confirmation.</documentation></businessRuleTask>
+    <endEvent id="n_43_end" name="Evidence captured and linked"/>
+    <sequenceFlow id="f_n_43_start_n_43_kind" sourceRef="n_43_start" targetRef="n_43_kind" name=""/>
+    <sequenceFlow id="f_n_43_kind_n_43_form" sourceRef="n_43_kind" targetRef="n_43_form" name="form or checklist"><conditionExpression xsi:type="tFormalExpression"><![CDATA[evidence = "form"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_43_kind_n_43_photo" sourceRef="n_43_kind" targetRef="n_43_photo" name="photograph"><conditionExpression xsi:type="tFormalExpression"><![CDATA[evidence = "image"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_43_kind_n_43_read" sourceRef="n_43_kind" targetRef="n_43_read" name="reading or measurement"><conditionExpression xsi:type="tFormalExpression"><![CDATA[evidence = "reading"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_43_kind_n_43_sig" sourceRef="n_43_kind" targetRef="n_43_sig" name="customer acknowledgement"><conditionExpression xsi:type="tFormalExpression"><![CDATA[evidence = "signature"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_43_kind_n_43_cond" sourceRef="n_43_kind" targetRef="n_43_cond" name="as-found and as-left"><conditionExpression xsi:type="tFormalExpression"><![CDATA[evidence = "condition"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_43_form_n_43_val" sourceRef="n_43_form" targetRef="n_43_val" name=""/>
+    <sequenceFlow id="f_n_43_photo_n_43_val" sourceRef="n_43_photo" targetRef="n_43_val" name=""/>
+    <sequenceFlow id="f_n_43_read_n_43_val" sourceRef="n_43_read" targetRef="n_43_val" name=""/>
+    <sequenceFlow id="f_n_43_sig_n_43_val" sourceRef="n_43_sig" targetRef="n_43_val" name=""/>
+    <sequenceFlow id="f_n_43_cond_n_43_val" sourceRef="n_43_cond" targetRef="n_43_val" name=""/>
+    <sequenceFlow id="f_n_43_val_n_43_hold" sourceRef="n_43_val" targetRef="n_43_hold" name="unusable, out of range or refused"><conditionExpression xsi:type="tFormalExpression"><![CDATA[usable = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_43_hold_n_43_link" sourceRef="n_43_hold" targetRef="n_43_link" name=""/>
+    <sequenceFlow id="f_n_43_val_n_43_link" sourceRef="n_43_val" targetRef="n_43_link" name="usable"/>
+    <sequenceFlow id="f_n_43_link_n_43_cmp" sourceRef="n_43_link" targetRef="n_43_cmp" name=""/>
+    <sequenceFlow id="f_n_43_cmp_n_43_fu" sourceRef="n_43_cmp" targetRef="n_43_fu" name="condition unresolved"><conditionExpression xsi:type="tFormalExpression"><![CDATA[meetsAcceptance = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_43_fu_n_43_sym" sourceRef="n_43_fu" targetRef="n_43_sym" name=""/>
+    <sequenceFlow id="f_n_43_cmp_n_43_sym" sourceRef="n_43_cmp" targetRef="n_43_sym" name="meets acceptance"/>
+    <sequenceFlow id="f_n_43_sym_n_43_end" sourceRef="n_43_sym" targetRef="n_43_end" name=""/>
+  </process>
+  <bpmndi:BPMNDiagram id="dg_P_4_3">
+    <bpmndi:BPMNPlane id="pl_P_4_3" bpmnElement="P_4_3">
+      <bpmndi:BPMNShape id="sh_n_43_start" bpmnElement="n_43_start"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_43_kind" bpmnElement="n_43_kind"><dc:Bounds x="297" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_43_form" bpmnElement="n_43_form"><dc:Bounds x="425" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_43_photo" bpmnElement="n_43_photo"><dc:Bounds x="425" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_43_read" bpmnElement="n_43_read"><dc:Bounds x="425" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_43_sig" bpmnElement="n_43_sig"><dc:Bounds x="425" y="860" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_43_cond" bpmnElement="n_43_cond"><dc:Bounds x="425" y="1080" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_43_val" bpmnElement="n_43_val"><dc:Bounds x="637" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_43_hold" bpmnElement="n_43_hold"><dc:Bounds x="595" y="1300" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_43_link" bpmnElement="n_43_link"><dc:Bounds x="765" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_43_cmp" bpmnElement="n_43_cmp"><dc:Bounds x="977" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_43_fu" bpmnElement="n_43_fu"><dc:Bounds x="935" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_43_sym" bpmnElement="n_43_sym"><dc:Bounds x="1105" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_43_end" bpmnElement="n_43_end"><dc:Bounds x="1322" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ed_f_n_43_start_n_43_kind" bpmnElement="f_n_43_start_n_43_kind"><di:waypoint x="168" y="235"/><di:waypoint x="297" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_43_kind_n_43_form" bpmnElement="f_n_43_kind_n_43_form"><di:waypoint x="343" y="235"/><di:waypoint x="425" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_43_kind_n_43_photo" bpmnElement="f_n_43_kind_n_43_photo"><di:waypoint x="343" y="235"/><di:waypoint x="400" y="235"/><di:waypoint x="400" y="455"/><di:waypoint x="425" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_43_kind_n_43_read" bpmnElement="f_n_43_kind_n_43_read"><di:waypoint x="343" y="235"/><di:waypoint x="400" y="235"/><di:waypoint x="400" y="675"/><di:waypoint x="425" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_43_kind_n_43_sig" bpmnElement="f_n_43_kind_n_43_sig"><di:waypoint x="343" y="235"/><di:waypoint x="400" y="235"/><di:waypoint x="400" y="895"/><di:waypoint x="425" y="895"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_43_kind_n_43_cond" bpmnElement="f_n_43_kind_n_43_cond"><di:waypoint x="343" y="235"/><di:waypoint x="400" y="235"/><di:waypoint x="400" y="1115"/><di:waypoint x="425" y="1115"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_43_form_n_43_val" bpmnElement="f_n_43_form_n_43_val"><di:waypoint x="555" y="235"/><di:waypoint x="637" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_43_photo_n_43_val" bpmnElement="f_n_43_photo_n_43_val"><di:waypoint x="555" y="455"/><di:waypoint x="612" y="455"/><di:waypoint x="612" y="235"/><di:waypoint x="637" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_43_read_n_43_val" bpmnElement="f_n_43_read_n_43_val"><di:waypoint x="555" y="675"/><di:waypoint x="612" y="675"/><di:waypoint x="612" y="235"/><di:waypoint x="637" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_43_sig_n_43_val" bpmnElement="f_n_43_sig_n_43_val"><di:waypoint x="555" y="895"/><di:waypoint x="612" y="895"/><di:waypoint x="612" y="235"/><di:waypoint x="637" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_43_cond_n_43_val" bpmnElement="f_n_43_cond_n_43_val"><di:waypoint x="555" y="1115"/><di:waypoint x="612" y="1115"/><di:waypoint x="612" y="235"/><di:waypoint x="637" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_43_val_n_43_hold" bpmnElement="f_n_43_val_n_43_hold"><di:waypoint x="683" y="235"/><di:waypoint x="570" y="235"/><di:waypoint x="570" y="1335"/><di:waypoint x="595" y="1335"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_43_hold_n_43_link" bpmnElement="f_n_43_hold_n_43_link"><di:waypoint x="725" y="1335"/><di:waypoint x="740" y="1335"/><di:waypoint x="740" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_43_val_n_43_link" bpmnElement="f_n_43_val_n_43_link"><di:waypoint x="683" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_43_link_n_43_cmp" bpmnElement="f_n_43_link_n_43_cmp"><di:waypoint x="895" y="235"/><di:waypoint x="977" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_43_cmp_n_43_fu" bpmnElement="f_n_43_cmp_n_43_fu"><di:waypoint x="1023" y="235"/><di:waypoint x="910" y="235"/><di:waypoint x="910" y="455"/><di:waypoint x="935" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_43_fu_n_43_sym" bpmnElement="f_n_43_fu_n_43_sym"><di:waypoint x="1065" y="455"/><di:waypoint x="1080" y="455"/><di:waypoint x="1080" y="235"/><di:waypoint x="1105" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_43_cmp_n_43_sym" bpmnElement="f_n_43_cmp_n_43_sym"><di:waypoint x="1023" y="235"/><di:waypoint x="1105" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_43_sym_n_43_end" bpmnElement="f_n_43_sym_n_43_end"><di:waypoint x="1235" y="235"/><di:waypoint x="1322" y="235"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

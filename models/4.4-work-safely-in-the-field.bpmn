@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_P_4_4" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <process id="P_4_4" name="4.4 Work safely in the field" isExecutable="false">
+    <documentation>4.4.1, 4.4.2, 4.4.3 and 4.4.5 are drawn; 4.4.4 is a decision with its own table.
+
+The group has three entries because the three things it covers are not phases of one act. The tailboard runs at the start and REPEATS when work or conditions change, under 29 CFR 1910.269(c)(3)(ii). The lone-worker control runs on a timer for the duration and escalates on silence. The incident path starts whenever something happens and has no relationship to the other two.
+
+4.4.2 IS DRAWN AS AN ESCALATION, NOT A CHECK-IN. The value of a lone-worker control is entirely in what happens when the confirmation does NOT arrive; a model that draws the check-in and stops has drawn the easy half.
+
+4.4.5 is the one process here with a regulatory source rather than practice behind it: 49 CFR 192.631(c) requires a control room to verify field information, and a SCADA point that disagrees with the field position is resolved BEFORE release rather than logged for later. A control room operating on a wrong indication is the condition every subsequent switching decision inherits.</documentation>
+    <laneSet id="P_4_4_lanes">
+      <lane id="l_44_crew" name="Field crew">
+        <flowNodeRef>n_44_t</flowNodeRef>
+        <flowNodeRef>n_44_haz</flowNodeRef>
+        <flowNodeRef>n_44_ctl</flowNodeRef>
+        <flowNodeRef>n_44_iso</flowNodeRef>
+        <flowNodeRef>n_44_go</flowNodeRef>
+        <flowNodeRef>n_44_block</flowNodeRef>
+        <flowNodeRef>n_44_tb</flowNodeRef>
+        <flowNodeRef>n_44_end1</flowNodeRef>
+        <flowNodeRef>n_44_lw</flowNodeRef>
+        <flowNodeRef>n_44_timer</flowNodeRef>
+        <flowNodeRef>n_44_chk</flowNodeRef>
+        <flowNodeRef>n_44_inc</flowNodeRef>
+        <flowNodeRef>n_44_safe</flowNodeRef>
+        <flowNodeRef>n_44_cls</flowNodeRef>
+        <flowNodeRef>n_44_facts</flowNodeRef>
+        <flowNodeRef>n_44_sc</flowNodeRef>
+        <flowNodeRef>n_44_rep</flowNodeRef>
+      </lane>
+      <lane id="l_44_sup" name="Supervision and control room">
+        <flowNodeRef>n_44_got</flowNodeRef>
+        <flowNodeRef>n_44_esc</flowNodeRef>
+        <flowNodeRef>n_44_clear</flowNodeRef>
+        <flowNodeRef>n_44_end2</flowNodeRef>
+        <flowNodeRef>n_44_not</flowNodeRef>
+        <flowNodeRef>n_44_ev</flowNodeRef>
+        <flowNodeRef>n_44_end3</flowNodeRef>
+        <flowNodeRef>n_44_cmp</flowNodeRef>
+        <flowNodeRef>n_44_res</flowNodeRef>
+        <flowNodeRef>n_44_ver</flowNodeRef>
+        <flowNodeRef>n_44_end4</flowNodeRef>
+      </lane>
+    </laneSet>
+    <startEvent id="n_44_t" name="Work is about to start, or conditions changed"><messageEventDefinition id="n_44_t_md"/></startEvent>
+    <userTask id="n_44_haz" name="Identify hazards and energy sources"><documentation>4.4.1.</documentation></userTask>
+    <userTask id="n_44_ctl" name="Assign roles and protective controls"><documentation>4.4.1.</documentation></userTask>
+    <businessRuleTask id="n_44_iso" name="Confirm isolation and permit-to-work (4.4.4)"><documentation>4.4.4. Verifies. Never issues - that is 18.4.4.</documentation></businessRuleTask>
+    <exclusiveGateway id="n_44_go" name="Authority to work"/>
+    <sendTask id="n_44_block" name="Block work and request the control"><documentation>4.4.4. Through 18.4.4 for a clearance, 2.6 for a permit. The crew does not proceed and does not create either.</documentation></sendTask>
+    <userTask id="n_44_tb" name="Conduct and record the tailboard"><documentation>4.4.1. Recorded. 1910.269(c)(1)(ii) requires the briefing before the job and (c)(3)(ii) requires another on a significant change.</documentation></userTask>
+    <endEvent id="n_44_end1" name="Cleared to work"/>
+    <startEvent id="n_44_lw" name="Work subject to the lone-worker control"><conditionalEventDefinition id="n_44_lw_cd"><condition/></conditionalEventDefinition></startEvent>
+    <serviceTask id="n_44_timer" name="Start the required check-in or timer"><documentation>4.4.2.</documentation></serviceTask>
+    <receiveTask id="n_44_chk" name="Receive the welfare confirmation"><documentation>4.4.2.</documentation></receiveTask>
+    <exclusiveGateway id="n_44_got" name="Confirmation received"/>
+    <sendTask id="n_44_esc" name="Escalate the missed confirmation"><documentation>4.4.2. This is the process. A check-in that is never chased is a log entry, not a control.</documentation></sendTask>
+    <serviceTask id="n_44_clear" name="Close the control when the worker is clear"><documentation>4.4.2.</documentation></serviceTask>
+    <endEvent id="n_44_end2" name="Lone-worker control closed"/>
+    <startEvent id="n_44_inc" name="Incident, near-miss or hazard occurs"><messageEventDefinition id="n_44_inc_md"/></startEvent>
+    <userTask id="n_44_safe" name="Make it safe and get emergency help"><documentation>4.4.3. First, and before classification.</documentation></userTask>
+    <userTask id="n_44_cls" name="Classify incident, near-miss or hazard"><documentation>4.4.3.</documentation></userTask>
+    <userTask id="n_44_facts" name="Record people, place, time and immediate facts"><documentation>4.4.3.</documentation></userTask>
+    <sendTask id="n_44_not" name="Notify the required roles and authorities"><documentation>4.4.3. Authorities where the classification requires it - 8.5.2 investigates and the reporting obligations are 15.3's.</documentation></sendTask>
+    <serviceTask id="n_44_ev" name="Preserve evidence and create follow-up"><documentation>4.4.3.</documentation></serviceTask>
+    <endEvent id="n_44_end3" name="Incident reported"/>
+    <startEvent id="n_44_sc" name="Field change affects SCADA points"><messageEventDefinition id="n_44_sc_md"/></startEvent>
+    <sendTask id="n_44_rep" name="Report field completion to network operations"><documentation>4.4.5.</documentation></sendTask>
+    <exclusiveGateway id="n_44_cmp" name="Field position matches the indication"><documentation>4.4.5. 49 CFR 192.631(c).</documentation></exclusiveGateway>
+    <userTask id="n_44_res" name="Resolve the disagreement before release"><documentation>4.4.5. Before. A control room running on a wrong indication carries that error into every switching decision after it.</documentation></userTask>
+    <serviceTask id="n_44_ver" name="Record the verification"><documentation>4.4.5.</documentation></serviceTask>
+    <endEvent id="n_44_end4" name="Points verified"/>
+    <sequenceFlow id="f_n_44_t_n_44_haz" sourceRef="n_44_t" targetRef="n_44_haz" name=""/>
+    <sequenceFlow id="f_n_44_haz_n_44_ctl" sourceRef="n_44_haz" targetRef="n_44_ctl" name=""/>
+    <sequenceFlow id="f_n_44_ctl_n_44_iso" sourceRef="n_44_ctl" targetRef="n_44_iso" name=""/>
+    <sequenceFlow id="f_n_44_iso_n_44_go" sourceRef="n_44_iso" targetRef="n_44_go" name=""/>
+    <sequenceFlow id="f_n_44_go_n_44_block" sourceRef="n_44_go" targetRef="n_44_block" name="blocked"><conditionExpression xsi:type="tFormalExpression"><![CDATA[authority = "block"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_44_go_n_44_tb" sourceRef="n_44_go" targetRef="n_44_tb" name="proceed"/>
+    <sequenceFlow id="f_n_44_tb_n_44_end1" sourceRef="n_44_tb" targetRef="n_44_end1" name=""/>
+    <sequenceFlow id="f_n_44_lw_n_44_timer" sourceRef="n_44_lw" targetRef="n_44_timer" name=""/>
+    <sequenceFlow id="f_n_44_timer_n_44_chk" sourceRef="n_44_timer" targetRef="n_44_chk" name=""/>
+    <sequenceFlow id="f_n_44_chk_n_44_got" sourceRef="n_44_chk" targetRef="n_44_got" name=""/>
+    <sequenceFlow id="f_n_44_got_n_44_esc" sourceRef="n_44_got" targetRef="n_44_esc" name="missed"><conditionExpression xsi:type="tFormalExpression"><![CDATA[confirmed = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_44_got_n_44_clear" sourceRef="n_44_got" targetRef="n_44_clear" name="received"/>
+    <sequenceFlow id="f_n_44_esc_n_44_clear" sourceRef="n_44_esc" targetRef="n_44_clear" name=""/>
+    <sequenceFlow id="f_n_44_clear_n_44_end2" sourceRef="n_44_clear" targetRef="n_44_end2" name=""/>
+    <sequenceFlow id="f_n_44_inc_n_44_safe" sourceRef="n_44_inc" targetRef="n_44_safe" name=""/>
+    <sequenceFlow id="f_n_44_safe_n_44_cls" sourceRef="n_44_safe" targetRef="n_44_cls" name=""/>
+    <sequenceFlow id="f_n_44_cls_n_44_facts" sourceRef="n_44_cls" targetRef="n_44_facts" name=""/>
+    <sequenceFlow id="f_n_44_facts_n_44_not" sourceRef="n_44_facts" targetRef="n_44_not" name=""/>
+    <sequenceFlow id="f_n_44_not_n_44_ev" sourceRef="n_44_not" targetRef="n_44_ev" name=""/>
+    <sequenceFlow id="f_n_44_ev_n_44_end3" sourceRef="n_44_ev" targetRef="n_44_end3" name=""/>
+    <sequenceFlow id="f_n_44_sc_n_44_rep" sourceRef="n_44_sc" targetRef="n_44_rep" name=""/>
+    <sequenceFlow id="f_n_44_rep_n_44_cmp" sourceRef="n_44_rep" targetRef="n_44_cmp" name=""/>
+    <sequenceFlow id="f_n_44_cmp_n_44_res" sourceRef="n_44_cmp" targetRef="n_44_res" name="disagreement"><conditionExpression xsi:type="tFormalExpression"><![CDATA[matches = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_44_res_n_44_ver" sourceRef="n_44_res" targetRef="n_44_ver" name=""/>
+    <sequenceFlow id="f_n_44_cmp_n_44_ver" sourceRef="n_44_cmp" targetRef="n_44_ver" name="matches"/>
+    <sequenceFlow id="f_n_44_ver_n_44_end4" sourceRef="n_44_ver" targetRef="n_44_end4" name=""/>
+  </process>
+  <bpmndi:BPMNDiagram id="dg_P_4_4">
+    <bpmndi:BPMNPlane id="pl_P_4_4" bpmnElement="P_4_4">
+      <bpmndi:BPMNShape id="sh_n_44_t" bpmnElement="n_44_t"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_44_haz" bpmnElement="n_44_haz"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_44_ctl" bpmnElement="n_44_ctl"><dc:Bounds x="425" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_44_iso" bpmnElement="n_44_iso"><dc:Bounds x="595" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_44_go" bpmnElement="n_44_go"><dc:Bounds x="807" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_44_block" bpmnElement="n_44_block"><dc:Bounds x="765" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_44_tb" bpmnElement="n_44_tb"><dc:Bounds x="935" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_44_end1" bpmnElement="n_44_end1"><dc:Bounds x="1152" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_44_lw" bpmnElement="n_44_lw"><dc:Bounds x="132" y="657" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_44_timer" bpmnElement="n_44_timer"><dc:Bounds x="255" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_44_chk" bpmnElement="n_44_chk"><dc:Bounds x="425" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_44_got" bpmnElement="n_44_got"><dc:Bounds x="637" y="652" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_44_esc" bpmnElement="n_44_esc"><dc:Bounds x="595" y="860" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_44_clear" bpmnElement="n_44_clear"><dc:Bounds x="765" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_44_end2" bpmnElement="n_44_end2"><dc:Bounds x="982" y="657" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_44_inc" bpmnElement="n_44_inc"><dc:Bounds x="132" y="1097" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_44_safe" bpmnElement="n_44_safe"><dc:Bounds x="255" y="1080" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_44_cls" bpmnElement="n_44_cls"><dc:Bounds x="425" y="1080" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_44_facts" bpmnElement="n_44_facts"><dc:Bounds x="595" y="1080" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_44_not" bpmnElement="n_44_not"><dc:Bounds x="765" y="1080" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_44_ev" bpmnElement="n_44_ev"><dc:Bounds x="935" y="1080" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_44_end3" bpmnElement="n_44_end3"><dc:Bounds x="1152" y="1097" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_44_sc" bpmnElement="n_44_sc"><dc:Bounds x="132" y="1537" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_44_rep" bpmnElement="n_44_rep"><dc:Bounds x="255" y="1520" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_44_cmp" bpmnElement="n_44_cmp"><dc:Bounds x="467" y="1532" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_44_res" bpmnElement="n_44_res"><dc:Bounds x="425" y="1740" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_44_ver" bpmnElement="n_44_ver"><dc:Bounds x="595" y="1520" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_44_end4" bpmnElement="n_44_end4"><dc:Bounds x="812" y="1537" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ed_f_n_44_t_n_44_haz" bpmnElement="f_n_44_t_n_44_haz"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_44_haz_n_44_ctl" bpmnElement="f_n_44_haz_n_44_ctl"><di:waypoint x="385" y="235"/><di:waypoint x="425" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_44_ctl_n_44_iso" bpmnElement="f_n_44_ctl_n_44_iso"><di:waypoint x="555" y="235"/><di:waypoint x="595" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_44_iso_n_44_go" bpmnElement="f_n_44_iso_n_44_go"><di:waypoint x="725" y="235"/><di:waypoint x="807" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_44_go_n_44_block" bpmnElement="f_n_44_go_n_44_block"><di:waypoint x="853" y="235"/><di:waypoint x="740" y="235"/><di:waypoint x="740" y="455"/><di:waypoint x="765" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_44_go_n_44_tb" bpmnElement="f_n_44_go_n_44_tb"><di:waypoint x="853" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_44_tb_n_44_end1" bpmnElement="f_n_44_tb_n_44_end1"><di:waypoint x="1065" y="235"/><di:waypoint x="1152" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_44_lw_n_44_timer" bpmnElement="f_n_44_lw_n_44_timer"><di:waypoint x="168" y="675"/><di:waypoint x="255" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_44_timer_n_44_chk" bpmnElement="f_n_44_timer_n_44_chk"><di:waypoint x="385" y="675"/><di:waypoint x="425" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_44_chk_n_44_got" bpmnElement="f_n_44_chk_n_44_got"><di:waypoint x="555" y="675"/><di:waypoint x="637" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_44_got_n_44_esc" bpmnElement="f_n_44_got_n_44_esc"><di:waypoint x="683" y="675"/><di:waypoint x="570" y="675"/><di:waypoint x="570" y="895"/><di:waypoint x="595" y="895"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_44_got_n_44_clear" bpmnElement="f_n_44_got_n_44_clear"><di:waypoint x="683" y="675"/><di:waypoint x="765" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_44_esc_n_44_clear" bpmnElement="f_n_44_esc_n_44_clear"><di:waypoint x="725" y="895"/><di:waypoint x="740" y="895"/><di:waypoint x="740" y="675"/><di:waypoint x="765" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_44_clear_n_44_end2" bpmnElement="f_n_44_clear_n_44_end2"><di:waypoint x="895" y="675"/><di:waypoint x="982" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_44_inc_n_44_safe" bpmnElement="f_n_44_inc_n_44_safe"><di:waypoint x="168" y="1115"/><di:waypoint x="255" y="1115"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_44_safe_n_44_cls" bpmnElement="f_n_44_safe_n_44_cls"><di:waypoint x="385" y="1115"/><di:waypoint x="425" y="1115"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_44_cls_n_44_facts" bpmnElement="f_n_44_cls_n_44_facts"><di:waypoint x="555" y="1115"/><di:waypoint x="595" y="1115"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_44_facts_n_44_not" bpmnElement="f_n_44_facts_n_44_not"><di:waypoint x="725" y="1115"/><di:waypoint x="765" y="1115"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_44_not_n_44_ev" bpmnElement="f_n_44_not_n_44_ev"><di:waypoint x="895" y="1115"/><di:waypoint x="935" y="1115"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_44_ev_n_44_end3" bpmnElement="f_n_44_ev_n_44_end3"><di:waypoint x="1065" y="1115"/><di:waypoint x="1152" y="1115"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_44_sc_n_44_rep" bpmnElement="f_n_44_sc_n_44_rep"><di:waypoint x="168" y="1555"/><di:waypoint x="255" y="1555"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_44_rep_n_44_cmp" bpmnElement="f_n_44_rep_n_44_cmp"><di:waypoint x="385" y="1555"/><di:waypoint x="467" y="1555"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_44_cmp_n_44_res" bpmnElement="f_n_44_cmp_n_44_res"><di:waypoint x="513" y="1555"/><di:waypoint x="400" y="1555"/><di:waypoint x="400" y="1775"/><di:waypoint x="425" y="1775"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_44_res_n_44_ver" bpmnElement="f_n_44_res_n_44_ver"><di:waypoint x="555" y="1775"/><di:waypoint x="570" y="1775"/><di:waypoint x="570" y="1555"/><di:waypoint x="595" y="1555"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_44_cmp_n_44_ver" bpmnElement="f_n_44_cmp_n_44_ver"><di:waypoint x="513" y="1555"/><di:waypoint x="595" y="1555"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_44_ver_n_44_end4" bpmnElement="f_n_44_ver_n_44_end4"><di:waypoint x="725" y="1555"/><di:waypoint x="812" y="1555"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

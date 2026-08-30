@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/" id="Remove_or_abandon" name="19.2.4 Remove the asset or abandon it in place" namespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <description>Returns a physical end-state AND the subdivision that authorised it. A table rather than a flow because the output is a value; the cutting and sealing that follow are 19.2.5's.
+
+49 CFR 192.727 is unusually complete for a decommissioning rule and the table carries it as written: (b) abandoned in place - disconnected from all sources and supplies of gas, purged of gas, and the ends sealed, except that a small enough volume need not be purged; (c) inactive and not maintained - the pipeline must be physically disconnected and maintained under the part until it is; (d) service lines discontinued; (g) an abandoned offshore facility or one crossing a navigable waterway must be reported.
+
+THE LAST ROW IS THE ONE TO READ. Electric distribution has no equivalent, because 16 U.S.C. 824o(a)(1) excludes local distribution from the bulk-power system and no federal rule reaches how a distribution pole or cable is retired. The table returns the operator's own method and names the statute that creates the gap, rather than borrowing 192.727 across a commodity it does not govern.</description>
+  <inputData id="in_commodity" name="Commodity"><variable id="in_commodity_v" name="Commodity" typeRef="string"/></inputData>
+  <inputData id="in_lineType" name="Gas line type under 49 CFR 192.3"><variable id="in_lineType_v" name="Gas line type under 49 CFR 192.3" typeRef="string"/></inputData>
+  <inputData id="in_endState" name="Physical end-state the operator intends"><variable id="in_endState_v" name="Physical end-state the operator intends" typeRef="string"/></inputData>
+  <inputData id="in_smallVolume" name="Volume small enough that 192.727(b) does not require a purge"><variable id="in_smallVolume_v" name="Volume small enough that 192.727(b) does not require a purge" typeRef="boolean"/></inputData>
+  <knowledgeSource id="ks_192727" name="49 CFR 192.727 Abandonment or deactivation of facilities; 16 U.S.C. 824o(a)(1)"><description>(b) abandoned in place: disconnected from all sources and supplies of gas, purged, ends sealed, with a small-volume exception. (c) inactive and not maintained. (d) discontinued service lines. (g) the filing for offshore or a navigable waterway. 824o(a)(1) is why none of this reaches electric distribution.</description></knowledgeSource>
+  <decision id="d_19_2_4" name="Physical end-state">
+    <variable id="d_19_2_4_v" name="Physical end-state" typeRef="string"/>
+    <informationRequirement id="ir_d_19_2_4_ks_192727"><requiredInput href="#ks_192727"/></informationRequirement>
+    <decisionTable id="d_19_2_4_dt" hitPolicy="FIRST" preferredOrientation="Rule-as-Row">
+      <input id="d_19_2_4_i1" label="Commodity"><inputExpression id="d_19_2_4_i1_e" typeRef="string"><text>in_commodity</text></inputExpression></input>
+      <input id="d_19_2_4_i2" label="Gas line type"><inputExpression id="d_19_2_4_i2_e" typeRef="string"><text>in_lineType</text></inputExpression></input>
+      <input id="d_19_2_4_i3" label="Intended end-state"><inputExpression id="d_19_2_4_i3_e" typeRef="string"><text>in_endState</text></inputExpression></input>
+      <input id="d_19_2_4_i4" label="Small volume"><inputExpression id="d_19_2_4_i4_e" typeRef="boolean"><text>in_smallVolume</text></inputExpression></input>
+      <output id="d_19_2_4_o" label="Physical end-state" name="Physical end-state" typeRef="string"/>
+      <rule id="d_19_2_4_r1">
+        <description>16 U.S.C. 824o(a)(1). No federal rule governs how an electric distribution asset is retired. The operator's own method applies, the statute is named so the absence is visible, and 192.727 is NOT borrowed across.</description>
+        <inputEntry id="d_19_2_4_r1_ie1"><text>"electric"</text></inputEntry>
+        <inputEntry id="d_19_2_4_r1_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_19_2_4_r1_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_19_2_4_r1_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_19_2_4_r1_oe"><text>"operatorMethod"</text></outputEntry>
+      </rule>
+      <rule id="d_19_2_4_r2">
+        <description>49 CFR 192.727(d). A discontinued service line, on its own subdivision.</description>
+        <inputEntry id="d_19_2_4_r2_ie1"><text>"gas"</text></inputEntry>
+        <inputEntry id="d_19_2_4_r2_ie2"><text>"service"</text></inputEntry>
+        <inputEntry id="d_19_2_4_r2_ie3"><text>"discontinue"</text></inputEntry>
+        <inputEntry id="d_19_2_4_r2_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_19_2_4_r2_oe"><text>"discontinuedService192727d"</text></outputEntry>
+      </rule>
+      <rule id="d_19_2_4_r3">
+        <description>192.727(b) with its small-volume exception: disconnected and sealed, purge not required. 19.2.3 will have taken this path already; the table records which authority the field act ran under.</description>
+        <inputEntry id="d_19_2_4_r3_ie1"><text>"gas"</text></inputEntry>
+        <inputEntry id="d_19_2_4_r3_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_19_2_4_r3_ie3"><text>"abandonInPlace"</text></inputEntry>
+        <inputEntry id="d_19_2_4_r3_ie4"><text>true</text></inputEntry>
+        <outputEntry id="d_19_2_4_r3_oe"><text>"abandonInPlaceNoPurge192727b"</text></outputEntry>
+      </rule>
+      <rule id="d_19_2_4_r4">
+        <description>192.727(b) in full: disconnected from all sources and supplies of gas, purged, ends sealed. Residual risk is recorded at 19.2.5 and the plant stays on the map.</description>
+        <inputEntry id="d_19_2_4_r4_ie1"><text>"gas"</text></inputEntry>
+        <inputEntry id="d_19_2_4_r4_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_19_2_4_r4_ie3"><text>"abandonInPlace"</text></inputEntry>
+        <inputEntry id="d_19_2_4_r4_ie4"><text>false</text></inputEntry>
+        <outputEntry id="d_19_2_4_r4_oe"><text>"abandonInPlacePurged192727b"</text></outputEntry>
+      </rule>
+      <rule id="d_19_2_4_r5">
+        <description>192.727(c). NOT the same as abandoned: the pipeline stays under the part until it is physically disconnected, so 8.0's obligations continue to apply to it. The most expensive row in this table to get wrong.</description>
+        <inputEntry id="d_19_2_4_r5_ie1"><text>"gas"</text></inputEntry>
+        <inputEntry id="d_19_2_4_r5_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_19_2_4_r5_ie3"><text>"inactive"</text></inputEntry>
+        <inputEntry id="d_19_2_4_r5_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_19_2_4_r5_oe"><text>"inactiveNotMaintained192727c"</text></outputEntry>
+      </rule>
+      <rule id="d_19_2_4_r6">
+        <description>Taken out of the ground. 192.727 governs how it is made safe first; removal itself is the operator's method.</description>
+        <inputEntry id="d_19_2_4_r6_ie1"><text>"gas"</text></inputEntry>
+        <inputEntry id="d_19_2_4_r6_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_19_2_4_r6_ie3"><text>"remove"</text></inputEntry>
+        <inputEntry id="d_19_2_4_r6_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_19_2_4_r6_oe"><text>"removed"</text></outputEntry>
+      </rule>
+      <rule id="d_19_2_4_r7">
+        <description>Commodity or intended end-state not established. A named exception, because 'inactive' and 'abandoned' carry different ongoing obligations and defaulting between them is how a maintained pipeline stops being maintained.</description>
+        <inputEntry id="d_19_2_4_r7_ie1"><text>-</text></inputEntry>
+        <inputEntry id="d_19_2_4_r7_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_19_2_4_r7_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_19_2_4_r7_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_19_2_4_r7_oe"><text>"determineManually"</text></outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram id="drd_Remove_or_abandon">
+      <dmndi:DMNShape id="sh_in_commodity" dmnElementRef="in_commodity"><dc:Bounds x="60" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_lineType" dmnElementRef="in_lineType"><dc:Bounds x="245" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_endState" dmnElementRef="in_endState"><dc:Bounds x="430" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_smallVolume" dmnElementRef="in_smallVolume"><dc:Bounds x="615" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_d_19_2_4" dmnElementRef="d_19_2_4"><dc:Bounds x="60" y="240" width="180" height="70"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_ks_192727" dmnElementRef="ks_192727"><dc:Bounds x="900" y="100" width="160" height="55"/></dmndi:DMNShape>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</definitions>

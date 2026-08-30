@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/" id="Estimate_consumption" name="6.5.3 Estimate consumption where read unavailable" namespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <description>Returns WHICH authorised estimation basis applies, and marks the value as estimated. It does not compute the estimate: the arithmetic is the operator's and the tariff's, and this reference states none of it.
+
+THE MARKING IS THE POINT OF THE PROCESS. An estimate that enters billing unflagged cannot be corrected afterwards, because nothing downstream knows it was an estimate - and consecutive unflagged estimates are how a customer receives a very large catch-up bill and a complaint that 10.3 then has to answer.
+
+The insufficient-history row is a real outcome, not a fallback. A new premise, a changed meter or a converted supply may have no comparable history at all, and manufacturing an estimate from a comparable population is a judgement someone should make deliberately rather than a rule that fires silently.</description>
+  <inputData id="in_noRead" name="Confirmed that no usable read is available"><variable id="in_noRead_v" name="Confirmed that no usable read is available" typeRef="boolean"/></inputData>
+  <inputData id="in_history" name="Sufficient premise reading history exists"><variable id="in_history_v" name="Sufficient premise reading history exists" typeRef="boolean"/></inputData>
+  <inputData id="in_comparable" name="An authorised comparable population exists"><variable id="in_comparable_v" name="An authorised comparable population exists" typeRef="boolean"/></inputData>
+  <inputData id="in_consecutive" name="Consecutive estimates already issued"><variable id="in_consecutive_v" name="Consecutive estimates already issued" typeRef="boolean"/></inputData>
+  <knowledgeSource id="ks_est" name="The operator's authorised estimation rules and the applicable tariff"><description>Estimation method, the number of consecutive estimates permitted and the obligation to obtain an actual read are tariff and State matters. None is stated in this reference.</description></knowledgeSource>
+  <decision id="d_6_5_3" name="Estimation basis">
+    <variable id="d_6_5_3_v" name="Estimation basis" typeRef="string"/>
+    <informationRequirement id="ir_d_6_5_3_ks_est"><requiredInput href="#ks_est"/></informationRequirement>
+    <decisionTable id="d_6_5_3_dt" hitPolicy="FIRST" preferredOrientation="Rule-as-Row">
+      <input id="d_6_5_3_i1" label="No usable read"><inputExpression id="d_6_5_3_i1_e" typeRef="boolean"><text>in_noRead</text></inputExpression></input>
+      <input id="d_6_5_3_i2" label="Sufficient history"><inputExpression id="d_6_5_3_i2_e" typeRef="boolean"><text>in_history</text></inputExpression></input>
+      <input id="d_6_5_3_i3" label="Comparable population available"><inputExpression id="d_6_5_3_i3_e" typeRef="boolean"><text>in_comparable</text></inputExpression></input>
+      <input id="d_6_5_3_i4" label="Consecutive estimates already issued"><inputExpression id="d_6_5_3_i4_e" typeRef="boolean"><text>in_consecutive</text></inputExpression></input>
+      <output id="d_6_5_3_o" label="Estimation basis" name="Estimation basis" typeRef="string"/>
+      <rule id="d_6_5_3_r1">
+        <description>A usable read exists. 6.5.2 accepted it, or 6.5.4 resolved it - either way an estimate would replace measurement with inference.</description>
+        <inputEntry id="d_6_5_3_r1_ie1"><text>false</text></inputEntry>
+        <inputEntry id="d_6_5_3_r1_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_6_5_3_r1_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_6_5_3_r1_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_6_5_3_r1_oe"><text>"noEstimateRequired"</text></outputEntry>
+      </rule>
+      <rule id="d_6_5_3_r2">
+        <description>Estimates have already been issued consecutively. The tariff usually obliges the operator to obtain an actual read rather than estimate again, and this reference does not state how many is too many - so it escalates to 6.5.1 for a visit rather than estimating on.</description>
+        <inputEntry id="d_6_5_3_r2_ie1"><text>true</text></inputEntry>
+        <inputEntry id="d_6_5_3_r2_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_6_5_3_r2_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_6_5_3_r2_ie4"><text>true</text></inputEntry>
+        <outputEntry id="d_6_5_3_r2_oe"><text>"escalateForActualRead"</text></outputEntry>
+      </rule>
+      <rule id="d_6_5_3_r3">
+        <description>Estimated from the premise's own history, on the operator's rule. Marked as estimated on release.</description>
+        <inputEntry id="d_6_5_3_r3_ie1"><text>true</text></inputEntry>
+        <inputEntry id="d_6_5_3_r3_ie2"><text>true</text></inputEntry>
+        <inputEntry id="d_6_5_3_r3_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_6_5_3_r3_ie4"><text>false</text></inputEntry>
+        <outputEntry id="d_6_5_3_r3_oe"><text>"estimateFromHistory"</text></outputEntry>
+      </rule>
+      <rule id="d_6_5_3_r4">
+        <description>No premise history - a new supply, a changed meter, a conversion. Estimated from an authorised comparable population, and this is a weaker basis that the mark should reflect.</description>
+        <inputEntry id="d_6_5_3_r4_ie1"><text>true</text></inputEntry>
+        <inputEntry id="d_6_5_3_r4_ie2"><text>false</text></inputEntry>
+        <inputEntry id="d_6_5_3_r4_ie3"><text>true</text></inputEntry>
+        <inputEntry id="d_6_5_3_r4_ie4"><text>false</text></inputEntry>
+        <outputEntry id="d_6_5_3_r4_oe"><text>"estimateFromComparable"</text></outputEntry>
+      </rule>
+      <rule id="d_6_5_3_r5">
+        <description>No history and no comparable population. A deliberate human determination, not a silent default - and 10.3 may need to tell the customer why.</description>
+        <inputEntry id="d_6_5_3_r5_ie1"><text>true</text></inputEntry>
+        <inputEntry id="d_6_5_3_r5_ie2"><text>false</text></inputEntry>
+        <inputEntry id="d_6_5_3_r5_ie3"><text>false</text></inputEntry>
+        <inputEntry id="d_6_5_3_r5_ie4"><text>false</text></inputEntry>
+        <outputEntry id="d_6_5_3_r5_oe"><text>"manualDetermination"</text></outputEntry>
+      </rule>
+      <rule id="d_6_5_3_r6">
+        <description>Read availability not confirmed.</description>
+        <inputEntry id="d_6_5_3_r6_ie1"><text>-</text></inputEntry>
+        <inputEntry id="d_6_5_3_r6_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_6_5_3_r6_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_6_5_3_r6_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_6_5_3_r6_oe"><text>"determineManually"</text></outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram id="drd_Estimate_consumption">
+      <dmndi:DMNShape id="sh_in_noRead" dmnElementRef="in_noRead"><dc:Bounds x="60" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_history" dmnElementRef="in_history"><dc:Bounds x="245" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_comparable" dmnElementRef="in_comparable"><dc:Bounds x="430" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_consecutive" dmnElementRef="in_consecutive"><dc:Bounds x="615" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_d_6_5_3" dmnElementRef="d_6_5_3"><dc:Bounds x="60" y="240" width="180" height="70"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_ks_est" dmnElementRef="ks_est"><dc:Bounds x="900" y="100" width="160" height="55"/></dmndi:DMNShape>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</definitions>

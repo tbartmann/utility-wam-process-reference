@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/" id="Installation_acceptance" name="6.3.4 Validate installation, read and signal" namespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <description>Returns whether an installation is ACCEPTED, and where it is not, which of the three tests failed. A table because the output is an acceptance value, and because the three inputs fail independently and route to different places.
+
+THE PARTIAL SUCCESSES ARE THE ROWS THAT MATTER. A valid read with failed communication is a working meter that will need a manual read until the path is fixed - it bills correctly and it is not a field revisit. A working communication path with a rejected identity is the opposite: the network is fine and the data is attributed to the wrong device, which is a billing error the moment it is trusted. Treating both as 'failed' would send the wrong crew to the wrong problem.
+
+Identity is tested first for that reason. A read and a signal from a device that is not the one on the order are evidence about some other customer's meter.</description>
+  <inputData id="in_identityMatch" name="Installed device identity matches the order"><variable id="in_identityMatch_v" name="Installed device identity matches the order" typeRef="boolean"/></inputData>
+  <inputData id="in_read" name="An initial read was obtained"><variable id="in_read_v" name="An initial read was obtained" typeRef="boolean"/></inputData>
+  <inputData id="in_signal" name="Communication response received"><variable id="in_signal_v" name="Communication response received" typeRef="boolean"/></inputData>
+  <knowledgeSource id="ks_61968_9" name="IEC 61968-9 meter reading and control - consensus, no clause locator available; APQC PCF Utilities 14.4.4 Operate Advanced Metering Infrastructure"><description>Cited at consensus rather than clause-verified because no clause locator could be confirmed for it. The acceptance rule itself is the operator's.</description></knowledgeSource>
+  <decision id="d_6_3_4" name="Installation acceptance">
+    <variable id="d_6_3_4_v" name="Installation acceptance" typeRef="string"/>
+    <informationRequirement id="ir_d_6_3_4_ks_61968_9"><requiredInput href="#ks_61968_9"/></informationRequirement>
+    <decisionTable id="d_6_3_4_dt" hitPolicy="FIRST" preferredOrientation="Rule-as-Row">
+      <input id="d_6_3_4_i1" label="Identity matches"><inputExpression id="d_6_3_4_i1_e" typeRef="boolean"><text>in_identityMatch</text></inputExpression></input>
+      <input id="d_6_3_4_i2" label="Initial read obtained"><inputExpression id="d_6_3_4_i2_e" typeRef="boolean"><text>in_read</text></inputExpression></input>
+      <input id="d_6_3_4_i3" label="Signal received"><inputExpression id="d_6_3_4_i3_e" typeRef="boolean"><text>in_signal</text></inputExpression></input>
+      <output id="d_6_3_4_o" label="Installation acceptance" name="Installation acceptance" typeRef="string"/>
+      <rule id="d_6_3_4_r1">
+        <description>The installed device is not the one on the order. A read and a signal from it are evidence about a different meter, so nothing else on this row is assessable. Back to 6.2 as correction work and to 6.1.1 to fix the record.</description>
+        <inputEntry id="d_6_3_4_r1_ie1"><text>false</text></inputEntry>
+        <inputEntry id="d_6_3_4_r1_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_6_3_4_r1_ie3"><text>-</text></inputEntry>
+        <outputEntry id="d_6_3_4_r1_oe"><text>"rejectIdentity"</text></outputEntry>
+      </rule>
+      <rule id="d_6_3_4_r2">
+        <description>Identity, read and signal all good. The installation is complete and 6.5 takes over.</description>
+        <inputEntry id="d_6_3_4_r2_ie1"><text>true</text></inputEntry>
+        <inputEntry id="d_6_3_4_r2_ie2"><text>true</text></inputEntry>
+        <inputEntry id="d_6_3_4_r2_ie3"><text>true</text></inputEntry>
+        <outputEntry id="d_6_3_4_r2_oe"><text>"accept"</text></outputEntry>
+      </rule>
+      <rule id="d_6_3_4_r3">
+        <description>A working meter on a failed communication path. It BILLS CORRECTLY on a manual or mobile read at 6.5.1 while the path is investigated - this is not a field revisit and treating it as one sends a technician to a meter that is working.</description>
+        <inputEntry id="d_6_3_4_r3_ie1"><text>true</text></inputEntry>
+        <inputEntry id="d_6_3_4_r3_ie2"><text>true</text></inputEntry>
+        <inputEntry id="d_6_3_4_r3_ie3"><text>false</text></inputEntry>
+        <outputEntry id="d_6_3_4_r3_oe"><text>"acceptReadManually"</text></outputEntry>
+      </rule>
+      <rule id="d_6_3_4_r4">
+        <description>Communication established, no read. The device is reachable and is not measuring, or is not measuring what was expected. Field correction work through 6.2.</description>
+        <inputEntry id="d_6_3_4_r4_ie1"><text>true</text></inputEntry>
+        <inputEntry id="d_6_3_4_r4_ie2"><text>false</text></inputEntry>
+        <inputEntry id="d_6_3_4_r4_ie3"><text>true</text></inputEntry>
+        <outputEntry id="d_6_3_4_r4_oe"><text>"rejectNoRead"</text></outputEntry>
+      </rule>
+      <rule id="d_6_3_4_r5">
+        <description>Correct device, nothing working. Field correction work.</description>
+        <inputEntry id="d_6_3_4_r5_ie1"><text>true</text></inputEntry>
+        <inputEntry id="d_6_3_4_r5_ie2"><text>false</text></inputEntry>
+        <inputEntry id="d_6_3_4_r5_ie3"><text>false</text></inputEntry>
+        <outputEntry id="d_6_3_4_r5_oe"><text>"rejectInstallation"</text></outputEntry>
+      </rule>
+      <rule id="d_6_3_4_r6">
+        <description>Identity not established. Everything else on the row depends on it.</description>
+        <inputEntry id="d_6_3_4_r6_ie1"><text>-</text></inputEntry>
+        <inputEntry id="d_6_3_4_r6_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_6_3_4_r6_ie3"><text>-</text></inputEntry>
+        <outputEntry id="d_6_3_4_r6_oe"><text>"determineManually"</text></outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram id="drd_Installation_acceptance">
+      <dmndi:DMNShape id="sh_in_identityMatch" dmnElementRef="in_identityMatch"><dc:Bounds x="60" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_read" dmnElementRef="in_read"><dc:Bounds x="245" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_signal" dmnElementRef="in_signal"><dc:Bounds x="430" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_d_6_3_4" dmnElementRef="d_6_3_4"><dc:Bounds x="60" y="240" width="180" height="70"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_ks_61968_9" dmnElementRef="ks_61968_9"><dc:Bounds x="900" y="100" width="160" height="55"/></dmndi:DMNShape>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</definitions>

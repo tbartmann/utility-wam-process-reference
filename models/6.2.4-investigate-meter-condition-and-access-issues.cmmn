@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/CMMN/20151109/MODEL" xmlns:cmmndi="http://www.omg.org/spec/CMMN/20151109/CMMNDI" xmlns:dc="http://www.omg.org/spec/CMMN/20151109/DC" xmlns:di="http://www.omg.org/spec/CMMN/20151109/DI" id="defs_Meter_condition_access" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <case id="Meter_condition_access" name="6.2.4 Investigate meter condition and access issues">
+    <caseFileModel id="Meter_condition_access_cfm">
+      <caseFileItem id="cf_order" name="The order that could not be completed"/>
+      <caseFileItem id="cf_site" name="Site, access and observed condition"/>
+      <caseFileItem id="cf_record" name="Meter and service-point record as held"/>
+    </caseFileModel>
+    <casePlanModel id="Meter_condition_access_plan" name="6.2.4 Investigate meter condition and access issues" autoComplete="true">
+      <documentation>No access, a condition defect and an identity mismatch arrive looking the same - the ordered work did not happen - and what the technician does next depends on which it turns out to be. Two competent technicians investigate in a different order. That is the CMMN test.
+
+AN IDENTITY MISMATCH IS THE SERIOUS ONE and it is why this is a case rather than a retry. A meter whose identity or location does not match the record means either the record is wrong or the meter has been moved, and both have billing consequences reaching back to whenever it happened. It routes to 6.6.1 for a tamper assessment and to 12.2.5 as a record conflict, and neither is a repeat visit.
+
+An unsafe condition ends the case immediately and hands to 6.2.2 for a safety turn-off. That is drawn as its own required-when-found item rather than as a classification outcome, because it cannot wait for the investigation to finish.</documentation>
+      <planItem id="pi_t_review" name="Review the reported condition or access problem" definitionRef="t_review_def">
+        <itemControl id="ic_t_review">
+          <requiredRule id="rr_t_review"><condition><![CDATA[true]]></condition></requiredRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_unsafe" name="Make safe and raise an immediate turn-off" definitionRef="t_unsafe_def">
+        <itemControl id="ic_t_unsafe">
+          <requiredRule id="rr_t_unsafe"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_unsafe"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_inspect" name="Inspect the meter and service point where accessible" definitionRef="t_inspect_def">
+        <itemControl id="ic_t_inspect">
+          <requiredRule id="rr_t_inspect"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_inspect"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_evidence" name="Record evidence and safety conditions" definitionRef="t_evidence_def">
+        <itemControl id="ic_t_evidence">
+          <requiredRule id="rr_t_evidence"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_evidence"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_identity" name="Resolve an identity or location mismatch" definitionRef="t_identity_def">
+        <itemControl id="ic_t_identity">
+          <requiredRule id="rr_t_identity"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_identity"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_access" name="Arrange access through the customer route" definitionRef="t_access_def">
+        <itemControl id="ic_t_access">
+          <requiredRule id="rr_t_access"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_access"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_classify" name="Classify the outcome and required follow-up" definitionRef="t_classify_def">
+        <itemControl id="ic_t_classify">
+          <requiredRule id="rr_t_classify"><condition><![CDATA[true]]></condition></requiredRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_m_cause" name="Cause established" definitionRef="m_cause_def"/>
+      <planItem id="pi_m_routed" name="Follow-up raised" definitionRef="m_routed_def"/>
+      <humanTask id="t_review_def" name="Review the reported condition or access problem" isBlocking="true"><documentation>Required. Access, condition or identity - the three route completely differently and the classification is the case.</documentation></humanTask>
+      <humanTask id="t_unsafe_def" name="Make safe and raise an immediate turn-off" isBlocking="true"><documentation>Discretionary in principle, mandatory when found. Through 6.2.2's safety turn-off; it does not wait for the rest of the investigation.</documentation></humanTask>
+      <humanTask id="t_inspect_def" name="Inspect the meter and service point where accessible" isBlocking="true"><documentation>Discretionary. Not possible on an access failure, which is why access is classified first.</documentation></humanTask>
+      <humanTask id="t_evidence_def" name="Record evidence and safety conditions" isBlocking="true"><documentation>Discretionary in extent. 4.3.2's photograph rules apply, and evidence gathered now is what a later tamper case at 6.6.2 rests on.</documentation></humanTask>
+      <humanTask id="t_identity_def" name="Resolve an identity or location mismatch" isBlocking="true"><documentation>Discretionary. Routes to 6.6.1 for tamper assessment AND to 12.2.5 as a record conflict - the record and the device disagree and only one investigation can settle which is wrong.</documentation></humanTask>
+      <humanTask id="t_access_def" name="Arrange access through the customer route" isBlocking="true"><documentation>Discretionary. 10.3 owns customer contact; repeated access failure becomes a tariff matter rather than a field one.</documentation></humanTask>
+      <humanTask id="t_classify_def" name="Classify the outcome and required follow-up" isBlocking="true"><documentation>Required. An unclassified failed visit is indistinguishable from a visit that never happened.</documentation></humanTask>
+      <milestone id="m_cause_def" name="Cause established"><documentation>Access, condition or identity - and recorded as which.</documentation></milestone>
+      <milestone id="m_routed_def" name="Follow-up raised"><documentation>Field revisit, customer route, tamper referral or record conflict.</documentation></milestone>
+    </casePlanModel>
+  </case>
+  <cmmndi:CMMNDI>
+    <cmmndi:CMMNDiagram id="dg_Meter_condition_access">
+      <cmmndi:CMMNShape id="sh_plan" cmmnElementRef="Meter_condition_access_plan"><dc:Bounds x="40" y="40" width="1010" height="300"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_review" cmmnElementRef="pi_t_review"><dc:Bounds x="80" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_unsafe" cmmnElementRef="pi_t_unsafe"><dc:Bounds x="270" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_inspect" cmmnElementRef="pi_t_inspect"><dc:Bounds x="460" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_evidence" cmmnElementRef="pi_t_evidence"><dc:Bounds x="80" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_identity" cmmnElementRef="pi_t_identity"><dc:Bounds x="270" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_access" cmmnElementRef="pi_t_access"><dc:Bounds x="460" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_classify" cmmnElementRef="pi_t_classify"><dc:Bounds x="80" y="290" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_m_cause" cmmnElementRef="pi_m_cause"><dc:Bounds x="270" y="290" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_m_routed" cmmnElementRef="pi_m_routed"><dc:Bounds x="460" y="290" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+    </cmmndi:CMMNDiagram>
+  </cmmndi:CMMNDI>
+</definitions>

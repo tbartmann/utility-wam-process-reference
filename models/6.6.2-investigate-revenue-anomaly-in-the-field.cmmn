@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/CMMN/20151109/MODEL" xmlns:cmmndi="http://www.omg.org/spec/CMMN/20151109/CMMNDI" xmlns:dc="http://www.omg.org/spec/CMMN/20151109/DC" xmlns:di="http://www.omg.org/spec/CMMN/20151109/DI" id="defs_Revenue_investigation" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <case id="Revenue_investigation" name="6.6.2 Investigate revenue anomaly in the field">
+    <caseFileModel id="Revenue_investigation_cfm">
+      <caseFileItem id="cf_referral" name="The controlled referral from 6.6.1 and its evidence"/>
+      <caseFileItem id="cf_site" name="Service point, meter, seals and connections as found"/>
+      <caseFileItem id="cf_custody" name="Evidence record and chain of custody"/>
+    </caseFileModel>
+    <casePlanModel id="Revenue_investigation_plan" name="6.6.2 Investigate revenue anomaly in the field" autoComplete="true">
+      <documentation>A controlled investigation, and the word controlled is doing real work. What is found here can support a back-billing claim against a customer or a referral to law enforcement, so the order in which evidence is gathered and preserved matters in a way it does nowhere else in this category - and it still varies by what the technician finds on arrival. That is the CMMN test with a chain of custody attached.
+
+SAFETY PRECEDES EVIDENCE, ALWAYS. An interfered-with service can be unsafe, and the required item is to verify conditions before inspecting anything. Where the condition is unsafe the corrective work happens immediately even though it destroys evidence - that trade is not the technician's to agonise over and the case makes it explicit.
+
+NO INTERFERENCE FOUND IS A FIRST-CLASS OUTCOME. Most referrals close this way, and closing them cleanly is what keeps the referral route credible. A case that can only end in a finding produces findings.</documentation>
+      <planItem id="pi_t_safety" name="Verify meter, service point and safety conditions" definitionRef="t_safety_def">
+        <itemControl id="ic_t_safety">
+          <requiredRule id="rr_t_safety"><condition><![CDATA[true]]></condition></requiredRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_unsafe" name="Raise immediate corrective work" definitionRef="t_unsafe_def">
+        <itemControl id="ic_t_unsafe">
+          <requiredRule id="rr_t_unsafe"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_unsafe"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_inspect" name="Inspect meter, seals and connections" definitionRef="t_inspect_def">
+        <itemControl id="ic_t_inspect">
+          <requiredRule id="rr_t_inspect"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_inspect"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_photograph" name="Record evidence as found, before disturbing it" definitionRef="t_photograph_def">
+        <itemControl id="ic_t_photograph">
+          <requiredRule id="rr_t_photograph"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_photograph"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_custody" name="Preserve evidence and maintain the chain of custody" definitionRef="t_custody_def">
+        <itemControl id="ic_t_custody">
+          <requiredRule id="rr_t_custody"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_custody"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_measure" name="Establish the metering condition and its effect" definitionRef="t_measure_def">
+        <itemControl id="ic_t_measure">
+          <requiredRule id="rr_t_measure"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_measure"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_classify" name="Classify the finding" definitionRef="t_classify_def">
+        <itemControl id="ic_t_classify">
+          <requiredRule id="rr_t_classify"><condition><![CDATA[true]]></condition></requiredRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_remediate" name="Raise remediation work" definitionRef="t_remediate_def">
+        <itemControl id="ic_t_remediate">
+          <requiredRule id="rr_t_remediate"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_remediate"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_m_safe" name="Site verified safe" definitionRef="m_safe_def"/>
+      <planItem id="pi_m_finding" name="Finding classified" definitionRef="m_finding_def"/>
+      <humanTask id="t_safety_def" name="Verify meter, service point and safety conditions" isBlocking="true"><documentation>Required, and first. An interfered-with service can be unsafe, and safety precedes evidence even when making it safe destroys the evidence.</documentation></humanTask>
+      <humanTask id="t_unsafe_def" name="Raise immediate corrective work" isBlocking="true"><documentation>Discretionary in principle, mandatory when found. Through 6.2.2 or 9.0. The evidence loss is accepted and recorded as the reason.</documentation></humanTask>
+      <humanTask id="t_inspect_def" name="Inspect meter, seals and connections" isBlocking="true"><documentation>Discretionary in order. Seals are compared against what 6.2.1 recorded at installation - which is why that record exists.</documentation></humanTask>
+      <humanTask id="t_photograph_def" name="Record evidence as found, before disturbing it" isBlocking="true"><documentation>Discretionary in extent, decisive in timing. 4.3.2's rules apply and this is the item that most often cannot be repeated.</documentation></humanTask>
+      <humanTask id="t_custody_def" name="Preserve evidence and maintain the chain of custody" isBlocking="true"><documentation>Discretionary in form, required in fact where anything is removed. A removed meter continues through 6.4.1, which starts its own custody record.</documentation></humanTask>
+      <humanTask id="t_measure_def" name="Establish the metering condition and its effect" isBlocking="true"><documentation>Discretionary. What was actually happening to the measurement, which is what a supportable adjustment at 6.6.3 rests on.</documentation></humanTask>
+      <humanTask id="t_classify_def" name="Classify the finding" isBlocking="true"><documentation>Required. Interference confirmed, no interference found, or inconclusive - and all three are real answers.</documentation></humanTask>
+      <humanTask id="t_remediate_def" name="Raise remediation work" isBlocking="true"><documentation>Discretionary. Correcting or isolating the metering condition, through 6.2.</documentation></humanTask>
+      <milestone id="m_safe_def" name="Site verified safe"><documentation>Before any inspection.</documentation></milestone>
+      <milestone id="m_finding_def" name="Finding classified"><documentation>Including no interference found, which is how most referrals correctly end.</documentation></milestone>
+    </casePlanModel>
+  </case>
+  <cmmndi:CMMNDI>
+    <cmmndi:CMMNDiagram id="dg_Revenue_investigation">
+      <cmmndi:CMMNShape id="sh_plan" cmmnElementRef="Revenue_investigation_plan"><dc:Bounds x="40" y="40" width="1010" height="300"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_safety" cmmnElementRef="pi_t_safety"><dc:Bounds x="80" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_unsafe" cmmnElementRef="pi_t_unsafe"><dc:Bounds x="270" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_inspect" cmmnElementRef="pi_t_inspect"><dc:Bounds x="460" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_photograph" cmmnElementRef="pi_t_photograph"><dc:Bounds x="80" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_custody" cmmnElementRef="pi_t_custody"><dc:Bounds x="270" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_measure" cmmnElementRef="pi_t_measure"><dc:Bounds x="460" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_classify" cmmnElementRef="pi_t_classify"><dc:Bounds x="80" y="290" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_remediate" cmmnElementRef="pi_t_remediate"><dc:Bounds x="270" y="290" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_m_safe" cmmnElementRef="pi_m_safe"><dc:Bounds x="460" y="290" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_m_finding" cmmnElementRef="pi_m_finding"><dc:Bounds x="80" y="390" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+    </cmmndi:CMMNDiagram>
+  </cmmndi:CMMNDI>
+</definitions>

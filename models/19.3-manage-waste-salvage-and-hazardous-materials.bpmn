@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_P_19_3" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <process id="P_19_3" name="19.3 Manage waste, salvage and hazardous materials" isExecutable="false">
+    <documentation>19.3.2, 19.3.3, 19.3.4 and 19.3.5 are drawn. 19.3.1 is the classification and has its own table.
+
+The whole group hangs off that classification, and the order matters: material is CLASSIFIED before it is stored, because 40 CFR 761.65 storage and 761.40 marking are section-specific, and a drum stored unmarked is a handling failure rather than a paperwork one. 19.3.2's own control says so - unmarked storage is not handling.
+
+Salvage rejoins the waste path rather than leaving it. 19.3.4 assesses whether material can return to stock at 13.2, and where it cannot, sends it back through 19.3.1 to be reclassified rather than scrapping it on the spot. That loop is drawn because it is the one that keeps a contaminated transformer out of the storeroom.
+
+And nothing here retires anything. 19.3.5 files the signed evidence against the source asset and hands the pack to 12.1.6 and 19.4.4; the register and the property record belong to other categories.</documentation>
+    <laneSet id="P_19_3_lanes">
+      <lane id="l_193_env" name="Environmental and waste">
+        <flowNodeRef>n_193_start</flowNodeRef>
+        <flowNodeRef>n_193_cls</flowNodeRef>
+        <flowNodeRef>n_193_gw</flowNodeRef>
+        <flowNodeRef>n_193_store</flowNodeRef>
+        <flowNodeRef>n_193_man</flowNodeRef>
+        <flowNodeRef>n_193_disp</flowNodeRef>
+        <flowNodeRef>n_193_sign</flowNodeRef>
+        <flowNodeRef>n_193_reclass</flowNodeRef>
+        <flowNodeRef>n_193_file</flowNodeRef>
+        <flowNodeRef>n_193_hand</flowNodeRef>
+        <flowNodeRef>n_193_end</flowNodeRef>
+      </lane>
+      <lane id="l_193_mm" name="Materials and storeroom">
+        <flowNodeRef>n_193_sal</flowNodeRef>
+        <flowNodeRef>n_193_can</flowNodeRef>
+        <flowNodeRef>n_193_stock</flowNodeRef>
+      </lane>
+    </laneSet>
+    <startEvent id="n_193_start" name="Material has left an asset or the storeroom"><conditionalEventDefinition id="n_193_start_cd"><condition/></conditionalEventDefinition></startEvent>
+    <businessRuleTask id="n_193_cls" name="Classify the waste stream (19.3.1)"><documentation>19.3.1. Returns the class AND the section that set it.</documentation></businessRuleTask>
+    <exclusiveGateway id="n_193_gw" name="Class"/>
+    <serviceTask id="n_193_store" name="Store under 761.65 and mark under 761.40"><documentation>19.3.2. Both. Unmarked storage is not handling, and the marking rule is section-specific to the class 19.3.1 returned.</documentation></serviceTask>
+    <userTask id="n_193_man" name="Raise a 40 CFR 262.20 manifest where RCRA applies"><documentation>19.3.3.</documentation></userTask>
+    <sendTask id="n_193_disp" name="Dispose under 761.60, 761.61 or 761.62 as classified"><documentation>19.3.3. Under the section the classification named - not under a generic waste route.</documentation></sendTask>
+    <receiveTask id="n_193_sign" name="Receive the signed disposal evidence"><documentation>19.3.3.</documentation></receiveTask>
+    <userTask id="n_193_sal" name="Assess whether salvage can return to stock"><documentation>19.3.4.</documentation></userTask>
+    <exclusiveGateway id="n_193_can" name="Returnable to stock"/>
+    <sendTask id="n_193_stock" name="Return it to 13.2 as stock"><documentation>19.3.4. Not a plant retirement - the unit accounting is 19.4.3's.</documentation></sendTask>
+    <sendTask id="n_193_reclass" name="Reclassify through 19.3.1"><documentation>19.3.4. Back to the table rather than scrapped on the spot. This is the loop that keeps a contaminated unit out of the storeroom.</documentation></sendTask>
+    <serviceTask id="n_193_file" name="File the evidence against the source asset and the work"><documentation>19.3.5. PCB records are kept under 40 CFR 761.180.</documentation></serviceTask>
+    <sendTask id="n_193_hand" name="Hand the pack to 12.1.6 and 19.4.4"><documentation>19.3.5. Hand. Nothing in this group retires a register or a property record.</documentation></sendTask>
+    <endEvent id="n_193_end" name="Disposition evidence filed"/>
+    <sequenceFlow id="f_n_193_start_n_193_cls" sourceRef="n_193_start" targetRef="n_193_cls" name=""/>
+    <sequenceFlow id="f_n_193_cls_n_193_gw" sourceRef="n_193_cls" targetRef="n_193_gw" name=""/>
+    <sequenceFlow id="f_n_193_gw_n_193_store" sourceRef="n_193_gw" targetRef="n_193_store" name="regulated - PCB or RCRA"><conditionExpression xsi:type="tFormalExpression"><![CDATA[wasteClass != "salvage" and wasteClass != "nonHazardous"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_193_gw_n_193_sal" sourceRef="n_193_gw" targetRef="n_193_sal" name="salvage"><conditionExpression xsi:type="tFormalExpression"><![CDATA[wasteClass = "salvage"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_193_gw_n_193_file" sourceRef="n_193_gw" targetRef="n_193_file" name="non-hazardous"/>
+    <sequenceFlow id="f_n_193_store_n_193_man" sourceRef="n_193_store" targetRef="n_193_man" name=""/>
+    <sequenceFlow id="f_n_193_man_n_193_disp" sourceRef="n_193_man" targetRef="n_193_disp" name=""/>
+    <sequenceFlow id="f_n_193_disp_n_193_sign" sourceRef="n_193_disp" targetRef="n_193_sign" name=""/>
+    <sequenceFlow id="f_n_193_sign_n_193_file" sourceRef="n_193_sign" targetRef="n_193_file" name=""/>
+    <sequenceFlow id="f_n_193_sal_n_193_can" sourceRef="n_193_sal" targetRef="n_193_can" name=""/>
+    <sequenceFlow id="f_n_193_can_n_193_stock" sourceRef="n_193_can" targetRef="n_193_stock" name="returnable"/>
+    <sequenceFlow id="f_n_193_can_n_193_reclass" sourceRef="n_193_can" targetRef="n_193_reclass" name="not returnable"><conditionExpression xsi:type="tFormalExpression"><![CDATA[returnable = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_193_reclass_n_193_cls" sourceRef="n_193_reclass" targetRef="n_193_cls" name=""/>
+    <sequenceFlow id="f_n_193_stock_n_193_file" sourceRef="n_193_stock" targetRef="n_193_file" name=""/>
+    <sequenceFlow id="f_n_193_file_n_193_hand" sourceRef="n_193_file" targetRef="n_193_hand" name=""/>
+    <sequenceFlow id="f_n_193_hand_n_193_end" sourceRef="n_193_hand" targetRef="n_193_end" name=""/>
+  </process>
+  <bpmndi:BPMNDiagram id="dg_P_19_3">
+    <bpmndi:BPMNPlane id="pl_P_19_3" bpmnElement="P_19_3">
+      <bpmndi:BPMNShape id="sh_n_193_start" bpmnElement="n_193_start"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_193_cls" bpmnElement="n_193_cls"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_193_gw" bpmnElement="n_193_gw"><dc:Bounds x="467" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_193_store" bpmnElement="n_193_store"><dc:Bounds x="595" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_193_man" bpmnElement="n_193_man"><dc:Bounds x="765" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_193_disp" bpmnElement="n_193_disp"><dc:Bounds x="935" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_193_sign" bpmnElement="n_193_sign"><dc:Bounds x="1105" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_193_sal" bpmnElement="n_193_sal"><dc:Bounds x="595" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_193_can" bpmnElement="n_193_can"><dc:Bounds x="807" y="432" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_193_stock" bpmnElement="n_193_stock"><dc:Bounds x="935" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_193_reclass" bpmnElement="n_193_reclass"><dc:Bounds x="765" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_193_file" bpmnElement="n_193_file"><dc:Bounds x="1275" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_193_hand" bpmnElement="n_193_hand"><dc:Bounds x="1445" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_193_end" bpmnElement="n_193_end"><dc:Bounds x="1662" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ed_f_n_193_start_n_193_cls" bpmnElement="f_n_193_start_n_193_cls"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_193_cls_n_193_gw" bpmnElement="f_n_193_cls_n_193_gw"><di:waypoint x="385" y="235"/><di:waypoint x="467" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_193_gw_n_193_store" bpmnElement="f_n_193_gw_n_193_store"><di:waypoint x="513" y="235"/><di:waypoint x="595" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_193_gw_n_193_sal" bpmnElement="f_n_193_gw_n_193_sal"><di:waypoint x="513" y="235"/><di:waypoint x="570" y="235"/><di:waypoint x="570" y="455"/><di:waypoint x="595" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_193_gw_n_193_file" bpmnElement="f_n_193_gw_n_193_file"><di:waypoint x="513" y="235"/><di:waypoint x="1275" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_193_store_n_193_man" bpmnElement="f_n_193_store_n_193_man"><di:waypoint x="725" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_193_man_n_193_disp" bpmnElement="f_n_193_man_n_193_disp"><di:waypoint x="895" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_193_disp_n_193_sign" bpmnElement="f_n_193_disp_n_193_sign"><di:waypoint x="1065" y="235"/><di:waypoint x="1105" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_193_sign_n_193_file" bpmnElement="f_n_193_sign_n_193_file"><di:waypoint x="1235" y="235"/><di:waypoint x="1275" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_193_sal_n_193_can" bpmnElement="f_n_193_sal_n_193_can"><di:waypoint x="725" y="455"/><di:waypoint x="807" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_193_can_n_193_stock" bpmnElement="f_n_193_can_n_193_stock"><di:waypoint x="853" y="455"/><di:waypoint x="935" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_193_can_n_193_reclass" bpmnElement="f_n_193_can_n_193_reclass"><di:waypoint x="853" y="455"/><di:waypoint x="740" y="455"/><di:waypoint x="740" y="675"/><di:waypoint x="765" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_193_reclass_n_193_cls" bpmnElement="f_n_193_reclass_n_193_cls"><di:waypoint x="895" y="675"/><di:waypoint x="230" y="675"/><di:waypoint x="230" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_193_stock_n_193_file" bpmnElement="f_n_193_stock_n_193_file"><di:waypoint x="1065" y="455"/><di:waypoint x="1250" y="455"/><di:waypoint x="1250" y="235"/><di:waypoint x="1275" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_193_file_n_193_hand" bpmnElement="f_n_193_file_n_193_hand"><di:waypoint x="1405" y="235"/><di:waypoint x="1445" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_193_hand_n_193_end" bpmnElement="f_n_193_hand_n_193_end"><di:waypoint x="1575" y="235"/><di:waypoint x="1662" y="235"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

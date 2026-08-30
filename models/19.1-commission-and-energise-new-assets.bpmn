@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_P_19_1" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <process id="P_19_1" name="19.1 Commission and energise new assets" isExecutable="false">
+    <documentation>All six processes are drawn, and the group is one path because commissioning is one: evidence, window, tie-in, energise, record, hand over. What makes it worth drawing is the number of times it hands control to another category and takes it back.
+
+19.1.2 books a window that 18.2.2 must approve, and HOLDS until it does. 19.1.3 receives the clearance 18.4.4 issues and does not issue one. 19.1.5 attaches the commissioning record to the ASSET rather than only to the work order, and explicitly does not write as-built geometry - that is 5.4. 19.1.6 tells 12.1 the asset is in service without creating the record. Four boundaries in six processes, each drawn as a message to somewhere else rather than as a task this group performs.
+
+The failure path is real and is drawn: 19.1.4 energises ONCE and proves it, and where it does not hold the plant is dumped and returned to 19.1.1 rather than retried on the spot.</documentation>
+    <laneSet id="P_19_1_lanes">
+      <lane id="l_191_con" name="Construction and commissioning">
+        <flowNodeRef>n_191_start</flowNodeRef>
+        <flowNodeRef>n_191_ev</flowNodeRef>
+        <flowNodeRef>n_191_acc</flowNodeRef>
+        <flowNodeRef>n_191_ret</flowNodeRef>
+        <flowNodeRef>n_191_en</flowNodeRef>
+        <flowNodeRef>n_191_ok</flowNodeRef>
+        <flowNodeRef>n_191_dump</flowNodeRef>
+        <flowNodeRef>n_191_recd</flowNodeRef>
+        <flowNodeRef>n_191_hand</flowNodeRef>
+      </lane>
+      <lane id="l_191_ops" name="Network operations">
+        <flowNodeRef>n_191_win</flowNodeRef>
+        <flowNodeRef>n_191_hold</flowNodeRef>
+        <flowNodeRef>n_191_iso</flowNodeRef>
+        <flowNodeRef>n_191_clr</flowNodeRef>
+        <flowNodeRef>n_191_rel</flowNodeRef>
+        <flowNodeRef>n_191_rl</flowNodeRef>
+        <flowNodeRef>n_191_tell</flowNodeRef>
+        <flowNodeRef>n_191_end</flowNodeRef>
+      </lane>
+    </laneSet>
+    <startEvent id="n_191_start" name="Construction reports complete with test evidence"><messageEventDefinition id="n_191_start_md"/></startEvent>
+    <userTask id="n_191_ev" name="Compare test evidence with the acceptance criteria"><documentation>19.1.1. Against the criteria 2.1 set. Closing the construction work order is 5.1.1 and is not done here.</documentation></userTask>
+    <exclusiveGateway id="n_191_acc" name="Accepted"/>
+    <sendTask id="n_191_ret" name="Return the shortfall to 5.1"><documentation>19.1.1.</documentation></sendTask>
+    <sendTask id="n_191_win" name="Request a commissioning window from 18.2"><documentation>19.1.2. Requested, not taken. The date is held until 18.2.2 approves the outage plan.</documentation></sendTask>
+    <receiveTask id="n_191_hold" name="Hold until 18.2.2 approves"><documentation>19.1.2.</documentation></receiveTask>
+    <exclusiveGateway id="n_191_iso" name="Tie-in needs the plant dead"/>
+    <receiveTask id="n_191_clr" name="Receive the clearance 18.4.4 issues"><documentation>19.1.3. RECEIVE. No process in this category may issue a clearance; 18.4.4 is the only one in the model that can.</documentation></receiveTask>
+    <serviceTask id="n_191_rel" name="Release the tie-in while the clearance is held"><documentation>19.1.3. Only while it is held.</documentation></serviceTask>
+    <userTask id="n_191_en" name="Energise or pressurise, and verify performance"><documentation>19.1.4. Gas first pressurisation runs under 192.629(a).</documentation></userTask>
+    <exclusiveGateway id="n_191_ok" name="Performance holds"/>
+    <serviceTask id="n_191_dump" name="Dump and hold"><documentation>19.1.4. Back to 19.1.1 with a documented hold. Not declared in service, and not retried at the tie-in.</documentation></serviceTask>
+    <serviceTask id="n_191_recd" name="Record the test and first-energise results"><documentation>19.1.5. Who energised, when, and under which clearance - attached to the ASSET, not only to the work order. As-built geometry is 5.4.</documentation></serviceTask>
+    <sendTask id="n_191_hand" name="Transfer custody from construction to operations"><documentation>19.1.6.</documentation></sendTask>
+    <sendTask id="n_191_rl" name="Release the clearance if one is still held"><documentation>19.1.6. Through 18.5, which is where a clearance is surrendered.</documentation></sendTask>
+    <sendTask id="n_191_tell" name="Tell 12.1 the asset is in service"><documentation>19.1.6. Tell. 12.1.1 creates the record; this process does not.</documentation></sendTask>
+    <endEvent id="n_191_end" name="Asset in service"/>
+    <sequenceFlow id="f_n_191_start_n_191_ev" sourceRef="n_191_start" targetRef="n_191_ev" name=""/>
+    <sequenceFlow id="f_n_191_ev_n_191_acc" sourceRef="n_191_ev" targetRef="n_191_acc" name=""/>
+    <sequenceFlow id="f_n_191_acc_n_191_ret" sourceRef="n_191_acc" targetRef="n_191_ret" name="shortfall"><conditionExpression xsi:type="tFormalExpression"><![CDATA[accepted = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_191_acc_n_191_win" sourceRef="n_191_acc" targetRef="n_191_win" name="accepted"/>
+    <sequenceFlow id="f_n_191_win_n_191_hold" sourceRef="n_191_win" targetRef="n_191_hold" name=""/>
+    <sequenceFlow id="f_n_191_hold_n_191_iso" sourceRef="n_191_hold" targetRef="n_191_iso" name=""/>
+    <sequenceFlow id="f_n_191_iso_n_191_clr" sourceRef="n_191_iso" targetRef="n_191_clr" name="dead tie-in"><conditionExpression xsi:type="tFormalExpression"><![CDATA[deadTieIn = true]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_191_clr_n_191_rel" sourceRef="n_191_clr" targetRef="n_191_rel" name=""/>
+    <sequenceFlow id="f_n_191_iso_n_191_rel" sourceRef="n_191_iso" targetRef="n_191_rel" name="live tie-in, no isolation"/>
+    <sequenceFlow id="f_n_191_rel_n_191_en" sourceRef="n_191_rel" targetRef="n_191_en" name=""/>
+    <sequenceFlow id="f_n_191_en_n_191_ok" sourceRef="n_191_en" targetRef="n_191_ok" name=""/>
+    <sequenceFlow id="f_n_191_ok_n_191_dump" sourceRef="n_191_ok" targetRef="n_191_dump" name="does not hold"><conditionExpression xsi:type="tFormalExpression"><![CDATA[holds = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_191_dump_n_191_ev" sourceRef="n_191_dump" targetRef="n_191_ev" name=""/>
+    <sequenceFlow id="f_n_191_ok_n_191_recd" sourceRef="n_191_ok" targetRef="n_191_recd" name="holds"/>
+    <sequenceFlow id="f_n_191_recd_n_191_hand" sourceRef="n_191_recd" targetRef="n_191_hand" name=""/>
+    <sequenceFlow id="f_n_191_hand_n_191_rl" sourceRef="n_191_hand" targetRef="n_191_rl" name=""/>
+    <sequenceFlow id="f_n_191_rl_n_191_tell" sourceRef="n_191_rl" targetRef="n_191_tell" name=""/>
+    <sequenceFlow id="f_n_191_tell_n_191_end" sourceRef="n_191_tell" targetRef="n_191_end" name=""/>
+  </process>
+  <bpmndi:BPMNDiagram id="dg_P_19_1">
+    <bpmndi:BPMNPlane id="pl_P_19_1" bpmnElement="P_19_1">
+      <bpmndi:BPMNShape id="sh_n_191_start" bpmnElement="n_191_start"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_191_ev" bpmnElement="n_191_ev"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_191_acc" bpmnElement="n_191_acc"><dc:Bounds x="467" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_191_ret" bpmnElement="n_191_ret"><dc:Bounds x="425" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_191_win" bpmnElement="n_191_win"><dc:Bounds x="595" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_191_hold" bpmnElement="n_191_hold"><dc:Bounds x="765" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_191_iso" bpmnElement="n_191_iso"><dc:Bounds x="977" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_191_clr" bpmnElement="n_191_clr"><dc:Bounds x="935" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_191_rel" bpmnElement="n_191_rel"><dc:Bounds x="1105" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_191_en" bpmnElement="n_191_en"><dc:Bounds x="1275" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_191_ok" bpmnElement="n_191_ok"><dc:Bounds x="1487" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_191_dump" bpmnElement="n_191_dump"><dc:Bounds x="1445" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_191_recd" bpmnElement="n_191_recd"><dc:Bounds x="1615" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_191_hand" bpmnElement="n_191_hand"><dc:Bounds x="1785" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_191_rl" bpmnElement="n_191_rl"><dc:Bounds x="1955" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_191_tell" bpmnElement="n_191_tell"><dc:Bounds x="2125" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_191_end" bpmnElement="n_191_end"><dc:Bounds x="2342" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ed_f_n_191_start_n_191_ev" bpmnElement="f_n_191_start_n_191_ev"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_191_ev_n_191_acc" bpmnElement="f_n_191_ev_n_191_acc"><di:waypoint x="385" y="235"/><di:waypoint x="467" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_191_acc_n_191_ret" bpmnElement="f_n_191_acc_n_191_ret"><di:waypoint x="513" y="235"/><di:waypoint x="400" y="235"/><di:waypoint x="400" y="455"/><di:waypoint x="425" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_191_acc_n_191_win" bpmnElement="f_n_191_acc_n_191_win"><di:waypoint x="513" y="235"/><di:waypoint x="595" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_191_win_n_191_hold" bpmnElement="f_n_191_win_n_191_hold"><di:waypoint x="725" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_191_hold_n_191_iso" bpmnElement="f_n_191_hold_n_191_iso"><di:waypoint x="895" y="235"/><di:waypoint x="977" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_191_iso_n_191_clr" bpmnElement="f_n_191_iso_n_191_clr"><di:waypoint x="1023" y="235"/><di:waypoint x="910" y="235"/><di:waypoint x="910" y="455"/><di:waypoint x="935" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_191_clr_n_191_rel" bpmnElement="f_n_191_clr_n_191_rel"><di:waypoint x="1065" y="455"/><di:waypoint x="1080" y="455"/><di:waypoint x="1080" y="235"/><di:waypoint x="1105" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_191_iso_n_191_rel" bpmnElement="f_n_191_iso_n_191_rel"><di:waypoint x="1023" y="235"/><di:waypoint x="1105" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_191_rel_n_191_en" bpmnElement="f_n_191_rel_n_191_en"><di:waypoint x="1235" y="235"/><di:waypoint x="1275" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_191_en_n_191_ok" bpmnElement="f_n_191_en_n_191_ok"><di:waypoint x="1405" y="235"/><di:waypoint x="1487" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_191_ok_n_191_dump" bpmnElement="f_n_191_ok_n_191_dump"><di:waypoint x="1533" y="235"/><di:waypoint x="1420" y="235"/><di:waypoint x="1420" y="455"/><di:waypoint x="1445" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_191_dump_n_191_ev" bpmnElement="f_n_191_dump_n_191_ev"><di:waypoint x="1575" y="455"/><di:waypoint x="230" y="455"/><di:waypoint x="230" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_191_ok_n_191_recd" bpmnElement="f_n_191_ok_n_191_recd"><di:waypoint x="1533" y="235"/><di:waypoint x="1615" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_191_recd_n_191_hand" bpmnElement="f_n_191_recd_n_191_hand"><di:waypoint x="1745" y="235"/><di:waypoint x="1785" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_191_hand_n_191_rl" bpmnElement="f_n_191_hand_n_191_rl"><di:waypoint x="1915" y="235"/><di:waypoint x="1955" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_191_rl_n_191_tell" bpmnElement="f_n_191_rl_n_191_tell"><di:waypoint x="2085" y="235"/><di:waypoint x="2125" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_191_tell_n_191_end" bpmnElement="f_n_191_tell_n_191_end"><di:waypoint x="2255" y="235"/><di:waypoint x="2342" y="235"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

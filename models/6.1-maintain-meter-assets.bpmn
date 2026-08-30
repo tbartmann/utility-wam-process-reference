@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_P_6_1" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <process id="P_6_1" name="6.1 Maintain the meter asset population" isExecutable="false">
+    <documentation>6.1.1, 6.1.3 and 6.1.4 are drawn; 6.1.2 is a determination with its own table.
+
+6.1.4 RETIRES THE RECORD AND ROUTES THE UNIT. It does not condemn anything - condemnation is a shop judgement made at 6.4.5 on a test result and a physical inspection, and the two are separated here deliberately. A meter can be retired from service and returned to stock after test; a meter can be condemned and its record already retired weeks earlier. Collapsing them would make every removal look like a disposal.
+
+The rotation loop is the shape of the group. Stock is issued, installed, removed, inspected, tested, and either certified back into stock or condemned - and 6.1.3 is the only process in the model that holds a device in that circulating state. 13.2 operates storerooms generally; a meter in rotation is not ordinary stock, because its eligibility for issue depends on a certification that expires.</documentation>
+    <laneSet id="P_6_1_lanes">
+      <lane id="l_61_am" name="Meter asset records">
+        <flowNodeRef>n_61_start</flowNodeRef>
+        <flowNodeRef>n_61_val</flowNodeRef>
+        <flowNodeRef>n_61_app</flowNodeRef>
+        <flowNodeRef>n_61_pub</flowNodeRef>
+        <flowNodeRef>n_61_e1</flowNodeRef>
+        <flowNodeRef>n_61_r</flowNodeRef>
+        <flowNodeRef>n_61_fin</flowNodeRef>
+        <flowNodeRef>n_61_ret</flowNodeRef>
+        <flowNodeRef>n_61_route</flowNodeRef>
+        <flowNodeRef>n_61_e3</flowNodeRef>
+      </lane>
+      <lane id="l_61_stock" name="Meter stock and rotation">
+        <flowNodeRef>n_61_s</flowNodeRef>
+        <flowNodeRef>n_61_rec</flowNodeRef>
+        <flowNodeRef>n_61_elig</flowNodeRef>
+        <flowNodeRef>n_61_hold</flowNodeRef>
+        <flowNodeRef>n_61_iss</flowNodeRef>
+        <flowNodeRef>n_61_trk</flowNodeRef>
+        <flowNodeRef>n_61_e2</flowNodeRef>
+        <flowNodeRef>n_61_test</flowNodeRef>
+        <flowNodeRef>n_61_disp</flowNodeRef>
+      </lane>
+    </laneSet>
+    <startEvent id="n_61_start" name="An asset-record change arrives"><messageEventDefinition id="n_61_start_md"/></startEvent>
+    <userTask id="n_61_val" name="Validate identity, location and configuration"><documentation>6.1.1. Identity first - a meter record is the anchor for a bill, and a wrong identity is a wrong customer.</documentation></userTask>
+    <serviceTask id="n_61_app" name="Apply the change to the asset record"><documentation>6.1.1. An exchange links predecessor and successor; the chain is what makes a historical bill defensible.</documentation></serviceTask>
+    <sendTask id="n_61_pub" name="Publish the current record"><documentation>6.1.1. To 12.1 as an asset and to 10.1 as a premise attribute.</documentation></sendTask>
+    <endEvent id="n_61_e1" name="Record current"/>
+    <startEvent id="n_61_s" name="Meter receipt, reservation or return"><messageEventDefinition id="n_61_s_md"/></startEvent>
+    <serviceTask id="n_61_rec" name="Record receipt and status"><documentation>6.1.3.</documentation></serviceTask>
+    <exclusiveGateway id="n_61_elig" name="Eligible for issue"><documentation>6.1.3. Eligibility depends on a certification that expires - which is what makes this different from ordinary storeroom stock at 13.2.</documentation></exclusiveGateway>
+    <serviceTask id="n_61_hold" name="Hold for inspection and test"><documentation>6.1.3. Into 6.4.1.</documentation></serviceTask>
+    <serviceTask id="n_61_iss" name="Reserve and issue the meter"><documentation>6.1.3.</documentation></serviceTask>
+    <serviceTask id="n_61_trk" name="Track the issued meter"><documentation>6.1.3. An issued meter that never reaches a service point is the commonest source of an unexplained inventory difference.</documentation></serviceTask>
+    <endEvent id="n_61_e2" name="Meter issued or held"/>
+    <startEvent id="n_61_r" name="Meter has been removed from service"><messageEventDefinition id="n_61_r_md"/></startEvent>
+    <userTask id="n_61_fin" name="Capture final identity, read and status"><documentation>6.1.4. The final read is a billing determinant, not an asset attribute - 10.5 needs it to close the account.</documentation></userTask>
+    <serviceTask id="n_61_ret" name="Retire the active asset record"><documentation>6.1.4. The RECORD. The unit is still physical and still has a disposition ahead of it.</documentation></serviceTask>
+    <exclusiveGateway id="n_61_route" name="Disposition of the unit"/>
+    <sendTask id="n_61_test" name="Route to test"><documentation>6.1.4, into 6.4.1.</documentation></sendTask>
+    <sendTask id="n_61_disp" name="Route for disposal"><documentation>6.1.4, into 19.3.1 for waste classification. The condemnation judgement itself is 6.4.5's.</documentation></sendTask>
+    <endEvent id="n_61_e3" name="Record retired, unit routed"/>
+    <sequenceFlow id="f_n_61_start_n_61_val" sourceRef="n_61_start" targetRef="n_61_val" name=""/>
+    <sequenceFlow id="f_n_61_val_n_61_app" sourceRef="n_61_val" targetRef="n_61_app" name=""/>
+    <sequenceFlow id="f_n_61_app_n_61_pub" sourceRef="n_61_app" targetRef="n_61_pub" name=""/>
+    <sequenceFlow id="f_n_61_pub_n_61_e1" sourceRef="n_61_pub" targetRef="n_61_e1" name=""/>
+    <sequenceFlow id="f_n_61_s_n_61_rec" sourceRef="n_61_s" targetRef="n_61_rec" name=""/>
+    <sequenceFlow id="f_n_61_rec_n_61_elig" sourceRef="n_61_rec" targetRef="n_61_elig" name=""/>
+    <sequenceFlow id="f_n_61_elig_n_61_hold" sourceRef="n_61_elig" targetRef="n_61_hold" name="not certified"><conditionExpression xsi:type="tFormalExpression"><![CDATA[eligible = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_61_elig_n_61_iss" sourceRef="n_61_elig" targetRef="n_61_iss" name="certified"/>
+    <sequenceFlow id="f_n_61_hold_n_61_e2" sourceRef="n_61_hold" targetRef="n_61_e2" name=""/>
+    <sequenceFlow id="f_n_61_iss_n_61_trk" sourceRef="n_61_iss" targetRef="n_61_trk" name=""/>
+    <sequenceFlow id="f_n_61_trk_n_61_e2" sourceRef="n_61_trk" targetRef="n_61_e2" name=""/>
+    <sequenceFlow id="f_n_61_r_n_61_fin" sourceRef="n_61_r" targetRef="n_61_fin" name=""/>
+    <sequenceFlow id="f_n_61_fin_n_61_ret" sourceRef="n_61_fin" targetRef="n_61_ret" name=""/>
+    <sequenceFlow id="f_n_61_ret_n_61_route" sourceRef="n_61_ret" targetRef="n_61_route" name=""/>
+    <sequenceFlow id="f_n_61_route_n_61_test" sourceRef="n_61_route" targetRef="n_61_test" name="reuse, repair or test"><conditionExpression xsi:type="tFormalExpression"><![CDATA[disposition != "disposal"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_61_route_n_61_disp" sourceRef="n_61_route" targetRef="n_61_disp" name="disposal"><conditionExpression xsi:type="tFormalExpression"><![CDATA[disposition = "disposal"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_61_test_n_61_e3" sourceRef="n_61_test" targetRef="n_61_e3" name=""/>
+    <sequenceFlow id="f_n_61_disp_n_61_e3" sourceRef="n_61_disp" targetRef="n_61_e3" name=""/>
+  </process>
+  <bpmndi:BPMNDiagram id="dg_P_6_1">
+    <bpmndi:BPMNPlane id="pl_P_6_1" bpmnElement="P_6_1">
+      <bpmndi:BPMNShape id="sh_n_61_start" bpmnElement="n_61_start"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_61_val" bpmnElement="n_61_val"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_61_app" bpmnElement="n_61_app"><dc:Bounds x="425" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_61_pub" bpmnElement="n_61_pub"><dc:Bounds x="595" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_61_e1" bpmnElement="n_61_e1"><dc:Bounds x="812" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_61_s" bpmnElement="n_61_s"><dc:Bounds x="132" y="657" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_61_rec" bpmnElement="n_61_rec"><dc:Bounds x="255" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_61_elig" bpmnElement="n_61_elig"><dc:Bounds x="467" y="652" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_61_hold" bpmnElement="n_61_hold"><dc:Bounds x="425" y="860" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_61_iss" bpmnElement="n_61_iss"><dc:Bounds x="595" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_61_trk" bpmnElement="n_61_trk"><dc:Bounds x="765" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_61_e2" bpmnElement="n_61_e2"><dc:Bounds x="982" y="657" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_61_r" bpmnElement="n_61_r"><dc:Bounds x="132" y="1097" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_61_fin" bpmnElement="n_61_fin"><dc:Bounds x="255" y="1080" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_61_ret" bpmnElement="n_61_ret"><dc:Bounds x="425" y="1080" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_61_route" bpmnElement="n_61_route"><dc:Bounds x="637" y="1092" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_61_test" bpmnElement="n_61_test"><dc:Bounds x="595" y="1300" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_61_disp" bpmnElement="n_61_disp"><dc:Bounds x="765" y="1300" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_61_e3" bpmnElement="n_61_e3"><dc:Bounds x="982" y="1097" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ed_f_n_61_start_n_61_val" bpmnElement="f_n_61_start_n_61_val"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_61_val_n_61_app" bpmnElement="f_n_61_val_n_61_app"><di:waypoint x="385" y="235"/><di:waypoint x="425" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_61_app_n_61_pub" bpmnElement="f_n_61_app_n_61_pub"><di:waypoint x="555" y="235"/><di:waypoint x="595" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_61_pub_n_61_e1" bpmnElement="f_n_61_pub_n_61_e1"><di:waypoint x="725" y="235"/><di:waypoint x="812" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_61_s_n_61_rec" bpmnElement="f_n_61_s_n_61_rec"><di:waypoint x="168" y="675"/><di:waypoint x="255" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_61_rec_n_61_elig" bpmnElement="f_n_61_rec_n_61_elig"><di:waypoint x="385" y="675"/><di:waypoint x="467" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_61_elig_n_61_hold" bpmnElement="f_n_61_elig_n_61_hold"><di:waypoint x="513" y="675"/><di:waypoint x="400" y="675"/><di:waypoint x="400" y="895"/><di:waypoint x="425" y="895"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_61_elig_n_61_iss" bpmnElement="f_n_61_elig_n_61_iss"><di:waypoint x="513" y="675"/><di:waypoint x="595" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_61_hold_n_61_e2" bpmnElement="f_n_61_hold_n_61_e2"><di:waypoint x="555" y="895"/><di:waypoint x="957" y="895"/><di:waypoint x="957" y="675"/><di:waypoint x="982" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_61_iss_n_61_trk" bpmnElement="f_n_61_iss_n_61_trk"><di:waypoint x="725" y="675"/><di:waypoint x="765" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_61_trk_n_61_e2" bpmnElement="f_n_61_trk_n_61_e2"><di:waypoint x="895" y="675"/><di:waypoint x="982" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_61_r_n_61_fin" bpmnElement="f_n_61_r_n_61_fin"><di:waypoint x="168" y="1115"/><di:waypoint x="255" y="1115"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_61_fin_n_61_ret" bpmnElement="f_n_61_fin_n_61_ret"><di:waypoint x="385" y="1115"/><di:waypoint x="425" y="1115"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_61_ret_n_61_route" bpmnElement="f_n_61_ret_n_61_route"><di:waypoint x="555" y="1115"/><di:waypoint x="637" y="1115"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_61_route_n_61_test" bpmnElement="f_n_61_route_n_61_test"><di:waypoint x="683" y="1115"/><di:waypoint x="570" y="1115"/><di:waypoint x="570" y="1335"/><di:waypoint x="595" y="1335"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_61_route_n_61_disp" bpmnElement="f_n_61_route_n_61_disp"><di:waypoint x="683" y="1115"/><di:waypoint x="740" y="1115"/><di:waypoint x="740" y="1335"/><di:waypoint x="765" y="1335"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_61_test_n_61_e3" bpmnElement="f_n_61_test_n_61_e3"><di:waypoint x="725" y="1335"/><di:waypoint x="957" y="1335"/><di:waypoint x="957" y="1115"/><di:waypoint x="982" y="1115"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_61_disp_n_61_e3" bpmnElement="f_n_61_disp_n_61_e3"><di:waypoint x="895" y="1335"/><di:waypoint x="957" y="1335"/><di:waypoint x="957" y="1115"/><di:waypoint x="982" y="1115"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

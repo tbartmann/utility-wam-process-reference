@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/" id="Validate_read" name="6.5.2 Validate reads and resolve exceptions" namespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <description>Returns accepted, suspect or rejected. The most consequential table in the category, because everything downstream of it is somebody's bill.
+
+THE THREE OUTCOMES ARE NOT A SEVERITY SCALE. Accepted goes to billing. Rejected means there is no usable read and 6.5.3 estimates. SUSPECT is the interesting one: the read is arithmetically possible but does not fit the context, and it needs a human at 6.5.4 rather than an estimate. Collapsing suspect into rejected estimates over real consumption; collapsing it into accepted bills an anomaly.
+
+No source states a validation tolerance. High-low limits, comparison windows and the definition of a plausible change are the operator's, and vary by commodity and customer class. The table encodes the DECISION SHAPE - identity, then arithmetic, then context - and never the numbers.
+
+Identity and sequence come first for the same reason they do everywhere else in this category: a perfectly plausible read on the wrong meter passes every consumption test there is.</description>
+  <inputData id="in_identity" name="Meter identity and service point resolve"><variable id="in_identity_v" name="Meter identity and service point resolve" typeRef="boolean"/></inputData>
+  <inputData id="in_sequence" name="Read is consistent in sequence and direction"><variable id="in_sequence_v" name="Read is consistent in sequence and direction" typeRef="boolean"/></inputData>
+  <inputData id="in_arithmetic" name="Read is arithmetically possible for the register"><variable id="in_arithmetic_v" name="Read is arithmetically possible for the register" typeRef="boolean"/></inputData>
+  <inputData id="in_context" name="Consistent with history and comparable context"><variable id="in_context_v" name="Consistent with history and comparable context" typeRef="boolean"/></inputData>
+  <knowledgeSource id="ks_vee" name="IEC 61968-9 meter reading and control - consensus, no clause locator available; the operator's validation, estimation and editing rules"><description>Validation tolerances, comparison windows and plausibility limits are the operator's and the tariff's, differ by commodity and customer class, and are not stated in this reference.</description></knowledgeSource>
+  <decision id="d_6_5_2" name="Read validity">
+    <variable id="d_6_5_2_v" name="Read validity" typeRef="string"/>
+    <informationRequirement id="ir_d_6_5_2_ks_vee"><requiredInput href="#ks_vee"/></informationRequirement>
+    <decisionTable id="d_6_5_2_dt" hitPolicy="FIRST" preferredOrientation="Rule-as-Row">
+      <input id="d_6_5_2_i1" label="Identity resolves"><inputExpression id="d_6_5_2_i1_e" typeRef="boolean"><text>in_identity</text></inputExpression></input>
+      <input id="d_6_5_2_i2" label="Sequence consistent"><inputExpression id="d_6_5_2_i2_e" typeRef="boolean"><text>in_sequence</text></inputExpression></input>
+      <input id="d_6_5_2_i3" label="Arithmetically possible"><inputExpression id="d_6_5_2_i3_e" typeRef="boolean"><text>in_arithmetic</text></inputExpression></input>
+      <input id="d_6_5_2_i4" label="Consistent with context"><inputExpression id="d_6_5_2_i4_e" typeRef="boolean"><text>in_context</text></inputExpression></input>
+      <output id="d_6_5_2_o" label="Read validity" name="Read validity" typeRef="string"/>
+      <rule id="d_6_5_2_r1">
+        <description>Identity does not resolve. A plausible read on an unidentified meter passes every consumption test there is and is still worthless. Routes to 6.2.4 and 12.2.5, not to estimation.</description>
+        <inputEntry id="d_6_5_2_r1_ie1"><text>false</text></inputEntry>
+        <inputEntry id="d_6_5_2_r1_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_6_5_2_r1_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_6_5_2_r1_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_6_5_2_r1_oe"><text>"reject"</text></outputEntry>
+      </rule>
+      <rule id="d_6_5_2_r2">
+        <description>Out of sequence or reversed. Often a register rollover or a replaced meter whose predecessor link is missing - 6.1.1 holds that link and this row is how a broken one surfaces.</description>
+        <inputEntry id="d_6_5_2_r2_ie1"><text>true</text></inputEntry>
+        <inputEntry id="d_6_5_2_r2_ie2"><text>false</text></inputEntry>
+        <inputEntry id="d_6_5_2_r2_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_6_5_2_r2_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_6_5_2_r2_oe"><text>"suspect"</text></outputEntry>
+      </rule>
+      <rule id="d_6_5_2_r3">
+        <description>Not arithmetically possible for the register. There is no usable read, so 6.5.3 estimates and the value is marked as estimated.</description>
+        <inputEntry id="d_6_5_2_r3_ie1"><text>true</text></inputEntry>
+        <inputEntry id="d_6_5_2_r3_ie2"><text>true</text></inputEntry>
+        <inputEntry id="d_6_5_2_r3_ie3"><text>false</text></inputEntry>
+        <inputEntry id="d_6_5_2_r3_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_6_5_2_r3_oe"><text>"reject"</text></outputEntry>
+      </rule>
+      <rule id="d_6_5_2_r4">
+        <description>Possible but does not fit the context. THIS IS THE ROW THAT NEEDS A PERSON: estimating over it hides real consumption, and accepting it bills an anomaly. To 6.5.4, which may find a vacant premise, a seasonal change, a failing register or theft.</description>
+        <inputEntry id="d_6_5_2_r4_ie1"><text>true</text></inputEntry>
+        <inputEntry id="d_6_5_2_r4_ie2"><text>true</text></inputEntry>
+        <inputEntry id="d_6_5_2_r4_ie3"><text>true</text></inputEntry>
+        <inputEntry id="d_6_5_2_r4_ie4"><text>false</text></inputEntry>
+        <outputEntry id="d_6_5_2_r4_oe"><text>"suspect"</text></outputEntry>
+      </rule>
+      <rule id="d_6_5_2_r5">
+        <description>Accepted and released for billing without correction.</description>
+        <inputEntry id="d_6_5_2_r5_ie1"><text>true</text></inputEntry>
+        <inputEntry id="d_6_5_2_r5_ie2"><text>true</text></inputEntry>
+        <inputEntry id="d_6_5_2_r5_ie3"><text>true</text></inputEntry>
+        <inputEntry id="d_6_5_2_r5_ie4"><text>true</text></inputEntry>
+        <outputEntry id="d_6_5_2_r5_oe"><text>"accept"</text></outputEntry>
+      </rule>
+      <rule id="d_6_5_2_r6">
+        <description>Identity status not established.</description>
+        <inputEntry id="d_6_5_2_r6_ie1"><text>-</text></inputEntry>
+        <inputEntry id="d_6_5_2_r6_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_6_5_2_r6_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_6_5_2_r6_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_6_5_2_r6_oe"><text>"determineManually"</text></outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram id="drd_Validate_read">
+      <dmndi:DMNShape id="sh_in_identity" dmnElementRef="in_identity"><dc:Bounds x="60" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_sequence" dmnElementRef="in_sequence"><dc:Bounds x="245" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_arithmetic" dmnElementRef="in_arithmetic"><dc:Bounds x="430" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_context" dmnElementRef="in_context"><dc:Bounds x="615" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_d_6_5_2" dmnElementRef="d_6_5_2"><dc:Bounds x="60" y="240" width="180" height="70"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_ks_vee" dmnElementRef="ks_vee"><dc:Bounds x="900" y="100" width="160" height="55"/></dmndi:DMNShape>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</definitions>

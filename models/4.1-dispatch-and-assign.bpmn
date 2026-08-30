@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_P_4_1" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <process id="P_4_1" name="4.1 Dispatch work and confirm arrival" isExecutable="false">
+    <documentation>4.1.2 and 4.1.3 are drawn. 4.1.1 is a decision, and 4.1.4 and 4.1.5 are cases with their own files.
+
+The path is short and its value is in two failures it makes visible. TRANSMISSION IS NOT RECEIPT: 4.1.2 records delivery or communication failure rather than assuming the message landed, which matters because a crew that never received a dispatch looks identical, in the work record, to one that ignored it. And A MISSED MILESTONE RAISES AN EXCEPTION rather than waiting: 4.1.3 turns silence into an event that 4.1.4 can act on.
+
+The assignment is re-confirmed at dispatch rather than trusted. Between 4.1.1 and 4.1.2 a qualification can lapse, an outage can move, and a crew can be recalled by 4.1.5 - so the first act is to check the assignment still holds.</documentation>
+    <laneSet id="P_4_1_lanes">
+      <lane id="l_41_disp" name="Dispatch">
+        <flowNodeRef>n_41_start</flowNodeRef>
+        <flowNodeRef>n_41_valid</flowNodeRef>
+        <flowNodeRef>n_41_pack</flowNodeRef>
+        <flowNodeRef>n_41_send</flowNodeRef>
+        <flowNodeRef>n_41_del</flowNodeRef>
+        <flowNodeRef>n_41_fail</flowNodeRef>
+        <flowNodeRef>n_41_miss</flowNodeRef>
+        <flowNodeRef>n_41_exc</flowNodeRef>
+      </lane>
+      <lane id="l_41_crew" name="Field crew">
+        <flowNodeRef>n_41_ack</flowNodeRef>
+        <flowNodeRef>n_41_enr</flowNodeRef>
+        <flowNodeRef>n_41_site</flowNodeRef>
+        <flowNodeRef>n_41_end</flowNodeRef>
+      </lane>
+    </laneSet>
+    <startEvent id="n_41_start" name="Work has been assigned"><messageEventDefinition id="n_41_start_md"/></startEvent>
+    <serviceTask id="n_41_valid" name="Confirm the assignment still holds"><documentation>4.1.2. Qualification currency, outage state and any 4.1.5 recall since assignment.</documentation></serviceTask>
+    <serviceTask id="n_41_pack" name="Assemble the current work information and constraints"><documentation>4.1.2. Current. A dispatch carrying yesterday's constraints is worse than no dispatch, because the crew will act on it.</documentation></serviceTask>
+    <sendTask id="n_41_send" name="Transmit the dispatch"><documentation>4.1.2.</documentation></sendTask>
+    <exclusiveGateway id="n_41_del" name="Delivered"/>
+    <serviceTask id="n_41_fail" name="Record the communication failure"><documentation>4.1.2. Recorded as a failure, not as a dispatch. An undelivered message and an ignored one are different facts and 4.1.4 responds to them differently.</documentation></serviceTask>
+    <receiveTask id="n_41_ack" name="Record crew acknowledgement"><documentation>4.1.3.</documentation></receiveTask>
+    <receiveTask id="n_41_enr" name="Record en-route status"><documentation>4.1.3.</documentation></receiveTask>
+    <receiveTask id="n_41_site" name="Record arrival on site"><documentation>4.1.3.</documentation></receiveTask>
+    <exclusiveGateway id="n_41_miss" name="Milestone missed"/>
+    <sendTask id="n_41_exc" name="Raise the exception to 4.1.4"><documentation>4.1.3. Silence becomes an event. Without this the monitoring case has nothing to open on.</documentation></sendTask>
+    <endEvent id="n_41_end" name="Crew on site, work may start"/>
+    <sequenceFlow id="f_n_41_start_n_41_valid" sourceRef="n_41_start" targetRef="n_41_valid" name=""/>
+    <sequenceFlow id="f_n_41_valid_n_41_pack" sourceRef="n_41_valid" targetRef="n_41_pack" name=""/>
+    <sequenceFlow id="f_n_41_pack_n_41_send" sourceRef="n_41_pack" targetRef="n_41_send" name=""/>
+    <sequenceFlow id="f_n_41_send_n_41_del" sourceRef="n_41_send" targetRef="n_41_del" name=""/>
+    <sequenceFlow id="f_n_41_del_n_41_fail" sourceRef="n_41_del" targetRef="n_41_fail" name="not delivered"><conditionExpression xsi:type="tFormalExpression"><![CDATA[delivered = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_41_fail_n_41_exc" sourceRef="n_41_fail" targetRef="n_41_exc" name=""/>
+    <sequenceFlow id="f_n_41_del_n_41_ack" sourceRef="n_41_del" targetRef="n_41_ack" name="delivered"/>
+    <sequenceFlow id="f_n_41_ack_n_41_enr" sourceRef="n_41_ack" targetRef="n_41_enr" name=""/>
+    <sequenceFlow id="f_n_41_enr_n_41_site" sourceRef="n_41_enr" targetRef="n_41_site" name=""/>
+    <sequenceFlow id="f_n_41_site_n_41_miss" sourceRef="n_41_site" targetRef="n_41_miss" name=""/>
+    <sequenceFlow id="f_n_41_miss_n_41_exc" sourceRef="n_41_miss" targetRef="n_41_exc" name="milestone missed"><conditionExpression xsi:type="tFormalExpression"><![CDATA[milestoneMissed = true]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_41_miss_n_41_end" sourceRef="n_41_miss" targetRef="n_41_end" name="on site"/>
+  </process>
+  <bpmndi:BPMNDiagram id="dg_P_4_1">
+    <bpmndi:BPMNPlane id="pl_P_4_1" bpmnElement="P_4_1">
+      <bpmndi:BPMNShape id="sh_n_41_start" bpmnElement="n_41_start"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_41_valid" bpmnElement="n_41_valid"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_41_pack" bpmnElement="n_41_pack"><dc:Bounds x="425" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_41_send" bpmnElement="n_41_send"><dc:Bounds x="595" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_41_del" bpmnElement="n_41_del"><dc:Bounds x="807" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_41_fail" bpmnElement="n_41_fail"><dc:Bounds x="765" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_41_ack" bpmnElement="n_41_ack"><dc:Bounds x="935" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_41_enr" bpmnElement="n_41_enr"><dc:Bounds x="1105" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_41_site" bpmnElement="n_41_site"><dc:Bounds x="1275" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_41_miss" bpmnElement="n_41_miss"><dc:Bounds x="1487" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_41_exc" bpmnElement="n_41_exc"><dc:Bounds x="1445" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_41_end" bpmnElement="n_41_end"><dc:Bounds x="1662" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ed_f_n_41_start_n_41_valid" bpmnElement="f_n_41_start_n_41_valid"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_41_valid_n_41_pack" bpmnElement="f_n_41_valid_n_41_pack"><di:waypoint x="385" y="235"/><di:waypoint x="425" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_41_pack_n_41_send" bpmnElement="f_n_41_pack_n_41_send"><di:waypoint x="555" y="235"/><di:waypoint x="595" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_41_send_n_41_del" bpmnElement="f_n_41_send_n_41_del"><di:waypoint x="725" y="235"/><di:waypoint x="807" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_41_del_n_41_fail" bpmnElement="f_n_41_del_n_41_fail"><di:waypoint x="853" y="235"/><di:waypoint x="740" y="235"/><di:waypoint x="740" y="455"/><di:waypoint x="765" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_41_fail_n_41_exc" bpmnElement="f_n_41_fail_n_41_exc"><di:waypoint x="895" y="455"/><di:waypoint x="1445" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_41_del_n_41_ack" bpmnElement="f_n_41_del_n_41_ack"><di:waypoint x="853" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_41_ack_n_41_enr" bpmnElement="f_n_41_ack_n_41_enr"><di:waypoint x="1065" y="235"/><di:waypoint x="1105" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_41_enr_n_41_site" bpmnElement="f_n_41_enr_n_41_site"><di:waypoint x="1235" y="235"/><di:waypoint x="1275" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_41_site_n_41_miss" bpmnElement="f_n_41_site_n_41_miss"><di:waypoint x="1405" y="235"/><di:waypoint x="1487" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_41_miss_n_41_exc" bpmnElement="f_n_41_miss_n_41_exc"><di:waypoint x="1533" y="235"/><di:waypoint x="1420" y="235"/><di:waypoint x="1420" y="455"/><di:waypoint x="1445" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_41_miss_n_41_end" bpmnElement="f_n_41_miss_n_41_end"><di:waypoint x="1533" y="235"/><di:waypoint x="1662" y="235"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

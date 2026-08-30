@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/" id="Failure_symptoms" name="4.3.6 Capture failure symptoms and preliminary codes" namespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <description>Returns a PRELIMINARY code and the confidence behind it. The word preliminary is load-bearing: the crew records what it observed, and 12.4.2 - a case, with laboratory results and history the crew does not have - establishes mode, mechanism and cause.
+
+ISO 14224 cl. 9.5 gives the structure for recording failure data. It does not give a method for arriving at a cause from a symptom, and no source in this reference does. So the table classifies what was SEEN - the observable symptom and the operating context - and never asserts why.
+
+The uncertainty output is not decoration. 12.4.3 scores asset health on this data and 12.5.2 sets condition triggers from it; both need to know whether a code was a clear observation or a field guess, and neither can recover that later. A code recorded with false confidence propagates into a maintenance strategy.</description>
+  <inputData id="in_observed" name="Symptom was directly observed"><variable id="in_observed_v" name="Symptom was directly observed" typeRef="boolean"/></inputData>
+  <inputData id="in_symptomClass" name="Observable symptom class"><variable id="in_symptomClass_v" name="Observable symptom class" typeRef="string"/></inputData>
+  <inputData id="in_context" name="Operating context at the time"><variable id="in_context_v" name="Operating context at the time" typeRef="string"/></inputData>
+  <inputData id="in_matches" name="Symptom matches a defined preliminary code"><variable id="in_matches_v" name="Symptom matches a defined preliminary code" typeRef="boolean"/></inputData>
+  <knowledgeSource id="ks_14224" name="ISO 14224:2016 cl. 9.5 failure data and cl. 9.6 maintenance data"><description>Gives the structure for recording failure and maintenance data. It does not supply a symptom-to-cause method, and neither does anything else in this reference - which is why the output is preliminary and 12.4.2 confirms it.</description></knowledgeSource>
+  <decision id="d_4_3_6" name="Preliminary code and confidence">
+    <variable id="d_4_3_6_v" name="Preliminary code and confidence" typeRef="string"/>
+    <informationRequirement id="ir_d_4_3_6_ks_14224"><requiredInput href="#ks_14224"/></informationRequirement>
+    <decisionTable id="d_4_3_6_dt" hitPolicy="FIRST" preferredOrientation="Rule-as-Row">
+      <input id="d_4_3_6_i1" label="Directly observed"><inputExpression id="d_4_3_6_i1_e" typeRef="boolean"><text>in_observed</text></inputExpression></input>
+      <input id="d_4_3_6_i2" label="Symptom class"><inputExpression id="d_4_3_6_i2_e" typeRef="string"><text>in_symptomClass</text></inputExpression></input>
+      <input id="d_4_3_6_i3" label="Matches a defined code"><inputExpression id="d_4_3_6_i3_e" typeRef="boolean"><text>in_matches</text></inputExpression></input>
+      <output id="d_4_3_6_o" label="Preliminary code and confidence" name="Preliminary code and confidence" typeRef="string"/>
+      <rule id="d_4_3_6_r1">
+        <description>Reported by a customer or a third party and not seen by the crew. Recorded as hearsay, because a symptom nobody witnessed is evidence that something was reported, not that it happened.</description>
+        <inputEntry id="d_4_3_6_r1_ie1"><text>false</text></inputEntry>
+        <inputEntry id="d_4_3_6_r1_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_4_3_6_r1_ie3"><text>-</text></inputEntry>
+        <outputEntry id="d_4_3_6_r1_oe"><text>"reportedNotObserved"</text></outputEntry>
+      </rule>
+      <rule id="d_4_3_6_r2">
+        <description>Seen, but no defined code fits. The description is kept verbatim and routed to 12.4.2 - this row is where a new failure mode first appears, and forcing it into the nearest existing code is how a new mode stays invisible for years.</description>
+        <inputEntry id="d_4_3_6_r2_ie1"><text>true</text></inputEntry>
+        <inputEntry id="d_4_3_6_r2_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_4_3_6_r2_ie3"><text>false</text></inputEntry>
+        <outputEntry id="d_4_3_6_r2_oe"><text>"observedNoCodeMatch"</text></outputEntry>
+      </rule>
+      <rule id="d_4_3_6_r3">
+        <description>Coded, and for gas it also enters 8.3.1 for grading. Leak grading is not federal - 49 CFR 192.703(c) requires hazardous leaks to be repaired promptly and says no more - so the grade comes from the operator's procedure, not from this table.</description>
+        <inputEntry id="d_4_3_6_r3_ie1"><text>true</text></inputEntry>
+        <inputEntry id="d_4_3_6_r3_ie2"><text>"leak","escape"</text></inputEntry>
+        <inputEntry id="d_4_3_6_r3_ie3"><text>true</text></inputEntry>
+        <outputEntry id="d_4_3_6_r3_oe"><text>"codedLeak"</text></outputEntry>
+      </rule>
+      <rule id="d_4_3_6_r4">
+        <description>Coded. Third-party damage also enters 8.4.4 as a claim, and the evidence captured at 4.3.2 is what supports it.</description>
+        <inputEntry id="d_4_3_6_r4_ie1"><text>true</text></inputEntry>
+        <inputEntry id="d_4_3_6_r4_ie2"><text>"damage","impact"</text></inputEntry>
+        <inputEntry id="d_4_3_6_r4_ie3"><text>true</text></inputEntry>
+        <outputEntry id="d_4_3_6_r4_oe"><text>"codedDamage"</text></outputEntry>
+      </rule>
+      <rule id="d_4_3_6_r5">
+        <description>Coded from a direct observation. Confidence is high for the SYMPTOM; the cause remains 12.4.2's to establish.</description>
+        <inputEntry id="d_4_3_6_r5_ie1"><text>true</text></inputEntry>
+        <inputEntry id="d_4_3_6_r5_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_4_3_6_r5_ie3"><text>true</text></inputEntry>
+        <outputEntry id="d_4_3_6_r5_oe"><text>"coded"</text></outputEntry>
+      </rule>
+      <rule id="d_4_3_6_r6">
+        <description>Observation status not established. Whether the crew saw it is the first thing the record needs and the easiest to lose.</description>
+        <inputEntry id="d_4_3_6_r6_ie1"><text>-</text></inputEntry>
+        <inputEntry id="d_4_3_6_r6_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_4_3_6_r6_ie3"><text>-</text></inputEntry>
+        <outputEntry id="d_4_3_6_r6_oe"><text>"determineManually"</text></outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram id="drd_Failure_symptoms">
+      <dmndi:DMNShape id="sh_in_observed" dmnElementRef="in_observed"><dc:Bounds x="60" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_symptomClass" dmnElementRef="in_symptomClass"><dc:Bounds x="245" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_context" dmnElementRef="in_context"><dc:Bounds x="430" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_matches" dmnElementRef="in_matches"><dc:Bounds x="615" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_d_4_3_6" dmnElementRef="d_4_3_6"><dc:Bounds x="60" y="240" width="180" height="70"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_ks_14224" dmnElementRef="ks_14224"><dc:Bounds x="900" y="100" width="160" height="55"/></dmndi:DMNShape>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</definitions>

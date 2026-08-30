@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_P_4_5" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <process id="P_4_5" name="4.5 Operate mobile devices and reconcile offline work" isExecutable="false">
+    <documentation>4.5.2 and 4.5.4 are drawn. 4.5.1 offline operation and 4.5.3 map and spatial context are specified without models and correctly so - both are standing device capabilities with no instance boundary. A crew is not 'in' an offline process; the device is either connected or it is not.
+
+SECTION I OF THE SOURCE PACK NAMES THIS AS UNSTANDARDISED. Offline behaviour, sync conflict resolution, field data capture and electronic forms are recorded there as entirely vendor-defined - there is no standard anywhere. So this file draws the ORDER and the CONFLICT ROUTE, which are process facts, and states no resolution rule, which would be a vendor's.
+
+Controlled order matters and is drawn: records transmit in the order they were created, because a completion that arrives before the safety record it depends on produces a work order that looks finished and unsafe. And a conflict is ROUTED rather than auto-resolved - last-write-wins on a field record silently discards what a crew saw.</documentation>
+    <laneSet id="P_4_5_lanes">
+      <lane id="l_45_field" name="Field and device">
+        <flowNodeRef>n_45_start</flowNodeRef>
+        <flowNodeRef>n_45_q</flowNodeRef>
+        <flowNodeRef>n_45_ack</flowNodeRef>
+        <flowNodeRef>n_45_cf</flowNodeRef>
+        <flowNodeRef>n_45_d</flowNodeRef>
+        <flowNodeRef>n_45_as</flowNodeRef>
+        <flowNodeRef>n_45_cfg</flowNodeRef>
+        <flowNodeRef>n_45_ref</flowNodeRef>
+        <flowNodeRef>n_45_ev</flowNodeRef>
+        <flowNodeRef>n_45_resp</flowNodeRef>
+      </lane>
+      <lane id="l_45_back" name="Back office">
+        <flowNodeRef>n_45_route</flowNodeRef>
+        <flowNodeRef>n_45_ret</flowNodeRef>
+        <flowNodeRef>n_45_end</flowNodeRef>
+        <flowNodeRef>n_45_rem</flowNodeRef>
+        <flowNodeRef>n_45_end2</flowNodeRef>
+      </lane>
+    </laneSet>
+    <startEvent id="n_45_start" name="Connectivity is restored"><conditionalEventDefinition id="n_45_start_cd"><condition/></conditionalEventDefinition></startEvent>
+    <serviceTask id="n_45_q" name="Transmit pending records in controlled order"><documentation>4.5.2. In creation order. A completion arriving before its safety record produces a work order that reads as finished and unsafe.</documentation></serviceTask>
+    <receiveTask id="n_45_ack" name="Confirm receipt and identify conflicts"><documentation>4.5.2.</documentation></receiveTask>
+    <exclusiveGateway id="n_45_cf" name="Conflict"/>
+    <sendTask id="n_45_route" name="Route each conflict for resolution"><documentation>4.5.2. Routed, never auto-resolved. No source states a resolution rule and last-write-wins discards field observation.</documentation></sendTask>
+    <serviceTask id="n_45_ret" name="Retain the synchronisation result"><documentation>4.5.2. Including what did not land - a partial sync that reports success is the failure mode this step exists for.</documentation></serviceTask>
+    <endEvent id="n_45_end" name="Field data reconciled"/>
+    <startEvent id="n_45_d" name="Device assignment or support request"><messageEventDefinition id="n_45_d_md"/></startEvent>
+    <serviceTask id="n_45_as" name="Assign the device to an authorised worker or pool"><documentation>4.5.4. Authorised - 14.1.4 provisions the access this depends on.</documentation></serviceTask>
+    <serviceTask id="n_45_cfg" name="Apply approved access and application configuration"><documentation>4.5.4.</documentation></serviceTask>
+    <serviceTask id="n_45_ref" name="Confirm required reference data is available"><documentation>4.5.4. What 4.5.1 will run on when the device goes offline - a device provisioned without reference data is a device that cannot work offline.</documentation></serviceTask>
+    <exclusiveGateway id="n_45_ev" name="Loss, failure or support request"/>
+    <userTask id="n_45_resp" name="Respond to the loss, failure or request"><documentation>4.5.4.</documentation></userTask>
+    <serviceTask id="n_45_rem" name="Remove access and recover the device"><documentation>4.5.4. At end of assignment, and 14.1.4 de-provisions - a recovered device with live access is the same exposure as a lost one.</documentation></serviceTask>
+    <endEvent id="n_45_end2" name="Device managed"/>
+    <sequenceFlow id="f_n_45_start_n_45_q" sourceRef="n_45_start" targetRef="n_45_q" name=""/>
+    <sequenceFlow id="f_n_45_q_n_45_ack" sourceRef="n_45_q" targetRef="n_45_ack" name=""/>
+    <sequenceFlow id="f_n_45_ack_n_45_cf" sourceRef="n_45_ack" targetRef="n_45_cf" name=""/>
+    <sequenceFlow id="f_n_45_cf_n_45_route" sourceRef="n_45_cf" targetRef="n_45_route" name="conflict"><conditionExpression xsi:type="tFormalExpression"><![CDATA[conflict = true]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_45_route_n_45_ret" sourceRef="n_45_route" targetRef="n_45_ret" name=""/>
+    <sequenceFlow id="f_n_45_cf_n_45_ret" sourceRef="n_45_cf" targetRef="n_45_ret" name="clean"/>
+    <sequenceFlow id="f_n_45_ret_n_45_end" sourceRef="n_45_ret" targetRef="n_45_end" name=""/>
+    <sequenceFlow id="f_n_45_d_n_45_as" sourceRef="n_45_d" targetRef="n_45_as" name=""/>
+    <sequenceFlow id="f_n_45_as_n_45_cfg" sourceRef="n_45_as" targetRef="n_45_cfg" name=""/>
+    <sequenceFlow id="f_n_45_cfg_n_45_ref" sourceRef="n_45_cfg" targetRef="n_45_ref" name=""/>
+    <sequenceFlow id="f_n_45_ref_n_45_ev" sourceRef="n_45_ref" targetRef="n_45_ev" name=""/>
+    <sequenceFlow id="f_n_45_ev_n_45_resp" sourceRef="n_45_ev" targetRef="n_45_resp" name="loss, failure or request"><conditionExpression xsi:type="tFormalExpression"><![CDATA[supportEvent = true]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_45_resp_n_45_rem" sourceRef="n_45_resp" targetRef="n_45_rem" name=""/>
+    <sequenceFlow id="f_n_45_ev_n_45_rem" sourceRef="n_45_ev" targetRef="n_45_rem" name="end of assignment"/>
+    <sequenceFlow id="f_n_45_rem_n_45_end2" sourceRef="n_45_rem" targetRef="n_45_end2" name=""/>
+  </process>
+  <bpmndi:BPMNDiagram id="dg_P_4_5">
+    <bpmndi:BPMNPlane id="pl_P_4_5" bpmnElement="P_4_5">
+      <bpmndi:BPMNShape id="sh_n_45_start" bpmnElement="n_45_start"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_45_q" bpmnElement="n_45_q"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_45_ack" bpmnElement="n_45_ack"><dc:Bounds x="425" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_45_cf" bpmnElement="n_45_cf"><dc:Bounds x="637" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_45_route" bpmnElement="n_45_route"><dc:Bounds x="595" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_45_ret" bpmnElement="n_45_ret"><dc:Bounds x="765" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_45_end" bpmnElement="n_45_end"><dc:Bounds x="982" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_45_d" bpmnElement="n_45_d"><dc:Bounds x="132" y="657" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_45_as" bpmnElement="n_45_as"><dc:Bounds x="255" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_45_cfg" bpmnElement="n_45_cfg"><dc:Bounds x="425" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_45_ref" bpmnElement="n_45_ref"><dc:Bounds x="595" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_45_ev" bpmnElement="n_45_ev"><dc:Bounds x="807" y="652" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_45_resp" bpmnElement="n_45_resp"><dc:Bounds x="765" y="860" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_45_rem" bpmnElement="n_45_rem"><dc:Bounds x="935" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_45_end2" bpmnElement="n_45_end2"><dc:Bounds x="1152" y="657" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ed_f_n_45_start_n_45_q" bpmnElement="f_n_45_start_n_45_q"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_45_q_n_45_ack" bpmnElement="f_n_45_q_n_45_ack"><di:waypoint x="385" y="235"/><di:waypoint x="425" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_45_ack_n_45_cf" bpmnElement="f_n_45_ack_n_45_cf"><di:waypoint x="555" y="235"/><di:waypoint x="637" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_45_cf_n_45_route" bpmnElement="f_n_45_cf_n_45_route"><di:waypoint x="683" y="235"/><di:waypoint x="570" y="235"/><di:waypoint x="570" y="455"/><di:waypoint x="595" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_45_route_n_45_ret" bpmnElement="f_n_45_route_n_45_ret"><di:waypoint x="725" y="455"/><di:waypoint x="740" y="455"/><di:waypoint x="740" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_45_cf_n_45_ret" bpmnElement="f_n_45_cf_n_45_ret"><di:waypoint x="683" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_45_ret_n_45_end" bpmnElement="f_n_45_ret_n_45_end"><di:waypoint x="895" y="235"/><di:waypoint x="982" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_45_d_n_45_as" bpmnElement="f_n_45_d_n_45_as"><di:waypoint x="168" y="675"/><di:waypoint x="255" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_45_as_n_45_cfg" bpmnElement="f_n_45_as_n_45_cfg"><di:waypoint x="385" y="675"/><di:waypoint x="425" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_45_cfg_n_45_ref" bpmnElement="f_n_45_cfg_n_45_ref"><di:waypoint x="555" y="675"/><di:waypoint x="595" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_45_ref_n_45_ev" bpmnElement="f_n_45_ref_n_45_ev"><di:waypoint x="725" y="675"/><di:waypoint x="807" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_45_ev_n_45_resp" bpmnElement="f_n_45_ev_n_45_resp"><di:waypoint x="853" y="675"/><di:waypoint x="740" y="675"/><di:waypoint x="740" y="895"/><di:waypoint x="765" y="895"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_45_resp_n_45_rem" bpmnElement="f_n_45_resp_n_45_rem"><di:waypoint x="895" y="895"/><di:waypoint x="910" y="895"/><di:waypoint x="910" y="675"/><di:waypoint x="935" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_45_ev_n_45_rem" bpmnElement="f_n_45_ev_n_45_rem"><di:waypoint x="853" y="675"/><di:waypoint x="935" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_45_rem_n_45_end2" bpmnElement="f_n_45_rem_n_45_end2"><di:waypoint x="1065" y="675"/><di:waypoint x="1152" y="675"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

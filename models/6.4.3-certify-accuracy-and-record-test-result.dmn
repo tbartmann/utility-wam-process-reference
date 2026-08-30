@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/" id="Certify_accuracy" name="6.4.3 Certify accuracy and record test result" namespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <description>Returns a certification disposition. A table because the output is a value that travels with the device for the rest of its life and determines whether it may be issued again.
+
+THE TABLE CARRIES NO TOLERANCE, and that is deliberate. Accuracy limits for revenue metering come from State weights-and-measures rules and from tariff; they differ by commodity, by meter class and by jurisdiction, and this reference holds none of them. What the table encodes is the DISPOSITION LOGIC once the comparison against the applicable requirement has been made - which is a process fact and is stable everywhere.
+
+The restricted row is the one that is easy to leave out. A meter that passes at some load points and not others is not simply a pass or a fail; it may be eligible for a narrower application. Collapsing that into 'fail' scraps serviceable equipment, and collapsing it into 'pass' issues a meter into a duty it cannot measure.</description>
+  <inputData id="in_testValid" name="Test observations are valid and complete"><variable id="in_testValid_v" name="Test observations are valid and complete" typeRef="boolean"/></inputData>
+  <inputData id="in_withinLimit" name="Within the applicable accuracy requirement"><variable id="in_withinLimit_v" name="Within the applicable accuracy requirement" typeRef="boolean"/></inputData>
+  <inputData id="in_partial" name="Within limit only over part of the range"><variable id="in_partial_v" name="Within limit only over part of the range" typeRef="boolean"/></inputData>
+  <inputData id="in_repairable" name="Economically repairable"><variable id="in_repairable_v" name="Economically repairable" typeRef="boolean"/></inputData>
+  <knowledgeSource id="ks_accuracy" name="State weights-and-measures rules and tariff accuracy requirements; APQC PCF Utilities 14.4.3 Manage and test meters"><description>The accuracy limit is the jurisdiction's and the tariff's, differs by commodity and meter class, and is not stated in this reference. The table encodes the disposition once the comparison has been made.</description></knowledgeSource>
+  <decision id="d_6_4_3" name="Certification disposition">
+    <variable id="d_6_4_3_v" name="Certification disposition" typeRef="string"/>
+    <informationRequirement id="ir_d_6_4_3_ks_accuracy"><requiredInput href="#ks_accuracy"/></informationRequirement>
+    <decisionTable id="d_6_4_3_dt" hitPolicy="FIRST" preferredOrientation="Rule-as-Row">
+      <input id="d_6_4_3_i1" label="Test valid"><inputExpression id="d_6_4_3_i1_e" typeRef="boolean"><text>in_testValid</text></inputExpression></input>
+      <input id="d_6_4_3_i2" label="Within the requirement"><inputExpression id="d_6_4_3_i2_e" typeRef="boolean"><text>in_withinLimit</text></inputExpression></input>
+      <input id="d_6_4_3_i3" label="Within limit over part of the range only"><inputExpression id="d_6_4_3_i3_e" typeRef="boolean"><text>in_partial</text></inputExpression></input>
+      <input id="d_6_4_3_i4" label="Economically repairable"><inputExpression id="d_6_4_3_i4_e" typeRef="boolean"><text>in_repairable</text></inputExpression></input>
+      <output id="d_6_4_3_o" label="Certification disposition" name="Certification disposition" typeRef="string"/>
+      <rule id="d_6_4_3_r1">
+        <description>No valid certification can be issued on an invalid test. Back to 6.4.2 - and if the cause was equipment, 6.4.6 has already removed it from use and other results are in question too.</description>
+        <inputEntry id="d_6_4_3_r1_ie1"><text>false</text></inputEntry>
+        <inputEntry id="d_6_4_3_r1_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_6_4_3_r1_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_6_4_3_r1_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_6_4_3_r1_oe"><text>"retest"</text></outputEntry>
+      </rule>
+      <rule id="d_6_4_3_r2">
+        <description>Within the applicable requirement. Certified and returned to eligible stock at 6.1.3, where the certification is what makes it issuable.</description>
+        <inputEntry id="d_6_4_3_r2_ie1"><text>true</text></inputEntry>
+        <inputEntry id="d_6_4_3_r2_ie2"><text>true</text></inputEntry>
+        <inputEntry id="d_6_4_3_r2_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_6_4_3_r2_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_6_4_3_r2_oe"><text>"passToStock"</text></outputEntry>
+      </rule>
+      <rule id="d_6_4_3_r3">
+        <description>Within limit over part of the range only. NOT a pass and not a scrap - it may be eligible for a narrower duty, and 6.4.5 decides. Collapsing this row either way either scraps serviceable plant or issues a meter into a load it cannot measure.</description>
+        <inputEntry id="d_6_4_3_r3_ie1"><text>true</text></inputEntry>
+        <inputEntry id="d_6_4_3_r3_ie2"><text>false</text></inputEntry>
+        <inputEntry id="d_6_4_3_r3_ie3"><text>true</text></inputEntry>
+        <inputEntry id="d_6_4_3_r3_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_6_4_3_r3_oe"><text>"restricted"</text></outputEntry>
+      </rule>
+      <rule id="d_6_4_3_r4">
+        <description>Outside the requirement and economically repairable. To 6.4.5 for repair and retest - the retest is not optional, because a repaired meter has no valid certification until it has one.</description>
+        <inputEntry id="d_6_4_3_r4_ie1"><text>true</text></inputEntry>
+        <inputEntry id="d_6_4_3_r4_ie2"><text>false</text></inputEntry>
+        <inputEntry id="d_6_4_3_r4_ie3"><text>false</text></inputEntry>
+        <inputEntry id="d_6_4_3_r4_ie4"><text>true</text></inputEntry>
+        <outputEntry id="d_6_4_3_r4_oe"><text>"failRepairable"</text></outputEntry>
+      </rule>
+      <rule id="d_6_4_3_r5">
+        <description>Outside the requirement and not economically repairable. Condemned at 6.4.5, and the unit then goes to 19.3.1 for waste classification rather than into a skip.</description>
+        <inputEntry id="d_6_4_3_r5_ie1"><text>true</text></inputEntry>
+        <inputEntry id="d_6_4_3_r5_ie2"><text>false</text></inputEntry>
+        <inputEntry id="d_6_4_3_r5_ie3"><text>false</text></inputEntry>
+        <inputEntry id="d_6_4_3_r5_ie4"><text>false</text></inputEntry>
+        <outputEntry id="d_6_4_3_r5_oe"><text>"failCondemn"</text></outputEntry>
+      </rule>
+      <rule id="d_6_4_3_r6">
+        <description>Test validity not established. The one input everything else rests on.</description>
+        <inputEntry id="d_6_4_3_r6_ie1"><text>-</text></inputEntry>
+        <inputEntry id="d_6_4_3_r6_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_6_4_3_r6_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_6_4_3_r6_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_6_4_3_r6_oe"><text>"determineManually"</text></outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram id="drd_Certify_accuracy">
+      <dmndi:DMNShape id="sh_in_testValid" dmnElementRef="in_testValid"><dc:Bounds x="60" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_withinLimit" dmnElementRef="in_withinLimit"><dc:Bounds x="245" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_partial" dmnElementRef="in_partial"><dc:Bounds x="430" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_repairable" dmnElementRef="in_repairable"><dc:Bounds x="615" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_d_6_4_3" dmnElementRef="d_6_4_3"><dc:Bounds x="60" y="240" width="180" height="70"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_ks_accuracy" dmnElementRef="ks_accuracy"><dc:Bounds x="900" y="100" width="160" height="55"/></dmndi:DMNShape>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</definitions>

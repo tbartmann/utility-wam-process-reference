@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_P_6_6" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <process id="P_6_6" name="6.6 Remediate and recover unbilled revenue" isExecutable="false">
+    <documentation>Only 6.6.3 is drawn. 6.6.1 is a detection determination and 6.6.2 a controlled field investigation, each with its own file - which is the right shape, because detection is a rule, investigation is a case, and only the remediation is a sequence.
+
+THE PROCESS ENDS BY REFERRING, NOT BY BILLING. 6.6.3 determines the supported adjustment period and the evidence behind it and hands both to customer and financial processing. Metering establishes what was measured wrongly and for how long; whether and how a customer is charged is a tariff matter with its own protections, and it belongs to 10.0 and 5.0.
+
+SUPPORTED is the load-bearing word and the gate is drawn on it. An adjustment needs a defensible start date - a seal record, an exchange date, a documented consumption change - and where the evidence does not support one, the correct outcome is to fix the metering and close with the rationale recorded rather than to estimate backwards. That third variant is the one a reference is most tempted to leave out, and it is the one that protects the utility as much as the customer.</documentation>
+    <laneSet id="P_6_6_lanes">
+      <lane id="l_66_rev" name="Revenue protection">
+        <flowNodeRef>n_66_start</flowNodeRef>
+        <flowNodeRef>n_66_fix</flowNodeRef>
+        <flowNodeRef>n_66_ev</flowNodeRef>
+        <flowNodeRef>n_66_sup</flowNodeRef>
+        <flowNodeRef>n_66_close</flowNodeRef>
+        <flowNodeRef>n_66_ref</flowNodeRef>
+        <flowNodeRef>n_66_rec</flowNodeRef>
+        <flowNodeRef>n_66_end</flowNodeRef>
+      </lane>
+    </laneSet>
+    <startEvent id="n_66_start" name="An authorised investigation finding is received"><messageEventDefinition id="n_66_start_md"/></startEvent>
+    <sendTask id="n_66_fix" name="Correct or isolate the metering condition"><documentation>6.6.3. Through authorised work at 6.2 - the meter is put right before anything financial is decided.</documentation></sendTask>
+    <userTask id="n_66_ev" name="Determine the supported adjustment period and evidence"><documentation>6.6.3. Supported: a seal record, an exchange date, a documented change. 6.2.1's installation record is usually what supplies it.</documentation></userTask>
+    <exclusiveGateway id="n_66_sup" name="Adjustment supportable"/>
+    <serviceTask id="n_66_close" name="Close with the rationale recorded"><documentation>6.6.3. The metering is fixed and no adjustment is pursued because the evidence cannot date it. Recording why is what stops it being reopened annually.</documentation></serviceTask>
+    <sendTask id="n_66_ref" name="Refer the adjustment to customer and financial processing"><documentation>6.6.3. Referred. 10.0 owns the customer relationship and its protections; 5.0 owns the settlement. Metering does not bill.</documentation></sendTask>
+    <serviceTask id="n_66_rec" name="Record completion and retain the evidence"><documentation>6.6.3. Retained - a referred adjustment can be challenged long after the case is closed.</documentation></serviceTask>
+    <endEvent id="n_66_end" name="Revenue position resolved"/>
+    <sequenceFlow id="f_n_66_start_n_66_fix" sourceRef="n_66_start" targetRef="n_66_fix" name=""/>
+    <sequenceFlow id="f_n_66_fix_n_66_ev" sourceRef="n_66_fix" targetRef="n_66_ev" name=""/>
+    <sequenceFlow id="f_n_66_ev_n_66_sup" sourceRef="n_66_ev" targetRef="n_66_sup" name=""/>
+    <sequenceFlow id="f_n_66_sup_n_66_close" sourceRef="n_66_sup" targetRef="n_66_close" name="not supportable"><conditionExpression xsi:type="tFormalExpression"><![CDATA[supportable = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_66_close_n_66_rec" sourceRef="n_66_close" targetRef="n_66_rec" name=""/>
+    <sequenceFlow id="f_n_66_sup_n_66_ref" sourceRef="n_66_sup" targetRef="n_66_ref" name="supportable"/>
+    <sequenceFlow id="f_n_66_ref_n_66_rec" sourceRef="n_66_ref" targetRef="n_66_rec" name=""/>
+    <sequenceFlow id="f_n_66_rec_n_66_end" sourceRef="n_66_rec" targetRef="n_66_end" name=""/>
+  </process>
+  <bpmndi:BPMNDiagram id="dg_P_6_6">
+    <bpmndi:BPMNPlane id="pl_P_6_6" bpmnElement="P_6_6">
+      <bpmndi:BPMNShape id="sh_n_66_start" bpmnElement="n_66_start"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_66_fix" bpmnElement="n_66_fix"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_66_ev" bpmnElement="n_66_ev"><dc:Bounds x="425" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_66_sup" bpmnElement="n_66_sup"><dc:Bounds x="637" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_66_close" bpmnElement="n_66_close"><dc:Bounds x="595" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_66_ref" bpmnElement="n_66_ref"><dc:Bounds x="765" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_66_rec" bpmnElement="n_66_rec"><dc:Bounds x="935" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_66_end" bpmnElement="n_66_end"><dc:Bounds x="1152" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ed_f_n_66_start_n_66_fix" bpmnElement="f_n_66_start_n_66_fix"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_66_fix_n_66_ev" bpmnElement="f_n_66_fix_n_66_ev"><di:waypoint x="385" y="235"/><di:waypoint x="425" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_66_ev_n_66_sup" bpmnElement="f_n_66_ev_n_66_sup"><di:waypoint x="555" y="235"/><di:waypoint x="637" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_66_sup_n_66_close" bpmnElement="f_n_66_sup_n_66_close"><di:waypoint x="683" y="235"/><di:waypoint x="570" y="235"/><di:waypoint x="570" y="455"/><di:waypoint x="595" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_66_close_n_66_rec" bpmnElement="f_n_66_close_n_66_rec"><di:waypoint x="725" y="455"/><di:waypoint x="910" y="455"/><di:waypoint x="910" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_66_sup_n_66_ref" bpmnElement="f_n_66_sup_n_66_ref"><di:waypoint x="683" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_66_ref_n_66_rec" bpmnElement="f_n_66_ref_n_66_rec"><di:waypoint x="895" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_66_rec_n_66_end" bpmnElement="f_n_66_rec_n_66_end"><di:waypoint x="1065" y="235"/><di:waypoint x="1152" y="235"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

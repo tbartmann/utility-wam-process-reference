@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/" id="Waste_stream_class" name="19.3.1 Classify the waste stream and its handling requirement" namespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <description>The first environmental determination in the reference. Returns a waste class and the section that set it - never a disposal action, which is 19.3.2 and 19.3.3.
+
+Two federal regimes meet here and they are not interchangeable. 40 CFR 761 governs PCBs, with 761.50 setting the applicability by form - PCB liquid, PCB Item, PCB remediation waste - 761.60, 761.61 and 761.62 setting disposal by that form, 761.65 storage, 761.40 marking and 761.180 records. 40 CFR 262.11 is the RCRA hazardous waste determination the generator must make, with 262.20 the manifest.
+
+Utility work meets PCBs constantly - transformer and capacitor dielectric fluid, and the soil under a leaking one - which is why the PCB rows come before the RCRA row. A stream that is both is PCB-regulated for the PCB component, and the table returns the PCB class so 19.3.3 disposes under the right section.
+
+Salvage is a class in this table and not an absence. Serviceable material returning to stock at 13.2 has left the asset exactly as waste does, and routing it through the same determination is what stops a recoverable transformer being scrapped and a contaminated one being shelved.</description>
+  <inputData id="in_material" name="Material that has left the asset or the storeroom"><variable id="in_material_v" name="Material that has left the asset or the storeroom" typeRef="string"/></inputData>
+  <inputData id="in_pcbForm" name="PCB form under 40 CFR 761.50"><variable id="in_pcbForm_v" name="PCB form under 40 CFR 761.50" typeRef="string"/></inputData>
+  <inputData id="in_rcraHazardous" name="Meets the 40 CFR 262.11 hazardous-waste determination"><variable id="in_rcraHazardous_v" name="Meets the 40 CFR 262.11 hazardous-waste determination" typeRef="boolean"/></inputData>
+  <inputData id="in_serviceable" name="Serviceable and returnable to stock"><variable id="in_serviceable_v" name="Serviceable and returnable to stock" typeRef="boolean"/></inputData>
+  <knowledgeSource id="ks_761" name="40 CFR 761.50, 761.60, 761.61, 761.62, 761.65, 761.40 and 761.180; 40 CFR 262.11 and 262.20"><description>761.50 applicability by form; 761.60 to 761.62 disposal by form; 761.65 storage for disposal; 761.40 marking; 761.180 records. 262.11 is the generator's hazardous-waste determination and 262.20 the manifest.</description></knowledgeSource>
+  <decision id="d_19_3_1" name="Waste class">
+    <variable id="d_19_3_1_v" name="Waste class" typeRef="string"/>
+    <informationRequirement id="ir_d_19_3_1_ks_761"><requiredInput href="#ks_761"/></informationRequirement>
+    <decisionTable id="d_19_3_1_dt" hitPolicy="FIRST" preferredOrientation="Rule-as-Row">
+      <input id="d_19_3_1_i1" label="PCB form"><inputExpression id="d_19_3_1_i1_e" typeRef="string"><text>in_pcbForm</text></inputExpression></input>
+      <input id="d_19_3_1_i2" label="RCRA hazardous"><inputExpression id="d_19_3_1_i2_e" typeRef="boolean"><text>in_rcraHazardous</text></inputExpression></input>
+      <input id="d_19_3_1_i3" label="Serviceable"><inputExpression id="d_19_3_1_i3_e" typeRef="boolean"><text>in_serviceable</text></inputExpression></input>
+      <output id="d_19_3_1_o" label="Waste class" name="Waste class" typeRef="string"/>
+      <rule id="d_19_3_1_r1">
+        <description>40 CFR 761.50(b)(1), disposal under 761.60(a). Transformer and capacitor dielectric fluid is the common case.</description>
+        <inputEntry id="d_19_3_1_r1_ie1"><text>"liquid"</text></inputEntry>
+        <inputEntry id="d_19_3_1_r1_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_19_3_1_r1_ie3"><text>-</text></inputEntry>
+        <outputEntry id="d_19_3_1_r1_oe"><text>"pcbLiquid"</text></outputEntry>
+      </rule>
+      <rule id="d_19_3_1_r2">
+        <description>761.50(b)(2), disposal under 761.60(b). The equipment itself rather than the fluid in it.</description>
+        <inputEntry id="d_19_3_1_r2_ie1"><text>"item"</text></inputEntry>
+        <inputEntry id="d_19_3_1_r2_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_19_3_1_r2_ie3"><text>-</text></inputEntry>
+        <outputEntry id="d_19_3_1_r2_oe"><text>"pcbItem"</text></outputEntry>
+      </rule>
+      <rule id="d_19_3_1_r3">
+        <description>761.61. Contaminated soil and media - the material under a leaking transformer, which is a waste stream in its own right and is regularly missed.</description>
+        <inputEntry id="d_19_3_1_r3_ie1"><text>"remediationWaste"</text></inputEntry>
+        <inputEntry id="d_19_3_1_r3_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_19_3_1_r3_ie3"><text>-</text></inputEntry>
+        <outputEntry id="d_19_3_1_r3_oe"><text>"pcbRemediationWaste"</text></outputEntry>
+      </rule>
+      <rule id="d_19_3_1_r4">
+        <description>761.62.</description>
+        <inputEntry id="d_19_3_1_r4_ie1"><text>"bulkProduct"</text></inputEntry>
+        <inputEntry id="d_19_3_1_r4_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_19_3_1_r4_ie3"><text>-</text></inputEntry>
+        <outputEntry id="d_19_3_1_r4_oe"><text>"pcbBulkProduct"</text></outputEntry>
+      </rule>
+      <rule id="d_19_3_1_r5">
+        <description>The generator's determination under 40 CFR 262.11. Shipment needs a 262.20 manifest and 19.3.2 stores it until there is one.</description>
+        <inputEntry id="d_19_3_1_r5_ie1"><text>"none"</text></inputEntry>
+        <inputEntry id="d_19_3_1_r5_ie2"><text>true</text></inputEntry>
+        <inputEntry id="d_19_3_1_r5_ie3"><text>-</text></inputEntry>
+        <outputEntry id="d_19_3_1_r5_oe"><text>"rcraHazardous"</text></outputEntry>
+      </rule>
+      <rule id="d_19_3_1_r6">
+        <description>Not a waste. 19.3.4 assesses it and returns it to stock at 13.2 - and sends it back through this table if the assessment says otherwise.</description>
+        <inputEntry id="d_19_3_1_r6_ie1"><text>"none"</text></inputEntry>
+        <inputEntry id="d_19_3_1_r6_ie2"><text>false</text></inputEntry>
+        <inputEntry id="d_19_3_1_r6_ie3"><text>true</text></inputEntry>
+        <outputEntry id="d_19_3_1_r6_oe"><text>"salvage"</text></outputEntry>
+      </rule>
+      <rule id="d_19_3_1_r7">
+        <description>Neither PCB nor RCRA nor serviceable. Disposed under whatever State and local rule applies, which this reference does not state.</description>
+        <inputEntry id="d_19_3_1_r7_ie1"><text>"none"</text></inputEntry>
+        <inputEntry id="d_19_3_1_r7_ie2"><text>false</text></inputEntry>
+        <inputEntry id="d_19_3_1_r7_ie3"><text>false</text></inputEntry>
+        <outputEntry id="d_19_3_1_r7_oe"><text>"nonHazardous"</text></outputEntry>
+      </rule>
+      <rule id="d_19_3_1_r8">
+        <description>The PCB form has not been established. 761.50 turns on form, so nothing downstream can be decided without it, and guessing selects the wrong disposal section.</description>
+        <inputEntry id="d_19_3_1_r8_ie1"><text>-</text></inputEntry>
+        <inputEntry id="d_19_3_1_r8_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_19_3_1_r8_ie3"><text>-</text></inputEntry>
+        <outputEntry id="d_19_3_1_r8_oe"><text>"determineManually"</text></outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram id="drd_Waste_stream_class">
+      <dmndi:DMNShape id="sh_in_material" dmnElementRef="in_material"><dc:Bounds x="60" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_pcbForm" dmnElementRef="in_pcbForm"><dc:Bounds x="245" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_rcraHazardous" dmnElementRef="in_rcraHazardous"><dc:Bounds x="430" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_serviceable" dmnElementRef="in_serviceable"><dc:Bounds x="615" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_d_19_3_1" dmnElementRef="d_19_3_1"><dc:Bounds x="60" y="240" width="180" height="70"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_ks_761" dmnElementRef="ks_761"><dc:Bounds x="900" y="100" width="160" height="55"/></dmndi:DMNShape>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</definitions>

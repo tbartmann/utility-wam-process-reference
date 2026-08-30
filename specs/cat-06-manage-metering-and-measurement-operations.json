@@ -1,0 +1,4658 @@
+{
+ "category": {
+  "uid": 10148,
+  "id": "6.0",
+  "name": "Manage Metering and Measurement Operations",
+  "band": "Specialised Operations"
+ },
+ "platform": "ChatGPT",
+ "model": "GPT-5",
+ "round": 2,
+ "date": "2026-08-29",
+ "merge_corrections": [
+  {
+   "date": "2026-08-30",
+   "by": "Claude",
+   "what": "ONE MECHANICAL CORRECTION, and it RAISES a status rather than lowering one. 26 EN 17007 citations were submitted as clause-verified. EN 17007:2017 is held in full by this project, so its ceiling is 'verified' and clause-verified under-claims it - which understates the reference rather than over-claiming. No citation text changed; only the status. Nothing else in the file was touched.",
+   "accepted_from_submitter": [
+    "Fifty-two controls, every one unique across twenty-six processes, replacing the three repeated templates that were the rejection grounds. The third of those templates - field assignment must apply job-briefing, information-transfer and qualification requirements - was true of every field process in the model and told a reader nothing about metering; its replacements are about read reliability, estimation and tamper evidence.",
+    "Twenty-six process-specific judgment citations replacing one category-wide disclaimer, done in the same pass and without being rejected for it.",
+    "IEC 61968-9 and -4 cited at consensus rather than clause-verified because no clause locator was available. Correct, and the right call rather than inventing a clause number.",
+    "Sixteen artifacts for twenty-six processes - six group BPMN, six DMN, four CMMN - which is the granularity rule applied exactly."
+   ],
+   "models_built_here": "Sixteen artifacts, 6 BPMN, 6 DMN and 4 CMMN.",
+   "open_finding": "The category does not use the words meter shop, billing or premise state. Client material shows a meter is operated on at a billing-active premise, at an inactive premise, or in the shop, and that disposal is a shop act - which also settles 6.1.4 (retire the RECORD) against 6.4.5 (condemn the UNIT). Recorded here for the enrichment pass; not changed at merge, because it is programme practice and belongs in a P-graded revision written product-neutrally.",
+   "open_finding_notation_why": "OPEN FINDING, ADDED AFTER THE MERGE NOTE ABOVE WAS WRITTEN. That note said no correction was needed, and on the two rejection grounds it was right. Building the behaviour models surfaced a third instance of the same defect family: notation.why - the rationale for why a process is drawn in a given notation - is one text on 16 of the 26 processes. It states the notation RULE ('the process has a repeatable start, ordered activities and a defined completion outcome') rather than which repeatable start THIS process has. Nothing in it is false; it is the BPMN test, correctly applied. But fifteen of the seventeen merged categories carry a distinct rationale on every process and none shares one on more than two. Recorded rather than fixed, and now a WARNING in validate_spec.py - the third check of this shape after control reuse and judgment-citation reuse. The pattern across all three is the same: a category-level truth put where a process-level one belongs, in a file that passed every other check because the field was populated."
+  }
+ ],
+ "schema": "specs/SCHEMA.md",
+ "derivation": "STANDARDS-DERIVED. IEC 61968, EN 17007, APQC structural precedent and SMRP supply the permitted authority. Unsourced operating detail is labelled judgment.",
+ "field_set": "EN 17007:2017 cl. 5.2 maintenance process profile, corroborated by ISO 9001 cl. 4.4.1 a) to h).",
+ "gaps": [
+  "The Source Authority Pack contains no detailed meter accuracy, proving, certification, calibration or estimation standard. IEC 61968-9:2024 Ed. 3 establishes meter reading and control scope but its clause bodies are paywalled and are not paraphrased.",
+  "No permitted source defines endpoint programming parameters, firmware governance, commissioning acceptance thresholds, communication signal thresholds, tamper rules, revenue-estimation methods or recovery periods. These remain judgment.",
+  "No metering-specific measure is permitted by the campaign measure vocabulary. SMRP work-management measures are used only for associated work and exception workloads.",
+  "APQC 14.3.4 Aggregate and distribute data is partial: pcf_id 19324 Pass consumption data to market participants has no model home because the reference stops at validation.",
+  "APQC 14.4.4 Operate Advanced Metering Infrastructure is partial: pcf_ids 19338 to 19341 for the operating centre, network-performance monitoring and network faults have no model home; 6.3 commissions endpoints only.",
+  "IEC 61968-6 remains electric-scoped, while IEC 61968-9:2024 Ed. 3 extends to gas and water metering. Gas uses the CIM Work vocabulary here despite the cross-commodity gap."
+ ],
+ "processes": [
+  {
+   "uid": 10150,
+   "id": "6.1.1",
+   "name": "Maintain meter and endpoint asset record",
+   "group": {
+    "id": "6.1",
+    "name": "Manage the meter asset population",
+    "uid": 10149
+   },
+   "intent": "Maintain the identity, location, configuration and status of each meter and endpoint.",
+   "activities": [
+    "Receive an asset-record change",
+    "Validate identity, location and configuration",
+    "Apply the change to the asset record",
+    "Publish the current record"
+   ],
+   "trigger": {
+    "kind": "message",
+    "text": "A meter or endpoint is installed, changed, inspected or removed.",
+    "cim": "WorkRequest.create"
+   },
+   "inputs": [
+    {
+     "what": "A meter or endpoint is installed, changed, inspected or removed.",
+     "party": "AM",
+     "data": "Asset"
+    },
+    {
+     "what": "Meter, endpoint and service-point context",
+     "party": "MR&C",
+     "data": "WorkAsset"
+    },
+    {
+     "what": "Authorised work and prior activity",
+     "party": "MAI",
+     "data": "Work"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Current meter and endpoint record",
+     "party": "AM",
+     "data": "WorkAsset"
+    },
+    {
+     "what": "Activity result and exception evidence",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "systems": [
+    {
+     "component": "MR&C",
+     "role": "contributing",
+     "service": "Meter reading and control"
+    },
+    {
+     "component": "MAI",
+     "role": "consuming",
+     "service": "Meter work and inspection"
+    },
+    {
+     "component": "AM",
+     "role": "reference",
+     "service": "Meter asset record"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "MAI",
+     "to": "MR&C",
+     "payload": "WorkRequest",
+     "verb": "create",
+     "pattern": "event"
+    },
+    {
+     "from": "MR&C",
+     "to": "MAI",
+     "payload": "MaintenanceOrder",
+     "verb": "reply",
+     "pattern": "request-reply"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Meter operations specialist",
+     "raci": "R"
+    },
+    {
+     "role": "Meter operations manager",
+     "raci": "A"
+    },
+    {
+     "role": "Asset information steward",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkAsset",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "Accept a meter-asset change only when the meter, endpoint, service point, location and configuration resolve to one controlled identity."
+    },
+    {
+     "kind": "operational",
+     "text": "Publish the changed record only after required attributes and the prior-to-current relationship pass validation."
+    }
+   ],
+   "measures": [
+    {
+     "name": "PM & PdM Work Orders Overdue",
+     "definition": "SMRP 5.4.11, applied to the associated meter work or exception workload.",
+     "cite": "SMRP Best Practices, 7th Edition, Pillar 5 Work Management"
+    }
+   ],
+   "variants": [
+    "New installation record",
+    "Exchange with predecessor and successor linked",
+    "Removal with final read and retired status"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "The process has a repeatable start, sequence and completion outcome.",
+    "artifact": "models/6.1-maintain-meter-assets.bpmn"
+   },
+   "en17007": {
+    "process": "DTA.1",
+    "title": "Store and validate the raw data in a library and/or a database",
+    "clause": "6.10"
+   },
+   "sources": [
+    {
+     "for": "process alignment",
+     "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.10 DTA.1 Store and validate the raw data in a library and/or a database",
+     "status": "verified"
+    },
+    {
+     "for": "metering scope and interfaces",
+     "cite": "IEC 61968-4:2019 records and asset management; IEC 61968-9:2024 Ed. 3",
+     "status": "consensus"
+    },
+    {
+     "for": "components, messages and work data",
+     "cite": "IEC 61968-6:2015 cl. 4.2 and cl. 5; IEC 61968-11:2013 CIM Work package",
+     "status": "clause-verified"
+    },
+    {
+     "for": "taxonomy coverage",
+     "cite": "APQC PCF Utilities v7.2.1 category 14.3 Metering and 14.4.2 to 14.4.4 meter operations, used as structural precedent",
+     "status": "consensus"
+    },
+    {
+     "for": "activities and detailed operating rules",
+     "cite": "No permitted source states the validation and publication sequence for a utility meter-and-endpoint asset record.",
+     "status": "judgment"
+    },
+    {
+     "for": "measure",
+     "cite": "SMRP Best Practices, 7th Edition, Pillar 5 Work Management 5.4.11",
+     "status": "consensus"
+    },
+    {
+     "for": "variants",
+     "cite": "APQC PCF Utilities v7.2.1 14.3.1 Manage meter information, pcf_id 19308; exact lifecycle branches are judgment",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "standard",
+    "primary": "IEC 61968-4:2019 records and asset management; IEC 61968-9:2024 Ed. 3"
+   }
+  },
+  {
+   "uid": 10151,
+   "id": "6.1.2",
+   "name": "Plan meter deployment and change-out programme",
+   "group": {
+    "id": "6.1",
+    "name": "Manage the meter asset population",
+    "uid": 10149
+   },
+   "intent": "Define the population and sequence for a meter deployment or change-out programme.",
+   "activities": [
+    "Define the eligible meter population",
+    "Apply programme and asset criteria",
+    "Divide the population into controlled tranches",
+    "Release approved tranches for work generation"
+   ],
+   "trigger": {
+    "kind": "timer",
+    "text": "A deployment or change-out programme reaches its planning horizon.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "A deployment or change-out programme reaches its planning horizon.",
+     "party": "AM",
+     "data": "Asset"
+    },
+    {
+     "what": "Meter, endpoint and service-point context",
+     "party": "MR&C",
+     "data": "WorkAsset"
+    },
+    {
+     "what": "Authorised work and prior activity",
+     "party": "MAI",
+     "data": "Work"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Approved programme population and tranches",
+     "party": "AM",
+     "data": "WorkAsset"
+    },
+    {
+     "what": "Activity result and exception evidence",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "systems": [
+    {
+     "component": "MR&C",
+     "role": "contributing",
+     "service": "Meter reading and control"
+    },
+    {
+     "component": "MAI",
+     "role": "consuming",
+     "service": "Meter work and inspection"
+    },
+    {
+     "component": "AM",
+     "role": "reference",
+     "service": "Meter asset record"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "MAI",
+     "to": "MR&C",
+     "payload": "WorkRequest",
+     "verb": "create",
+     "pattern": "event"
+    },
+    {
+     "from": "MR&C",
+     "to": "MAI",
+     "payload": "MaintenanceOrder",
+     "verb": "reply",
+     "pattern": "request-reply"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Meter operations specialist",
+     "raci": "R"
+    },
+    {
+     "role": "Meter operations manager",
+     "raci": "A"
+    },
+    {
+     "role": "Asset information steward",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkAsset",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "A deployment tranche contains only meters that meet the approved population, eligibility and asset criteria recorded for the programme."
+    },
+    {
+     "kind": "operational",
+     "text": "Release a tranche only after ownership, schedule window and change-out disposition are approved."
+    }
+   ],
+   "measures": [
+    {
+     "name": "PM & PdM Work Orders Overdue",
+     "definition": "SMRP 5.4.11, applied to the associated meter work or exception workload.",
+     "cite": "SMRP Best Practices, 7th Edition, Pillar 5 Work Management"
+    }
+   ],
+   "variants": [
+    "Initial population deployment",
+    "Age or accuracy change-out programme",
+    "Targeted replacement after condition or communication failure"
+   ],
+   "notation": {
+    "class": "DMN",
+    "why": "The output is a classification, eligibility, disposition or calculated value.",
+    "artifact": "models/6.1.2-plan-meter-deployment-and-change-out-programme.dmn"
+   },
+   "en17007": {
+    "process": "PRV.2",
+    "title": "Use and update the Maintenance Plans",
+    "clause": "6.3.3"
+   },
+   "sources": [
+    {
+     "for": "process alignment",
+     "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.3.3 PRV.2 Use and update the Maintenance Plans",
+     "status": "verified"
+    },
+    {
+     "for": "metering scope and interfaces",
+     "cite": "IEC 61968-4:2019 records and asset management; IEC 61968-9:2024 Ed. 3",
+     "status": "consensus"
+    },
+    {
+     "for": "components, messages and work data",
+     "cite": "IEC 61968-6:2015 cl. 4.2 and cl. 5; IEC 61968-11:2013 CIM Work package",
+     "status": "clause-verified"
+    },
+    {
+     "for": "taxonomy coverage",
+     "cite": "APQC PCF Utilities v7.2.1 category 14.3 Metering and 14.4.2 to 14.4.4 meter operations, used as structural precedent",
+     "status": "consensus"
+    },
+    {
+     "for": "activities and detailed operating rules",
+     "cite": "No permitted source states deployment eligibility, tranche sizing or release gates for a meter change-out programme.",
+     "status": "judgment"
+    },
+    {
+     "for": "measure",
+     "cite": "SMRP Best Practices, 7th Edition, Pillar 5 Work Management 5.4.11",
+     "status": "consensus"
+    },
+    {
+     "for": "variants",
+     "cite": "EN 17007:2017 PRV.2 Use and update the Maintenance Plans; APQC 14.4.2 meter operations; exact programme branches are judgment",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "standard",
+    "primary": "IEC 61968-4:2019 records and asset management; IEC 61968-9:2024 Ed. 3"
+   }
+  },
+  {
+   "uid": 10152,
+   "id": "6.1.3",
+   "name": "Manage meter stock and rotation",
+   "group": {
+    "id": "6.1",
+    "name": "Manage the meter asset population",
+    "uid": 10149
+   },
+   "intent": "Maintain available meter stock and rotate units through issue, return and test.",
+   "activities": [
+    "Record meter receipt and status",
+    "Reserve an eligible meter for work",
+    "Issue and track the meter",
+    "Return unused or removed meters to the correct disposition"
+   ],
+   "trigger": {
+    "kind": "message",
+    "text": "A meter is received, reserved, issued or returned.",
+    "cim": "WorkRequest.create"
+   },
+   "inputs": [
+    {
+     "what": "A meter is received, reserved, issued or returned.",
+     "party": "AM",
+     "data": "Asset"
+    },
+    {
+     "what": "Meter, endpoint and service-point context",
+     "party": "MR&C",
+     "data": "WorkAsset"
+    },
+    {
+     "what": "Authorised work and prior activity",
+     "party": "MAI",
+     "data": "Work"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Current meter stock and disposition",
+     "party": "AM",
+     "data": "WorkAsset"
+    },
+    {
+     "what": "Activity result and exception evidence",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "systems": [
+    {
+     "component": "MR&C",
+     "role": "contributing",
+     "service": "Meter reading and control"
+    },
+    {
+     "component": "MAI",
+     "role": "consuming",
+     "service": "Meter work and inspection"
+    },
+    {
+     "component": "AM",
+     "role": "reference",
+     "service": "Meter asset record"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "MAI",
+     "to": "MR&C",
+     "payload": "WorkRequest",
+     "verb": "create",
+     "pattern": "event"
+    },
+    {
+     "from": "MR&C",
+     "to": "MAI",
+     "payload": "MaintenanceOrder",
+     "verb": "reply",
+     "pattern": "request-reply"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Meter operations specialist",
+     "raci": "R"
+    },
+    {
+     "role": "Meter operations manager",
+     "raci": "A"
+    },
+    {
+     "role": "Asset information steward",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkAsset",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "Reserve and issue only a meter whose type, status and configuration are eligible for the assigned work."
+    },
+    {
+     "kind": "operational",
+     "text": "Preserve custody and disposition from receipt through issue, return, repair or retirement."
+    }
+   ],
+   "measures": [
+    {
+     "name": "PM & PdM Work Orders Overdue",
+     "definition": "SMRP 5.4.11, applied to the associated meter work or exception workload.",
+     "cite": "SMRP Best Practices, 7th Edition, Pillar 5 Work Management"
+    }
+   ],
+   "variants": [
+    "New stock available for issue",
+    "Returned stock held for inspection and test",
+    "Certified stock rotated back to issue"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "The process has a repeatable start, sequence and completion outcome.",
+    "artifact": "models/6.1-maintain-meter-assets.bpmn"
+   },
+   "en17007": {
+    "process": "SPP.2",
+    "title": "Manage stocks",
+    "clause": "6.16"
+   },
+   "sources": [
+    {
+     "for": "process alignment",
+     "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.16 SPP.2 Manage stocks",
+     "status": "verified"
+    },
+    {
+     "for": "metering scope and interfaces",
+     "cite": "IEC 61968-4:2019 records and asset management; IEC 61968-9:2024 Ed. 3",
+     "status": "consensus"
+    },
+    {
+     "for": "components, messages and work data",
+     "cite": "IEC 61968-6:2015 cl. 4.2 and cl. 5; IEC 61968-11:2013 CIM Work package",
+     "status": "clause-verified"
+    },
+    {
+     "for": "taxonomy coverage",
+     "cite": "APQC PCF Utilities v7.2.1 category 14.3 Metering and 14.4.2 to 14.4.4 meter operations, used as structural precedent",
+     "status": "consensus"
+    },
+    {
+     "for": "activities and detailed operating rules",
+     "cite": "No permitted source states reservation, issue, return or rotation rules for utility meter stock.",
+     "status": "judgment"
+    },
+    {
+     "for": "measure",
+     "cite": "SMRP Best Practices, 7th Edition, Pillar 5 Work Management 5.4.11",
+     "status": "consensus"
+    },
+    {
+     "for": "variants",
+     "cite": "EN 17007:2017 SPP.2 Manage stocks, SPP.6 Receive ordered or repaired spare items and SPP.7 Add the spare items to stock",
+     "status": "verified"
+    }
+   ],
+   "provenance": {
+    "basis": "standard",
+    "primary": "IEC 61968-4:2019 records and asset management; IEC 61968-9:2024 Ed. 3"
+   }
+  },
+  {
+   "uid": 10153,
+   "id": "6.1.4",
+   "name": "Retire and dispose of meters",
+   "group": {
+    "id": "6.1",
+    "name": "Manage the meter asset population",
+    "uid": 10149
+   },
+   "intent": "Retire meter records and route removed units to an authorised disposition.",
+   "activities": [
+    "Confirm the meter is removed from service",
+    "Capture final identity, read and status",
+    "Retire the active asset record",
+    "Route the unit for reuse, repair or disposal"
+   ],
+   "trigger": {
+    "kind": "message",
+    "text": "A removed meter is declared no longer eligible for service.",
+    "cim": "WorkRequest.create"
+   },
+   "inputs": [
+    {
+     "what": "A removed meter is declared no longer eligible for service.",
+     "party": "AM",
+     "data": "Asset"
+    },
+    {
+     "what": "Meter, endpoint and service-point context",
+     "party": "MR&C",
+     "data": "WorkAsset"
+    },
+    {
+     "what": "Authorised work and prior activity",
+     "party": "MAI",
+     "data": "Work"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Retired record and disposal route",
+     "party": "AM",
+     "data": "WorkAsset"
+    },
+    {
+     "what": "Activity result and exception evidence",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "systems": [
+    {
+     "component": "MR&C",
+     "role": "contributing",
+     "service": "Meter reading and control"
+    },
+    {
+     "component": "MAI",
+     "role": "consuming",
+     "service": "Meter work and inspection"
+    },
+    {
+     "component": "AM",
+     "role": "reference",
+     "service": "Meter asset record"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "MAI",
+     "to": "MR&C",
+     "payload": "WorkRequest",
+     "verb": "create",
+     "pattern": "event"
+    },
+    {
+     "from": "MR&C",
+     "to": "MAI",
+     "payload": "MaintenanceOrder",
+     "verb": "reply",
+     "pattern": "request-reply"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Meter operations specialist",
+     "raci": "R"
+    },
+    {
+     "role": "Meter operations manager",
+     "raci": "A"
+    },
+    {
+     "role": "Asset information steward",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkAsset",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "Retire the active record only after removal, final read, meter identity and service-point relationship are reconciled."
+    },
+    {
+     "kind": "operational",
+     "text": "Route the removed unit to reuse, repair or disposal under its recorded test and condition status."
+    }
+   ],
+   "measures": [
+    {
+     "name": "PM & PdM Work Orders Overdue",
+     "definition": "SMRP 5.4.11, applied to the associated meter work or exception workload.",
+     "cite": "SMRP Best Practices, 7th Edition, Pillar 5 Work Management"
+    }
+   ],
+   "variants": [
+    "Retire and retain for testing",
+    "Retire and route for repair or refurbishment",
+    "Retire and condemn for disposal"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "The process has a repeatable start, sequence and completion outcome.",
+    "artifact": "models/6.1-maintain-meter-assets.bpmn"
+   },
+   "en17007": {
+    "process": "SPP.12",
+    "title": "Disposal of faulty or damaged items",
+    "clause": "6.16"
+   },
+   "sources": [
+    {
+     "for": "process alignment",
+     "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.16 SPP.12 Disposal of faulty or damaged items",
+     "status": "verified"
+    },
+    {
+     "for": "metering scope and interfaces",
+     "cite": "IEC 61968-4:2019 records and asset management; IEC 61968-9:2024 Ed. 3",
+     "status": "consensus"
+    },
+    {
+     "for": "components, messages and work data",
+     "cite": "IEC 61968-6:2015 cl. 4.2 and cl. 5; IEC 61968-11:2013 CIM Work package",
+     "status": "clause-verified"
+    },
+    {
+     "for": "taxonomy coverage",
+     "cite": "APQC PCF Utilities v7.2.1 category 14.3 Metering and 14.4.2 to 14.4.4 meter operations, used as structural precedent",
+     "status": "consensus"
+    },
+    {
+     "for": "activities and detailed operating rules",
+     "cite": "No permitted source states the evidence or disposition sequence for retiring and disposing of utility meters.",
+     "status": "judgment"
+    },
+    {
+     "for": "measure",
+     "cite": "SMRP Best Practices, 7th Edition, Pillar 5 Work Management 5.4.11",
+     "status": "consensus"
+    },
+    {
+     "for": "variants",
+     "cite": "EN 17007:2017 SPP.10 Assess replaced items, SPP.11 Repair replaced items and SPP.12 Disposal of faulty or damaged items",
+     "status": "verified"
+    }
+   ],
+   "provenance": {
+    "basis": "standard",
+    "primary": "IEC 61968-4:2019 records and asset management; IEC 61968-9:2024 Ed. 3"
+   }
+  },
+  {
+   "uid": 10155,
+   "id": "6.2.1",
+   "name": "Set, exchange and remove meters",
+   "group": {
+    "id": "6.2",
+    "name": "Perform meter field operations",
+    "uid": 10154
+   },
+   "intent": "Install, replace or remove the specified meter while preserving asset and measurement continuity.",
+   "activities": [
+    "Verify the service point and authorised work",
+    "Record the existing meter identity and final read",
+    "Set, exchange or remove the meter",
+    "Record installed identity, seals and initial read",
+    "Close the field work record"
+   ],
+   "trigger": {
+    "kind": "message",
+    "text": "Authorised meter field work is released.",
+    "cim": "WorkRequest.create"
+   },
+   "inputs": [
+    {
+     "what": "Authorised meter field work is released.",
+     "party": "AM",
+     "data": "Asset"
+    },
+    {
+     "what": "Meter, endpoint and service-point context",
+     "party": "MR&C",
+     "data": "WorkAsset"
+    },
+    {
+     "what": "Authorised work and prior activity",
+     "party": "MAI",
+     "data": "Work"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Completed meter field work and asset change",
+     "party": "AM",
+     "data": "WorkAsset"
+    },
+    {
+     "what": "Activity result and exception evidence",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "systems": [
+    {
+     "component": "MR&C",
+     "role": "contributing",
+     "service": "Meter reading and control"
+    },
+    {
+     "component": "MAI",
+     "role": "owning",
+     "service": "Meter work and inspection"
+    },
+    {
+     "component": "AM",
+     "role": "reference",
+     "service": "Meter asset record"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "MAI",
+     "to": "MR&C",
+     "payload": "WorkRequest",
+     "verb": "create",
+     "pattern": "event"
+    },
+    {
+     "from": "MR&C",
+     "to": "MAI",
+     "payload": "MaintenanceOrder",
+     "verb": "reply",
+     "pattern": "request-reply"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Meter field technician",
+     "raci": "R"
+    },
+    {
+     "role": "Meter operations manager",
+     "raci": "A"
+    },
+    {
+     "role": "Asset information steward",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkAsset",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "Do not set, exchange or remove a meter until the service point, authorised work and existing meter identity agree."
+    },
+    {
+     "kind": "operational",
+     "text": "Close the field record only when final and initial reads, installed identity and seal status are captured or an exception is raised."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Work Order Cycle Time",
+     "definition": "SMRP 5.4.7, applied to the associated meter work or exception workload.",
+     "cite": "SMRP Best Practices, 7th Edition, Pillar 5 Work Management"
+    }
+   ],
+   "variants": [
+    "Initial meter set",
+    "Like-for-like or technology exchange",
+    "Removal without immediate replacement"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "The process has a repeatable start, sequence and completion outcome.",
+    "artifact": "models/6.2-perform-meter-field-work.bpmn"
+   },
+   "en17007": {
+    "process": "ACT.6",
+    "title": "Perform the maintenance tasks",
+    "clause": "6.5.7"
+   },
+   "sources": [
+    {
+     "for": "process alignment",
+     "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.5.7 ACT.6 Perform the maintenance tasks",
+     "status": "verified"
+    },
+    {
+     "for": "metering scope and interfaces",
+     "cite": "IEC 61968-4:2019 records and asset management; IEC 61968-9:2024 Ed. 3",
+     "status": "consensus"
+    },
+    {
+     "for": "components, messages and work data",
+     "cite": "IEC 61968-6:2015 cl. 4.2 and cl. 5; IEC 61968-11:2013 CIM Work package",
+     "status": "clause-verified"
+    },
+    {
+     "for": "taxonomy coverage",
+     "cite": "APQC PCF Utilities v7.2.1 category 14.3 Metering and 14.4.2 to 14.4.4 meter operations, used as structural precedent",
+     "status": "consensus"
+    },
+    {
+     "for": "activities and detailed operating rules",
+     "cite": "No permitted source states the field sequence or acceptance record for setting, exchanging or removing a meter.",
+     "status": "judgment"
+    },
+    {
+     "for": "measure",
+     "cite": "SMRP Best Practices, 7th Edition, Pillar 5 Work Management 5.4.7",
+     "status": "consensus"
+    },
+    {
+     "for": "field safety controls",
+     "cite": "29 CFR 1910.269(a)(3), (c), (d) and (m), as applicable to electric utility work; 29 CFR 1910.147 applies to gas distribution energy control",
+     "status": "regulation"
+    },
+    {
+     "for": "variants",
+     "cite": "APQC PCF Utilities v7.2.1 14.4.2 Install/remove/energize/re-energize meters, pcf_id 19329",
+     "status": "consensus"
+    }
+   ],
+   "provenance": {
+    "basis": "standard",
+    "primary": "IEC 61968-4:2019 records and asset management; IEC 61968-9:2024 Ed. 3"
+   }
+  },
+  {
+   "uid": 10156,
+   "id": "6.2.2",
+   "name": "Perform turn-on, turn-off and reconnection",
+   "group": {
+    "id": "6.2",
+    "name": "Perform meter field operations",
+    "uid": 10154
+   },
+   "intent": "Change service state at the meter in response to an authorised service order.",
+   "activities": [
+    "Verify the service point and authorised state change",
+    "Check the field condition and applicable safety controls",
+    "Operate the service device",
+    "Confirm the resulting state",
+    "Record completion or an exception"
+   ],
+   "trigger": {
+    "kind": "message",
+    "text": "An authorised service-state change is released.",
+    "cim": "WorkRequest.create"
+   },
+   "inputs": [
+    {
+     "what": "An authorised service-state change is released.",
+     "party": "AM",
+     "data": "Asset"
+    },
+    {
+     "what": "Meter, endpoint and service-point context",
+     "party": "MR&C",
+     "data": "WorkAsset"
+    },
+    {
+     "what": "Authorised work and prior activity",
+     "party": "MAI",
+     "data": "Work"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Confirmed service-state change",
+     "party": "AM",
+     "data": "WorkAsset"
+    },
+    {
+     "what": "Activity result and exception evidence",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "systems": [
+    {
+     "component": "MR&C",
+     "role": "contributing",
+     "service": "Meter reading and control"
+    },
+    {
+     "component": "MAI",
+     "role": "owning",
+     "service": "Meter work and inspection"
+    },
+    {
+     "component": "AM",
+     "role": "reference",
+     "service": "Meter asset record"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "MAI",
+     "to": "MR&C",
+     "payload": "WorkRequest",
+     "verb": "create",
+     "pattern": "event"
+    },
+    {
+     "from": "MR&C",
+     "to": "MAI",
+     "payload": "MaintenanceOrder",
+     "verb": "reply",
+     "pattern": "request-reply"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Meter field technician",
+     "raci": "R"
+    },
+    {
+     "role": "Meter operations manager",
+     "raci": "A"
+    },
+    {
+     "role": "Asset information steward",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkAsset",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "Operate the service device only for the authorised service state and after confirming the device, service point and field condition."
+    },
+    {
+     "kind": "operational",
+     "text": "Record the resulting on, off or reconnected state; a failed operation remains an exception and does not update service as complete."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Work Order Cycle Time",
+     "definition": "SMRP 5.4.7, applied to the associated meter work or exception workload.",
+     "cite": "SMRP Best Practices, 7th Edition, Pillar 5 Work Management"
+    }
+   ],
+   "variants": [
+    "Planned turn-off",
+    "Immediate safety turn-off",
+    "Reconnection after the required authorisation"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "The process has a repeatable start, sequence and completion outcome.",
+    "artifact": "models/6.2-perform-meter-field-work.bpmn"
+   },
+   "en17007": {
+    "process": "ACT.6",
+    "title": "Perform the maintenance tasks",
+    "clause": "6.5.7"
+   },
+   "sources": [
+    {
+     "for": "process alignment",
+     "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.5.7 ACT.6 Perform the maintenance tasks",
+     "status": "verified"
+    },
+    {
+     "for": "metering scope and interfaces",
+     "cite": "IEC 61968-4:2019 records and asset management; IEC 61968-9:2024 Ed. 3",
+     "status": "consensus"
+    },
+    {
+     "for": "components, messages and work data",
+     "cite": "IEC 61968-6:2015 cl. 4.2 and cl. 5; IEC 61968-11:2013 CIM Work package",
+     "status": "clause-verified"
+    },
+    {
+     "for": "taxonomy coverage",
+     "cite": "APQC PCF Utilities v7.2.1 category 14.3 Metering and 14.4.2 to 14.4.4 meter operations, used as structural precedent",
+     "status": "consensus"
+    },
+    {
+     "for": "activities and detailed operating rules",
+     "cite": "No permitted source states the field sequence or outcome criteria for meter turn-on, turn-off or reconnection.",
+     "status": "judgment"
+    },
+    {
+     "for": "measure",
+     "cite": "SMRP Best Practices, 7th Edition, Pillar 5 Work Management 5.4.7",
+     "status": "consensus"
+    },
+    {
+     "for": "field safety controls",
+     "cite": "29 CFR 1910.269(a)(3), (c), (d) and (m), as applicable to electric utility work; 29 CFR 1910.147 applies to gas distribution energy control",
+     "status": "regulation"
+    },
+    {
+     "for": "variants",
+     "cite": "APQC PCF Utilities v7.2.1 14.4.2 Install/remove/energize/re-energize meters, pcf_id 19329; urgency branch is judgment",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "standard",
+    "primary": "IEC 61968-4:2019 records and asset management; IEC 61968-9:2024 Ed. 3"
+   }
+  },
+  {
+   "uid": 10157,
+   "id": "6.2.3",
+   "name": "Install communication module or endpoint",
+   "group": {
+    "id": "6.2",
+    "name": "Perform meter field operations",
+    "uid": 10154
+   },
+   "intent": "Install the communication endpoint specified for the meter and service point.",
+   "activities": [
+    "Verify device compatibility and assignment",
+    "Install the module or endpoint",
+    "Record device identity and linkage",
+    "Pass the installed endpoint to commissioning"
+   ],
+   "trigger": {
+    "kind": "message",
+    "text": "An authorised endpoint installation is released.",
+    "cim": "WorkRequest.create"
+   },
+   "inputs": [
+    {
+     "what": "An authorised endpoint installation is released.",
+     "party": "AM",
+     "data": "Asset"
+    },
+    {
+     "what": "Meter, endpoint and service-point context",
+     "party": "MR&C",
+     "data": "WorkAsset"
+    },
+    {
+     "what": "Authorised work and prior activity",
+     "party": "MAI",
+     "data": "Work"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Installed endpoint awaiting commissioning",
+     "party": "AM",
+     "data": "WorkAsset"
+    },
+    {
+     "what": "Activity result and exception evidence",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "systems": [
+    {
+     "component": "MR&C",
+     "role": "contributing",
+     "service": "Meter reading and control"
+    },
+    {
+     "component": "MAI",
+     "role": "owning",
+     "service": "Meter work and inspection"
+    },
+    {
+     "component": "AM",
+     "role": "reference",
+     "service": "Meter asset record"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "MAI",
+     "to": "MR&C",
+     "payload": "WorkRequest",
+     "verb": "create",
+     "pattern": "event"
+    },
+    {
+     "from": "MR&C",
+     "to": "MAI",
+     "payload": "MaintenanceOrder",
+     "verb": "reply",
+     "pattern": "request-reply"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Meter field technician",
+     "raci": "R"
+    },
+    {
+     "role": "Meter operations manager",
+     "raci": "A"
+    },
+    {
+     "role": "Asset information steward",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkAsset",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "Install only an endpoint whose device type and assignment are compatible with the meter and communication service."
+    },
+    {
+     "kind": "operational",
+     "text": "Do not declare commissioning complete in the installation record; pass device identity and linkage to 6.3.3 and retain exceptions."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Work Order Cycle Time",
+     "definition": "SMRP 5.4.7, applied to the associated meter work or exception workload.",
+     "cite": "SMRP Best Practices, 7th Edition, Pillar 5 Work Management"
+    }
+   ],
+   "variants": [
+    "Endpoint installed with a new meter",
+    "Endpoint retrofitted to an installed meter",
+    "Failed endpoint exchanged without changing the meter"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "The process has a repeatable start, sequence and completion outcome.",
+    "artifact": "models/6.2-perform-meter-field-work.bpmn"
+   },
+   "en17007": {
+    "process": "ACT.6",
+    "title": "Perform the maintenance tasks",
+    "clause": "6.5.7"
+   },
+   "sources": [
+    {
+     "for": "process alignment",
+     "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.5.7 ACT.6 Perform the maintenance tasks",
+     "status": "verified"
+    },
+    {
+     "for": "metering scope and interfaces",
+     "cite": "IEC 61968-4:2019 records and asset management; IEC 61968-9:2024 Ed. 3",
+     "status": "consensus"
+    },
+    {
+     "for": "components, messages and work data",
+     "cite": "IEC 61968-6:2015 cl. 4.2 and cl. 5; IEC 61968-11:2013 CIM Work package",
+     "status": "clause-verified"
+    },
+    {
+     "for": "taxonomy coverage",
+     "cite": "APQC PCF Utilities v7.2.1 category 14.3 Metering and 14.4.2 to 14.4.4 meter operations, used as structural precedent",
+     "status": "consensus"
+    },
+    {
+     "for": "activities and detailed operating rules",
+     "cite": "No permitted source states the compatibility check or installation handoff for a meter communication endpoint.",
+     "status": "judgment"
+    },
+    {
+     "for": "measure",
+     "cite": "SMRP Best Practices, 7th Edition, Pillar 5 Work Management 5.4.7",
+     "status": "consensus"
+    },
+    {
+     "for": "field safety controls",
+     "cite": "29 CFR 1910.269(a)(3), (c), (d) and (m), as applicable to electric utility work; 29 CFR 1910.147 applies to gas distribution energy control",
+     "status": "regulation"
+    },
+    {
+     "for": "variants",
+     "cite": "APQC PCF Utilities v7.2.1 14.4.2 and 14.4.4 meter and endpoint operations; exact installation branches are judgment",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "standard",
+    "primary": "IEC 61968-4:2019 records and asset management; IEC 61968-9:2024 Ed. 3"
+   }
+  },
+  {
+   "uid": 10158,
+   "id": "6.2.4",
+   "name": "Investigate meter condition and access issues",
+   "group": {
+    "id": "6.2",
+    "name": "Perform meter field operations",
+    "uid": 10154
+   },
+   "intent": "Establish the meter condition or access constraint and determine the required follow-up.",
+   "activities": [
+    "Review the reported condition or access problem",
+    "Inspect the meter and service point where accessible",
+    "Record evidence and safety conditions",
+    "Classify the outcome and required follow-up"
+   ],
+   "trigger": {
+    "kind": "message",
+    "text": "A meter condition, access problem or failed visit is reported.",
+    "cim": "WorkRequest.create"
+   },
+   "inputs": [
+    {
+     "what": "A meter condition, access problem or failed visit is reported.",
+     "party": "AM",
+     "data": "Asset"
+    },
+    {
+     "what": "Meter, endpoint and service-point context",
+     "party": "MR&C",
+     "data": "WorkAsset"
+    },
+    {
+     "what": "Authorised work and prior activity",
+     "party": "MAI",
+     "data": "Work"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Investigation finding and follow-up demand",
+     "party": "AM",
+     "data": "WorkAsset"
+    },
+    {
+     "what": "Activity result and exception evidence",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "systems": [
+    {
+     "component": "MR&C",
+     "role": "contributing",
+     "service": "Meter reading and control"
+    },
+    {
+     "component": "MAI",
+     "role": "owning",
+     "service": "Meter work and inspection"
+    },
+    {
+     "component": "AM",
+     "role": "reference",
+     "service": "Meter asset record"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "MAI",
+     "to": "MR&C",
+     "payload": "WorkRequest",
+     "verb": "create",
+     "pattern": "event"
+    },
+    {
+     "from": "MR&C",
+     "to": "MAI",
+     "payload": "MaintenanceOrder",
+     "verb": "reply",
+     "pattern": "request-reply"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Meter field technician",
+     "raci": "R"
+    },
+    {
+     "role": "Meter operations manager",
+     "raci": "A"
+    },
+    {
+     "role": "Asset information steward",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkAsset",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "Do not disturb a meter or service where access, condition or hazard evidence makes inspection unsafe or unauthorised."
+    },
+    {
+     "kind": "operational",
+     "text": "Classify the observed condition and required follow-up from recorded evidence; an inaccessible device remains unresolved."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Work Order Cycle Time",
+     "definition": "SMRP 5.4.7, applied to the associated meter work or exception workload.",
+     "cite": "SMRP Best Practices, 7th Edition, Pillar 5 Work Management"
+    }
+   ],
+   "variants": [
+    "Customer or site access unavailable",
+    "Meter condition defect confirmed",
+    "Meter identity or location does not match the record"
+   ],
+   "notation": {
+    "class": "CMMN",
+    "why": "Evidence determines which investigative or corrective actions are appropriate and their order.",
+    "artifact": "models/6.2.4-investigate-meter-condition-and-access-issues.cmmn"
+   },
+   "en17007": {
+    "process": "COR.2",
+    "title": "Diagnose the state of the items in question",
+    "clause": "6.4.3"
+   },
+   "sources": [
+    {
+     "for": "process alignment",
+     "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.4.3 COR.2 Diagnose the state of the items in question",
+     "status": "verified"
+    },
+    {
+     "for": "metering scope and interfaces",
+     "cite": "IEC 61968-4:2019 records and asset management; IEC 61968-9:2024 Ed. 3",
+     "status": "consensus"
+    },
+    {
+     "for": "components, messages and work data",
+     "cite": "IEC 61968-6:2015 cl. 4.2 and cl. 5; IEC 61968-11:2013 CIM Work package",
+     "status": "clause-verified"
+    },
+    {
+     "for": "taxonomy coverage",
+     "cite": "APQC PCF Utilities v7.2.1 category 14.3 Metering and 14.4.2 to 14.4.4 meter operations, used as structural precedent",
+     "status": "consensus"
+    },
+    {
+     "for": "activities and detailed operating rules",
+     "cite": "No permitted source states the investigation sequence or disposition rule for meter condition and access issues.",
+     "status": "judgment"
+    },
+    {
+     "for": "measure",
+     "cite": "SMRP Best Practices, 7th Edition, Pillar 5 Work Management 5.4.7",
+     "status": "consensus"
+    },
+    {
+     "for": "field safety controls",
+     "cite": "29 CFR 1910.269(a)(3), (c), (d) and (m), as applicable to electric utility work; 29 CFR 1910.147 applies to gas distribution energy control",
+     "status": "regulation"
+    },
+    {
+     "for": "variants",
+     "cite": "EN 17007:2017 COR.2 Diagnose the state of the items in question; access and record-mismatch branches are judgment",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "standard",
+    "primary": "IEC 61968-4:2019 records and asset management; IEC 61968-9:2024 Ed. 3"
+   }
+  },
+  {
+   "uid": 10160,
+   "id": "6.3.1",
+   "name": "Programme meter, register or module",
+   "group": {
+    "id": "6.3",
+    "name": "Programme and commission endpoints",
+    "uid": 10159
+   },
+   "intent": "Apply the authorised parameters to a meter, register or communication module.",
+   "activities": [
+    "Verify device identity and approved parameter set",
+    "Load the authorised parameters",
+    "Read back the programmed values",
+    "Record success or exception"
+   ],
+   "trigger": {
+    "kind": "message",
+    "text": "An installed or prepared device requires programming.",
+    "cim": "WorkRequest.create"
+   },
+   "inputs": [
+    {
+     "what": "An installed or prepared device requires programming.",
+     "party": "MR&C",
+     "data": "WorkAsset"
+    },
+    {
+     "what": "Meter, endpoint and service-point context",
+     "party": "MR&C",
+     "data": "WorkAsset"
+    },
+    {
+     "what": "Authorised work and prior activity",
+     "party": "MAI",
+     "data": "Work"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Programmed device and result",
+     "party": "MR&C",
+     "data": "WorkAsset"
+    },
+    {
+     "what": "Activity result and exception evidence",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "systems": [
+    {
+     "component": "MR&C",
+     "role": "owning",
+     "service": "Meter reading and control"
+    },
+    {
+     "component": "MAI",
+     "role": "consuming",
+     "service": "Meter work and inspection"
+    },
+    {
+     "component": "AM",
+     "role": "reference",
+     "service": "Meter asset record"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "MAI",
+     "to": "MR&C",
+     "payload": "WorkRequest",
+     "verb": "create",
+     "pattern": "event"
+    },
+    {
+     "from": "MR&C",
+     "to": "MAI",
+     "payload": "MaintenanceOrder",
+     "verb": "reply",
+     "pattern": "request-reply"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Meter operations specialist",
+     "raci": "R"
+    },
+    {
+     "role": "Meter operations manager",
+     "raci": "A"
+    },
+    {
+     "role": "Asset information steward",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkAsset",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "Load only the approved parameter set matched to the device identity, register type and effective configuration."
+    },
+    {
+     "kind": "operational",
+     "text": "A successful programming result requires read-back of the applied values; mismatch produces an exception rather than completion."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Rework",
+     "definition": "SMRP 4.1, applied to the associated meter work or exception workload.",
+     "cite": "SMRP Best Practices, 7th Edition, Pillar 5 Work Management"
+    }
+   ],
+   "variants": [
+    "Programmed before field issue",
+    "Programmed during installation",
+    "Reprogrammed after commissioning"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "The process has a repeatable start, sequence and completion outcome.",
+    "artifact": "models/6.3-configure-and-commission-endpoints.bpmn"
+   },
+   "en17007": {
+    "process": "TOL.3",
+    "title": "Maintain and/or Update the support equipment",
+    "clause": "6.17"
+   },
+   "sources": [
+    {
+     "for": "process alignment",
+     "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.17 TOL.3 Maintain and/or Update the support equipment",
+     "status": "verified"
+    },
+    {
+     "for": "metering scope and interfaces",
+     "cite": "IEC 61968-4:2019 records and asset management; IEC 61968-9:2024 Ed. 3",
+     "status": "consensus"
+    },
+    {
+     "for": "components, messages and work data",
+     "cite": "IEC 61968-6:2015 cl. 4.2 and cl. 5; IEC 61968-11:2013 CIM Work package",
+     "status": "clause-verified"
+    },
+    {
+     "for": "taxonomy coverage",
+     "cite": "APQC PCF Utilities v7.2.1 category 14.3 Metering and 14.4.2 to 14.4.4 meter operations, used as structural precedent",
+     "status": "consensus"
+    },
+    {
+     "for": "activities and detailed operating rules",
+     "cite": "No permitted source states parameter approval, load or read-back procedure for programming a meter or module.",
+     "status": "judgment"
+    },
+    {
+     "for": "measure",
+     "cite": "SMRP Best Practices, 7th Edition, Pillar 5 Work Management 4.1",
+     "status": "consensus"
+    },
+    {
+     "for": "variants",
+     "cite": "APQC PCF Utilities v7.2.1 14.4.2 and 14.4.4 meter and endpoint operations; programming timing is judgment",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "standard",
+    "primary": "IEC 61968-4:2019 records and asset management; IEC 61968-9:2024 Ed. 3"
+   }
+  },
+  {
+   "uid": 10161,
+   "id": "6.3.2",
+   "name": "Apply configuration and firmware",
+   "group": {
+    "id": "6.3",
+    "name": "Programme and commission endpoints",
+    "uid": 10159
+   },
+   "intent": "Apply an authorised configuration or firmware version and record the resulting state.",
+   "activities": [
+    "Confirm device eligibility and target version",
+    "Apply the authorised package",
+    "Verify version and configuration after change",
+    "Record failure, rollback or completion"
+   ],
+   "trigger": {
+    "kind": "message",
+    "text": "An authorised device configuration or firmware change is released.",
+    "cim": "WorkRequest.create"
+   },
+   "inputs": [
+    {
+     "what": "An authorised device configuration or firmware change is released.",
+     "party": "MR&C",
+     "data": "WorkAsset"
+    },
+    {
+     "what": "Meter, endpoint and service-point context",
+     "party": "MR&C",
+     "data": "WorkAsset"
+    },
+    {
+     "what": "Authorised work and prior activity",
+     "party": "MAI",
+     "data": "Work"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Verified device software state",
+     "party": "MR&C",
+     "data": "WorkAsset"
+    },
+    {
+     "what": "Activity result and exception evidence",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "systems": [
+    {
+     "component": "MR&C",
+     "role": "owning",
+     "service": "Meter reading and control"
+    },
+    {
+     "component": "MAI",
+     "role": "consuming",
+     "service": "Meter work and inspection"
+    },
+    {
+     "component": "AM",
+     "role": "reference",
+     "service": "Meter asset record"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "MAI",
+     "to": "MR&C",
+     "payload": "WorkRequest",
+     "verb": "create",
+     "pattern": "event"
+    },
+    {
+     "from": "MR&C",
+     "to": "MAI",
+     "payload": "MaintenanceOrder",
+     "verb": "reply",
+     "pattern": "request-reply"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Meter operations specialist",
+     "raci": "R"
+    },
+    {
+     "role": "Meter operations manager",
+     "raci": "A"
+    },
+    {
+     "role": "Asset information steward",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkAsset",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "Apply only an authorised package to a device confirmed eligible for the target version."
+    },
+    {
+     "kind": "operational",
+     "text": "Retain the pre-change version and record verification, rollback or failure so an incomplete update is not reported as current."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Rework",
+     "definition": "SMRP 4.1, applied to the associated meter work or exception workload.",
+     "cite": "SMRP Best Practices, 7th Edition, Pillar 5 Work Management"
+    }
+   ],
+   "variants": [
+    "Configuration-only change",
+    "Firmware change completed and verified",
+    "Firmware change failed and prior state restored"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "The process has a repeatable start, sequence and completion outcome.",
+    "artifact": "models/6.3-configure-and-commission-endpoints.bpmn"
+   },
+   "en17007": {
+    "process": "DOC.4",
+    "title": "Update the reference documentation",
+    "clause": "6.9"
+   },
+   "sources": [
+    {
+     "for": "process alignment",
+     "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.9 DOC.4 Update the reference documentation",
+     "status": "verified"
+    },
+    {
+     "for": "metering scope and interfaces",
+     "cite": "IEC 61968-4:2019 records and asset management; IEC 61968-9:2024 Ed. 3",
+     "status": "consensus"
+    },
+    {
+     "for": "components, messages and work data",
+     "cite": "IEC 61968-6:2015 cl. 4.2 and cl. 5; IEC 61968-11:2013 CIM Work package",
+     "status": "clause-verified"
+    },
+    {
+     "for": "taxonomy coverage",
+     "cite": "APQC PCF Utilities v7.2.1 category 14.3 Metering and 14.4.2 to 14.4.4 meter operations, used as structural precedent",
+     "status": "consensus"
+    },
+    {
+     "for": "activities and detailed operating rules",
+     "cite": "No permitted source states device eligibility, rollback or completion rules for meter firmware and configuration.",
+     "status": "judgment"
+    },
+    {
+     "for": "measure",
+     "cite": "SMRP Best Practices, 7th Edition, Pillar 5 Work Management 4.1",
+     "status": "consensus"
+    },
+    {
+     "for": "variants",
+     "cite": "EN 17007:2017 DOC.4 Update the reference documentation; firmware completion and restoration branches are judgment",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "standard",
+    "primary": "IEC 61968-4:2019 records and asset management; IEC 61968-9:2024 Ed. 3"
+   }
+  },
+  {
+   "uid": 10162,
+   "id": "6.3.3",
+   "name": "Commission endpoint to the communication network",
+   "group": {
+    "id": "6.3",
+    "name": "Programme and commission endpoints",
+    "uid": 10159
+   },
+   "intent": "Register an installed endpoint and establish its operational communication state.",
+   "activities": [
+    "Confirm endpoint identity and installed linkage",
+    "Register the endpoint to the communication service",
+    "Initiate communication and receive a response",
+    "Record commissioned state or an exception"
+   ],
+   "trigger": {
+    "kind": "message",
+    "text": "An installed endpoint is ready for network commissioning.",
+    "cim": "WorkRequest.create"
+   },
+   "inputs": [
+    {
+     "what": "An installed endpoint is ready for network commissioning.",
+     "party": "MR&C",
+     "data": "WorkAsset"
+    },
+    {
+     "what": "Meter, endpoint and service-point context",
+     "party": "MR&C",
+     "data": "WorkAsset"
+    },
+    {
+     "what": "Authorised work and prior activity",
+     "party": "MAI",
+     "data": "Work"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Commissioned endpoint communication state",
+     "party": "MR&C",
+     "data": "WorkAsset"
+    },
+    {
+     "what": "Activity result and exception evidence",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "systems": [
+    {
+     "component": "MR&C",
+     "role": "owning",
+     "service": "Meter reading and control"
+    },
+    {
+     "component": "MAI",
+     "role": "consuming",
+     "service": "Meter work and inspection"
+    },
+    {
+     "component": "AM",
+     "role": "reference",
+     "service": "Meter asset record"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "MAI",
+     "to": "MR&C",
+     "payload": "WorkRequest",
+     "verb": "create",
+     "pattern": "event"
+    },
+    {
+     "from": "MR&C",
+     "to": "MAI",
+     "payload": "MaintenanceOrder",
+     "verb": "reply",
+     "pattern": "request-reply"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Meter operations specialist",
+     "raci": "R"
+    },
+    {
+     "role": "Meter operations manager",
+     "raci": "A"
+    },
+    {
+     "role": "Asset information steward",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkAsset",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "Register only the endpoint identity linked to the installed meter and assigned communication service."
+    },
+    {
+     "kind": "operational",
+     "text": "Commissioned state requires a confirmed network response, not merely successful device installation."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Rework",
+     "definition": "SMRP 4.1, applied to the associated meter work or exception workload.",
+     "cite": "SMRP Best Practices, 7th Edition, Pillar 5 Work Management"
+    }
+   ],
+   "variants": [
+    "Commissioned during installation",
+    "Commissioned later through the operating centre",
+    "Registration failed and returned to field work"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "The process has a repeatable start, sequence and completion outcome.",
+    "artifact": "models/6.3-configure-and-commission-endpoints.bpmn"
+   },
+   "en17007": {
+    "process": "ACT.7",
+    "title": "Finish the tasks",
+    "clause": "6.5.8"
+   },
+   "sources": [
+    {
+     "for": "process alignment",
+     "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.5.8 ACT.7 Finish the tasks",
+     "status": "verified"
+    },
+    {
+     "for": "metering scope and interfaces",
+     "cite": "IEC 61968-4:2019 records and asset management; IEC 61968-9:2024 Ed. 3",
+     "status": "consensus"
+    },
+    {
+     "for": "components, messages and work data",
+     "cite": "IEC 61968-6:2015 cl. 4.2 and cl. 5; IEC 61968-11:2013 CIM Work package",
+     "status": "clause-verified"
+    },
+    {
+     "for": "taxonomy coverage",
+     "cite": "APQC PCF Utilities v7.2.1 category 14.3 Metering and 14.4.2 to 14.4.4 meter operations, used as structural precedent",
+     "status": "consensus"
+    },
+    {
+     "for": "activities and detailed operating rules",
+     "cite": "No permitted source states the registration handshake or failure route for commissioning a meter endpoint.",
+     "status": "judgment"
+    },
+    {
+     "for": "measure",
+     "cite": "SMRP Best Practices, 7th Edition, Pillar 5 Work Management 4.1",
+     "status": "consensus"
+    },
+    {
+     "for": "variants",
+     "cite": "APQC PCF Utilities v7.2.1 14.4.4 Operate Advanced Metering Infrastructure, pcf_id 19337; commissioning timing and failure route are judgment",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "standard",
+    "primary": "IEC 61968-4:2019 records and asset management; IEC 61968-9:2024 Ed. 3"
+   }
+  },
+  {
+   "uid": 10163,
+   "id": "6.3.4",
+   "name": "Validate installation, read and signal",
+   "group": {
+    "id": "6.3",
+    "name": "Programme and commission endpoints",
+    "uid": 10159
+   },
+   "intent": "Confirm that installation identity, measurement and communication agree before acceptance.",
+   "activities": [
+    "Compare installed device identity to the order",
+    "Obtain an initial read",
+    "Test communication response and signal",
+    "Accept the installation or raise correction work"
+   ],
+   "trigger": {
+    "kind": "conditional",
+    "text": "Programming and communication commissioning are complete.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Programming and communication commissioning are complete.",
+     "party": "MR&C",
+     "data": "WorkAsset"
+    },
+    {
+     "what": "Meter, endpoint and service-point context",
+     "party": "MR&C",
+     "data": "WorkAsset"
+    },
+    {
+     "what": "Authorised work and prior activity",
+     "party": "MAI",
+     "data": "Work"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Accepted installation or correction demand",
+     "party": "MR&C",
+     "data": "WorkAsset"
+    },
+    {
+     "what": "Activity result and exception evidence",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "systems": [
+    {
+     "component": "MR&C",
+     "role": "owning",
+     "service": "Meter reading and control"
+    },
+    {
+     "component": "MAI",
+     "role": "consuming",
+     "service": "Meter work and inspection"
+    },
+    {
+     "component": "AM",
+     "role": "reference",
+     "service": "Meter asset record"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "MAI",
+     "to": "MR&C",
+     "payload": "WorkRequest",
+     "verb": "create",
+     "pattern": "event"
+    },
+    {
+     "from": "MR&C",
+     "to": "MAI",
+     "payload": "MaintenanceOrder",
+     "verb": "reply",
+     "pattern": "request-reply"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Meter operations specialist",
+     "raci": "R"
+    },
+    {
+     "role": "Meter operations manager",
+     "raci": "A"
+    },
+    {
+     "role": "Asset information steward",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkAsset",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "Accept the installation only when work identity, installed device, initial read and communication result agree."
+    },
+    {
+     "kind": "operational",
+     "text": "Any failed identity, read or signal check creates correction work and blocks acceptance."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Rework",
+     "definition": "SMRP 4.1, applied to the associated meter work or exception workload.",
+     "cite": "SMRP Best Practices, 7th Edition, Pillar 5 Work Management"
+    }
+   ],
+   "variants": [
+    "Installation, read and signal all accepted",
+    "Valid read with failed communication",
+    "Communication established but read or identity rejected"
+   ],
+   "notation": {
+    "class": "DMN",
+    "why": "The output is a classification, eligibility, disposition or calculated value.",
+    "artifact": "models/6.3.4-validate-installation-read-and-signal.dmn"
+   },
+   "en17007": {
+    "process": "ACT.7",
+    "title": "Finish the tasks",
+    "clause": "6.5.8"
+   },
+   "sources": [
+    {
+     "for": "process alignment",
+     "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.5.8 ACT.7 Finish the tasks",
+     "status": "verified"
+    },
+    {
+     "for": "metering scope and interfaces",
+     "cite": "IEC 61968-4:2019 records and asset management; IEC 61968-9:2024 Ed. 3",
+     "status": "consensus"
+    },
+    {
+     "for": "components, messages and work data",
+     "cite": "IEC 61968-6:2015 cl. 4.2 and cl. 5; IEC 61968-11:2013 CIM Work package",
+     "status": "clause-verified"
+    },
+    {
+     "for": "taxonomy coverage",
+     "cite": "APQC PCF Utilities v7.2.1 category 14.3 Metering and 14.4.2 to 14.4.4 meter operations, used as structural precedent",
+     "status": "consensus"
+    },
+    {
+     "for": "activities and detailed operating rules",
+     "cite": "No permitted source states a combined acceptance rule for device identity, initial read and communication signal.",
+     "status": "judgment"
+    },
+    {
+     "for": "measure",
+     "cite": "SMRP Best Practices, 7th Edition, Pillar 5 Work Management 4.1",
+     "status": "consensus"
+    },
+    {
+     "for": "variants",
+     "cite": "EN 17007:2017 ACT.7 Finish the tasks; acceptance combinations are judgment",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "standard",
+    "primary": "IEC 61968-4:2019 records and asset management; IEC 61968-9:2024 Ed. 3"
+   }
+  },
+  {
+   "uid": 10164,
+   "id": "6.3.5",
+   "name": "Record programming and commissioning audit trail",
+   "group": {
+    "id": "6.3",
+    "name": "Programme and commission endpoints",
+    "uid": 10159
+   },
+   "intent": "Retain the device, parameter, version, result and actor evidence from commissioning.",
+   "activities": [
+    "Collect programming and commissioning results",
+    "Validate device and work references",
+    "Store the audit record",
+    "Make the record available to authorised users"
+   ],
+   "trigger": {
+    "kind": "message",
+    "text": "Programming or commissioning produces a result.",
+    "cim": "WorkRequest.create"
+   },
+   "inputs": [
+    {
+     "what": "Programming or commissioning produces a result.",
+     "party": "MR&C",
+     "data": "WorkAsset"
+    },
+    {
+     "what": "Meter, endpoint and service-point context",
+     "party": "MR&C",
+     "data": "WorkAsset"
+    },
+    {
+     "what": "Authorised work and prior activity",
+     "party": "MAI",
+     "data": "Work"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Commissioning audit record",
+     "party": "MR&C",
+     "data": "WorkAsset"
+    },
+    {
+     "what": "Activity result and exception evidence",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "systems": [
+    {
+     "component": "MR&C",
+     "role": "owning",
+     "service": "Meter reading and control"
+    },
+    {
+     "component": "MAI",
+     "role": "consuming",
+     "service": "Meter work and inspection"
+    },
+    {
+     "component": "AM",
+     "role": "reference",
+     "service": "Meter asset record"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "MAI",
+     "to": "MR&C",
+     "payload": "WorkRequest",
+     "verb": "create",
+     "pattern": "event"
+    },
+    {
+     "from": "MR&C",
+     "to": "MAI",
+     "payload": "MaintenanceOrder",
+     "verb": "reply",
+     "pattern": "request-reply"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Meter operations specialist",
+     "raci": "R"
+    },
+    {
+     "role": "Meter operations manager",
+     "raci": "A"
+    },
+    {
+     "role": "Asset information steward",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkAsset",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "Store the audit record only against validated device and work references."
+    },
+    {
+     "kind": "operational",
+     "text": "Preserve applied parameters, versions, timestamps and result status so authorised users can reconstruct the event."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Rework",
+     "definition": "SMRP 4.1, applied to the associated meter work or exception workload.",
+     "cite": "SMRP Best Practices, 7th Edition, Pillar 5 Work Management"
+    }
+   ],
+   "variants": [
+    "Successful first commissioning",
+    "Failed attempt followed by correction",
+    "Recommissioning after device or configuration change"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "The process has a repeatable start, sequence and completion outcome.",
+    "artifact": "models/6.3-configure-and-commission-endpoints.bpmn"
+   },
+   "en17007": {
+    "process": "DTA.1",
+    "title": "Store and validate the raw data in a library and/or a database",
+    "clause": "6.10"
+   },
+   "sources": [
+    {
+     "for": "process alignment",
+     "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.10 DTA.1 Store and validate the raw data in a library and/or a database",
+     "status": "verified"
+    },
+    {
+     "for": "metering scope and interfaces",
+     "cite": "IEC 61968-4:2019 records and asset management; IEC 61968-9:2024 Ed. 3",
+     "status": "consensus"
+    },
+    {
+     "for": "components, messages and work data",
+     "cite": "IEC 61968-6:2015 cl. 4.2 and cl. 5; IEC 61968-11:2013 CIM Work package",
+     "status": "clause-verified"
+    },
+    {
+     "for": "taxonomy coverage",
+     "cite": "APQC PCF Utilities v7.2.1 category 14.3 Metering and 14.4.2 to 14.4.4 meter operations, used as structural precedent",
+     "status": "consensus"
+    },
+    {
+     "for": "activities and detailed operating rules",
+     "cite": "No permitted source states required content or retention route for a programming and commissioning audit trail.",
+     "status": "judgment"
+    },
+    {
+     "for": "measure",
+     "cite": "SMRP Best Practices, 7th Edition, Pillar 5 Work Management 4.1",
+     "status": "consensus"
+    },
+    {
+     "for": "variants",
+     "cite": "EN 17007:2017 DTA.1 Store and validate the raw data in a library and/or a database; audit-trail outcomes are judgment",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "standard",
+    "primary": "IEC 61968-4:2019 records and asset management; IEC 61968-9:2024 Ed. 3"
+   }
+  },
+  {
+   "uid": 10166,
+   "id": "6.4.1",
+   "name": "Receive and inspect returned meters",
+   "group": {
+    "id": "6.4",
+    "name": "Test, prove and certify meters",
+    "uid": 10165
+   },
+   "intent": "Receive a returned meter and establish its identity, condition and test disposition.",
+   "activities": [
+    "Receive and identify the returned meter",
+    "Inspect seals, condition and accompanying record",
+    "Record chain of custody and observed condition",
+    "Route the meter to test, repair, reuse or disposal"
+   ],
+   "trigger": {
+    "kind": "message",
+    "text": "A removed or returned meter arrives at the meter facility.",
+    "cim": "WorkRequest.create"
+   },
+   "inputs": [
+    {
+     "what": "A removed or returned meter arrives at the meter facility.",
+     "party": "MR&C",
+     "data": "WorkAsset"
+    },
+    {
+     "what": "Meter, endpoint and service-point context",
+     "party": "MR&C",
+     "data": "WorkAsset"
+    },
+    {
+     "what": "Authorised work and prior activity",
+     "party": "MAI",
+     "data": "Work"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Received-meter condition and disposition",
+     "party": "MR&C",
+     "data": "WorkAsset"
+    },
+    {
+     "what": "Activity result and exception evidence",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "systems": [
+    {
+     "component": "MR&C",
+     "role": "owning",
+     "service": "Meter reading and control"
+    },
+    {
+     "component": "MAI",
+     "role": "consuming",
+     "service": "Meter work and inspection"
+    },
+    {
+     "component": "AM",
+     "role": "reference",
+     "service": "Meter asset record"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "MAI",
+     "to": "MR&C",
+     "payload": "WorkRequest",
+     "verb": "create",
+     "pattern": "event"
+    },
+    {
+     "from": "MR&C",
+     "to": "MAI",
+     "payload": "MaintenanceOrder",
+     "verb": "reply",
+     "pattern": "request-reply"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Meter operations specialist",
+     "raci": "R"
+    },
+    {
+     "role": "Meter operations manager",
+     "raci": "A"
+    },
+    {
+     "role": "Meter test specialist",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkAsset",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "Record meter identity, seal state, physical condition and custody before routing a returned unit."
+    },
+    {
+     "kind": "operational",
+     "text": "Do not return a meter to eligible stock until its required inspection or test disposition is recorded."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Rework",
+     "definition": "SMRP 4.1, applied to the associated meter work or exception workload.",
+     "cite": "SMRP Best Practices, 7th Edition, Pillar 5 Work Management"
+    }
+   ],
+   "variants": [
+    "Returned sealed with complete identity",
+    "Returned damaged or with suspected interference",
+    "Returned without a complete identity or custody record"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "The process has a repeatable start, sequence and completion outcome.",
+    "artifact": "models/6.4-test-and-certify-meters.bpmn"
+   },
+   "en17007": {
+    "process": "SPP.6",
+    "title": "Receive ordered or repaired spare items",
+    "clause": "6.16"
+   },
+   "sources": [
+    {
+     "for": "process alignment",
+     "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.16 SPP.6 Receive ordered or repaired spare items",
+     "status": "verified"
+    },
+    {
+     "for": "metering scope and interfaces",
+     "cite": "IEC 61968-9:2024 Ed. 3, meter reading and control scope; detailed accuracy and calibration rules are not supplied",
+     "status": "consensus"
+    },
+    {
+     "for": "components, messages and work data",
+     "cite": "IEC 61968-6:2015 cl. 4.2 and cl. 5; IEC 61968-11:2013 CIM Work package",
+     "status": "clause-verified"
+    },
+    {
+     "for": "taxonomy coverage",
+     "cite": "APQC PCF Utilities v7.2.1 category 14.3 Metering and 14.4.2 to 14.4.4 meter operations, used as structural precedent",
+     "status": "consensus"
+    },
+    {
+     "for": "activities and detailed operating rules",
+     "cite": "No permitted source states the custody, inspection or routing sequence for a returned meter.",
+     "status": "judgment"
+    },
+    {
+     "for": "measure",
+     "cite": "SMRP Best Practices, 7th Edition, Pillar 5 Work Management 4.1",
+     "status": "consensus"
+    },
+    {
+     "for": "variants",
+     "cite": "EN 17007:2017 SPP.6 Receive ordered or repaired spare items and SPP.10 Assess replaced items; custody exceptions are judgment",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "standard",
+    "primary": "IEC 61968-9:2024 Ed. 3, meter reading and control scope; detailed accuracy and calibration rules are not supplied"
+   }
+  },
+  {
+   "uid": 10167,
+   "id": "6.4.2",
+   "name": "Perform bench and prover accuracy testing",
+   "group": {
+    "id": "6.4",
+    "name": "Test, prove and certify meters",
+    "uid": 10165
+   },
+   "intent": "Measure meter performance using controlled test equipment and retain the observations.",
+   "activities": [
+    "Verify meter identity and test method",
+    "Confirm test equipment calibration status",
+    "Run the specified test points",
+    "Record observed error and test conditions",
+    "Flag an invalid or incomplete test"
+   ],
+   "trigger": {
+    "kind": "manual",
+    "text": "A meter is released for accuracy testing.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "A meter is released for accuracy testing.",
+     "party": "MR&C",
+     "data": "WorkAsset"
+    },
+    {
+     "what": "Meter, endpoint and service-point context",
+     "party": "MR&C",
+     "data": "WorkAsset"
+    },
+    {
+     "what": "Authorised work and prior activity",
+     "party": "MAI",
+     "data": "Work"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Accuracy observations and test record",
+     "party": "MR&C",
+     "data": "WorkAsset"
+    },
+    {
+     "what": "Activity result and exception evidence",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "systems": [
+    {
+     "component": "MR&C",
+     "role": "owning",
+     "service": "Meter reading and control"
+    },
+    {
+     "component": "MAI",
+     "role": "consuming",
+     "service": "Meter work and inspection"
+    },
+    {
+     "component": "AM",
+     "role": "reference",
+     "service": "Meter asset record"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "MAI",
+     "to": "MR&C",
+     "payload": "WorkRequest",
+     "verb": "create",
+     "pattern": "event"
+    },
+    {
+     "from": "MR&C",
+     "to": "MAI",
+     "payload": "MaintenanceOrder",
+     "verb": "reply",
+     "pattern": "request-reply"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Meter operations specialist",
+     "raci": "R"
+    },
+    {
+     "role": "Meter operations manager",
+     "raci": "A"
+    },
+    {
+     "role": "Meter test specialist",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkAsset",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "Use only test equipment whose calibration status is current for the specified method and test points."
+    },
+    {
+     "kind": "operational",
+     "text": "An invalid or incomplete test cannot support certification; retain observed error and test conditions for disposition."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Rework",
+     "definition": "SMRP 4.1, applied to the associated meter work or exception workload.",
+     "cite": "SMRP Best Practices, 7th Edition, Pillar 5 Work Management"
+    }
+   ],
+   "variants": [
+    "Population sample test",
+    "Bench test after removal",
+    "Dispute or complaint test requested for one meter"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "The process has a repeatable start, sequence and completion outcome.",
+    "artifact": "models/6.4-test-and-certify-meters.bpmn"
+   },
+   "en17007": {
+    "process": "COR.2",
+    "title": "Diagnose the state of the items in question",
+    "clause": "6.4.3"
+   },
+   "sources": [
+    {
+     "for": "process alignment",
+     "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.4.3 COR.2 Diagnose the state of the items in question",
+     "status": "verified"
+    },
+    {
+     "for": "metering scope and interfaces",
+     "cite": "IEC 61968-9:2024 Ed. 3, meter reading and control scope; detailed accuracy and calibration rules are not supplied",
+     "status": "consensus"
+    },
+    {
+     "for": "components, messages and work data",
+     "cite": "IEC 61968-6:2015 cl. 4.2 and cl. 5; IEC 61968-11:2013 CIM Work package",
+     "status": "clause-verified"
+    },
+    {
+     "for": "taxonomy coverage",
+     "cite": "APQC PCF Utilities v7.2.1 category 14.3 Metering and 14.4.2 to 14.4.4 meter operations, used as structural precedent",
+     "status": "consensus"
+    },
+    {
+     "for": "activities and detailed operating rules",
+     "cite": "No permitted source states the bench or prover test method, test points or invalid-test rule for distribution meters.",
+     "status": "judgment"
+    },
+    {
+     "for": "measure",
+     "cite": "SMRP Best Practices, 7th Edition, Pillar 5 Work Management 4.1",
+     "status": "consensus"
+    },
+    {
+     "for": "variants",
+     "cite": "APQC PCF Utilities v7.2.1 14.4.3 Manage and test meters, pcf_id 19333; the three test routes are judgment because the permitted pack has no detailed meter-test standard",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "standard",
+    "primary": "IEC 61968-9:2024 Ed. 3, meter reading and control scope; detailed accuracy and calibration rules are not supplied"
+   }
+  },
+  {
+   "uid": 10168,
+   "id": "6.4.3",
+   "name": "Certify accuracy and record test result",
+   "group": {
+    "id": "6.4",
+    "name": "Test, prove and certify meters",
+    "uid": 10165
+   },
+   "intent": "Determine and record whether the meter meets the applicable accuracy requirement.",
+   "activities": [
+    "Review the valid test observations",
+    "Compare results with the applicable requirement",
+    "Assign pass, fail or restricted disposition",
+    "Authorise and retain the certification result"
+   ],
+   "trigger": {
+    "kind": "conditional",
+    "text": "A valid meter accuracy test is complete.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "A valid meter accuracy test is complete.",
+     "party": "MR&C",
+     "data": "WorkAsset"
+    },
+    {
+     "what": "Meter, endpoint and service-point context",
+     "party": "MR&C",
+     "data": "WorkAsset"
+    },
+    {
+     "what": "Authorised work and prior activity",
+     "party": "MAI",
+     "data": "Work"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Certified result and meter disposition",
+     "party": "MR&C",
+     "data": "WorkAsset"
+    },
+    {
+     "what": "Activity result and exception evidence",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "systems": [
+    {
+     "component": "MR&C",
+     "role": "owning",
+     "service": "Meter reading and control"
+    },
+    {
+     "component": "MAI",
+     "role": "consuming",
+     "service": "Meter work and inspection"
+    },
+    {
+     "component": "AM",
+     "role": "reference",
+     "service": "Meter asset record"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "MAI",
+     "to": "MR&C",
+     "payload": "WorkRequest",
+     "verb": "create",
+     "pattern": "event"
+    },
+    {
+     "from": "MR&C",
+     "to": "MAI",
+     "payload": "MaintenanceOrder",
+     "verb": "reply",
+     "pattern": "request-reply"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Meter operations specialist",
+     "raci": "R"
+    },
+    {
+     "role": "Meter operations manager",
+     "raci": "A"
+    },
+    {
+     "role": "Meter test specialist",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkAsset",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "Certify only from valid test observations evaluated against the applicable accuracy requirement."
+    },
+    {
+     "kind": "operational",
+     "text": "Record the authorised pass, fail or restricted disposition; do not infer certification from a completed test alone."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Rework",
+     "definition": "SMRP 4.1, applied to the associated meter work or exception workload.",
+     "cite": "SMRP Best Practices, 7th Edition, Pillar 5 Work Management"
+    }
+   ],
+   "variants": [
+    "Pass and return to eligible stock",
+    "Fail and route for repair or refurbishment",
+    "Fail and condemn for disposal"
+   ],
+   "notation": {
+    "class": "DMN",
+    "why": "The output is a classification, eligibility, disposition or calculated value.",
+    "artifact": "models/6.4.3-certify-accuracy-and-record-test-result.dmn"
+   },
+   "en17007": {
+    "process": "DTA.1",
+    "title": "Store and validate the raw data in a library and/or a database",
+    "clause": "6.10"
+   },
+   "sources": [
+    {
+     "for": "process alignment",
+     "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.10 DTA.1 Store and validate the raw data in a library and/or a database",
+     "status": "verified"
+    },
+    {
+     "for": "metering scope and interfaces",
+     "cite": "IEC 61968-9:2024 Ed. 3, meter reading and control scope; detailed accuracy and calibration rules are not supplied",
+     "status": "consensus"
+    },
+    {
+     "for": "components, messages and work data",
+     "cite": "IEC 61968-6:2015 cl. 4.2 and cl. 5; IEC 61968-11:2013 CIM Work package",
+     "status": "clause-verified"
+    },
+    {
+     "for": "taxonomy coverage",
+     "cite": "APQC PCF Utilities v7.2.1 category 14.3 Metering and 14.4.2 to 14.4.4 meter operations, used as structural precedent",
+     "status": "consensus"
+    },
+    {
+     "for": "activities and detailed operating rules",
+     "cite": "No permitted source states the pass/fail threshold or certification authority for meter accuracy results.",
+     "status": "judgment"
+    },
+    {
+     "for": "measure",
+     "cite": "SMRP Best Practices, 7th Edition, Pillar 5 Work Management 4.1",
+     "status": "consensus"
+    },
+    {
+     "for": "variants",
+     "cite": "EN 17007:2017 SPP.10 Assess replaced items, SPP.11 Repair replaced items and SPP.12 Disposal of faulty or damaged items",
+     "status": "verified"
+    }
+   ],
+   "provenance": {
+    "basis": "standard",
+    "primary": "IEC 61968-9:2024 Ed. 3, meter reading and control scope; detailed accuracy and calibration rules are not supplied"
+   }
+  },
+  {
+   "uid": 10169,
+   "id": "6.4.4",
+   "name": "Produce test and prover reporting",
+   "group": {
+    "id": "6.4",
+    "name": "Test, prove and certify meters",
+    "uid": 10165
+   },
+   "intent": "Produce controlled reporting from meter tests and prover activity.",
+   "activities": [
+    "Select the reporting population and period",
+    "Reconcile complete and invalid tests",
+    "Compile result and equipment-use records",
+    "Release the report to authorised recipients"
+   ],
+   "trigger": {
+    "kind": "timer",
+    "text": "A reporting period or reporting request becomes due.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "A reporting period or reporting request becomes due.",
+     "party": "MR&C",
+     "data": "WorkAsset"
+    },
+    {
+     "what": "Meter, endpoint and service-point context",
+     "party": "MR&C",
+     "data": "WorkAsset"
+    },
+    {
+     "what": "Authorised work and prior activity",
+     "party": "MAI",
+     "data": "Work"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Meter test and prover report",
+     "party": "MR&C",
+     "data": "WorkAsset"
+    },
+    {
+     "what": "Activity result and exception evidence",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "systems": [
+    {
+     "component": "MR&C",
+     "role": "owning",
+     "service": "Meter reading and control"
+    },
+    {
+     "component": "MAI",
+     "role": "consuming",
+     "service": "Meter work and inspection"
+    },
+    {
+     "component": "AM",
+     "role": "reference",
+     "service": "Meter asset record"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "MAI",
+     "to": "MR&C",
+     "payload": "WorkRequest",
+     "verb": "create",
+     "pattern": "event"
+    },
+    {
+     "from": "MR&C",
+     "to": "MAI",
+     "payload": "MaintenanceOrder",
+     "verb": "reply",
+     "pattern": "request-reply"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Meter operations specialist",
+     "raci": "R"
+    },
+    {
+     "role": "Meter operations manager",
+     "raci": "A"
+    },
+    {
+     "role": "Meter test specialist",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkAsset",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "Include only reconciled valid, invalid and incomplete test populations for the stated period and test method."
+    },
+    {
+     "kind": "operational",
+     "text": "Release test and prover reporting only when equipment-use and exception records remain traceable."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Rework",
+     "definition": "SMRP 4.1, applied to the associated meter work or exception workload.",
+     "cite": "SMRP Best Practices, 7th Edition, Pillar 5 Work Management"
+    }
+   ],
+   "variants": [
+    "Periodic population-test report",
+    "Exception and failed-test report",
+    "Test-equipment use and calibration-status report"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "The process has a repeatable start, sequence and completion outcome.",
+    "artifact": "models/6.4-test-and-certify-meters.bpmn"
+   },
+   "en17007": {
+    "process": "DTA.11",
+    "title": "Calculate, save and provide access to performance and monitoring indicators",
+    "clause": "6.10"
+   },
+   "sources": [
+    {
+     "for": "process alignment",
+     "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.10 DTA.11 Calculate, save and provide access to performance and monitoring indicators",
+     "status": "verified"
+    },
+    {
+     "for": "metering scope and interfaces",
+     "cite": "IEC 61968-9:2024 Ed. 3, meter reading and control scope; detailed accuracy and calibration rules are not supplied",
+     "status": "consensus"
+    },
+    {
+     "for": "components, messages and work data",
+     "cite": "IEC 61968-6:2015 cl. 4.2 and cl. 5; IEC 61968-11:2013 CIM Work package",
+     "status": "clause-verified"
+    },
+    {
+     "for": "taxonomy coverage",
+     "cite": "APQC PCF Utilities v7.2.1 category 14.3 Metering and 14.4.2 to 14.4.4 meter operations, used as structural precedent",
+     "status": "consensus"
+    },
+    {
+     "for": "activities and detailed operating rules",
+     "cite": "No permitted source states the reporting population, period cut or release method for meter and prover test results.",
+     "status": "judgment"
+    },
+    {
+     "for": "measure",
+     "cite": "SMRP Best Practices, 7th Edition, Pillar 5 Work Management 4.1",
+     "status": "consensus"
+    },
+    {
+     "for": "variants",
+     "cite": "EN 17007:2017 DTA.11 Calculate, save and provide access to performance and monitoring indicators; report cuts are judgment",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "standard",
+    "primary": "IEC 61968-9:2024 Ed. 3, meter reading and control scope; detailed accuracy and calibration rules are not supplied"
+   }
+  },
+  {
+   "uid": 10170,
+   "id": "6.4.5",
+   "name": "Repair, refurbish or condemn meters",
+   "group": {
+    "id": "6.4",
+    "name": "Test, prove and certify meters",
+    "uid": 10165
+   },
+   "intent": "Route a failed or damaged meter to repair, refurbishment or condemnation.",
+   "activities": [
+    "Review test result and physical condition",
+    "Determine the eligible disposition",
+    "Perform or commission approved repair",
+    "Retest repaired meters",
+    "Record return to stock or condemnation"
+   ],
+   "trigger": {
+    "kind": "conditional",
+    "text": "Testing or inspection finds a meter unfit for direct reuse.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Testing or inspection finds a meter unfit for direct reuse.",
+     "party": "MR&C",
+     "data": "WorkAsset"
+    },
+    {
+     "what": "Meter, endpoint and service-point context",
+     "party": "MR&C",
+     "data": "WorkAsset"
+    },
+    {
+     "what": "Authorised work and prior activity",
+     "party": "MAI",
+     "data": "Work"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Repaired meter or condemnation record",
+     "party": "MR&C",
+     "data": "WorkAsset"
+    },
+    {
+     "what": "Activity result and exception evidence",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "systems": [
+    {
+     "component": "MR&C",
+     "role": "owning",
+     "service": "Meter reading and control"
+    },
+    {
+     "component": "MAI",
+     "role": "consuming",
+     "service": "Meter work and inspection"
+    },
+    {
+     "component": "AM",
+     "role": "reference",
+     "service": "Meter asset record"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "MAI",
+     "to": "MR&C",
+     "payload": "WorkRequest",
+     "verb": "create",
+     "pattern": "event"
+    },
+    {
+     "from": "MR&C",
+     "to": "MAI",
+     "payload": "MaintenanceOrder",
+     "verb": "reply",
+     "pattern": "request-reply"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Meter operations specialist",
+     "raci": "R"
+    },
+    {
+     "role": "Meter operations manager",
+     "raci": "A"
+    },
+    {
+     "role": "Meter test specialist",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkAsset",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "Repair or refurbish only a meter eligible under its test result, physical condition and approved disposition."
+    },
+    {
+     "kind": "operational",
+     "text": "A repaired meter returns to stock only after required retest and recorded acceptance; condemnation ends reuse eligibility."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Rework",
+     "definition": "SMRP 4.1, applied to the associated meter work or exception workload.",
+     "cite": "SMRP Best Practices, 7th Edition, Pillar 5 Work Management"
+    }
+   ],
+   "variants": [
+    "Repair and retest",
+    "Refurbish and recertify for reuse",
+    "Condemn as uneconomic or unfit for repair"
+   ],
+   "notation": {
+    "class": "CMMN",
+    "why": "Evidence determines which investigative or corrective actions are appropriate and their order.",
+    "artifact": "models/6.4.5-repair-refurbish-or-condemn-meters.cmmn"
+   },
+   "en17007": {
+    "process": "SPP.11",
+    "title": "Repair replaced items",
+    "clause": "6.16"
+   },
+   "sources": [
+    {
+     "for": "process alignment",
+     "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.16 SPP.11 Repair replaced items",
+     "status": "verified"
+    },
+    {
+     "for": "metering scope and interfaces",
+     "cite": "IEC 61968-9:2024 Ed. 3, meter reading and control scope; detailed accuracy and calibration rules are not supplied",
+     "status": "consensus"
+    },
+    {
+     "for": "components, messages and work data",
+     "cite": "IEC 61968-6:2015 cl. 4.2 and cl. 5; IEC 61968-11:2013 CIM Work package",
+     "status": "clause-verified"
+    },
+    {
+     "for": "taxonomy coverage",
+     "cite": "APQC PCF Utilities v7.2.1 category 14.3 Metering and 14.4.2 to 14.4.4 meter operations, used as structural precedent",
+     "status": "consensus"
+    },
+    {
+     "for": "activities and detailed operating rules",
+     "cite": "No permitted source states the repair eligibility, retest or condemnation rule for utility meters.",
+     "status": "judgment"
+    },
+    {
+     "for": "measure",
+     "cite": "SMRP Best Practices, 7th Edition, Pillar 5 Work Management 4.1",
+     "status": "consensus"
+    },
+    {
+     "for": "variants",
+     "cite": "EN 17007:2017 SPP.10 Assess replaced items, SPP.11 Repair replaced items and SPP.12 Disposal of faulty or damaged items",
+     "status": "verified"
+    }
+   ],
+   "provenance": {
+    "basis": "standard",
+    "primary": "IEC 61968-9:2024 Ed. 3, meter reading and control scope; detailed accuracy and calibration rules are not supplied"
+   }
+  },
+  {
+   "uid": 10171,
+   "id": "6.4.6",
+   "name": "Maintain test equipment calibration",
+   "group": {
+    "id": "6.4",
+    "name": "Test, prove and certify meters",
+    "uid": 10165
+   },
+   "intent": "Keep meter test equipment within its authorised calibration status.",
+   "activities": [
+    "Maintain the equipment register and calibration due date",
+    "Remove overdue or failed equipment from use",
+    "Arrange calibration or verification",
+    "Record result and next due date"
+   ],
+   "trigger": {
+    "kind": "timer",
+    "text": "Test equipment reaches its calibration due date or fails a check.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Test equipment reaches its calibration due date or fails a check.",
+     "party": "MR&C",
+     "data": "WorkAsset"
+    },
+    {
+     "what": "Meter, endpoint and service-point context",
+     "party": "MR&C",
+     "data": "WorkAsset"
+    },
+    {
+     "what": "Authorised work and prior activity",
+     "party": "MAI",
+     "data": "Work"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Current calibration status",
+     "party": "MR&C",
+     "data": "WorkAsset"
+    },
+    {
+     "what": "Activity result and exception evidence",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "systems": [
+    {
+     "component": "MR&C",
+     "role": "owning",
+     "service": "Meter reading and control"
+    },
+    {
+     "component": "MAI",
+     "role": "consuming",
+     "service": "Meter work and inspection"
+    },
+    {
+     "component": "AM",
+     "role": "reference",
+     "service": "Meter asset record"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "MAI",
+     "to": "MR&C",
+     "payload": "WorkRequest",
+     "verb": "create",
+     "pattern": "event"
+    },
+    {
+     "from": "MR&C",
+     "to": "MAI",
+     "payload": "MaintenanceOrder",
+     "verb": "reply",
+     "pattern": "request-reply"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Meter operations specialist",
+     "raci": "R"
+    },
+    {
+     "role": "Meter operations manager",
+     "raci": "A"
+    },
+    {
+     "role": "Meter test specialist",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkAsset",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "Remove calibration equipment from use when its due date lapses or verification fails."
+    },
+    {
+     "kind": "operational",
+     "text": "Restore equipment to service only after an accepted calibration or verification result and a recorded next due date."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Rework",
+     "definition": "SMRP 4.1, applied to the associated meter work or exception workload.",
+     "cite": "SMRP Best Practices, 7th Edition, Pillar 5 Work Management"
+    }
+   ],
+   "variants": [
+    "Scheduled calibration at the due date",
+    "Intermediate check failure removes equipment from use",
+    "Calibration after repair or adjustment"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "The process has a repeatable start, sequence and completion outcome.",
+    "artifact": "models/6.4-test-and-certify-meters.bpmn"
+   },
+   "en17007": {
+    "process": "TOL.3",
+    "title": "Maintain and/or Update the support equipment",
+    "clause": "6.17"
+   },
+   "sources": [
+    {
+     "for": "process alignment",
+     "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.17 TOL.3 Maintain and/or Update the support equipment",
+     "status": "verified"
+    },
+    {
+     "for": "metering scope and interfaces",
+     "cite": "IEC 61968-9:2024 Ed. 3, meter reading and control scope; detailed accuracy and calibration rules are not supplied",
+     "status": "consensus"
+    },
+    {
+     "for": "components, messages and work data",
+     "cite": "IEC 61968-6:2015 cl. 4.2 and cl. 5; IEC 61968-11:2013 CIM Work package",
+     "status": "clause-verified"
+    },
+    {
+     "for": "taxonomy coverage",
+     "cite": "APQC PCF Utilities v7.2.1 category 14.3 Metering and 14.4.2 to 14.4.4 meter operations, used as structural precedent",
+     "status": "consensus"
+    },
+    {
+     "for": "activities and detailed operating rules",
+     "cite": "No permitted source states the calibration interval or service-restoration rule for meter test equipment.",
+     "status": "judgment"
+    },
+    {
+     "for": "measure",
+     "cite": "SMRP Best Practices, 7th Edition, Pillar 5 Work Management 4.1",
+     "status": "consensus"
+    },
+    {
+     "for": "variants",
+     "cite": "EN 17007:2017 TOL.3 Maintain and/or Update the support equipment; calibration event branches are judgment",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "standard",
+    "primary": "IEC 61968-9:2024 Ed. 3, meter reading and control scope; detailed accuracy and calibration rules are not supplied"
+   }
+  },
+  {
+   "uid": 10173,
+   "id": "6.5.1",
+   "name": "Perform manual or mobile meter reading",
+   "group": {
+    "id": "6.5",
+    "name": "Obtain and validate measurement data",
+    "uid": 10172
+   },
+   "intent": "Obtain a meter read with its device, location, time and exception context.",
+   "activities": [
+    "Select the assigned reading population",
+    "Confirm meter and service-point identity",
+    "Capture read, date and exception evidence",
+    "Submit the reading result"
+   ],
+   "trigger": {
+    "kind": "timer",
+    "text": "A scheduled meter-reading cycle or special read becomes due.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "A scheduled meter-reading cycle or special read becomes due.",
+     "party": "MR&C",
+     "data": "WorkAsset"
+    },
+    {
+     "what": "Meter, endpoint and service-point context",
+     "party": "MR&C",
+     "data": "WorkAsset"
+    },
+    {
+     "what": "Authorised work and prior activity",
+     "party": "MAI",
+     "data": "Work"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Meter read and exception result",
+     "party": "MR&C",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Activity result and exception evidence",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "systems": [
+    {
+     "component": "MR&C",
+     "role": "owning",
+     "service": "Meter reading and control"
+    },
+    {
+     "component": "MAI",
+     "role": "consuming",
+     "service": "Meter work and inspection"
+    },
+    {
+     "component": "AM",
+     "role": "reference",
+     "service": "Meter asset record"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "MAI",
+     "to": "MR&C",
+     "payload": "WorkRequest",
+     "verb": "create",
+     "pattern": "event"
+    },
+    {
+     "from": "MR&C",
+     "to": "MAI",
+     "payload": "MaintenanceOrder",
+     "verb": "reply",
+     "pattern": "request-reply"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Meter operations specialist",
+     "raci": "R"
+    },
+    {
+     "role": "Meter operations manager",
+     "raci": "A"
+    },
+    {
+     "role": "Asset information steward",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkAsset",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "Submit a reading only when meter identity and service point agree; otherwise record the read as an exception."
+    },
+    {
+     "kind": "operational",
+     "text": "Retain read date, collection channel and exception evidence with the measured value."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Work Order Cycle Time",
+     "definition": "SMRP 5.4.7, applied to the associated meter work or exception workload.",
+     "cite": "SMRP Best Practices, 7th Edition, Pillar 5 Work Management"
+    }
+   ],
+   "variants": [
+    "Walk-up read recorded at the meter",
+    "Drive-by automated meter reading collection",
+    "Fixed-network advanced metering read with no field visit"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "The process has a repeatable start, sequence and completion outcome.",
+    "artifact": "models/6.5-obtain-and-validate-reads.bpmn"
+   },
+   "en17007": {
+    "process": "IMP.1",
+    "title": "Collect data",
+    "clause": "6.6"
+   },
+   "sources": [
+    {
+     "for": "process alignment",
+     "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.6 IMP.1 Collect data",
+     "status": "verified"
+    },
+    {
+     "for": "metering scope and interfaces",
+     "cite": "IEC 61968-9:2024 Ed. 3, meter reading and control",
+     "status": "consensus"
+    },
+    {
+     "for": "components, messages and work data",
+     "cite": "IEC 61968-6:2015 cl. 4.2 and cl. 5; IEC 61968-11:2013 CIM Work package",
+     "status": "clause-verified"
+    },
+    {
+     "for": "taxonomy coverage",
+     "cite": "APQC PCF Utilities v7.2.1 category 14.3 Metering and 14.4.2 to 14.4.4 meter operations, used as structural precedent",
+     "status": "consensus"
+    },
+    {
+     "for": "activities and detailed operating rules",
+     "cite": "No permitted source states the route, exception coding or evidence rule for manual and mobile meter reading.",
+     "status": "judgment"
+    },
+    {
+     "for": "measure",
+     "cite": "SMRP Best Practices, 7th Edition, Pillar 5 Work Management 5.4.7",
+     "status": "consensus"
+    },
+    {
+     "for": "variants",
+     "cite": "APQC PCF Utilities v7.2.1 14.3.2 Collect meter data, pcf_id 19311; collection-channel branches are judgment",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "standard",
+    "primary": "IEC 61968-9:2024 Ed. 3, meter reading and control"
+   }
+  },
+  {
+   "uid": 10174,
+   "id": "6.5.2",
+   "name": "Validate reads and resolve exceptions",
+   "group": {
+    "id": "6.5",
+    "name": "Obtain and validate measurement data",
+    "uid": 10172
+   },
+   "intent": "Determine whether a meter read is usable and route exceptions for correction.",
+   "activities": [
+    "Validate identity, sequence and basic consistency",
+    "Compare the reading with available context",
+    "Classify valid, suspect or rejected",
+    "Accept the read or create an exception action"
+   ],
+   "trigger": {
+    "kind": "message",
+    "text": "A meter reading result is received.",
+    "cim": "WorkRequest.create"
+   },
+   "inputs": [
+    {
+     "what": "A meter reading result is received.",
+     "party": "MR&C",
+     "data": "WorkAsset"
+    },
+    {
+     "what": "Meter, endpoint and service-point context",
+     "party": "MR&C",
+     "data": "WorkAsset"
+    },
+    {
+     "what": "Authorised work and prior activity",
+     "party": "MAI",
+     "data": "Work"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Validated read or exception action",
+     "party": "MR&C",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Activity result and exception evidence",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "systems": [
+    {
+     "component": "MR&C",
+     "role": "owning",
+     "service": "Meter reading and control"
+    },
+    {
+     "component": "MAI",
+     "role": "consuming",
+     "service": "Meter work and inspection"
+    },
+    {
+     "component": "AM",
+     "role": "reference",
+     "service": "Meter asset record"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "MAI",
+     "to": "MR&C",
+     "payload": "WorkRequest",
+     "verb": "create",
+     "pattern": "event"
+    },
+    {
+     "from": "MR&C",
+     "to": "MAI",
+     "payload": "MaintenanceOrder",
+     "verb": "reply",
+     "pattern": "request-reply"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Meter operations specialist",
+     "raci": "R"
+    },
+    {
+     "role": "Meter operations manager",
+     "raci": "A"
+    },
+    {
+     "role": "Asset information steward",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkAsset",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "Accept only a read that passes identity, sequence and applicable consistency checks."
+    },
+    {
+     "kind": "operational",
+     "text": "A suspect or rejected read remains marked and produces an exception action; validation does not silently replace it."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Work Order Cycle Time",
+     "definition": "SMRP 5.4.7, applied to the associated meter work or exception workload.",
+     "cite": "SMRP Best Practices, 7th Edition, Pillar 5 Work Management"
+    }
+   ],
+   "variants": [
+    "Read accepted without correction",
+    "Read held as suspect and corrected or estimated",
+    "Read rejected and routed to field investigation"
+   ],
+   "notation": {
+    "class": "DMN",
+    "why": "The output is a classification, eligibility, disposition or calculated value.",
+    "artifact": "models/6.5.2-validate-reads-and-resolve-exceptions.dmn"
+   },
+   "en17007": {
+    "process": "DTA.1",
+    "title": "Store and validate the raw data in a library and/or a database",
+    "clause": "6.10"
+   },
+   "sources": [
+    {
+     "for": "process alignment",
+     "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.10 DTA.1 Store and validate the raw data in a library and/or a database",
+     "status": "verified"
+    },
+    {
+     "for": "metering scope and interfaces",
+     "cite": "IEC 61968-9:2024 Ed. 3, meter reading and control",
+     "status": "consensus"
+    },
+    {
+     "for": "components, messages and work data",
+     "cite": "IEC 61968-6:2015 cl. 4.2 and cl. 5; IEC 61968-11:2013 CIM Work package",
+     "status": "clause-verified"
+    },
+    {
+     "for": "taxonomy coverage",
+     "cite": "APQC PCF Utilities v7.2.1 category 14.3 Metering and 14.4.2 to 14.4.4 meter operations, used as structural precedent",
+     "status": "consensus"
+    },
+    {
+     "for": "activities and detailed operating rules",
+     "cite": "No permitted source states the validation thresholds or resolution sequence for meter-read exceptions.",
+     "status": "judgment"
+    },
+    {
+     "for": "measure",
+     "cite": "SMRP Best Practices, 7th Edition, Pillar 5 Work Management 5.4.7",
+     "status": "consensus"
+    },
+    {
+     "for": "variants",
+     "cite": "APQC PCF Utilities v7.2.1 14.3.3 Process meter data, pcf_id 19317; validation outcomes are judgment",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "standard",
+    "primary": "IEC 61968-9:2024 Ed. 3, meter reading and control"
+   }
+  },
+  {
+   "uid": 10175,
+   "id": "6.5.3",
+   "name": "Estimate consumption where read unavailable",
+   "group": {
+    "id": "6.5",
+    "name": "Obtain and validate measurement data",
+    "uid": 10172
+   },
+   "intent": "Produce and identify an estimated consumption value when a usable read is unavailable.",
+   "activities": [
+    "Confirm that no usable read is available",
+    "Select the authorised estimation rule and inputs",
+    "Calculate the estimate",
+    "Mark and release the value as estimated"
+   ],
+   "trigger": {
+    "kind": "conditional",
+    "text": "Reading validation finds no usable measurement for the period.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Reading validation finds no usable measurement for the period.",
+     "party": "MR&C",
+     "data": "WorkAsset"
+    },
+    {
+     "what": "Meter, endpoint and service-point context",
+     "party": "MR&C",
+     "data": "WorkAsset"
+    },
+    {
+     "what": "Authorised work and prior activity",
+     "party": "MAI",
+     "data": "Work"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Estimated consumption value with basis",
+     "party": "MR&C",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Activity result and exception evidence",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "systems": [
+    {
+     "component": "MR&C",
+     "role": "owning",
+     "service": "Meter reading and control"
+    },
+    {
+     "component": "MAI",
+     "role": "consuming",
+     "service": "Meter work and inspection"
+    },
+    {
+     "component": "AM",
+     "role": "reference",
+     "service": "Meter asset record"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "MAI",
+     "to": "MR&C",
+     "payload": "WorkRequest",
+     "verb": "create",
+     "pattern": "event"
+    },
+    {
+     "from": "MR&C",
+     "to": "MAI",
+     "payload": "MaintenanceOrder",
+     "verb": "reply",
+     "pattern": "request-reply"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Meter operations specialist",
+     "raci": "R"
+    },
+    {
+     "role": "Meter operations manager",
+     "raci": "A"
+    },
+    {
+     "role": "Asset information steward",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkAsset",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "Estimate consumption only after confirming no usable read is available and selecting the authorised rule and inputs."
+    },
+    {
+     "kind": "operational",
+     "text": "Mark the released value as estimated and retain the rule, period and source inputs used."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Work Order Cycle Time",
+     "definition": "SMRP 5.4.7, applied to the associated meter work or exception workload.",
+     "cite": "SMRP Best Practices, 7th Edition, Pillar 5 Work Management"
+    }
+   ],
+   "variants": [
+    "Estimate from the premise reading history",
+    "Estimate from an authorised comparable population",
+    "Insufficient history routed for manual determination"
+   ],
+   "notation": {
+    "class": "DMN",
+    "why": "The output is a classification, eligibility, disposition or calculated value.",
+    "artifact": "models/6.5.3-estimate-consumption-where-read-unavailable.dmn"
+   },
+   "en17007": {
+    "process": "DTA.4",
+    "title": "Evaluate and analyse maintenance data and HSE data",
+    "clause": "6.10"
+   },
+   "sources": [
+    {
+     "for": "process alignment",
+     "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.10 DTA.4 Evaluate and analyse maintenance data and HSE data",
+     "status": "verified"
+    },
+    {
+     "for": "metering scope and interfaces",
+     "cite": "IEC 61968-9:2024 Ed. 3, meter reading and control",
+     "status": "consensus"
+    },
+    {
+     "for": "components, messages and work data",
+     "cite": "IEC 61968-6:2015 cl. 4.2 and cl. 5; IEC 61968-11:2013 CIM Work package",
+     "status": "clause-verified"
+    },
+    {
+     "for": "taxonomy coverage",
+     "cite": "APQC PCF Utilities v7.2.1 category 14.3 Metering and 14.4.2 to 14.4.4 meter operations, used as structural precedent",
+     "status": "consensus"
+    },
+    {
+     "for": "activities and detailed operating rules",
+     "cite": "No permitted source states a consumption estimation formula, input hierarchy or release rule when no read is available.",
+     "status": "judgment"
+    },
+    {
+     "for": "measure",
+     "cite": "SMRP Best Practices, 7th Edition, Pillar 5 Work Management 5.4.7",
+     "status": "consensus"
+    },
+    {
+     "for": "variants",
+     "cite": "APQC PCF Utilities v7.2.1 14.3.3 Process meter data, pcf_id 19317; the permitted pack supplies no estimation method, so the routes are judgment",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "standard",
+    "primary": "IEC 61968-9:2024 Ed. 3, meter reading and control"
+   }
+  },
+  {
+   "uid": 10176,
+   "id": "6.5.4",
+   "name": "Investigate measurement anomalies",
+   "group": {
+    "id": "6.5",
+    "name": "Obtain and validate measurement data",
+    "uid": 10172
+   },
+   "intent": "Determine the cause and required response for an anomalous measurement pattern.",
+   "activities": [
+    "Review the anomaly and available history",
+    "Check device, communication and field evidence",
+    "Classify the likely cause",
+    "Correct data where authorised or raise field work"
+   ],
+   "trigger": {
+    "kind": "signal",
+    "text": "Validation or monitoring identifies a measurement anomaly.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Validation or monitoring identifies a measurement anomaly.",
+     "party": "MR&C",
+     "data": "WorkAsset"
+    },
+    {
+     "what": "Meter, endpoint and service-point context",
+     "party": "MR&C",
+     "data": "WorkAsset"
+    },
+    {
+     "what": "Authorised work and prior activity",
+     "party": "MAI",
+     "data": "Work"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Anomaly finding and correction route",
+     "party": "MR&C",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Activity result and exception evidence",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "systems": [
+    {
+     "component": "MR&C",
+     "role": "owning",
+     "service": "Meter reading and control"
+    },
+    {
+     "component": "MAI",
+     "role": "consuming",
+     "service": "Meter work and inspection"
+    },
+    {
+     "component": "AM",
+     "role": "reference",
+     "service": "Meter asset record"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "MAI",
+     "to": "MR&C",
+     "payload": "WorkRequest",
+     "verb": "create",
+     "pattern": "event"
+    },
+    {
+     "from": "MR&C",
+     "to": "MAI",
+     "payload": "MaintenanceOrder",
+     "verb": "reply",
+     "pattern": "request-reply"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Meter operations specialist",
+     "raci": "R"
+    },
+    {
+     "role": "Meter operations manager",
+     "raci": "A"
+    },
+    {
+     "role": "Asset information steward",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkAsset",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "Do not correct measurement data until the device, communication or field cause is supported by recorded evidence."
+    },
+    {
+     "kind": "operational",
+     "text": "Where evidence cannot resolve the anomaly, raise field work rather than closing the exception."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Work Order Cycle Time",
+     "definition": "SMRP 5.4.7, applied to the associated meter work or exception workload.",
+     "cite": "SMRP Best Practices, 7th Edition, Pillar 5 Work Management"
+    }
+   ],
+   "variants": [
+    "Meter or register condition anomaly",
+    "Communication-path anomaly",
+    "Consumption-pattern anomaly requiring field evidence"
+   ],
+   "notation": {
+    "class": "CMMN",
+    "why": "Evidence determines which investigative or corrective actions are appropriate and their order.",
+    "artifact": "models/6.5.4-investigate-measurement-anomalies.cmmn"
+   },
+   "en17007": {
+    "process": "COR.2",
+    "title": "Diagnose the state of the items in question",
+    "clause": "6.4.3"
+   },
+   "sources": [
+    {
+     "for": "process alignment",
+     "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.4.3 COR.2 Diagnose the state of the items in question",
+     "status": "verified"
+    },
+    {
+     "for": "metering scope and interfaces",
+     "cite": "IEC 61968-9:2024 Ed. 3, meter reading and control",
+     "status": "consensus"
+    },
+    {
+     "for": "components, messages and work data",
+     "cite": "IEC 61968-6:2015 cl. 4.2 and cl. 5; IEC 61968-11:2013 CIM Work package",
+     "status": "clause-verified"
+    },
+    {
+     "for": "taxonomy coverage",
+     "cite": "APQC PCF Utilities v7.2.1 category 14.3 Metering and 14.4.2 to 14.4.4 meter operations, used as structural precedent",
+     "status": "consensus"
+    },
+    {
+     "for": "activities and detailed operating rules",
+     "cite": "No permitted source states anomaly classification, correction threshold or field-work escalation rule.",
+     "status": "judgment"
+    },
+    {
+     "for": "measure",
+     "cite": "SMRP Best Practices, 7th Edition, Pillar 5 Work Management 5.4.7",
+     "status": "consensus"
+    },
+    {
+     "for": "variants",
+     "cite": "EN 17007:2017 COR.2 Diagnose the state of the items in question; anomaly classes are judgment",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "standard",
+    "primary": "IEC 61968-9:2024 Ed. 3, meter reading and control"
+   }
+  },
+  {
+   "uid": 10178,
+   "id": "6.6.1",
+   "name": "Detect suspected theft or tamper",
+   "group": {
+    "id": "6.6",
+    "name": "Protect revenue",
+    "uid": 10177
+   },
+   "intent": "Identify measurement patterns or field evidence that require a revenue-protection review.",
+   "activities": [
+    "Receive an anomaly, alarm or field report",
+    "Compare the evidence with authorised detection rules",
+    "Classify the suspicion and urgency",
+    "Create a controlled investigation referral"
+   ],
+   "trigger": {
+    "kind": "signal",
+    "text": "A measurement anomaly, tamper indication or field report is received.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "A measurement anomaly, tamper indication or field report is received.",
+     "party": "MR&C",
+     "data": "WorkAsset"
+    },
+    {
+     "what": "Meter, endpoint and service-point context",
+     "party": "MR&C",
+     "data": "WorkAsset"
+    },
+    {
+     "what": "Authorised work and prior activity",
+     "party": "MAI",
+     "data": "Work"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Suspected tamper referral",
+     "party": "MR&C",
+     "data": "WorkAsset"
+    },
+    {
+     "what": "Activity result and exception evidence",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "systems": [
+    {
+     "component": "MR&C",
+     "role": "owning",
+     "service": "Meter reading and control"
+    },
+    {
+     "component": "MAI",
+     "role": "owning",
+     "service": "Meter work and inspection"
+    },
+    {
+     "component": "AM",
+     "role": "reference",
+     "service": "Meter asset record"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "MAI",
+     "to": "MR&C",
+     "payload": "WorkRequest",
+     "verb": "create",
+     "pattern": "event"
+    },
+    {
+     "from": "MR&C",
+     "to": "MAI",
+     "payload": "MaintenanceOrder",
+     "verb": "reply",
+     "pattern": "request-reply"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Meter field technician",
+     "raci": "R"
+    },
+    {
+     "role": "Meter operations manager",
+     "raci": "A"
+    },
+    {
+     "role": "Asset information steward",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkAsset",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "Create an investigation referral only from recorded alarm, anomaly or field evidence evaluated against authorised detection rules."
+    },
+    {
+     "kind": "operational",
+     "text": "Limit the referral to suspicion and urgency; detection does not establish theft, tamper or recoverable revenue."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Reactive Work",
+     "definition": "SMRP 5.4.1, applied to the associated meter work or exception workload.",
+     "cite": "SMRP Best Practices, 7th Edition, Pillar 5 Work Management"
+    }
+   ],
+   "variants": [
+    "Tamper indication reported by the meter",
+    "Consumption anomaly identified through analysis",
+    "Interference observed during field work"
+   ],
+   "notation": {
+    "class": "DMN",
+    "why": "The output is a classification, eligibility, disposition or calculated value.",
+    "artifact": "models/6.6.1-detect-suspected-theft-or-tamper.dmn"
+   },
+   "en17007": {
+    "process": "COR.1",
+    "title": "Classify the actual events",
+    "clause": "6.4.2"
+   },
+   "sources": [
+    {
+     "for": "process alignment",
+     "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.4.2 COR.1 Classify the actual events",
+     "status": "verified"
+    },
+    {
+     "for": "metering scope and interfaces",
+     "cite": "IEC 61968-9:2024 Ed. 3, meter reading and control",
+     "status": "consensus"
+    },
+    {
+     "for": "components, messages and work data",
+     "cite": "IEC 61968-6:2015 cl. 4.2 and cl. 5; IEC 61968-11:2013 CIM Work package",
+     "status": "clause-verified"
+    },
+    {
+     "for": "taxonomy coverage",
+     "cite": "APQC PCF Utilities v7.2.1 category 14.3 Metering and 14.4.2 to 14.4.4 meter operations, used as structural precedent",
+     "status": "consensus"
+    },
+    {
+     "for": "activities and detailed operating rules",
+     "cite": "No permitted source states theft or tamper detection thresholds, urgency rule or referral standard.",
+     "status": "judgment"
+    },
+    {
+     "for": "measure",
+     "cite": "SMRP Best Practices, 7th Edition, Pillar 5 Work Management 5.4.1",
+     "status": "consensus"
+    },
+    {
+     "for": "field safety controls",
+     "cite": "29 CFR 1910.269(a)(3), (c), (d) and (m), as applicable to electric utility work; 29 CFR 1910.147 applies to gas distribution energy control",
+     "status": "regulation"
+    },
+    {
+     "for": "variants",
+     "cite": "EN 17007:2017 COR.1 Classify the actual events; detection channels are judgment because the permitted pack has no revenue-protection practice",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "standard",
+    "primary": "IEC 61968-9:2024 Ed. 3, meter reading and control"
+   }
+  },
+  {
+   "uid": 10179,
+   "id": "6.6.2",
+   "name": "Investigate revenue anomaly in the field",
+   "group": {
+    "id": "6.6",
+    "name": "Protect revenue",
+    "uid": 10177
+   },
+   "intent": "Collect field evidence and establish the condition behind a revenue anomaly.",
+   "activities": [
+    "Review the controlled investigation referral",
+    "Verify meter, service point and safety conditions",
+    "Inspect and record meter, seals and connections",
+    "Preserve evidence and classify the finding",
+    "Raise remediation work where required"
+   ],
+   "trigger": {
+    "kind": "message",
+    "text": "An authorised revenue-protection investigation is released.",
+    "cim": "WorkRequest.create"
+   },
+   "inputs": [
+    {
+     "what": "An authorised revenue-protection investigation is released.",
+     "party": "MR&C",
+     "data": "WorkAsset"
+    },
+    {
+     "what": "Meter, endpoint and service-point context",
+     "party": "MR&C",
+     "data": "WorkAsset"
+    },
+    {
+     "what": "Authorised work and prior activity",
+     "party": "MAI",
+     "data": "Work"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Field investigation finding and evidence record",
+     "party": "MR&C",
+     "data": "WorkAsset"
+    },
+    {
+     "what": "Activity result and exception evidence",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "systems": [
+    {
+     "component": "MR&C",
+     "role": "owning",
+     "service": "Meter reading and control"
+    },
+    {
+     "component": "MAI",
+     "role": "owning",
+     "service": "Meter work and inspection"
+    },
+    {
+     "component": "AM",
+     "role": "reference",
+     "service": "Meter asset record"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "MAI",
+     "to": "MR&C",
+     "payload": "WorkRequest",
+     "verb": "create",
+     "pattern": "event"
+    },
+    {
+     "from": "MR&C",
+     "to": "MAI",
+     "payload": "MaintenanceOrder",
+     "verb": "reply",
+     "pattern": "request-reply"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Meter field technician",
+     "raci": "R"
+    },
+    {
+     "role": "Meter operations manager",
+     "raci": "A"
+    },
+    {
+     "role": "Asset information steward",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkAsset",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "Conduct the field investigation under controlled access and preserve meter, seal, connection and site evidence."
+    },
+    {
+     "kind": "operational",
+     "text": "Classify the finding without calculating recovery; authorised remediation and financial adjustment remain downstream."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Reactive Work",
+     "definition": "SMRP 5.4.1, applied to the associated meter work or exception workload.",
+     "cite": "SMRP Best Practices, 7th Edition, Pillar 5 Work Management"
+    }
+   ],
+   "variants": [
+    "No interference found and referral closed",
+    "Unsafe condition requires immediate corrective work",
+    "Evidence confirms interference and is retained"
+   ],
+   "notation": {
+    "class": "CMMN",
+    "why": "Evidence determines which investigative or corrective actions are appropriate and their order.",
+    "artifact": "models/6.6.2-investigate-revenue-anomaly-in-the-field.cmmn"
+   },
+   "en17007": {
+    "process": "COR.2",
+    "title": "Diagnose the state of the items in question",
+    "clause": "6.4.3"
+   },
+   "sources": [
+    {
+     "for": "process alignment",
+     "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.4.3 COR.2 Diagnose the state of the items in question",
+     "status": "verified"
+    },
+    {
+     "for": "metering scope and interfaces",
+     "cite": "IEC 61968-9:2024 Ed. 3, meter reading and control",
+     "status": "consensus"
+    },
+    {
+     "for": "components, messages and work data",
+     "cite": "IEC 61968-6:2015 cl. 4.2 and cl. 5; IEC 61968-11:2013 CIM Work package",
+     "status": "clause-verified"
+    },
+    {
+     "for": "taxonomy coverage",
+     "cite": "APQC PCF Utilities v7.2.1 category 14.3 Metering and 14.4.2 to 14.4.4 meter operations, used as structural precedent",
+     "status": "consensus"
+    },
+    {
+     "for": "activities and detailed operating rules",
+     "cite": "No permitted source states an evidence protocol or outcome classification for field investigation of a revenue anomaly.",
+     "status": "judgment"
+    },
+    {
+     "for": "measure",
+     "cite": "SMRP Best Practices, 7th Edition, Pillar 5 Work Management 5.4.1",
+     "status": "consensus"
+    },
+    {
+     "for": "field safety controls",
+     "cite": "29 CFR 1910.269(a)(3), (c), (d) and (m), as applicable to electric utility work; 29 CFR 1910.147 applies to gas distribution energy control",
+     "status": "regulation"
+    },
+    {
+     "for": "variants",
+     "cite": "EN 17007:2017 COR.2 Diagnose the state of the items in question; investigation outcomes are judgment",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "standard",
+    "primary": "IEC 61968-9:2024 Ed. 3, meter reading and control"
+   }
+  },
+  {
+   "uid": 10180,
+   "id": "6.6.3",
+   "name": "Remediate and recover unbilled revenue",
+   "group": {
+    "id": "6.6",
+    "name": "Protect revenue",
+    "uid": 10177
+   },
+   "intent": "Correct the metering condition and refer supported consumption adjustments for recovery.",
+   "activities": [
+    "Review the authorised investigation finding",
+    "Correct or isolate the metering condition through authorised work",
+    "Determine the supported adjustment period and evidence",
+    "Refer the adjustment to customer and financial processing",
+    "Record completion and retained evidence"
+   ],
+   "trigger": {
+    "kind": "message",
+    "text": "A revenue investigation confirms a remediable condition.",
+    "cim": "WorkRequest.create"
+   },
+   "inputs": [
+    {
+     "what": "A revenue investigation confirms a remediable condition.",
+     "party": "MR&C",
+     "data": "WorkAsset"
+    },
+    {
+     "what": "Meter, endpoint and service-point context",
+     "party": "MR&C",
+     "data": "WorkAsset"
+    },
+    {
+     "what": "Authorised work and prior activity",
+     "party": "MAI",
+     "data": "Work"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Corrected condition and supported adjustment referral",
+     "party": "MR&C",
+     "data": "WorkAsset"
+    },
+    {
+     "what": "Activity result and exception evidence",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "systems": [
+    {
+     "component": "MR&C",
+     "role": "owning",
+     "service": "Meter reading and control"
+    },
+    {
+     "component": "MAI",
+     "role": "owning",
+     "service": "Meter work and inspection"
+    },
+    {
+     "component": "AM",
+     "role": "reference",
+     "service": "Meter asset record"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "MAI",
+     "to": "MR&C",
+     "payload": "WorkRequest",
+     "verb": "create",
+     "pattern": "event"
+    },
+    {
+     "from": "MR&C",
+     "to": "MAI",
+     "payload": "MaintenanceOrder",
+     "verb": "reply",
+     "pattern": "request-reply"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Meter field technician",
+     "raci": "R"
+    },
+    {
+     "role": "Meter operations manager",
+     "raci": "A"
+    },
+    {
+     "role": "Asset information steward",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkAsset",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "Correct or isolate the metering condition only from an authorised investigation finding and work route."
+    },
+    {
+     "kind": "operational",
+     "text": "Refer the supported adjustment period and evidence to customer and financial processing; field remediation does not post recovery."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Reactive Work",
+     "definition": "SMRP 5.4.1, applied to the associated meter work or exception workload.",
+     "cite": "SMRP Best Practices, 7th Edition, Pillar 5 Work Management"
+    }
+   ],
+   "variants": [
+    "Metering condition corrected without consumption adjustment",
+    "Supported adjustment referred for customer and financial processing",
+    "Recovery not supportable and closed with rationale"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "The process has a repeatable start, sequence and completion outcome.",
+    "artifact": "models/6.6-protect-revenue.bpmn"
+   },
+   "en17007": {
+    "process": "BUD.5",
+    "title": "Analyse, explain and, if applicable, take corrective actions",
+    "clause": "6.8"
+   },
+   "sources": [
+    {
+     "for": "process alignment",
+     "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.8 BUD.5 Analyse, explain and, if applicable, take corrective actions",
+     "status": "verified"
+    },
+    {
+     "for": "metering scope and interfaces",
+     "cite": "IEC 61968-9:2024 Ed. 3, meter reading and control",
+     "status": "consensus"
+    },
+    {
+     "for": "components, messages and work data",
+     "cite": "IEC 61968-6:2015 cl. 4.2 and cl. 5; IEC 61968-11:2013 CIM Work package",
+     "status": "clause-verified"
+    },
+    {
+     "for": "taxonomy coverage",
+     "cite": "APQC PCF Utilities v7.2.1 category 14.3 Metering and 14.4.2 to 14.4.4 meter operations, used as structural precedent",
+     "status": "consensus"
+    },
+    {
+     "for": "activities and detailed operating rules",
+     "cite": "No permitted source states the adjustment period, recovery calculation or customer disposition rule for unbilled revenue.",
+     "status": "judgment"
+    },
+    {
+     "for": "measure",
+     "cite": "SMRP Best Practices, 7th Edition, Pillar 5 Work Management 5.4.1",
+     "status": "consensus"
+    },
+    {
+     "for": "field safety controls",
+     "cite": "29 CFR 1910.269(a)(3), (c), (d) and (m), as applicable to electric utility work; 29 CFR 1910.147 applies to gas distribution energy control",
+     "status": "regulation"
+    },
+    {
+     "for": "variants",
+     "cite": "EN 17007:2017 BUD.5 Analyse, explain and, if applicable, take corrective actions; recovery outcomes are judgment",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "standard",
+    "primary": "IEC 61968-9:2024 Ed. 3, meter reading and control"
+   }
+  }
+ ]
+}

@@ -1,0 +1,3649 @@
+{
+ "category": {
+  "uid": 10603,
+  "id": "19.0",
+  "name": "Commission, Decommission and Dispose of Assets",
+  "band": "Asset Lifecycle"
+ },
+ "platform": "Grok",
+ "model": "grok-4.6",
+ "round": 6,
+ "date": "2026-08-29",
+ "schema": "eam/specs/SCHEMA.md",
+ "derivation": "STANDARDS-DERIVED. Citation statuses observe source_status_ceiling. 19.1 is APQC 10.2.6, GFMAM 6.2 and ISO 55001:2024 cl. 8.1, with 18.4.4 as the clearance producer. 19.2 is 49 CFR 192.727 and 192.629 for gas, 16 U.S.C. 824o for the electric absence, APQC 10.4.2/10.4.4 and GFMAM 6.7. 19.3 is 40 CFR 761.50/60/61/62/65/40/180 and 40 CFR 262.11/262.20/268.1. 19.4 is 18 CFR 101 EPI 10 and Definition 34, 18 CFR 125.3 Item 16(b), APQC 10.4.3. 12.1.6 retires the register; 5.3 unitises additions; 5.1.1 closes the work; 10.6.5 and 10.6.7 stay on the customer side of 19.1.3.",
+ "field_set": "EN 17007:2017 cl. 5.2 maintenance process profile, corroborated by ISO 9001:2015 cl. 4.4.1 a) to h).",
+ "gaps": [
+  "19.2.6 and 12.2.3 look like one act: both update the spatial network after an asset change. Split proposed: 19.2.6 produces as-left connectivity from the field; 12.2.3 publishes that accepted change into the spatial system of record. Written that way here. If the taxonomy keeps both names, the split has to live in the specs or one of them is a duplicate.",
+  "19.2.5 and 12.1.6 look like one act: both close the asset after it leaves service. Split: 19.2.5 produces physical disposition evidence (and 192.727(g) where it bites); 12.1.6 end-dates the register and maintenance eligibility. ChatGPT already wrote 12.1.6 that way. The process NAME 'Retire and dispose of assets' on 12.1.6 remains misleading, as that specification already said.",
+  "19.4.3 and 5.3 look like one act on the property record. Split: 5.3 unitises ADDITIONS of completed construction; 19.4.3 retires the unit under 18 CFR 101 EPI 10 and Definition 34. Both stay.",
+  "19.1.1 and 5.1.1 look like one act on completion evidence. Split: 5.1.1 verifies the WORK is done; 19.1.1 accepts the ASSET into commissioning. A closed work order is not commissioned plant.",
+  "19.1.3 and 19.1.4 could collapse into 'energise it'. Split held: 19.1.3 consumes 18.4.4 and the 18.2.2 window (coordination); 19.1.4 is first energise and performance. APQC already split them as 10.2.6.2 and a following activity. Same shape as 17.5.2 owning the arithmetic and 17.2.2 weighing it.",
+  "19.2.4 and 19.4.1 could collapse into 'what happens to the asset'. Split held: 19.2.4 is the PHYSICAL end-state under 192.727 (or operator method for electric); 19.4.1 is where TITLE goes (scrap, sell, trade, transfer) under 18 CFR 101 or the contract.",
+  "8.6.6, 18.4.3 and 19.2.3 all purge. Split already in the APQC crosswalk for 8.6.6 vs 19.2.4: 8.6.6 is in-service pressure work; 18.4.3 purges a section that will RETURN; 19.2.3 purges plant that is LEAVING. Three processes, one 192.629, three purposes. Recorded rather than merged.",
+  "16 U.S.C. 824o(a)(1) means there is no federal electric-distribution abandonment, purge, commissioning-test or retention rule. 19.2.3, 19.2.4 and 19.4.4 return that absence as a class with that statute, they do not invent an electric 192.727.",
+  "APQC 10.4.1 Develop exit strategy (pcf_id 10952) is crosswalked as scope. Not added. Portfolio exit remains 17.2.6 / 17.4, not a fifth group here.",
+  "IEC 61968-11 Work package has no CommissioningRecord, WasteClass or RetirementUnit class. Held as WorkActivityRecord, WorkAsset and Asset.",
+  "EN 17007 SPP.12 is disposal of faulty or damaged spare items. Abandoning a main and shipping PCB oil are both mapped to it as nearest process. ISO 55001 cl. 8.1 and GFMAM 6.7 are the real spine for 19.2-19.4.",
+  "40 CFR 112 SPCC is facility-level, pack-scoped as not job-level. Not cited for 19.3. State waste codes and TSCA 761 concentration arithmetic beyond the 50 ppm trigger in 761.50(a)(4) are not reproduced."
+ ],
+ "processes": [
+  {
+   "uid": 10605,
+   "id": "19.1.1",
+   "name": "Confirm construction acceptance and test results",
+   "group": {
+    "id": "19.1",
+    "name": "Commission and energise new assets",
+    "uid": 10604
+   },
+   "intent": "Accept the new plant as built, on test evidence, before commissioning is scheduled.",
+   "activities": [
+    "Collect construction-test evidence for the new asset",
+    "Compare it with the acceptance criteria 2.1 set",
+    "Accept, or return the shortfall to 5.1",
+    "Do not close the construction work order here - that is 5.1.1"
+   ],
+   "trigger": {
+    "kind": "message",
+    "text": "Construction of a new network asset reports complete with test evidence.",
+    "cim": "WorkRequest.change"
+   },
+   "inputs": [
+    {
+     "what": "Construction-test evidence from the field",
+     "party": "FRD",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Acceptance criteria from the design",
+     "party": "DGN",
+     "data": "Work"
+    },
+    {
+     "what": "New asset identity",
+     "party": "AM",
+     "data": "Asset"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Accepted plant, ready to commission",
+     "party": "CON",
+     "data": "WorkAsset"
+    },
+    {
+     "what": "Shortfall returned to 5.1.1",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "systems": [
+    {
+     "component": "CON",
+     "role": "owning",
+     "service": "Construction acceptance"
+    },
+    {
+     "component": "FRD",
+     "role": "originating",
+     "service": "Test evidence"
+    },
+    {
+     "component": "DGN",
+     "role": "reference",
+     "service": "Acceptance criteria"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "FRD",
+     "to": "CON",
+     "payload": "WorkRequest",
+     "verb": "change",
+     "pattern": "event"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Commissioning engineer",
+     "raci": "R"
+    },
+    {
+     "role": "Construction manager",
+     "raci": "A"
+    },
+    {
+     "role": "Design engineer",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkAsset",
+    "Asset",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "5.1.1 reviews completion of the WORK. This process accepts the ASSET into commissioning. A closed work order is not a commissioned plant."
+    },
+    {
+     "kind": "regulatory",
+     "text": "7 CFR 1724.32 is inspection and certification of work-order construction for RUS borrowers. 49 CFR 192.503 is the general test requirement for gas mains. Neither is a customer-service tightness test; that stays in 10.6.5."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Rework",
+     "definition": "SMRP 4.1. Plant returned because the construction test failed the design criteria.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    },
+    {
+     "name": "Cycle Time",
+     "definition": "SMRP 5.4.7 from construction-complete to accepted-for-commissioning.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    }
+   ],
+   "variants": [
+    "Gas main accepted on a 192.503 test",
+    "Electric plant accepted on the design test set",
+    "RUS borrower certification under 7 CFR 1724.32"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "Construction-complete evidence is accepted or returned before any commissioning date is set.",
+    "artifact": "models/19.1-commission-and-energise-new-assets.bpmn"
+   },
+   "en17007": {
+    "process": "IMP.7",
+    "title": "Verify conformity with the reliability, maintainability, safety and logistic support requirements",
+    "clause": "6.6"
+   },
+   "sources": [
+    {
+     "for": "process",
+     "cite": "EN 17007:2017 cl. 6.6 IMP.7",
+     "status": "verified"
+    },
+    {
+     "for": "release",
+     "cite": "ISO 9001:2015 cl. 8.6 Release of products and services",
+     "status": "clause-verified"
+    },
+    {
+     "for": "gas tests",
+     "cite": "49 CFR 192.503 General requirements",
+     "status": "regulation"
+    },
+    {
+     "for": "RUS",
+     "cite": "7 CFR 1724.32 Inspection and certification of work order construction",
+     "status": "regulation"
+    },
+    {
+     "for": "interfaces",
+     "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 payloads; Annex A verbs",
+     "status": "clause-verified"
+    },
+    {
+     "for": "data_objects",
+     "cite": "IEC 61968-11:2013 CIM extensions for distribution, Work package",
+     "status": "clause-verified"
+    },
+    {
+     "for": "boundary",
+     "cite": "5.1.1 closes the work record; 19.1.1 accepts the asset into commissioning",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "regulation",
+    "primary": "49 CFR 192.503 General requirements"
+   }
+  },
+  {
+   "uid": 10606,
+   "id": "19.1.2",
+   "name": "Schedule commissioning",
+   "group": {
+    "id": "19.1",
+    "name": "Commission and energise new assets",
+    "uid": 10604
+   },
+   "intent": "Place accepted new plant on a commissioning window that network operations can support.",
+   "activities": [
+    "Take the accepted asset from 19.1.1",
+    "Request a commissioning window from 18.2",
+    "Hold the date until 18.2.2 has approved the outage plan",
+    "Do not start energisation from this process"
+   ],
+   "trigger": {
+    "kind": "conditional",
+    "text": "New plant has been accepted and needs a commissioning window.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Accepted plant from 19.1.1",
+     "party": "CON",
+     "data": "WorkAsset"
+    },
+    {
+     "what": "Crew and test-equipment availability",
+     "party": "SCHD",
+     "data": "Crew"
+    },
+    {
+     "what": "Outage-plan status from 18.2",
+     "party": "NO",
+     "data": "Work"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Commissioning window requested of 18.2",
+     "party": "SCHD",
+     "data": "WorkTimeSchedule"
+    },
+    {
+     "what": "Date held pending 18.2.2 approval",
+     "party": "NO",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "systems": [
+    {
+     "component": "SCHD",
+     "role": "owning",
+     "service": "Commissioning window"
+    },
+    {
+     "component": "NO",
+     "role": "approving",
+     "service": "Outage plan at 18.2.2"
+    },
+    {
+     "component": "CON",
+     "role": "originating",
+     "service": "Accepted plant"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "SCHD",
+     "to": "NO",
+     "payload": "WorkRequest",
+     "verb": "create",
+     "pattern": "request-reply"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Commissioning engineer",
+     "raci": "R"
+    },
+    {
+     "role": "Network operator",
+     "raci": "A"
+    },
+    {
+     "role": "Scheduler",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkAsset",
+    "WorkTimeSchedule",
+    "WorkActivityRecord",
+    "Crew"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "APQC 10.2.6.1 (pcf_id 19235) is schedule commissioning. The WINDOW is approved at 18.2.2. 3.4.3 consumes that window for other work; this process only books the first-energise slot."
+    },
+    {
+     "kind": "operational",
+     "text": "A date without 18.2.2 is a preference, not a schedule. Do not treat a construction finish date as a commissioning date."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Schedule Compliance",
+     "definition": "SMRP 5.4.3 against the window 18.2.2 approved.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    },
+    {
+     "name": "Cycle Time",
+     "definition": "SMRP 5.4.7 from acceptance to an approved commissioning window.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    }
+   ],
+   "variants": [
+    "Window that needs an outage plan",
+    "Live-line or live-gas commissioning with no outage",
+    "Held until 18.2.2 approves"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "Accepted plant is booked onto a window that 18.2.2 must approve.",
+    "artifact": "models/19.1-commission-and-energise-new-assets.bpmn"
+   },
+   "en17007": {
+    "process": "ACT.4",
+    "title": "Schedule the tasks",
+    "clause": "6.5.5"
+   },
+   "sources": [
+    {
+     "for": "process",
+     "cite": "EN 17007:2017 cl. 6.5.5 ACT.4",
+     "status": "verified"
+    },
+    {
+     "for": "structure",
+     "cite": "APQC PCF Utilities v7.2.1 10.2.6.1 Schedule commissioning (pcf_id 19235) - structural precedent only",
+     "status": "consensus"
+    },
+    {
+     "for": "life cycle",
+     "cite": "ANSI/ASTM/ISO 55001-2024 cl. 8.1 operational planning and control including life cycle management",
+     "status": "clause-verified"
+    },
+    {
+     "for": "interfaces",
+     "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 payloads; Annex A verbs",
+     "status": "clause-verified"
+    },
+    {
+     "for": "data_objects",
+     "cite": "IEC 61968-11:2013 CIM extensions for distribution, Work package",
+     "status": "clause-verified"
+    }
+   ],
+   "provenance": {
+    "basis": "standard",
+    "primary": "ANSI/ASTM/ISO 55001-2024 cl. 8.1"
+   }
+  },
+  {
+   "uid": 10607,
+   "id": "19.1.3",
+   "name": "Coordinate energisation with network operations",
+   "group": {
+    "id": "19.1",
+    "name": "Commission and energise new assets",
+    "uid": 10604
+   },
+   "intent": "Arrange first energisation of new network plant with operations, and consume the clearance 18.4.4 issues.",
+   "activities": [
+    "Confirm the 18.2.2-approved window is still live",
+    "Request isolation if the new plant must be tied in dead",
+    "Receive the clearance 18.4.4 issues; do not issue one",
+    "Release 19.1.4 to energise only while that clearance is held"
+   ],
+   "trigger": {
+    "kind": "conditional",
+    "text": "The commissioning window is approved and the new network asset is ready to tie in.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Approved commissioning window",
+     "party": "SCHD",
+     "data": "WorkTimeSchedule"
+    },
+    {
+     "what": "Clearance issued at 18.4.4, if isolation is required",
+     "party": "NO",
+     "data": "Work"
+    },
+    {
+     "what": "New network asset to be tied in",
+     "party": "AM",
+     "data": "Asset"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Coordination complete, 19.1.4 may energise",
+     "party": "NO",
+     "data": "Work"
+    },
+    {
+     "what": "Clearance holder and section, as 18.4.4 recorded them",
+     "party": "FRD",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "systems": [
+    {
+     "component": "NO",
+     "role": "owning",
+     "service": "Energisation coordination"
+    },
+    {
+     "component": "FRD",
+     "role": "holding",
+     "service": "Clearance from 18.4.4"
+    },
+    {
+     "component": "AM",
+     "role": "reference",
+     "service": "New network asset"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "NO",
+     "to": "FRD",
+     "payload": "WorkRequest",
+     "verb": "reply",
+     "pattern": "request-reply"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Network operator",
+     "raci": "A"
+    },
+    {
+     "role": "Commissioning engineer",
+     "raci": "R"
+    },
+    {
+     "role": "Employee in charge of the clearance",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "Asset",
+    "WorkTimeSchedule",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "regulatory",
+     "text": "29 CFR 1910.269(m) is deenergizing for T and D. The CLEARANCE is issued at 18.4.4 against a switching plan approved at 18.2.2. This process consumes it. First energisation of NEW network plant is not 18.5.3, which returns EXISTING plant after planned work."
+    },
+    {
+     "kind": "operational",
+     "text": "10.6.5 commissions the customer service at the premise. 10.6.7 grants permission to operate an interconnection. This process coordinates energisation of NETWORK assets. APQC 10.2.6.2 (pcf_id 19236) is that coordination. Do not collapse the three."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Schedule Compliance",
+     "definition": "SMRP 5.4.3. Tie-in starts only on the approved window with the clearance held.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    },
+    {
+     "name": "Rework",
+     "definition": "SMRP 4.1. Energisation attempted without the 18.4.4 clearance, or against a cancelled window.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    }
+   ],
+   "variants": [
+    "Dead tie-in under an 18.4.4 clearance",
+    "Live tie-in with no isolation",
+    "Gas pressurisation coordinated with operations, not a customer turn-on"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "Approved window plus consumed 18.4.4 clearance releases first energisation of new plant.",
+    "artifact": "models/19.1-commission-and-energise-new-assets.bpmn"
+   },
+   "en17007": {
+    "process": "ACT.2",
+    "title": "Prepare for the maintenance tasks",
+    "clause": "6.5.3"
+   },
+   "sources": [
+    {
+     "for": "process",
+     "cite": "EN 17007:2017 cl. 6.5.3 ACT.2",
+     "status": "verified"
+    },
+    {
+     "for": "clearance",
+     "cite": "29 CFR 1910.269(m); producing process 18.4.4 against 18.2.2",
+     "status": "regulation"
+    },
+    {
+     "for": "structure",
+     "cite": "APQC PCF Utilities v7.2.1 10.2.6.2 Co-ordinate energization with network operations (pcf_id 19236) - structural precedent only",
+     "status": "consensus"
+    },
+    {
+     "for": "landscape",
+     "cite": "GFMAM Asset Management Landscape 3rd ed. v3.0, 2024-06, subject 6.2 Asset Creation & Acquisition",
+     "status": "verified"
+    },
+    {
+     "for": "interfaces",
+     "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 payloads; Annex A verbs",
+     "status": "clause-verified"
+    },
+    {
+     "for": "data_objects",
+     "cite": "IEC 61968-11:2013 CIM extensions for distribution, Work package",
+     "status": "clause-verified"
+    },
+    {
+     "for": "three-way split",
+     "cite": "19.1.3 is network-asset energisation; 10.6.5 is premise service; 10.6.7 is interconnection permission to operate",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "regulation",
+    "primary": "29 CFR 1910.269(m) with clearance produced at 18.4.4"
+   }
+  },
+  {
+   "uid": 10608,
+   "id": "19.1.4",
+   "name": "Energise or pressurise and verify performance",
+   "group": {
+    "id": "19.1",
+    "name": "Commission and energise new assets",
+    "uid": 10604
+   },
+   "intent": "Put energy or pressure on the new plant for the first time and prove it holds.",
+   "activities": [
+    "Confirm 19.1.3 has released the tie-in",
+    "Energise or pressurise the new asset",
+    "Verify performance against the design criteria",
+    "Hold or dump if it does not hold; do not declare in-service yet"
+   ],
+   "trigger": {
+    "kind": "message",
+    "text": "19.1.3 has released first energisation of the new network asset.",
+    "cim": "WorkRequest.change"
+   },
+   "inputs": [
+    {
+     "what": "Coordination release from 19.1.3",
+     "party": "NO",
+     "data": "Work"
+    },
+    {
+     "what": "Design performance criteria",
+     "party": "DGN",
+     "data": "Work"
+    },
+    {
+     "what": "Clearance still held, if isolation was required",
+     "party": "FRD",
+     "data": "Work"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "First-energise result, hold or pass",
+     "party": "FRD",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Performance against the design criteria",
+     "party": "AM",
+     "data": "WorkAsset"
+    }
+   ],
+   "systems": [
+    {
+     "component": "FRD",
+     "role": "performing",
+     "service": "First energise or pressurise"
+    },
+    {
+     "component": "NO",
+     "role": "releasing",
+     "service": "Coordination from 19.1.3"
+    },
+    {
+     "component": "DGN",
+     "role": "reference",
+     "service": "Performance criteria"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "NO",
+     "to": "FRD",
+     "payload": "WorkRequest",
+     "verb": "change",
+     "pattern": "event"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Commissioning engineer",
+     "raci": "A"
+    },
+    {
+     "role": "Field technician",
+     "raci": "R"
+    },
+    {
+     "role": "Network operator",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkAsset",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "regulatory",
+     "text": "Gas: 49 CFR 192.503 is the test the main must have passed before this step; 192.629(a) is how gas is introduced if air is being purged. Electric: 29 CFR 1910.269(l) minimum approach distance still binds the crew doing the first energise."
+    },
+    {
+     "kind": "operational",
+     "text": "18.5.3 reverses switching on EXISTING plant after planned work. This process is the FIRST energisation of NEW plant. A pass here is not handover; 19.1.6 is."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Rework",
+     "definition": "SMRP 4.1. First energise that failed the design performance criteria.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    },
+    {
+     "name": "SAIDI",
+     "definition": "IEEE 1366-2022 if first energise causes an interruption on adjacent in-service plant.",
+     "cite": "IEEE 1366-2022"
+    }
+   ],
+   "variants": [
+    "Electric first energise, performance holds",
+    "Gas first pressurise under 192.629(a)",
+    "Fail, dump and hold for 19.1.1 again"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "Released new plant is energised or pressurised once and proved, or held.",
+    "artifact": "models/19.1-commission-and-energise-new-assets.bpmn"
+   },
+   "en17007": {
+    "process": "ACT.6",
+    "title": "Perform the maintenance tasks",
+    "clause": "6.5.7"
+   },
+   "sources": [
+    {
+     "for": "process",
+     "cite": "EN 17007:2017 cl. 6.5.7 ACT.6",
+     "status": "verified"
+    },
+    {
+     "for": "gas introduce",
+     "cite": "49 CFR 192.629(a) Purging of pipelines",
+     "status": "regulation"
+    },
+    {
+     "for": "MAD",
+     "cite": "29 CFR 1910.269(l) minimum approach distance",
+     "status": "regulation"
+    },
+    {
+     "for": "interfaces",
+     "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 payloads; Annex A verbs",
+     "status": "clause-verified"
+    },
+    {
+     "for": "data_objects",
+     "cite": "IEC 61968-11:2013 CIM extensions for distribution, Work package",
+     "status": "clause-verified"
+    },
+    {
+     "for": "not 18.5.3",
+     "cite": "18.5.3 returns existing plant after planned work; 19.1.4 is first energisation of new plant",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "regulation",
+    "primary": "49 CFR 192.629(a) introducing gas"
+   }
+  },
+  {
+   "uid": 10609,
+   "id": "19.1.5",
+   "name": "Capture the commissioning record",
+   "group": {
+    "id": "19.1",
+    "name": "Commission and energise new assets",
+    "uid": 10604
+   },
+   "intent": "Write the first-energise evidence the asset will carry for its life.",
+   "activities": [
+    "Record the test and first-energise results",
+    "Record who energised, when, and under which clearance",
+    "Attach the record to the asset, not only to the work order",
+    "Do not write as-built geometry here - that is 5.4"
+   ],
+   "trigger": {
+    "kind": "conditional",
+    "text": "19.1.4 has returned a pass or a documented hold.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "First-energise result from 19.1.4",
+     "party": "FRD",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Clearance identity from 18.4.4, if one was held",
+     "party": "NO",
+     "data": "Work"
+    },
+    {
+     "what": "Asset identity",
+     "party": "AM",
+     "data": "Asset"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Commissioning record on the asset",
+     "party": "AM",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Record available to 19.1.6 and to 5.4",
+     "party": "MAI",
+     "data": "Work"
+    }
+   ],
+   "systems": [
+    {
+     "component": "AM",
+     "role": "owning",
+     "service": "Commissioning record"
+    },
+    {
+     "component": "FRD",
+     "role": "originating",
+     "service": "First-energise evidence"
+    },
+    {
+     "component": "MAI",
+     "role": "informed",
+     "service": "Record for handover"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "FRD",
+     "to": "AM",
+     "payload": "WorkRequest",
+     "verb": "change",
+     "pattern": "event"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Commissioning engineer",
+     "raci": "R"
+    },
+    {
+     "role": "Asset data steward",
+     "raci": "A"
+    },
+    {
+     "role": "Field technician",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Asset",
+    "Work",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "regulatory",
+     "text": "49 CFR 192.517 is records: tests, for the gas tests 192.503 required. 18 CFR 101 Electric Plant Instruction 11 requires the work-order and property-record system. The commissioning record is what 19.1.6 will hand over and what 12.1 will keep."
+    },
+    {
+     "kind": "operational",
+     "text": "APQC 10.2.6.3 (pcf_id 19237) is capture commissioning records. 5.4 captures as-built geometry. This process captures the ENERGISATION evidence. Do not merge them."
+    }
+   ],
+   "measures": [
+    {
+     "name": "ICT indicators",
+     "definition": "EN 15341 cl. 12 ICTi. Completeness of the commissioning record on the asset.",
+     "cite": "EN 15341:2019+A1:2022 cl. 12 ICTi"
+    },
+    {
+     "name": "Rework",
+     "definition": "SMRP 4.1. Handover attempted with no commissioning record on the asset.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    }
+   ],
+   "variants": [
+    "Gas test record under 49 CFR 192.517",
+    "Electric first-energise log with clearance identity",
+    "Hold record where 19.1.4 failed"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "A pass or hold from 19.1.4 becomes a commissioning record on the asset.",
+    "artifact": "models/19.1-commission-and-energise-new-assets.bpmn"
+   },
+   "en17007": {
+    "process": "DTA.1",
+    "title": "Store and validate the raw data in a library and/or a database",
+    "clause": "6.10"
+   },
+   "sources": [
+    {
+     "for": "process",
+     "cite": "EN 17007:2017 cl. 6.10 DTA.1",
+     "status": "verified"
+    },
+    {
+     "for": "gas records",
+     "cite": "49 CFR 192.517 Records: tests",
+     "status": "regulation"
+    },
+    {
+     "for": "plant record",
+     "cite": "18 CFR 101 Electric Plant Instruction 11",
+     "status": "regulation"
+    },
+    {
+     "for": "structure",
+     "cite": "APQC PCF Utilities v7.2.1 10.2.6.3 Capture commissioning records (pcf_id 19237) - structural precedent only",
+     "status": "consensus"
+    },
+    {
+     "for": "interfaces",
+     "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 payloads; Annex A verbs",
+     "status": "clause-verified"
+    },
+    {
+     "for": "data_objects",
+     "cite": "IEC 61968-11:2013 CIM extensions for distribution, Work package",
+     "status": "clause-verified"
+    },
+    {
+     "for": "not 5.4",
+     "cite": "5.4 is as-built geometry; 19.1.5 is first-energise evidence on the asset",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "regulation",
+    "primary": "49 CFR 192.517 Records: tests"
+   }
+  },
+  {
+   "uid": 10610,
+   "id": "19.1.6",
+   "name": "Hand the asset over into service",
+   "group": {
+    "id": "19.1",
+    "name": "Commission and energise new assets",
+    "uid": 10604
+   },
+   "intent": "Put the new plant under operations, with the commissioning record, and end construction custody.",
+   "activities": [
+    "Confirm the commissioning record is on the asset",
+    "Transfer custody from construction to operations",
+    "Release the 18.4.4 clearance if one is still held",
+    "Tell 12.1 the asset is in service; do not create the record here"
+   ],
+   "trigger": {
+    "kind": "conditional",
+    "text": "The commissioning record is on the asset and performance has passed.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Commissioning record from 19.1.5",
+     "party": "AM",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Construction custody of the asset",
+     "party": "CON",
+     "data": "WorkAsset"
+    },
+    {
+     "what": "Clearance still held, if any",
+     "party": "NO",
+     "data": "Work"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Asset in service under operations",
+     "party": "AM",
+     "data": "Asset"
+    },
+    {
+     "what": "Construction custody ended",
+     "party": "CON",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "systems": [
+    {
+     "component": "AM",
+     "role": "owning",
+     "service": "In-service status"
+    },
+    {
+     "component": "CON",
+     "role": "releasing",
+     "service": "Construction custody"
+    },
+    {
+     "component": "NO",
+     "role": "releasing",
+     "service": "Clearance if still held"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "CON",
+     "to": "AM",
+     "payload": "WorkRequest",
+     "verb": "change",
+     "pattern": "event"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Network operator",
+     "raci": "A"
+    },
+    {
+     "role": "Commissioning engineer",
+     "raci": "R"
+    },
+    {
+     "role": "Construction manager",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Asset",
+    "WorkAsset",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "12.1.1 creates the asset record. This process changes custody and in-service status. Handing over without a 19.1.5 record is operations taking plant they cannot prove."
+    },
+    {
+     "kind": "operational",
+     "text": "ISO 9001:2015 cl. 8.6 is release of products and services. GFMAM 6.2 Asset Creation and Acquisition ends when the asset is in service, not when construction reports complete."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Planned Work",
+     "definition": "SMRP 5.3.1. Plant that entered service through this process is commissioned, not discovered in-service.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    },
+    {
+     "name": "Cycle Time",
+     "definition": "SMRP 5.4.7 from first energise to operations custody.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    }
+   ],
+   "variants": [
+    "Electric plant handed to operations",
+    "Gas plant handed to operations after 192.517 record",
+    "Clearance released as part of handover"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "Passed new plant leaves construction custody and enters operations with its record.",
+    "artifact": "models/19.1-commission-and-energise-new-assets.bpmn"
+   },
+   "en17007": {
+    "process": "ACT.7",
+    "title": "Finish the tasks",
+    "clause": "6.5.8"
+   },
+   "sources": [
+    {
+     "for": "process",
+     "cite": "EN 17007:2017 cl. 6.5.8 ACT.7",
+     "status": "verified"
+    },
+    {
+     "for": "release",
+     "cite": "ISO 9001:2015 cl. 8.6 Release of products and services",
+     "status": "clause-verified"
+    },
+    {
+     "for": "landscape",
+     "cite": "GFMAM Asset Management Landscape 3rd ed. v3.0, 2024-06, subject 6.2 Asset Creation & Acquisition",
+     "status": "verified"
+    },
+    {
+     "for": "interfaces",
+     "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 payloads; Annex A verbs",
+     "status": "clause-verified"
+    },
+    {
+     "for": "data_objects",
+     "cite": "IEC 61968-11:2013 CIM extensions for distribution, Work package",
+     "status": "clause-verified"
+    },
+    {
+     "for": "not 12.1.1",
+     "cite": "12.1.1 creates the record; 19.1.6 changes custody and in-service status",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "standard",
+    "primary": "GFMAM Asset Management Landscape 3rd ed. subject 6.2 Asset Creation & Acquisition"
+   }
+  },
+  {
+   "uid": 10612,
+   "id": "19.2.1",
+   "name": "Confirm the decision to remove the asset from service",
+   "group": {
+    "id": "19.2",
+    "name": "Decommission and remove assets from service",
+    "uid": 10611
+   },
+   "intent": "Confirm that this asset is leaving service, and on which 17.2.6 or 17.3.5 basis, before isolation starts.",
+   "activities": [
+    "Take the selected solution or classification-driven work",
+    "Confirm the asset identity and the reason it is leaving",
+    "Confirm 17.3 classification so 19.2.4 knows which rule applies",
+    "Release 19.2.2; do not isolate in this process"
+   ],
+   "trigger": {
+    "kind": "message",
+    "text": "A selected solution or a 17.3.5 clock requires an in-service asset to leave service.",
+    "cim": "WorkRequest.create"
+   },
+   "inputs": [
+    {
+     "what": "Selected solution from 17.2.6 or work from 17.3.5",
+     "party": "NE",
+     "data": "Work"
+    },
+    {
+     "what": "In-service asset identity",
+     "party": "AM",
+     "data": "Asset"
+    },
+    {
+     "what": "Jurisdictional class from 17.3.4",
+     "party": "AM",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Confirmed removal decision and reason",
+     "party": "AM",
+     "data": "Work"
+    },
+    {
+     "what": "Decision released to 19.2.2",
+     "party": "NO",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "systems": [
+    {
+     "component": "AM",
+     "role": "owning",
+     "service": "Removal decision"
+    },
+    {
+     "component": "NE",
+     "role": "originating",
+     "service": "Programme or classification basis"
+    },
+    {
+     "component": "NO",
+     "role": "informed",
+     "service": "Isolation will be requested"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "NE",
+     "to": "AM",
+     "payload": "WorkRequest",
+     "verb": "create",
+     "pattern": "event"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Planning manager",
+     "raci": "A"
+    },
+    {
+     "role": "Asset manager",
+     "raci": "R"
+    },
+    {
+     "role": "Network operator",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "Asset",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "The decision lives in 17.2.6 or 17.3.5. This process CONFIRMS the asset and the reason so isolation does not start on the wrong plant. It does not re-score the capital case."
+    },
+    {
+     "kind": "operational",
+     "text": "ISO 55001:2024 cl. 8.1 includes the end of life. GFMAM 6.7 is Asset Repurposing or Disposal. Confirming here is what lets 19.2.2 ask 18.4 for a clearance."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Planned Work",
+     "definition": "SMRP 5.3.1. Removals confirmed against a programme or a 17.3.5 clock are planned.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    },
+    {
+     "name": "Rework",
+     "definition": "SMRP 4.1. Isolation started on an asset whose removal had not been confirmed.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    }
+   ],
+   "variants": [
+    "Programme-driven removal from 17.2.6",
+    "Classification-driven removal from 17.3.5",
+    "Condition-driven removal from 12.6.3, still confirmed here"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "A programme or classification trigger is confirmed against the asset before isolation is requested.",
+    "artifact": "models/19.2-decommission-and-remove-assets-from-service.bpmn"
+   },
+   "en17007": {
+    "process": "MAN.5",
+    "title": "Oversee the actions",
+    "clause": "6.2"
+   },
+   "sources": [
+    {
+     "for": "process",
+     "cite": "EN 17007:2017 cl. 6.2 MAN.5",
+     "status": "verified"
+    },
+    {
+     "for": "life cycle",
+     "cite": "ANSI/ASTM/ISO 55001-2024 cl. 8.1 operational planning and control including life cycle management",
+     "status": "clause-verified"
+    },
+    {
+     "for": "landscape",
+     "cite": "GFMAM Asset Management Landscape 3rd ed. v3.0, 2024-06, subject 6.7 Asset Repurposing or Disposal",
+     "status": "verified"
+    },
+    {
+     "for": "interfaces",
+     "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 payloads; Annex A verbs",
+     "status": "clause-verified"
+    },
+    {
+     "for": "data_objects",
+     "cite": "IEC 61968-11:2013 CIM extensions for distribution, Work package",
+     "status": "clause-verified"
+    },
+    {
+     "for": "does not rescore",
+     "cite": "19.2.1 confirms identity and reason; it does not repeat 17.2.6 selection",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "standard",
+    "primary": "GFMAM Asset Management Landscape 3rd ed. subject 6.7 Asset Repurposing or Disposal"
+   }
+  },
+  {
+   "uid": 10613,
+   "id": "19.2.2",
+   "name": "Coordinate de-energisation or depressurisation",
+   "group": {
+    "id": "19.2",
+    "name": "Decommission and remove assets from service",
+    "uid": 10611
+   },
+   "intent": "Arrange taking the leaving asset off the network with operations, and consume the clearance 18.4.4 issues.",
+   "activities": [
+    "Request isolation of the leaving asset from 18.2",
+    "Receive the clearance 18.4.4 issues; do not issue one",
+    "Hold 19.2.3 until that clearance is held",
+    "This is not 18.5.3 - the asset is not coming back"
+   ],
+   "trigger": {
+    "kind": "conditional",
+    "text": "19.2.1 has confirmed the asset is leaving service.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Confirmed removal decision",
+     "party": "AM",
+     "data": "Work"
+    },
+    {
+     "what": "Clearance issued at 18.4.4",
+     "party": "NO",
+     "data": "Work"
+    },
+    {
+     "what": "Approved outage plan from 18.2.2",
+     "party": "SCHD",
+     "data": "WorkTimeSchedule"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "De-energisation coordinated, 19.2.3 may make safe",
+     "party": "NO",
+     "data": "Work"
+    },
+    {
+     "what": "Clearance holder and section",
+     "party": "FRD",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "systems": [
+    {
+     "component": "NO",
+     "role": "owning",
+     "service": "De-energisation coordination"
+    },
+    {
+     "component": "FRD",
+     "role": "holding",
+     "service": "Clearance from 18.4.4"
+    },
+    {
+     "component": "AM",
+     "role": "reference",
+     "service": "Asset leaving service"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "NO",
+     "to": "FRD",
+     "payload": "WorkRequest",
+     "verb": "reply",
+     "pattern": "request-reply"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Network operator",
+     "raci": "A"
+    },
+    {
+     "role": "Decommissioning engineer",
+     "raci": "R"
+    },
+    {
+     "role": "Employee in charge of the clearance",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkTimeSchedule",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "regulatory",
+     "text": "29 CFR 1910.269(m) still applies: the clearance is issued at 18.4.4. 19.2.2 consumes it so the leaving asset can be made safe. 18.5.3 is the return path for plant that stays in the network. Do not reverse-switch a leaving asset back to normal here."
+    },
+    {
+     "kind": "operational",
+     "text": "19.1.3 coordinates FIRST energisation of new plant. This process coordinates LAST de-energisation of leaving plant. Same operations desk, opposite end of life."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Schedule Compliance",
+     "definition": "SMRP 5.4.3. Make-safe starts only with the 18.4.4 clearance held.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    },
+    {
+     "name": "Rework",
+     "definition": "SMRP 4.1. Purge or cut started without the clearance 18.4.4 issues.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    }
+   ],
+   "variants": [
+    "Electric isolation under 18.4.4",
+    "Gas isolation under 18.4.4, purge still 19.2.3",
+    "Already dead, coordination still recorded"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "Confirmed leaving plant is isolated through 18.4.4 before make-safe starts.",
+    "artifact": "models/19.2-decommission-and-remove-assets-from-service.bpmn"
+   },
+   "en17007": {
+    "process": "ACT.2",
+    "title": "Prepare for the maintenance tasks",
+    "clause": "6.5.3"
+   },
+   "sources": [
+    {
+     "for": "process",
+     "cite": "EN 17007:2017 cl. 6.5.3 ACT.2",
+     "status": "verified"
+    },
+    {
+     "for": "clearance",
+     "cite": "29 CFR 1910.269(m); producing process 18.4.4 against 18.2.2",
+     "status": "regulation"
+    },
+    {
+     "for": "structure",
+     "cite": "APQC PCF Utilities v7.2.1 10.4.2 Decommission productive assets (pcf_id 19258) - structural precedent only",
+     "status": "consensus"
+    },
+    {
+     "for": "interfaces",
+     "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 payloads; Annex A verbs",
+     "status": "clause-verified"
+    },
+    {
+     "for": "data_objects",
+     "cite": "IEC 61968-11:2013 CIM extensions for distribution, Work package",
+     "status": "clause-verified"
+    },
+    {
+     "for": "not 18.5.3",
+     "cite": "18.5.3 returns remaining plant; 19.2.2 takes leaving plant off and does not restore it",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "regulation",
+    "primary": "29 CFR 1910.269(m) with clearance produced at 18.4.4"
+   }
+  },
+  {
+   "uid": 10614,
+   "id": "19.2.3",
+   "name": "Isolate, purge and make the asset safe",
+   "group": {
+    "id": "19.2",
+    "name": "Decommission and remove assets from service",
+    "uid": 10611
+   },
+   "intent": "Make the leaving asset safe to cut or seal, under the clearance 19.2.2 obtained.",
+   "activities": [
+    "Confirm the 18.4.4 clearance is still held",
+    "Complete isolation of the leaving asset",
+    "Purge gas under 192.629 where the asset is a pipeline",
+    "Prove it is safe to cut or seal; electric has no 192.629 analogue"
+   ],
+   "trigger": {
+    "kind": "message",
+    "text": "19.2.2 has released make-safe on the leaving asset.",
+    "cim": "WorkRequest.change"
+   },
+   "inputs": [
+    {
+     "what": "Coordination release from 19.2.2",
+     "party": "NO",
+     "data": "Work"
+    },
+    {
+     "what": "Clearance still held",
+     "party": "FRD",
+     "data": "Work"
+    },
+    {
+     "what": "Leaving asset and commodity",
+     "party": "AM",
+     "data": "Asset"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Asset safe to cut or seal",
+     "party": "FRD",
+     "data": "WorkAsset"
+    },
+    {
+     "what": "Purge record, if gas",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "systems": [
+    {
+     "component": "FRD",
+     "role": "performing",
+     "service": "Make-safe of leaving plant"
+    },
+    {
+     "component": "NO",
+     "role": "controlling",
+     "service": "Clearance still held"
+    },
+    {
+     "component": "AM",
+     "role": "reference",
+     "service": "Leaving asset"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "NO",
+     "to": "FRD",
+     "payload": "WorkRequest",
+     "verb": "change",
+     "pattern": "event"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Decommissioning engineer",
+     "raci": "A"
+    },
+    {
+     "role": "Field technician",
+     "raci": "R"
+    },
+    {
+     "role": "Network operator",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkAsset",
+    "Asset",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "regulatory",
+     "text": "49 CFR 192.629 is the purge. 192.727(b) and (c) then require disconnect, purge and seal. 8.6.6 is in-service pressure work; 18.4.3 purges a returning section; this process purges leaving plant."
+    },
+    {
+     "kind": "regulatory",
+     "text": "16 U.S.C. 824o(a)(1) excludes local distribution. There is no federal electric-distribution purge method. NESC Rule 214A2 is inspection, not decommissioning. Electric make-safe is 29 CFR 1910.269(m) plus the operator's method."
+    }
+   ],
+   "measures": [
+    {
+     "name": "HSE indicators",
+     "definition": "EN 15341 cl. 12 HSEi. Make-safe of leaving plant under a held clearance.",
+     "cite": "EN 15341:2019+A1:2022 cl. 12 HSEi health and safety indicators"
+    },
+    {
+     "name": "Rework",
+     "definition": "SMRP 4.1. Cut or seal started on plant that still contained gas or was still live.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    }
+   ],
+   "variants": [
+    "Gas purge under 49 CFR 192.629, then seal",
+    "Electric isolation under 1910.269(m), no federal purge rule",
+    "Volume so small 192.727(b) does not require a purge"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "Leaving plant is made safe under a held clearance, then released to 19.2.4.",
+    "artifact": "models/19.2-decommission-and-remove-assets-from-service.bpmn"
+   },
+   "en17007": {
+    "process": "HSE.4",
+    "title": "Propose measures for preventing risks and consequences of identified risks",
+    "clause": "6.7"
+   },
+   "sources": [
+    {
+     "for": "process",
+     "cite": "EN 17007:2017 cl. 6.7 HSE.4",
+     "status": "verified"
+    },
+    {
+     "for": "purge",
+     "cite": "49 CFR 192.629 Purging of pipelines",
+     "status": "regulation"
+    },
+    {
+     "for": "abandon prep",
+     "cite": "49 CFR 192.727(b), (c)",
+     "status": "regulation"
+    },
+    {
+     "for": "electric absence",
+     "cite": "16 U.S.C. 824o(a)(1)",
+     "status": "regulation"
+    },
+    {
+     "for": "inspection not method",
+     "cite": "NESC (ANSI/IEEE C2-2023) Rule 214A2",
+     "status": "clause-verified"
+    },
+    {
+     "for": "interfaces",
+     "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 payloads; Annex A verbs",
+     "status": "clause-verified"
+    },
+    {
+     "for": "data_objects",
+     "cite": "IEC 61968-11:2013 CIM extensions for distribution, Work package",
+     "status": "clause-verified"
+    },
+    {
+     "for": "three purges",
+     "cite": "8.6.6 is in-service pressure work; 18.4.3 is a returning section; 19.2.3 is leaving plant",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "regulation",
+    "primary": "49 CFR 192.629 Purging of pipelines"
+   }
+  },
+  {
+   "uid": 10615,
+   "id": "19.2.4",
+   "name": "Remove the asset or abandon it in place",
+   "group": {
+    "id": "19.2",
+    "name": "Decommission and remove assets from service",
+    "uid": 10611
+   },
+   "intent": "Return remove, abandon-in-place, or inactive-not-maintained, and name the rule that authorised it.",
+   "activities": [
+    "Take the made-safe asset and its 17.3.4 class",
+    "Return abandon-in-place, inactive-not-maintained, or remove",
+    "If gas, apply 192.727(b), (c) or (d) as the authority",
+    "If local distribution, return operator method and name 16 U.S.C. 824o"
+   ],
+   "trigger": {
+    "kind": "conditional",
+    "text": "The leaving asset has been made safe and a physical end-state is required.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Made-safe asset from 19.2.3",
+     "party": "FRD",
+     "data": "WorkAsset"
+    },
+    {
+     "what": "Jurisdictional class from 17.3.4",
+     "party": "AM",
+     "data": "Asset"
+    },
+    {
+     "what": "Confirmed removal reason from 19.2.1",
+     "party": "AM",
+     "data": "Work"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Remove, abandon-in-place or inactive-not-maintained, plus authority",
+     "party": "CON",
+     "data": "Work"
+    },
+    {
+     "what": "Physical work released, or hold",
+     "party": "FRD",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "systems": [
+    {
+     "component": "CON",
+     "role": "owning",
+     "service": "Physical end-state"
+    },
+    {
+     "component": "FRD",
+     "role": "performing",
+     "service": "Cut, seal or remove"
+    },
+    {
+     "component": "AM",
+     "role": "reference",
+     "service": "Class that selected the rule"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "AM",
+     "to": "CON",
+     "payload": "WorkRequest",
+     "verb": "change",
+     "pattern": "event"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Decommissioning engineer",
+     "raci": "R"
+    },
+    {
+     "role": "Construction manager",
+     "raci": "A"
+    },
+    {
+     "role": "Integrity engineer",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkAsset",
+    "Asset",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "regulatory",
+     "text": "49 CFR 192.727(b) abandon-in-place: disconnect, purge, seal; offshore filled. 192.727(c) inactive-not-maintained, same except services. 192.727(d) discontinued service: lock, block or disconnect. 192.727(f) fill vaults."
+    },
+    {
+     "kind": "regulatory",
+     "text": "16 U.S.C. 824o(a)(1) excludes local distribution. There is no federal electric-distribution abandonment method. Return remove or abandon as the operator's method and name that statute. Do not write a 192.727 parallel for a feeder."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Planned Work",
+     "definition": "SMRP 5.3.1. End-state chosen before the cut, not discovered after.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    },
+    {
+     "name": "HSE indicators",
+     "definition": "EN 15341 cl. 12 HSEi. Abandoned plant left live or unpurged.",
+     "cite": "EN 15341:2019+A1:2022 cl. 12 HSEi health and safety indicators"
+    }
+   ],
+   "variants": [
+    "Abandon in place under 49 CFR 192.727(b)",
+    "Inactive, not maintained, under 192.727(c)",
+    "Discontinued service under 192.727(d)",
+    "Remove from the ground",
+    "Electric distribution - operator method, 16 U.S.C. 824o"
+   ],
+   "notation": {
+    "class": "DMN",
+    "why": "The output is remove, abandon-in-place or inactive, plus the rule that authorised it.",
+    "artifact": "models/19.2.4-remove-or-abandon.dmn"
+   },
+   "en17007": {
+    "process": "SPP.12",
+    "title": "Disposal of faulty or damaged items",
+    "clause": "6.16"
+   },
+   "sources": [
+    {
+     "for": "process",
+     "cite": "EN 17007:2017 cl. 6.16 SPP.12",
+     "status": "verified"
+    },
+    {
+     "for": "gas abandonment",
+     "cite": "49 CFR 192.727 Abandonment or deactivation of facilities",
+     "status": "regulation"
+    },
+    {
+     "for": "electric absence",
+     "cite": "16 U.S.C. 824o(a)(1)",
+     "status": "regulation"
+    },
+    {
+     "for": "structure",
+     "cite": "APQC PCF Utilities v7.2.1 10.4.4 Perform abandonment (pcf_id 10954) - structural precedent only",
+     "status": "consensus"
+    },
+    {
+     "for": "interfaces",
+     "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 payloads; Annex A verbs",
+     "status": "clause-verified"
+    },
+    {
+     "for": "data_objects",
+     "cite": "IEC 61968-11:2013 CIM extensions for distribution, Work package",
+     "status": "clause-verified"
+    },
+    {
+     "for": "not 8.6.6",
+     "cite": "8.6.6 is the in-service purge-and-seal procedure; 19.2.4 is the lifecycle end state",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "regulation",
+    "primary": "49 CFR 192.727 Abandonment or deactivation of facilities"
+   }
+  },
+  {
+   "uid": 10616,
+   "id": "19.2.5",
+   "name": "Record removal, abandonment and any residual risk",
+   "group": {
+    "id": "19.2",
+    "name": "Decommission and remove assets from service",
+    "uid": 10611
+   },
+   "intent": "Write the physical as-left evidence 12.1.6 will use to retire the active record.",
+   "activities": [
+    "Record what was removed, sealed, filled or left",
+    "Record residual risk on plant abandoned in place",
+    "File 192.727(g) where the abandonment is offshore or a navigable waterway",
+    "Hand the evidence to 12.1.6; do not end-date the register here"
+   ],
+   "trigger": {
+    "kind": "conditional",
+    "text": "19.2.4 has returned a physical end-state.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Physical end-state from 19.2.4",
+     "party": "CON",
+     "data": "Work"
+    },
+    {
+     "what": "Field as-left from the cut or seal",
+     "party": "FRD",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Asset identity",
+     "party": "AM",
+     "data": "Asset"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Physical disposition evidence for 12.1.6",
+     "party": "CON",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Residual-risk note on abandoned plant",
+     "party": "AM",
+     "data": "WorkAsset"
+    }
+   ],
+   "systems": [
+    {
+     "component": "CON",
+     "role": "owning",
+     "service": "Disposition evidence"
+    },
+    {
+     "component": "FRD",
+     "role": "originating",
+     "service": "As-left of the cut or seal"
+    },
+    {
+     "component": "AM",
+     "role": "informed",
+     "service": "Evidence 12.1.6 will consume"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "FRD",
+     "to": "CON",
+     "payload": "WorkRequest",
+     "verb": "change",
+     "pattern": "event"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Decommissioning engineer",
+     "raci": "R"
+    },
+    {
+     "role": "Asset data steward",
+     "raci": "A"
+    },
+    {
+     "role": "Field technician",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkAsset",
+    "Asset",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "regulatory",
+     "text": "49 CFR 192.727(g) requires a report on abandoned offshore facilities and onshore facilities that cross a commercially navigable waterway, preferably to NPMS, with date, diameter, method and certification. Electric distribution has no equivalent filing."
+    },
+    {
+     "kind": "operational",
+     "text": "12.1.6 retires the active record and ends maintenance eligibility. This process produces the PHYSICAL evidence that input requires. Writing the register end-date here would duplicate 12.1.6."
+    }
+   ],
+   "measures": [
+    {
+     "name": "ICT indicators",
+     "definition": "EN 15341 cl. 12 ICTi. Abandoned plant with no as-left evidence.",
+     "cite": "EN 15341:2019+A1:2022 cl. 12 ICTi"
+    },
+    {
+     "name": "Rework",
+     "definition": "SMRP 4.1. 12.1.6 attempted without disposition evidence from this process.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    }
+   ],
+   "variants": [
+    "Removed plant, as-left recorded",
+    "Abandoned in place, residual risk recorded",
+    "192.727(g) NPMS filing for waterway or offshore"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "A physical end-state becomes disposition evidence for 12.1.6, not a register edit.",
+    "artifact": "models/19.2-decommission-and-remove-assets-from-service.bpmn"
+   },
+   "en17007": {
+    "process": "DTA.1",
+    "title": "Store and validate the raw data in a library and/or a database",
+    "clause": "6.10"
+   },
+   "sources": [
+    {
+     "for": "process",
+     "cite": "EN 17007:2017 cl. 6.10 DTA.1",
+     "status": "verified"
+    },
+    {
+     "for": "waterway filing",
+     "cite": "49 CFR 192.727(g)",
+     "status": "regulation"
+    },
+    {
+     "for": "landscape",
+     "cite": "GFMAM Asset Management Landscape 3rd ed. v3.0, 2024-06, subject 6.7 Asset Repurposing or Disposal",
+     "status": "verified"
+    },
+    {
+     "for": "interfaces",
+     "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 payloads; Annex A verbs",
+     "status": "clause-verified"
+    },
+    {
+     "for": "data_objects",
+     "cite": "IEC 61968-11:2013 CIM extensions for distribution, Work package",
+     "status": "clause-verified"
+    },
+    {
+     "for": "not 12.1.6",
+     "cite": "12.1.6 end-dates the register; 19.2.5 produces the physical evidence it consumes",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "regulation",
+    "primary": "49 CFR 192.727(g) abandonment report"
+   }
+  },
+  {
+   "uid": 10617,
+   "id": "19.2.6",
+   "name": "Update the network model and spatial record",
+   "group": {
+    "id": "19.2",
+    "name": "Decommission and remove assets from service",
+    "uid": 10611
+   },
+   "intent": "State the as-left connectivity so 12.2.3 can publish it; do not publish the spatial model here.",
+   "activities": [
+    "Record which connections were cut, sealed or left",
+    "Record the as-left isolation points on the remaining network",
+    "Hand the as-left to 12.2.3 to publish",
+    "Do not apply the spatial edit in this process"
+   ],
+   "trigger": {
+    "kind": "conditional",
+    "text": "Physical disposition evidence from 19.2.5 is ready to change connectivity.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Physical disposition evidence from 19.2.5",
+     "party": "CON",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Current connectivity of the remaining network",
+     "party": "GINV",
+     "data": "WorkLocation"
+    },
+    {
+     "what": "Leaving asset identity",
+     "party": "AM",
+     "data": "Asset"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "As-left connectivity for 12.2.3",
+     "party": "GINV",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Remaining isolation points",
+     "party": "NO",
+     "data": "WorkAsset"
+    }
+   ],
+   "systems": [
+    {
+     "component": "GINV",
+     "role": "receiving",
+     "service": "As-left connectivity"
+    },
+    {
+     "component": "CON",
+     "role": "originating",
+     "service": "Disposition evidence"
+    },
+    {
+     "component": "NO",
+     "role": "informed",
+     "service": "Remaining isolation points"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "CON",
+     "to": "GINV",
+     "payload": "WorkRequest",
+     "verb": "change",
+     "pattern": "event"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Network modeller",
+     "raci": "R"
+    },
+    {
+     "role": "Asset information owner",
+     "raci": "A"
+    },
+    {
+     "role": "Network operator",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "WorkLocation",
+    "WorkAsset",
+    "Asset",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "12.2.3 publishes accepted asset changes to the spatial network model. This process produces the AS-LEFT CONNECTIVITY that input requires. Applying the spatial edit here would duplicate 12.2.3."
+    },
+    {
+     "kind": "operational",
+     "text": "A remaining network that still shows a removed feeder will be switched as if it were there. 18.1.4 verifies plans against current state; it needs this as-left first."
+    }
+   ],
+   "measures": [
+    {
+     "name": "ICT indicators",
+     "definition": "EN 15341 cl. 12 ICTi. Remaining network still showing removed plant.",
+     "cite": "EN 15341:2019+A1:2022 cl. 12 ICTi"
+    },
+    {
+     "name": "Rework",
+     "definition": "SMRP 4.1. Switching planned against connectivity that 19.2.4 already cut.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    }
+   ],
+   "variants": [
+    "Removed plant, connectivity cut for 12.2.3",
+    "Abandoned in place, still on the map as abandoned",
+    "Isolation points on the remaining network recorded"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "Disposition evidence becomes as-left connectivity for 12.2.3 to publish.",
+    "artifact": "models/19.2-decommission-and-remove-assets-from-service.bpmn"
+   },
+   "en17007": {
+    "process": "DTA.10",
+    "title": "Save and provide access to data in a data processing system",
+    "clause": "6.10"
+   },
+   "sources": [
+    {
+     "for": "process",
+     "cite": "EN 17007:2017 cl. 6.10 DTA.10",
+     "status": "verified"
+    },
+    {
+     "for": "component",
+     "cite": "IEC 61968-6:2015 cl. 4.2 GINV Geographical inventory",
+     "status": "clause-verified"
+    },
+    {
+     "for": "data_objects",
+     "cite": "IEC 61968-11:2013 CIM extensions for distribution, Work package",
+     "status": "clause-verified"
+    },
+    {
+     "for": "not 12.2.3",
+     "cite": "12.2.3 publishes the spatial model; 19.2.6 produces the as-left connectivity it publishes",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "standard",
+    "primary": "IEC 61968-6:2015 cl. 4.2 GINV Geographical inventory"
+   }
+  },
+  {
+   "uid": 10619,
+   "id": "19.3.1",
+   "name": "Classify the waste stream and its handling requirement",
+   "group": {
+    "id": "19.3",
+    "name": "Manage waste, salvage and hazardous materials",
+    "uid": 10618
+   },
+   "intent": "Return the waste class and the section that sets how it must be handled.",
+   "activities": [
+    "Identify the material leaving the asset or the storeroom",
+    "Return PCB-liquid, PCB-item, PCB-remediation, RCRA-hazardous, non-hazardous or salvage",
+    "Name 40 CFR 761.50, 761.61, 761.62 or 40 CFR 262.11 as the authority",
+    "Hand the class to 19.3.2 or 19.3.4; do not dispose in this process"
+   ],
+   "trigger": {
+    "kind": "conditional",
+    "text": "Material has left an asset or the storeroom and needs a handling class.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Material identity and where it came from",
+     "party": "MM",
+     "data": "MaterialItem"
+    },
+    {
+     "what": "Asset it was removed from, if any",
+     "party": "AM",
+     "data": "Asset"
+    },
+    {
+     "what": "Field observation of contamination",
+     "party": "FRD",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Waste class and the section that set it",
+     "party": "MM",
+     "data": "Work"
+    },
+    {
+     "what": "Class released to 19.3.2 or 19.3.4",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "systems": [
+    {
+     "component": "MM",
+     "role": "owning",
+     "service": "Waste class"
+    },
+    {
+     "component": "FRD",
+     "role": "originating",
+     "service": "Contamination observation"
+    },
+    {
+     "component": "AM",
+     "role": "reference",
+     "service": "Source asset"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "FRD",
+     "to": "MM",
+     "payload": "WorkRequest",
+     "verb": "create",
+     "pattern": "event"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Environmental specialist",
+     "raci": "R"
+    },
+    {
+     "role": "Materials manager",
+     "raci": "A"
+    },
+    {
+     "role": "Field technician",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "MaterialItem",
+    "Asset",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "regulatory",
+     "text": "40 CFR 761.50(b)(1) is PCB liquids; 761.50(b)(2) is PCB Items; 761.50(b)(3) points at 761.61 for PCB remediation waste; 761.50(b)(4) points at 761.62 for PCB bulk product waste. 40 CFR 262.11 is the RCRA hazardous-waste determination. Return the class and the section."
+    },
+    {
+     "kind": "operational",
+     "text": "13.2 receives maintenance and construction material, not PCB or oil waste. 13.3.6 and 13.5.6 route salvage and surplus here. 7.4.4 remains vegetation debris. This process classifies what those processes sent."
+    }
+   ],
+   "measures": [
+    {
+     "name": "HSE indicators",
+     "definition": "EN 15341 cl. 12 HSEi. Unclassified material leaving a substation or a main.",
+     "cite": "EN 15341:2019+A1:2022 cl. 12 HSEi health and safety indicators"
+    },
+    {
+     "name": "Rework",
+     "definition": "SMRP 4.1. Disposal started before a class was returned.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    }
+   ],
+   "variants": [
+    "PCB liquid under 40 CFR 761.50(b)(1)",
+    "PCB Item under 761.50(b)(2)",
+    "PCB remediation waste under 761.61",
+    "RCRA hazardous waste under 40 CFR 262.11",
+    "Salvage, not a waste"
+   ],
+   "notation": {
+    "class": "DMN",
+    "why": "The output is a waste class and the section that set it, not a disposal state.",
+    "artifact": "models/19.3.1-waste-stream-class.dmn"
+   },
+   "en17007": {
+    "process": "DTA.3",
+    "title": "Draw up and maintain an up-to-date list of critical items",
+    "clause": "6.10"
+   },
+   "sources": [
+    {
+     "for": "process",
+     "cite": "EN 17007:2017 cl. 6.10 DTA.3",
+     "status": "verified"
+    },
+    {
+     "for": "PCB classes",
+     "cite": "40 CFR 761.50(b) Applicability",
+     "status": "regulation"
+    },
+    {
+     "for": "RCRA determination",
+     "cite": "40 CFR 262.11 Hazardous waste determination",
+     "status": "regulation"
+    },
+    {
+     "for": "structure",
+     "cite": "APQC PCF Utilities v7.2.1 10.4.5 Perform waste and hazardous goods management (pcf_id 16970) - structural precedent only",
+     "status": "consensus"
+    },
+    {
+     "for": "interfaces",
+     "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 payloads; Annex A verbs",
+     "status": "clause-verified"
+    },
+    {
+     "for": "data_objects",
+     "cite": "IEC 61968-11:2013 CIM extensions for distribution, Work package",
+     "status": "clause-verified"
+    }
+   ],
+   "provenance": {
+    "basis": "regulation",
+    "primary": "40 CFR 761.50(b) PCB waste classes and 40 CFR 262.11"
+   }
+  },
+  {
+   "uid": 10620,
+   "id": "19.3.2",
+   "name": "Handle regulated materials and contaminated media",
+   "group": {
+    "id": "19.3",
+    "name": "Manage waste, salvage and hazardous materials",
+    "uid": 10618
+   },
+   "intent": "Store and mark classified PCB or hazardous material until 19.3.3 can ship it.",
+   "activities": [
+    "Take the class from 19.3.1",
+    "Store PCB waste under 40 CFR 761.65",
+    "Mark under 40 CFR 761.40",
+    "Do not treat unmarked storage as handling"
+   ],
+   "trigger": {
+    "kind": "conditional",
+    "text": "19.3.1 has returned a regulated class that cannot yet be shipped.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Waste class from 19.3.1",
+     "party": "MM",
+     "data": "Work"
+    },
+    {
+     "what": "Material to be stored",
+     "party": "MM",
+     "data": "MaterialItem"
+    },
+    {
+     "what": "Storage location",
+     "party": "GINV",
+     "data": "WorkLocation"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Marked, stored regulated material",
+     "party": "MM",
+     "data": "MaterialItem"
+    },
+    {
+     "what": "Storage record against the source asset",
+     "party": "AM",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "systems": [
+    {
+     "component": "MM",
+     "role": "owning",
+     "service": "Regulated storage"
+    },
+    {
+     "component": "GINV",
+     "role": "reference",
+     "service": "Storage location"
+    },
+    {
+     "component": "AM",
+     "role": "informed",
+     "service": "Stored against the source asset"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "MM",
+     "to": "AM",
+     "payload": "WorkRequest",
+     "verb": "change",
+     "pattern": "event"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Environmental specialist",
+     "raci": "A"
+    },
+    {
+     "role": "Storekeeper",
+     "raci": "R"
+    },
+    {
+     "role": "Materials manager",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "MaterialItem",
+    "WorkLocation",
+    "WorkActivityRecord",
+    "Asset"
+   ],
+   "controls": [
+    {
+     "kind": "regulatory",
+     "text": "40 CFR 761.65 is storage for disposal. 40 CFR 761.40 is marking of PCBs. 761.50(c) requires storage in accordance with 761.65. Unmarked drums in a yard are not a store."
+    },
+    {
+     "kind": "regulatory",
+     "text": "40 CFR 761.50(a)(4): spills and other uncontrolled discharges of PCBs at concentrations of 50 ppm or more constitute disposal. A spill during handling is 19.3.1 again, as PCB remediation waste under 761.61."
+    }
+   ],
+   "measures": [
+    {
+     "name": "HSE indicators",
+     "definition": "EN 15341 cl. 12 HSEi. Regulated material stored unmarked.",
+     "cite": "EN 15341:2019+A1:2022 cl. 12 HSEi health and safety indicators"
+    },
+    {
+     "name": "Cycle Time",
+     "definition": "SMRP 5.4.7 from class to marked storage ready to ship.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    }
+   ],
+   "variants": [
+    "PCB Item stored and marked under 761.65 and 761.40",
+    "PCB liquid stored under 761.65",
+    "RCRA hazardous stored pending a 262.20 manifest"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "A regulated class is marked and stored under 761.65 until 19.3.3 ships it.",
+    "artifact": "models/19.3-manage-waste-salvage-and-hazardous-materials.bpmn"
+   },
+   "en17007": {
+    "process": "HSE.4",
+    "title": "Propose measures for preventing risks and consequences of identified risks",
+    "clause": "6.7"
+   },
+   "sources": [
+    {
+     "for": "process",
+     "cite": "EN 17007:2017 cl. 6.7 HSE.4",
+     "status": "verified"
+    },
+    {
+     "for": "storage",
+     "cite": "40 CFR 761.65 Storage for disposal",
+     "status": "regulation"
+    },
+    {
+     "for": "marking",
+     "cite": "40 CFR 761.40 Marking of PCBs",
+     "status": "regulation"
+    },
+    {
+     "for": "spill is disposal",
+     "cite": "40 CFR 761.50(a)(4)",
+     "status": "regulation"
+    },
+    {
+     "for": "interfaces",
+     "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 payloads; Annex A verbs",
+     "status": "clause-verified"
+    },
+    {
+     "for": "data_objects",
+     "cite": "IEC 61968-11:2013 CIM extensions for distribution, Work package",
+     "status": "clause-verified"
+    }
+   ],
+   "provenance": {
+    "basis": "regulation",
+    "primary": "40 CFR 761.65 Storage for disposal"
+   }
+  },
+  {
+   "uid": 10621,
+   "id": "19.3.3",
+   "name": "Manifest, transport and dispose of regulated waste",
+   "group": {
+    "id": "19.3",
+    "name": "Manage waste, salvage and hazardous materials",
+    "uid": 10618
+   },
+   "intent": "Ship the stored regulated waste under the manifest or PCB disposal section that 19.3.1 named.",
+   "activities": [
+    "Take the stored material and its class",
+    "Raise a 40 CFR 262.20 manifest where RCRA applies",
+    "Dispose PCB waste under 40 CFR 761.60, 761.61 or 761.62 as classified",
+    "Return the signed disposal evidence to 19.3.5"
+   ],
+   "trigger": {
+    "kind": "conditional",
+    "text": "Regulated material is stored, marked and ready to leave the site.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Stored, marked material from 19.3.2",
+     "party": "MM",
+     "data": "MaterialItem"
+    },
+    {
+     "what": "Waste class from 19.3.1",
+     "party": "MM",
+     "data": "Work"
+    },
+    {
+     "what": "Receiving facility identity",
+     "party": "MM",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Manifest or PCB disposal record",
+     "party": "MM",
+     "data": "Work"
+    },
+    {
+     "what": "Signed disposal evidence for 19.3.5",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "systems": [
+    {
+     "component": "MM",
+     "role": "owning",
+     "service": "Manifest and disposal"
+    },
+    {
+     "component": "MAI",
+     "role": "receiving",
+     "service": "Disposal evidence"
+    },
+    {
+     "component": "FIN",
+     "role": "informed",
+     "service": "Disposal cost"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "MM",
+     "to": "MAI",
+     "payload": "WorkRequest",
+     "verb": "change",
+     "pattern": "event"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Environmental specialist",
+     "raci": "A"
+    },
+    {
+     "role": "Materials manager",
+     "raci": "R"
+    },
+    {
+     "role": "Finance controller",
+     "raci": "I"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "MaterialItem",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "regulatory",
+     "text": "40 CFR 262.20 is the RCRA manifest. 40 CFR 761.60 is PCB disposal requirements; 761.61 is PCB remediation waste; 761.62 is PCB bulk product waste. Cite the section 19.3.1 returned, not Part 761 as a whole."
+    },
+    {
+     "kind": "regulatory",
+     "text": "40 CFR 268.1 is land-disposal restrictions. A landfill that is legal under 761.62(b) may still be restricted under Part 268 if the waste is also RCRA-hazardous. Name both when both bite."
+    }
+   ],
+   "measures": [
+    {
+     "name": "HSE indicators",
+     "definition": "EN 15341 cl. 12 HSEi. Regulated waste leaving without a manifest or 761.60 record.",
+     "cite": "EN 15341:2019+A1:2022 cl. 12 HSEi health and safety indicators"
+    },
+    {
+     "name": "Cycle Time",
+     "definition": "SMRP 5.4.7 from marked storage to signed disposal evidence.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    }
+   ],
+   "variants": [
+    "RCRA hazardous on a 40 CFR 262.20 manifest",
+    "PCB liquid under 761.60(a)",
+    "PCB Item under 761.60(b)",
+    "PCB bulk product under 761.62"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "Stored regulated waste is shipped under the section 19.3.1 named and evidence returned.",
+    "artifact": "models/19.3-manage-waste-salvage-and-hazardous-materials.bpmn"
+   },
+   "en17007": {
+    "process": "SPP.12",
+    "title": "Disposal of faulty or damaged items",
+    "clause": "6.16"
+   },
+   "sources": [
+    {
+     "for": "process",
+     "cite": "EN 17007:2017 cl. 6.16 SPP.12",
+     "status": "verified"
+    },
+    {
+     "for": "manifest",
+     "cite": "40 CFR 262.20 Manifest",
+     "status": "regulation"
+    },
+    {
+     "for": "PCB disposal",
+     "cite": "40 CFR 761.60 Disposal requirements",
+     "status": "regulation"
+    },
+    {
+     "for": "LDR",
+     "cite": "40 CFR 268.1 Land disposal restrictions",
+     "status": "regulation"
+    },
+    {
+     "for": "interfaces",
+     "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 payloads; Annex A verbs",
+     "status": "clause-verified"
+    },
+    {
+     "for": "data_objects",
+     "cite": "IEC 61968-11:2013 CIM extensions for distribution, Work package",
+     "status": "clause-verified"
+    }
+   ],
+   "provenance": {
+    "basis": "regulation",
+    "primary": "40 CFR 262.20 Manifest and 40 CFR 761.60"
+   }
+  },
+  {
+   "uid": 10622,
+   "id": "19.3.4",
+   "name": "Recover, salvage and recycle serviceable material",
+   "group": {
+    "id": "19.3",
+    "name": "Manage waste, salvage and hazardous materials",
+    "uid": 10618
+   },
+   "intent": "Return serviceable material from a leaving asset or the storeroom to stock, not to a waste class.",
+   "activities": [
+    "Take material 19.3.1 returned as salvage",
+    "Assess whether it can return to stock",
+    "Return it to 13.2, or reclassify through 19.3.1 if it is waste",
+    "Do not treat salvage as a plant retirement"
+   ],
+   "trigger": {
+    "kind": "conditional",
+    "text": "19.3.1 has returned salvage, or a leaving asset has yielded serviceable parts.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Salvage class from 19.3.1",
+     "party": "MM",
+     "data": "Work"
+    },
+    {
+     "what": "Recovered item from the leaving asset",
+     "party": "FRD",
+     "data": "MaterialItem"
+    },
+    {
+     "what": "Stock identity it would return under",
+     "party": "MM",
+     "data": "MaterialItem"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Item returned to 13.2 as stock",
+     "party": "MM",
+     "data": "MaterialItem"
+    },
+    {
+     "what": "Item reclassified as waste through 19.3.1",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "systems": [
+    {
+     "component": "MM",
+     "role": "owning",
+     "service": "Salvage return"
+    },
+    {
+     "component": "FRD",
+     "role": "originating",
+     "service": "Recovered item"
+    },
+    {
+     "component": "FIN",
+     "role": "informed",
+     "service": "Salvage credit"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "FRD",
+     "to": "MM",
+     "payload": "WorkRequest",
+     "verb": "change",
+     "pattern": "event"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Storekeeper",
+     "raci": "R"
+    },
+    {
+     "role": "Materials manager",
+     "raci": "A"
+    },
+    {
+     "role": "Decommissioning engineer",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "MaterialItem",
+    "Work",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "EN 17007 SPP.10 is assess replaced items. 13.5.6 surplus and 13.2 receipts send salvage here. A salvage class is not a 18 CFR 101 retirement. 19.4.3 retires the plant; this process returns the part."
+    },
+    {
+     "kind": "financial",
+     "text": "18 CFR 101 Electric Plant Instruction 10 and Definition 34 are the retirement unit. Salvage credit follows the plant retirement, it does not create one."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Maintenance cost",
+     "definition": "EN 15341 cl. 12 Mi. Salvage credit against the leaving asset, not a new stock purchase.",
+     "cite": "EN 15341:2019+A1:2022 cl. 12 Mi maintenance-cost indicators"
+    },
+    {
+     "name": "Rework",
+     "definition": "SMRP 4.1. Waste that should have been salvage, or salvage later found to be PCB.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    }
+   ],
+   "variants": [
+    "Returned to 13.2 as stock",
+    "Reclassified as PCB or RCRA through 19.3.1",
+    "Scrap with no stock identity"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "Salvage is assessed, returned to stock, or sent back through 19.3.1 as waste.",
+    "artifact": "models/19.3-manage-waste-salvage-and-hazardous-materials.bpmn"
+   },
+   "en17007": {
+    "process": "SPP.10",
+    "title": "Assess replaced items",
+    "clause": "6.16"
+   },
+   "sources": [
+    {
+     "for": "process",
+     "cite": "EN 17007:2017 cl. 6.16 SPP.10",
+     "status": "verified"
+    },
+    {
+     "for": "retirement unit",
+     "cite": "18 CFR 101 Electric Plant Instruction 10; Definition 34",
+     "status": "regulation"
+    },
+    {
+     "for": "landscape",
+     "cite": "GFMAM Asset Management Landscape 3rd ed. v3.0, 2024-06, subject 6.7 Asset Repurposing or Disposal",
+     "status": "verified"
+    },
+    {
+     "for": "interfaces",
+     "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 payloads; Annex A verbs",
+     "status": "clause-verified"
+    },
+    {
+     "for": "data_objects",
+     "cite": "IEC 61968-11:2013 CIM extensions for distribution, Work package",
+     "status": "clause-verified"
+    },
+    {
+     "for": "not a retirement",
+     "cite": "Salvage credit is not a plant-account retirement; 19.4.3 is",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "standard",
+    "primary": "EN 17007:2017 cl. 6.16 SPP.10"
+   }
+  },
+  {
+   "uid": 10623,
+   "id": "19.3.5",
+   "name": "Record disposal evidence against the asset and the work",
+   "group": {
+    "id": "19.3",
+    "name": "Manage waste, salvage and hazardous materials",
+    "uid": 10618
+   },
+   "intent": "Attach the signed disposal or salvage evidence to the asset and the work that produced it.",
+   "activities": [
+    "Take the signed 19.3.3 evidence or the 19.3.4 stock return",
+    "Attach it to the source asset and to the work",
+    "Keep PCB records under 40 CFR 761.180",
+    "Hand the pack to 12.1.6 and 19.4.4; do not retire the register here"
+   ],
+   "trigger": {
+    "kind": "conditional",
+    "text": "Signed disposal evidence or a salvage return is ready to file.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Signed disposal evidence from 19.3.3",
+     "party": "MM",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Salvage return from 19.3.4",
+     "party": "MM",
+     "data": "MaterialItem"
+    },
+    {
+     "what": "Source asset",
+     "party": "AM",
+     "data": "Asset"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Disposal evidence on the asset and the work",
+     "party": "AM",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Pack for 12.1.6 and 19.4.4",
+     "party": "MAI",
+     "data": "Work"
+    }
+   ],
+   "systems": [
+    {
+     "component": "AM",
+     "role": "owning",
+     "service": "Disposal evidence on the asset"
+    },
+    {
+     "component": "MM",
+     "role": "originating",
+     "service": "Manifest or salvage record"
+    },
+    {
+     "component": "MAI",
+     "role": "informed",
+     "service": "Evidence for close-out"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "MM",
+     "to": "AM",
+     "payload": "WorkRequest",
+     "verb": "change",
+     "pattern": "event"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Environmental specialist",
+     "raci": "R"
+    },
+    {
+     "role": "Asset data steward",
+     "raci": "A"
+    },
+    {
+     "role": "Materials manager",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Asset",
+    "Work",
+    "WorkActivityRecord",
+    "MaterialItem"
+   ],
+   "controls": [
+    {
+     "kind": "regulatory",
+     "text": "40 CFR 761.180 is records and monitoring for PCBs. The signed 761.60/61/62 disposal record and the 262.20 manifest copy live here, against the asset, not only in a yard file."
+    },
+    {
+     "kind": "operational",
+     "text": "12.1.6 will not retire an asset whose hazardous material has no disposal evidence. 19.4.4 keeps the retention clock. This process only files the evidence those two will read."
+    }
+   ],
+   "measures": [
+    {
+     "name": "ICT indicators",
+     "definition": "EN 15341 cl. 12 ICTi. Leaving asset with no disposal evidence attached.",
+     "cite": "EN 15341:2019+A1:2022 cl. 12 ICTi"
+    },
+    {
+     "name": "HSE indicators",
+     "definition": "EN 15341 cl. 12 HSEi. PCB or RCRA waste with no 761.180 or 262.20 record.",
+     "cite": "EN 15341:2019+A1:2022 cl. 12 HSEi health and safety indicators"
+    }
+   ],
+   "variants": [
+    "PCB disposal record under 40 CFR 761.180",
+    "RCRA manifest copy under 40 CFR 262.20",
+    "Salvage return filed against the source asset"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "Signed disposal or salvage evidence is filed on the asset for 12.1.6 and 19.4.4.",
+    "artifact": "models/19.3-manage-waste-salvage-and-hazardous-materials.bpmn"
+   },
+   "en17007": {
+    "process": "DTA.1",
+    "title": "Store and validate the raw data in a library and/or a database",
+    "clause": "6.10"
+   },
+   "sources": [
+    {
+     "for": "process",
+     "cite": "EN 17007:2017 cl. 6.10 DTA.1",
+     "status": "verified"
+    },
+    {
+     "for": "PCB records",
+     "cite": "40 CFR 761.180 Records and monitoring",
+     "status": "regulation"
+    },
+    {
+     "for": "manifest copy",
+     "cite": "40 CFR 262.20 Manifest",
+     "status": "regulation"
+    },
+    {
+     "for": "interfaces",
+     "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 payloads; Annex A verbs",
+     "status": "clause-verified"
+    },
+    {
+     "for": "data_objects",
+     "cite": "IEC 61968-11:2013 CIM extensions for distribution, Work package",
+     "status": "clause-verified"
+    },
+    {
+     "for": "not 12.1.6",
+     "cite": "Evidence is filed here; 12.1.6 reads it when it end-dates the register",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "regulation",
+    "primary": "40 CFR 761.180 Records and monitoring"
+   }
+  },
+  {
+   "uid": 10625,
+   "id": "19.4.1",
+   "name": "Determine the disposal or transfer route",
+   "group": {
+    "id": "19.4",
+    "name": "Dispose of and transfer asset ownership",
+    "uid": 10624
+   },
+   "intent": "Return scrap, sell, trade or transfer, and name whether the authority is 18 CFR 101 or the contract.",
+   "activities": [
+    "Take the physical end-state from 19.2.4 and any salvage from 19.3.4",
+    "Return scrap, sell, trade or transfer",
+    "Name 18 CFR 101 retirement-unit accounting or the contract as the authority",
+    "Do not re-decide abandon-versus-remove - that was 19.2.4"
+   ],
+   "trigger": {
+    "kind": "conditional",
+    "text": "Physical end-state is known and title still has to go somewhere.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Physical end-state from 19.2.4",
+     "party": "CON",
+     "data": "Work"
+    },
+    {
+     "what": "Salvage result from 19.3.4",
+     "party": "MM",
+     "data": "MaterialItem"
+    },
+    {
+     "what": "Continuing property record of the asset",
+     "party": "FIN",
+     "data": "WorkAsset"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Scrap, sell, trade or transfer, plus authority",
+     "party": "FIN",
+     "data": "Work"
+    },
+    {
+     "what": "Route released to 19.4.2 or 19.4.3",
+     "party": "AM",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "systems": [
+    {
+     "component": "FIN",
+     "role": "owning",
+     "service": "Disposal route"
+    },
+    {
+     "component": "AM",
+     "role": "informed",
+     "service": "Route on the asset"
+    },
+    {
+     "component": "CON",
+     "role": "reference",
+     "service": "Physical end-state"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "CON",
+     "to": "FIN",
+     "payload": "WorkRequest",
+     "verb": "change",
+     "pattern": "event"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Asset manager",
+     "raci": "A"
+    },
+    {
+     "role": "Property accountant",
+     "raci": "R"
+    },
+    {
+     "role": "Legal counsel",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkAsset",
+    "MaterialItem",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "financial",
+     "text": "18 CFR 101 Electric Plant Instruction 10 and Definition 34 are the retirement unit. A scrap route still retires the unit. A sale or trade is APQC 10.4.3 (pcf_id 10953). Transfer terms, if not a FERC retirement, are the contract."
+    },
+    {
+     "kind": "operational",
+     "text": "19.2.4 already returned remove or abandon-in-place. This process returns where TITLE goes. Re-deciding abandon here would collide with 19.2.4 the way 17.2.2 collided with 17.5.2."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Maintenance cost",
+     "definition": "EN 15341 cl. 12 Mi. Route decides whether a salvage credit or a sale proceeds.",
+     "cite": "EN 15341:2019+A1:2022 cl. 12 Mi maintenance-cost indicators"
+    },
+    {
+     "name": "Cycle Time",
+     "definition": "SMRP 5.4.7 from physical end-state to a named title route.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    }
+   ],
+   "variants": [
+    "Scrap, retirement unit under 18 CFR 101 Definition 34",
+    "Sell or trade under APQC 10.4.3, terms in the contract",
+    "Transfer to another operator, terms in the contract",
+    "Already abandoned in place, title remains, 19.4.3 still retires the unit"
+   ],
+   "notation": {
+    "class": "DMN",
+    "why": "The output is scrap, sell, trade or transfer, plus whether 18 CFR 101 or the contract is the authority.",
+    "artifact": "models/19.4.1-disposal-or-transfer-route.dmn"
+   },
+   "en17007": {
+    "process": "OPT.1",
+    "title": "Determine the areas of improvement",
+    "clause": "6.13"
+   },
+   "sources": [
+    {
+     "for": "process",
+     "cite": "EN 17007:2017 cl. 6.13 OPT.1",
+     "status": "verified"
+    },
+    {
+     "for": "retirement unit",
+     "cite": "18 CFR 101 Electric Plant Instruction 10; Definition 34",
+     "status": "regulation"
+    },
+    {
+     "for": "structure",
+     "cite": "APQC PCF Utilities v7.2.1 10.4.3 Perform sale or trade (pcf_id 10953) - structural precedent only",
+     "status": "consensus"
+    },
+    {
+     "for": "landscape",
+     "cite": "GFMAM Asset Management Landscape 3rd ed. v3.0, 2024-06, subject 6.7 Asset Repurposing or Disposal",
+     "status": "verified"
+    },
+    {
+     "for": "interfaces",
+     "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 payloads; Annex A verbs",
+     "status": "clause-verified"
+    },
+    {
+     "for": "data_objects",
+     "cite": "IEC 61968-11:2013 CIM extensions for distribution, Work package",
+     "status": "clause-verified"
+    },
+    {
+     "for": "not 19.2.4",
+     "cite": "19.2.4 is the physical end-state; 19.4.1 is where title goes",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "regulation",
+    "primary": "18 CFR 101 Electric Plant Instruction 10 and Definition 34"
+   }
+  },
+  {
+   "uid": 10626,
+   "id": "19.4.2",
+   "name": "Transfer ownership, sell or trade the asset",
+   "group": {
+    "id": "19.4",
+    "name": "Dispose of and transfer asset ownership",
+    "uid": 10624
+   },
+   "intent": "Execute the sale, trade or transfer 19.4.1 named, on the contract, not on an invented tariff.",
+   "activities": [
+    "Take the sell, trade or transfer route from 19.4.1",
+    "Execute the contract that carries title",
+    "If the asset is a jointly used structure, notify 11.1",
+    "Hand the completed transfer to 19.4.3"
+   ],
+   "trigger": {
+    "kind": "conditional",
+    "text": "19.4.1 has returned sell, trade or transfer.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Route from 19.4.1",
+     "party": "FIN",
+     "data": "Work"
+    },
+    {
+     "what": "Contract or conveyance",
+     "party": "FIN",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Asset identity and any joint-use flag",
+     "party": "AM",
+     "data": "Asset"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Completed transfer of title",
+     "party": "FIN",
+     "data": "Work"
+    },
+    {
+     "what": "Notice to 11.1 if a jointly used structure changed owner",
+     "party": "CS",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "systems": [
+    {
+     "component": "FIN",
+     "role": "owning",
+     "service": "Title transfer"
+    },
+    {
+     "component": "AM",
+     "role": "informed",
+     "service": "Owner on the asset"
+    },
+    {
+     "component": "CS",
+     "role": "informed",
+     "service": "Joint-use notice"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "FIN",
+     "to": "AM",
+     "payload": "WorkRequest",
+     "verb": "change",
+     "pattern": "event"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Legal counsel",
+     "raci": "R"
+    },
+    {
+     "role": "Asset manager",
+     "raci": "A"
+    },
+    {
+     "role": "Property accountant",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "Asset",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "APQC 10.4.3 (pcf_id 10953) is perform sale or trade. No pack source states consideration, warranties or closing conditions. Those are the contract. Return that the contract is the authority, the way 10.4.4 names the state rule."
+    },
+    {
+     "kind": "operational",
+     "text": "11.1 holds joint-use and licence terms. A pole that changes owner still has attachers. Notify 11.1; do not rewrite the licence here."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Cycle Time",
+     "definition": "SMRP 5.4.7 from named route to completed title transfer.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    },
+    {
+     "name": "Maintenance cost",
+     "definition": "EN 15341 cl. 12 Mi. Sale proceeds against the retired unit.",
+     "cite": "EN 15341:2019+A1:2022 cl. 12 Mi maintenance-cost indicators"
+    }
+   ],
+   "variants": [
+    "Sale to a third party, terms in the contract",
+    "Trade against other plant, terms in the contract",
+    "Transfer of a jointly used structure, 11.1 notified"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "A named sell, trade or transfer is executed on the contract and handed to 19.4.3.",
+    "artifact": "models/19.4-dispose-of-and-transfer-asset-ownership.bpmn"
+   },
+   "en17007": {
+    "process": "SER.3",
+    "title": "Manage contracts and evaluate companies and services",
+    "clause": "6.15"
+   },
+   "sources": [
+    {
+     "for": "process",
+     "cite": "EN 17007:2017 cl. 6.15 SER.3",
+     "status": "verified"
+    },
+    {
+     "for": "structure",
+     "cite": "APQC PCF Utilities v7.2.1 10.4.3 Perform sale or trade (pcf_id 10953) - structural precedent only",
+     "status": "consensus"
+    },
+    {
+     "for": "landscape",
+     "cite": "GFMAM Asset Management Landscape 3rd ed. v3.0, 2024-06, subject 6.7 Asset Repurposing or Disposal",
+     "status": "verified"
+    },
+    {
+     "for": "interfaces",
+     "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 payloads; Annex A verbs",
+     "status": "clause-verified"
+    },
+    {
+     "for": "data_objects",
+     "cite": "IEC 61968-11:2013 CIM extensions for distribution, Work package",
+     "status": "clause-verified"
+    },
+    {
+     "for": "contract terms",
+     "cite": "Consideration, warranties and closing conditions are the contract; no pack source states them",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "consensus",
+    "primary": "APQC PCF Utilities v7.2.1 10.4.3 Perform sale or trade (pcf_id 10953)"
+   }
+  },
+  {
+   "uid": 10627,
+   "id": "19.4.3",
+   "name": "Retire the accounting and continuing property record",
+   "group": {
+    "id": "19.4",
+    "name": "Dispose of and transfer asset ownership",
+    "uid": 10624
+   },
+   "intent": "Take the retirement unit out of the continuing property record. Do not reverse a 5.3 addition here.",
+   "activities": [
+    "Take the physical evidence from 19.2.5 and the route from 19.4.1",
+    "Identify the retirement unit under 18 CFR 101 Definition 34",
+    "Record the retirement against the continuing property record",
+    "Do not end-date the asset register - that is 12.1.6"
+   ],
+   "trigger": {
+    "kind": "conditional",
+    "text": "Physical disposition evidence and a title route are ready to retire the unit.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Physical disposition evidence from 19.2.5",
+     "party": "CON",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Title route from 19.4.1 or completed transfer from 19.4.2",
+     "party": "FIN",
+     "data": "Work"
+    },
+    {
+     "what": "Continuing property record",
+     "party": "FIN",
+     "data": "WorkAsset"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Retirement posted to the continuing property record",
+     "party": "FIN",
+     "data": "WorkAsset"
+    },
+    {
+     "what": "Retirement available to 12.1.6 as property-record disposition",
+     "party": "AM",
+     "data": "Work"
+    }
+   ],
+   "systems": [
+    {
+     "component": "FIN",
+     "role": "owning",
+     "service": "Property-record retirement"
+    },
+    {
+     "component": "CON",
+     "role": "originating",
+     "service": "Physical evidence"
+    },
+    {
+     "component": "AM",
+     "role": "informed",
+     "service": "Disposition 12.1.6 will read"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "CON",
+     "to": "FIN",
+     "payload": "WorkRequest",
+     "verb": "change",
+     "pattern": "event"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Property accountant",
+     "raci": "R"
+    },
+    {
+     "role": "Finance controller",
+     "raci": "A"
+    },
+    {
+     "role": "Asset data steward",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "WorkAsset",
+    "Work",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "financial",
+     "text": "18 CFR 101 Electric Plant Instruction 10 is additions AND retirements. Definition 34 is the retirement unit. 5.3 unitises ADDITIONS of completed construction. This process retires the unit. Parallel text is 18 CFR 201 for gas."
+    },
+    {
+     "kind": "financial",
+     "text": "18 CFR 125.3 Item 16(b) keeps the continuing plant inventory ledger 25 years. Item 17 lets work-order sheets go 5 years after clearance to plant, provided that ledger is maintained. The property record outlives the work order."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Maintenance cost",
+     "definition": "EN 15341 cl. 12 Mi. Retired original cost against the unit, not a work-order close.",
+     "cite": "EN 15341:2019+A1:2022 cl. 12 Mi maintenance-cost indicators"
+    },
+    {
+     "name": "ICT indicators",
+     "definition": "EN 15341 cl. 12 ICTi. Physical removal with no property-record retirement.",
+     "cite": "EN 15341:2019+A1:2022 cl. 12 ICTi"
+    }
+   ],
+   "variants": [
+    "Retirement unit removed, original cost retired",
+    "Abandoned in place, unit still retired",
+    "Sold or transferred, unit retired on the completed 19.4.2"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "Physical evidence plus title route posts a retirement unit off the continuing property record.",
+    "artifact": "models/19.4-dispose-of-and-transfer-asset-ownership.bpmn"
+   },
+   "en17007": {
+    "process": "BUD.4",
+    "title": "Extract budgeted and actual expenditures",
+    "clause": "6.8"
+   },
+   "sources": [
+    {
+     "for": "process",
+     "cite": "EN 17007:2017 cl. 6.8 BUD.4",
+     "status": "verified"
+    },
+    {
+     "for": "retirement",
+     "cite": "18 CFR 101 Electric Plant Instruction 10; Definition 34",
+     "status": "regulation"
+    },
+    {
+     "for": "retention",
+     "cite": "18 CFR 125.3 Item 16(b); Item 17",
+     "status": "regulation"
+    },
+    {
+     "for": "gas parallel",
+     "cite": "18 CFR 201",
+     "status": "regulation"
+    },
+    {
+     "for": "interfaces",
+     "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 payloads; Annex A verbs",
+     "status": "clause-verified"
+    },
+    {
+     "for": "data_objects",
+     "cite": "IEC 61968-11:2013 CIM extensions for distribution, Work package",
+     "status": "clause-verified"
+    },
+    {
+     "for": "not 5.3",
+     "cite": "5.3 unitises additions of completed construction; 19.4.3 retires the unit",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "regulation",
+    "primary": "18 CFR 101 Electric Plant Instruction 10 and Definition 34"
+   }
+  },
+  {
+   "uid": 10628,
+   "id": "19.4.4",
+   "name": "Close out obligations and satisfy record retention",
+   "group": {
+    "id": "19.4",
+    "name": "Dispose of and transfer asset ownership",
+    "uid": 10624
+   },
+   "intent": "Close the remaining obligations on the leaving asset and keep the records the clocks require.",
+   "activities": [
+    "Take 12.1.6 retired-record confirmation, 19.4.3 retirement and 19.3.5 disposal evidence",
+    "Close remaining joint-use, environmental and work obligations",
+    "Apply 18 CFR 125.3 Item 16(b), 49 CFR 192.709 and 40 CFR 761.180 as they bite",
+    "Do not invent an electric-distribution retention clock"
+   ],
+   "trigger": {
+    "kind": "conditional",
+    "text": "Register, property record and disposal evidence are all in.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Retired register confirmation from 12.1.6",
+     "party": "AM",
+     "data": "Asset"
+    },
+    {
+     "what": "Property-record retirement from 19.4.3",
+     "party": "FIN",
+     "data": "WorkAsset"
+    },
+    {
+     "what": "Disposal evidence from 19.3.5",
+     "party": "MM",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Obligations closed, retention clocks set",
+     "party": "MAI",
+     "data": "Work"
+    },
+    {
+     "what": "Retention pack by authority",
+     "party": "AM",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "systems": [
+    {
+     "component": "MAI",
+     "role": "owning",
+     "service": "Close-out and retention"
+    },
+    {
+     "component": "AM",
+     "role": "holding",
+     "service": "Retention pack"
+    },
+    {
+     "component": "FIN",
+     "role": "reference",
+     "service": "Property-record retirement"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "AM",
+     "to": "MAI",
+     "payload": "WorkRequest",
+     "verb": "close",
+     "pattern": "event"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Asset manager",
+     "raci": "A"
+    },
+    {
+     "role": "Records officer",
+     "raci": "R"
+    },
+    {
+     "role": "Environmental specialist",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "Asset",
+    "WorkAsset",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "regulatory",
+     "text": "18 CFR 125.3 Item 16(b) is 25 years on the plant ledger. 49 CFR 192.709(a) keeps pipe-repair history for the life of the pipe. 40 CFR 761.180 keeps PCB records. 16 U.S.C. 824o does not create an electric-distribution clock."
+    },
+    {
+     "kind": "operational",
+     "text": "12.1.6 has already end-dated the active record. This process closes OBLIGATIONS and sets RETENTION. Re-retiring the register here would be the 17.2.2/17.5.2 collision again."
+    }
+   ],
+   "measures": [
+    {
+     "name": "ICT indicators",
+     "definition": "EN 15341 cl. 12 ICTi. Closed asset with no retention pack by authority.",
+     "cite": "EN 15341:2019+A1:2022 cl. 12 ICTi"
+    },
+    {
+     "name": "Cycle Time",
+     "definition": "SMRP 5.4.7 from last evidence in to obligations closed.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    }
+   ],
+   "variants": [
+    "Property-record clock under 18 CFR 125.3 Item 16(b)",
+    "Pipe-repair history under 49 CFR 192.709(a)",
+    "PCB records under 40 CFR 761.180",
+    "Electric distribution - operator retention, no federal clock"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "Retired register, retired unit and disposal evidence close obligations and set named retention clocks.",
+    "artifact": "models/19.4-dispose-of-and-transfer-asset-ownership.bpmn"
+   },
+   "en17007": {
+    "process": "DTA.10",
+    "title": "Save and provide access to data in a data processing system",
+    "clause": "6.10"
+   },
+   "sources": [
+    {
+     "for": "process",
+     "cite": "EN 17007:2017 cl. 6.10 DTA.10",
+     "status": "verified"
+    },
+    {
+     "for": "property retention",
+     "cite": "18 CFR 125.3 Item 16(b); Item 17",
+     "status": "regulation"
+    },
+    {
+     "for": "pipe records",
+     "cite": "49 CFR 192.709(a)",
+     "status": "regulation"
+    },
+    {
+     "for": "PCB records",
+     "cite": "40 CFR 761.180 Records and monitoring",
+     "status": "regulation"
+    },
+    {
+     "for": "no electric clock",
+     "cite": "16 U.S.C. 824o(a)(1)",
+     "status": "regulation"
+    },
+    {
+     "for": "interfaces",
+     "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 payloads; Annex A verbs",
+     "status": "clause-verified"
+    },
+    {
+     "for": "data_objects",
+     "cite": "IEC 61968-11:2013 CIM extensions for distribution, Work package",
+     "status": "clause-verified"
+    },
+    {
+     "for": "not 12.1.6",
+     "cite": "12.1.6 end-dates the active record; 19.4.4 closes remaining obligations and sets retention",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "regulation",
+    "primary": "18 CFR 125.3 Item 16(b) continuing plant inventory ledger"
+   }
+  }
+ ],
+ "merge_corrections": [
+  {
+   "date": "2026-08-30",
+   "by": "Claude",
+   "what": "NO CORRECTION NEEDED. Zero errors and zero warnings, first submission. That is the third consecutive clean file from this platform and the fourth in the campaign.",
+   "accepted_from_submitter": [
+    "49 CFR 192.727 abandonment cited as a real prescriptive federal rule for gas with the electric absence stated rather than an electric parallel manufactured - the same discipline 17.3.4 applies to 16 U.S.C. 824o.",
+    "40 CFR 761 and RCRA cited by subdivision rather than by Part. This is the first environmental law in the reference and it arrived cited correctly.",
+    "12.1.6 referenced as the owner of the asset RECORD retirement, with 19.2 taking the physical act and 19.3 the material. The boundary named in the brief held.",
+    "Three DMN tables and eighteen BPMN with no CMMN, which is right for a category whose sequences are largely fixed by permit and by rule."
+   ],
+   "models_built_here": "Seven artifacts, 4 BPMN and 3 DMN."
+  }
+ ]
+}

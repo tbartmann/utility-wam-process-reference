@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_P_19_4" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <process id="P_19_4" name="19.4 Dispose of and transfer asset ownership" isExecutable="false">
+    <documentation>19.4.2, 19.4.3 and 19.4.4 are drawn. 19.4.1 is the route decision and has its own table.
+
+THE ACCOUNTING PATH RUNS WHETHER OR NOT ANYTHING MOVED. Plant abandoned in place is still owned and has not gone anywhere, and its retirement unit is still retired off the continuing property record under 18 CFR 101 Definition 34. The transfer branch is optional; the retirement branch is not, and the flow is drawn so that 19.4.3 is reached from both.
+
+Three separate records end in three separate places and none of them is this group's: 12.1.6 end-dates the asset register, 19.4.3 retires the property unit, and 19.3.5 holds the disposal evidence. 19.4.4 is the process that waits for all three before it closes anything.
+
+The retention clocks at the end are named individually because they expire differently - 18 CFR 125.3 Item 16(b) for the property record, 49 CFR 192.709(a) for pipe repair history, 40 CFR 761.180 for PCB records - and because there is no federal retention clock for electric distribution, which the last activity says rather than implies.</documentation>
+    <laneSet id="P_19_4_lanes">
+      <lane id="l_194_fin" name="Property accounting">
+        <flowNodeRef>n_194_start</flowNodeRef>
+        <flowNodeRef>n_194_rt</flowNodeRef>
+        <flowNodeRef>n_194_gw</flowNodeRef>
+        <flowNodeRef>n_194_unit</flowNodeRef>
+        <flowNodeRef>n_194_post</flowNodeRef>
+        <flowNodeRef>n_194_wait</flowNodeRef>
+        <flowNodeRef>n_194_ret</flowNodeRef>
+        <flowNodeRef>n_194_end</flowNodeRef>
+      </lane>
+      <lane id="l_194_com" name="Commercial and joint use">
+        <flowNodeRef>n_194_exec</flowNodeRef>
+        <flowNodeRef>n_194_ju</flowNodeRef>
+        <flowNodeRef>n_194_obl</flowNodeRef>
+      </lane>
+    </laneSet>
+    <startEvent id="n_194_start" name="Physical end-state known, title still to settle"><conditionalEventDefinition id="n_194_start_cd"><condition/></conditionalEventDefinition></startEvent>
+    <businessRuleTask id="n_194_rt" name="Determine the title route (19.4.1)"><documentation>19.4.1. Scrap, sell, trade, transfer, or retained in place.</documentation></businessRuleTask>
+    <exclusiveGateway id="n_194_gw" name="Route"/>
+    <userTask id="n_194_exec" name="Execute the contract that carries title"><documentation>19.4.2. The terms are the contract's; this reference states none of them.</documentation></userTask>
+    <sendTask id="n_194_ju" name="Notify 11.1 if it is a jointly used structure"><documentation>19.4.2. Attachers do not transfer with the pole automatically, and 11.0 holds the agreements that say what happens to them.</documentation></sendTask>
+    <serviceTask id="n_194_unit" name="Identify the retirement unit"><documentation>19.4.3. 18 CFR 101 Definition 34.</documentation></serviceTask>
+    <serviceTask id="n_194_post" name="Post the retirement against the continuing property record"><documentation>19.4.3. The asset register is 12.1.6's to end-date; this is the property record, and they are different books.</documentation></serviceTask>
+    <receiveTask id="n_194_wait" name="Wait for register, property record and disposal evidence"><documentation>19.4.4. All three: 12.1.6 confirmation, 19.4.3 retirement, 19.3.5 evidence.</documentation></receiveTask>
+    <userTask id="n_194_obl" name="Close joint-use, environmental and work obligations"><documentation>19.4.4.</documentation></userTask>
+    <serviceTask id="n_194_ret" name="Set the retention clocks that bite"><documentation>19.4.4. 18 CFR 125.3 Item 16(b), 49 CFR 192.709(a), 40 CFR 761.180 - each on its own period. For electric distribution there is no federal clock and none is invented.</documentation></serviceTask>
+    <endEvent id="n_194_end" name="Obligations closed"/>
+    <sequenceFlow id="f_n_194_start_n_194_rt" sourceRef="n_194_start" targetRef="n_194_rt" name=""/>
+    <sequenceFlow id="f_n_194_rt_n_194_gw" sourceRef="n_194_rt" targetRef="n_194_gw" name=""/>
+    <sequenceFlow id="f_n_194_gw_n_194_exec" sourceRef="n_194_gw" targetRef="n_194_exec" name="sell, trade or transfer"><conditionExpression xsi:type="tFormalExpression"><![CDATA[route = "sellOrTrade" or route = "transfer"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_194_exec_n_194_ju" sourceRef="n_194_exec" targetRef="n_194_ju" name=""/>
+    <sequenceFlow id="f_n_194_ju_n_194_unit" sourceRef="n_194_ju" targetRef="n_194_unit" name=""/>
+    <sequenceFlow id="f_n_194_gw_n_194_unit" sourceRef="n_194_gw" targetRef="n_194_unit" name="scrap, or retained in place"/>
+    <sequenceFlow id="f_n_194_unit_n_194_post" sourceRef="n_194_unit" targetRef="n_194_post" name=""/>
+    <sequenceFlow id="f_n_194_post_n_194_wait" sourceRef="n_194_post" targetRef="n_194_wait" name=""/>
+    <sequenceFlow id="f_n_194_wait_n_194_obl" sourceRef="n_194_wait" targetRef="n_194_obl" name=""/>
+    <sequenceFlow id="f_n_194_obl_n_194_ret" sourceRef="n_194_obl" targetRef="n_194_ret" name=""/>
+    <sequenceFlow id="f_n_194_ret_n_194_end" sourceRef="n_194_ret" targetRef="n_194_end" name=""/>
+  </process>
+  <bpmndi:BPMNDiagram id="dg_P_19_4">
+    <bpmndi:BPMNPlane id="pl_P_19_4" bpmnElement="P_19_4">
+      <bpmndi:BPMNShape id="sh_n_194_start" bpmnElement="n_194_start"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_194_rt" bpmnElement="n_194_rt"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_194_gw" bpmnElement="n_194_gw"><dc:Bounds x="467" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_194_exec" bpmnElement="n_194_exec"><dc:Bounds x="595" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_194_ju" bpmnElement="n_194_ju"><dc:Bounds x="765" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_194_unit" bpmnElement="n_194_unit"><dc:Bounds x="935" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_194_post" bpmnElement="n_194_post"><dc:Bounds x="1105" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_194_wait" bpmnElement="n_194_wait"><dc:Bounds x="1275" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_194_obl" bpmnElement="n_194_obl"><dc:Bounds x="1445" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_194_ret" bpmnElement="n_194_ret"><dc:Bounds x="1615" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_194_end" bpmnElement="n_194_end"><dc:Bounds x="1832" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ed_f_n_194_start_n_194_rt" bpmnElement="f_n_194_start_n_194_rt"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_194_rt_n_194_gw" bpmnElement="f_n_194_rt_n_194_gw"><di:waypoint x="385" y="235"/><di:waypoint x="467" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_194_gw_n_194_exec" bpmnElement="f_n_194_gw_n_194_exec"><di:waypoint x="513" y="235"/><di:waypoint x="570" y="235"/><di:waypoint x="570" y="455"/><di:waypoint x="595" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_194_exec_n_194_ju" bpmnElement="f_n_194_exec_n_194_ju"><di:waypoint x="725" y="455"/><di:waypoint x="765" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_194_ju_n_194_unit" bpmnElement="f_n_194_ju_n_194_unit"><di:waypoint x="895" y="455"/><di:waypoint x="910" y="455"/><di:waypoint x="910" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_194_gw_n_194_unit" bpmnElement="f_n_194_gw_n_194_unit"><di:waypoint x="513" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_194_unit_n_194_post" bpmnElement="f_n_194_unit_n_194_post"><di:waypoint x="1065" y="235"/><di:waypoint x="1105" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_194_post_n_194_wait" bpmnElement="f_n_194_post_n_194_wait"><di:waypoint x="1235" y="235"/><di:waypoint x="1275" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_194_wait_n_194_obl" bpmnElement="f_n_194_wait_n_194_obl"><di:waypoint x="1405" y="235"/><di:waypoint x="1445" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_194_obl_n_194_ret" bpmnElement="f_n_194_obl_n_194_ret"><di:waypoint x="1575" y="235"/><di:waypoint x="1615" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_194_ret_n_194_end" bpmnElement="f_n_194_ret_n_194_end"><di:waypoint x="1745" y="235"/><di:waypoint x="1832" y="235"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

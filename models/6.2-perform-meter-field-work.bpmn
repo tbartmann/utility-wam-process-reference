@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_P_6_2" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <process id="P_6_2" name="6.2 Perform meter field work" isExecutable="false">
+    <documentation>6.2.1, 6.2.2 and 6.2.3 are drawn; 6.2.4 is a case with its own file.
+
+EVERY PATH STARTS BY VERIFYING THE SERVICE POINT, and that is not ceremony. A meter operation performed at the wrong service point produces a correct field record against the wrong customer, and the error surfaces on a bill weeks later - by which time the crew, the meter and the evidence have all moved.
+
+The final read on a removal and the initial read on a set are billing determinants, not asset attributes. They leave this group for 10.5 and 6.5, which is why 6.2.1 records them explicitly rather than treating the exchange as a swap.
+
+6.2.2 IS A METER OPERATION, NOT A COLLECTIONS ACT. 10.4.2 and 10.4.5 disconnect and reconnect for non-payment and carry the customer protections that go with that; 6.2.2 operates the device on an authorised order from either source. Same physical act, different authority, and the safety check before operating is common to both.</documentation>
+    <laneSet id="P_6_2_lanes">
+      <lane id="l_62_field" name="Meter field technician">
+        <flowNodeRef>n_62_start</flowNodeRef>
+        <flowNodeRef>n_62_sp</flowNodeRef>
+        <flowNodeRef>n_62_kind</flowNodeRef>
+        <flowNodeRef>n_62_fin</flowNodeRef>
+        <flowNodeRef>n_62_op</flowNodeRef>
+        <flowNodeRef>n_62_new</flowNodeRef>
+        <flowNodeRef>n_62_safe</flowNodeRef>
+        <flowNodeRef>n_62_state</flowNodeRef>
+        <flowNodeRef>n_62_dev</flowNodeRef>
+        <flowNodeRef>n_62_link</flowNodeRef>
+        <flowNodeRef>n_62_pass</flowNodeRef>
+        <flowNodeRef>n_62_ok</flowNodeRef>
+        <flowNodeRef>n_62_case</flowNodeRef>
+        <flowNodeRef>n_62_close</flowNodeRef>
+        <flowNodeRef>n_62_end</flowNodeRef>
+      </lane>
+    </laneSet>
+    <startEvent id="n_62_start" name="An authorised meter order is received"><messageEventDefinition id="n_62_start_md"/></startEvent>
+    <userTask id="n_62_sp" name="Verify the service point and the authorised work"><documentation>6.2.1, 6.2.2 and 6.2.3. The commonest metering error is correct work at the wrong service point, and it surfaces on a bill, not on site.</documentation></userTask>
+    <exclusiveGateway id="n_62_kind" name="Order type"/>
+    <userTask id="n_62_fin" name="Record existing identity and final read"><documentation>6.2.1. A billing determinant - 10.5 closes the account on it.</documentation></userTask>
+    <serviceTask id="n_62_op" name="Set, exchange or remove the meter"><documentation>6.2.1.</documentation></serviceTask>
+    <userTask id="n_62_new" name="Record installed identity, seals and initial read"><documentation>6.2.1. Seals recorded at installation are what make a later tamper finding provable at 6.6.2.</documentation></userTask>
+    <userTask id="n_62_safe" name="Check field condition and safety controls"><documentation>6.2.2. Common to a planned turn-off and an immediate safety turn-off; only the authority differs.</documentation></userTask>
+    <serviceTask id="n_62_state" name="Operate the service device and confirm the state"><documentation>6.2.2.</documentation></serviceTask>
+    <userTask id="n_62_dev" name="Install the module or endpoint"><documentation>6.2.3.</documentation></userTask>
+    <serviceTask id="n_62_link" name="Record device identity and linkage"><documentation>6.2.3. The linkage is what 6.3.3 commissions against.</documentation></serviceTask>
+    <sendTask id="n_62_pass" name="Pass the installed endpoint to commissioning"><documentation>6.2.3, into 6.3.</documentation></sendTask>
+    <exclusiveGateway id="n_62_ok" name="Completed as ordered"/>
+    <callActivity id="n_62_case" name="Investigate condition or access (6.2.4)"><documentation>6.2.4. No access, a condition defect, or an identity that does not match the record.</documentation></callActivity>
+    <serviceTask id="n_62_close" name="Close the field work record"><documentation>6.2.1.</documentation></serviceTask>
+    <endEvent id="n_62_end" name="Meter work complete"/>
+    <sequenceFlow id="f_n_62_start_n_62_sp" sourceRef="n_62_start" targetRef="n_62_sp" name=""/>
+    <sequenceFlow id="f_n_62_sp_n_62_kind" sourceRef="n_62_sp" targetRef="n_62_kind" name=""/>
+    <sequenceFlow id="f_n_62_kind_n_62_fin" sourceRef="n_62_kind" targetRef="n_62_fin" name="set, exchange or remove"><conditionExpression xsi:type="tFormalExpression"><![CDATA[order = "exchange"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_62_kind_n_62_safe" sourceRef="n_62_kind" targetRef="n_62_safe" name="turn-on, turn-off or reconnection"><conditionExpression xsi:type="tFormalExpression"><![CDATA[order = "state"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_62_kind_n_62_dev" sourceRef="n_62_kind" targetRef="n_62_dev" name="endpoint or module"><conditionExpression xsi:type="tFormalExpression"><![CDATA[order = "endpoint"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_62_fin_n_62_op" sourceRef="n_62_fin" targetRef="n_62_op" name=""/>
+    <sequenceFlow id="f_n_62_op_n_62_new" sourceRef="n_62_op" targetRef="n_62_new" name=""/>
+    <sequenceFlow id="f_n_62_new_n_62_ok" sourceRef="n_62_new" targetRef="n_62_ok" name=""/>
+    <sequenceFlow id="f_n_62_safe_n_62_state" sourceRef="n_62_safe" targetRef="n_62_state" name=""/>
+    <sequenceFlow id="f_n_62_state_n_62_ok" sourceRef="n_62_state" targetRef="n_62_ok" name=""/>
+    <sequenceFlow id="f_n_62_dev_n_62_link" sourceRef="n_62_dev" targetRef="n_62_link" name=""/>
+    <sequenceFlow id="f_n_62_link_n_62_pass" sourceRef="n_62_link" targetRef="n_62_pass" name=""/>
+    <sequenceFlow id="f_n_62_pass_n_62_ok" sourceRef="n_62_pass" targetRef="n_62_ok" name=""/>
+    <sequenceFlow id="f_n_62_ok_n_62_case" sourceRef="n_62_ok" targetRef="n_62_case" name="no access, defect or mismatch"><conditionExpression xsi:type="tFormalExpression"><![CDATA[completed = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_62_case_n_62_close" sourceRef="n_62_case" targetRef="n_62_close" name=""/>
+    <sequenceFlow id="f_n_62_ok_n_62_close" sourceRef="n_62_ok" targetRef="n_62_close" name="completed"/>
+    <sequenceFlow id="f_n_62_close_n_62_end" sourceRef="n_62_close" targetRef="n_62_end" name=""/>
+  </process>
+  <bpmndi:BPMNDiagram id="dg_P_6_2">
+    <bpmndi:BPMNPlane id="pl_P_6_2" bpmnElement="P_6_2">
+      <bpmndi:BPMNShape id="sh_n_62_start" bpmnElement="n_62_start"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_62_sp" bpmnElement="n_62_sp"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_62_kind" bpmnElement="n_62_kind"><dc:Bounds x="467" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_62_fin" bpmnElement="n_62_fin"><dc:Bounds x="595" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_62_op" bpmnElement="n_62_op"><dc:Bounds x="765" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_62_new" bpmnElement="n_62_new"><dc:Bounds x="935" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_62_safe" bpmnElement="n_62_safe"><dc:Bounds x="595" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_62_state" bpmnElement="n_62_state"><dc:Bounds x="765" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_62_dev" bpmnElement="n_62_dev"><dc:Bounds x="595" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_62_link" bpmnElement="n_62_link"><dc:Bounds x="765" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_62_pass" bpmnElement="n_62_pass"><dc:Bounds x="935" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_62_ok" bpmnElement="n_62_ok"><dc:Bounds x="1147" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_62_case" bpmnElement="n_62_case"><dc:Bounds x="1105" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_62_close" bpmnElement="n_62_close"><dc:Bounds x="1275" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_62_end" bpmnElement="n_62_end"><dc:Bounds x="1492" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ed_f_n_62_start_n_62_sp" bpmnElement="f_n_62_start_n_62_sp"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_62_sp_n_62_kind" bpmnElement="f_n_62_sp_n_62_kind"><di:waypoint x="385" y="235"/><di:waypoint x="467" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_62_kind_n_62_fin" bpmnElement="f_n_62_kind_n_62_fin"><di:waypoint x="513" y="235"/><di:waypoint x="595" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_62_kind_n_62_safe" bpmnElement="f_n_62_kind_n_62_safe"><di:waypoint x="513" y="235"/><di:waypoint x="570" y="235"/><di:waypoint x="570" y="455"/><di:waypoint x="595" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_62_kind_n_62_dev" bpmnElement="f_n_62_kind_n_62_dev"><di:waypoint x="513" y="235"/><di:waypoint x="570" y="235"/><di:waypoint x="570" y="675"/><di:waypoint x="595" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_62_fin_n_62_op" bpmnElement="f_n_62_fin_n_62_op"><di:waypoint x="725" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_62_op_n_62_new" bpmnElement="f_n_62_op_n_62_new"><di:waypoint x="895" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_62_new_n_62_ok" bpmnElement="f_n_62_new_n_62_ok"><di:waypoint x="1065" y="235"/><di:waypoint x="1147" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_62_safe_n_62_state" bpmnElement="f_n_62_safe_n_62_state"><di:waypoint x="725" y="455"/><di:waypoint x="765" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_62_state_n_62_ok" bpmnElement="f_n_62_state_n_62_ok"><di:waypoint x="895" y="455"/><di:waypoint x="1122" y="455"/><di:waypoint x="1122" y="235"/><di:waypoint x="1147" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_62_dev_n_62_link" bpmnElement="f_n_62_dev_n_62_link"><di:waypoint x="725" y="675"/><di:waypoint x="765" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_62_link_n_62_pass" bpmnElement="f_n_62_link_n_62_pass"><di:waypoint x="895" y="675"/><di:waypoint x="935" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_62_pass_n_62_ok" bpmnElement="f_n_62_pass_n_62_ok"><di:waypoint x="1065" y="675"/><di:waypoint x="1122" y="675"/><di:waypoint x="1122" y="235"/><di:waypoint x="1147" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_62_ok_n_62_case" bpmnElement="f_n_62_ok_n_62_case"><di:waypoint x="1193" y="235"/><di:waypoint x="1080" y="235"/><di:waypoint x="1080" y="455"/><di:waypoint x="1105" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_62_case_n_62_close" bpmnElement="f_n_62_case_n_62_close"><di:waypoint x="1235" y="455"/><di:waypoint x="1250" y="455"/><di:waypoint x="1250" y="235"/><di:waypoint x="1275" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_62_ok_n_62_close" bpmnElement="f_n_62_ok_n_62_close"><di:waypoint x="1193" y="235"/><di:waypoint x="1275" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_62_close_n_62_end" bpmnElement="f_n_62_close_n_62_end"><di:waypoint x="1405" y="235"/><di:waypoint x="1492" y="235"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

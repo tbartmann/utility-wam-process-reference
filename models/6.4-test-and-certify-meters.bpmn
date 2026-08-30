@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_P_6_4" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <process id="P_6_4" name="6.4 Test, prove and certify meters" isExecutable="false">
+    <documentation>6.4.1, 6.4.2, 6.4.4 and 6.4.6 are drawn; 6.4.3 is the certification determination and 6.4.5 the disposition case.
+
+THIS IS THE METER SHOP, and it is the reason 6.1.4 and 6.4.5 are separate processes. A meter arrives here after its record has already been retired; what happens next - certified back to stock, repaired, refurbished or condemned - is a judgement made on a test result and a physical inspection, in a place, by people who are not the field crew that removed it.
+
+6.4.6 GATES 6.4.2 AND THE ORDER IS NOT COSMETIC. A test from equipment that is out of calibration is not a weak result, it is not a result - and every certification issued on it is unsupported. So calibration status is confirmed before the test points are run, and equipment that fails an intermediate check is removed from use, which invalidates work already done on it.
+
+Chain of custody starts at 6.4.1 and it is what makes a later tamper finding provable. A meter returned without a complete identity or custody record is its own variant, because the unit is physically fine and evidentially useless.</documentation>
+    <laneSet id="P_6_4_lanes">
+      <lane id="l_64_shop" name="Meter shop">
+        <flowNodeRef>n_64_start</flowNodeRef>
+        <flowNodeRef>n_64_id</flowNodeRef>
+        <flowNodeRef>n_64_cust</flowNodeRef>
+        <flowNodeRef>n_64_susp</flowNodeRef>
+        <flowNodeRef>n_64_ref</flowNodeRef>
+        <flowNodeRef>n_64_cal</flowNodeRef>
+        <flowNodeRef>n_64_test</flowNodeRef>
+        <flowNodeRef>n_64_obs</flowNodeRef>
+        <flowNodeRef>n_64_valid</flowNodeRef>
+        <flowNodeRef>n_64_flag</flowNodeRef>
+        <flowNodeRef>n_64_cert</flowNodeRef>
+        <flowNodeRef>n_64_disp</flowNodeRef>
+        <flowNodeRef>n_64_stock</flowNodeRef>
+        <flowNodeRef>n_64_end</flowNodeRef>
+      </lane>
+      <lane id="l_64_qa" name="Test equipment and reporting">
+        <flowNodeRef>n_64_rem</flowNodeRef>
+        <flowNodeRef>n_64_rt</flowNodeRef>
+        <flowNodeRef>n_64_rec</flowNodeRef>
+        <flowNodeRef>n_64_rep</flowNodeRef>
+        <flowNodeRef>n_64_e2</flowNodeRef>
+        <flowNodeRef>n_64_ct</flowNodeRef>
+        <flowNodeRef>n_64_arr</flowNodeRef>
+        <flowNodeRef>n_64_due</flowNodeRef>
+        <flowNodeRef>n_64_e3</flowNodeRef>
+      </lane>
+    </laneSet>
+    <startEvent id="n_64_start" name="A returned meter arrives at the shop"><messageEventDefinition id="n_64_start_md"/></startEvent>
+    <userTask id="n_64_id" name="Receive, identify and inspect seals and condition"><documentation>6.4.1. Seals against what 6.2.1 recorded at installation.</documentation></userTask>
+    <serviceTask id="n_64_cust" name="Record chain of custody and observed condition"><documentation>6.4.1. The chain is what makes a tamper finding provable at 6.6.2; a unit returned without one is physically fine and evidentially useless.</documentation></serviceTask>
+    <exclusiveGateway id="n_64_susp" name="Interference suspected"/>
+    <sendTask id="n_64_ref" name="Refer to 6.6.1 preserving the evidence"><documentation>6.4.1. Before any test that would disturb it.</documentation></sendTask>
+    <exclusiveGateway id="n_64_cal" name="Test equipment in calibration"><documentation>6.4.6 gates 6.4.2. A test on uncalibrated equipment is not a weak result, it is not a result.</documentation></exclusiveGateway>
+    <serviceTask id="n_64_rem" name="Remove the equipment from use"><documentation>6.4.6. And review the tests already run on it - an intermediate check failure reaches backwards.</documentation></serviceTask>
+    <userTask id="n_64_test" name="Run the specified test points"><documentation>6.4.2.</documentation></userTask>
+    <serviceTask id="n_64_obs" name="Record observed error and test conditions"><documentation>6.4.2.</documentation></serviceTask>
+    <exclusiveGateway id="n_64_valid" name="Test valid and complete"/>
+    <serviceTask id="n_64_flag" name="Flag the invalid or incomplete test"><documentation>6.4.2.</documentation></serviceTask>
+    <businessRuleTask id="n_64_cert" name="Certify the result (6.4.3)"><documentation>6.4.3. Pass, fail or restricted - against the applicable requirement, which is the jurisdiction's and the operator's.</documentation></businessRuleTask>
+    <callActivity id="n_64_disp" name="Repair, refurbish or condemn (6.4.5)"><documentation>6.4.5. A case: the disposition depends on evidence that arrives in no fixed order.</documentation></callActivity>
+    <sendTask id="n_64_stock" name="Return to eligible stock"><documentation>6.4.3, into 6.1.3.</documentation></sendTask>
+    <endEvent id="n_64_end" name="Meter dispositioned"/>
+    <startEvent id="n_64_rt" name="Reporting period closes"><timerEventDefinition id="n_64_rt_td"/></startEvent>
+    <serviceTask id="n_64_rec" name="Reconcile complete and invalid tests"><documentation>6.4.4.</documentation></serviceTask>
+    <sendTask id="n_64_rep" name="Release the report to authorised recipients"><documentation>6.4.4. Including test-equipment use and calibration status, which is what makes the population result auditable.</documentation></sendTask>
+    <endEvent id="n_64_e2" name="Reporting released"/>
+    <startEvent id="n_64_ct" name="Calibration due"><timerEventDefinition id="n_64_ct_td"/></startEvent>
+    <serviceTask id="n_64_arr" name="Arrange calibration or verification"><documentation>6.4.6.</documentation></serviceTask>
+    <serviceTask id="n_64_due" name="Record result and next due date"><documentation>6.4.6.</documentation></serviceTask>
+    <endEvent id="n_64_e3" name="Equipment eligible"/>
+    <sequenceFlow id="f_n_64_start_n_64_id" sourceRef="n_64_start" targetRef="n_64_id" name=""/>
+    <sequenceFlow id="f_n_64_id_n_64_cust" sourceRef="n_64_id" targetRef="n_64_cust" name=""/>
+    <sequenceFlow id="f_n_64_cust_n_64_susp" sourceRef="n_64_cust" targetRef="n_64_susp" name=""/>
+    <sequenceFlow id="f_n_64_susp_n_64_ref" sourceRef="n_64_susp" targetRef="n_64_ref" name="interference suspected"><conditionExpression xsi:type="tFormalExpression"><![CDATA[tamperSuspected = true]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_64_ref_n_64_end" sourceRef="n_64_ref" targetRef="n_64_end" name=""/>
+    <sequenceFlow id="f_n_64_susp_n_64_cal" sourceRef="n_64_susp" targetRef="n_64_cal" name="no interference indicated"/>
+    <sequenceFlow id="f_n_64_cal_n_64_rem" sourceRef="n_64_cal" targetRef="n_64_rem" name="out of calibration"><conditionExpression xsi:type="tFormalExpression"><![CDATA[calibrated = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_64_rem_n_64_end" sourceRef="n_64_rem" targetRef="n_64_end" name=""/>
+    <sequenceFlow id="f_n_64_cal_n_64_test" sourceRef="n_64_cal" targetRef="n_64_test" name="in calibration"/>
+    <sequenceFlow id="f_n_64_test_n_64_obs" sourceRef="n_64_test" targetRef="n_64_obs" name=""/>
+    <sequenceFlow id="f_n_64_obs_n_64_valid" sourceRef="n_64_obs" targetRef="n_64_valid" name=""/>
+    <sequenceFlow id="f_n_64_valid_n_64_flag" sourceRef="n_64_valid" targetRef="n_64_flag" name="invalid or incomplete"><conditionExpression xsi:type="tFormalExpression"><![CDATA[testValid = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_64_flag_n_64_test" sourceRef="n_64_flag" targetRef="n_64_test" name=""/>
+    <sequenceFlow id="f_n_64_valid_n_64_cert" sourceRef="n_64_valid" targetRef="n_64_cert" name="valid"/>
+    <sequenceFlow id="f_n_64_cert_n_64_stock" sourceRef="n_64_cert" targetRef="n_64_stock" name="pass"/>
+    <sequenceFlow id="f_n_64_cert_n_64_disp" sourceRef="n_64_cert" targetRef="n_64_disp" name="fail or restricted"><conditionExpression xsi:type="tFormalExpression"><![CDATA[certification != "pass"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_64_stock_n_64_end" sourceRef="n_64_stock" targetRef="n_64_end" name=""/>
+    <sequenceFlow id="f_n_64_disp_n_64_end" sourceRef="n_64_disp" targetRef="n_64_end" name=""/>
+    <sequenceFlow id="f_n_64_rt_n_64_rec" sourceRef="n_64_rt" targetRef="n_64_rec" name=""/>
+    <sequenceFlow id="f_n_64_rec_n_64_rep" sourceRef="n_64_rec" targetRef="n_64_rep" name=""/>
+    <sequenceFlow id="f_n_64_rep_n_64_e2" sourceRef="n_64_rep" targetRef="n_64_e2" name=""/>
+    <sequenceFlow id="f_n_64_ct_n_64_arr" sourceRef="n_64_ct" targetRef="n_64_arr" name=""/>
+    <sequenceFlow id="f_n_64_arr_n_64_due" sourceRef="n_64_arr" targetRef="n_64_due" name=""/>
+    <sequenceFlow id="f_n_64_due_n_64_e3" sourceRef="n_64_due" targetRef="n_64_e3" name=""/>
+  </process>
+  <bpmndi:BPMNDiagram id="dg_P_6_4">
+    <bpmndi:BPMNPlane id="pl_P_6_4" bpmnElement="P_6_4">
+      <bpmndi:BPMNShape id="sh_n_64_start" bpmnElement="n_64_start"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_64_id" bpmnElement="n_64_id"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_64_cust" bpmnElement="n_64_cust"><dc:Bounds x="425" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_64_susp" bpmnElement="n_64_susp"><dc:Bounds x="637" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_64_ref" bpmnElement="n_64_ref"><dc:Bounds x="595" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_64_cal" bpmnElement="n_64_cal"><dc:Bounds x="807" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_64_rem" bpmnElement="n_64_rem"><dc:Bounds x="765" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_64_test" bpmnElement="n_64_test"><dc:Bounds x="935" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_64_obs" bpmnElement="n_64_obs"><dc:Bounds x="1105" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_64_valid" bpmnElement="n_64_valid"><dc:Bounds x="1317" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_64_flag" bpmnElement="n_64_flag"><dc:Bounds x="1275" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_64_cert" bpmnElement="n_64_cert"><dc:Bounds x="1445" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_64_disp" bpmnElement="n_64_disp"><dc:Bounds x="1615" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_64_stock" bpmnElement="n_64_stock"><dc:Bounds x="1615" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_64_end" bpmnElement="n_64_end"><dc:Bounds x="1832" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_64_rt" bpmnElement="n_64_rt"><dc:Bounds x="132" y="877" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_64_rec" bpmnElement="n_64_rec"><dc:Bounds x="255" y="860" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_64_rep" bpmnElement="n_64_rep"><dc:Bounds x="425" y="860" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_64_e2" bpmnElement="n_64_e2"><dc:Bounds x="642" y="877" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_64_ct" bpmnElement="n_64_ct"><dc:Bounds x="132" y="1317" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_64_arr" bpmnElement="n_64_arr"><dc:Bounds x="255" y="1300" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_64_due" bpmnElement="n_64_due"><dc:Bounds x="425" y="1300" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_64_e3" bpmnElement="n_64_e3"><dc:Bounds x="642" y="1317" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ed_f_n_64_start_n_64_id" bpmnElement="f_n_64_start_n_64_id"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_64_id_n_64_cust" bpmnElement="f_n_64_id_n_64_cust"><di:waypoint x="385" y="235"/><di:waypoint x="425" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_64_cust_n_64_susp" bpmnElement="f_n_64_cust_n_64_susp"><di:waypoint x="555" y="235"/><di:waypoint x="637" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_64_susp_n_64_ref" bpmnElement="f_n_64_susp_n_64_ref"><di:waypoint x="683" y="235"/><di:waypoint x="570" y="235"/><di:waypoint x="570" y="455"/><di:waypoint x="595" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_64_ref_n_64_end" bpmnElement="f_n_64_ref_n_64_end"><di:waypoint x="725" y="455"/><di:waypoint x="1807" y="455"/><di:waypoint x="1807" y="235"/><di:waypoint x="1832" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_64_susp_n_64_cal" bpmnElement="f_n_64_susp_n_64_cal"><di:waypoint x="683" y="235"/><di:waypoint x="807" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_64_cal_n_64_rem" bpmnElement="f_n_64_cal_n_64_rem"><di:waypoint x="853" y="235"/><di:waypoint x="740" y="235"/><di:waypoint x="740" y="675"/><di:waypoint x="765" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_64_rem_n_64_end" bpmnElement="f_n_64_rem_n_64_end"><di:waypoint x="895" y="675"/><di:waypoint x="1807" y="675"/><di:waypoint x="1807" y="235"/><di:waypoint x="1832" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_64_cal_n_64_test" bpmnElement="f_n_64_cal_n_64_test"><di:waypoint x="853" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_64_test_n_64_obs" bpmnElement="f_n_64_test_n_64_obs"><di:waypoint x="1065" y="235"/><di:waypoint x="1105" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_64_obs_n_64_valid" bpmnElement="f_n_64_obs_n_64_valid"><di:waypoint x="1235" y="235"/><di:waypoint x="1317" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_64_valid_n_64_flag" bpmnElement="f_n_64_valid_n_64_flag"><di:waypoint x="1363" y="235"/><di:waypoint x="1250" y="235"/><di:waypoint x="1250" y="455"/><di:waypoint x="1275" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_64_flag_n_64_test" bpmnElement="f_n_64_flag_n_64_test"><di:waypoint x="1405" y="455"/><di:waypoint x="910" y="455"/><di:waypoint x="910" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_64_valid_n_64_cert" bpmnElement="f_n_64_valid_n_64_cert"><di:waypoint x="1363" y="235"/><di:waypoint x="1445" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_64_cert_n_64_stock" bpmnElement="f_n_64_cert_n_64_stock"><di:waypoint x="1575" y="235"/><di:waypoint x="1615" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_64_cert_n_64_disp" bpmnElement="f_n_64_cert_n_64_disp"><di:waypoint x="1575" y="235"/><di:waypoint x="1590" y="235"/><di:waypoint x="1590" y="455"/><di:waypoint x="1615" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_64_stock_n_64_end" bpmnElement="f_n_64_stock_n_64_end"><di:waypoint x="1745" y="235"/><di:waypoint x="1832" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_64_disp_n_64_end" bpmnElement="f_n_64_disp_n_64_end"><di:waypoint x="1745" y="455"/><di:waypoint x="1807" y="455"/><di:waypoint x="1807" y="235"/><di:waypoint x="1832" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_64_rt_n_64_rec" bpmnElement="f_n_64_rt_n_64_rec"><di:waypoint x="168" y="895"/><di:waypoint x="255" y="895"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_64_rec_n_64_rep" bpmnElement="f_n_64_rec_n_64_rep"><di:waypoint x="385" y="895"/><di:waypoint x="425" y="895"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_64_rep_n_64_e2" bpmnElement="f_n_64_rep_n_64_e2"><di:waypoint x="555" y="895"/><di:waypoint x="642" y="895"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_64_ct_n_64_arr" bpmnElement="f_n_64_ct_n_64_arr"><di:waypoint x="168" y="1335"/><di:waypoint x="255" y="1335"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_64_arr_n_64_due" bpmnElement="f_n_64_arr_n_64_due"><di:waypoint x="385" y="1335"/><di:waypoint x="425" y="1335"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_64_due_n_64_e3" bpmnElement="f_n_64_due_n_64_e3"><di:waypoint x="555" y="1335"/><di:waypoint x="642" y="1335"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

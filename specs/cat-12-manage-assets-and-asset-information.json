@@ -21,6 +21,12 @@
     "12.2.5 is CMMN and correctly so: a record exception is resolved in an order that depends on which system holds the authority, and two data stewards would not take the same one."
    ],
    "models_built_here": "Nine artifacts, 6 BPMN and 3 CMMN. The specification names them; only this side has the generator."
+  },
+  {
+   "date": "2026-08-30",
+   "by": "Claude",
+   "what": "Corrections-only replacement. The submitter rewrote the judgment citation on all thirty-two processes, replacing one category-wide disclaimer with a per-process statement of what that process infers. Diffed field by field before merging: SOURCES ONLY changed on all 32; intent, activities, trigger, inputs, outputs, systems, interfaces, roles, data objects, controls, measures, variants, notation and en17007 are byte-identical to the merged version. The finding recorded at the first merge is closed - the maximum judgment citation share is now 1 of 32, against a merged-category maximum of 3.",
+   "verification": "validate_spec.py: 0 errors, 0 warnings, where the previous file carried 1 warning."
   }
  ],
  "derivation": "STANDARDS-DERIVED. Every field traces to a standard, regulation, recognised industry body or explicit judgment. No client or product practice is generalised.",
@@ -211,7 +217,7 @@
     },
     {
      "for": "activity sequence and uncodified variants",
-     "cite": "Standards-aligned decomposition where the cited authorities do not prescribe a utility workflow or threshold",
+     "cite": "No permitted source defines the creation, completeness or classification workflow for a utility asset record.",
      "status": "judgment"
     },
     {
@@ -403,7 +409,7 @@
     },
     {
      "for": "activity sequence and uncodified variants",
-     "cite": "Standards-aligned decomposition where the cited authorities do not prescribe a utility workflow or threshold",
+     "cite": "CIM represents asset relationships, but no permitted source defines hierarchy ownership, approval or correction rules.",
      "status": "judgment"
     }
    ],
@@ -594,7 +600,7 @@
     },
     {
      "for": "activity sequence and uncodified variants",
-     "cite": "Standards-aligned decomposition where the cited authorities do not prescribe a utility workflow or threshold",
+     "cite": "No permitted source defines location-hierarchy levels or the governance method joining assets to network and territory.",
      "status": "judgment"
     }
    ],
@@ -765,7 +771,7 @@
     },
     {
      "for": "activity sequence and uncodified variants",
-     "cite": "Standards-aligned decomposition where the cited authorities do not prescribe a utility workflow or threshold",
+     "cite": "No permitted source defines the organisational ownership hierarchy or stewardship workflow used by asset and work records.",
      "status": "judgment"
     }
    ],
@@ -951,7 +957,7 @@
     },
     {
      "for": "activity sequence and uncodified variants",
-     "cite": "Standards-aligned decomposition where the cited authorities do not prescribe a utility workflow or threshold",
+     "cite": "No permitted source defines a common required-attribute set, approval route or effective-date rule across utility asset classes.",
      "status": "judgment"
     }
    ],
@@ -1142,7 +1148,7 @@
     },
     {
      "for": "activity sequence and uncodified variants",
-     "cite": "Standards-aligned decomposition where the cited authorities do not prescribe a utility workflow or threshold",
+     "cite": "Lifecycle authorities require controlled disposal, but no permitted source defines the asset-record retirement and history-preservation sequence.",
      "status": "judgment"
     }
    ],
@@ -1322,7 +1328,7 @@
     },
     {
      "for": "activity sequence and uncodified variants",
-     "cite": "Standards-aligned decomposition where the cited authorities do not prescribe a utility workflow or threshold",
+     "cite": "No permitted source assigns authoritative systems by asset class or states precedence when governed copies disagree.",
      "status": "judgment"
     }
    ],
@@ -1509,7 +1515,7 @@
     },
     {
      "for": "activity sequence and uncodified variants",
-     "cite": "Standards-aligned decomposition where the cited authorities do not prescribe a utility workflow or threshold",
+     "cite": "No permitted source defines spatial-to-non-spatial matching tolerances, precedence or reconciliation disposition.",
      "status": "judgment"
     }
    ],
@@ -1695,7 +1701,7 @@
     },
     {
      "for": "activity sequence and uncodified variants",
-     "cite": "Standards-aligned decomposition where the cited authorities do not prescribe a utility workflow or threshold",
+     "cite": "No permitted source defines the approval, publication or rejection workflow for asset changes entering a spatial network model.",
      "status": "judgment"
     }
    ],
@@ -1882,7 +1888,7 @@
     },
     {
      "for": "activity sequence and uncodified variants",
-     "cite": "Standards-aligned decomposition where the cited authorities do not prescribe a utility workflow or threshold",
+     "cite": "No permitted source defines how dependent asset and maintenance records consume, reject or defer spatial connectivity changes.",
      "status": "judgment"
     }
    ],
@@ -2068,7 +2074,7 @@
     },
     {
      "for": "activity sequence and uncodified variants",
-     "cite": "Standards-aligned decomposition where the cited authorities do not prescribe a utility workflow or threshold",
+     "cite": "No permitted source defines identity-match thresholds or disposition rules for orphaned, duplicate and mismatched asset records.",
      "status": "judgment"
     }
    ],
@@ -2244,7 +2250,7 @@
     },
     {
      "for": "activity sequence and uncodified variants",
-     "cite": "Standards-aligned decomposition where the cited authorities do not prescribe a utility workflow or threshold",
+     "cite": "No permitted source defines one cross-commodity asset identifier, naming syntax or controlled-renaming procedure.",
      "status": "judgment"
     }
    ],
@@ -2420,7 +2426,7 @@
     },
     {
      "for": "activity sequence and uncodified variants",
-     "cite": "Standards-aligned decomposition where the cited authorities do not prescribe a utility workflow or threshold",
+     "cite": "No permitted source defines territory partitioning, authority resolution or availability rules for distributed utility asset data.",
      "status": "judgment"
     }
    ],
@@ -2596,7 +2602,7 @@
     },
     {
      "for": "activity sequence and uncodified variants",
-     "cite": "Standards-aligned decomposition where the cited authorities do not prescribe a utility workflow or threshold",
+     "cite": "PODS supplies linear entities, but no permitted source selects the route, measure origin or calibration governance for each asset.",
      "status": "judgment"
     }
    ],
@@ -2787,7 +2793,7 @@
     },
     {
      "for": "activity sequence and uncodified variants",
-     "cite": "Standards-aligned decomposition where the cited authorities do not prescribe a utility workflow or threshold",
+     "cite": "No permitted source defines calibration-point acceptance, measure tolerance or event-placement rules for linear assets.",
      "status": "judgment"
     }
    ],
@@ -2959,7 +2965,7 @@
     },
     {
      "for": "activity sequence and uncodified variants",
-     "cite": "Standards-aligned decomposition where the cited authorities do not prescribe a utility workflow or threshold",
+     "cite": "No standard defines dynamic segmentation; PODS models the record of work done, not the derived segment view.",
      "status": "judgment"
     }
    ],
@@ -3151,7 +3157,7 @@
     },
     {
      "for": "activity sequence and uncodified variants",
-     "cite": "Standards-aligned decomposition where the cited authorities do not prescribe a utility workflow or threshold",
+     "cite": "PODS models linear events, but no permitted source defines the evidence workflow joining condition, defect and completed work to a measured range.",
      "status": "judgment"
     }
    ],
@@ -3343,7 +3349,7 @@
     },
     {
      "for": "activity sequence and uncodified variants",
-     "cite": "Standards-aligned decomposition where the cited authorities do not prescribe a utility workflow or threshold",
+     "cite": "No permitted source defines measure propagation or history-preservation rules when linear segments split, merge or are re-measured.",
      "status": "judgment"
     }
    ],
@@ -3534,7 +3540,7 @@
     },
     {
      "for": "activity sequence and uncodified variants",
-     "cite": "Standards-aligned decomposition where the cited authorities do not prescribe a utility workflow or threshold",
+     "cite": "CIM and PODS model connections, but no permitted source defines network-connectivity validation or trace-evidence acceptance.",
      "status": "judgment"
     }
    ],
@@ -3727,7 +3733,7 @@
     },
     {
      "for": "activity sequence and uncodified variants",
-     "cite": "Standards-aligned decomposition where the cited authorities do not prescribe a utility workflow or threshold",
+     "cite": "No permitted source defines a condition scale, evidence weighting or assessment frequency across distribution asset classes.",
      "status": "judgment"
     }
    ],
@@ -3908,7 +3914,7 @@
     },
     {
      "for": "activity sequence and uncodified variants",
-     "cite": "Standards-aligned decomposition where the cited authorities do not prescribe a utility workflow or threshold",
+     "cite": "No permitted source defines evidence sufficiency or the validation sequence joining failure mode, mechanism, cause and consequence.",
      "status": "judgment"
     }
    ],
@@ -4085,7 +4091,7 @@
     },
     {
      "for": "activity sequence and uncodified variants",
-     "cite": "Standards-aligned decomposition where the cited authorities do not prescribe a utility workflow or threshold",
+     "cite": "No permitted source states a health index or a criticality weighting for distribution plant in either commodity.",
      "status": "judgment"
     }
    ],
@@ -4277,7 +4283,7 @@
     },
     {
      "for": "activity sequence and uncodified variants",
-     "cite": "Standards-aligned decomposition where the cited authorities do not prescribe a utility workflow or threshold",
+     "cite": "IEEE 1366 defines system reliability indices, but no permitted source sets asset or cohort deterioration thresholds or maintenance-response rules.",
      "status": "judgment"
     }
    ],
@@ -4473,7 +4479,7 @@
     },
     {
      "for": "activity sequence and uncodified variants",
-     "cite": "Standards-aligned decomposition where the cited authorities do not prescribe a utility workflow or threshold",
+     "cite": "No permitted source states how a utility converts maintenance strategy into eligible assets, task intervals and recurring-work rules.",
      "status": "judgment"
     }
    ],
@@ -4656,7 +4662,7 @@
     },
     {
      "for": "activity sequence and uncodified variants",
-     "cite": "Standards-aligned decomposition where the cited authorities do not prescribe a utility workflow or threshold",
+     "cite": "No permitted source states condition thresholds that generate inspection, maintenance or review work for distribution assets.",
      "status": "judgment"
     }
    ],
@@ -4847,7 +4853,7 @@
     },
     {
      "for": "activity sequence and uncodified variants",
-     "cite": "Standards-aligned decomposition where the cited authorities do not prescribe a utility workflow or threshold",
+     "cite": "No permitted source defines predictive-model acceptance, confidence thresholds or prescriptive-action rules for distribution assets.",
      "status": "judgment"
     }
    ],
@@ -5038,7 +5044,7 @@
     },
     {
      "for": "activity sequence and uncodified variants",
-     "cite": "Standards-aligned decomposition where the cited authorities do not prescribe a utility workflow or threshold",
+     "cite": "No permitted source defines job-plan content, task-library structure, version control or approval workflow for utility maintenance.",
      "status": "judgment"
     }
    ],
@@ -5230,7 +5236,7 @@
     },
     {
      "for": "activity sequence and uncodified variants",
-     "cite": "Standards-aligned decomposition where the cited authorities do not prescribe a utility workflow or threshold",
+     "cite": "No permitted source defines warranty evidence sufficiency, claim-routing deadlines or recovery disposition for utility assets.",
      "status": "judgment"
     }
    ],
@@ -5427,7 +5433,7 @@
     },
     {
      "for": "activity sequence and uncodified variants",
-     "cite": "Standards-aligned decomposition where the cited authorities do not prescribe a utility workflow or threshold",
+     "cite": "Regulations state individual duties, but no permitted source defines a cross-regime obligation register, applicability workflow or evidence owner.",
      "status": "judgment"
     }
    ],
@@ -5619,7 +5625,7 @@
     },
     {
      "for": "activity sequence and uncodified variants",
-     "cite": "Standards-aligned decomposition where the cited authorities do not prescribe a utility workflow or threshold",
+     "cite": "No permitted source states a likelihood scale, consequence weighting or risk matrix for distribution assets in either commodity.",
      "status": "judgment"
     }
    ],
@@ -5826,7 +5832,7 @@
     },
     {
      "for": "activity sequence and uncodified variants",
-     "cite": "Standards-aligned decomposition where the cited authorities do not prescribe a utility workflow or threshold",
+     "cite": "Asset-management authorities require life-cycle planning, but no permitted source defines a cross-commodity replacement ranking or renewal decision rule.",
      "status": "judgment"
     }
    ],
@@ -6040,7 +6046,7 @@
     },
     {
      "for": "activity sequence and uncodified variants",
-     "cite": "Standards-aligned decomposition where the cited authorities do not prescribe a utility workflow or threshold",
+     "cite": "Change-control authorities set governance expectations, but no permitted source defines utility technical-change classification, evidence or handover workflow.",
      "status": "judgment"
     }
    ],

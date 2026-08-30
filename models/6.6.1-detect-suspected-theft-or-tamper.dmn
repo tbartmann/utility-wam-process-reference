@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/" id="Detect_tamper" name="6.6.1 Detect suspected theft or tamper" namespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <description>Returns a SUSPICION and an urgency, and creates a controlled referral. It does not return a finding: whether interference occurred is established at 6.6.2 with evidence, and the distinction is not pedantry - a suspicion recorded as a finding is an allegation against a customer.
+
+URGENCY IS SEPARATE FROM SUSPICION AND IS THE MORE IMPORTANT OUTPUT. Interference with a gas meter can leave an unsecured supply, and interference with an electric service can leave exposed conductors. Those are safety events that go to 9.0 immediately, whatever the revenue question turns out to be, and the table returns them as their own class rather than as a high-priority theft case.
+
+The detection rules themselves are the operator's. No standard states what consumption pattern indicates theft, and this reference states none - the table encodes which SOURCE the evidence came from, because that determines how it must be handled, and leaves the threshold to the operator.</description>
+  <inputData id="in_source" name="Source of the indication"><variable id="in_source_v" name="Source of the indication" typeRef="string"/></inputData>
+  <inputData id="in_unsafe" name="An unsafe condition is indicated"><variable id="in_unsafe_v" name="An unsafe condition is indicated" typeRef="boolean"/></inputData>
+  <inputData id="in_physical" name="Physical evidence has been observed"><variable id="in_physical_v" name="Physical evidence has been observed" typeRef="boolean"/></inputData>
+  <inputData id="in_meetsRule" name="Meets the operator's detection rule"><variable id="in_meetsRule_v" name="Meets the operator's detection rule" typeRef="boolean"/></inputData>
+  <knowledgeSource id="ks_tamper" name="The operator's authorised detection rules and evidence-handling procedure; 29 CFR 1910.269 and 49 CFR 192 for the safety response"><description>No standard states a theft-detection threshold. What the table encodes is the source of the indication, because that determines the evidence handling, and the safety branch, because that cannot wait for the revenue question.</description></knowledgeSource>
+  <decision id="d_6_6_1" name="Suspicion class">
+    <variable id="d_6_6_1_v" name="Suspicion class" typeRef="string"/>
+    <informationRequirement id="ir_d_6_6_1_ks_tamper"><requiredInput href="#ks_tamper"/></informationRequirement>
+    <decisionTable id="d_6_6_1_dt" hitPolicy="FIRST" preferredOrientation="Rule-as-Row">
+      <input id="d_6_6_1_i1" label="Source"><inputExpression id="d_6_6_1_i1_e" typeRef="string"><text>in_source</text></inputExpression></input>
+      <input id="d_6_6_1_i2" label="Unsafe condition indicated"><inputExpression id="d_6_6_1_i2_e" typeRef="boolean"><text>in_unsafe</text></inputExpression></input>
+      <input id="d_6_6_1_i3" label="Physical evidence observed"><inputExpression id="d_6_6_1_i3_e" typeRef="boolean"><text>in_physical</text></inputExpression></input>
+      <input id="d_6_6_1_i4" label="Meets the detection rule"><inputExpression id="d_6_6_1_i4_e" typeRef="boolean"><text>in_meetsRule</text></inputExpression></input>
+      <output id="d_6_6_1_o" label="Suspicion class" name="Suspicion class" typeRef="string"/>
+      <rule id="d_6_6_1_r1">
+        <description>An unsafe condition. To 9.0 immediately - an unsecured gas supply or an exposed conductor is an emergency whatever the revenue position turns out to be, and it does not queue behind an investigation.</description>
+        <inputEntry id="d_6_6_1_r1_ie1"><text>-</text></inputEntry>
+        <inputEntry id="d_6_6_1_r1_ie2"><text>true</text></inputEntry>
+        <inputEntry id="d_6_6_1_r1_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_6_6_1_r1_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_6_6_1_r1_oe"><text>"safetyFirst"</text></outputEntry>
+      </rule>
+      <rule id="d_6_6_1_r2">
+        <description>Observed during field work, with physical evidence. The strongest referral and the most fragile: 6.6.2 needs the evidence undisturbed, so the crew records and preserves rather than correcting.</description>
+        <inputEntry id="d_6_6_1_r2_ie1"><text>"fieldObservation"</text></inputEntry>
+        <inputEntry id="d_6_6_1_r2_ie2"><text>false</text></inputEntry>
+        <inputEntry id="d_6_6_1_r2_ie3"><text>true</text></inputEntry>
+        <inputEntry id="d_6_6_1_r2_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_6_6_1_r2_oe"><text>"referWithPhysicalEvidence"</text></outputEntry>
+      </rule>
+      <rule id="d_6_6_1_r3">
+        <description>The meter itself reported it. Corroboration is still required - a tamper flag can be raised by a legitimate exchange or a shock in transit, and 6.1.1's exchange record is what separates the two.</description>
+        <inputEntry id="d_6_6_1_r3_ie1"><text>"meterAlarm"</text></inputEntry>
+        <inputEntry id="d_6_6_1_r3_ie2"><text>false</text></inputEntry>
+        <inputEntry id="d_6_6_1_r3_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_6_6_1_r3_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_6_6_1_r3_oe"><text>"referTamperIndication"</text></outputEntry>
+      </rule>
+      <rule id="d_6_6_1_r4">
+        <description>Consumption analysis meeting the operator's rule. The weakest evidentially and the one most in need of field confirmation before anyone contacts a customer.</description>
+        <inputEntry id="d_6_6_1_r4_ie1"><text>"analysis"</text></inputEntry>
+        <inputEntry id="d_6_6_1_r4_ie2"><text>false</text></inputEntry>
+        <inputEntry id="d_6_6_1_r4_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_6_6_1_r4_ie4"><text>true</text></inputEntry>
+        <outputEntry id="d_6_6_1_r4_oe"><text>"referAnalyticFinding"</text></outputEntry>
+      </rule>
+      <rule id="d_6_6_1_r5">
+        <description>Below the operator's rule. Monitored rather than referred - a referral on every unusual pattern devalues the ones that matter.</description>
+        <inputEntry id="d_6_6_1_r5_ie1"><text>"analysis"</text></inputEntry>
+        <inputEntry id="d_6_6_1_r5_ie2"><text>false</text></inputEntry>
+        <inputEntry id="d_6_6_1_r5_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_6_6_1_r5_ie4"><text>false</text></inputEntry>
+        <outputEntry id="d_6_6_1_r5_oe"><text>"monitorOnly"</text></outputEntry>
+      </rule>
+      <rule id="d_6_6_1_r6">
+        <description>Source not established. How the indication arose determines how the evidence must be handled, and it cannot be reconstructed later.</description>
+        <inputEntry id="d_6_6_1_r6_ie1"><text>-</text></inputEntry>
+        <inputEntry id="d_6_6_1_r6_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_6_6_1_r6_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_6_6_1_r6_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_6_6_1_r6_oe"><text>"determineManually"</text></outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram id="drd_Detect_tamper">
+      <dmndi:DMNShape id="sh_in_source" dmnElementRef="in_source"><dc:Bounds x="60" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_unsafe" dmnElementRef="in_unsafe"><dc:Bounds x="245" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_physical" dmnElementRef="in_physical"><dc:Bounds x="430" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_meetsRule" dmnElementRef="in_meetsRule"><dc:Bounds x="615" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_d_6_6_1" dmnElementRef="d_6_6_1"><dc:Bounds x="60" y="240" width="180" height="70"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_ks_tamper" dmnElementRef="ks_tamper"><dc:Bounds x="900" y="100" width="160" height="55"/></dmndi:DMNShape>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</definitions>
