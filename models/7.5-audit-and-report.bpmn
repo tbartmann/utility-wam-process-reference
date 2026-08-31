@@ -35,7 +35,7 @@
     <bpmndi:BPMNPlane id="pl_P_7_5" bpmnElement="P_7_5">
       <bpmndi:BPMNShape id="sh_n_75_s" bpmnElement="n_75_s"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_75_sel" bpmnElement="n_75_sel"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_75_cmp" bpmnElement="n_75_cmp"><dc:Bounds x="425" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_75_cmp" bpmnElement="n_75_cmp"><dc:Bounds x="425" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_75_g" bpmnElement="n_75_g"><dc:Bounds x="637" y="212" width="46" height="46"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_75_rw" bpmnElement="n_75_rw"><dc:Bounds x="595" y="420" width="130" height="70"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_75_pass" bpmnElement="n_75_pass"><dc:Bounds x="765" y="200" width="130" height="70"/></bpmndi:BPMNShape>
@@ -50,14 +50,34 @@
       <bpmndi:BPMNEdge id="ed_f_n_75_s_n_75_sel" bpmnElement="f_n_75_s_n_75_sel"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_75_sel_n_75_cmp" bpmnElement="f_n_75_sel_n_75_cmp"><di:waypoint x="385" y="235"/><di:waypoint x="425" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_75_cmp_n_75_g" bpmnElement="f_n_75_cmp_n_75_g"><di:waypoint x="555" y="235"/><di:waypoint x="637" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_75_g_n_75_rw" bpmnElement="f_n_75_g_n_75_rw"><di:waypoint x="683" y="235"/><di:waypoint x="570" y="235"/><di:waypoint x="570" y="455"/><di:waypoint x="595" y="455"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_75_rw_n_75_pass" bpmnElement="f_n_75_rw_n_75_pass"><di:waypoint x="725" y="455"/><di:waypoint x="740" y="455"/><di:waypoint x="740" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_75_g_n_75_pass" bpmnElement="f_n_75_g_n_75_pass"><di:waypoint x="683" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_75_g_n_75_rw" bpmnElement="f_n_75_g_n_75_rw"><di:waypoint x="683" y="235"/><di:waypoint x="570" y="235"/><di:waypoint x="570" y="455"/><di:waypoint x="595" y="455"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="525" y="446.5" width="40" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_75_rw_n_75_pass" bpmnElement="f_n_75_rw_n_75_pass"><di:waypoint x="725" y="455"/><di:waypoint x="740" y="455"/><di:waypoint x="740" y="235"/><di:waypoint x="765" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="745" y="336.5" width="76.8" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_75_g_n_75_pass" bpmnElement="f_n_75_g_n_75_pass"><di:waypoint x="683" y="235"/><di:waypoint x="765" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="704" y="213" width="40" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_75_pass_n_75_ea" bpmnElement="f_n_75_pass_n_75_ea"><di:waypoint x="895" y="235"/><di:waypoint x="982" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_75_t_n_75_asm" bpmnElement="f_n_75_t_n_75_asm"><di:waypoint x="848" y="565"/><di:waypoint x="935" y="565"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_75_asm_n_75_split" bpmnElement="f_n_75_asm_n_75_split"><di:waypoint x="1065" y="565"/><di:waypoint x="1147" y="565"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_75_split_n_75_puc" bpmnElement="f_n_75_split_n_75_puc"><di:waypoint x="1193" y="565"/><di:waypoint x="1080" y="565"/><di:waypoint x="1080" y="455"/><di:waypoint x="1105" y="455"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_75_split_n_75_nerc" bpmnElement="f_n_75_split_n_75_nerc"><di:waypoint x="1193" y="565"/><di:waypoint x="1080" y="565"/><di:waypoint x="1080" y="675"/><di:waypoint x="1105" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_75_split_n_75_puc" bpmnElement="f_n_75_split_n_75_puc"><di:waypoint x="1193" y="565"/><di:waypoint x="1080" y="565"/><di:waypoint x="1080" y="455"/><di:waypoint x="1105" y="455"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1003.8" y="446.5" width="71.2" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_75_split_n_75_nerc" bpmnElement="f_n_75_split_n_75_nerc"><di:waypoint x="1193" y="565"/><di:waypoint x="1080" y="565"/><di:waypoint x="1080" y="675"/><di:waypoint x="1105" y="675"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="998.2" y="660" width="76.8" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_75_puc_n_75_rec" bpmnElement="f_n_75_puc_n_75_rec"><di:waypoint x="1235" y="455"/><di:waypoint x="1250" y="455"/><di:waypoint x="1250" y="565"/><di:waypoint x="1275" y="565"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_75_nerc_n_75_rec" bpmnElement="f_n_75_nerc_n_75_rec"><di:waypoint x="1235" y="675"/><di:waypoint x="1250" y="675"/><di:waypoint x="1250" y="565"/><di:waypoint x="1275" y="565"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_75_rec_n_75_e" bpmnElement="f_n_75_rec_n_75_e"><di:waypoint x="1405" y="565"/><di:waypoint x="1492" y="565"/></bpmndi:BPMNEdge>

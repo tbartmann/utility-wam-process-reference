@@ -88,10 +88,10 @@ Chain of custody starts at 6.4.1 and it is what makes a later tamper finding pro
   <bpmndi:BPMNDiagram id="dg_P_6_4">
     <bpmndi:BPMNPlane id="pl_P_6_4" bpmnElement="P_6_4">
       <bpmndi:BPMNShape id="sh_n_64_start" bpmnElement="n_64_start"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_64_id" bpmnElement="n_64_id"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_64_cust" bpmnElement="n_64_cust"><dc:Bounds x="425" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_64_id" bpmnElement="n_64_id"><dc:Bounds x="255" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_64_cust" bpmnElement="n_64_cust"><dc:Bounds x="425" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_64_susp" bpmnElement="n_64_susp"><dc:Bounds x="637" y="212" width="46" height="46"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_64_ref" bpmnElement="n_64_ref"><dc:Bounds x="595" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_64_ref" bpmnElement="n_64_ref"><dc:Bounds x="595" y="411.5" width="130" height="87"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_64_cal" bpmnElement="n_64_cal"><dc:Bounds x="807" y="212" width="46" height="46"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_64_rem" bpmnElement="n_64_rem"><dc:Bounds x="765" y="640" width="130" height="70"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_64_test" bpmnElement="n_64_test"><dc:Bounds x="935" y="200" width="130" height="70"/></bpmndi:BPMNShape>
@@ -113,19 +113,51 @@ Chain of custody starts at 6.4.1 and it is what makes a later tamper finding pro
       <bpmndi:BPMNEdge id="ed_f_n_64_start_n_64_id" bpmnElement="f_n_64_start_n_64_id"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_64_id_n_64_cust" bpmnElement="f_n_64_id_n_64_cust"><di:waypoint x="385" y="235"/><di:waypoint x="425" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_64_cust_n_64_susp" bpmnElement="f_n_64_cust_n_64_susp"><di:waypoint x="555" y="235"/><di:waypoint x="637" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_64_susp_n_64_ref" bpmnElement="f_n_64_susp_n_64_ref"><di:waypoint x="683" y="235"/><di:waypoint x="570" y="235"/><di:waypoint x="570" y="455"/><di:waypoint x="595" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_64_susp_n_64_ref" bpmnElement="f_n_64_susp_n_64_ref"><di:waypoint x="683" y="235"/><di:waypoint x="570" y="235"/><di:waypoint x="570" y="455"/><di:waypoint x="595" y="455"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="493.8" y="440" width="71.2" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_64_ref_n_64_end" bpmnElement="f_n_64_ref_n_64_end"><di:waypoint x="725" y="455"/><di:waypoint x="1807" y="455"/><di:waypoint x="1807" y="235"/><di:waypoint x="1832" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_64_susp_n_64_cal" bpmnElement="f_n_64_susp_n_64_cal"><di:waypoint x="683" y="235"/><di:waypoint x="807" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_64_cal_n_64_rem" bpmnElement="f_n_64_cal_n_64_rem"><di:waypoint x="853" y="235"/><di:waypoint x="740" y="235"/><di:waypoint x="740" y="675"/><di:waypoint x="765" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_64_susp_n_64_cal" bpmnElement="f_n_64_susp_n_64_cal"><di:waypoint x="683" y="235"/><di:waypoint x="807" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="701" y="200" width="88" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_64_cal_n_64_rem" bpmnElement="f_n_64_cal_n_64_rem"><di:waypoint x="853" y="235"/><di:waypoint x="740" y="235"/><di:waypoint x="740" y="675"/><di:waypoint x="765" y="675"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="669.4" y="660" width="65.6" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_64_rem_n_64_end" bpmnElement="f_n_64_rem_n_64_end"><di:waypoint x="895" y="675"/><di:waypoint x="1807" y="675"/><di:waypoint x="1807" y="235"/><di:waypoint x="1832" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_64_cal_n_64_test" bpmnElement="f_n_64_cal_n_64_test"><di:waypoint x="853" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_64_cal_n_64_test" bpmnElement="f_n_64_cal_n_64_test"><di:waypoint x="853" y="235"/><di:waypoint x="935" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="839.7" y="186" width="82.4" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_64_test_n_64_obs" bpmnElement="f_n_64_test_n_64_obs"><di:waypoint x="1065" y="235"/><di:waypoint x="1105" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_64_obs_n_64_valid" bpmnElement="f_n_64_obs_n_64_valid"><di:waypoint x="1235" y="235"/><di:waypoint x="1317" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_64_valid_n_64_flag" bpmnElement="f_n_64_valid_n_64_flag"><di:waypoint x="1363" y="235"/><di:waypoint x="1250" y="235"/><di:waypoint x="1250" y="455"/><di:waypoint x="1275" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_64_valid_n_64_flag" bpmnElement="f_n_64_valid_n_64_flag"><di:waypoint x="1363" y="235"/><di:waypoint x="1250" y="235"/><di:waypoint x="1250" y="455"/><di:waypoint x="1275" y="455"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1185" y="440" width="60" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_64_flag_n_64_test" bpmnElement="f_n_64_flag_n_64_test"><di:waypoint x="1405" y="455"/><di:waypoint x="910" y="455"/><di:waypoint x="910" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_64_valid_n_64_cert" bpmnElement="f_n_64_valid_n_64_cert"><di:waypoint x="1363" y="235"/><di:waypoint x="1445" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_64_cert_n_64_stock" bpmnElement="f_n_64_cert_n_64_stock"><di:waypoint x="1575" y="235"/><di:waypoint x="1615" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_64_cert_n_64_disp" bpmnElement="f_n_64_cert_n_64_disp"><di:waypoint x="1575" y="235"/><di:waypoint x="1590" y="235"/><di:waypoint x="1590" y="455"/><di:waypoint x="1615" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_64_valid_n_64_cert" bpmnElement="f_n_64_valid_n_64_cert"><di:waypoint x="1363" y="235"/><di:waypoint x="1445" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1384" y="213" width="40" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_64_cert_n_64_stock" bpmnElement="f_n_64_cert_n_64_stock"><di:waypoint x="1575" y="235"/><di:waypoint x="1615" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1568.6" y="177" width="40" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_64_cert_n_64_disp" bpmnElement="f_n_64_cert_n_64_disp"><di:waypoint x="1575" y="235"/><di:waypoint x="1590" y="235"/><di:waypoint x="1590" y="455"/><di:waypoint x="1615" y="455"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1595" y="330" width="60" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_64_stock_n_64_end" bpmnElement="f_n_64_stock_n_64_end"><di:waypoint x="1745" y="235"/><di:waypoint x="1832" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_64_disp_n_64_end" bpmnElement="f_n_64_disp_n_64_end"><di:waypoint x="1745" y="455"/><di:waypoint x="1807" y="455"/><di:waypoint x="1807" y="235"/><di:waypoint x="1832" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_64_rt_n_64_rec" bpmnElement="f_n_64_rt_n_64_rec"><di:waypoint x="168" y="895"/><di:waypoint x="255" y="895"/></bpmndi:BPMNEdge>

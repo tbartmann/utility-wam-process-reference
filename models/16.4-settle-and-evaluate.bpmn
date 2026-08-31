@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_P_16_4" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
   <process id="P_16_4" name="16.4 Settle contracted work and evaluate performance" isExecutable="false">
-    <documentation>Tier-4 activities under 16.4.1 and 16.4.3; rate validation is 16.4.2 and is called, and the scorecard at 16.4.4 is specified rather than modelled because no source states a scorecard rule. Three objects are kept apart here that a system will happily merge: contract pay units, design compatible units at 2.3 and 2.5, and the plant account 5.3 unitises to. They may coincide. They are not the same document, and settling against the wrong one is how a capital job gets paid at maintenance rates.</documentation>
+    <documentation>Tier-4 activities under 16.4.1 and 16.4.3; rate validation is 16.4.2 and is called, and the scorecard at 16.4.4 is specified rather than modelled because no source states a scorecard rule. Three objects are kept apart here that a system will happily merge: contract pay units, design compatible units at 2.2 and 2.4, and the plant account 5.3 unitises to. They may coincide. They are not the same document, and settling against the wrong one is how a capital job gets paid at maintenance rates.</documentation>
     <laneSet id="P_16_4_lanes">
       <lane id="l_164_mai" name="Contract administration">
         <flowNodeRef>n_164_start</flowNodeRef>
@@ -52,10 +52,10 @@
   <bpmndi:BPMNDiagram id="dg_P_16_4">
     <bpmndi:BPMNPlane id="pl_P_16_4" bpmnElement="P_16_4">
       <bpmndi:BPMNShape id="sh_n_164_start" bpmnElement="n_164_start"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_164_cnt" bpmnElement="n_164_cnt"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_164_cnt" bpmnElement="n_164_cnt"><dc:Bounds x="255" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_164_qg" bpmnElement="n_164_qg"><dc:Bounds x="467" y="212" width="46" height="46"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_164_chg" bpmnElement="n_164_chg"><dc:Bounds x="425" y="420" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_164_rate" bpmnElement="n_164_rate"><dc:Bounds x="595" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_164_chg" bpmnElement="n_164_chg"><dc:Bounds x="425" y="411.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_164_rate" bpmnElement="n_164_rate"><dc:Bounds x="595" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_164_rg" bpmnElement="n_164_rg"><dc:Bounds x="807" y="212" width="46" height="46"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_164_hold" bpmnElement="n_164_hold"><dc:Bounds x="765" y="420" width="130" height="70"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_164_rwg" bpmnElement="n_164_rwg"><dc:Bounds x="977" y="212" width="46" height="46"/></bpmndi:BPMNShape>
@@ -66,15 +66,47 @@
       <bpmndi:BPMNShape id="sh_n_164_end" bpmnElement="n_164_end"><dc:Bounds x="1662" y="217" width="36" height="36"/></bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="ed_f_n_164_start_n_164_cnt" bpmnElement="f_n_164_start_n_164_cnt"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_164_cnt_n_164_qg" bpmnElement="f_n_164_cnt_n_164_qg"><di:waypoint x="385" y="235"/><di:waypoint x="467" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_164_qg_n_164_chg" bpmnElement="f_n_164_qg_n_164_chg"><di:waypoint x="513" y="235"/><di:waypoint x="400" y="235"/><di:waypoint x="400" y="455"/><di:waypoint x="425" y="455"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_164_chg_n_164_rate" bpmnElement="f_n_164_chg_n_164_rate"><di:waypoint x="555" y="455"/><di:waypoint x="570" y="455"/><di:waypoint x="570" y="235"/><di:waypoint x="595" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_164_qg_n_164_rate" bpmnElement="f_n_164_qg_n_164_rate"><di:waypoint x="513" y="235"/><di:waypoint x="595" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_164_qg_n_164_chg" bpmnElement="f_n_164_qg_n_164_chg"><di:waypoint x="513" y="235"/><di:waypoint x="400" y="235"/><di:waypoint x="400" y="455"/><di:waypoint x="425" y="455"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="295.8" y="446.5" width="99.2" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_164_chg_n_164_rate" bpmnElement="f_n_164_chg_n_164_rate"><di:waypoint x="555" y="455"/><di:waypoint x="570" y="455"/><di:waypoint x="570" y="235"/><di:waypoint x="595" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="575" y="336.5" width="88" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_164_qg_n_164_rate" bpmnElement="f_n_164_qg_n_164_rate"><di:waypoint x="513" y="235"/><di:waypoint x="595" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="494.1" y="186" width="93.6" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_164_rate_n_164_rg" bpmnElement="f_n_164_rate_n_164_rg"><di:waypoint x="725" y="235"/><di:waypoint x="807" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_164_rg_n_164_hold" bpmnElement="f_n_164_rg_n_164_hold"><di:waypoint x="853" y="235"/><di:waypoint x="740" y="235"/><di:waypoint x="740" y="455"/><di:waypoint x="765" y="455"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_164_hold_n_164_rate" bpmnElement="f_n_164_hold_n_164_rate"><di:waypoint x="895" y="455"/><di:waypoint x="570" y="455"/><di:waypoint x="570" y="235"/><di:waypoint x="595" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_164_rg_n_164_rwg" bpmnElement="f_n_164_rg_n_164_rwg"><di:waypoint x="853" y="235"/><di:waypoint x="977" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_164_rwg_n_164_block" bpmnElement="f_n_164_rwg_n_164_block"><di:waypoint x="1023" y="235"/><di:waypoint x="957" y="235"/><di:waypoint x="957" y="455"/><di:waypoint x="982" y="455"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_164_rwg_n_164_auth" bpmnElement="f_n_164_rwg_n_164_auth"><di:waypoint x="1023" y="235"/><di:waypoint x="1105" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_164_rg_n_164_hold" bpmnElement="f_n_164_rg_n_164_hold"><di:waypoint x="853" y="235"/><di:waypoint x="740" y="235"/><di:waypoint x="740" y="455"/><di:waypoint x="765" y="455"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="652.6" y="446.5" width="82.4" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_164_hold_n_164_rate" bpmnElement="f_n_164_hold_n_164_rate"><di:waypoint x="895" y="455"/><di:waypoint x="570" y="455"/><di:waypoint x="570" y="235"/><di:waypoint x="595" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="516.2" y="336.5" width="48.8" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_164_rg_n_164_rwg" bpmnElement="f_n_164_rg_n_164_rwg"><di:waypoint x="853" y="235"/><di:waypoint x="977" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="893.4" y="213" width="43.2" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_164_rwg_n_164_block" bpmnElement="f_n_164_rwg_n_164_block"><di:waypoint x="1023" y="235"/><di:waypoint x="957" y="235"/><di:waypoint x="957" y="455"/><di:waypoint x="982" y="455"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="962" y="336.5" width="93.6" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_164_rwg_n_164_auth" bpmnElement="f_n_164_rwg_n_164_auth"><di:waypoint x="1023" y="235"/><di:waypoint x="1105" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1042.4" y="213" width="43.2" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_164_auth_n_164_rem" bpmnElement="f_n_164_auth_n_164_rem"><di:waypoint x="1235" y="235"/><di:waypoint x="1275" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_164_rem_n_164_fb" bpmnElement="f_n_164_rem_n_164_fb"><di:waypoint x="1405" y="235"/><di:waypoint x="1445" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_164_fb_n_164_end" bpmnElement="f_n_164_fb_n_164_end"><di:waypoint x="1575" y="235"/><di:waypoint x="1662" y="235"/></bpmndi:BPMNEdge>

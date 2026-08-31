@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_P_14_1" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <process id="P_14_1" name="14.1 Administer the workforce" isExecutable="false">
+    <documentation>Three of the four processes are drawn. 14.1.2 the organisational structure is SPEC - it is held continuously and read by everything that approves, costs or assigns, and has no instance boundary of its own.
+
+ONE EVENT DRIVES THE WHOLE GROUP: a person joins, moves, changes status or leaves. Everything else in the flow is a consequence, which is why access provisioning at 14.1.4 hangs off the worker record rather than off a request. Access granted on request bypasses the qualification restriction 14.2.4 exists to apply, and the field application then offers work the person may not do.
+
+14.1.3 OWNS THE PERSON STATUS RECORD and 3.5.4 is the scheduling view of it. The flow only ever publishes status outward; there is no path by which a status set in scheduling comes back in. Setting availability in two places is how a restricted person gets dispatched, and this is the group where that would happen.
+
+49 CFR Part 199 is the one hard regulatory input and it is gas only. A positive result or a refusal removes a covered employee from availability - a workforce fact, not a scheduling one. Electric utilities are not covered by Part 199 at all.
+
+A leaver's record is retired, not deleted. The work they performed stays attributable and their qualification evidence has to outlive the employment that produced it, because 192.805 evidence is read long afterwards.</documentation>
+    <laneSet id="P_14_1_lanes">
+      <lane id="l_141_hr" name="Workforce administration">
+        <flowNodeRef>n_141_start</flowNodeRef>
+        <flowNodeRef>n_141_what</flowNodeRef>
+        <flowNodeRef>n_141_new</flowNodeRef>
+        <flowNodeRef>n_141_mov</flowNodeRef>
+        <flowNodeRef>n_141_stat</flowNodeRef>
+        <flowNodeRef>n_141_p199</flowNodeRef>
+        <flowNodeRef>n_141_leave</flowNodeRef>
+        <flowNodeRef>n_141_pub</flowNodeRef>
+        <flowNodeRef>n_141_end</flowNodeRef>
+      </lane>
+      <lane id="l_141_it" name="Access and devices">
+        <flowNodeRef>n_141_acc</flowNodeRef>
+        <flowNodeRef>n_141_prov</flowNodeRef>
+        <flowNodeRef>n_141_give</flowNodeRef>
+        <flowNodeRef>n_141_take</flowNodeRef>
+      </lane>
+    </laneSet>
+    <startEvent id="n_141_start" name="A person joins, moves, changes status or leaves"><messageEventDefinition id="n_141_start_md"/></startEvent>
+    <exclusiveGateway id="n_141_what" name="Which event"/>
+    <serviceTask id="n_141_new" name="Create the worker record and its identifier"><documentation>14.1.1. The identifier every completed work record will point at. Reusing one silently reattributes history.</documentation></serviceTask>
+    <serviceTask id="n_141_mov" name="Change role, craft or base location"><documentation>14.1.1.</documentation></serviceTask>
+    <serviceTask id="n_141_stat" name="Set availability status with its reason and period"><documentation>14.1.3. The reason travels with the status: a qualification lapse, a medical restriction and annual leave are three different facts.</documentation></serviceTask>
+    <businessRuleTask id="n_141_p199" name="Apply the Part 199 outcome"><documentation>14.1.3. Gas covered employees only. A positive result or a refusal removes the person from availability. Electric utilities are not covered.</documentation></businessRuleTask>
+    <serviceTask id="n_141_leave" name="Retire the record, keeping the work history"><documentation>14.1.1. Retired, not deleted. Qualification evidence outlives the employment.</documentation></serviceTask>
+    <serviceTask id="n_141_acc" name="Derive access from role and qualification"><documentation>14.1.4. Derived, never requested. Access granted directly bypasses 14.2.4.</documentation></serviceTask>
+    <exclusiveGateway id="n_141_prov" name="Provision or remove"/>
+    <sendTask id="n_141_give" name="Provision accounts, device and field application"><documentation>14.1.4.</documentation></sendTask>
+    <sendTask id="n_141_take" name="Remove access and evidence the removal"><documentation>14.1.4. Evidenced, not assumed. An account outliving employment is a workforce failure before it is an IT one.</documentation></sendTask>
+    <sendTask id="n_141_pub" name="Publish the worker, status and structure outward"><documentation>14.1.1, 14.1.3. PUBLISH only. 3.5.4 is the scheduling view of this record and never writes back to it.</documentation></sendTask>
+    <endEvent id="n_141_end" name="Workforce record current and published"/>
+    <sequenceFlow id="f_n_141_start_n_141_what" sourceRef="n_141_start" targetRef="n_141_what" name=""/>
+    <sequenceFlow id="f_n_141_what_n_141_new" sourceRef="n_141_what" targetRef="n_141_new" name="joiner"/>
+    <sequenceFlow id="f_n_141_what_n_141_mov" sourceRef="n_141_what" targetRef="n_141_mov" name="role or location change"/>
+    <sequenceFlow id="f_n_141_what_n_141_stat" sourceRef="n_141_what" targetRef="n_141_stat" name="availability change"/>
+    <sequenceFlow id="f_n_141_what_n_141_leave" sourceRef="n_141_what" targetRef="n_141_leave" name="leaver"/>
+    <sequenceFlow id="f_n_141_stat_n_141_p199" sourceRef="n_141_stat" targetRef="n_141_p199" name="gas covered employee"><conditionExpression xsi:type="tFormalExpression"><![CDATA[regime = "part199"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_141_p199_n_141_acc" sourceRef="n_141_p199" targetRef="n_141_acc" name=""/>
+    <sequenceFlow id="f_n_141_stat_n_141_acc" sourceRef="n_141_stat" targetRef="n_141_acc" name="other reason"/>
+    <sequenceFlow id="f_n_141_new_n_141_acc" sourceRef="n_141_new" targetRef="n_141_acc" name=""/>
+    <sequenceFlow id="f_n_141_mov_n_141_acc" sourceRef="n_141_mov" targetRef="n_141_acc" name=""/>
+    <sequenceFlow id="f_n_141_leave_n_141_acc" sourceRef="n_141_leave" targetRef="n_141_acc" name=""/>
+    <sequenceFlow id="f_n_141_acc_n_141_prov" sourceRef="n_141_acc" targetRef="n_141_prov" name=""/>
+    <sequenceFlow id="f_n_141_prov_n_141_give" sourceRef="n_141_prov" targetRef="n_141_give" name="entitled"/>
+    <sequenceFlow id="f_n_141_prov_n_141_take" sourceRef="n_141_prov" targetRef="n_141_take" name="no longer entitled"><conditionExpression xsi:type="tFormalExpression"><![CDATA[entitled = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_141_give_n_141_pub" sourceRef="n_141_give" targetRef="n_141_pub" name=""/>
+    <sequenceFlow id="f_n_141_take_n_141_pub" sourceRef="n_141_take" targetRef="n_141_pub" name=""/>
+    <sequenceFlow id="f_n_141_pub_n_141_end" sourceRef="n_141_pub" targetRef="n_141_end" name=""/>
+  </process>
+  <bpmndi:BPMNDiagram id="dg_P_14_1">
+    <bpmndi:BPMNPlane id="pl_P_14_1" bpmnElement="P_14_1">
+      <bpmndi:BPMNShape id="sh_n_141_start" bpmnElement="n_141_start"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_141_what" bpmnElement="n_141_what"><dc:Bounds x="297" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_141_new" bpmnElement="n_141_new"><dc:Bounds x="255" y="411.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_141_mov" bpmnElement="n_141_mov"><dc:Bounds x="425" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_141_stat" bpmnElement="n_141_stat"><dc:Bounds x="595" y="411.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_141_p199" bpmnElement="n_141_p199"><dc:Bounds x="765" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_141_leave" bpmnElement="n_141_leave"><dc:Bounds x="765" y="851.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_141_acc" bpmnElement="n_141_acc"><dc:Bounds x="935" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_141_prov" bpmnElement="n_141_prov"><dc:Bounds x="1147" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_141_give" bpmnElement="n_141_give"><dc:Bounds x="1105" y="411.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_141_take" bpmnElement="n_141_take"><dc:Bounds x="1105" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_141_pub" bpmnElement="n_141_pub"><dc:Bounds x="1275" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_141_end" bpmnElement="n_141_end"><dc:Bounds x="1492" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ed_f_n_141_start_n_141_what" bpmnElement="f_n_141_start_n_141_what"><di:waypoint x="168" y="235"/><di:waypoint x="297" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_141_what_n_141_new" bpmnElement="f_n_141_what_n_141_new"><di:waypoint x="343" y="235"/><di:waypoint x="230" y="235"/><di:waypoint x="230" y="455"/><di:waypoint x="255" y="455"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="185" y="446.5" width="40" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_141_what_n_141_mov" bpmnElement="f_n_141_what_n_141_mov"><di:waypoint x="343" y="235"/><di:waypoint x="400" y="235"/><di:waypoint x="400" y="455"/><di:waypoint x="425" y="455"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="405" y="330" width="93.6" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_141_what_n_141_stat" bpmnElement="f_n_141_what_n_141_stat"><di:waypoint x="343" y="235"/><di:waypoint x="570" y="235"/><di:waypoint x="570" y="455"/><di:waypoint x="595" y="455"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="420.9" y="200" width="71.2" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_141_what_n_141_leave" bpmnElement="f_n_141_what_n_141_leave"><di:waypoint x="343" y="235"/><di:waypoint x="740" y="235"/><di:waypoint x="740" y="895"/><di:waypoint x="765" y="895"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="695" y="886.5" width="40" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_141_stat_n_141_p199" bpmnElement="f_n_141_stat_n_141_p199"><di:waypoint x="725" y="455"/><di:waypoint x="740" y="455"/><di:waypoint x="740" y="675"/><di:waypoint x="765" y="675"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="745" y="550" width="65.6" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_141_p199_n_141_acc" bpmnElement="f_n_141_p199_n_141_acc"><di:waypoint x="895" y="675"/><di:waypoint x="910" y="675"/><di:waypoint x="910" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_141_stat_n_141_acc" bpmnElement="f_n_141_stat_n_141_acc"><di:waypoint x="725" y="455"/><di:waypoint x="910" y="455"/><di:waypoint x="910" y="235"/><di:waypoint x="935" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="915" y="336.5" width="71.2" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_141_new_n_141_acc" bpmnElement="f_n_141_new_n_141_acc"><di:waypoint x="385" y="455"/><di:waypoint x="910" y="455"/><di:waypoint x="910" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_141_mov_n_141_acc" bpmnElement="f_n_141_mov_n_141_acc"><di:waypoint x="555" y="455"/><di:waypoint x="910" y="455"/><di:waypoint x="910" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_141_leave_n_141_acc" bpmnElement="f_n_141_leave_n_141_acc"><di:waypoint x="895" y="895"/><di:waypoint x="910" y="895"/><di:waypoint x="910" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_141_acc_n_141_prov" bpmnElement="f_n_141_acc_n_141_prov"><di:waypoint x="1065" y="235"/><di:waypoint x="1147" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_141_prov_n_141_give" bpmnElement="f_n_141_prov_n_141_give"><di:waypoint x="1193" y="235"/><di:waypoint x="1080" y="235"/><di:waypoint x="1080" y="455"/><di:waypoint x="1105" y="455"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1026.2" y="446.5" width="48.8" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_141_prov_n_141_take" bpmnElement="f_n_141_prov_n_141_take"><di:waypoint x="1193" y="235"/><di:waypoint x="1080" y="235"/><di:waypoint x="1080" y="675"/><di:waypoint x="1105" y="675"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1020.6" y="660" width="54.4" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_141_give_n_141_pub" bpmnElement="f_n_141_give_n_141_pub"><di:waypoint x="1235" y="455"/><di:waypoint x="1250" y="455"/><di:waypoint x="1250" y="235"/><di:waypoint x="1275" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_141_take_n_141_pub" bpmnElement="f_n_141_take_n_141_pub"><di:waypoint x="1235" y="675"/><di:waypoint x="1250" y="675"/><di:waypoint x="1250" y="235"/><di:waypoint x="1275" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_141_pub_n_141_end" bpmnElement="f_n_141_pub_n_141_end"><di:waypoint x="1405" y="235"/><di:waypoint x="1492" y="235"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

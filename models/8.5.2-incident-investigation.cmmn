@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/CMMN/20151109/MODEL" xmlns:cmmndi="http://www.omg.org/spec/CMMN/20151109/CMMNDI" xmlns:dc="http://www.omg.org/spec/CMMN/20151109/DC" xmlns:di="http://www.omg.org/spec/CMMN/20151109/DI" id="defs_Incident_investigation" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <case id="Incident_investigation" name="8.5.2 Investigate incidents and near misses">
+    <caseFileModel id="Incident_investigation_cfm">
+      <caseFileItem id="cf_scene" name="The scene, the equipment and its state"/>
+      <caseFileItem id="cf_people" name="Those involved, those who saw it, and their accounts"/>
+      <caseFileItem id="cf_records" name="Work records, procedures in force and qualification status"/>
+      <caseFileItem id="cf_class" name="Incident class and the notice and recording duties it carries"/>
+    </caseFileModel>
+    <casePlanModel id="Incident_investigation_plan" name="8.5.2 Investigate incidents and near misses" autoComplete="true">
+      <documentation>Scene, witnesses, records and equipment are all available at once and two competent investigators will not take them in the same order. What is taken first depends on what is perishable, which is the CMMN test.
+
+THE NOTICE IS NOT PART OF THE INVESTIGATION AND MUST NOT WAIT FOR IT. 49 CFR 191.5 requires immediate notice of certain incidents at the earliest practicable moment. The clock starts at DISCOVERY and runs whatever the investigation is doing, so the notice is a required item that fires on its own rather than a step in a sequence. An operator that waits for facts before notifying has already breached.
+
+RECORDABILITY IS A DETERMINATION, NOT A JUDGMENT ABOUT SEVERITY. 29 CFR Part 1904 sets criteria and they apply to both commodities. Deciding an injury was 'not serious enough' is not one of the available answers.
+
+A near miss with no injury and no damage enters this case on the same terms as one that caused harm. It is frequently the cheapest evidence an operator will ever get, and excluding it because nothing happened is how the same event recurs with an injury. Camunda 8 dropped CMMN, so a runtime means Flowable or an equivalent.</documentation>
+      <planItem id="pi_t_notice" name="Give the immediate notice the class requires" definitionRef="t_notice_def">
+        <itemControl id="ic_t_notice">
+          <requiredRule id="rr_t_notice"><condition><![CDATA[true]]></condition></requiredRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_scene" name="Secure and examine the scene and the equipment" definitionRef="t_scene_def">
+        <itemControl id="ic_t_scene">
+          <requiredRule id="rr_t_scene"><condition><![CDATA[true]]></condition></requiredRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_accounts" name="Take accounts from those involved and those who saw it" definitionRef="t_accounts_def">
+        <itemControl id="ic_t_accounts">
+          <requiredRule id="rr_t_accounts"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_accounts"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_records" name="Examine procedures in force and qualification status" definitionRef="t_records_def">
+        <itemControl id="ic_t_records">
+          <requiredRule id="rr_t_records"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_records"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_record" name="Determine recordability against 29 CFR 1904" definitionRef="t_record_def">
+        <itemControl id="ic_t_record">
+          <requiredRule id="rr_t_record"><condition><![CDATA[true]]></condition></requiredRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_cause" name="Establish immediate and underlying causes" definitionRef="t_cause_def">
+        <itemControl id="ic_t_cause">
+          <requiredRule id="rr_t_cause"><condition><![CDATA[true]]></condition></requiredRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_actions" name="Issue findings with owners and dates" definitionRef="t_actions_def">
+        <itemControl id="ic_t_actions">
+          <requiredRule id="rr_t_actions"><condition><![CDATA[false]]></condition></requiredRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_m_notified" name="Statutory notice given within the required period" definitionRef="m_notified_def"/>
+      <planItem id="pi_m_closed" name="Causes established and findings issued" definitionRef="m_closed_def"/>
+      <humanTask id="t_notice_def" name="Give the immediate notice the class requires" isBlocking="true"><documentation>Required and independent. 49 CFR 191.5 runs from discovery and does not wait for the investigation. Electric distribution has no federal equivalent; a state duty may apply.</documentation></humanTask>
+      <humanTask id="t_scene_def" name="Secure and examine the scene and the equipment" isBlocking="true"><documentation>Required. Perishable in the same way as 8.4.4's site evidence.</documentation></humanTask>
+      <humanTask id="t_accounts_def" name="Take accounts from those involved and those who saw it" isBlocking="true"><documentation>Taken early where memory is the evidence, later where the record will contradict it.</documentation></humanTask>
+      <humanTask id="t_records_def" name="Examine procedures in force and qualification status" isBlocking="true"><documentation>8.5.1 holds the procedure version; 14.2 and 16.1.4 hold the qualification. A lapsed qualification is a finding about the system, not about the person.</documentation></humanTask>
+      <decisionTask id="t_record_def" name="Determine recordability against 29 CFR 1904"><documentation>Required. A determination against 1904's criteria, applying to both commodities. Not a view about severity.</documentation></decisionTask>
+      <humanTask id="t_cause_def" name="Establish immediate and underlying causes" isBlocking="true"><documentation>Required. Immediate AND underlying; one without the other produces a finding nobody can act on.</documentation></humanTask>
+      <humanTask id="t_actions_def" name="Issue findings with owners and dates" isBlocking="true"><documentation>Findings without an owner close nothing. 8.5.1 receives those that change a procedure.</documentation></humanTask>
+      <milestone id="m_notified_def" name="Statutory notice given within the required period"><documentation>Independent of everything else in the case, and the first thing an inspector will ask for.</documentation></milestone>
+      <milestone id="m_closed_def" name="Causes established and findings issued"><documentation>The investigation outcome. Closure of the findings themselves is tracked at 8.5.4, not here.</documentation></milestone>
+    </casePlanModel>
+  </case>
+  <cmmndi:CMMNDI>
+    <cmmndi:CMMNDiagram id="dg_Incident_investigation">
+      <cmmndi:CMMNShape id="sh_plan" cmmnElementRef="Incident_investigation_plan"><dc:Bounds x="40" y="40" width="1010" height="300"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_notice" cmmnElementRef="pi_t_notice"><dc:Bounds x="80" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_scene" cmmnElementRef="pi_t_scene"><dc:Bounds x="270" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_accounts" cmmnElementRef="pi_t_accounts"><dc:Bounds x="460" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_records" cmmnElementRef="pi_t_records"><dc:Bounds x="80" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_record" cmmnElementRef="pi_t_record"><dc:Bounds x="270" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_cause" cmmnElementRef="pi_t_cause"><dc:Bounds x="460" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_actions" cmmnElementRef="pi_t_actions"><dc:Bounds x="80" y="290" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_m_notified" cmmnElementRef="pi_m_notified"><dc:Bounds x="270" y="290" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_m_closed" cmmnElementRef="pi_m_closed"><dc:Bounds x="460" y="290" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+    </cmmndi:CMMNDiagram>
+  </cmmndi:CMMNDI>
+</definitions>

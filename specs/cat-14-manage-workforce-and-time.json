@@ -1,0 +1,3071 @@
+{
+  "category": {
+    "id": "14.0",
+    "name": "Manage Workforce and Time",
+    "uid": 10463
+  },
+  "platform": "Claude",
+  "model": "claude-opus-5",
+  "round": 6,
+  "date": "2026-08-30",
+  "merge_corrections": [],
+  "derivation": [
+    "Field set is EN 17007:2017 cl. 5.2. Sources are SOURCE_AUTHORITY_PACK sections E, F, G, H and I only.",
+    "The least standardised category in the library. Section I of the pack records that scheduling, rostering and resource optimisation have no standard anywhere and that ISO 30409:2016 is STRATEGIC workforce planning which must not be stretched to cover them. Nine of eighteen processes rest on judgment and say so.",
+    "Qualification is the part that is real, and it is asymmetric. 49 CFR 192 Subpart N gives gas a written programme, identified covered tasks and evaluated individuals. Electric distribution has no federal qualification programme requirement at all - 29 CFR 1910.269(a)(2) defines a qualified employee and 1926 Subpart P a competent person, and neither is a programme. 14.2.5 and 14.2.6 are gas only for that reason.",
+    "49 CFR Part 199 drug and alcohol testing is gas only and reaches this category because a positive result or refusal removes a person from availability at 14.1.3.",
+    "Five cross-references already merged in 3.0 and 16.0 bind this category and all five hold: 14.1.2 as the organisational master, 14.1.3 owning the live person status record, 14.2.4 restricting assignment on a lapsed qualification, 14.2.5 qualifying operator people only, and 14.4.1 owning pay rules that 3.2 consumes and must not invent."
+  ],
+  "taxonomy_origin": "TAXONOMY ORIGIN, WHICH IS A DIFFERENT FACT FROM THE DERIVATION ABOVE. The derivation line describes where FIELD CONTENT comes from: every field value traces to a standard, a regulation or a recognised industry body and carries its citation. It does NOT describe where the taxonomy comes from. Which processes exist, how they are grouped and what they are called is a practitioner synthesis of delivered implementations, generalised until it is product- and client-neutral. Of the 102 process groups, 43 originate in programme material, 28 in domain research, 20 in a published source and 11 in folder and file names; the provenance layer grades every one and names what to read next. This model is DELIVERED PRACTICE SPECIFIED AGAINST STANDARDS, not a standard turned into a model - and saying so is not a weakness. A taxonomy proven in delivery and then held against the standards is a stronger claim than one derived from a standard and never built.",
+  "field_set": {
+    "standard": "EN 17007:2017",
+    "clause": "5.2",
+    "corroboration": "ISO 9001:2015 cl. 4.4.1"
+  },
+  "gaps": [
+    "No standard defines a worker master, an organisational structure master, availability status, access provisioning, competency profiles, time capture, crew cascade, timesheet approval, pay rules, payroll interfacing or time reconciliation for utility work. Every one of those is recorded as judgment rather than attributed to a source that does not reach it.",
+    "49 CFR 192.805(g) sets no requalification interval - it is entirely operator-set - so 14.2.2 records the operator's own figure and its source.",
+    "49 CFR 192.805 requires direction and observation of an unqualified individual and sets NO span-of-control number. 14.2.6 records the limit as the operator's and never cites it to the section.",
+    "Offline mobile behaviour, sync conflict resolution and field data capture are entirely vendor-defined, which is why 14.3.1 specifies what is captured and not how the device behaves."
+  ],
+  "processes": [
+    {
+      "uid": 10465,
+      "id": "14.1.1",
+      "name": "Maintain worker and role records",
+      "group": {
+        "id": "14.1",
+        "name": "Administer the workforce",
+        "uid": 10464
+      },
+      "intent": "Hold the worker record the rest of the model identifies a person by.",
+      "activities": [
+        "Create the worker record on joining, with the identifier work will carry",
+        "Maintain role, craft, base location and employment status",
+        "Record the changes that move a person between roles or locations",
+        "Retire the record on leaving, without destroying the work history it carries"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "A worker joins, changes role or leaves.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Joiner, mover or leaver notification",
+          "party": "HR",
+          "data": "Crew"
+        },
+        {
+          "what": "Role, craft and base location",
+          "party": "HR",
+          "data": "Crew"
+        },
+        {
+          "what": "Employment status and effective dates",
+          "party": "HR",
+          "data": "WorkTimeSchedule"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Worker record with a stable identifier",
+          "party": "HR",
+          "data": "Crew"
+        },
+        {
+          "what": "Change published to the systems that assign work",
+          "party": "SCHD",
+          "data": "Crew"
+        }
+      ],
+      "systems": [
+        {
+          "component": "HR",
+          "role": "system of record",
+          "service": "worker identity and role"
+        },
+        {
+          "component": "SCHD",
+          "role": "consumer",
+          "service": "who can be assigned"
+        },
+        {
+          "component": "MAI",
+          "role": "consumer",
+          "service": "who performed the work"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "HR",
+          "to": "SCHD",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "publish-subscribe"
+        }
+      ],
+      "roles": [
+        {
+          "role": "HR administrator",
+          "raci": "R"
+        },
+        {
+          "role": "Operations manager",
+          "raci": "A"
+        },
+        {
+          "role": "Field supervisor",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Crew",
+        "WorkTimeSchedule"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "The worker identifier is what every completed work record points at. Reissuing or reusing one silently reattributes history, and the history is evidence under 192.805 and 1910.269."
+        },
+        {
+          "kind": "operational",
+          "text": "A leaver's record is retired, not deleted. The work they performed stays attributable, and qualification evidence has to survive the employment that produced it."
+        },
+        {
+          "kind": "regulatory",
+          "text": "No standard defines a worker master for utility work. ISO 30409 is strategic workforce planning and does not reach this."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Record currency",
+          "definition": "Proportion of active workers whose role and base location match the current organisation.",
+          "cite": "EN 15341:2019+A1:2022 Maintenance Key Performance Indicators cl. 12"
+        },
+        {
+          "name": "Joiner latency",
+          "definition": "Elapsed time from a joiner starting to being assignable.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Employee record",
+        "Movement between craft or base location",
+        "Leaver whose record is retired but retained"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Create, maintain, change, retire - one repeatable lifecycle per person, with the branch set by which of the three events arrived.",
+        "artifact": "models/14.1-administer-the-workforce.bpmn"
+      },
+      "en17007": {
+        "process": "RES",
+        "title": "Provide internal human resources",
+        "clause": "6.14"
+      },
+      "sources": [
+        {
+          "for": "qualification evidence",
+          "cite": "49 CFR 192.805 Qualification program",
+          "status": "regulation"
+        },
+        {
+          "for": "competence",
+          "cite": "GFMAM Asset Management Landscape 3rd ed. v3.0, 2024-06, subject 4.5 Competence Management",
+          "status": "verified"
+        },
+        {
+          "for": "no worker-master standard",
+          "cite": "No standard defines a worker master for utility work: neither EN 17007, IEC 61968-6 nor GFMAM specifies the record a completed work order attributes to a person",
+          "status": "judgment"
+        },
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319) RES.4 provide internal human resources",
+          "status": "verified"
+        },
+        {
+          "for": "indicator",
+          "cite": "EN 15341:2019+A1:2022 Maintenance Key Performance Indicators cl. 12",
+          "status": "clause-verified"
+        }
+      ],
+      "provenance": {
+        "basis": "judgment",
+        "primary": "no standard reaches a worker master; GFMAM 4.5 is the nearest"
+      }
+    },
+    {
+      "uid": 10466,
+      "id": "14.1.2",
+      "name": "Maintain organisation and reporting structure",
+      "group": {
+        "id": "14.1",
+        "name": "Administer the workforce",
+        "uid": 10464
+      },
+      "intent": "Hold the organisation and reporting structure the whole model resolves against.",
+      "activities": [
+        "Maintain the units, their reporting lines and their effective dates",
+        "Attach each worker and each supervisory position to a unit",
+        "Record reorganisations as dated changes rather than as replacements",
+        "Publish the structure the approval, cost and assignment paths read"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "The organisation or a reporting line changes.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Organisational change and its effective date",
+          "party": "HR",
+          "data": "Crew"
+        },
+        {
+          "what": "Units, positions and reporting lines",
+          "party": "HR",
+          "data": "Crew"
+        },
+        {
+          "what": "Cost centre alignment for the unit",
+          "party": "FIN",
+          "data": "Work"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Published organisation and reporting structure",
+          "party": "HR",
+          "data": "Crew"
+        },
+        {
+          "what": "Approval and cost paths derived from it",
+          "party": "FIN",
+          "data": "Work"
+        }
+      ],
+      "systems": [
+        {
+          "component": "HR",
+          "role": "system of record",
+          "service": "organisation and reporting structure"
+        },
+        {
+          "component": "FIN",
+          "role": "consumer",
+          "service": "approval and cost centre path"
+        },
+        {
+          "component": "SCHD",
+          "role": "consumer",
+          "service": "supervisory assignment"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "HR",
+          "to": "FIN",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "publish-subscribe"
+        }
+      ],
+      "roles": [
+        {
+          "role": "HR administrator",
+          "raci": "R"
+        },
+        {
+          "role": "Operations manager",
+          "raci": "A"
+        },
+        {
+          "role": "Finance controller",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Crew",
+        "Work"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "This is the ORGANISATIONAL master. 12.1.4 holds the same structure as an asset-record dimension and 3.5.3 is the scheduling geography; neither is the org. Confirmed by Tim, 2026-08-30."
+        },
+        {
+          "kind": "operational",
+          "text": "Reorganisations are dated changes. Replacing the structure destroys the ability to say who approved what under which line, which is the only reason an approval record is worth keeping."
+        },
+        {
+          "kind": "financial",
+          "text": "Approval limits and cost centre paths derive from this structure. A unit moved without its cost alignment silently reroutes authorisation at 2.3.2."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Structure currency",
+          "definition": "Proportion of positions whose reporting line matches the published structure.",
+          "cite": "EN 15341:2019+A1:2022 Maintenance Key Performance Indicators cl. 12"
+        },
+        {
+          "name": "Change latency",
+          "definition": "Elapsed time from an effective date to the structure showing it.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Permanent reorganisation",
+        "Temporary acting or secondment arrangement",
+        "Structure aligned to a cost centre change"
+      ],
+      "notation": {
+        "class": "SPEC",
+        "why": "A standing capability with no instance boundary. The structure is held continuously and read by everything that approves, costs or assigns.",
+        "artifact": null
+      },
+      "en17007": {
+        "process": "MAN",
+        "title": "Manage maintenance (strategy and improvement, human resources, continuous improvement, compliance, etc.)",
+        "clause": "6.2"
+      },
+      "sources": [
+        {
+          "for": "organisation and responsibilities",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319) MAN.3 determine the organization, job profiles and responsibilities",
+          "status": "verified"
+        },
+        {
+          "for": "boundary",
+          "cite": "12.1.4 holds the organisational dimension of the asset record and 3.5.3 the scheduling geography; neither is the organisational master",
+          "status": "judgment"
+        },
+        {
+          "for": "competence",
+          "cite": "GFMAM Asset Management Landscape 3rd ed. v3.0, 2024-06, subject 4.5 Competence Management",
+          "status": "verified"
+        },
+        {
+          "for": "no org-structure standard",
+          "cite": "EN 17007 MAN.3 requires the organization and responsibilities to be determined and does not say how the structure is held or versioned; no standard does",
+          "status": "judgment"
+        },
+        {
+          "for": "indicator",
+          "cite": "EN 15341:2019+A1:2022 Maintenance Key Performance Indicators cl. 12",
+          "status": "clause-verified"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "EN 17007 MAN.3; the boundary rulings are judgment"
+      }
+    },
+    {
+      "uid": 10467,
+      "id": "14.1.3",
+      "name": "Maintain worker availability and status",
+      "group": {
+        "id": "14.1",
+        "name": "Administer the workforce",
+        "uid": 10464
+      },
+      "intent": "Hold whether a person is actually available to be given work, and why not.",
+      "activities": [
+        "Take absence, leave, restriction and testing outcomes as they arise",
+        "Set the availability status with its reason and its effective period",
+        "Publish the status to the systems that assign and schedule",
+        "Clear the status when the reason ends"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "A worker's availability changes.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Absence, leave or restriction",
+          "party": "HR",
+          "data": "Crew"
+        },
+        {
+          "what": "Testing outcome removing a covered employee",
+          "party": "HR",
+          "data": "Crew"
+        },
+        {
+          "what": "Qualification lapse from 14.2.4",
+          "party": "HR",
+          "data": "Crew"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Availability status with reason and period",
+          "party": "HR",
+          "data": "Crew"
+        },
+        {
+          "what": "Status published to scheduling and dispatch",
+          "party": "SCHD",
+          "data": "Crew"
+        }
+      ],
+      "systems": [
+        {
+          "component": "HR",
+          "role": "system of record",
+          "service": "availability status and its reason"
+        },
+        {
+          "component": "SCHD",
+          "role": "consumer",
+          "service": "the scheduling view of the same record"
+        },
+        {
+          "component": "MAI",
+          "role": "consumer",
+          "service": "assignability at the point of dispatch"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "HR",
+          "to": "SCHD",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "publish-subscribe"
+        }
+      ],
+      "roles": [
+        {
+          "role": "HR administrator",
+          "raci": "R"
+        },
+        {
+          "role": "Field supervisor",
+          "raci": "A"
+        },
+        {
+          "role": "Scheduler",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Crew",
+        "WorkTimeSchedule"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "This OWNS the person status record. 3.5.4 is the scheduling view of it and consumes rather than sets it. Setting availability in two places is how a restricted person gets dispatched."
+        },
+        {
+          "kind": "regulatory",
+          "text": "49 CFR Part 199 covers gas employees in operations, maintenance or emergency response. A positive result or refusal removes them from availability. Electric utilities are not covered."
+        },
+        {
+          "kind": "operational",
+          "text": "The reason travels with the status. A qualification lapse, a medical restriction and annual leave are three different facts, and 3.5.4 needs the difference to plan."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Status accuracy",
+          "definition": "Proportion of dispatch attempts against a person whose status was current.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Unplanned unavailability",
+          "definition": "Proportion of scheduled hours lost to unplanned unavailability.",
+          "cite": "EN 15341:2019+A1:2022 Maintenance Key Performance Indicators cl. 12"
+        }
+      ],
+      "variants": [
+        "Planned absence or leave",
+        "Medical or duty restriction",
+        "Removal under 49 CFR Part 199 (gas only)",
+        "Unavailability arising from a qualification lapse at 14.2.4"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Receive the reason, set the status, publish it, clear it. One repeatable sequence whose branch is the reason, not the handler.",
+        "artifact": "models/14.1-administer-the-workforce.bpmn"
+      },
+      "en17007": {
+        "process": "RES",
+        "title": "Provide internal human resources",
+        "clause": "6.14"
+      },
+      "sources": [
+        {
+          "for": "testing regime",
+          "cite": "49 CFR Part 199 Drug and alcohol testing, gas covered employees only",
+          "status": "regulation"
+        },
+        {
+          "for": "electric absence",
+          "cite": "Electric utilities are not covered by 49 CFR Part 199",
+          "status": "regulation"
+        },
+        {
+          "for": "qualification input",
+          "cite": "49 CFR 192.805 Qualification program(g), requalification intervals are operator-set",
+          "status": "regulation"
+        },
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319) RES.4 provide internal human resources",
+          "status": "verified"
+        },
+        {
+          "for": "no availability standard",
+          "cite": "No standard defines an availability status or its reason codes. ISO 30409 is strategic workforce planning and does not reach rostering or day-to-day availability",
+          "status": "judgment"
+        }
+      ],
+      "provenance": {
+        "basis": "regulation",
+        "primary": "49 CFR Part 199 for gas; the rest is judgment"
+      }
+    },
+    {
+      "uid": 10468,
+      "id": "14.1.4",
+      "name": "Provision and de-provision system and mobile access",
+      "group": {
+        "id": "14.1",
+        "name": "Administer the workforce",
+        "uid": 10464
+      },
+      "intent": "Give and take away the system and device access the work requires.",
+      "activities": [
+        "Derive the access the person's role and qualification entitle them to",
+        "Provision the accounts, the mobile device and the field application",
+        "Revise access when the role, the qualification or the status changes",
+        "Remove access on leaving, and prove it was removed"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "A worker joins, changes role, loses a qualification or leaves.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Role, qualification and status",
+          "party": "HR",
+          "data": "Crew"
+        },
+        {
+          "what": "Access entitlement for the role",
+          "party": "TCM",
+          "data": "Crew"
+        },
+        {
+          "what": "Device and application assignment",
+          "party": "FRD",
+          "data": "Tool"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Provisioned access and device",
+          "party": "TCM",
+          "data": "Crew"
+        },
+        {
+          "what": "Removal evidence on leaving or lapse",
+          "party": "TCM",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "TCM",
+          "role": "system of record",
+          "service": "access provisioning and removal"
+        },
+        {
+          "component": "HR",
+          "role": "supplier",
+          "service": "role, qualification and status"
+        },
+        {
+          "component": "FRD",
+          "role": "consumer",
+          "service": "the field application the device runs"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "HR",
+          "to": "TCM",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "HR administrator",
+          "raci": "C"
+        },
+        {
+          "role": "IT administrator",
+          "raci": "R"
+        },
+        {
+          "role": "Operations manager",
+          "raci": "A"
+        }
+      ],
+      "data_objects": [
+        "Crew",
+        "Tool",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "Access derives from role and qualification, not from request. Granted directly it bypasses 14.2.4's restriction, and the field application then offers work the person may not do."
+        },
+        {
+          "kind": "operational",
+          "text": "Removal on leaving is evidenced, not assumed. An account that outlives the employment is a workforce failure before it is an IT one."
+        },
+        {
+          "kind": "regulatory",
+          "text": "No standard governs access provisioning for utility field work. Offline mobile behaviour and field application design are vendor-defined throughout."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Provisioning latency",
+          "definition": "Elapsed time from a joiner starting to being able to work in the field application.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Orphan account rate",
+          "definition": "Accounts active for workers whose employment has ended.",
+          "cite": "EN 15341:2019+A1:2022 Maintenance Key Performance Indicators cl. 12"
+        }
+      ],
+      "variants": [
+        "Provisioning on joining",
+        "Revision on a role or qualification change",
+        "Suspension on a lapsed qualification",
+        "Removal on leaving"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Derive, provision, revise, remove - a controlled sequence whose trigger is always a change to the worker record at 14.1.1.",
+        "artifact": "models/14.1-administer-the-workforce.bpmn"
+      },
+      "en17007": {
+        "process": "TOL",
+        "title": "Deliver the tools, support equipment and information system",
+        "clause": "6.17"
+      },
+      "sources": [
+        {
+          "for": "qualification gate",
+          "cite": "49 CFR 192.805 Qualification program",
+          "status": "regulation"
+        },
+        {
+          "for": "field component",
+          "cite": "IEC 61968-6:2015 cl. 4.2 reference components, FRD Field Recording",
+          "status": "clause-verified"
+        },
+        {
+          "for": "no provisioning standard",
+          "cite": "Offline mobile behaviour, field data capture and electronic forms are entirely vendor-defined; no standard reaches them",
+          "status": "judgment"
+        },
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319) TOL.5 determine and provide a maintenance management, decision support software tools and documentation system",
+          "status": "verified"
+        },
+        {
+          "for": "indicator",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management",
+          "status": "consensus"
+        }
+      ],
+      "provenance": {
+        "basis": "judgment",
+        "primary": "no standard reaches access provisioning for field work"
+      }
+    },
+    {
+      "uid": 10470,
+      "id": "14.2.1",
+      "name": "Maintain skills and competency profile",
+      "group": {
+        "id": "14.2",
+        "name": "Manage skills and certification",
+        "uid": 10469
+      },
+      "intent": "Hold what each person is competent to do, and on what evidence.",
+      "activities": [
+        "Define the skills and competencies the work in scope requires",
+        "Record each person's profile against them, with the evidence",
+        "Revise the profile as competence is gained, assessed or lost",
+        "Publish the profile the assignment and qualification checks read"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "Competence is gained, assessed, or found no longer held.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Skills and competencies the work requires",
+          "party": "HR",
+          "data": "Crew"
+        },
+        {
+          "what": "Assessment or training evidence",
+          "party": "HR",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Worker record the profile attaches to",
+          "party": "HR",
+          "data": "Crew"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Competency profile with its evidence",
+          "party": "HR",
+          "data": "Crew"
+        },
+        {
+          "what": "Profile published to assignment",
+          "party": "SCHD",
+          "data": "Crew"
+        }
+      ],
+      "systems": [
+        {
+          "component": "HR",
+          "role": "system of record",
+          "service": "competency profile and evidence"
+        },
+        {
+          "component": "SCHD",
+          "role": "consumer",
+          "service": "who may be assigned to what"
+        },
+        {
+          "component": "CON",
+          "role": "consumer",
+          "service": "the operator side of a contracted crew"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "HR",
+          "to": "SCHD",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "publish-subscribe"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Training coordinator",
+          "raci": "R"
+        },
+        {
+          "role": "Operations manager",
+          "raci": "A"
+        },
+        {
+          "role": "Field supervisor",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Crew",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "A competency profile is not a qualification. 14.2.2 holds the certifications and licences that expire; this holds what the person can do. Merging them makes an unexpired certificate look like current competence."
+        },
+        {
+          "kind": "regulatory",
+          "text": "For gas covered tasks the binding record is the 192.805 qualification at 14.2.5, not this profile. A person competent in this record and unqualified in that one may not perform the task."
+        },
+        {
+          "kind": "operational",
+          "text": "GFMAM subject 4.5 is competence management and is the nearest framework anchor. It says the capability must exist; it does not define the profile, and no standard does."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Profile coverage",
+          "definition": "Proportion of active workers with a current competency profile.",
+          "cite": "EN 15341:2019+A1:2022 Maintenance Key Performance Indicators cl. 12"
+        },
+        {
+          "name": "Evidence currency",
+          "definition": "Proportion of recorded competencies whose evidence is within its review period.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Competency gained through training",
+        "Competency assessed in the field",
+        "Competency withdrawn after an assessment or an incident finding"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Define, record, revise, publish. The same sequence whatever raised the change.",
+        "artifact": "models/14.2-manage-skills-and-certification.bpmn"
+      },
+      "en17007": {
+        "process": "RES",
+        "title": "Provide internal human resources",
+        "clause": "6.14"
+      },
+      "sources": [
+        {
+          "for": "competence framework",
+          "cite": "GFMAM Asset Management Landscape 3rd ed. v3.0, 2024-06, subject 4.5 Competence Management",
+          "status": "verified"
+        },
+        {
+          "for": "gas qualification boundary",
+          "cite": "49 CFR 192.805 Qualification program, the binding record for covered tasks",
+          "status": "regulation"
+        },
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319) RES.1 manage jobs and skills",
+          "status": "verified"
+        },
+        {
+          "for": "no competency standard",
+          "cite": "GFMAM subject 4.5 requires competence management to exist and does not define a competency profile or its evidence; no standard does",
+          "status": "judgment"
+        },
+        {
+          "for": "indicator",
+          "cite": "EN 15341:2019+A1:2022 Maintenance Key Performance Indicators cl. 12",
+          "status": "clause-verified"
+        }
+      ],
+      "provenance": {
+        "basis": "consensus",
+        "primary": "GFMAM subject 4.5; the profile content is judgment"
+      }
+    },
+    {
+      "uid": 10471,
+      "id": "14.2.2",
+      "name": "Track certification, licence and currency",
+      "group": {
+        "id": "14.2",
+        "name": "Manage skills and certification",
+        "uid": 10469
+      },
+      "intent": "Hold every certification and licence, and know when each stops being valid.",
+      "activities": [
+        "Record the certification, licence or medical with its issuer and expiry",
+        "Track it against the expiry the issuer set",
+        "Warn ahead of expiry with enough time to renew",
+        "Mark it lapsed on expiry and publish the lapse"
+      ],
+      "trigger": {
+        "kind": "timer",
+        "text": "A certification, licence or medical approaches or reaches its expiry.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Certification, licence or medical and its expiry",
+          "party": "HR",
+          "data": "Crew"
+        },
+        {
+          "what": "Issuer and the renewal route",
+          "party": "HR",
+          "data": "Crew"
+        },
+        {
+          "what": "Renewal evidence when it arrives",
+          "party": "HR",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Currency status by person and credential",
+          "party": "HR",
+          "data": "Crew"
+        },
+        {
+          "what": "Lapse published to assignment restriction",
+          "party": "HR",
+          "data": "Crew"
+        }
+      ],
+      "systems": [
+        {
+          "component": "HR",
+          "role": "system of record",
+          "service": "credential currency and expiry"
+        },
+        {
+          "component": "SCHD",
+          "role": "consumer",
+          "service": "assignability at the point of scheduling"
+        },
+        {
+          "component": "TCM",
+          "role": "consumer",
+          "service": "access that depends on a credential"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "HR",
+          "to": "SCHD",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "publish-subscribe"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Training coordinator",
+          "raci": "R"
+        },
+        {
+          "role": "Operations manager",
+          "raci": "A"
+        },
+        {
+          "role": "Field supervisor",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Crew",
+        "WorkActivityRecord",
+        "WorkTimeSchedule"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "For gas, 192.805(g) requires qualification to be kept current and the requalification interval is ENTIRELY operator-set. No federal figure exists, so record the operator's and its source."
+        },
+        {
+          "kind": "operational",
+          "text": "The warning period is what makes this useful. A lapse found on the expiry date takes a person out of service that day, and the crew is short at dispatch rather than at planning."
+        },
+        {
+          "kind": "operational",
+          "text": "An external credential expires on the issuer's terms. Recording an operator review date as the expiry is how a licence lapses while the record says current."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Credential currency",
+          "definition": "Proportion of required credentials current across the active workforce.",
+          "cite": "EN 15341:2019+A1:2022 Maintenance Key Performance Indicators cl. 12"
+        },
+        {
+          "name": "Lapse rate",
+          "definition": "Credentials allowed to lapse before renewal, per hundred held.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Operator qualification under Subpart N (gas)",
+        "Externally issued licence or certification",
+        "Medical or fitness-for-duty certification",
+        "Credential renewed before expiry"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Record, track, warn, lapse. A timer-driven sequence identical for every credential; only the issuer's period varies.",
+        "artifact": "models/14.2-manage-skills-and-certification.bpmn"
+      },
+      "en17007": {
+        "process": "RES",
+        "title": "Provide internal human resources",
+        "clause": "6.14"
+      },
+      "sources": [
+        {
+          "for": "currency duty",
+          "cite": "49 CFR 192.805 Qualification program(g), qualification maintained current",
+          "status": "regulation"
+        },
+        {
+          "for": "operator-set interval",
+          "cite": "49 CFR 192.805(g) sets no requalification figure; the interval is entirely the operator's",
+          "status": "regulation"
+        },
+        {
+          "for": "qualification programme",
+          "cite": "ASME B31Q-2025 Pipeline Personnel Qualification",
+          "status": "consensus"
+        },
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319) RES.3 ensure training, qualification and certification of internal staff",
+          "status": "verified"
+        },
+        {
+          "for": "indicator",
+          "cite": "EN 15341:2019+A1:2022 Maintenance Key Performance Indicators cl. 12",
+          "status": "clause-verified"
+        }
+      ],
+      "provenance": {
+        "basis": "regulation",
+        "primary": "49 CFR 192.805(g) for gas; the interval is the operator's"
+      }
+    },
+    {
+      "uid": 10472,
+      "id": "14.2.3",
+      "name": "Plan and record training",
+      "group": {
+        "id": "14.2",
+        "name": "Manage skills and certification",
+        "uid": 10469
+      },
+      "intent": "Plan and record the training that closes the gap between required and held.",
+      "activities": [
+        "Compare required competence against what the workforce holds",
+        "Plan the training that closes the gap, and book it against availability",
+        "Deliver or procure the training and record attendance and outcome",
+        "Feed the outcome back to the profile and the qualification record"
+      ],
+      "trigger": {
+        "kind": "conditional",
+        "text": "A competence gap, a procedure change or a new obligation requires training.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Required competence and the profiles held",
+          "party": "HR",
+          "data": "Crew"
+        },
+        {
+          "what": "Training demand from a procedure or rule change",
+          "party": "HR",
+          "data": "Work"
+        },
+        {
+          "what": "Availability the training must fit",
+          "party": "HR",
+          "data": "WorkTimeSchedule"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Training delivered with attendance and outcome",
+          "party": "HR",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Profile and qualification updates",
+          "party": "HR",
+          "data": "Crew"
+        }
+      ],
+      "systems": [
+        {
+          "component": "HR",
+          "role": "system of record",
+          "service": "training plan, delivery and outcome"
+        },
+        {
+          "component": "SCHD",
+          "role": "consumer",
+          "service": "hours committed to training"
+        },
+        {
+          "component": "CON",
+          "role": "supplier",
+          "service": "procured training where external"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "HR",
+          "to": "SCHD",
+          "payload": "WorkRequest",
+          "verb": "create",
+          "pattern": "event"
+        },
+        {
+          "from": "HR",
+          "to": "CON",
+          "payload": "ServiceOrder",
+          "verb": "create",
+          "pattern": "request-reply"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Training coordinator",
+          "raci": "R"
+        },
+        {
+          "role": "Operations manager",
+          "raci": "A"
+        },
+        {
+          "role": "Field supervisor",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Crew",
+        "WorkActivityRecord",
+        "WorkTimeSchedule"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "Training is not qualification. For gas covered tasks, 192.809 requires the individual to be EVALUATED, and attendance at a course is not an evaluation. 14.2.5 carries the evaluation; this carries the training."
+        },
+        {
+          "kind": "operational",
+          "text": "Training hours are working hours and compete with work. Booking them against 14.1.3's availability rather than around it is what stops a training plan that nobody can attend."
+        },
+        {
+          "kind": "operational",
+          "text": "Training bodies are not standards publishers. MEA EnergyU, NGA and SGA deliver courses covering 49 CFR 192 and ASME B31Q; the authority is the regulation and the standard, never the course."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Gap closure",
+          "definition": "Proportion of identified competence gaps closed within the planned period.",
+          "cite": "EN 15341:2019+A1:2022 Maintenance Key Performance Indicators cl. 12"
+        },
+        {
+          "name": "Training completion",
+          "definition": "Proportion of planned training delivered and recorded.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.4.3 Schedule Compliance"
+        }
+      ],
+      "variants": [
+        "Training closing an identified competence gap",
+        "Training required by a procedure or regulatory change",
+        "Training procured externally",
+        "Refresher ahead of a requalification"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Compare, plan, deliver, record. The sequence repeats identically whatever raised the demand.",
+        "artifact": "models/14.2-manage-skills-and-certification.bpmn"
+      },
+      "en17007": {
+        "process": "RES",
+        "title": "Provide internal human resources",
+        "clause": "6.14"
+      },
+      "sources": [
+        {
+          "for": "evaluation duty",
+          "cite": "49 CFR 192.809 General, qualification of individuals",
+          "status": "regulation"
+        },
+        {
+          "for": "qualification programme",
+          "cite": "ASME B31Q-2025 Pipeline Personnel Qualification",
+          "status": "consensus"
+        },
+        {
+          "for": "training bodies are not publishers",
+          "cite": "MEA EnergyU, NGA and SGA deliver courses on 49 CFR 192 and ASME B31Q; the authority is the regulation, not the course",
+          "status": "judgment"
+        },
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319) IMP.10 identify skills and training needs",
+          "status": "verified"
+        },
+        {
+          "for": "indicator",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management",
+          "status": "consensus"
+        }
+      ],
+      "provenance": {
+        "basis": "regulation",
+        "primary": "49 CFR 192.809; the planning is judgment"
+      }
+    },
+    {
+      "uid": 10473,
+      "id": "14.2.4",
+      "name": "Restrict assignment on lapsed qualification",
+      "group": {
+        "id": "14.2",
+        "name": "Manage skills and certification",
+        "uid": 10469
+      },
+      "intent": "Stop work being assigned to someone whose qualification no longer holds.",
+      "activities": [
+        "Take the qualification, credential and restriction position for the person",
+        "Take the qualification the task requires",
+        "Return whether the person may be assigned to it, and why not",
+        "Publish the restriction to assignment, scheduling and access"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "An assignment is proposed, or a qualification lapses.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Person's qualification and credential position",
+          "party": "HR",
+          "data": "Crew"
+        },
+        {
+          "what": "Qualification the task requires",
+          "party": "MAI",
+          "data": "WorkTask"
+        },
+        {
+          "what": "Restrictions in force on the person",
+          "party": "HR",
+          "data": "Crew"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Assignment permitted, or refused with its reason",
+          "party": "SCHD",
+          "data": "Crew"
+        },
+        {
+          "what": "Restriction published to access and dispatch",
+          "party": "TCM",
+          "data": "Crew"
+        }
+      ],
+      "systems": [
+        {
+          "component": "HR",
+          "role": "system of record",
+          "service": "qualification restriction"
+        },
+        {
+          "component": "SCHD",
+          "role": "consumer",
+          "service": "assignment permitted or refused"
+        },
+        {
+          "component": "MAI",
+          "role": "supplier",
+          "service": "the qualification the task requires"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "HR",
+          "to": "SCHD",
+          "payload": "WorkRequest",
+          "verb": "reply",
+          "pattern": "request-reply"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Field supervisor",
+          "raci": "A"
+        },
+        {
+          "role": "HR administrator",
+          "raci": "R"
+        },
+        {
+          "role": "Scheduler",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Crew",
+        "WorkTask"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "Gas covered tasks are 49 CFR 192.805; electric is 29 CFR 1910.269(a)(2). The two are not equivalent - Subpart N is a programme with identified tasks and evaluated individuals, and 1910.269(a)(2) is a definition of a qualified employee."
+        },
+        {
+          "kind": "operational",
+          "text": "This process is consumed, not re-decided. 3.x and 16.x both take the restriction from here rather than testing qualification themselves, and a second test in either place will eventually disagree with this one."
+        },
+        {
+          "kind": "regulatory",
+          "text": "A refusal carries its reason. 'Not qualified' and 'qualification lapsed' and 'restricted under Part 199' produce the same refusal and entirely different remedies."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Restriction effectiveness",
+          "definition": "Assignments attempted against a restricted person, per thousand assignments.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Refusal reason completeness",
+          "definition": "Proportion of refusals carrying a reason code.",
+          "cite": "EN 15341:2019+A1:2022 Maintenance Key Performance Indicators cl. 12"
+        }
+      ],
+      "variants": [
+        "Gas covered task under Subpart N",
+        "Electric work requiring a qualified employee",
+        "Excavation requiring a competent person",
+        "Restriction arising from Part 199 rather than qualification"
+      ],
+      "notation": {
+        "class": "DMN",
+        "why": "The output is a value - permitted or refused, with a reason - determined from the person's position against the task's requirement. Nothing changes state.",
+        "artifact": "models/14.2.4-assignment-restriction.dmn"
+      },
+      "en17007": {
+        "process": "RES",
+        "title": "Provide internal human resources",
+        "clause": "6.14"
+      },
+      "sources": [
+        {
+          "for": "gas covered task",
+          "cite": "49 CFR 192.805 Qualification program",
+          "status": "regulation"
+        },
+        {
+          "for": "electric qualified employee",
+          "cite": "29 CFR 1910.269(a)(2) Training and qualified employee",
+          "status": "regulation"
+        },
+        {
+          "for": "competent person",
+          "cite": "29 CFR 1926 Subpart P Excavations, competent person at 1926.651(k)",
+          "status": "regulation"
+        },
+        {
+          "for": "testing restriction",
+          "cite": "49 CFR Part 199 Drug and alcohol testing, gas only",
+          "status": "regulation"
+        },
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319) RES.4 provide internal human resources",
+          "status": "verified"
+        }
+      ],
+      "provenance": {
+        "basis": "regulation",
+        "primary": "49 CFR 192.805 and 29 CFR 1910.269(a)(2)"
+      }
+    },
+    {
+      "uid": 10474,
+      "id": "14.2.5",
+      "name": "Identify covered tasks and qualify individuals",
+      "group": {
+        "id": "14.2",
+        "name": "Manage skills and certification",
+        "uid": 10469
+      },
+      "intent": "Name the tasks the rule covers, and evaluate each individual against them.",
+      "activities": [
+        "Identify the covered tasks the operator's work actually includes",
+        "Write the evaluation for each, and the criteria it applies",
+        "Evaluate each individual and record the outcome with its date",
+        "Set the requalification interval and hold the evidence"
+      ],
+      "trigger": {
+        "kind": "conditional",
+        "text": "A covered task is identified, or an individual requires evaluation.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Work performed and the tasks it comprises",
+          "party": "MAI",
+          "data": "WorkTask"
+        },
+        {
+          "what": "Subpart N covered-task criteria",
+          "party": "HR",
+          "data": "Crew"
+        },
+        {
+          "what": "Individual to be evaluated",
+          "party": "HR",
+          "data": "Crew"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Identified covered tasks with their criteria",
+          "party": "HR",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Qualified individuals with evaluation evidence",
+          "party": "HR",
+          "data": "Crew"
+        }
+      ],
+      "systems": [
+        {
+          "component": "HR",
+          "role": "system of record",
+          "service": "covered tasks and qualification evidence"
+        },
+        {
+          "component": "MAI",
+          "role": "supplier",
+          "service": "the tasks the work comprises"
+        },
+        {
+          "component": "SCHD",
+          "role": "consumer",
+          "service": "who may be assigned to a covered task"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "HR",
+          "to": "SCHD",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "publish-subscribe"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Operations manager",
+          "raci": "A"
+        },
+        {
+          "role": "Training coordinator",
+          "raci": "R"
+        },
+        {
+          "role": "Compliance supervisor",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Crew",
+        "WorkTask",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "Gas only. 49 CFR 192 Subpart N applies to gas pipeline operators, and 192.803 defines a covered task by a four-part test. No federal qualification programme requirement exists for electric distribution workers, because 16 U.S.C. 824o excludes local distribution."
+        },
+        {
+          "kind": "regulatory",
+          "text": "192.809 requires the INDIVIDUAL to be evaluated. A programme that identifies tasks and never evaluates anyone satisfies 192.805 on paper and fails on the only thing the rule is about."
+        },
+        {
+          "kind": "operational",
+          "text": "This qualifies OPERATOR people. Contractor qualification is 16.1.4's and must match 192.805 independently - a contractor's own assertion that a person is qualified is not an evaluation the operator holds."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Covered task coverage",
+          "definition": "Proportion of identified covered tasks with a written evaluation.",
+          "cite": "EN 15341:2019+A1:2022 Maintenance Key Performance Indicators cl. 12"
+        },
+        {
+          "name": "Individual qualification",
+          "definition": "Proportion of individuals performing covered tasks with current evaluation evidence.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Covered task identified against the 192.803 test",
+        "Individual evaluated for the first time",
+        "Individual requalified on the operator's interval",
+        "Task assessed and found not covered"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Identify, write the evaluation, evaluate, record. Subpart N fixes the order and it is not the author's.",
+        "artifact": "models/14.2-manage-skills-and-certification.bpmn"
+      },
+      "en17007": {
+        "process": "RES",
+        "title": "Provide internal human resources",
+        "clause": "6.14"
+      },
+      "sources": [
+        {
+          "for": "scope",
+          "cite": "49 CFR 192.801 Scope of Subpart N, operator qualification",
+          "status": "regulation"
+        },
+        {
+          "for": "covered task test",
+          "cite": "49 CFR 192.803 Definitions, covered task",
+          "status": "regulation"
+        },
+        {
+          "for": "programme",
+          "cite": "49 CFR 192.805 Qualification program",
+          "status": "regulation"
+        },
+        {
+          "for": "evaluation duty",
+          "cite": "49 CFR 192.809 General, qualification of individuals",
+          "status": "regulation"
+        },
+        {
+          "for": "electric absence",
+          "cite": "No federal qualification programme requirement exists for electric distribution workers; 16 U.S.C. 824o Electric reliability excludes local distribution",
+          "status": "judgment"
+        },
+        {
+          "for": "qualification standard",
+          "cite": "ASME B31Q-2025 Pipeline Personnel Qualification",
+          "status": "consensus"
+        },
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319) RES.3 ensure training, qualification and certification of internal staff",
+          "status": "verified"
+        }
+      ],
+      "provenance": {
+        "basis": "regulation",
+        "primary": "49 CFR 192 Subpart N, 192.801 to 192.809"
+      }
+    },
+    {
+      "uid": 10475,
+      "id": "14.2.6",
+      "name": "Apply span-of-control and abnormal-operating-condition rules on assignment",
+      "group": {
+        "id": "14.2",
+        "name": "Manage skills and certification",
+        "uid": 10469
+      },
+      "intent": "Apply the limits on who may direct work and what an unqualified person may do.",
+      "activities": [
+        "Take the task, the qualified person and who is directing the work",
+        "Apply the span-of-control limit the operator set for that task",
+        "Apply the abnormal-operating-condition duty to the qualified person",
+        "Return the permitted arrangement, or refuse it"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "An assignment proposes an unqualified person working under direction.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Task, its covered status and its requirements",
+          "party": "MAI",
+          "data": "WorkTask"
+        },
+        {
+          "what": "Qualified person and those to be directed",
+          "party": "HR",
+          "data": "Crew"
+        },
+        {
+          "what": "Span-of-control limit the operator set",
+          "party": "HR",
+          "data": "Crew"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Permitted arrangement, or a refusal",
+          "party": "SCHD",
+          "data": "Crew"
+        },
+        {
+          "what": "Recorded basis for the arrangement",
+          "party": "HR",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "HR",
+          "role": "system of record",
+          "service": "span-of-control and direction rules"
+        },
+        {
+          "component": "SCHD",
+          "role": "consumer",
+          "service": "the crew arrangement permitted"
+        },
+        {
+          "component": "MAI",
+          "role": "supplier",
+          "service": "the task and its covered status"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "HR",
+          "to": "SCHD",
+          "payload": "WorkRequest",
+          "verb": "reply",
+          "pattern": "request-reply"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Field supervisor",
+          "raci": "A"
+        },
+        {
+          "role": "Operations manager",
+          "raci": "R"
+        },
+        {
+          "role": "Compliance supervisor",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Crew",
+        "WorkTask",
+        "WorkActivityRecord"
+      ],
+      "controls": [
+        {
+          "kind": "regulatory",
+          "text": "Gas only. 192.805 allows an unqualified individual to perform a covered task only when directed and observed by a qualified one, and requires abnormal operating conditions to be addressed."
+        },
+        {
+          "kind": "regulatory",
+          "text": "THE RATIO IS NOT IN THE CFR. 192.805 requires direction and observation and sets no number. The span limit is the operator's and is never cited to the section."
+        },
+        {
+          "kind": "operational",
+          "text": "The qualified individual keeps the abnormal-operating-condition duty; it does not transfer with the direction. Recording who directed is what makes it attributable."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Direction compliance",
+          "definition": "Covered tasks performed by unqualified individuals outside the operator's span limit.",
+          "cite": "EN 15341:2019+A1:2022 Maintenance Key Performance Indicators cl. 12"
+        },
+        {
+          "name": "Arrangement recording",
+          "definition": "Proportion of directed arrangements with the directing individual recorded.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Unqualified individual directed and observed",
+        "Arrangement refused for exceeding the operator's span limit",
+        "Arrangement where the abnormal-operating-condition duty is the constraint"
+      ],
+      "notation": {
+        "class": "DMN",
+        "why": "The output is a value - the arrangement permitted or refused - determined from the task, the qualified person and the operator's own limit. No state changes.",
+        "artifact": "models/14.2.6-span-of-control.dmn"
+      },
+      "en17007": {
+        "process": "RES",
+        "title": "Provide internal human resources",
+        "clause": "6.14"
+      },
+      "sources": [
+        {
+          "for": "direction and observation",
+          "cite": "49 CFR 192.805 Qualification program, direction and observation by a qualified individual and abnormal operating conditions",
+          "status": "regulation"
+        },
+        {
+          "for": "no federal ratio",
+          "cite": "49 CFR 192.805 sets no span-of-control number; the limit is entirely the operator's",
+          "status": "regulation"
+        },
+        {
+          "for": "scope",
+          "cite": "49 CFR 192.801 Scope of Subpart N, operator qualification",
+          "status": "regulation"
+        },
+        {
+          "for": "qualification standard",
+          "cite": "ASME B31Q-2025 Pipeline Personnel Qualification",
+          "status": "consensus"
+        },
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319) RES.4 provide internal human resources",
+          "status": "verified"
+        }
+      ],
+      "provenance": {
+        "basis": "regulation",
+        "primary": "49 CFR 192.805; the span limit is the operator's"
+      }
+    },
+    {
+      "uid": 10477,
+      "id": "14.3.1",
+      "name": "Record time against work in the field",
+      "group": {
+        "id": "14.3",
+        "name": "Capture and approve time",
+        "uid": 10476
+      },
+      "intent": "Capture time against the work it was spent on, while the crew is still there.",
+      "activities": [
+        "Take the assignment and the work the person is on",
+        "Record time against the work order and task, not against the day",
+        "Capture the elements pay will need: type, premium trigger, location",
+        "Hold it locally where the device is offline, and submit when it is not"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "A worker records time against work in the field.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Assignment and the work in progress",
+          "party": "SCHD",
+          "data": "WorkTask"
+        },
+        {
+          "what": "Time and the work it was spent on",
+          "party": "FRD",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Time type and premium triggers",
+          "party": "HR",
+          "data": "WorkTimeSchedule"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Time recorded against work order and task",
+          "party": "MAI",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Time held locally until connectivity returns",
+          "party": "FRD",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "FRD",
+          "role": "system of record",
+          "service": "field time capture"
+        },
+        {
+          "component": "MAI",
+          "role": "consumer",
+          "service": "time against the work order"
+        },
+        {
+          "component": "HR",
+          "role": "consumer",
+          "service": "time for pay and approval"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "FRD",
+          "to": "MAI",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Field worker",
+          "raci": "R"
+        },
+        {
+          "role": "Field supervisor",
+          "raci": "A"
+        },
+        {
+          "role": "Scheduler",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "WorkActivityRecord",
+        "WorkTask",
+        "WorkTimeSchedule"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "Time is recorded against the WORK, not the day. A daily total cannot be settled to a work order at 5.2.1, which is where the cost of the work lands."
+        },
+        {
+          "kind": "operational",
+          "text": "Offline capture is the normal case. Field work happens without connectivity, and offline behaviour and sync conflict resolution are entirely vendor-defined."
+        },
+        {
+          "kind": "operational",
+          "text": "Capturing at the work is what makes the record honest. Time reconstructed at shift end is an estimate, and the largest source of the exceptions 14.4.4 resolves."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Capture latency",
+          "definition": "Elapsed time from work performed to time recorded against it.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.4.7 Work Order Cycle Time"
+        },
+        {
+          "name": "Unattributed time",
+          "definition": "Proportion of recorded hours not attributable to a work order.",
+          "cite": "EN 15341:2019+A1:2022 Maintenance Key Performance Indicators cl. 12"
+        }
+      ],
+      "variants": [
+        "Time captured on a connected device",
+        "Time captured offline and synchronised later",
+        "Time captured by the supervisor on the crew's behalf",
+        "Time against non-productive or standing activity"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Take the assignment, record against it, hold or submit. One repeatable sequence per entry, with connectivity the only branch.",
+        "artifact": "models/14.3-capture-and-approve-time.bpmn"
+      },
+      "en17007": {
+        "process": "ACT",
+        "title": "Implement preventive and/or corrective actions on the item",
+        "clause": "6.5"
+      },
+      "sources": [
+        {
+          "for": "field component",
+          "cite": "IEC 61968-6:2015 cl. 4.2 reference components, FRD Field Recording",
+          "status": "clause-verified"
+        },
+        {
+          "for": "work record",
+          "cite": "IEC 61968-11:2013 CIM WorkActivityRecord",
+          "status": "consensus"
+        },
+        {
+          "for": "no offline standard",
+          "cite": "Offline mobile behaviour, sync conflict resolution and field data capture are entirely vendor-defined; no standard reaches them",
+          "status": "judgment"
+        },
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319) ACT.7 finish the tasks",
+          "status": "verified"
+        },
+        {
+          "for": "indicator",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management",
+          "status": "consensus"
+        }
+      ],
+      "provenance": {
+        "basis": "judgment",
+        "primary": "no standard reaches field time capture; IEC 61968-6 FRD is the component"
+      }
+    },
+    {
+      "uid": 10478,
+      "id": "14.3.2",
+      "name": "Cascade time across the crew",
+      "group": {
+        "id": "14.3",
+        "name": "Capture and approve time",
+        "uid": 10476
+      },
+      "intent": "Spread one supervisor's entry across the crew that was actually there.",
+      "activities": [
+        "Take the crew as it was constituted on the job, not as it was planned",
+        "Apply the entry to each member with their own time type",
+        "Adjust for members who joined, left or were on different work",
+        "Return individual entries that each stand on their own"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "Time has been entered for a crew rather than for an individual.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Crew entry and the work it covers",
+          "party": "FRD",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Crew as constituted on the job",
+          "party": "SCHD",
+          "data": "Crew"
+        },
+        {
+          "what": "Individual time types and exceptions",
+          "party": "HR",
+          "data": "Crew"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Individual time entries against the work",
+          "party": "MAI",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Exceptions where a member differed",
+          "party": "HR",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "FRD",
+          "role": "supplier",
+          "service": "the crew entry as captured"
+        },
+        {
+          "component": "HR",
+          "role": "system of record",
+          "service": "individual entries after cascade"
+        },
+        {
+          "component": "MAI",
+          "role": "consumer",
+          "service": "time against the work order"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "FRD",
+          "to": "HR",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Field supervisor",
+          "raci": "R"
+        },
+        {
+          "role": "Timekeeper",
+          "raci": "A"
+        },
+        {
+          "role": "Scheduler",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Crew",
+        "WorkActivityRecord",
+        "WorkTask"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "The cascade runs against the crew AS CONSTITUTED, not as planned. A planned crew that differs from the actual one produces time for people who were not there, and it is only caught at 14.4.4 if it is caught at all."
+        },
+        {
+          "kind": "operational",
+          "text": "Each member's entry has to stand alone after the cascade. A member on a different time type, on a premium, or who left mid-job carries an exception, and the exception is part of the cascade rather than a correction to it."
+        },
+        {
+          "kind": "operational",
+          "text": "No standard defines crew time cascade. IEC 61968-6 names Crew Composition as a data flow, which is the nearest thing to an anchor, and it describes the data rather than this process."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Cascade accuracy",
+          "definition": "Proportion of cascaded entries not later corrected at 14.3.3.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Crew composition mismatch",
+          "definition": "Cascades where the actual crew differed from the planned one.",
+          "cite": "EN 15341:2019+A1:2022 Maintenance Key Performance Indicators cl. 12"
+        }
+      ],
+      "variants": [
+        "Cascade to a crew that matched the plan",
+        "Cascade with a member added or removed on the day",
+        "Cascade with individual premium or time-type exceptions"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Take the crew, apply, adjust, return individual entries. The sequence is fixed; only the exceptions vary.",
+        "artifact": "models/14.3-capture-and-approve-time.bpmn"
+      },
+      "en17007": {
+        "process": "ACT",
+        "title": "Implement preventive and/or corrective actions on the item",
+        "clause": "6.5"
+      },
+      "sources": [
+        {
+          "for": "crew data flow",
+          "cite": "IEC 61968-6:2015 cl. 4.2 reference components, SCHD Work Scheduling and Dispatching, Crew Composition",
+          "status": "clause-verified"
+        },
+        {
+          "for": "no cascade standard",
+          "cite": "No standard defines how one crew time entry is divided among its members. IEC 61968-6 names Crew Composition as a data flow, which describes the data rather than the division",
+          "status": "judgment"
+        },
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319) ACT.7 finish the tasks",
+          "status": "verified"
+        },
+        {
+          "for": "indicator",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management",
+          "status": "consensus"
+        }
+      ],
+      "provenance": {
+        "basis": "judgment",
+        "primary": "no standard reaches crew time cascade"
+      }
+    },
+    {
+      "uid": 10479,
+      "id": "14.3.3",
+      "name": "Edit, submit and correct timesheets",
+      "group": {
+        "id": "14.3",
+        "name": "Capture and approve time",
+        "uid": 10476
+      },
+      "intent": "Let a worker correct their own time before anyone approves it.",
+      "activities": [
+        "Present the recorded time back to the worker for the period",
+        "Take edits, additions and the reason for each",
+        "Submit the timesheet for approval",
+        "Reopen and correct a period already submitted, keeping the original"
+      ],
+      "trigger": {
+        "kind": "timer",
+        "text": "A timesheet period closes, or a submitted period requires correction.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Recorded time for the period",
+          "party": "HR",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Edits and their reasons",
+          "party": "HR",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Approval state of the period",
+          "party": "HR",
+          "data": "WorkTimeSchedule"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Submitted timesheet for approval",
+          "party": "HR",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Correction with the original retained",
+          "party": "HR",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "HR",
+          "role": "system of record",
+          "service": "timesheet submission and correction"
+        },
+        {
+          "component": "FRD",
+          "role": "supplier",
+          "service": "the time as captured in the field"
+        },
+        {
+          "component": "MAI",
+          "role": "consumer",
+          "service": "corrected time against the work order"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "HR",
+          "to": "MAI",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Field worker",
+          "raci": "R"
+        },
+        {
+          "role": "Timekeeper",
+          "raci": "A"
+        },
+        {
+          "role": "Field supervisor",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "WorkActivityRecord",
+        "WorkTimeSchedule"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "A correction retains the original. Overwriting time already settled to a work order at 5.2.1 breaks the cost record without leaving anything to reconcile against, and 5.2.5 then has an exception with no history."
+        },
+        {
+          "kind": "operational",
+          "text": "Every edit carries a reason. An unexplained edit is indistinguishable from an error and from a manipulation, and the difference matters where the hours drive a premium at 14.4.1."
+        },
+        {
+          "kind": "operational",
+          "text": "Correcting a period already transferred to payroll is a different act with a different route. It cannot silently change what payroll has already paid; 14.4.4 owns that reconciliation."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Edit rate",
+          "definition": "Proportion of captured entries edited before submission.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Post-approval correction rate",
+          "definition": "Corrections raised against periods already approved.",
+          "cite": "EN 15341:2019+A1:2022 Maintenance Key Performance Indicators cl. 12"
+        }
+      ],
+      "variants": [
+        "Edit before submission",
+        "Correction after approval, before payroll transfer",
+        "Correction after payroll transfer",
+        "Period submitted with no edits"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Present, edit, submit, and a defined reopen path. The states are the same for every worker and every period.",
+        "artifact": "models/14.3-capture-and-approve-time.bpmn"
+      },
+      "en17007": {
+        "process": "DTA",
+        "title": "Manage data",
+        "clause": "6.10"
+      },
+      "sources": [
+        {
+          "for": "work record",
+          "cite": "IEC 61968-11:2013 CIM WorkActivityRecord",
+          "status": "consensus"
+        },
+        {
+          "for": "cost settlement boundary",
+          "cite": "5.2.1 posts labour actuals and 5.2.5 resolves costing exceptions; a correction after settlement goes through them",
+          "status": "judgment"
+        },
+        {
+          "for": "no timesheet standard",
+          "cite": "No standard defines timesheet submission, edit authority or the retention of a superseded entry",
+          "status": "judgment"
+        },
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319) DTA.1 store and validate the raw data in a library and/or a database",
+          "status": "verified"
+        },
+        {
+          "for": "indicator",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management",
+          "status": "consensus"
+        }
+      ],
+      "provenance": {
+        "basis": "judgment",
+        "primary": "no standard reaches timesheet submission and correction"
+      }
+    },
+    {
+      "uid": 10480,
+      "id": "14.3.4",
+      "name": "Review, approve and exception-handle time",
+      "group": {
+        "id": "14.3",
+        "name": "Capture and approve time",
+        "uid": 10476
+      },
+      "intent": "Approve the time, and deal with what does not look right before pay does.",
+      "activities": [
+        "Take the submitted timesheets for the approval group",
+        "Test each against the exceptions the operator defined",
+        "Approve, query or reject, recording which and why",
+        "Release approved time to costing and to pay"
+      ],
+      "trigger": {
+        "kind": "timer",
+        "text": "Submitted timesheets are due for approval.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Submitted timesheets for the group",
+          "party": "HR",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Exception rules the operator defined",
+          "party": "HR",
+          "data": "WorkTimeSchedule"
+        },
+        {
+          "what": "Approval authority from the org structure",
+          "party": "HR",
+          "data": "Crew"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Approved time released to costing and pay",
+          "party": "FIN",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Queried or rejected time with its reason",
+          "party": "HR",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "HR",
+          "role": "system of record",
+          "service": "approval state and exception"
+        },
+        {
+          "component": "FIN",
+          "role": "consumer",
+          "service": "approved time for cost and pay"
+        },
+        {
+          "component": "MAI",
+          "role": "consumer",
+          "service": "approved hours against the work order"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "HR",
+          "to": "FIN",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Field supervisor",
+          "raci": "R"
+        },
+        {
+          "role": "Operations manager",
+          "raci": "A"
+        },
+        {
+          "role": "Timekeeper",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "WorkActivityRecord",
+        "Crew",
+        "WorkTimeSchedule"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "Approval authority derives from 14.1.2's reporting structure. An approver outside the line is the most common audit finding in time administration and it is a structure problem, not a workflow one."
+        },
+        {
+          "kind": "operational",
+          "text": "The exception rules are the operator's. No standard defines what an anomalous timesheet looks like, so the rules and their thresholds are recorded as the operator's and reviewed as such."
+        },
+        {
+          "kind": "financial",
+          "text": "Approval is the gate before cost and pay diverge. The same approved hours go to 5.2.1 as work cost and to 14.4.3 as pay, and approving them separately is how the two stop reconciling."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Approval timeliness",
+          "definition": "Proportion of timesheets approved before the pay cut-off.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.4.3 Schedule Compliance"
+        },
+        {
+          "name": "Exception rate",
+          "definition": "Proportion of submitted timesheets raising an exception.",
+          "cite": "EN 15341:2019+A1:2022 Maintenance Key Performance Indicators cl. 12"
+        }
+      ],
+      "variants": [
+        "Approved without exception",
+        "Queried and resubmitted",
+        "Rejected and returned for correction",
+        "Approved by delegation during absence"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Take, test, decide, release. A period-driven sequence identical for every approval group.",
+        "artifact": "models/14.3-capture-and-approve-time.bpmn"
+      },
+      "en17007": {
+        "process": "MAN",
+        "title": "Manage maintenance (strategy and improvement, human resources, continuous improvement, compliance, etc.)",
+        "clause": "6.2"
+      },
+      "sources": [
+        {
+          "for": "approval authority",
+          "cite": "Approval authority derives from the organisational structure at 14.1.2",
+          "status": "judgment"
+        },
+        {
+          "for": "cost boundary",
+          "cite": "5.2.1 posts labour actuals from the same approved hours",
+          "status": "judgment"
+        },
+        {
+          "for": "no approval standard",
+          "cite": "No standard defines a time approval gate or what an anomalous timesheet is; the exception rules and thresholds are the operator's",
+          "status": "judgment"
+        },
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319) MAN.5 oversee the actions",
+          "status": "verified"
+        },
+        {
+          "for": "indicator",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management",
+          "status": "consensus"
+        }
+      ],
+      "provenance": {
+        "basis": "judgment",
+        "primary": "no standard reaches time approval"
+      }
+    },
+    {
+      "uid": 10482,
+      "id": "14.4.1",
+      "name": "Apply pay rules, premiums and agreements",
+      "group": {
+        "id": "14.4",
+        "name": "Cost labour and interface to payroll",
+        "uid": 10481
+      },
+      "intent": "Hold the pay rules, premiums and agreement terms the hours are valued at.",
+      "activities": [
+        "Hold the agreement terms, rates, premiums and their trigger conditions",
+        "Apply them to the approved hours to produce a valued entry",
+        "Maintain the terms as agreements are renegotiated, with effective dates",
+        "Publish the constraints that scheduling must plan within"
+      ],
+      "trigger": {
+        "kind": "conditional",
+        "text": "Approved hours require valuing, or an agreement term changes.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Approved hours with their time types",
+          "party": "HR",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Agreement terms, rates and premium triggers",
+          "party": "FIN",
+          "data": "Crew"
+        },
+        {
+          "what": "Effective dates for a changed term",
+          "party": "FIN",
+          "data": "WorkTimeSchedule"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Valued hours with the rule that valued them",
+          "party": "FIN",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Labour-agreement constraints for scheduling",
+          "party": "SCHD",
+          "data": "Crew"
+        }
+      ],
+      "systems": [
+        {
+          "component": "FIN",
+          "role": "system of record",
+          "service": "pay rules, rates and premiums"
+        },
+        {
+          "component": "HR",
+          "role": "supplier",
+          "service": "approved hours and time types"
+        },
+        {
+          "component": "SCHD",
+          "role": "consumer",
+          "service": "the constraints scheduling plans within"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "FIN",
+          "to": "SCHD",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "publish-subscribe"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Payroll administrator",
+          "raci": "R"
+        },
+        {
+          "role": "Finance controller",
+          "raci": "A"
+        },
+        {
+          "role": "Operations manager",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Crew",
+        "WorkActivityRecord",
+        "WorkTimeSchedule"
+      ],
+      "controls": [
+        {
+          "kind": "financial",
+          "text": "This OWNS pay rules, premiums and overtime. 3.2 consumes the constraints and must not invent them; a second rule set in scheduling will eventually pay differently."
+        },
+        {
+          "kind": "financial",
+          "text": "Every valued entry records the rule that valued it. A premium without its trigger cannot be re-derived when the agreement changes, leaving back-pay with no basis."
+        },
+        {
+          "kind": "operational",
+          "text": "Terms change on effective dates and hours are valued at the rule in force when worked. Applying today's rate to last period's hours is the costliest error here."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Rule attribution",
+          "definition": "Proportion of valued entries carrying the rule that valued them.",
+          "cite": "EN 15341:2019+A1:2022 Maintenance Key Performance Indicators cl. 12"
+        },
+        {
+          "name": "Premium proportion",
+          "definition": "Premium hours as a proportion of total paid hours, by crew type.",
+          "cite": "EN 15341:2019+A1:2022 Maintenance Key Performance Indicators cl. 12 Mi maintenance-cost indicators"
+        }
+      ],
+      "variants": [
+        "Standard time at the base rate",
+        "Overtime or premium against a trigger",
+        "Standby, call-out or on-call arrangement",
+        "Term applied at a superseded rate for a retrospective period"
+      ],
+      "notation": {
+        "class": "SPEC",
+        "why": "A standing capability with no instance boundary. The rules are held and maintained continuously; the valuing of a particular set of hours is an instance of 14.4.2, not of this.",
+        "artifact": null
+      },
+      "en17007": {
+        "process": "BUD",
+        "title": "Budget maintenance of items",
+        "clause": "6.8"
+      },
+      "sources": [
+        {
+          "for": "no pay-rule standard",
+          "cite": "No standard defines pay rules, premium triggers or labour-agreement terms for utility work; they are contractual and jurisdictional",
+          "status": "judgment"
+        },
+        {
+          "for": "scheduling boundary",
+          "cite": "3.2 consumes labour-agreement constraints and does not specify them",
+          "status": "judgment"
+        },
+        {
+          "for": "workforce planning limit",
+          "cite": "ISO 30409:2016 Human resource management - Workforce planning is strategic workforce planning and does not reach rostering, pay or dispatch",
+          "status": "consensus"
+        },
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319) BUD.1 define, compile cost elements and calculate or estimate actual costs",
+          "status": "verified"
+        },
+        {
+          "for": "indicator",
+          "cite": "EN 15341:2019+A1:2022 Maintenance Key Performance Indicators cl. 12",
+          "status": "clause-verified"
+        }
+      ],
+      "provenance": {
+        "basis": "judgment",
+        "primary": "no standard reaches pay rules; EN 17007 BUD.1 is the process anchor"
+      }
+    },
+    {
+      "uid": 10483,
+      "id": "14.4.2",
+      "name": "Post labour cost to work and project",
+      "group": {
+        "id": "14.4",
+        "name": "Cost labour and interface to payroll",
+        "uid": 10481
+      },
+      "intent": "Put the cost of the hours onto the work they were spent on.",
+      "activities": [
+        "Take the valued hours and the work order they were recorded against",
+        "Post the labour cost to the work order and to the project above it",
+        "Split the posting where the hours crossed work orders or cost objects",
+        "Return exceptions where the hours will not post"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "Valued hours are ready to be posted to work.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Valued hours and their work order",
+          "party": "FIN",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Work order and project cost structure",
+          "party": "FIN",
+          "data": "Work"
+        },
+        {
+          "what": "Cost object rules for the posting",
+          "party": "FIN",
+          "data": "Work"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Labour cost posted to work and project",
+          "party": "FIN",
+          "data": "Work"
+        },
+        {
+          "what": "Posting exceptions for resolution",
+          "party": "FIN",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "FIN",
+          "role": "system of record",
+          "service": "labour cost posting"
+        },
+        {
+          "component": "MAI",
+          "role": "consumer",
+          "service": "cost against the work order"
+        },
+        {
+          "component": "HR",
+          "role": "supplier",
+          "service": "valued hours"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "FIN",
+          "to": "MAI",
+          "payload": "WorkRequest",
+          "verb": "change",
+          "pattern": "batch"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Payroll administrator",
+          "raci": "R"
+        },
+        {
+          "role": "Finance controller",
+          "raci": "A"
+        },
+        {
+          "role": "Maintenance planner",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkActivityRecord",
+        "WorkTask"
+      ],
+      "controls": [
+        {
+          "kind": "financial",
+          "text": "5.2.1 posts labour actuals as part of closing work; this posts them as part of paying people. They are the same hours reaching the same work order from two directions, and they must reconcile or the work cost is wrong in one of them."
+        },
+        {
+          "kind": "financial",
+          "text": "A posting that fails is an exception, not a silent loss. Hours that will not post because the work order is closed still have to land somewhere, and 14.4.4 is where that is resolved."
+        },
+        {
+          "kind": "operational",
+          "text": "Hours crossing work orders split at the posting, not at capture. Making the worker split them in the field produces a division that nobody can audit against what actually happened."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Posting completeness",
+          "definition": "Proportion of valued hours posted to a work order in the period.",
+          "cite": "EN 15341:2019+A1:2022 Maintenance Key Performance Indicators cl. 12"
+        },
+        {
+          "name": "Posting exception rate",
+          "definition": "Proportion of postings failing and requiring resolution.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Posting to an open work order",
+        "Posting to a closed or settled work order",
+        "Posting split across work orders",
+        "Posting to a standing or overhead cost object"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Take, post, split, return exceptions. A batch sequence that repeats identically each period.",
+        "artifact": "models/14.4-cost-labour-and-interface-to-payroll.bpmn"
+      },
+      "en17007": {
+        "process": "BUD",
+        "title": "Budget maintenance of items",
+        "clause": "6.8"
+      },
+      "sources": [
+        {
+          "for": "cost boundary",
+          "cite": "5.2.1 posts labour actuals from the same approved hours; the two must reconcile",
+          "status": "judgment"
+        },
+        {
+          "for": "work cost model",
+          "cite": "IEC 61968-11:2013 CIM Work and WorkTask",
+          "status": "consensus"
+        },
+        {
+          "for": "no posting standard",
+          "cite": "No standard defines how labour cost is posted or split across work orders; IEC 61968-11 models the Work the cost lands on and not the posting",
+          "status": "judgment"
+        },
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319) BUD.1 define, compile cost elements and calculate or estimate actual costs",
+          "status": "verified"
+        },
+        {
+          "for": "indicator",
+          "cite": "EN 15341:2019+A1:2022 Maintenance Key Performance Indicators cl. 12",
+          "status": "clause-verified"
+        }
+      ],
+      "provenance": {
+        "basis": "judgment",
+        "primary": "no standard reaches labour cost posting"
+      }
+    },
+    {
+      "uid": 10484,
+      "id": "14.4.3",
+      "name": "Transfer approved time to payroll",
+      "group": {
+        "id": "14.4",
+        "name": "Cost labour and interface to payroll",
+        "uid": 10481
+      },
+      "intent": "Hand the approved time to payroll, once, and know that it arrived.",
+      "activities": [
+        "Take the approved time for the pay period at the cut-off",
+        "Transfer it to payroll in the form the payroll system requires",
+        "Capture the acknowledgement and reconcile the transferred totals",
+        "Hold anything the cut-off excluded for the following period"
+      ],
+      "trigger": {
+        "kind": "timer",
+        "text": "The payroll cut-off for the period is reached.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Approved time for the pay period",
+          "party": "HR",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Payroll cut-off and period definition",
+          "party": "FIN",
+          "data": "WorkTimeSchedule"
+        },
+        {
+          "what": "Transfer format the payroll system requires",
+          "party": "FIN",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Transferred time and its acknowledgement",
+          "party": "FIN",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Time held for the following period",
+          "party": "HR",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "FIN",
+          "role": "system of record",
+          "service": "payroll transfer and acknowledgement"
+        },
+        {
+          "component": "HR",
+          "role": "supplier",
+          "service": "approved time at the cut-off"
+        },
+        {
+          "component": "SIM",
+          "role": "consumer",
+          "service": "the interface itself and its exceptions"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "HR",
+          "to": "FIN",
+          "payload": "WorkRequest",
+          "verb": "create",
+          "pattern": "batch"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Payroll administrator",
+          "raci": "R"
+        },
+        {
+          "role": "Finance controller",
+          "raci": "A"
+        },
+        {
+          "role": "Timekeeper",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "WorkActivityRecord",
+        "WorkTimeSchedule",
+        "Crew"
+      ],
+      "controls": [
+        {
+          "kind": "financial",
+          "text": "The transfer happens once per period. A re-sent period pays twice, and the acknowledgement is what proves it was sent and received rather than sent twice or not at all."
+        },
+        {
+          "kind": "operational",
+          "text": "Time that misses the cut-off is HELD, not dropped. It belongs to the following period with its original dates intact, and losing the original dates is what breaks the reconciliation at 14.4.4."
+        },
+        {
+          "kind": "operational",
+          "text": "15.5 owns the integration mechanics. This process owns what is transferred and whether it arrived; how the interface is built and monitored is not specified here."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Transfer timeliness",
+          "definition": "Proportion of pay periods transferred by the cut-off.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.4.3 Schedule Compliance"
+        },
+        {
+          "name": "Held time proportion",
+          "definition": "Proportion of approved hours held to the following period.",
+          "cite": "EN 15341:2019+A1:2022 Maintenance Key Performance Indicators cl. 12"
+        }
+      ],
+      "variants": [
+        "Transfer at the standard cut-off",
+        "Off-cycle or supplementary transfer",
+        "Transfer with time held for the following period",
+        "Retransfer after a failed acknowledgement"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Take at the cut-off, transfer, acknowledge, hold the remainder. A timer-driven batch identical each period.",
+        "artifact": "models/14.4-cost-labour-and-interface-to-payroll.bpmn"
+      },
+      "en17007": {
+        "process": "DTA",
+        "title": "Manage data",
+        "clause": "6.10"
+      },
+      "sources": [
+        {
+          "for": "integration boundary",
+          "cite": "15.5 owns the integration mechanics and their monitoring; this process owns what is transferred",
+          "status": "judgment"
+        },
+        {
+          "for": "no payroll interface standard",
+          "cite": "No standard defines a payroll transfer, its cut-off or its acknowledgement. IEC 61968 does not model payroll at all",
+          "status": "judgment"
+        },
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319) DTA.10 save and provide access to data in a data processing system",
+          "status": "verified"
+        },
+        {
+          "for": "indicator",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management",
+          "status": "consensus"
+        }
+      ],
+      "provenance": {
+        "basis": "judgment",
+        "primary": "no standard reaches payroll interfacing"
+      }
+    },
+    {
+      "uid": 10485,
+      "id": "14.4.4",
+      "name": "Reconcile time and pay exceptions",
+      "group": {
+        "id": "14.4",
+        "name": "Cost labour and interface to payroll",
+        "uid": 10481
+      },
+      "intent": "Make the hours worked, the hours costed and the hours paid agree.",
+      "activities": [
+        "Compare hours approved, hours posted to work and hours paid for the period",
+        "Identify the differences and establish what caused each",
+        "Correct the side that is wrong, through the route that side allows",
+        "Return the residual and the reason it could not be resolved"
+      ],
+      "trigger": {
+        "kind": "timer",
+        "text": "A pay period has closed and requires reconciliation.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Approved hours for the period",
+          "party": "HR",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Hours posted to work orders",
+          "party": "FIN",
+          "data": "Work"
+        },
+        {
+          "what": "Hours paid by payroll",
+          "party": "FIN",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Reconciled position across the three",
+          "party": "FIN",
+          "data": "WorkActivityRecord"
+        },
+        {
+          "what": "Corrections routed to the side at fault",
+          "party": "HR",
+          "data": "Work"
+        },
+        {
+          "what": "Residual difference with its reason",
+          "party": "SIM",
+          "data": "WorkActivityRecord"
+        }
+      ],
+      "systems": [
+        {
+          "component": "FIN",
+          "role": "system of record",
+          "service": "reconciliation across time, cost and pay"
+        },
+        {
+          "component": "HR",
+          "role": "supplier",
+          "service": "approved hours and corrections"
+        },
+        {
+          "component": "SIM",
+          "role": "consumer",
+          "service": "residual exceptions for reporting"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "FIN",
+          "to": "HR",
+          "payload": "WorkRequest",
+          "verb": "create",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Payroll administrator",
+          "raci": "R"
+        },
+        {
+          "role": "Finance controller",
+          "raci": "A"
+        },
+        {
+          "role": "Operations manager",
+          "raci": "C"
+        }
+      ],
+      "data_objects": [
+        "WorkActivityRecord",
+        "Work",
+        "WorkTimeSchedule"
+      ],
+      "controls": [
+        {
+          "kind": "financial",
+          "text": "Three populations must agree: hours approved at 14.3.4, posted at 14.4.2 and 5.2.1, and paid at 14.4.3. Reconciling two leaves the third to drift, usually the work cost."
+        },
+        {
+          "kind": "financial",
+          "text": "A correction takes the route its side allows. Time already paid is adjusted in the following period; 14.3.3 must never look as though it can undo a payment."
+        },
+        {
+          "kind": "operational",
+          "text": "An unresolved residual is recorded with its reason, not written off. One repeating each period is a systematic defect, and only visible if it is kept."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Reconciliation completeness",
+          "definition": "Proportion of periods reconciled across all three populations.",
+          "cite": "EN 15341:2019+A1:2022 Maintenance Key Performance Indicators cl. 12"
+        },
+        {
+          "name": "Residual difference",
+          "definition": "Unresolved difference as a proportion of hours paid.",
+          "cite": "EN 15341:2019+A1:2022 Maintenance Key Performance Indicators cl. 12 Mi maintenance-cost indicators"
+        }
+      ],
+      "variants": [
+        "Difference between approved and paid",
+        "Difference between paid and posted to work",
+        "Correction routed as a following-period adjustment",
+        "Residual recorded with its reason"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Compare, diagnose, correct, return the residual. A period-driven sequence whose steps do not vary with what the difference turns out to be.",
+        "artifact": "models/14.4-cost-labour-and-interface-to-payroll.bpmn"
+      },
+      "en17007": {
+        "process": "BUD",
+        "title": "Budget maintenance of items",
+        "clause": "6.8"
+      },
+      "sources": [
+        {
+          "for": "cost boundary",
+          "cite": "5.2.1 posts labour actuals and 5.2.5 resolves costing exceptions; this reconciles across time, cost and pay",
+          "status": "judgment"
+        },
+        {
+          "for": "no reconciliation standard",
+          "cite": "No standard requires hours approved, hours costed and hours paid to be reconciled, or defines what an acceptable residual is",
+          "status": "judgment"
+        },
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319) BUD.4 extract budgeted and actual expenditures",
+          "status": "verified"
+        },
+        {
+          "for": "indicator",
+          "cite": "EN 15341:2019+A1:2022 Maintenance Key Performance Indicators cl. 12",
+          "status": "clause-verified"
+        }
+      ],
+      "provenance": {
+        "basis": "judgment",
+        "primary": "no standard reaches time and pay reconciliation"
+      }
+    }
+  ]
+}

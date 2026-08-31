@@ -1,3283 +1,3372 @@
 {
-  "category": {
-    "uid": 10512,
-    "id": "16.0",
-    "name": "Manage Contractors and Partners",
-    "band": "Foundations and Enabling"
+ "category": {
+  "uid": 10512,
+  "id": "16.0",
+  "name": "Manage Contractors and Partners",
+  "band": "Foundations and Enabling"
+ },
+ "platform": "Grok",
+ "model": "grok-4.6",
+ "round": 5,
+ "date": "2026-08-29",
+ "schema": "eam/specs/SCHEMA.md",
+ "derivation": "STANDARDS-DERIVED. Citation statuses observe source_status_ceiling. EN 17007 SER is the spine. ISO 55001:2024 cl. 8.3 is the control, not a lifecycle stage - contractors attach to the work sequence rather than sitting inside it. BPMN artifacts are one per group.",
+ "taxonomy_origin": "TAXONOMY ORIGIN, WHICH IS A DIFFERENT FACT FROM THE DERIVATION ABOVE. The derivation line describes where FIELD CONTENT comes from: every field value traces to a standard, a regulation or a recognised industry body and carries its citation. It does NOT describe where the taxonomy comes from. Which processes exist, how they are grouped and what they are called is a practitioner synthesis of delivered implementations, generalised until it is product- and client-neutral. Of the 102 process groups, 43 originate in programme material, 28 in domain research, 20 in a published source and 11 in folder and file names; the provenance layer grades every one and names what to read next. This model is DELIVERED PRACTICE SPECIFIED AGAINST STANDARDS, not a standard turned into a model - and saying so is not a weakness. A taxonomy proven in delivery and then held against the standards is a stronger claim than one derived from a standard and never built.",
+ "field_set": "EN 17007:2017 cl. 5.2 maintenance process profile, corroborated by ISO 9001:2015 cl. 4.4.1 a) to h).",
+ "gaps": [
+  "EN 13269:2016 is cited by title only for contract preparation. Its body is paywalled and is not paraphrased into package content, rate tables or acceptance tests.",
+  "No standard specifies work-package content (pack D-bis). 7 CFR 1724.53(b)(1) is RUS only. 16.2.3 issues the package; content remains judgment aside from 1910.269(a)(3) hazard transfer.",
+  "cl. 4.2 has no contractor, document or procurement component. The register sits on MAI, crews and credentials on HR, awards on SCHD, progress on FRD, pay on FIN.",
+  "APQC PCF Utilities has no contractor-management process in categories 10 and 14. Cross-industry 4.2.4 Manage suppliers is manufacturing supply chain, not field-crew contracting. The assignment pack's APQC rows are empty; that is a real finding, not a missed mapping.",
+  "NERC CIP-013 is in the pack for this category but is bulk-power cyber. 16 U.S.C. 824o keeps it off local distribution. Named only as a transmission-scoped access variant at 16.5.1.",
+  "No pack standard specifies contractor completion-evidence content, progress codes, scorecards, or interface-exception handling. SER.3/SER.4/DTA.1 are the closest names.",
+  "16.2.1 uses deliveryRoute, the shared DMN variable with 1.3.4. 3.2.3 commits the roster split; 16.2.1 decides the work item. Three processes, one determination.",
+  "16.5.3 and 16.3.1/16.3.2 look like duplicates. They are not: 16.5 is the message, 16.3 is the management. Same split as 13.7 versus 13.4.",
+  "13.7.1 qualifies goods suppliers (SPP.5). 16.1 qualifies field contractors (SER.1). Paying them is 13.4.4 versus 16.4.3. Easy to merge; wrong.",
+  "ISO 9001:2015 cl. 8.4 is cited by title as the management-system analogue for externally provided processes. Wording from third-party reproductions is not used."
+ ],
+ "processes": [
+  {
+   "uid": 10514,
+   "id": "16.1.1",
+   "name": "Register contractor organisation and crews",
+   "group": {
+    "id": "16.1",
+    "name": "Qualify and onboard contractors",
+    "uid": 10513
+   },
+   "intent": "Put the contractor organisation, and the crews it will send, on the register the award will use.",
+   "activities": [
+    "Capture the organisation identity",
+    "Register named crews against it",
+    "Bind a home contact and a host-employer contact",
+    "Refuse a crew with no organisation"
+   ],
+   "trigger": {
+    "kind": "message",
+    "text": "A contractor organisation or crew is presented for the register.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Organisation identity",
+     "party": "MAI",
+     "data": "Crew"
+    },
+    {
+     "what": "Named crews",
+     "party": "HR",
+     "data": "Crew"
+    },
+    {
+     "what": "Host-employer contact",
+     "party": "HR",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Registered organisation and crews",
+     "party": "MAI",
+     "data": "Crew"
+    },
+    {
+     "what": "Rejected incomplete registration",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "systems": [
+    {
+     "component": "MAI",
+     "role": "owning",
+     "service": "Contractor register"
+    },
+    {
+     "component": "HR",
+     "role": "reference",
+     "service": "Crew identity"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "HR",
+     "to": "MAI",
+     "payload": "WorkRequest",
+     "verb": "create",
+     "pattern": "event"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Contractor administrator",
+     "raci": "R"
+    },
+    {
+     "role": "Contractor manager",
+     "raci": "A"
+    }
+   ],
+   "data_objects": [
+    "Crew",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "regulatory",
+     "text": "29 CFR 1910.269(a)(3) requires host and contract employer to inform each other. A crew that is not on the register cannot receive that transfer."
+    },
+    {
+     "kind": "operational",
+     "text": "13.7.1 qualifies goods suppliers. This register is for organisations that do field work. cl. 4.2 has no contractor component; the register sits on MAI, crews on HR."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Rework",
+     "definition": "SMRP 4.1. Work awarded to an unregistered crew.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    },
+    {
+     "name": "Work Order Cycle Time",
+     "definition": "SMRP 5.4.7. First award waiting on a missing register row.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    }
+   ],
+   "variants": [
+    "Prime contractor",
+    "Sub-crew under a prime",
+    "Mutual-aid crew for a named event"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "A presented organisation is registered or rejected.",
+    "artifact": "models/16.1-qualify-and-onboard-contractors.bpmn"
+   },
+   "en17007": {
+    "process": "SER.1",
+    "title": "Identify competent external companies",
+    "clause": "6.15"
+   },
+   "sources": [
+    {
+     "for": "process",
+     "cite": "EN 17007:2017 cl. 6.15 SER.1",
+     "status": "verified"
+    },
+    {
+     "for": "host/contract",
+     "cite": "29 CFR 1910.269(a)(3) host and contract employer information transfer",
+     "status": "regulation"
+    },
+    {
+     "for": "interfaces",
+     "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 payloads; Annex A verbs",
+     "status": "clause-verified"
+    },
+    {
+     "for": "register content",
+     "cite": "Contractor-register content is not standardised",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "regulation",
+    "primary": "29 CFR 1910.269(a)(3) host and contract employer information transfer"
+   },
+   "regulatory": {
+    "class": "C",
+    "why": "29 CFR 1910.269 governs how this is done, not whether it is done"
+   }
   },
-  "platform": "Grok",
-  "model": "grok-4.6",
-  "round": 5,
-  "date": "2026-08-29",
-  "schema": "eam/specs/SCHEMA.md",
-  "derivation": "STANDARDS-DERIVED. Citation statuses observe source_status_ceiling. EN 17007 SER is the spine. ISO 55001:2024 cl. 8.3 is the control, not a lifecycle stage - contractors attach to the work sequence rather than sitting inside it. BPMN artifacts are one per group.",
-  "field_set": "EN 17007:2017 cl. 5.2 maintenance process profile, corroborated by ISO 9001:2015 cl. 4.4.1 a) to h).",
-  "gaps": [
-    "EN 13269:2016 is cited by title only for contract preparation. Its body is paywalled and is not paraphrased into package content, rate tables or acceptance tests.",
-    "No standard specifies work-package content (pack D-bis). 7 CFR 1724.53(b)(1) is RUS only. 16.2.3 issues the package; content remains judgment aside from 1910.269(a)(3) hazard transfer.",
-    "cl. 4.2 has no contractor, document or procurement component. The register sits on MAI, crews and credentials on HR, awards on SCHD, progress on FRD, pay on FIN.",
-    "APQC PCF Utilities has no contractor-management process in categories 10 and 14. Cross-industry 4.2.4 Manage suppliers is manufacturing supply chain, not field-crew contracting. The assignment pack's APQC rows are empty; that is a real finding, not a missed mapping.",
-    "NERC CIP-013 is in the pack for this category but is bulk-power cyber. 16 U.S.C. 824o keeps it off local distribution. Named only as a transmission-scoped access variant at 16.5.1.",
-    "No pack standard specifies contractor completion-evidence content, progress codes, scorecards, or interface-exception handling. SER.3/SER.4/DTA.1 are the closest names.",
-    "16.2.1 uses deliveryRoute, the shared DMN variable with 1.3.4. 3.2.3 commits the roster split; 16.2.1 decides the work item. Three processes, one determination.",
-    "16.5.3 and 16.3.1/16.3.2 look like duplicates. They are not: 16.5 is the message, 16.3 is the management. Same split as 13.7 versus 13.4.",
-    "13.7.1 qualifies goods suppliers (SPP.5). 16.1 qualifies field contractors (SER.1). Paying them is 13.4.4 versus 16.4.3. Easy to merge; wrong.",
-    "ISO 9001:2015 cl. 8.4 is cited by title as the management-system analogue for externally provided processes. Wording from third-party reproductions is not used."
-  ],
-  "processes": [
+  {
+   "uid": 10515,
+   "id": "16.1.2",
+   "name": "Capture capability, skill and equipment profile",
+   "group": {
+    "id": "16.1",
+    "name": "Qualify and onboard contractors",
+    "uid": 10513
+   },
+   "intent": "Record what the contractor may actually be sent to do, and with what.",
+   "activities": [
+    "Capture skills and covered-task qualifications",
+    "Capture plant and equipment they will bring",
+    "Bind the profile to the registered crews",
+    "Flag work types they must not be awarded"
+   ],
+   "trigger": {
+    "kind": "message",
+    "text": "A registered contractor has a capability to record or to change.",
+    "cim": null
+   },
+   "inputs": [
     {
-      "uid": 10514,
-      "id": "16.1.1",
-      "name": "Register contractor organisation and crews",
-      "group": {
-        "id": "16.1",
-        "name": "Qualify and onboard contractors",
-        "uid": 10513
-      },
-      "intent": "Put the contractor organisation, and the crews it will send, on the register the award will use.",
-      "activities": [
-        "Capture the organisation identity",
-        "Register named crews against it",
-        "Bind a home contact and a host-employer contact",
-        "Refuse a crew with no organisation"
-      ],
-      "trigger": {
-        "kind": "message",
-        "text": "A contractor organisation or crew is presented for the register.",
-        "cim": null
-      },
-      "inputs": [
-        {
-          "what": "Organisation identity",
-          "party": "MAI",
-          "data": "Crew"
-        },
-        {
-          "what": "Named crews",
-          "party": "HR",
-          "data": "Crew"
-        },
-        {
-          "what": "Host-employer contact",
-          "party": "HR",
-          "data": "WorkActivityRecord"
-        }
-      ],
-      "outputs": [
-        {
-          "what": "Registered organisation and crews",
-          "party": "MAI",
-          "data": "Crew"
-        },
-        {
-          "what": "Rejected incomplete registration",
-          "party": "MAI",
-          "data": "WorkActivityRecord"
-        }
-      ],
-      "systems": [
-        {
-          "component": "MAI",
-          "role": "owning",
-          "service": "Contractor register"
-        },
-        {
-          "component": "HR",
-          "role": "reference",
-          "service": "Crew identity"
-        }
-      ],
-      "interfaces": [
-        {
-          "from": "HR",
-          "to": "MAI",
-          "payload": "WorkRequest",
-          "verb": "create",
-          "pattern": "event"
-        }
-      ],
-      "roles": [
-        {
-          "role": "Contractor administrator",
-          "raci": "R"
-        },
-        {
-          "role": "Contractor manager",
-          "raci": "A"
-        }
-      ],
-      "data_objects": [
-        "Crew",
-        "WorkActivityRecord"
-      ],
-      "controls": [
-        {
-          "kind": "regulatory",
-          "text": "29 CFR 1910.269(a)(3) requires host and contract employer to inform each other. A crew that is not on the register cannot receive that transfer."
-        },
-        {
-          "kind": "operational",
-          "text": "13.7.1 qualifies goods suppliers. This register is for organisations that do field work. cl. 4.2 has no contractor component; the register sits on MAI, crews on HR."
-        }
-      ],
-      "measures": [
-        {
-          "name": "Rework",
-          "definition": "SMRP 4.1. Work awarded to an unregistered crew.",
-          "cite": "SMRP Best Practices, Pillar 5 Work Management"
-        },
-        {
-          "name": "Work Order Cycle Time",
-          "definition": "SMRP 5.4.7. First award waiting on a missing register row.",
-          "cite": "SMRP Best Practices, Pillar 5 Work Management"
-        }
-      ],
-      "variants": [
-        "Prime contractor",
-        "Sub-crew under a prime",
-        "Mutual-aid crew for a named event"
-      ],
-      "notation": {
-        "class": "BPMN",
-        "why": "A presented organisation is registered or rejected.",
-        "artifact": "models/16.1-qualify-and-onboard-contractors.bpmn"
-      },
-      "en17007": {
-        "process": "SER.1",
-        "title": "Identify competent external companies",
-        "clause": "6.15"
-      },
-      "sources": [
-        {
-          "for": "process",
-          "cite": "EN 17007:2017 cl. 6.15 SER.1",
-          "status": "verified"
-        },
-        {
-          "for": "host/contract",
-          "cite": "29 CFR 1910.269(a)(3) host and contract employer information transfer",
-          "status": "regulation"
-        },
-        {
-          "for": "interfaces",
-          "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 payloads; Annex A verbs",
-          "status": "clause-verified"
-        },
-        {
-          "for": "register content",
-          "cite": "Contractor-register content is not standardised",
-          "status": "judgment"
-        }
-      ],
-      "provenance": {
-        "basis": "regulation",
-        "primary": "29 CFR 1910.269(a)(3) host and contract employer information transfer"
-      }
+     "what": "Registered crews",
+     "party": "MAI",
+     "data": "Crew"
     },
     {
-      "uid": 10515,
-      "id": "16.1.2",
-      "name": "Capture capability, skill and equipment profile",
-      "group": {
-        "id": "16.1",
-        "name": "Qualify and onboard contractors",
-        "uid": 10513
-      },
-      "intent": "Record what the contractor may actually be sent to do, and with what.",
-      "activities": [
-        "Capture skills and covered-task qualifications",
-        "Capture plant and equipment they will bring",
-        "Bind the profile to the registered crews",
-        "Flag work types they must not be awarded"
-      ],
-      "trigger": {
-        "kind": "message",
-        "text": "A registered contractor has a capability to record or to change.",
-        "cim": null
-      },
-      "inputs": [
-        {
-          "what": "Registered crews",
-          "party": "MAI",
-          "data": "Crew"
-        },
-        {
-          "what": "Qualification evidence",
-          "party": "HR",
-          "data": "Crew"
-        },
-        {
-          "what": "Equipment they will bring",
-          "party": "MM",
-          "data": "Tool"
-        }
-      ],
-      "outputs": [
-        {
-          "what": "Capability profile on the contractor",
-          "party": "MAI",
-          "data": "Crew"
-        },
-        {
-          "what": "Work types they must not be awarded",
-          "party": "SCHD",
-          "data": "Work"
-        }
-      ],
-      "systems": [
-        {
-          "component": "MAI",
-          "role": "owning",
-          "service": "Capability profile"
-        },
-        {
-          "component": "HR",
-          "role": "reference",
-          "service": "Qualification"
-        },
-        {
-          "component": "MM",
-          "role": "reference",
-          "service": "Contractor-owned plant"
-        }
-      ],
-      "interfaces": [
-        {
-          "from": "HR",
-          "to": "MAI",
-          "payload": "WorkRequest",
-          "verb": "change",
-          "pattern": "event"
-        }
-      ],
-      "roles": [
-        {
-          "role": "Contractor administrator",
-          "raci": "R"
-        },
-        {
-          "role": "Contractor manager",
-          "raci": "A"
-        },
-        {
-          "role": "Scheduler",
-          "raci": "C"
-        }
-      ],
-      "data_objects": [
-        "Crew",
-        "Tool",
-        "Work"
-      ],
-      "controls": [
-        {
-          "kind": "regulatory",
-          "text": "Gas covered tasks: 49 CFR 192.805. Electric: 29 CFR 1910.269(a)(2) qualified employee. 14.2 owns the operator's qualification record; this process captures the contractor's. A profile that cannot gate 16.2.2 is decoration."
-        },
-        {
-          "kind": "operational",
-          "text": "2.5.2 states what a JOB needs. This profile states what a CONTRACTOR can supply. Do not collapse them."
-        }
-      ],
-      "measures": [
-        {
-          "name": "Schedule Compliance",
-          "definition": "SMRP 5.4.3/5.4.4. Work awarded to a crew that could not do it.",
-          "cite": "SMRP Best Practices, Pillar 5 Work Management"
-        },
-        {
-          "name": "Rework",
-          "definition": "SMRP 4.1. Recalled work for missing qualification.",
-          "cite": "SMRP Best Practices, Pillar 5 Work Management"
-        }
-      ],
-      "variants": [
-        "Covered-task gas crew",
-        "Line-clearance vegetation crew",
-        "Civil-only crew, no electrical"
-      ],
-      "notation": {
-        "class": "BPMN",
-        "why": "Profile is captured and bound to the register.",
-        "artifact": "models/16.1-qualify-and-onboard-contractors.bpmn"
-      },
-      "en17007": {
-        "process": "SER.1",
-        "title": "Identify competent external companies",
-        "clause": "6.15"
-      },
-      "sources": [
-        {
-          "for": "process",
-          "cite": "EN 17007:2017 cl. 6.15 SER.1",
-          "status": "verified"
-        },
-        {
-          "for": "gas OQ",
-          "cite": "49 CFR 192.805 Qualification program - individuals performing covered tasks must be qualified, or directed and observed under 192.805(c); gas only",
-          "status": "regulation"
-        },
-        {
-          "for": "electric qualified person",
-          "cite": "29 CFR 1910.269(a)(2)",
-          "status": "regulation"
-        },
-        {
-          "for": "interfaces",
-          "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 payloads; Annex A verbs",
-          "status": "clause-verified"
-        }
-      ],
-      "provenance": {
-        "basis": "regulation",
-        "primary": "49 CFR 192.805 Qualification program - individuals performing covered tasks must be qualified, or directed and observed under 192.805(c); gas only"
-      }
+     "what": "Qualification evidence",
+     "party": "HR",
+     "data": "Crew"
     },
     {
-      "uid": 10516,
-      "id": "16.1.3",
-      "name": "Verify insurance, certification and compliance",
-      "group": {
-        "id": "16.1",
-        "name": "Qualify and onboard contractors",
-        "uid": 10513
-      },
-      "intent": "Prove the papers that must be live before the contractor is allowed on the system.",
-      "activities": [
-        "Collect insurance, licence and programme certificates",
-        "Verify they are current and cover the work type",
-        "Record Part 199 status for gas covered employees",
-        "Hold the register row until they pass"
-      ],
-      "trigger": {
-        "kind": "message",
-        "text": "Papers have been presented, or an existing certificate is due to expire.",
-        "cim": null
-      },
-      "inputs": [
-        {
-          "what": "Presented certificates",
-          "party": "MAI",
-          "data": "WorkActivityRecord"
-        },
-        {
-          "what": "Work types the contractor will perform",
-          "party": "MAI",
-          "data": "Crew"
-        }
-      ],
-      "outputs": [
-        {
-          "what": "Verified, current papers",
-          "party": "MAI",
-          "data": "WorkActivityRecord"
-        },
-        {
-          "what": "Hold or fail on the register row",
-          "party": "MAI",
-          "data": "Crew"
-        }
-      ],
-      "systems": [
-        {
-          "component": "MAI",
-          "role": "owning",
-          "service": "Compliance papers"
-        },
-        {
-          "component": "HR",
-          "role": "reference",
-          "service": "Covered-employee status"
-        }
-      ],
-      "interfaces": [
-        {
-          "from": "HR",
-          "to": "MAI",
-          "payload": "WorkRequest",
-          "verb": "change",
-          "pattern": "event"
-        }
-      ],
-      "roles": [
-        {
-          "role": "Contractor administrator",
-          "raci": "R"
-        },
-        {
-          "role": "Contractor manager",
-          "raci": "A"
-        }
-      ],
-      "data_objects": [
-        "Crew",
-        "WorkActivityRecord"
-      ],
-      "controls": [
-        {
-          "kind": "regulatory",
-          "text": "Gas: 49 CFR Part 199 drug and alcohol testing for covered employees performing operations, maintenance or emergency response - contractors included where they perform those functions. Electric utilities are not under Part 199. Required cover limits are tariff and contract, not a federal table."
-        },
-        {
-          "kind": "operational",
-          "text": "ISO 55001 cl. 8.3 requires control of externally provided processes. Certificate lists are operator and contract. CIP-013 is bulk-power cyber and does not set distribution insurance."
-        }
-      ],
-      "measures": [
-        {
-          "name": "Rework",
-          "definition": "SMRP 4.1. A crew sent out on lapsed papers.",
-          "cite": "SMRP Best Practices, Pillar 5 Work Management"
-        },
-        {
-          "name": "Work Order Cycle Time",
-          "definition": "SMRP 5.4.7. Award waiting on a lapsed certificate.",
-          "cite": "SMRP Best Practices, Pillar 5 Work Management"
-        }
-      ],
-      "variants": [
-        "Insurance current",
-        "Gas Part 199 covered-employee status",
-        "Fail and hold the register row"
-      ],
-      "notation": {
-        "class": "BPMN",
-        "why": "Papers are verified, or the row is held.",
-        "artifact": "models/16.1-qualify-and-onboard-contractors.bpmn"
-      },
-      "en17007": {
-        "process": "SER.1",
-        "title": "Identify competent external companies",
-        "clause": "6.15"
-      },
-      "sources": [
-        {
-          "for": "process",
-          "cite": "EN 17007:2017 cl. 6.15 SER.1",
-          "status": "verified"
-        },
-        {
-          "for": "gas D&A",
-          "cite": "49 CFR Part 199",
-          "status": "regulation"
-        },
-        {
-          "for": "externally provided",
-          "cite": "ANSI/ASTM/ISO 55001-2024 cl. 8.3 Outsourcing",
-          "status": "clause-verified"
-        },
-        {
-          "for": "cover limits",
-          "cite": "Insurance limits are contract, not in the pack",
-          "status": "judgment"
-        }
-      ],
-      "provenance": {
-        "basis": "regulation",
-        "primary": "49 CFR Part 199"
-      }
-    },
-    {
-      "uid": 10517,
-      "id": "16.1.4",
-      "name": "Maintain qualification currency and suspension",
-      "group": {
-        "id": "16.1",
-        "name": "Qualify and onboard contractors",
-        "uid": 10513
-      },
-      "intent": "Keep the register live: current, suspended, or removed, and stop awards to a suspended crew.",
-      "activities": [
-        "Watch expiry of papers and covered-task dates",
-        "Suspend on lapse, incident or host instruction",
-        "Reinstate only after 16.1.3 passes again",
-        "Publish the live status to award and to dispatch"
-      ],
-      "trigger": {
-        "kind": "timer",
-        "text": "A certificate or qualification is due, or a host instruction to suspend has arrived.",
-        "cim": null
-      },
-      "inputs": [
-        {
-          "what": "Live papers and covered-task dates",
-          "party": "MAI",
-          "data": "WorkActivityRecord"
-        },
-        {
-          "what": "Incident or host instruction",
-          "party": "HR",
-          "data": "Crew"
-        }
-      ],
-      "outputs": [
-        {
-          "what": "Current, suspended or removed status",
-          "party": "MAI",
-          "data": "Crew"
-        },
-        {
-          "what": "Status published to award and dispatch",
-          "party": "SCHD",
-          "data": "Crew"
-        }
-      ],
-      "systems": [
-        {
-          "component": "MAI",
-          "role": "owning",
-          "service": "Currency and suspension"
-        },
-        {
-          "component": "SCHD",
-          "role": "receiving",
-          "service": "Do-not-award list"
-        },
-        {
-          "component": "HR",
-          "role": "reference",
-          "service": "Covered-task dates"
-        }
-      ],
-      "interfaces": [
-        {
-          "from": "MAI",
-          "to": "SCHD",
-          "payload": "WorkRequest",
-          "verb": "change",
-          "pattern": "event"
-        }
-      ],
-      "roles": [
-        {
-          "role": "Contractor administrator",
-          "raci": "R"
-        },
-        {
-          "role": "Contractor manager",
-          "raci": "A"
-        },
-        {
-          "role": "Scheduler",
-          "raci": "I"
-        }
-      ],
-      "data_objects": [
-        "Crew",
-        "WorkActivityRecord"
-      ],
-      "controls": [
-        {
-          "kind": "regulatory",
-          "text": "49 CFR 192.805(g) requalification intervals are operator-set. A lapse still suspends award. 14.2.4 restricts assignment on lapsed operator qualification; this process is the contractor twin."
-        },
-        {
-          "kind": "operational",
-          "text": "A suspension that dispatch cannot see is not a suspension. 16.2.2 must consume this status."
-        }
-      ],
-      "measures": [
-        {
-          "name": "Rework",
-          "definition": "SMRP 4.1. Work on a crew that should have been suspended.",
-          "cite": "SMRP Best Practices, Pillar 5 Work Management"
-        },
-        {
-          "name": "Schedule Compliance",
-          "definition": "SMRP 5.4.3/5.4.4. Jobs recalled after a late suspension.",
-          "cite": "SMRP Best Practices, Pillar 5 Work Management"
-        }
-      ],
-      "variants": [
-        "Lapse of papers",
-        "Incident-triggered",
-        "Host instruction to suspend"
-      ],
-      "notation": {
-        "class": "BPMN",
-        "why": "Watch, suspend or reinstate, then publish.",
-        "artifact": "models/16.1-qualify-and-onboard-contractors.bpmn"
-      },
-      "en17007": {
-        "process": "SER.3",
-        "title": "Manage contracts and evaluate companies and services",
-        "clause": "6.15"
-      },
-      "sources": [
-        {
-          "for": "process",
-          "cite": "EN 17007:2017 cl. 6.15 SER.3",
-          "status": "verified"
-        },
-        {
-          "for": "requalification",
-          "cite": "49 CFR 192.805 Qualification program - individuals performing covered tasks must be qualified, or directed and observed under 192.805(c); gas only",
-          "status": "regulation"
-        },
-        {
-          "for": "interfaces",
-          "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 payloads; Annex A verbs",
-          "status": "clause-verified"
-        }
-      ],
-      "provenance": {
-        "basis": "regulation",
-        "primary": "49 CFR 192.805 Qualification program - individuals performing covered tasks must be qualified, or directed and observed under 192.805(c); gas only"
-      }
-    },
-    {
-      "uid": 10519,
-      "id": "16.2.1",
-      "name": "Determine internal versus contracted delivery",
-      "group": {
-        "id": "16.2",
-        "name": "Award and assign contracted work",
-        "uid": 10518
-      },
-      "intent": "Decide, for this work, whether it is internal or external - the same determination as 1.3.4, using deliveryRoute.",
-      "activities": [
-        "Take the work type, qualification need and internal capacity",
-        "Apply the deliveryRoute rule set",
-        "Return internal, externalService or a named pool",
-        "Do not award until this value is set"
-      ],
-      "trigger": {
-        "kind": "conditional",
-        "text": "Work is ready to assign and the delivery route is not yet set.",
-        "cim": null
-      },
-      "inputs": [
-        {
-          "what": "Work type and qualification need",
-          "party": "MAI",
-          "data": "Work"
-        },
-        {
-          "what": "Internal capacity remaining",
-          "party": "SCHD",
-          "data": "Crew"
-        },
-        {
-          "what": "Qualified contractor pool",
-          "party": "MAI",
-          "data": "Crew"
-        }
-      ],
-      "outputs": [
-        {
-          "what": "deliveryRoute value on the work",
-          "party": "MAI",
-          "data": "Work"
-        },
-        {
-          "what": "Work that cannot be routed",
-          "party": "MAI",
-          "data": "WorkActivityRecord"
-        }
-      ],
-      "systems": [
-        {
-          "component": "MAI",
-          "role": "owning",
-          "service": "Delivery-route decision"
-        },
-        {
-          "component": "SCHD",
-          "role": "reference",
-          "service": "Internal remainder"
-        }
-      ],
-      "interfaces": [
-        {
-          "from": "SCHD",
-          "to": "MAI",
-          "payload": "WorkRequest",
-          "verb": "get",
-          "pattern": "request-reply"
-        }
-      ],
-      "roles": [
-        {
-          "role": "Resource planner",
-          "raci": "R"
-        },
-        {
-          "role": "Maintenance manager",
-          "raci": "A"
-        },
-        {
-          "role": "Contractor manager",
-          "raci": "C"
-        }
-      ],
-      "data_objects": [
-        "Work",
-        "Crew",
-        "WorkActivityRecord"
-      ],
-      "controls": [
-        {
-          "kind": "operational",
-          "text": "vocabulary.json names deliveryRoute as the shared variable with 1.3.4. 3.2.3 commits the roster split; this process decides the individual work item. EN 17007 MAN.2 is identify internal or external activities."
-        },
-        {
-          "kind": "operational",
-          "text": "ISO 55001 cl. 8.3 is the control on whatever this returns as external. It is not itself the decision."
-        }
-      ],
-      "measures": [
-        {
-          "name": "Schedule Compliance",
-          "definition": "SMRP 5.4.3/5.4.4. Work routed to a pool that cannot take it.",
-          "cite": "SMRP Best Practices, Pillar 5 Work Management"
-        },
-        {
-          "name": "Planned Work",
-          "definition": "SMRP 5.3.1. External used to keep planned work planned.",
-          "cite": "SMRP Best Practices, Pillar 5 Work Management"
-        }
-      ],
-      "variants": [
-        "Internal",
-        "externalService",
-        "qualifiedCrewPool"
-      ],
-      "notation": {
-        "class": "DMN",
-        "why": "The output is a deliveryRoute value. Same rule set as 1.3.4.",
-        "artifact": "models/16.2.1-internal-versus-contracted.dmn"
-      },
-      "en17007": {
-        "process": "MAN.2",
-        "title": "Identify the internal or external activities (carried out by the staff of the user company or participating com",
-        "clause": "6.2"
-      },
-      "sources": [
-        {
-          "for": "process",
-          "cite": "EN 17007:2017 cl. 6.2 MAN.2",
-          "status": "verified"
-        },
-        {
-          "for": "shared variable",
-          "cite": "vocabulary.json deliveryRoute - 1.3.4 routing and 16.2.1 sourcing are one determination",
-          "status": "judgment"
-        },
-        {
-          "for": "externally provided",
-          "cite": "ANSI/ASTM/ISO 55001-2024 cl. 8.3 Outsourcing",
-          "status": "clause-verified"
-        },
-        {
-          "for": "capacity",
-          "cite": "EN 17007:2017 cl. 6.14 RES.4 and cl. 6.15 SER.4",
-          "status": "verified"
-        }
-      ],
-      "provenance": {
-        "basis": "standard",
-        "primary": "EN 17007:2017 cl. 6.2 MAN.2"
-      }
-    },
-    {
-      "uid": 10520,
-      "id": "16.2.2",
-      "name": "Award work to contractor",
-      "group": {
-        "id": "16.2",
-        "name": "Award and assign contracted work",
-        "uid": 10518
-      },
-      "intent": "Place the work on a qualified contractor that 16.2.1 sent down the external route.",
-      "activities": [
-        "Take work with deliveryRoute externalService",
-        "Select a live, capable contractor",
-        "Record the award and the commercial terms used",
-        "Refuse if 16.1.4 is suspended"
-      ],
-      "trigger": {
-        "kind": "message",
-        "text": "Work has been routed external and is ready to place.",
-        "cim": null
-      },
-      "inputs": [
-        {
-          "what": "Work with deliveryRoute externalService",
-          "party": "MAI",
-          "data": "Work"
-        },
-        {
-          "what": "Live qualified contractors",
-          "party": "MAI",
-          "data": "Crew"
-        },
-        {
-          "what": "Contract rates",
-          "party": "FIN",
-          "data": "Work"
-        }
-      ],
-      "outputs": [
-        {
-          "what": "Awarded work and contractor",
-          "party": "SCHD",
-          "data": "Work"
-        },
-        {
-          "what": "Refused award, contractor suspended",
-          "party": "MAI",
-          "data": "WorkActivityRecord"
-        }
-      ],
-      "systems": [
-        {
-          "component": "MAI",
-          "role": "owning",
-          "service": "Award"
-        },
-        {
-          "component": "SCHD",
-          "role": "receiving",
-          "service": "Contractor as resource"
-        },
-        {
-          "component": "FIN",
-          "role": "reference",
-          "service": "Contract rates"
-        }
-      ],
-      "interfaces": [
-        {
-          "from": "MAI",
-          "to": "SCHD",
-          "payload": "WorkRequest",
-          "verb": "change",
-          "pattern": "event"
-        }
-      ],
-      "roles": [
-        {
-          "role": "Contractor manager",
-          "raci": "A"
-        },
-        {
-          "role": "Resource planner",
-          "raci": "R"
-        },
-        {
-          "role": "Scheduler",
-          "raci": "C"
-        }
-      ],
-      "data_objects": [
-        "Work",
-        "Crew",
-        "WorkActivityRecord"
-      ],
-      "controls": [
-        {
-          "kind": "operational",
-          "text": "EN 17007 SER.2 is contract with external companies. EN 13269 is cited by title for contract preparation only; its body is paywalled and is not paraphrased. This is work award, not a 13.4.2 goods purchase order."
-        },
-        {
-          "kind": "regulatory",
-          "text": "Do not award covered-task gas work to a crew 16.1.4 has suspended. 1910.269(a)(3) information transfer is owed at award, not after the crew is on site."
-        }
-      ],
-      "measures": [
-        {
-          "name": "Schedule Compliance",
-          "definition": "SMRP 5.4.3/5.4.4. Awarded date versus committed date.",
-          "cite": "SMRP Best Practices, Pillar 5 Work Management"
-        },
-        {
-          "name": "Work Order Cycle Time",
-          "definition": "SMRP 5.4.7. Routed-external to awarded.",
-          "cite": "SMRP Best Practices, Pillar 5 Work Management"
-        }
-      ],
-      "variants": [
-        "Unit-rate programme work",
-        "Lump-sum job",
-        "Time-and-material emergency"
-      ],
-      "notation": {
-        "class": "BPMN",
-        "why": "Routed-external work is awarded or refused.",
-        "artifact": "models/16.2-award-and-assign-contracted-work.bpmn"
-      },
-      "en17007": {
-        "process": "SER.2",
-        "title": "Contract with external companies",
-        "clause": "6.15"
-      },
-      "sources": [
-        {
-          "for": "process",
-          "cite": "EN 17007:2017 cl. 6.15 SER.2",
-          "status": "verified"
-        },
-        {
-          "for": "contract guideline",
-          "cite": "EN 13269:2016 Guideline on preparation of maintenance contracts",
-          "status": "consensus"
-        },
-        {
-          "for": "host/contract",
-          "cite": "29 CFR 1910.269(a)(3) host and contract employer information transfer",
-          "status": "regulation"
-        },
-        {
-          "for": "goods contrast",
-          "cite": "13.4.2 is goods PO; this is work award",
-          "status": "judgment"
-        }
-      ],
-      "provenance": {
-        "basis": "standard",
-        "primary": "EN 17007:2017 cl. 6.15 SER.2"
-      }
-    },
-    {
-      "uid": 10521,
-      "id": "16.2.3",
-      "name": "Issue work package to contractor",
-      "group": {
-        "id": "16.2",
-        "name": "Award and assign contracted work",
-        "uid": 10518
-      },
-      "intent": "Give the contractor the package they will execute, including the hazards the host already knows.",
-      "activities": [
-        "Assemble the package from 2.5",
-        "Add known hazards, access notes and any clearance need",
-        "Issue it to the awarded contractor",
-        "Hold if 1910.269(a)(3) transfer is incomplete"
-      ],
-      "trigger": {
-        "kind": "message",
-        "text": "Work has been awarded and the package is ready to issue.",
-        "cim": null
-      },
-      "inputs": [
-        {
-          "what": "Awarded work",
-          "party": "SCHD",
-          "data": "Work"
-        },
-        {
-          "what": "Job plan, drawings and material list",
-          "party": "MAI",
-          "data": "WorkTask"
-        },
-        {
-          "what": "Known hazards and access notes",
-          "party": "HR",
-          "data": "WorkActivityRecord"
-        }
-      ],
-      "outputs": [
-        {
-          "what": "Issued package",
-          "party": "MAI",
-          "data": "Work"
-        },
-        {
-          "what": "Hold for incomplete hazard transfer",
-          "party": "MAI",
-          "data": "WorkActivityRecord"
-        }
-      ],
-      "systems": [
-        {
-          "component": "MAI",
-          "role": "owning",
-          "service": "Package issue"
-        },
-        {
-          "component": "HR",
-          "role": "reference",
-          "service": "Host hazard information"
-        },
-        {
-          "component": "NO",
-          "role": "reference",
-          "service": "Clearance needed from 18.4.4"
-        }
-      ],
-      "interfaces": [
-        {
-          "from": "MAI",
-          "to": "HR",
-          "payload": "WorkRequest",
-          "verb": "get",
-          "pattern": "request-reply"
-        },
-        {
-          "from": "NO",
-          "to": "MAI",
-          "payload": "WorkRequest",
-          "verb": "get",
-          "pattern": "request-reply"
-        }
-      ],
-      "roles": [
-        {
-          "role": "Planner",
-          "raci": "R"
-        },
-        {
-          "role": "Contractor manager",
-          "raci": "A"
-        },
-        {
-          "role": "Network operator",
-          "raci": "C"
-        }
-      ],
-      "data_objects": [
-        "Work",
-        "WorkTask",
-        "WorkActivityRecord"
-      ],
-      "controls": [
-        {
-          "kind": "regulatory",
-          "text": "29 CFR 1910.269(a)(3) information transfer is the package's safety duty. A clearance is not in the package - 18.4.4 issues it. The package says whether one is required. No standard specifies work-package content; 7 CFR 1724.53(b)(1) is RUS only."
-        },
-        {
-          "kind": "operational",
-          "text": "2.5 built the package. This process issues it to an external provider. Issuing without 16.2.4 acceptance is a send, not a commitment."
-        }
-      ],
-      "measures": [
-        {
-          "name": "Schedule Compliance",
-          "definition": "SMRP 5.4.3/5.4.4. Package issued after the work should have started.",
-          "cite": "SMRP Best Practices, Pillar 5 Work Management"
-        },
-        {
-          "name": "Rework",
-          "definition": "SMRP 4.1. Packages that omitted a known hazard.",
-          "cite": "SMRP Best Practices, Pillar 5 Work Management"
-        }
-      ],
-      "variants": [
-        "Programme unit package",
-        "Job-specific design package",
-        "Emergency verbal then written"
-      ],
-      "notation": {
-        "class": "BPMN",
-        "why": "Package is issued, or held for incomplete transfer.",
-        "artifact": "models/16.2-award-and-assign-contracted-work.bpmn"
-      },
-      "en17007": {
-        "process": "ACT.2",
-        "title": "Prepare for the maintenance tasks",
-        "clause": "6.5.3"
-      },
-      "sources": [
-        {
-          "for": "process",
-          "cite": "EN 17007:2017 cl. 6.5.3 ACT.2",
-          "status": "verified"
-        },
-        {
-          "for": "host/contract",
-          "cite": "29 CFR 1910.269(a)(3) host and contract employer information transfer",
-          "status": "regulation"
-        },
-        {
-          "for": "clearance",
-          "cite": "29 CFR 1910.269(m); clearance produced by 18.4.4",
-          "status": "regulation"
-        },
-        {
-          "for": "package content",
-          "cite": "No standard specifies work-package content; 7 CFR 1724.53(b)(1) is RUS only",
-          "status": "judgment"
-        }
-      ],
-      "provenance": {
-        "basis": "regulation",
-        "primary": "29 CFR 1910.269(a)(3) host and contract employer information transfer"
-      }
-    },
-    {
-      "uid": 10522,
-      "id": "16.2.4",
-      "name": "Confirm acceptance and committed date",
-      "group": {
-        "id": "16.2",
-        "name": "Award and assign contracted work",
-        "uid": 10518
-      },
-      "intent": "Get the contractor's acceptance and a date the schedule may use.",
-      "activities": [
-        "Send the issued package for acceptance",
-        "Receive accept, reject or a date change",
-        "Write the committed date onto the schedule",
-        "Return rejected work to 16.2.1"
-      ],
-      "trigger": {
-        "kind": "message",
-        "text": "The contractor has the package and owes an acceptance.",
-        "cim": "WorkRequest.reply"
-      },
-      "inputs": [
-        {
-          "what": "Issued package",
-          "party": "MAI",
-          "data": "Work"
-        },
-        {
-          "what": "Contractor reply",
-          "party": "SCHD",
-          "data": "WorkActivityRecord"
-        }
-      ],
-      "outputs": [
-        {
-          "what": "Accepted work with committed date",
-          "party": "SCHD",
-          "data": "WorkTimeSchedule"
-        },
-        {
-          "what": "Rejected work back to routing",
-          "party": "MAI",
-          "data": "Work"
-        }
-      ],
-      "systems": [
-        {
-          "component": "SCHD",
-          "role": "owning",
-          "service": "Committed date"
-        },
-        {
-          "component": "MAI",
-          "role": "receiving",
-          "service": "Accepted or rejected"
-        }
-      ],
-      "interfaces": [
-        {
-          "from": "SCHD",
-          "to": "MAI",
-          "payload": "WorkRequest",
-          "verb": "reply",
-          "pattern": "request-reply"
-        }
-      ],
-      "roles": [
-        {
-          "role": "Scheduler",
-          "raci": "R"
-        },
-        {
-          "role": "Contractor manager",
-          "raci": "A"
-        }
-      ],
-      "data_objects": [
-        "Work",
-        "WorkTimeSchedule",
-        "WorkActivityRecord"
-      ],
-      "controls": [
-        {
-          "kind": "operational",
-          "text": "EN 17007 SER.4 Provide external services is the clause-6 acceptance of an external service - one of only two 'approval' occurrences in clause 6. A committed date that 3.4 cannot see is not committed."
-        },
-        {
-          "kind": "operational",
-          "text": "Reject is not a silent miss. The work returns to 16.2.1, not to a hole."
-        }
-      ],
-      "measures": [
-        {
-          "name": "Schedule Compliance",
-          "definition": "SMRP 5.4.3/5.4.4. Committed date versus done.",
-          "cite": "SMRP Best Practices, Pillar 5 Work Management"
-        },
-        {
-          "name": "Work Order Cycle Time",
-          "definition": "SMRP 5.4.7. Issue to accepted.",
-          "cite": "SMRP Best Practices, Pillar 5 Work Management"
-        }
-      ],
-      "variants": [
-        "Accept as issued",
-        "Accept with a later date",
-        "Reject and return to routing"
-      ],
-      "notation": {
-        "class": "BPMN",
-        "why": "Accept, date-change or reject.",
-        "artifact": "models/16.2-award-and-assign-contracted-work.bpmn"
-      },
-      "en17007": {
-        "process": "SER.4",
-        "title": "Provide external services",
-        "clause": "6.15"
-      },
-      "sources": [
-        {
-          "for": "process",
-          "cite": "EN 17007:2017 cl. 6.15 SER.4",
-          "status": "verified"
-        },
-        {
-          "for": "interfaces",
-          "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 payloads; Annex A verbs",
-          "status": "clause-verified"
-        },
-        {
-          "for": "measures",
-          "cite": "SMRP Best Practices, Pillar 5 Work Management",
-          "status": "consensus"
-        }
-      ],
-      "provenance": {
-        "basis": "standard",
-        "primary": "EN 17007:2017 cl. 6.15 SER.4"
-      }
-    },
-    {
-      "uid": 10524,
-      "id": "16.3.1",
-      "name": "Receive contractor progress and status",
-      "group": {
-        "id": "16.3",
-        "name": "Oversee contractor execution",
-        "uid": 10523
-      },
-      "intent": "Take the contractor's progress as a status the operator's schedule can use.",
-      "activities": [
-        "Receive progress against the awarded work",
-        "Translate it to the operator's status set",
-        "Update the schedule",
-        "Exception a silence past the committed date"
-      ],
-      "trigger": {
-        "kind": "message",
-        "text": "The contractor has sent progress, or the committed date has passed with none.",
-        "cim": null
-      },
-      "inputs": [
-        {
-          "what": "Awarded work and committed date",
-          "party": "SCHD",
-          "data": "WorkTimeSchedule"
-        },
-        {
-          "what": "Contractor progress message",
-          "party": "FRD",
-          "data": "WorkActivityRecord"
-        }
-      ],
-      "outputs": [
-        {
-          "what": "Operator status on the work",
-          "party": "SCHD",
-          "data": "Work"
-        },
-        {
-          "what": "Silence exception",
-          "party": "MAI",
-          "data": "WorkActivityRecord"
-        }
-      ],
-      "systems": [
-        {
-          "component": "FRD",
-          "role": "originating",
-          "service": "Contractor progress"
-        },
-        {
-          "component": "SCHD",
-          "role": "owning",
-          "service": "Operator status"
-        }
-      ],
-      "interfaces": [
-        {
-          "from": "FRD",
-          "to": "SCHD",
-          "payload": "WorkRequest",
-          "verb": "change",
-          "pattern": "event"
-        }
-      ],
-      "roles": [
-        {
-          "role": "Scheduler",
-          "raci": "R"
-        },
-        {
-          "role": "Contractor manager",
-          "raci": "A"
-        }
-      ],
-      "data_objects": [
-        "Work",
-        "WorkTimeSchedule",
-        "WorkActivityRecord"
-      ],
-      "controls": [
-        {
-          "kind": "operational",
-          "text": "IEC 61968-6 standardises the exchange, not the progress codes. 4.1.4 monitors internal progress. This process is the contractor feed into the same schedule. 16.5.3 is the interface; this is the operational use of it."
-        },
-        {
-          "kind": "operational",
-          "text": "Silence past the committed date is an exception, not a green status."
-        }
-      ],
-      "measures": [
-        {
-          "name": "Schedule Compliance",
-          "definition": "SMRP 5.4.3/5.4.4. Status versus committed date.",
-          "cite": "SMRP Best Practices, Pillar 5 Work Management"
-        },
-        {
-          "name": "Work Order Cycle Time",
-          "definition": "SMRP 5.4.7. Time spent in an unreported state.",
-          "cite": "SMRP Best Practices, Pillar 5 Work Management"
-        }
-      ],
-      "variants": [
-        "Periodic status",
-        "Milestone status",
-        "Silence past committed date"
-      ],
-      "notation": {
-        "class": "BPMN",
-        "why": "Progress is applied, or silence is excepted.",
-        "artifact": "models/16.3-oversee-contractor-execution.bpmn"
-      },
-      "en17007": {
-        "process": "SER.3",
-        "title": "Manage contracts and evaluate companies and services",
-        "clause": "6.15"
-      },
-      "sources": [
-        {
-          "for": "process",
-          "cite": "EN 17007:2017 cl. 6.15 SER.3",
-          "status": "verified"
-        },
-        {
-          "for": "interfaces",
-          "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 payloads; Annex A verbs",
-          "status": "clause-verified"
-        },
-        {
-          "for": "status codes",
-          "cite": "Progress-code mapping is operator judgment",
-          "status": "judgment"
-        }
-      ],
-      "provenance": {
-        "basis": "standard",
-        "primary": "EN 17007:2017 cl. 6.15 SER.3"
-      }
-    },
-    {
-      "uid": 10525,
-      "id": "16.3.2",
-      "name": "Receive contractor completion evidence",
-      "group": {
-        "id": "16.3",
-        "name": "Oversee contractor execution",
-        "uid": 10523
-      },
-      "intent": "Take the contractor's claim that the work is done, with the evidence 16.3.3 will audit.",
-      "activities": [
-        "Receive the completion claim",
-        "Check that evidence is attached",
-        "Hold a claim with no evidence",
-        "Hand a complete claim to inspect-and-accept"
-      ],
-      "trigger": {
-        "kind": "message",
-        "text": "The contractor has claimed the work complete.",
-        "cim": null
-      },
-      "inputs": [
-        {
-          "what": "Completion claim",
-          "party": "FRD",
-          "data": "WorkActivityRecord"
-        },
-        {
-          "what": "Awarded work and package",
-          "party": "MAI",
-          "data": "Work"
-        }
-      ],
-      "outputs": [
-        {
-          "what": "Claim with evidence, ready to inspect",
-          "party": "MAI",
-          "data": "Work"
-        },
-        {
-          "what": "Claim held for missing evidence",
-          "party": "FRD",
-          "data": "WorkActivityRecord"
-        }
-      ],
-      "systems": [
-        {
-          "component": "FRD",
-          "role": "originating",
-          "service": "Contractor claim"
-        },
-        {
-          "component": "MAI",
-          "role": "owning",
-          "service": "Evidence on the work"
-        }
-      ],
-      "interfaces": [
-        {
-          "from": "FRD",
-          "to": "MAI",
-          "payload": "WorkRequest",
-          "verb": "change",
-          "pattern": "event"
-        }
-      ],
-      "roles": [
-        {
-          "role": "Contractor administrator",
-          "raci": "R"
-        },
-        {
-          "role": "Contractor manager",
-          "raci": "A"
-        }
-      ],
-      "data_objects": [
-        "Work",
-        "WorkActivityRecord"
-      ],
-      "controls": [
-        {
-          "kind": "operational",
-          "text": "No standard specifies contractor completion-evidence content. 5.1 closes operator work; this is the contractor claim that feeds it. A claim without evidence is not complete."
-        },
-        {
-          "kind": "operational",
-          "text": "As-built that belongs on 5.4 still has to arrive here first if the contractor produced it."
-        }
-      ],
-      "measures": [
-        {
-          "name": "Rework",
-          "definition": "SMRP 4.1. Claims that fail 16.3.3 for missing evidence.",
-          "cite": "SMRP Best Practices, Pillar 5 Work Management"
-        },
-        {
-          "name": "Work Order Cycle Time",
-          "definition": "SMRP 5.4.7. Claim to inspect-ready.",
-          "cite": "SMRP Best Practices, Pillar 5 Work Management"
-        }
-      ],
-      "variants": [
-        "Photo and reading",
-        "As-built package",
-        "Claim with no evidence, held"
-      ],
-      "notation": {
-        "class": "BPMN",
-        "why": "Claim is inspect-ready, or held.",
-        "artifact": "models/16.3-oversee-contractor-execution.bpmn"
-      },
-      "en17007": {
-        "process": "SER.4",
-        "title": "Provide external services",
-        "clause": "6.15"
-      },
-      "sources": [
-        {
-          "for": "process",
-          "cite": "EN 17007:2017 cl. 6.15 SER.4",
-          "status": "verified"
-        },
-        {
-          "for": "interfaces",
-          "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 payloads; Annex A verbs",
-          "status": "clause-verified"
-        },
-        {
-          "for": "evidence content",
-          "cite": "Completion-evidence content is not standardised",
-          "status": "judgment"
-        }
-      ],
-      "provenance": {
-        "basis": "standard",
-        "primary": "EN 17007:2017 cl. 6.15 SER.4"
-      }
-    },
-    {
-      "uid": 10526,
-      "id": "16.3.3",
-      "name": "Inspect and accept contracted work",
-      "group": {
-        "id": "16.3",
-        "name": "Oversee contractor execution",
-        "uid": 10523
-      },
-      "intent": "Decide that the contractor's work meets the package, or that it does not.",
-      "activities": [
-        "Inspect against the issued package",
-        "Accept, accept-with-punchlist, or reject",
-        "Write the result on the work",
-        "Hand rejects to 16.3.4"
-      ],
-      "trigger": {
-        "kind": "message",
-        "text": "A completion claim with evidence is ready to inspect.",
-        "cim": null
-      },
-      "inputs": [
-        {
-          "what": "Claim with evidence",
-          "party": "MAI",
-          "data": "Work"
-        },
-        {
-          "what": "Issued package",
-          "party": "MAI",
-          "data": "WorkTask"
-        },
-        {
-          "what": "Field inspection result",
-          "party": "FRD",
-          "data": "WorkActivityRecord"
-        }
-      ],
-      "outputs": [
-        {
-          "what": "Accepted work",
-          "party": "MAI",
-          "data": "Work"
-        },
-        {
-          "what": "Rejected or punchlisted work",
-          "party": "MAI",
-          "data": "WorkActivityRecord"
-        }
-      ],
-      "systems": [
-        {
-          "component": "MAI",
-          "role": "owning",
-          "service": "Acceptance"
-        },
-        {
-          "component": "FRD",
-          "role": "originating",
-          "service": "Inspection"
-        },
-        {
-          "component": "FIN",
-          "role": "receiving",
-          "service": "Accepted quantities for settlement"
-        }
-      ],
-      "interfaces": [
-        {
-          "from": "FRD",
-          "to": "MAI",
-          "payload": "WorkRequest",
-          "verb": "change",
-          "pattern": "event"
-        },
-        {
-          "from": "MAI",
-          "to": "FIN",
-          "payload": "WorkRequest",
-          "verb": "change",
-          "pattern": "event"
-        }
-      ],
-      "roles": [
-        {
-          "role": "Inspector",
-          "raci": "R"
-        },
-        {
-          "role": "Contractor manager",
-          "raci": "A"
-        }
-      ],
-      "data_objects": [
-        "Work",
-        "WorkTask",
-        "WorkActivityRecord"
-      ],
-      "controls": [
-        {
-          "kind": "operational",
-          "text": "EN 17007 SER.4 is acceptance of an external service - one of two clause-6 approvals. 7 CFR 1724.32 inspection of work-order construction binds RUS borrowers only and is a variant, not a national rule."
-        },
-        {
-          "kind": "operational",
-          "text": "5.1.1 verifies operator work. This process accepts contractor work. Do not close 5.1 on a reject from here."
-        }
-      ],
-      "measures": [
-        {
-          "name": "Rework",
-          "definition": "SMRP 4.1. Rejected contractor work.",
-          "cite": "SMRP Best Practices, Pillar 5 Work Management"
-        },
-        {
-          "name": "PM Compliance",
-          "definition": "SMRP 5.4.14. Programme work accepted against the specification.",
-          "cite": "SMRP Best Practices, Pillar 5 Work Management"
-        }
-      ],
-      "variants": [
-        "Accept as built",
-        "Accept with punchlist",
-        "Reject"
-      ],
-      "notation": {
-        "class": "BPMN",
-        "why": "Inspect, then accept, punchlist or reject.",
-        "artifact": "models/16.3-oversee-contractor-execution.bpmn"
-      },
-      "en17007": {
-        "process": "SER.4",
-        "title": "Provide external services",
-        "clause": "6.15"
-      },
-      "sources": [
-        {
-          "for": "process",
-          "cite": "EN 17007:2017 cl. 6.15 SER.4",
-          "status": "verified"
-        },
-        {
-          "for": "RUS inspection",
-          "cite": "7 CFR 1724.32 inspection and certification of work order construction - RUS borrowers only",
-          "status": "regulation"
-        },
-        {
-          "for": "interfaces",
-          "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 payloads; Annex A verbs",
-          "status": "clause-verified"
-        }
-      ],
-      "provenance": {
-        "basis": "standard",
-        "primary": "EN 17007:2017 cl. 6.15 SER.4"
-      }
-    },
-    {
-      "uid": 10527,
-      "id": "16.3.4",
-      "name": "Manage contractor rework and defect",
-      "group": {
-        "id": "16.3",
-        "name": "Oversee contractor execution",
-        "uid": 10523
-      },
-      "intent": "Send rejected or punchlisted work back, and do not pay it as complete.",
-      "activities": [
-        "Take the reject or punchlist",
-        "Raise rework against the same award",
-        "Hold settlement on the defective portion",
-        "Close only when 16.3.3 later accepts"
-      ],
-      "trigger": {
-        "kind": "message",
-        "text": "Contracted work has been rejected or punchlisted.",
-        "cim": null
-      },
-      "inputs": [
-        {
-          "what": "Reject or punchlist",
-          "party": "MAI",
-          "data": "WorkActivityRecord"
-        },
-        {
-          "what": "Original award and rates",
-          "party": "FIN",
-          "data": "Work"
-        }
-      ],
-      "outputs": [
-        {
-          "what": "Rework on the same award",
-          "party": "SCHD",
-          "data": "Work"
-        },
-        {
-          "what": "Settlement hold on the defective portion",
-          "party": "FIN",
-          "data": "WorkActivityRecord"
-        }
-      ],
-      "systems": [
-        {
-          "component": "MAI",
-          "role": "owning",
-          "service": "Rework"
-        },
-        {
-          "component": "SCHD",
-          "role": "receiving",
-          "service": "Rework to schedule"
-        },
-        {
-          "component": "FIN",
-          "role": "receiving",
-          "service": "Hold"
-        }
-      ],
-      "interfaces": [
-        {
-          "from": "MAI",
-          "to": "SCHD",
-          "payload": "WorkRequest",
-          "verb": "change",
-          "pattern": "event"
-        },
-        {
-          "from": "MAI",
-          "to": "FIN",
-          "payload": "WorkRequest",
-          "verb": "change",
-          "pattern": "event"
-        }
-      ],
-      "roles": [
-        {
-          "role": "Contractor manager",
-          "raci": "A"
-        },
-        {
-          "role": "Inspector",
-          "raci": "R"
-        },
-        {
-          "role": "Scheduler",
-          "raci": "C"
-        }
-      ],
-      "data_objects": [
-        "Work",
-        "WorkActivityRecord"
-      ],
-      "controls": [
-        {
-          "kind": "operational",
-          "text": "SMRP 4.1 Rework is the measure. Paying punchlist work as complete is a 16.4.3 failure caused here. Two competent managers will not always re-award versus hold-in-place; the happy path is still rework on the same award."
-        },
-        {
-          "kind": "operational",
-          "text": "EN 17007 has no defect-management process. SER.3 is evaluate companies and services."
-        }
-      ],
-      "measures": [
-        {
-          "name": "Rework",
-          "definition": "SMRP 4.1. This process exists to make that measure true.",
-          "cite": "SMRP Best Practices, Pillar 5 Work Management"
-        },
-        {
-          "name": "Schedule Compliance",
-          "definition": "SMRP 5.4.3/5.4.4. Rework versus original committed date.",
-          "cite": "SMRP Best Practices, Pillar 5 Work Management"
-        }
-      ],
-      "variants": [
-        "Punchlist on the same crew",
-        "Full reject, re-perform",
-        "Defect found after a first accept"
-      ],
-      "notation": {
-        "class": "BPMN",
-        "why": "Reject becomes rework and a settlement hold.",
-        "artifact": "models/16.3-oversee-contractor-execution.bpmn"
-      },
-      "en17007": {
-        "process": "SER.3",
-        "title": "Manage contracts and evaluate companies and services",
-        "clause": "6.15"
-      },
-      "sources": [
-        {
-          "for": "process",
-          "cite": "EN 17007:2017 cl. 6.15 SER.3",
-          "status": "verified"
-        },
-        {
-          "for": "rework measure",
-          "cite": "SMRP Best Practices, Pillar 5 Work Management",
-          "status": "consensus"
-        },
-        {
-          "for": "interfaces",
-          "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 payloads; Annex A verbs",
-          "status": "clause-verified"
-        }
-      ],
-      "provenance": {
-        "basis": "standard",
-        "primary": "EN 17007:2017 cl. 6.15 SER.3"
-      }
-    },
-    {
-      "uid": 10529,
-      "id": "16.4.1",
-      "name": "Capture contracted units and quantities",
-      "group": {
-        "id": "16.4",
-        "name": "Settle and evaluate contractor performance",
-        "uid": 10528
-      },
-      "intent": "Count what the contractor actually did, in the units the contract pays.",
-      "activities": [
-        "Take accepted work from 16.3.3",
-        "Capture units and quantities in contract units",
-        "Flag quantities outside the award",
-        "Hand the count to rate validation"
-      ],
-      "trigger": {
-        "kind": "message",
-        "text": "Contracted work has been accepted and is ready to count.",
-        "cim": null
-      },
-      "inputs": [
-        {
-          "what": "Accepted work",
-          "party": "MAI",
-          "data": "Work"
-        },
-        {
-          "what": "Contract unit definitions",
-          "party": "FIN",
-          "data": "Work"
-        }
-      ],
-      "outputs": [
-        {
-          "what": "Captured quantities in contract units",
-          "party": "FIN",
-          "data": "WorkActivityRecord"
-        },
-        {
-          "what": "Quantity outside the award",
-          "party": "MAI",
-          "data": "Work"
-        }
-      ],
-      "systems": [
-        {
-          "component": "FIN",
-          "role": "owning",
-          "service": "Quantity capture"
-        },
-        {
-          "component": "MAI",
-          "role": "reference",
-          "service": "Accepted work"
-        }
-      ],
-      "interfaces": [
-        {
-          "from": "MAI",
-          "to": "FIN",
-          "payload": "WorkRequest",
-          "verb": "change",
-          "pattern": "event"
-        }
-      ],
-      "roles": [
-        {
-          "role": "Quantity inspector",
-          "raci": "R"
-        },
-        {
-          "role": "Contractor manager",
-          "raci": "A"
-        }
-      ],
-      "data_objects": [
-        "Work",
-        "WorkActivityRecord"
-      ],
-      "controls": [
-        {
-          "kind": "operational",
-          "text": "Compatible units at 2.3/2.5 are design units. These are contract pay units. They may coincide; they are not the same document. 5.3 unitises to the plant account; this process counts for the contractor invoice."
-        },
-        {
-          "kind": "operational",
-          "text": "A quantity the award did not allow is a change, not a quiet extra."
-        }
-      ],
-      "measures": [
-        {
-          "name": "Rework",
-          "definition": "SMRP 4.1. Quantities that fail 16.4.2.",
-          "cite": "SMRP Best Practices, Pillar 5 Work Management"
-        },
-        {
-          "name": "Work Order Cycle Time",
-          "definition": "SMRP 5.4.7. Accept to counted.",
-          "cite": "SMRP Best Practices, Pillar 5 Work Management"
-        }
-      ],
-      "variants": [
-        "Unit-rate count",
-        "Lump-sum complete",
-        "Time-and-material hours"
-      ],
-      "notation": {
-        "class": "BPMN",
-        "why": "Accepted work is counted in contract units.",
-        "artifact": "models/16.4-settle-and-evaluate.bpmn"
-      },
-      "en17007": {
-        "process": "BUD.4",
-        "title": "Extract budgeted and actual expenditures",
-        "clause": "6.8"
-      },
-      "sources": [
-        {
-          "for": "process",
-          "cite": "EN 17007:2017 cl. 6.8 BUD.4",
-          "status": "verified"
-        },
-        {
-          "for": "CU contrast",
-          "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 payloads; Annex A verbs",
-          "status": "clause-verified"
-        },
-        {
-          "for": "plant contrast",
-          "cite": "18 CFR Part 101 EPI 11 - plant unitisation is 5.3, not contractor pay units",
-          "status": "regulation"
-        }
-      ],
-      "provenance": {
-        "basis": "standard",
-        "primary": "EN 17007:2017 cl. 6.8 BUD.4"
-      }
-    },
-    {
-      "uid": 10530,
-      "id": "16.4.2",
-      "name": "Validate against contract rates and terms",
-      "group": {
-        "id": "16.4",
-        "name": "Settle and evaluate contractor performance",
-        "uid": 10528
-      },
-      "intent": "Apply the contract rate and terms to the counted quantity, or reject the line.",
-      "activities": [
-        "Take counted quantities",
-        "Apply the awarded rate and terms",
-        "Return payable, hold or reject",
-        "Do not invent a rate"
-      ],
-      "trigger": {
-        "kind": "conditional",
-        "text": "Counted quantities are ready to price.",
-        "cim": null
-      },
-      "inputs": [
-        {
-          "what": "Counted quantities",
-          "party": "FIN",
-          "data": "WorkActivityRecord"
-        },
-        {
-          "what": "Awarded rates and terms",
-          "party": "FIN",
-          "data": "Work"
-        }
-      ],
-      "outputs": [
-        {
-          "what": "Payable amount",
-          "party": "FIN",
-          "data": "WorkActivityRecord"
-        },
-        {
-          "what": "Held or rejected line",
-          "party": "FIN",
-          "data": "WorkActivityRecord"
-        }
-      ],
-      "systems": [
-        {
-          "component": "FIN",
-          "role": "owning",
-          "service": "Rate validation"
-        },
-        {
-          "component": "MAI",
-          "role": "reference",
-          "service": "Award"
-        }
-      ],
-      "interfaces": [
-        {
-          "from": "MAI",
-          "to": "FIN",
-          "payload": "WorkRequest",
-          "verb": "get",
-          "pattern": "request-reply"
-        }
-      ],
-      "roles": [
-        {
-          "role": "Contract analyst",
-          "raci": "R"
-        },
-        {
-          "role": "Finance controller",
-          "raci": "A"
-        }
-      ],
-      "data_objects": [
-        "Work",
-        "WorkActivityRecord"
-      ],
-      "controls": [
-        {
-          "kind": "financial",
-          "text": "EN 17007 BUD.4 extracts budgeted and actual. Rate tables are the contract. EN 13269 is cited by title only. A payable amount with no awarded rate is not validated."
-        },
-        {
-          "kind": "operational",
-          "text": "The output is payable, hold or reject - a value, not a payment."
-        }
-      ],
-      "measures": [
-        {
-          "name": "Rework",
-          "definition": "SMRP 4.1. Invoices that fail rate validation.",
-          "cite": "SMRP Best Practices, Pillar 5 Work Management"
-        },
-        {
-          "name": "Planning and Control indicators",
-          "definition": "EN 15341 cl. 12 O&S9-O&S22 applied to unpriced lines.",
-          "cite": "EN 15341:2019+A1:2022 Maintenance KPIs, cl. 12 O&S9-O&S22 Planning and Control"
-        }
-      ],
-      "variants": [
-        "Payable at awarded rate",
-        "Hold for a change",
-        "Reject, no rate"
-      ],
-      "notation": {
-        "class": "DMN",
-        "why": "The output is payable, hold or reject - a value.",
-        "artifact": "models/16.4.2-validate-contract-rates.dmn"
-      },
-      "en17007": {
-        "process": "BUD.4",
-        "title": "Extract budgeted and actual expenditures",
-        "clause": "6.8"
-      },
-      "sources": [
-        {
-          "for": "process",
-          "cite": "EN 17007:2017 cl. 6.8 BUD.4",
-          "status": "verified"
-        },
-        {
-          "for": "contract guideline",
-          "cite": "EN 13269:2016 Guideline on preparation of maintenance contracts",
-          "status": "consensus"
-        },
-        {
-          "for": "interfaces",
-          "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 payloads; Annex A verbs",
-          "status": "clause-verified"
-        }
-      ],
-      "provenance": {
-        "basis": "standard",
-        "primary": "EN 17007:2017 cl. 6.8 BUD.4"
-      }
-    },
-    {
-      "uid": 10531,
-      "id": "16.4.3",
-      "name": "Authorise contractor payment",
-      "group": {
-        "id": "16.4",
-        "name": "Settle and evaluate contractor performance",
-        "uid": 10528
-      },
-      "intent": "Pay what 16.4.2 said is payable, and nothing that 16.3.4 is still holding.",
-      "activities": [
-        "Take payable lines",
-        "Confirm no open rework hold on those lines",
-        "Authorise payment",
-        "Record remittance against the award"
-      ],
-      "trigger": {
-        "kind": "message",
-        "text": "Payable lines are ready to pay.",
-        "cim": null
-      },
-      "inputs": [
-        {
-          "what": "Payable amount",
-          "party": "FIN",
-          "data": "WorkActivityRecord"
-        },
-        {
-          "what": "Open rework holds",
-          "party": "MAI",
-          "data": "Work"
-        }
-      ],
-      "outputs": [
-        {
-          "what": "Authorised payment",
-          "party": "FIN",
-          "data": "WorkActivityRecord"
-        },
-        {
-          "what": "Blocked by rework hold",
-          "party": "MAI",
-          "data": "Work"
-        }
-      ],
-      "systems": [
-        {
-          "component": "FIN",
-          "role": "owning",
-          "service": "Payment"
-        },
-        {
-          "component": "MAI",
-          "role": "reference",
-          "service": "Rework holds"
-        }
-      ],
-      "interfaces": [
-        {
-          "from": "MAI",
-          "to": "FIN",
-          "payload": "WorkRequest",
-          "verb": "get",
-          "pattern": "request-reply"
-        }
-      ],
-      "roles": [
-        {
-          "role": "Finance controller",
-          "raci": "A"
-        },
-        {
-          "role": "Accounts payable clerk",
-          "raci": "R"
-        },
-        {
-          "role": "Contractor manager",
-          "raci": "C"
-        }
-      ],
-      "data_objects": [
-        "Work",
-        "WorkActivityRecord"
-      ],
-      "controls": [
-        {
-          "kind": "financial",
-          "text": "This is contractor pay. 13.4.4 is goods-supplier invoice. 5.3 is plant cost. Three different objects. EN 17007 has no payment-authorisation process; BUD.4 is the closest."
-        },
-        {
-          "kind": "operational",
-          "text": "Paying a line 16.3.4 is holding is a control failure, not a settlement success."
-        }
-      ],
-      "measures": [
-        {
-          "name": "Work Order Cycle Time",
-          "definition": "SMRP 5.4.7. Accept to paid.",
-          "cite": "SMRP Best Practices, Pillar 5 Work Management"
-        },
-        {
-          "name": "Rework",
-          "definition": "SMRP 4.1. Payments that have to be clawed back.",
-          "cite": "SMRP Best Practices, Pillar 5 Work Management"
-        }
-      ],
-      "variants": [
-        "Pay as validated",
-        "Block on rework hold",
-        "Partial pay, punchlist withheld"
-      ],
-      "notation": {
-        "class": "BPMN",
-        "why": "Payable lines are paid or blocked.",
-        "artifact": "models/16.4-settle-and-evaluate.bpmn"
-      },
-      "en17007": {
-        "process": "BUD.4",
-        "title": "Extract budgeted and actual expenditures",
-        "clause": "6.8"
-      },
-      "sources": [
-        {
-          "for": "process",
-          "cite": "EN 17007:2017 cl. 6.8 BUD.4",
-          "status": "verified"
-        },
-        {
-          "for": "plant contrast",
-          "cite": "18 CFR Part 101",
-          "status": "regulation"
-        },
-        {
-          "for": "interfaces",
-          "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 payloads; Annex A verbs",
-          "status": "clause-verified"
-        }
-      ],
-      "provenance": {
-        "basis": "standard",
-        "primary": "EN 17007:2017 cl. 6.8 BUD.4"
-      }
-    },
-    {
-      "uid": 10532,
-      "id": "16.4.4",
-      "name": "Measure contractor quality and service level",
-      "group": {
-        "id": "16.4",
-        "name": "Settle and evaluate contractor performance",
-        "uid": 10528
-      },
-      "intent": "Score the contractor on quality and service, and feed the score to 16.1.4.",
-      "activities": [
-        "Take accepts, rejects, dates and safety events",
-        "Compute the operator's score",
-        "Publish it to 16.1.4 and to 16.2.1",
-        "Trigger suspension where the rule says so"
-      ],
-      "trigger": {
-        "kind": "timer",
-        "text": "Contractor performance for the period is due.",
-        "cim": null
-      },
-      "inputs": [
-        {
-          "what": "Accepts, rejects and committed dates",
-          "party": "MAI",
-          "data": "WorkActivityRecord"
-        },
-        {
-          "what": "Safety or host-instruction events",
-          "party": "HR",
-          "data": "Crew"
-        }
-      ],
-      "outputs": [
-        {
-          "what": "Contractor score for the period",
-          "party": "MAI",
-          "data": "WorkActivityRecord"
-        },
-        {
-          "what": "Suspension trigger to 16.1.4",
-          "party": "MAI",
-          "data": "Crew"
-        }
-      ],
-      "systems": [
-        {
-          "component": "MAI",
-          "role": "owning",
-          "service": "Contractor score"
-        },
-        {
-          "component": "SCHD",
-          "role": "reference",
-          "service": "Committed versus actual"
-        }
-      ],
-      "interfaces": [
-        {
-          "from": "SCHD",
-          "to": "MAI",
-          "payload": "WorkRequest",
-          "verb": "get",
-          "pattern": "batch"
-        }
-      ],
-      "roles": [
-        {
-          "role": "Contractor manager",
-          "raci": "A"
-        },
-        {
-          "role": "Quality analyst",
-          "raci": "R"
-        }
-      ],
-      "data_objects": [
-        "Crew",
-        "WorkActivityRecord"
-      ],
-      "controls": [
-        {
-          "kind": "operational",
-          "text": "EN 17007 SER.3 is evaluate companies and services. SMRP and EN 15341 measure OUR work. Using schedule compliance as a contractor score is a labelled analogy. No pack standard defines a contractor scorecard."
-        },
-        {
-          "kind": "operational",
-          "text": "A score that never suspends anyone is a report, not this process. GFMAM 6.8 includes appraisal of contractors over the life cycle."
-        }
-      ],
-      "measures": [
-        {
-          "name": "Schedule Compliance",
-          "definition": "SMRP 5.4.3/5.4.4. Applied analogously to contractor committed date - labelled as such.",
-          "cite": "SMRP Best Practices, Pillar 5 Work Management"
-        },
-        {
-          "name": "Rework",
-          "definition": "SMRP 4.1. Reject rate.",
-          "cite": "SMRP Best Practices, Pillar 5 Work Management"
-        }
-      ],
-      "variants": [
-        "Quality reject rate",
-        "On-committed-date rate",
-        "Safety-event trigger"
-      ],
-      "notation": {
-        "class": "SPEC",
-        "why": "A determination: the output is a contractor score. No pack source states a scorecard rule, so a DMN would invent it."
-      },
-      "en17007": {
-        "process": "SER.3",
-        "title": "Manage contracts and evaluate companies and services",
-        "clause": "6.15"
-      },
-      "sources": [
-        {
-          "for": "process",
-          "cite": "EN 17007:2017 cl. 6.15 SER.3",
-          "status": "verified"
-        },
-        {
-          "for": "landscape",
-          "cite": "GFMAM Asset Management Landscape 3rd ed. v3.0, 2024-06, subject 6.8 Supply Chain Management",
-          "status": "verified"
-        },
-        {
-          "for": "our KPIs not theirs",
-          "cite": "SMRP Best Practices, Pillar 5 Work Management",
-          "status": "consensus"
-        },
-        {
-          "for": "scorecard",
-          "cite": "No pack standard defines a contractor scorecard",
-          "status": "judgment"
-        }
-      ],
-      "provenance": {
-        "basis": "standard",
-        "primary": "EN 17007:2017 cl. 6.15 SER.3"
-      }
-    },
-    {
-      "uid": 10534,
-      "id": "16.5.1",
-      "name": "Provide contractor access to work information",
-      "group": {
-        "id": "16.5",
-        "name": "Integrate with contractor systems",
-        "uid": 10533
-      },
-      "intent": "Give the contractor the work information they need, and only that, under the host's control.",
-      "activities": [
-        "Identify the awarded work they may see",
-        "Grant access to the package and the status",
-        "Revoke access when the award ends or the row is suspended",
-        "Log who saw what"
-      ],
-      "trigger": {
-        "kind": "none",
-        "text": "Standing access control over contractor-visible work.",
-        "cim": null
-      },
-      "inputs": [
-        {
-          "what": "Awarded work and live register status",
-          "party": "MAI",
-          "data": "Work"
-        },
-        {
-          "what": "Package content",
-          "party": "MAI",
-          "data": "WorkTask"
-        }
-      ],
-      "outputs": [
-        {
-          "what": "Access grant or revoke",
-          "party": "MAI",
-          "data": "WorkActivityRecord"
-        },
-        {
-          "what": "Access log",
-          "party": "MAI",
-          "data": "WorkActivityRecord"
-        }
-      ],
-      "systems": [
-        {
-          "component": "MAI",
-          "role": "owning",
-          "service": "Contractor-visible work"
-        },
-        {
-          "component": "HR",
-          "role": "reference",
-          "service": "Suspension status"
-        }
-      ],
-      "interfaces": [
-        {
-          "from": "HR",
-          "to": "MAI",
-          "payload": "WorkRequest",
-          "verb": "change",
-          "pattern": "event"
-        }
-      ],
-      "roles": [
-        {
-          "role": "Contractor administrator",
-          "raci": "R"
-        },
-        {
-          "role": "Contractor manager",
-          "raci": "A"
-        }
-      ],
-      "data_objects": [
-        "Work",
-        "WorkTask",
-        "WorkActivityRecord"
-      ],
-      "controls": [
-        {
-          "kind": "regulatory",
-          "text": "29 CFR 1910.269(a)(3) is a duty to inform, not a duty to open the whole work bank. Suspended contractors lose access here. cl. 4.2 has no document component; access sits on MAI."
-        },
-        {
-          "kind": "operational",
-          "text": "CIP-013 is bulk-power cyber supply chain, pack-scoped to this category but 16 U.S.C. 824o keeps it off local distribution. Name it only for in-scope transmission work."
-        }
-      ],
-      "measures": [
-        {
-          "name": "Rework",
-          "definition": "SMRP 4.1. Work done on a stale package because access was wrong.",
-          "cite": "SMRP Best Practices, Pillar 5 Work Management"
-        },
-        {
-          "name": "Schedule Compliance",
-          "definition": "SMRP 5.4.3/5.4.4. Contractor idle for want of the package.",
-          "cite": "SMRP Best Practices, Pillar 5 Work Management"
-        }
-      ],
-      "variants": [
-        "Awarded-work only",
-        "Revoke on suspension",
-        "Transmission CIP-scoped access, not distribution"
-      ],
-      "notation": {
-        "class": "SPEC",
-        "why": "Standing access control."
-      },
-      "en17007": {
-        "process": "DOC.6",
-        "title": "Manage the way in which operational documentation is made available",
-        "clause": "6.9"
-      },
-      "sources": [
-        {
-          "for": "process",
-          "cite": "EN 17007:2017 cl. 6.9 DOC.6",
-          "status": "verified"
-        },
-        {
-          "for": "host/contract",
-          "cite": "29 CFR 1910.269(a)(3) host and contract employer information transfer",
-          "status": "regulation"
-        },
-        {
-          "for": "CIP-013 limit",
-          "cite": "NERC CIP-013 - pack places it on 16.0; 16 U.S.C. 824o excludes local distribution",
-          "status": "regulation"
-        },
-        {
-          "for": "scope of access",
-          "cite": "What a contractor may see is operator judgment beyond (a)(3)",
-          "status": "judgment"
-        }
-      ],
-      "provenance": {
-        "basis": "regulation",
-        "primary": "29 CFR 1910.269(a)(3) host and contract employer information transfer"
-      }
-    },
-    {
-      "uid": 10535,
-      "id": "16.5.2",
-      "name": "Exchange work assignment and acceptance",
-      "group": {
-        "id": "16.5",
-        "name": "Integrate with contractor systems",
-        "uid": 10533
-      },
-      "intent": "Move the assignment out and the acceptance back, as messages, not as a portal anecdote.",
-      "activities": [
-        "Transmit the assignment",
-        "Receive acceptance or reject",
-        "Write the result onto 16.2.4",
-        "Exception a silent assignment"
-      ],
-      "trigger": {
-        "kind": "message",
-        "text": "An assignment is ready to send, or an acceptance is back.",
-        "cim": "WorkRequest.create"
-      },
-      "inputs": [
-        {
-          "what": "Awarded assignment",
-          "party": "SCHD",
-          "data": "Work"
-        },
-        {
-          "what": "Contractor channel",
-          "party": "MAI",
-          "data": "Crew"
-        }
-      ],
-      "outputs": [
-        {
-          "what": "Transmitted assignment",
-          "party": "SCHD",
-          "data": "Work"
-        },
-        {
-          "what": "Acceptance, reject or silence",
-          "party": "MAI",
-          "data": "WorkActivityRecord"
-        }
-      ],
-      "systems": [
-        {
-          "component": "SCHD",
-          "role": "owning",
-          "service": "Assignment message"
-        },
-        {
-          "component": "MAI",
-          "role": "owning",
-          "service": "Contractor channel"
-        }
-      ],
-      "interfaces": [
-        {
-          "from": "SCHD",
-          "to": "MAI",
-          "payload": "WorkRequest",
-          "verb": "create",
-          "pattern": "event"
-        },
-        {
-          "from": "MAI",
-          "to": "SCHD",
-          "payload": "WorkRequest",
-          "verb": "reply",
-          "pattern": "request-reply"
-        }
-      ],
-      "roles": [
-        {
-          "role": "Scheduler",
-          "raci": "R"
-        },
-        {
-          "role": "Contractor manager",
-          "raci": "A"
-        }
-      ],
-      "data_objects": [
-        "Work",
-        "Crew",
-        "WorkActivityRecord"
-      ],
-      "controls": [
-        {
-          "kind": "operational",
-          "text": "IEC 61968-6 Annex A create/reply is the exchange. MultiSpeak defines work-management interfaces for electric cooperatives (consensus, dormant since 2021). Channel beyond that is judgment. 16.2.4 is the operational accept; this is the message."
-        },
-        {
-          "kind": "operational",
-          "text": "PIDX is excluded. A portal click that is not a message still has to become one here."
-        }
-      ],
-      "measures": [
-        {
-          "name": "Schedule Compliance",
-          "definition": "SMRP 5.4.3/5.4.4. Silent assignments.",
-          "cite": "SMRP Best Practices, Pillar 5 Work Management"
-        },
-        {
-          "name": "Work Order Cycle Time",
-          "definition": "SMRP 5.4.7. Send to reply.",
-          "cite": "SMRP Best Practices, Pillar 5 Work Management"
-        }
-      ],
-      "variants": [
-        "IEC 61968-6 WorkRequest",
-        "MultiSpeak work interface",
-        "Manual channel then recorded"
-      ],
-      "notation": {
-        "class": "BPMN",
-        "why": "Assignment out, acceptance back, or silence excepted.",
-        "artifact": "models/16.5-integrate-with-contractor-systems.bpmn"
-      },
-      "en17007": {
-        "process": "SER.4",
-        "title": "Provide external services",
-        "clause": "6.15"
-      },
-      "sources": [
-        {
-          "for": "process",
-          "cite": "EN 17007:2017 cl. 6.15 SER.4",
-          "status": "verified"
-        },
-        {
-          "for": "payloads",
-          "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 payloads; Annex A verbs",
-          "status": "clause-verified"
-        },
-        {
-          "for": "MultiSpeak",
-          "cite": "MultiSpeak V5.0, 2015-02-18 - electric cooperative work interfaces; no confirmed gas profile",
-          "status": "consensus"
-        }
-      ],
-      "provenance": {
-        "basis": "standard",
-        "primary": "IEC 61968-6:2015 Annex A"
-      }
-    },
-    {
-      "uid": 10536,
-      "id": "16.5.3",
-      "name": "Receive contractor progress and completion",
-      "group": {
-        "id": "16.5",
-        "name": "Integrate with contractor systems",
-        "uid": 10533
-      },
-      "intent": "Take progress and completion messages so 16.3.1 and 16.3.2 do not re-key them.",
-      "activities": [
-        "Receive progress or completion messages",
-        "Validate they belong to an award",
-        "Hand them to 16.3.1 or 16.3.2",
-        "Quarantine messages that do not match"
-      ],
-      "trigger": {
-        "kind": "message",
-        "text": "A contractor progress or completion message has arrived.",
-        "cim": null
-      },
-      "inputs": [
-        {
-          "what": "Inbound message",
-          "party": "FRD",
-          "data": "WorkActivityRecord"
-        },
-        {
-          "what": "Open awards",
-          "party": "SCHD",
-          "data": "Work"
-        }
-      ],
-      "outputs": [
-        {
-          "what": "Validated message on the work",
-          "party": "MAI",
-          "data": "Work"
-        },
-        {
-          "what": "Unmatched message quarantined",
-          "party": "MAI",
-          "data": "WorkActivityRecord"
-        }
-      ],
-      "systems": [
-        {
-          "component": "FRD",
-          "role": "originating",
-          "service": "Inbound contractor message"
-        },
-        {
-          "component": "MAI",
-          "role": "owning",
-          "service": "Validated feed"
-        },
-        {
-          "component": "SCHD",
-          "role": "reference",
-          "service": "Open awards"
-        }
-      ],
-      "interfaces": [
-        {
-          "from": "FRD",
-          "to": "MAI",
-          "payload": "WorkRequest",
-          "verb": "change",
-          "pattern": "event"
-        }
-      ],
-      "roles": [
-        {
-          "role": "Contractor administrator",
-          "raci": "R"
-        },
-        {
-          "role": "Scheduler",
-          "raci": "A"
-        }
-      ],
-      "data_objects": [
-        "Work",
-        "WorkActivityRecord"
-      ],
-      "controls": [
-        {
-          "kind": "operational",
-          "text": "This is the inbound interface. 16.3.1/16.3.2 are the operational use. Duplicate processes on purpose: one is the message, one is the management. Unmatched messages are not progress."
-        },
-        {
-          "kind": "operational",
-          "text": "IEC 61968-6 is electric-scoped. Gas borrows it. Offline mobile is vendor-defined."
-        }
-      ],
-      "measures": [
-        {
-          "name": "Rework",
-          "definition": "SMRP 4.1. Progress applied to the wrong award.",
-          "cite": "SMRP Best Practices, Pillar 5 Work Management"
-        },
-        {
-          "name": "Work Order Cycle Time",
-          "definition": "SMRP 5.4.7. Message in to usable status.",
-          "cite": "SMRP Best Practices, Pillar 5 Work Management"
-        }
-      ],
-      "variants": [
-        "Progress message",
-        "Completion message",
-        "Unmatched, quarantined"
-      ],
-      "notation": {
-        "class": "BPMN",
-        "why": "Message is validated onto an award, or quarantined.",
-        "artifact": "models/16.5-integrate-with-contractor-systems.bpmn"
-      },
-      "en17007": {
-        "process": "SER.3",
-        "title": "Manage contracts and evaluate companies and services",
-        "clause": "6.15"
-      },
-      "sources": [
-        {
-          "for": "process",
-          "cite": "EN 17007:2017 cl. 6.15 SER.3",
-          "status": "verified"
-        },
-        {
-          "for": "interfaces",
-          "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 payloads; Annex A verbs",
-          "status": "clause-verified"
-        },
-        {
-          "for": "offline",
-          "cite": "Offline mobile behaviour is vendor-defined; pack section I",
-          "status": "judgment"
-        }
-      ],
-      "provenance": {
-        "basis": "standard",
-        "primary": "IEC 61968-6:2015 cl. 5"
-      }
-    },
-    {
-      "uid": 10537,
-      "id": "16.5.4",
-      "name": "Exchange units, quantities and cost for settlement",
-      "group": {
-        "id": "16.5",
-        "name": "Integrate with contractor systems",
-        "uid": 10533
-      },
-      "intent": "Move counted units and payable amounts between operator and contractor so 16.4 can settle.",
-      "activities": [
-        "Send counted units",
-        "Receive contractor quantity claims",
-        "Hand both to 16.4.1/16.4.2",
-        "Record mismatches as exceptions for 16.5.6"
-      ],
-      "trigger": {
-        "kind": "message",
-        "text": "Units or a quantity claim are ready to exchange.",
-        "cim": null
-      },
-      "inputs": [
-        {
-          "what": "Counted units",
-          "party": "FIN",
-          "data": "WorkActivityRecord"
-        },
-        {
-          "what": "Contractor quantity claim",
-          "party": "MAI",
-          "data": "Work"
-        }
-      ],
-      "outputs": [
-        {
-          "what": "Exchange on the settlement queue",
-          "party": "FIN",
-          "data": "WorkActivityRecord"
-        },
-        {
-          "what": "Mismatch exception",
-          "party": "MAI",
-          "data": "WorkActivityRecord"
-        }
-      ],
-      "systems": [
-        {
-          "component": "FIN",
-          "role": "owning",
-          "service": "Settlement exchange"
-        },
-        {
-          "component": "MAI",
-          "role": "reference",
-          "service": "Award"
-        }
-      ],
-      "interfaces": [
-        {
-          "from": "MAI",
-          "to": "FIN",
-          "payload": "WorkRequest",
-          "verb": "change",
-          "pattern": "event"
-        }
-      ],
-      "roles": [
-        {
-          "role": "Contract analyst",
-          "raci": "R"
-        },
-        {
-          "role": "Finance controller",
-          "raci": "A"
-        }
-      ],
-      "data_objects": [
-        "Work",
-        "WorkActivityRecord"
-      ],
-      "controls": [
-        {
-          "kind": "operational",
-          "text": "13.7.5 exchanges goods invoices. This exchanges contractor pay units. PIDX is not cited. 16.4.1 captures; this transmits."
-        },
-        {
-          "kind": "financial",
-          "text": "A contractor claim that never meets 16.4.2 is not payable just because it arrived."
-        }
-      ],
-      "measures": [
-        {
-          "name": "Rework",
-          "definition": "SMRP 4.1. Quantity mismatches.",
-          "cite": "SMRP Best Practices, Pillar 5 Work Management"
-        },
-        {
-          "name": "Work Order Cycle Time",
-          "definition": "SMRP 5.4.7. Count to exchange.",
-          "cite": "SMRP Best Practices, Pillar 5 Work Management"
-        }
-      ],
-      "variants": [
-        "Operator count outbound",
-        "Contractor claim inbound",
-        "Mismatch to 16.5.6"
-      ],
-      "notation": {
-        "class": "BPMN",
-        "why": "Units go out or in, mismatches excepted.",
-        "artifact": "models/16.5-integrate-with-contractor-systems.bpmn"
-      },
-      "en17007": {
-        "process": "BUD.4",
-        "title": "Extract budgeted and actual expenditures",
-        "clause": "6.8"
-      },
-      "sources": [
-        {
-          "for": "process",
-          "cite": "EN 17007:2017 cl. 6.8 BUD.4",
-          "status": "verified"
-        },
-        {
-          "for": "interfaces",
-          "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 payloads; Annex A verbs",
-          "status": "clause-verified"
-        },
-        {
-          "for": "PIDX excluded",
-          "cite": "Source Authority Pack - do not cite PIDX",
-          "status": "judgment"
-        }
-      ],
-      "provenance": {
-        "basis": "standard",
-        "primary": "EN 17007:2017 cl. 6.8 BUD.4"
-      }
-    },
-    {
-      "uid": 10538,
-      "id": "16.5.5",
-      "name": "Federate contractor crew and credential data",
-      "group": {
-        "id": "16.5",
-        "name": "Integrate with contractor systems",
-        "uid": 10533
-      },
-      "intent": "Keep the operator's register and the contractor's crew list talking, so 16.1.4 is not a spreadsheet.",
-      "activities": [
-        "Receive crew and credential updates",
-        "Match them to the register",
-        "Update 16.1.2/16.1.4",
-        "Quarantine unmatched people"
-      ],
-      "trigger": {
-        "kind": "message",
-        "text": "The contractor has sent a crew or credential change.",
-        "cim": null
-      },
-      "inputs": [
-        {
-          "what": "Contractor crew and credential file",
-          "party": "HR",
-          "data": "Crew"
-        },
-        {
-          "what": "Operator register",
-          "party": "MAI",
-          "data": "Crew"
-        }
-      ],
-      "outputs": [
-        {
-          "what": "Updated register",
-          "party": "MAI",
-          "data": "Crew"
-        },
-        {
-          "what": "Unmatched person quarantined",
-          "party": "HR",
-          "data": "WorkActivityRecord"
-        }
-      ],
-      "systems": [
-        {
-          "component": "HR",
-          "role": "owning",
-          "service": "Credential federation"
-        },
-        {
-          "component": "MAI",
-          "role": "owning",
-          "service": "Register match"
-        }
-      ],
-      "interfaces": [
-        {
-          "from": "HR",
-          "to": "MAI",
-          "payload": "WorkRequest",
-          "verb": "change",
-          "pattern": "event"
-        }
-      ],
-      "roles": [
-        {
-          "role": "Contractor administrator",
-          "raci": "R"
-        },
-        {
-          "role": "Contractor manager",
-          "raci": "A"
-        }
-      ],
-      "data_objects": [
-        "Crew",
-        "WorkActivityRecord"
-      ],
-      "controls": [
-        {
-          "kind": "regulatory",
-          "text": "Gas covered-task names must match 192.805. An unmatched person is not qualified just because the contractor says so. 14.2.5 identifies covered tasks for operator people; this federates the contractor's."
-        },
-        {
-          "kind": "operational",
-          "text": "IEC 61968-6 names Crew Composition as a data flow inside FRD. Federation method is judgment."
-        }
-      ],
-      "measures": [
-        {
-          "name": "Rework",
-          "definition": "SMRP 4.1. Work on a person who was never on the register.",
-          "cite": "SMRP Best Practices, Pillar 5 Work Management"
-        },
-        {
-          "name": "Schedule Compliance",
-          "definition": "SMRP 5.4.3/5.4.4. Jobs held for unmatched credentials.",
-          "cite": "SMRP Best Practices, Pillar 5 Work Management"
-        }
-      ],
-      "variants": [
-        "New crew member",
-        "Credential lapse",
-        "Unmatched person, quarantined"
-      ],
-      "notation": {
-        "class": "SPEC",
-        "why": "Standing federation of crew and credential data."
-      },
-      "en17007": {
-        "process": "RES.1",
-        "title": "Manage jobs and skills",
-        "clause": "6.14"
-      },
-      "sources": [
-        {
-          "for": "process",
-          "cite": "EN 17007:2017 cl. 6.14 RES.1",
-          "status": "verified"
-        },
-        {
-          "for": "gas OQ",
-          "cite": "49 CFR 192.805 Qualification program - individuals performing covered tasks must be qualified, or directed and observed under 192.805(c); gas only",
-          "status": "regulation"
-        },
-        {
-          "for": "crew composition",
-          "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 payloads; Annex A verbs",
-          "status": "clause-verified"
-        }
-      ],
-      "provenance": {
-        "basis": "regulation",
-        "primary": "49 CFR 192.805 Qualification program - individuals performing covered tasks must be qualified, or directed and observed under 192.805(c); gas only"
-      }
-    },
-    {
-      "uid": 10539,
-      "id": "16.5.6",
-      "name": "Reconcile contractor data exceptions",
-      "group": {
-        "id": "16.5",
-        "name": "Integrate with contractor systems",
-        "uid": 10533
-      },
-      "intent": "Clear the unmatched messages, quantities and people so they do not sit in quarantine forever.",
-      "activities": [
-        "Take quarantined messages, quantity mismatches and unmatched people",
-        "Match, return to sender, or discard with a reason",
-        "Replay a corrected message into 16.5.2-16.5.5",
-        "Do not invent a match that the evidence does not support"
-      ],
-      "trigger": {
-        "kind": "conditional",
-        "text": "A contractor-interface record is in quarantine.",
-        "cim": null
-      },
-      "inputs": [
-        {
-          "what": "Quarantined interface records",
-          "party": "MAI",
-          "data": "WorkActivityRecord"
-        },
-        {
-          "what": "Awards, quantities and register",
-          "party": "SCHD",
-          "data": "Work"
-        }
-      ],
-      "outputs": [
-        {
-          "what": "Cleared or discarded exception",
-          "party": "MAI",
-          "data": "WorkActivityRecord"
-        },
-        {
-          "what": "Replayed corrected message",
-          "party": "FRD",
-          "data": "Work"
-        }
-      ],
-      "systems": [
-        {
-          "component": "MAI",
-          "role": "owning",
-          "service": "Exception queue"
-        },
-        {
-          "component": "FRD",
-          "role": "receiving",
-          "service": "Replay"
-        },
-        {
-          "component": "FIN",
-          "role": "reference",
-          "service": "Quantity mismatches"
-        }
-      ],
-      "interfaces": [
-        {
-          "from": "MAI",
-          "to": "FRD",
-          "payload": "WorkRequest",
-          "verb": "change",
-          "pattern": "event"
-        }
-      ],
-      "roles": [
-        {
-          "role": "Contractor administrator",
-          "raci": "R"
-        },
-        {
-          "role": "Contractor manager",
-          "raci": "A"
-        },
-        {
-          "role": "Contract analyst",
-          "raci": "C"
-        }
-      ],
-      "data_objects": [
-        "Work",
-        "WorkActivityRecord"
-      ],
-      "controls": [
-        {
-          "kind": "operational",
-          "text": "Two competent people will not sequence match, return and discard the same way. That is why this is a case. A forced match that 16.4 then pays is a settlement failure that started here."
-        },
-        {
-          "kind": "operational",
-          "text": "DTA.1 is store and validate raw data. There is no pack standard for interface-exception handling."
-        }
-      ],
-      "measures": [
-        {
-          "name": "Rework",
-          "definition": "SMRP 4.1. Forced matches that later reverse.",
-          "cite": "SMRP Best Practices, Pillar 5 Work Management"
-        },
-        {
-          "name": "Work Order Cycle Time",
-          "definition": "SMRP 5.4.7. Time in quarantine.",
-          "cite": "SMRP Best Practices, Pillar 5 Work Management"
-        }
-      ],
-      "variants": [
-        "Match to an existing award",
-        "Return to sender",
-        "Discard with a named reason"
-      ],
-      "notation": {
-        "class": "CMMN",
-        "why": "Two competent people will sequence match, return and discard differently. CMMN is justified; Camunda 8 dropped it, so a runtime means Flowable.",
-        "artifact": "models/16.5.6-reconcile-exceptions.cmmn"
-      },
-      "en17007": {
-        "process": "DTA.1",
-        "title": "Store and validate the raw data in a library and/or a database",
-        "clause": "6.10"
-      },
-      "sources": [
-        {
-          "for": "process",
-          "cite": "EN 17007:2017 cl. 6.10 DTA.1",
-          "status": "verified"
-        },
-        {
-          "for": "interfaces",
-          "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 payloads; Annex A verbs",
-          "status": "clause-verified"
-        },
-        {
-          "for": "handling",
-          "cite": "Interface-exception handling is not standardised",
-          "status": "judgment"
-        }
-      ],
-      "provenance": {
-        "basis": "judgment",
-        "primary": "EN 17007:2017 cl. 6.10 DTA.1"
-      }
+     "what": "Equipment they will bring",
+     "party": "MM",
+     "data": "Tool"
     }
-  ],
-  "merge_corrections": [
+   ],
+   "outputs": [
     {
-      "date": "2026-08-29",
-      "by": "Claude",
-      "what": "ISO 55001:2024 cl. 8.3 was cited with ISO 9001's wording. The clause number is right; its title is Outsourcing. 'Control of externally provided processes, products and services' is ISO 9001:2015 cl. 8.4. A status of clause-verified asserts the clause number AND its title, so a borrowed title is an unearned status.",
-      "count": 2
+     "what": "Capability profile on the contractor",
+     "party": "MAI",
+     "data": "Crew"
     },
     {
-      "date": "2026-08-29",
-      "by": "Claude",
-      "what": "citation form: a status may not claim more than the citation string supports. 'clause-verified' without a clause dropped to 'consensus'; an asserted absence dropped to 'judgment'.",
-      "count": 2
-    },
-    {
-      "date": "2026-08-29",
-      "by": "Claude",
-      "what": "vocabulary.json is this project's own artifact, not a source. Citing it at 'verified' makes the reference evidence for itself; the cross-process note it carries is a judgment. And 16.4.4's notation.why said 'standing score' where the work is a determination - same correction as 13.7.7, same reason: it is SPEC because no source states the rule, not because it has no instance.",
-      "count": 2
+     "what": "Work types they must not be awarded",
+     "party": "SCHD",
+     "data": "Work"
     }
-  ]
+   ],
+   "systems": [
+    {
+     "component": "MAI",
+     "role": "owning",
+     "service": "Capability profile"
+    },
+    {
+     "component": "HR",
+     "role": "reference",
+     "service": "Qualification"
+    },
+    {
+     "component": "MM",
+     "role": "reference",
+     "service": "Contractor-owned plant"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "HR",
+     "to": "MAI",
+     "payload": "WorkRequest",
+     "verb": "change",
+     "pattern": "event"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Contractor administrator",
+     "raci": "R"
+    },
+    {
+     "role": "Contractor manager",
+     "raci": "A"
+    },
+    {
+     "role": "Scheduler",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Crew",
+    "Tool",
+    "Work"
+   ],
+   "controls": [
+    {
+     "kind": "regulatory",
+     "text": "Gas covered tasks: 49 CFR 192.805. Electric: 29 CFR 1910.269(a)(2) qualified employee. 14.2 owns the operator's qualification record; this process captures the contractor's. A profile that cannot gate 16.2.2 is decoration."
+    },
+    {
+     "kind": "operational",
+     "text": "2.4.2 states what a JOB needs. This profile states what a CONTRACTOR can supply. Do not collapse them."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Schedule Compliance",
+     "definition": "SMRP 5.4.3/5.4.4. Work awarded to a crew that could not do it.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    },
+    {
+     "name": "Rework",
+     "definition": "SMRP 4.1. Recalled work for missing qualification.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    }
+   ],
+   "variants": [
+    "Covered-task gas crew",
+    "Line-clearance vegetation crew",
+    "Civil-only crew, no electrical"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "Profile is captured and bound to the register.",
+    "artifact": "models/16.1-qualify-and-onboard-contractors.bpmn"
+   },
+   "en17007": {
+    "process": "SER.1",
+    "title": "Identify competent external companies",
+    "clause": "6.15"
+   },
+   "sources": [
+    {
+     "for": "process",
+     "cite": "EN 17007:2017 cl. 6.15 SER.1",
+     "status": "verified"
+    },
+    {
+     "for": "gas OQ",
+     "cite": "49 CFR 192.805 Qualification program - individuals performing covered tasks must be qualified, or directed and observed under 192.805(c); gas only",
+     "status": "regulation"
+    },
+    {
+     "for": "electric qualified person",
+     "cite": "29 CFR 1910.269(a)(2)",
+     "status": "regulation"
+    },
+    {
+     "for": "interfaces",
+     "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 payloads; Annex A verbs",
+     "status": "clause-verified"
+    }
+   ],
+   "provenance": {
+    "basis": "regulation",
+    "primary": "49 CFR 192.805 Qualification program - individuals performing covered tasks must be qualified, or directed and observed under 192.805(c); gas only"
+   },
+   "regulatory": {
+    "class": "C",
+    "why": "49 CFR 192.805 and 29 CFR 1910.269 govern how this is done, not whether it is done"
+   }
+  },
+  {
+   "uid": 10516,
+   "id": "16.1.3",
+   "name": "Verify insurance, certification and compliance",
+   "group": {
+    "id": "16.1",
+    "name": "Qualify and onboard contractors",
+    "uid": 10513
+   },
+   "intent": "Prove the papers that must be live before the contractor is allowed on the system.",
+   "activities": [
+    "Collect insurance, licence and programme certificates",
+    "Verify they are current and cover the work type",
+    "Record Part 199 status for gas covered employees",
+    "Hold the register row until they pass"
+   ],
+   "trigger": {
+    "kind": "message",
+    "text": "Papers have been presented, or an existing certificate is due to expire.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Presented certificates",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Work types the contractor will perform",
+     "party": "MAI",
+     "data": "Crew"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Verified, current papers",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Hold or fail on the register row",
+     "party": "MAI",
+     "data": "Crew"
+    }
+   ],
+   "systems": [
+    {
+     "component": "MAI",
+     "role": "owning",
+     "service": "Compliance papers"
+    },
+    {
+     "component": "HR",
+     "role": "reference",
+     "service": "Covered-employee status"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "HR",
+     "to": "MAI",
+     "payload": "WorkRequest",
+     "verb": "change",
+     "pattern": "event"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Contractor administrator",
+     "raci": "R"
+    },
+    {
+     "role": "Contractor manager",
+     "raci": "A"
+    }
+   ],
+   "data_objects": [
+    "Crew",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "regulatory",
+     "text": "Gas: 49 CFR Part 199 drug and alcohol testing for covered employees performing operations, maintenance or emergency response - contractors included where they perform those functions. Electric utilities are not under Part 199. Required cover limits are tariff and contract, not a federal table."
+    },
+    {
+     "kind": "operational",
+     "text": "ISO 55001 cl. 8.3 requires control of externally provided processes. Certificate lists are operator and contract. CIP-013 is bulk-power cyber and does not set distribution insurance."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Rework",
+     "definition": "SMRP 4.1. A crew sent out on lapsed papers.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    },
+    {
+     "name": "Work Order Cycle Time",
+     "definition": "SMRP 5.4.7. Award waiting on a lapsed certificate.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    }
+   ],
+   "variants": [
+    "Insurance current",
+    "Gas Part 199 covered-employee status",
+    "Fail and hold the register row"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "Papers are verified, or the row is held.",
+    "artifact": "models/16.1-qualify-and-onboard-contractors.bpmn"
+   },
+   "en17007": {
+    "process": "SER.1",
+    "title": "Identify competent external companies",
+    "clause": "6.15"
+   },
+   "sources": [
+    {
+     "for": "process",
+     "cite": "EN 17007:2017 cl. 6.15 SER.1",
+     "status": "verified"
+    },
+    {
+     "for": "gas D&A",
+     "cite": "49 CFR Part 199",
+     "status": "regulation"
+    },
+    {
+     "for": "externally provided",
+     "cite": "ANSI/ASTM/ISO 55001-2024 cl. 8.3 Outsourcing",
+     "status": "clause-verified"
+    },
+    {
+     "for": "cover limits",
+     "cite": "Insurance limits are contract, not in the pack",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "regulation",
+    "primary": "49 CFR Part 199"
+   },
+   "regulatory": {
+    "class": "C",
+    "why": "49 CFR 199 governs how this is done, not whether it is done"
+   }
+  },
+  {
+   "uid": 10517,
+   "id": "16.1.4",
+   "name": "Maintain qualification currency and suspension",
+   "group": {
+    "id": "16.1",
+    "name": "Qualify and onboard contractors",
+    "uid": 10513
+   },
+   "intent": "Keep the register live: current, suspended, or removed, and stop awards to a suspended crew.",
+   "activities": [
+    "Watch expiry of papers and covered-task dates",
+    "Suspend on lapse, incident or host instruction",
+    "Reinstate only after 16.1.3 passes again",
+    "Publish the live status to award and to dispatch"
+   ],
+   "trigger": {
+    "kind": "timer",
+    "text": "A certificate or qualification is due, or a host instruction to suspend has arrived.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Live papers and covered-task dates",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Incident or host instruction",
+     "party": "HR",
+     "data": "Crew"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Current, suspended or removed status",
+     "party": "MAI",
+     "data": "Crew"
+    },
+    {
+     "what": "Status published to award and dispatch",
+     "party": "SCHD",
+     "data": "Crew"
+    }
+   ],
+   "systems": [
+    {
+     "component": "MAI",
+     "role": "owning",
+     "service": "Currency and suspension"
+    },
+    {
+     "component": "SCHD",
+     "role": "receiving",
+     "service": "Do-not-award list"
+    },
+    {
+     "component": "HR",
+     "role": "reference",
+     "service": "Covered-task dates"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "MAI",
+     "to": "SCHD",
+     "payload": "WorkRequest",
+     "verb": "change",
+     "pattern": "event"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Contractor administrator",
+     "raci": "R"
+    },
+    {
+     "role": "Contractor manager",
+     "raci": "A"
+    },
+    {
+     "role": "Scheduler",
+     "raci": "I"
+    }
+   ],
+   "data_objects": [
+    "Crew",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "regulatory",
+     "text": "49 CFR 192.805(g) requalification intervals are operator-set. A lapse still suspends award. 14.2.4 restricts assignment on lapsed operator qualification; this process is the contractor twin."
+    },
+    {
+     "kind": "operational",
+     "text": "A suspension that dispatch cannot see is not a suspension. 16.2.2 must consume this status."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Rework",
+     "definition": "SMRP 4.1. Work on a crew that should have been suspended.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    },
+    {
+     "name": "Schedule Compliance",
+     "definition": "SMRP 5.4.3/5.4.4. Jobs recalled after a late suspension.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    }
+   ],
+   "variants": [
+    "Lapse of papers",
+    "Incident-triggered",
+    "Host instruction to suspend"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "Watch, suspend or reinstate, then publish.",
+    "artifact": "models/16.1-qualify-and-onboard-contractors.bpmn"
+   },
+   "en17007": {
+    "process": "SER.3",
+    "title": "Manage contracts and evaluate companies and services",
+    "clause": "6.15"
+   },
+   "sources": [
+    {
+     "for": "process",
+     "cite": "EN 17007:2017 cl. 6.15 SER.3",
+     "status": "verified"
+    },
+    {
+     "for": "requalification",
+     "cite": "49 CFR 192.805 Qualification program - individuals performing covered tasks must be qualified, or directed and observed under 192.805(c); gas only",
+     "status": "regulation"
+    },
+    {
+     "for": "interfaces",
+     "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 payloads; Annex A verbs",
+     "status": "clause-verified"
+    }
+   ],
+   "provenance": {
+    "basis": "regulation",
+    "primary": "49 CFR 192.805 Qualification program - individuals performing covered tasks must be qualified, or directed and observed under 192.805(c); gas only"
+   },
+   "regulatory": {
+    "class": "R",
+    "why": "49 CFR 192.805(g) requires qualification currency to be maintained"
+   }
+  },
+  {
+   "uid": 10519,
+   "id": "16.2.1",
+   "name": "Determine internal versus contracted delivery",
+   "group": {
+    "id": "16.2",
+    "name": "Award and assign contracted work",
+    "uid": 10518
+   },
+   "intent": "Decide, for this work, whether it is internal or external - the same determination as 1.3.4, using deliveryRoute.",
+   "activities": [
+    "Take the work type, qualification need and internal capacity",
+    "Apply the deliveryRoute rule set",
+    "Return internal, externalService or a named pool",
+    "Do not award until this value is set"
+   ],
+   "trigger": {
+    "kind": "conditional",
+    "text": "Work is ready to assign and the delivery route is not yet set.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Work type and qualification need",
+     "party": "MAI",
+     "data": "Work"
+    },
+    {
+     "what": "Internal capacity remaining",
+     "party": "SCHD",
+     "data": "Crew"
+    },
+    {
+     "what": "Qualified contractor pool",
+     "party": "MAI",
+     "data": "Crew"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "deliveryRoute value on the work",
+     "party": "MAI",
+     "data": "Work"
+    },
+    {
+     "what": "Work that cannot be routed",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "systems": [
+    {
+     "component": "MAI",
+     "role": "owning",
+     "service": "Delivery-route decision"
+    },
+    {
+     "component": "SCHD",
+     "role": "reference",
+     "service": "Internal remainder"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "SCHD",
+     "to": "MAI",
+     "payload": "WorkRequest",
+     "verb": "get",
+     "pattern": "request-reply"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Resource planner",
+     "raci": "R"
+    },
+    {
+     "role": "Maintenance manager",
+     "raci": "A"
+    },
+    {
+     "role": "Contractor manager",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "Crew",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "vocabulary.json names deliveryRoute as the shared variable with 1.3.4. 3.2.3 commits the roster split; this process decides the individual work item. EN 17007 MAN.2 is identify internal or external activities."
+    },
+    {
+     "kind": "operational",
+     "text": "ISO 55001 cl. 8.3 is the control on whatever this returns as external. It is not itself the decision."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Schedule Compliance",
+     "definition": "SMRP 5.4.3/5.4.4. Work routed to a pool that cannot take it.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    },
+    {
+     "name": "Planned Work",
+     "definition": "SMRP 5.3.1. External used to keep planned work planned.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    }
+   ],
+   "variants": [
+    "Internal",
+    "externalService",
+    "qualifiedCrewPool"
+   ],
+   "notation": {
+    "class": "DMN",
+    "why": "The output is a deliveryRoute value. Same rule set as 1.3.4.",
+    "artifact": "models/16.2.1-internal-versus-contracted.dmn"
+   },
+   "en17007": {
+    "process": "MAN.2",
+    "title": "Identify the internal or external activities (carried out by the staff of the user company or participating com",
+    "clause": "6.2"
+   },
+   "sources": [
+    {
+     "for": "process",
+     "cite": "EN 17007:2017 cl. 6.2 MAN.2",
+     "status": "verified"
+    },
+    {
+     "for": "shared variable",
+     "cite": "vocabulary.json deliveryRoute - 1.3.4 routing and 16.2.1 sourcing are one determination",
+     "status": "judgment"
+    },
+    {
+     "for": "externally provided",
+     "cite": "ANSI/ASTM/ISO 55001-2024 cl. 8.3 Outsourcing",
+     "status": "clause-verified"
+    },
+    {
+     "for": "capacity",
+     "cite": "EN 17007:2017 cl. 6.14 RES.4 and cl. 6.15 SER.4",
+     "status": "verified"
+    }
+   ],
+   "provenance": {
+    "basis": "standard",
+    "primary": "EN 17007:2017 cl. 6.2 MAN.2"
+   },
+   "regulatory": {
+    "class": null,
+    "why": "no regulation reaches this process"
+   }
+  },
+  {
+   "uid": 10520,
+   "id": "16.2.2",
+   "name": "Award work to contractor",
+   "group": {
+    "id": "16.2",
+    "name": "Award and assign contracted work",
+    "uid": 10518
+   },
+   "intent": "Place the work on a qualified contractor that 16.2.1 sent down the external route.",
+   "activities": [
+    "Take work with deliveryRoute externalService",
+    "Select a live, capable contractor",
+    "Record the award and the commercial terms used",
+    "Refuse if 16.1.4 is suspended"
+   ],
+   "trigger": {
+    "kind": "message",
+    "text": "Work has been routed external and is ready to place.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Work with deliveryRoute externalService",
+     "party": "MAI",
+     "data": "Work"
+    },
+    {
+     "what": "Live qualified contractors",
+     "party": "MAI",
+     "data": "Crew"
+    },
+    {
+     "what": "Contract rates",
+     "party": "FIN",
+     "data": "Work"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Awarded work and contractor",
+     "party": "SCHD",
+     "data": "Work"
+    },
+    {
+     "what": "Refused award, contractor suspended",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "systems": [
+    {
+     "component": "MAI",
+     "role": "owning",
+     "service": "Award"
+    },
+    {
+     "component": "SCHD",
+     "role": "receiving",
+     "service": "Contractor as resource"
+    },
+    {
+     "component": "FIN",
+     "role": "reference",
+     "service": "Contract rates"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "MAI",
+     "to": "SCHD",
+     "payload": "WorkRequest",
+     "verb": "change",
+     "pattern": "event"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Contractor manager",
+     "raci": "A"
+    },
+    {
+     "role": "Resource planner",
+     "raci": "R"
+    },
+    {
+     "role": "Scheduler",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "Crew",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "EN 17007 SER.2 is contract with external companies. EN 13269 is cited by title for contract preparation only; its body is paywalled and is not paraphrased. This is work award, not a 13.4.2 goods purchase order."
+    },
+    {
+     "kind": "regulatory",
+     "text": "Do not award covered-task gas work to a crew 16.1.4 has suspended. 1910.269(a)(3) information transfer is owed at award, not after the crew is on site."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Schedule Compliance",
+     "definition": "SMRP 5.4.3/5.4.4. Awarded date versus committed date.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    },
+    {
+     "name": "Work Order Cycle Time",
+     "definition": "SMRP 5.4.7. Routed-external to awarded.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    }
+   ],
+   "variants": [
+    "Unit-rate programme work",
+    "Lump-sum job",
+    "Time-and-material emergency"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "Routed-external work is awarded or refused.",
+    "artifact": "models/16.2-award-and-assign-contracted-work.bpmn"
+   },
+   "en17007": {
+    "process": "SER.2",
+    "title": "Contract with external companies",
+    "clause": "6.15"
+   },
+   "sources": [
+    {
+     "for": "process",
+     "cite": "EN 17007:2017 cl. 6.15 SER.2",
+     "status": "verified"
+    },
+    {
+     "for": "contract guideline",
+     "cite": "EN 13269:2016 Guideline on preparation of maintenance contracts",
+     "status": "consensus"
+    },
+    {
+     "for": "host/contract",
+     "cite": "29 CFR 1910.269(a)(3) host and contract employer information transfer",
+     "status": "regulation"
+    },
+    {
+     "for": "goods contrast",
+     "cite": "13.4.2 is goods PO; this is work award",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "standard",
+    "primary": "EN 17007:2017 cl. 6.15 SER.2"
+   },
+   "regulatory": {
+    "class": "C",
+    "why": "29 CFR 1910.269 governs how this is done, not whether it is done"
+   }
+  },
+  {
+   "uid": 10521,
+   "id": "16.2.3",
+   "name": "Issue work package to contractor",
+   "group": {
+    "id": "16.2",
+    "name": "Award and assign contracted work",
+    "uid": 10518
+   },
+   "intent": "Give the contractor the package they will execute, including the hazards the host already knows.",
+   "activities": [
+    "Assemble the package from 2.4",
+    "Add known hazards, access notes and any clearance need",
+    "Issue it to the awarded contractor",
+    "Hold if 1910.269(a)(3) transfer is incomplete"
+   ],
+   "trigger": {
+    "kind": "message",
+    "text": "Work has been awarded and the package is ready to issue.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Awarded work",
+     "party": "SCHD",
+     "data": "Work"
+    },
+    {
+     "what": "Job plan, drawings and material list",
+     "party": "MAI",
+     "data": "WorkTask"
+    },
+    {
+     "what": "Known hazards and access notes",
+     "party": "HR",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Issued package",
+     "party": "MAI",
+     "data": "Work"
+    },
+    {
+     "what": "Hold for incomplete hazard transfer",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "systems": [
+    {
+     "component": "MAI",
+     "role": "owning",
+     "service": "Package issue"
+    },
+    {
+     "component": "HR",
+     "role": "reference",
+     "service": "Host hazard information"
+    },
+    {
+     "component": "NO",
+     "role": "reference",
+     "service": "Clearance needed from 18.4.4"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "MAI",
+     "to": "HR",
+     "payload": "WorkRequest",
+     "verb": "get",
+     "pattern": "request-reply"
+    },
+    {
+     "from": "NO",
+     "to": "MAI",
+     "payload": "WorkRequest",
+     "verb": "get",
+     "pattern": "request-reply"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Planner",
+     "raci": "R"
+    },
+    {
+     "role": "Contractor manager",
+     "raci": "A"
+    },
+    {
+     "role": "Network operator",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkTask",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "regulatory",
+     "text": "29 CFR 1910.269(a)(3) information transfer is the package's safety duty. A clearance is not in the package - 18.4.4 issues it. The package says whether one is required. No standard specifies work-package content; 7 CFR 1724.53(b)(1) is RUS only."
+    },
+    {
+     "kind": "operational",
+     "text": "2.4 built the package. This process issues it to an external provider. Issuing without 16.2.4 acceptance is a send, not a commitment."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Schedule Compliance",
+     "definition": "SMRP 5.4.3/5.4.4. Package issued after the work should have started.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    },
+    {
+     "name": "Rework",
+     "definition": "SMRP 4.1. Packages that omitted a known hazard.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    }
+   ],
+   "variants": [
+    "Programme unit package",
+    "Job-specific design package",
+    "Emergency verbal then written"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "Package is issued, or held for incomplete transfer.",
+    "artifact": "models/16.2-award-and-assign-contracted-work.bpmn"
+   },
+   "en17007": {
+    "process": "ACT.2",
+    "title": "Prepare for the maintenance tasks",
+    "clause": "6.5.3"
+   },
+   "sources": [
+    {
+     "for": "process",
+     "cite": "EN 17007:2017 cl. 6.5.3 ACT.2",
+     "status": "verified"
+    },
+    {
+     "for": "host/contract",
+     "cite": "29 CFR 1910.269(a)(3) host and contract employer information transfer",
+     "status": "regulation"
+    },
+    {
+     "for": "clearance",
+     "cite": "29 CFR 1910.269(m); clearance produced by 18.4.4",
+     "status": "regulation"
+    },
+    {
+     "for": "package content",
+     "cite": "No standard specifies work-package content; 7 CFR 1724.53(b)(1) is RUS only",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "regulation",
+    "primary": "29 CFR 1910.269(a)(3) host and contract employer information transfer"
+   },
+   "regulatory": {
+    "class": "C",
+    "why": "29 CFR 1910.269 governs how this is done, not whether it is done"
+   }
+  },
+  {
+   "uid": 10522,
+   "id": "16.2.4",
+   "name": "Confirm acceptance and committed date",
+   "group": {
+    "id": "16.2",
+    "name": "Award and assign contracted work",
+    "uid": 10518
+   },
+   "intent": "Get the contractor's acceptance and a date the schedule may use.",
+   "activities": [
+    "Send the issued package for acceptance",
+    "Receive accept, reject or a date change",
+    "Write the committed date onto the schedule",
+    "Return rejected work to 16.2.1"
+   ],
+   "trigger": {
+    "kind": "message",
+    "text": "The contractor has the package and owes an acceptance.",
+    "cim": "WorkRequest.reply"
+   },
+   "inputs": [
+    {
+     "what": "Issued package",
+     "party": "MAI",
+     "data": "Work"
+    },
+    {
+     "what": "Contractor reply",
+     "party": "SCHD",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Accepted work with committed date",
+     "party": "SCHD",
+     "data": "WorkTimeSchedule"
+    },
+    {
+     "what": "Rejected work back to routing",
+     "party": "MAI",
+     "data": "Work"
+    }
+   ],
+   "systems": [
+    {
+     "component": "SCHD",
+     "role": "owning",
+     "service": "Committed date"
+    },
+    {
+     "component": "MAI",
+     "role": "receiving",
+     "service": "Accepted or rejected"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "SCHD",
+     "to": "MAI",
+     "payload": "WorkRequest",
+     "verb": "reply",
+     "pattern": "request-reply"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Scheduler",
+     "raci": "R"
+    },
+    {
+     "role": "Contractor manager",
+     "raci": "A"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkTimeSchedule",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "EN 17007 SER.4 Provide external services is the clause-6 acceptance of an external service - one of only two 'approval' occurrences in clause 6. A committed date that 3.4 cannot see is not committed."
+    },
+    {
+     "kind": "operational",
+     "text": "Reject is not a silent miss. The work returns to 16.2.1, not to a hole."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Schedule Compliance",
+     "definition": "SMRP 5.4.3/5.4.4. Committed date versus done.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    },
+    {
+     "name": "Work Order Cycle Time",
+     "definition": "SMRP 5.4.7. Issue to accepted.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    }
+   ],
+   "variants": [
+    "Accept as issued",
+    "Accept with a later date",
+    "Reject and return to routing"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "Accept, date-change or reject.",
+    "artifact": "models/16.2-award-and-assign-contracted-work.bpmn"
+   },
+   "en17007": {
+    "process": "SER.4",
+    "title": "Provide external services",
+    "clause": "6.15"
+   },
+   "sources": [
+    {
+     "for": "process",
+     "cite": "EN 17007:2017 cl. 6.15 SER.4",
+     "status": "verified"
+    },
+    {
+     "for": "interfaces",
+     "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 payloads; Annex A verbs",
+     "status": "clause-verified"
+    },
+    {
+     "for": "measures",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management",
+     "status": "consensus"
+    }
+   ],
+   "provenance": {
+    "basis": "standard",
+    "primary": "EN 17007:2017 cl. 6.15 SER.4"
+   },
+   "regulatory": {
+    "class": null,
+    "why": "no regulation reaches this process"
+   }
+  },
+  {
+   "uid": 10524,
+   "id": "16.3.1",
+   "name": "Receive contractor progress and status",
+   "group": {
+    "id": "16.3",
+    "name": "Oversee contractor execution",
+    "uid": 10523
+   },
+   "intent": "Take the contractor's progress as a status the operator's schedule can use.",
+   "activities": [
+    "Receive progress against the awarded work",
+    "Translate it to the operator's status set",
+    "Update the schedule",
+    "Exception a silence past the committed date"
+   ],
+   "trigger": {
+    "kind": "message",
+    "text": "The contractor has sent progress, or the committed date has passed with none.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Awarded work and committed date",
+     "party": "SCHD",
+     "data": "WorkTimeSchedule"
+    },
+    {
+     "what": "Contractor progress message",
+     "party": "FRD",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Operator status on the work",
+     "party": "SCHD",
+     "data": "Work"
+    },
+    {
+     "what": "Silence exception",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "systems": [
+    {
+     "component": "FRD",
+     "role": "originating",
+     "service": "Contractor progress"
+    },
+    {
+     "component": "SCHD",
+     "role": "owning",
+     "service": "Operator status"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "FRD",
+     "to": "SCHD",
+     "payload": "WorkRequest",
+     "verb": "change",
+     "pattern": "event"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Scheduler",
+     "raci": "R"
+    },
+    {
+     "role": "Contractor manager",
+     "raci": "A"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkTimeSchedule",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "IEC 61968-6 standardises the exchange, not the progress codes. 4.1.4 monitors internal progress. This process is the contractor feed into the same schedule. 16.5.3 is the interface; this is the operational use of it."
+    },
+    {
+     "kind": "operational",
+     "text": "Silence past the committed date is an exception, not a green status."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Schedule Compliance",
+     "definition": "SMRP 5.4.3/5.4.4. Status versus committed date.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    },
+    {
+     "name": "Work Order Cycle Time",
+     "definition": "SMRP 5.4.7. Time spent in an unreported state.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    }
+   ],
+   "variants": [
+    "Periodic status",
+    "Milestone status",
+    "Silence past committed date"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "Progress is applied, or silence is excepted.",
+    "artifact": "models/16.3-oversee-contractor-execution.bpmn"
+   },
+   "en17007": {
+    "process": "SER.3",
+    "title": "Manage contracts and evaluate companies and services",
+    "clause": "6.15"
+   },
+   "sources": [
+    {
+     "for": "process",
+     "cite": "EN 17007:2017 cl. 6.15 SER.3",
+     "status": "verified"
+    },
+    {
+     "for": "interfaces",
+     "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 payloads; Annex A verbs",
+     "status": "clause-verified"
+    },
+    {
+     "for": "status codes",
+     "cite": "Progress-code mapping is operator judgment",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "standard",
+    "primary": "EN 17007:2017 cl. 6.15 SER.3"
+   },
+   "regulatory": {
+    "class": null,
+    "why": "no regulation reaches this process"
+   }
+  },
+  {
+   "uid": 10525,
+   "id": "16.3.2",
+   "name": "Receive contractor completion evidence",
+   "group": {
+    "id": "16.3",
+    "name": "Oversee contractor execution",
+    "uid": 10523
+   },
+   "intent": "Take the contractor's claim that the work is done, with the evidence 16.3.3 will audit.",
+   "activities": [
+    "Receive the completion claim",
+    "Check that evidence is attached",
+    "Hold a claim with no evidence",
+    "Hand a complete claim to inspect-and-accept"
+   ],
+   "trigger": {
+    "kind": "message",
+    "text": "The contractor has claimed the work complete.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Completion claim",
+     "party": "FRD",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Awarded work and package",
+     "party": "MAI",
+     "data": "Work"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Claim with evidence, ready to inspect",
+     "party": "MAI",
+     "data": "Work"
+    },
+    {
+     "what": "Claim held for missing evidence",
+     "party": "FRD",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "systems": [
+    {
+     "component": "FRD",
+     "role": "originating",
+     "service": "Contractor claim"
+    },
+    {
+     "component": "MAI",
+     "role": "owning",
+     "service": "Evidence on the work"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "FRD",
+     "to": "MAI",
+     "payload": "WorkRequest",
+     "verb": "change",
+     "pattern": "event"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Contractor administrator",
+     "raci": "R"
+    },
+    {
+     "role": "Contractor manager",
+     "raci": "A"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "No standard specifies contractor completion-evidence content. 5.1 closes operator work; this is the contractor claim that feeds it. A claim without evidence is not complete."
+    },
+    {
+     "kind": "operational",
+     "text": "As-built that belongs on 5.4 still has to arrive here first if the contractor produced it."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Rework",
+     "definition": "SMRP 4.1. Claims that fail 16.3.3 for missing evidence.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    },
+    {
+     "name": "Work Order Cycle Time",
+     "definition": "SMRP 5.4.7. Claim to inspect-ready.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    }
+   ],
+   "variants": [
+    "Photo and reading",
+    "As-built package",
+    "Claim with no evidence, held"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "Claim is inspect-ready, or held.",
+    "artifact": "models/16.3-oversee-contractor-execution.bpmn"
+   },
+   "en17007": {
+    "process": "SER.4",
+    "title": "Provide external services",
+    "clause": "6.15"
+   },
+   "sources": [
+    {
+     "for": "process",
+     "cite": "EN 17007:2017 cl. 6.15 SER.4",
+     "status": "verified"
+    },
+    {
+     "for": "interfaces",
+     "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 payloads; Annex A verbs",
+     "status": "clause-verified"
+    },
+    {
+     "for": "evidence content",
+     "cite": "Completion-evidence content is not standardised",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "standard",
+    "primary": "EN 17007:2017 cl. 6.15 SER.4"
+   },
+   "regulatory": {
+    "class": null,
+    "why": "no regulation reaches this process"
+   }
+  },
+  {
+   "uid": 10526,
+   "id": "16.3.3",
+   "name": "Inspect and accept contracted work",
+   "group": {
+    "id": "16.3",
+    "name": "Oversee contractor execution",
+    "uid": 10523
+   },
+   "intent": "Decide that the contractor's work meets the package, or that it does not.",
+   "activities": [
+    "Inspect against the issued package",
+    "Accept, accept-with-punchlist, or reject",
+    "Write the result on the work",
+    "Hand rejects to 16.3.4"
+   ],
+   "trigger": {
+    "kind": "message",
+    "text": "A completion claim with evidence is ready to inspect.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Claim with evidence",
+     "party": "MAI",
+     "data": "Work"
+    },
+    {
+     "what": "Issued package",
+     "party": "MAI",
+     "data": "WorkTask"
+    },
+    {
+     "what": "Field inspection result",
+     "party": "FRD",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Accepted work",
+     "party": "MAI",
+     "data": "Work"
+    },
+    {
+     "what": "Rejected or punchlisted work",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "systems": [
+    {
+     "component": "MAI",
+     "role": "owning",
+     "service": "Acceptance"
+    },
+    {
+     "component": "FRD",
+     "role": "originating",
+     "service": "Inspection"
+    },
+    {
+     "component": "FIN",
+     "role": "receiving",
+     "service": "Accepted quantities for settlement"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "FRD",
+     "to": "MAI",
+     "payload": "WorkRequest",
+     "verb": "change",
+     "pattern": "event"
+    },
+    {
+     "from": "MAI",
+     "to": "FIN",
+     "payload": "WorkRequest",
+     "verb": "change",
+     "pattern": "event"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Inspector",
+     "raci": "R"
+    },
+    {
+     "role": "Contractor manager",
+     "raci": "A"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkTask",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "EN 17007 SER.4 is acceptance of an external service - one of two clause-6 approvals. 7 CFR 1724.32 inspection of work-order construction binds RUS borrowers only and is a variant, not a national rule."
+    },
+    {
+     "kind": "operational",
+     "text": "5.1.1 verifies operator work. This process accepts contractor work. Do not close 5.1 on a reject from here."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Rework",
+     "definition": "SMRP 4.1. Rejected contractor work.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    },
+    {
+     "name": "PM Compliance",
+     "definition": "SMRP 5.4.14. Programme work accepted against the specification.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    }
+   ],
+   "variants": [
+    "Accept as built",
+    "Accept with punchlist",
+    "Reject"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "Inspect, then accept, punchlist or reject.",
+    "artifact": "models/16.3-oversee-contractor-execution.bpmn"
+   },
+   "en17007": {
+    "process": "SER.4",
+    "title": "Provide external services",
+    "clause": "6.15"
+   },
+   "sources": [
+    {
+     "for": "process",
+     "cite": "EN 17007:2017 cl. 6.15 SER.4",
+     "status": "verified"
+    },
+    {
+     "for": "RUS inspection",
+     "cite": "7 CFR 1724.32 inspection and certification of work order construction - RUS borrowers only",
+     "status": "regulation"
+    },
+    {
+     "for": "interfaces",
+     "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 payloads; Annex A verbs",
+     "status": "clause-verified"
+    }
+   ],
+   "provenance": {
+    "basis": "standard",
+    "primary": "EN 17007:2017 cl. 6.15 SER.4"
+   },
+   "regulatory": {
+    "class": "C",
+    "why": "7 CFR 1724.32 governs how this is done, not whether it is done"
+   }
+  },
+  {
+   "uid": 10527,
+   "id": "16.3.4",
+   "name": "Manage contractor rework and defect",
+   "group": {
+    "id": "16.3",
+    "name": "Oversee contractor execution",
+    "uid": 10523
+   },
+   "intent": "Send rejected or punchlisted work back, and do not pay it as complete.",
+   "activities": [
+    "Take the reject or punchlist",
+    "Raise rework against the same award",
+    "Hold settlement on the defective portion",
+    "Close only when 16.3.3 later accepts"
+   ],
+   "trigger": {
+    "kind": "message",
+    "text": "Contracted work has been rejected or punchlisted.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Reject or punchlist",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Original award and rates",
+     "party": "FIN",
+     "data": "Work"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Rework on the same award",
+     "party": "SCHD",
+     "data": "Work"
+    },
+    {
+     "what": "Settlement hold on the defective portion",
+     "party": "FIN",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "systems": [
+    {
+     "component": "MAI",
+     "role": "owning",
+     "service": "Rework"
+    },
+    {
+     "component": "SCHD",
+     "role": "receiving",
+     "service": "Rework to schedule"
+    },
+    {
+     "component": "FIN",
+     "role": "receiving",
+     "service": "Hold"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "MAI",
+     "to": "SCHD",
+     "payload": "WorkRequest",
+     "verb": "change",
+     "pattern": "event"
+    },
+    {
+     "from": "MAI",
+     "to": "FIN",
+     "payload": "WorkRequest",
+     "verb": "change",
+     "pattern": "event"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Contractor manager",
+     "raci": "A"
+    },
+    {
+     "role": "Inspector",
+     "raci": "R"
+    },
+    {
+     "role": "Scheduler",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "SMRP 4.1 Rework is the measure. Paying punchlist work as complete is a 16.4.3 failure caused here. Two competent managers will not always re-award versus hold-in-place; the happy path is still rework on the same award."
+    },
+    {
+     "kind": "operational",
+     "text": "EN 17007 has no defect-management process. SER.3 is evaluate companies and services."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Rework",
+     "definition": "SMRP 4.1. This process exists to make that measure true.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    },
+    {
+     "name": "Schedule Compliance",
+     "definition": "SMRP 5.4.3/5.4.4. Rework versus original committed date.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    }
+   ],
+   "variants": [
+    "Punchlist on the same crew",
+    "Full reject, re-perform",
+    "Defect found after a first accept"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "Reject becomes rework and a settlement hold.",
+    "artifact": "models/16.3-oversee-contractor-execution.bpmn"
+   },
+   "en17007": {
+    "process": "SER.3",
+    "title": "Manage contracts and evaluate companies and services",
+    "clause": "6.15"
+   },
+   "sources": [
+    {
+     "for": "process",
+     "cite": "EN 17007:2017 cl. 6.15 SER.3",
+     "status": "verified"
+    },
+    {
+     "for": "rework measure",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management",
+     "status": "consensus"
+    },
+    {
+     "for": "interfaces",
+     "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 payloads; Annex A verbs",
+     "status": "clause-verified"
+    }
+   ],
+   "provenance": {
+    "basis": "standard",
+    "primary": "EN 17007:2017 cl. 6.15 SER.3"
+   },
+   "regulatory": {
+    "class": null,
+    "why": "no regulation reaches this process"
+   }
+  },
+  {
+   "uid": 10529,
+   "id": "16.4.1",
+   "name": "Capture contracted units and quantities",
+   "group": {
+    "id": "16.4",
+    "name": "Settle and evaluate contractor performance",
+    "uid": 10528
+   },
+   "intent": "Count what the contractor actually did, in the units the contract pays.",
+   "activities": [
+    "Take accepted work from 16.3.3",
+    "Capture units and quantities in contract units",
+    "Flag quantities outside the award",
+    "Hand the count to rate validation"
+   ],
+   "trigger": {
+    "kind": "message",
+    "text": "Contracted work has been accepted and is ready to count.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Accepted work",
+     "party": "MAI",
+     "data": "Work"
+    },
+    {
+     "what": "Contract unit definitions",
+     "party": "FIN",
+     "data": "Work"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Captured quantities in contract units",
+     "party": "FIN",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Quantity outside the award",
+     "party": "MAI",
+     "data": "Work"
+    }
+   ],
+   "systems": [
+    {
+     "component": "FIN",
+     "role": "owning",
+     "service": "Quantity capture"
+    },
+    {
+     "component": "MAI",
+     "role": "reference",
+     "service": "Accepted work"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "MAI",
+     "to": "FIN",
+     "payload": "WorkRequest",
+     "verb": "change",
+     "pattern": "event"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Quantity inspector",
+     "raci": "R"
+    },
+    {
+     "role": "Contractor manager",
+     "raci": "A"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "Compatible units at 2.2/2.4 are design units. These are contract pay units. They may coincide; they are not the same document. 5.3 unitises to the plant account; this process counts for the contractor invoice."
+    },
+    {
+     "kind": "operational",
+     "text": "A quantity the award did not allow is a change, not a quiet extra."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Rework",
+     "definition": "SMRP 4.1. Quantities that fail 16.4.2.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    },
+    {
+     "name": "Work Order Cycle Time",
+     "definition": "SMRP 5.4.7. Accept to counted.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    }
+   ],
+   "variants": [
+    "Unit-rate count",
+    "Lump-sum complete",
+    "Time-and-material hours"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "Accepted work is counted in contract units.",
+    "artifact": "models/16.4-settle-and-evaluate.bpmn"
+   },
+   "en17007": {
+    "process": "BUD.4",
+    "title": "Extract budgeted and actual expenditures",
+    "clause": "6.8"
+   },
+   "sources": [
+    {
+     "for": "process",
+     "cite": "EN 17007:2017 cl. 6.8 BUD.4",
+     "status": "verified"
+    },
+    {
+     "for": "CU contrast",
+     "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 payloads; Annex A verbs",
+     "status": "clause-verified"
+    },
+    {
+     "for": "plant contrast",
+     "cite": "18 CFR Part 101 EPI 11 - plant unitisation is 5.3, not contractor pay units",
+     "status": "regulation"
+    }
+   ],
+   "provenance": {
+    "basis": "standard",
+    "primary": "EN 17007:2017 cl. 6.8 BUD.4"
+   },
+   "regulatory": {
+    "class": "C",
+    "why": "18 CFR 101 governs how this is done, not whether it is done"
+   }
+  },
+  {
+   "uid": 10530,
+   "id": "16.4.2",
+   "name": "Validate against contract rates and terms",
+   "group": {
+    "id": "16.4",
+    "name": "Settle and evaluate contractor performance",
+    "uid": 10528
+   },
+   "intent": "Apply the contract rate and terms to the counted quantity, or reject the line.",
+   "activities": [
+    "Take counted quantities",
+    "Apply the awarded rate and terms",
+    "Return payable, hold or reject",
+    "Do not invent a rate"
+   ],
+   "trigger": {
+    "kind": "conditional",
+    "text": "Counted quantities are ready to price.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Counted quantities",
+     "party": "FIN",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Awarded rates and terms",
+     "party": "FIN",
+     "data": "Work"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Payable amount",
+     "party": "FIN",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Held or rejected line",
+     "party": "FIN",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "systems": [
+    {
+     "component": "FIN",
+     "role": "owning",
+     "service": "Rate validation"
+    },
+    {
+     "component": "MAI",
+     "role": "reference",
+     "service": "Award"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "MAI",
+     "to": "FIN",
+     "payload": "WorkRequest",
+     "verb": "get",
+     "pattern": "request-reply"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Contract analyst",
+     "raci": "R"
+    },
+    {
+     "role": "Finance controller",
+     "raci": "A"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "financial",
+     "text": "EN 17007 BUD.4 extracts budgeted and actual. Rate tables are the contract. EN 13269 is cited by title only. A payable amount with no awarded rate is not validated."
+    },
+    {
+     "kind": "operational",
+     "text": "The output is payable, hold or reject - a value, not a payment."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Rework",
+     "definition": "SMRP 4.1. Invoices that fail rate validation.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    },
+    {
+     "name": "Planning and Control indicators",
+     "definition": "EN 15341 cl. 12 O&S9-O&S22 applied to unpriced lines.",
+     "cite": "EN 15341:2019+A1:2022 Maintenance KPIs, cl. 12 O&S9-O&S22 Planning and Control"
+    }
+   ],
+   "variants": [
+    "Payable at awarded rate",
+    "Hold for a change",
+    "Reject, no rate"
+   ],
+   "notation": {
+    "class": "DMN",
+    "why": "The output is payable, hold or reject - a value.",
+    "artifact": "models/16.4.2-validate-contract-rates.dmn"
+   },
+   "en17007": {
+    "process": "BUD.4",
+    "title": "Extract budgeted and actual expenditures",
+    "clause": "6.8"
+   },
+   "sources": [
+    {
+     "for": "process",
+     "cite": "EN 17007:2017 cl. 6.8 BUD.4",
+     "status": "verified"
+    },
+    {
+     "for": "contract guideline",
+     "cite": "EN 13269:2016 Guideline on preparation of maintenance contracts",
+     "status": "consensus"
+    },
+    {
+     "for": "interfaces",
+     "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 payloads; Annex A verbs",
+     "status": "clause-verified"
+    }
+   ],
+   "provenance": {
+    "basis": "standard",
+    "primary": "EN 17007:2017 cl. 6.8 BUD.4"
+   },
+   "regulatory": {
+    "class": null,
+    "why": "no regulation reaches this process"
+   }
+  },
+  {
+   "uid": 10531,
+   "id": "16.4.3",
+   "name": "Authorise contractor payment",
+   "group": {
+    "id": "16.4",
+    "name": "Settle and evaluate contractor performance",
+    "uid": 10528
+   },
+   "intent": "Pay what 16.4.2 said is payable, and nothing that 16.3.4 is still holding.",
+   "activities": [
+    "Take payable lines",
+    "Confirm no open rework hold on those lines",
+    "Authorise payment",
+    "Record remittance against the award"
+   ],
+   "trigger": {
+    "kind": "message",
+    "text": "Payable lines are ready to pay.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Payable amount",
+     "party": "FIN",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Open rework holds",
+     "party": "MAI",
+     "data": "Work"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Authorised payment",
+     "party": "FIN",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Blocked by rework hold",
+     "party": "MAI",
+     "data": "Work"
+    }
+   ],
+   "systems": [
+    {
+     "component": "FIN",
+     "role": "owning",
+     "service": "Payment"
+    },
+    {
+     "component": "MAI",
+     "role": "reference",
+     "service": "Rework holds"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "MAI",
+     "to": "FIN",
+     "payload": "WorkRequest",
+     "verb": "get",
+     "pattern": "request-reply"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Finance controller",
+     "raci": "A"
+    },
+    {
+     "role": "Accounts payable clerk",
+     "raci": "R"
+    },
+    {
+     "role": "Contractor manager",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "financial",
+     "text": "This is contractor pay. 13.4.4 is goods-supplier invoice. 5.3 is plant cost. Three different objects. EN 17007 has no payment-authorisation process; BUD.4 is the closest."
+    },
+    {
+     "kind": "operational",
+     "text": "Paying a line 16.3.4 is holding is a control failure, not a settlement success."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Work Order Cycle Time",
+     "definition": "SMRP 5.4.7. Accept to paid.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    },
+    {
+     "name": "Rework",
+     "definition": "SMRP 4.1. Payments that have to be clawed back.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    }
+   ],
+   "variants": [
+    "Pay as validated",
+    "Block on rework hold",
+    "Partial pay, punchlist withheld"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "Payable lines are paid or blocked.",
+    "artifact": "models/16.4-settle-and-evaluate.bpmn"
+   },
+   "en17007": {
+    "process": "BUD.4",
+    "title": "Extract budgeted and actual expenditures",
+    "clause": "6.8"
+   },
+   "sources": [
+    {
+     "for": "process",
+     "cite": "EN 17007:2017 cl. 6.8 BUD.4",
+     "status": "verified"
+    },
+    {
+     "for": "plant contrast",
+     "cite": "18 CFR Part 101",
+     "status": "regulation"
+    },
+    {
+     "for": "interfaces",
+     "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 payloads; Annex A verbs",
+     "status": "clause-verified"
+    }
+   ],
+   "provenance": {
+    "basis": "standard",
+    "primary": "EN 17007:2017 cl. 6.8 BUD.4"
+   },
+   "regulatory": {
+    "class": "C",
+    "why": "18 CFR 101 governs how this is done, not whether it is done"
+   }
+  },
+  {
+   "uid": 10532,
+   "id": "16.4.4",
+   "name": "Measure contractor quality and service level",
+   "group": {
+    "id": "16.4",
+    "name": "Settle and evaluate contractor performance",
+    "uid": 10528
+   },
+   "intent": "Score the contractor on quality and service, and feed the score to 16.1.4.",
+   "activities": [
+    "Take accepts, rejects, dates and safety events",
+    "Compute the operator's score",
+    "Publish it to 16.1.4 and to 16.2.1",
+    "Trigger suspension where the rule says so"
+   ],
+   "trigger": {
+    "kind": "timer",
+    "text": "Contractor performance for the period is due.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Accepts, rejects and committed dates",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Safety or host-instruction events",
+     "party": "HR",
+     "data": "Crew"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Contractor score for the period",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Suspension trigger to 16.1.4",
+     "party": "MAI",
+     "data": "Crew"
+    }
+   ],
+   "systems": [
+    {
+     "component": "MAI",
+     "role": "owning",
+     "service": "Contractor score"
+    },
+    {
+     "component": "SCHD",
+     "role": "reference",
+     "service": "Committed versus actual"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "SCHD",
+     "to": "MAI",
+     "payload": "WorkRequest",
+     "verb": "get",
+     "pattern": "batch"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Contractor manager",
+     "raci": "A"
+    },
+    {
+     "role": "Quality analyst",
+     "raci": "R"
+    }
+   ],
+   "data_objects": [
+    "Crew",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "EN 17007 SER.3 is evaluate companies and services. SMRP and EN 15341 measure OUR work. Using schedule compliance as a contractor score is a labelled analogy. No pack standard defines a contractor scorecard."
+    },
+    {
+     "kind": "operational",
+     "text": "A score that never suspends anyone is a report, not this process. GFMAM 6.8 includes appraisal of contractors over the life cycle."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Schedule Compliance",
+     "definition": "SMRP 5.4.3/5.4.4. Applied analogously to contractor committed date - labelled as such.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    },
+    {
+     "name": "Rework",
+     "definition": "SMRP 4.1. Reject rate.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    }
+   ],
+   "variants": [
+    "Quality reject rate",
+    "On-committed-date rate",
+    "Safety-event trigger"
+   ],
+   "notation": {
+    "class": "SPEC",
+    "why": "A determination: the output is a contractor score. No pack source states a scorecard rule, so a DMN would invent it."
+   },
+   "en17007": {
+    "process": "SER.3",
+    "title": "Manage contracts and evaluate companies and services",
+    "clause": "6.15"
+   },
+   "sources": [
+    {
+     "for": "process",
+     "cite": "EN 17007:2017 cl. 6.15 SER.3",
+     "status": "verified"
+    },
+    {
+     "for": "landscape",
+     "cite": "GFMAM Asset Management Landscape 3rd ed. v3.0, 2024-06, subject 6.8 Supply Chain Management",
+     "status": "verified"
+    },
+    {
+     "for": "our KPIs not theirs",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management",
+     "status": "consensus"
+    },
+    {
+     "for": "scorecard",
+     "cite": "No pack standard defines a contractor scorecard",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "standard",
+    "primary": "EN 17007:2017 cl. 6.15 SER.3"
+   },
+   "regulatory": {
+    "class": null,
+    "why": "no regulation reaches this process"
+   }
+  },
+  {
+   "uid": 10534,
+   "id": "16.5.1",
+   "name": "Provide contractor access to work information",
+   "group": {
+    "id": "16.5",
+    "name": "Integrate with contractor systems",
+    "uid": 10533
+   },
+   "intent": "Give the contractor the work information they need, and only that, under the host's control.",
+   "activities": [
+    "Identify the awarded work they may see",
+    "Grant access to the package and the status",
+    "Revoke access when the award ends or the row is suspended",
+    "Log who saw what"
+   ],
+   "trigger": {
+    "kind": "none",
+    "text": "Standing access control over contractor-visible work.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Awarded work and live register status",
+     "party": "MAI",
+     "data": "Work"
+    },
+    {
+     "what": "Package content",
+     "party": "MAI",
+     "data": "WorkTask"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Access grant or revoke",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Access log",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "systems": [
+    {
+     "component": "MAI",
+     "role": "owning",
+     "service": "Contractor-visible work"
+    },
+    {
+     "component": "HR",
+     "role": "reference",
+     "service": "Suspension status"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "HR",
+     "to": "MAI",
+     "payload": "WorkRequest",
+     "verb": "change",
+     "pattern": "event"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Contractor administrator",
+     "raci": "R"
+    },
+    {
+     "role": "Contractor manager",
+     "raci": "A"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkTask",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "regulatory",
+     "text": "29 CFR 1910.269(a)(3) is a duty to inform, not a duty to open the whole work bank. Suspended contractors lose access here. cl. 4.2 has no document component; access sits on MAI."
+    },
+    {
+     "kind": "operational",
+     "text": "CIP-013 is bulk-power cyber supply chain, pack-scoped to this category but 16 U.S.C. 824o keeps it off local distribution. Name it only for in-scope transmission work."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Rework",
+     "definition": "SMRP 4.1. Work done on a stale package because access was wrong.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    },
+    {
+     "name": "Schedule Compliance",
+     "definition": "SMRP 5.4.3/5.4.4. Contractor idle for want of the package.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    }
+   ],
+   "variants": [
+    "Awarded-work only",
+    "Revoke on suspension",
+    "Transmission CIP-scoped access, not distribution"
+   ],
+   "notation": {
+    "class": "SPEC",
+    "why": "Standing access control."
+   },
+   "en17007": {
+    "process": "DOC.6",
+    "title": "Manage the way in which operational documentation is made available",
+    "clause": "6.9"
+   },
+   "sources": [
+    {
+     "for": "process",
+     "cite": "EN 17007:2017 cl. 6.9 DOC.6",
+     "status": "verified"
+    },
+    {
+     "for": "host/contract",
+     "cite": "29 CFR 1910.269(a)(3) host and contract employer information transfer",
+     "status": "regulation"
+    },
+    {
+     "for": "CIP-013 limit",
+     "cite": "NERC CIP-013 - pack places it on 16.0; 16 U.S.C. 824o excludes local distribution",
+     "status": "regulation"
+    },
+    {
+     "for": "scope of access",
+     "cite": "What a contractor may see is operator judgment beyond (a)(3)",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "regulation",
+    "primary": "29 CFR 1910.269(a)(3) host and contract employer information transfer"
+   },
+   "regulatory": {
+    "class": null,
+    "why": "the regulation is cited as a NEGATIVE finding - it establishes that no federal rule reaches this, which is the opposite of an obligation"
+   }
+  },
+  {
+   "uid": 10535,
+   "id": "16.5.2",
+   "name": "Exchange work assignment and acceptance",
+   "group": {
+    "id": "16.5",
+    "name": "Integrate with contractor systems",
+    "uid": 10533
+   },
+   "intent": "Move the assignment out and the acceptance back, as messages, not as a portal anecdote.",
+   "activities": [
+    "Transmit the assignment",
+    "Receive acceptance or reject",
+    "Write the result onto 16.2.4",
+    "Exception a silent assignment"
+   ],
+   "trigger": {
+    "kind": "message",
+    "text": "An assignment is ready to send, or an acceptance is back.",
+    "cim": "WorkRequest.create"
+   },
+   "inputs": [
+    {
+     "what": "Awarded assignment",
+     "party": "SCHD",
+     "data": "Work"
+    },
+    {
+     "what": "Contractor channel",
+     "party": "MAI",
+     "data": "Crew"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Transmitted assignment",
+     "party": "SCHD",
+     "data": "Work"
+    },
+    {
+     "what": "Acceptance, reject or silence",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "systems": [
+    {
+     "component": "SCHD",
+     "role": "owning",
+     "service": "Assignment message"
+    },
+    {
+     "component": "MAI",
+     "role": "owning",
+     "service": "Contractor channel"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "SCHD",
+     "to": "MAI",
+     "payload": "WorkRequest",
+     "verb": "create",
+     "pattern": "event"
+    },
+    {
+     "from": "MAI",
+     "to": "SCHD",
+     "payload": "WorkRequest",
+     "verb": "reply",
+     "pattern": "request-reply"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Scheduler",
+     "raci": "R"
+    },
+    {
+     "role": "Contractor manager",
+     "raci": "A"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "Crew",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "IEC 61968-6 Annex A create/reply is the exchange. MultiSpeak defines work-management interfaces for electric cooperatives (consensus, dormant since 2021). Channel beyond that is judgment. 16.2.4 is the operational accept; this is the message."
+    },
+    {
+     "kind": "operational",
+     "text": "PIDX is excluded. A portal click that is not a message still has to become one here."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Schedule Compliance",
+     "definition": "SMRP 5.4.3/5.4.4. Silent assignments.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    },
+    {
+     "name": "Work Order Cycle Time",
+     "definition": "SMRP 5.4.7. Send to reply.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    }
+   ],
+   "variants": [
+    "IEC 61968-6 WorkRequest",
+    "MultiSpeak work interface",
+    "Manual channel then recorded"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "Assignment out, acceptance back, or silence excepted.",
+    "artifact": "models/16.5-integrate-with-contractor-systems.bpmn"
+   },
+   "en17007": {
+    "process": "SER.4",
+    "title": "Provide external services",
+    "clause": "6.15"
+   },
+   "sources": [
+    {
+     "for": "process",
+     "cite": "EN 17007:2017 cl. 6.15 SER.4",
+     "status": "verified"
+    },
+    {
+     "for": "payloads",
+     "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 payloads; Annex A verbs",
+     "status": "clause-verified"
+    },
+    {
+     "for": "MultiSpeak",
+     "cite": "MultiSpeak V5.0, 2015-02-18 - electric cooperative work interfaces; no confirmed gas profile",
+     "status": "consensus"
+    }
+   ],
+   "provenance": {
+    "basis": "standard",
+    "primary": "IEC 61968-6:2015 Annex A"
+   },
+   "regulatory": {
+    "class": null,
+    "why": "no regulation reaches this process"
+   }
+  },
+  {
+   "uid": 10536,
+   "id": "16.5.3",
+   "name": "Receive contractor progress and completion",
+   "group": {
+    "id": "16.5",
+    "name": "Integrate with contractor systems",
+    "uid": 10533
+   },
+   "intent": "Take progress and completion messages so 16.3.1 and 16.3.2 do not re-key them.",
+   "activities": [
+    "Receive progress or completion messages",
+    "Validate they belong to an award",
+    "Hand them to 16.3.1 or 16.3.2",
+    "Quarantine messages that do not match"
+   ],
+   "trigger": {
+    "kind": "message",
+    "text": "A contractor progress or completion message has arrived.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Inbound message",
+     "party": "FRD",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Open awards",
+     "party": "SCHD",
+     "data": "Work"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Validated message on the work",
+     "party": "MAI",
+     "data": "Work"
+    },
+    {
+     "what": "Unmatched message quarantined",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "systems": [
+    {
+     "component": "FRD",
+     "role": "originating",
+     "service": "Inbound contractor message"
+    },
+    {
+     "component": "MAI",
+     "role": "owning",
+     "service": "Validated feed"
+    },
+    {
+     "component": "SCHD",
+     "role": "reference",
+     "service": "Open awards"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "FRD",
+     "to": "MAI",
+     "payload": "WorkRequest",
+     "verb": "change",
+     "pattern": "event"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Contractor administrator",
+     "raci": "R"
+    },
+    {
+     "role": "Scheduler",
+     "raci": "A"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "This is the inbound interface. 16.3.1/16.3.2 are the operational use. Duplicate processes on purpose: one is the message, one is the management. Unmatched messages are not progress."
+    },
+    {
+     "kind": "operational",
+     "text": "IEC 61968-6 is electric-scoped. Gas borrows it. Offline mobile is vendor-defined."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Rework",
+     "definition": "SMRP 4.1. Progress applied to the wrong award.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    },
+    {
+     "name": "Work Order Cycle Time",
+     "definition": "SMRP 5.4.7. Message in to usable status.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    }
+   ],
+   "variants": [
+    "Progress message",
+    "Completion message",
+    "Unmatched, quarantined"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "Message is validated onto an award, or quarantined.",
+    "artifact": "models/16.5-integrate-with-contractor-systems.bpmn"
+   },
+   "en17007": {
+    "process": "SER.3",
+    "title": "Manage contracts and evaluate companies and services",
+    "clause": "6.15"
+   },
+   "sources": [
+    {
+     "for": "process",
+     "cite": "EN 17007:2017 cl. 6.15 SER.3",
+     "status": "verified"
+    },
+    {
+     "for": "interfaces",
+     "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 payloads; Annex A verbs",
+     "status": "clause-verified"
+    },
+    {
+     "for": "offline",
+     "cite": "Offline mobile behaviour is vendor-defined; pack section I",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "standard",
+    "primary": "IEC 61968-6:2015 cl. 5"
+   },
+   "regulatory": {
+    "class": null,
+    "why": "no regulation reaches this process"
+   }
+  },
+  {
+   "uid": 10537,
+   "id": "16.5.4",
+   "name": "Exchange units, quantities and cost for settlement",
+   "group": {
+    "id": "16.5",
+    "name": "Integrate with contractor systems",
+    "uid": 10533
+   },
+   "intent": "Move counted units and payable amounts between operator and contractor so 16.4 can settle.",
+   "activities": [
+    "Send counted units",
+    "Receive contractor quantity claims",
+    "Hand both to 16.4.1/16.4.2",
+    "Record mismatches as exceptions for 16.5.6"
+   ],
+   "trigger": {
+    "kind": "message",
+    "text": "Units or a quantity claim are ready to exchange.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Counted units",
+     "party": "FIN",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Contractor quantity claim",
+     "party": "MAI",
+     "data": "Work"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Exchange on the settlement queue",
+     "party": "FIN",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Mismatch exception",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "systems": [
+    {
+     "component": "FIN",
+     "role": "owning",
+     "service": "Settlement exchange"
+    },
+    {
+     "component": "MAI",
+     "role": "reference",
+     "service": "Award"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "MAI",
+     "to": "FIN",
+     "payload": "WorkRequest",
+     "verb": "change",
+     "pattern": "event"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Contract analyst",
+     "raci": "R"
+    },
+    {
+     "role": "Finance controller",
+     "raci": "A"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "13.7.5 exchanges goods invoices. This exchanges contractor pay units. PIDX is not cited. 16.4.1 captures; this transmits."
+    },
+    {
+     "kind": "financial",
+     "text": "A contractor claim that never meets 16.4.2 is not payable just because it arrived."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Rework",
+     "definition": "SMRP 4.1. Quantity mismatches.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    },
+    {
+     "name": "Work Order Cycle Time",
+     "definition": "SMRP 5.4.7. Count to exchange.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    }
+   ],
+   "variants": [
+    "Operator count outbound",
+    "Contractor claim inbound",
+    "Mismatch to 16.5.6"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "Units go out or in, mismatches excepted.",
+    "artifact": "models/16.5-integrate-with-contractor-systems.bpmn"
+   },
+   "en17007": {
+    "process": "BUD.4",
+    "title": "Extract budgeted and actual expenditures",
+    "clause": "6.8"
+   },
+   "sources": [
+    {
+     "for": "process",
+     "cite": "EN 17007:2017 cl. 6.8 BUD.4",
+     "status": "verified"
+    },
+    {
+     "for": "interfaces",
+     "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 payloads; Annex A verbs",
+     "status": "clause-verified"
+    },
+    {
+     "for": "PIDX excluded",
+     "cite": "Source Authority Pack - do not cite PIDX",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "standard",
+    "primary": "EN 17007:2017 cl. 6.8 BUD.4"
+   },
+   "regulatory": {
+    "class": null,
+    "why": "no regulation reaches this process"
+   }
+  },
+  {
+   "uid": 10538,
+   "id": "16.5.5",
+   "name": "Federate contractor crew and credential data",
+   "group": {
+    "id": "16.5",
+    "name": "Integrate with contractor systems",
+    "uid": 10533
+   },
+   "intent": "Keep the operator's register and the contractor's crew list talking, so 16.1.4 is not a spreadsheet.",
+   "activities": [
+    "Receive crew and credential updates",
+    "Match them to the register",
+    "Update 16.1.2/16.1.4",
+    "Quarantine unmatched people"
+   ],
+   "trigger": {
+    "kind": "message",
+    "text": "The contractor has sent a crew or credential change.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Contractor crew and credential file",
+     "party": "HR",
+     "data": "Crew"
+    },
+    {
+     "what": "Operator register",
+     "party": "MAI",
+     "data": "Crew"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Updated register",
+     "party": "MAI",
+     "data": "Crew"
+    },
+    {
+     "what": "Unmatched person quarantined",
+     "party": "HR",
+     "data": "WorkActivityRecord"
+    }
+   ],
+   "systems": [
+    {
+     "component": "HR",
+     "role": "owning",
+     "service": "Credential federation"
+    },
+    {
+     "component": "MAI",
+     "role": "owning",
+     "service": "Register match"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "HR",
+     "to": "MAI",
+     "payload": "WorkRequest",
+     "verb": "change",
+     "pattern": "event"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Contractor administrator",
+     "raci": "R"
+    },
+    {
+     "role": "Contractor manager",
+     "raci": "A"
+    }
+   ],
+   "data_objects": [
+    "Crew",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "regulatory",
+     "text": "Gas covered-task names must match 192.805. An unmatched person is not qualified just because the contractor says so. 14.2.5 identifies covered tasks for operator people; this federates the contractor's."
+    },
+    {
+     "kind": "operational",
+     "text": "IEC 61968-6 names Crew Composition as a data flow inside FRD. Federation method is judgment."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Rework",
+     "definition": "SMRP 4.1. Work on a person who was never on the register.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    },
+    {
+     "name": "Schedule Compliance",
+     "definition": "SMRP 5.4.3/5.4.4. Jobs held for unmatched credentials.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    }
+   ],
+   "variants": [
+    "New crew member",
+    "Credential lapse",
+    "Unmatched person, quarantined"
+   ],
+   "notation": {
+    "class": "SPEC",
+    "why": "Standing federation of crew and credential data."
+   },
+   "en17007": {
+    "process": "RES.1",
+    "title": "Manage jobs and skills",
+    "clause": "6.14"
+   },
+   "sources": [
+    {
+     "for": "process",
+     "cite": "EN 17007:2017 cl. 6.14 RES.1",
+     "status": "verified"
+    },
+    {
+     "for": "gas OQ",
+     "cite": "49 CFR 192.805 Qualification program - individuals performing covered tasks must be qualified, or directed and observed under 192.805(c); gas only",
+     "status": "regulation"
+    },
+    {
+     "for": "crew composition",
+     "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 payloads; Annex A verbs",
+     "status": "clause-verified"
+    }
+   ],
+   "provenance": {
+    "basis": "regulation",
+    "primary": "49 CFR 192.805 Qualification program - individuals performing covered tasks must be qualified, or directed and observed under 192.805(c); gas only"
+   },
+   "regulatory": {
+    "class": "C",
+    "why": "49 CFR 192.805 governs how this is done, not whether it is done"
+   }
+  },
+  {
+   "uid": 10539,
+   "id": "16.5.6",
+   "name": "Reconcile contractor data exceptions",
+   "group": {
+    "id": "16.5",
+    "name": "Integrate with contractor systems",
+    "uid": 10533
+   },
+   "intent": "Clear the unmatched messages, quantities and people so they do not sit in quarantine forever.",
+   "activities": [
+    "Take quarantined messages, quantity mismatches and unmatched people",
+    "Match, return to sender, or discard with a reason",
+    "Replay a corrected message into 16.5.2-16.5.5",
+    "Do not invent a match that the evidence does not support"
+   ],
+   "trigger": {
+    "kind": "conditional",
+    "text": "A contractor-interface record is in quarantine.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Quarantined interface records",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Awards, quantities and register",
+     "party": "SCHD",
+     "data": "Work"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Cleared or discarded exception",
+     "party": "MAI",
+     "data": "WorkActivityRecord"
+    },
+    {
+     "what": "Replayed corrected message",
+     "party": "FRD",
+     "data": "Work"
+    }
+   ],
+   "systems": [
+    {
+     "component": "MAI",
+     "role": "owning",
+     "service": "Exception queue"
+    },
+    {
+     "component": "FRD",
+     "role": "receiving",
+     "service": "Replay"
+    },
+    {
+     "component": "FIN",
+     "role": "reference",
+     "service": "Quantity mismatches"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "MAI",
+     "to": "FRD",
+     "payload": "WorkRequest",
+     "verb": "change",
+     "pattern": "event"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Contractor administrator",
+     "raci": "R"
+    },
+    {
+     "role": "Contractor manager",
+     "raci": "A"
+    },
+    {
+     "role": "Contract analyst",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "operational",
+     "text": "Two competent people will not sequence match, return and discard the same way. That is why this is a case. A forced match that 16.4 then pays is a settlement failure that started here."
+    },
+    {
+     "kind": "operational",
+     "text": "DTA.1 is store and validate raw data. There is no pack standard for interface-exception handling."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Rework",
+     "definition": "SMRP 4.1. Forced matches that later reverse.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    },
+    {
+     "name": "Work Order Cycle Time",
+     "definition": "SMRP 5.4.7. Time in quarantine.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    }
+   ],
+   "variants": [
+    "Match to an existing award",
+    "Return to sender",
+    "Discard with a named reason"
+   ],
+   "notation": {
+    "class": "CMMN",
+    "why": "Two competent people will sequence match, return and discard differently. CMMN is justified; Camunda 8 dropped it, so a runtime means Flowable.",
+    "artifact": "models/16.5.6-reconcile-exceptions.cmmn"
+   },
+   "en17007": {
+    "process": "DTA.1",
+    "title": "Store and validate the raw data in a library and/or a database",
+    "clause": "6.10"
+   },
+   "sources": [
+    {
+     "for": "process",
+     "cite": "EN 17007:2017 cl. 6.10 DTA.1",
+     "status": "verified"
+    },
+    {
+     "for": "interfaces",
+     "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 payloads; Annex A verbs",
+     "status": "clause-verified"
+    },
+    {
+     "for": "handling",
+     "cite": "Interface-exception handling is not standardised",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "judgment",
+    "primary": "EN 17007:2017 cl. 6.10 DTA.1"
+   },
+   "regulatory": {
+    "class": null,
+    "why": "no regulation reaches this process"
+   }
+  }
+ ],
+ "merge_corrections": [
+  {
+   "date": "2026-08-29",
+   "by": "Claude",
+   "what": "ISO 55001:2024 cl. 8.3 was cited with ISO 9001's wording. The clause number is right; its title is Outsourcing. 'Control of externally provided processes, products and services' is ISO 9001:2015 cl. 8.4. A status of clause-verified asserts the clause number AND its title, so a borrowed title is an unearned status.",
+   "count": 2
+  },
+  {
+   "date": "2026-08-29",
+   "by": "Claude",
+   "what": "citation form: a status may not claim more than the citation string supports. 'clause-verified' without a clause dropped to 'consensus'; an asserted absence dropped to 'judgment'.",
+   "count": 2
+  },
+  {
+   "date": "2026-08-29",
+   "by": "Claude",
+   "what": "vocabulary.json is this project's own artifact, not a source. Citing it at 'verified' makes the reference evidence for itself; the cross-process note it carries is a judgment. And 16.4.4's notation.why said 'standing score' where the work is a determination - same correction as 13.7.7, same reason: it is SPEC because no source states the rule, not because it has no instance.",
+   "count": 2
+  }
+ ]
 }

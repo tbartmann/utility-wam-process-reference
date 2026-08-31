@@ -30,6 +30,7 @@
   }
  ],
  "derivation": "STANDARDS-DERIVED. Every field traces to a standard, regulation, recognised industry body or explicit judgment. No client or product practice is generalised.",
+ "taxonomy_origin": "TAXONOMY ORIGIN, WHICH IS A DIFFERENT FACT FROM THE DERIVATION ABOVE. The derivation line describes where FIELD CONTENT comes from: every field value traces to a standard, a regulation or a recognised industry body and carries its citation. It does NOT describe where the taxonomy comes from. Which processes exist, how they are grouped and what they are called is a practitioner synthesis of delivered implementations, generalised until it is product- and client-neutral. Of the 102 process groups, 43 originate in programme material, 28 in domain research, 20 in a published source and 11 in folder and file names; the provenance layer grades every one and names what to read next. This model is DELIVERED PRACTICE SPECIFIED AGAINST STANDARDS, not a standard turned into a model - and saying so is not a weakness. A taxonomy proven in delivery and then held against the standards is a stronger claim than one derived from a standard and never built.",
  "field_set": "EN 17007:2017 cl. 5.2 maintenance process profile, corroborated by ISO 9001:2015 cl. 4.4.1 a) to h).",
  "gaps": [
   "No asset-information model in the permitted pack spans gas and electric distribution. IEC 61968 is electric-scoped; PODS 7 and UPDM 2026 cover gas asset and inspection data but not the work item.",
@@ -229,6 +230,10 @@
    "provenance": {
     "basis": "regulation",
     "primary": "49 CFR 192.1007(a) and GFMAM subject 5.3"
+   },
+   "regulatory": {
+    "class": "C",
+    "why": "49 CFR 192.1007 governs how this is done, not whether it is done"
    }
   },
   {
@@ -416,6 +421,10 @@
    "provenance": {
     "basis": "consensus",
     "primary": "GFMAM Asset Management Landscape subject 5.3"
+   },
+   "regulatory": {
+    "class": "C",
+    "why": "18 CFR 101 governs how this is done, not whether it is done"
    }
   },
   {
@@ -516,7 +525,7 @@
      "raci": "A"
     },
     {
-     "role": "Field records coordinator",
+     "role": "Asset and GIS administrator",
      "raci": "C"
     }
    ],
@@ -607,6 +616,10 @@
    "provenance": {
     "basis": "regulation",
     "primary": "49 CFR 192.605(b)(3)"
+   },
+   "regulatory": {
+    "class": "C",
+    "why": "49 CFR 192.605 governs how this is done, not whether it is done"
    }
   },
   {
@@ -778,6 +791,10 @@
    "provenance": {
     "basis": "standard",
     "primary": "EN 17007:2017 MAN.3"
+   },
+   "regulatory": {
+    "class": null,
+    "why": "no regulation reaches this process"
    }
   },
   {
@@ -964,6 +981,10 @@
    "provenance": {
     "basis": "consensus",
     "primary": "GFMAM Asset Management Landscape subject 5.5"
+   },
+   "regulatory": {
+    "class": null,
+    "why": "no regulation reaches this process"
    }
   },
   {
@@ -1155,6 +1176,10 @@
    "provenance": {
     "basis": "regulation",
     "primary": "49 CFR 192.727 and 18 CFR Parts 101 and 201"
+   },
+   "regulatory": {
+    "class": "C",
+    "why": "49 CFR 192.727 and 18 CFR 101 govern how this is done, not whether it is done"
    }
   },
   {
@@ -1335,6 +1360,10 @@
    "provenance": {
     "basis": "consensus",
     "primary": "GFMAM Asset Management Landscape subjects 5.1 and 5.2"
+   },
+   "regulatory": {
+    "class": null,
+    "why": "no regulation reaches this process"
    }
   },
   {
@@ -1522,6 +1551,10 @@
    "provenance": {
     "basis": "regulation",
     "primary": "49 CFR 192.1007(a) and 192.605(b)(3)"
+   },
+   "regulatory": {
+    "class": "C",
+    "why": "49 CFR 192.1007 and 49 CFR 192.605 govern how this is done, not whether it is done"
    }
   },
   {
@@ -1622,7 +1655,7 @@
      "raci": "A"
     },
     {
-     "role": "Field records coordinator",
+     "role": "Asset and GIS administrator",
      "raci": "C"
     }
    ],
@@ -1708,6 +1741,10 @@
    "provenance": {
     "basis": "consensus",
     "primary": "GFMAM Asset Management Landscape subject 5.3"
+   },
+   "regulatory": {
+    "class": "C",
+    "why": "49 CFR 192.605 governs how this is done, not whether it is done"
    }
   },
   {
@@ -1895,6 +1932,10 @@
    "provenance": {
     "basis": "consensus",
     "primary": "GFMAM Asset Management Landscape subject 5.3"
+   },
+   "regulatory": {
+    "class": "C",
+    "why": "49 CFR 192.605 governs how this is done, not whether it is done"
    }
   },
   {
@@ -2081,6 +2122,10 @@
    "provenance": {
     "basis": "consensus",
     "primary": "GFMAM Asset Management Landscape subject 5.3"
+   },
+   "regulatory": {
+    "class": "C",
+    "why": "49 CFR 192.1007 governs how this is done, not whether it is done"
    }
   },
   {
@@ -2257,6 +2302,10 @@
    "provenance": {
     "basis": "consensus",
     "primary": "GFMAM Asset Management Landscape subject 5.2"
+   },
+   "regulatory": {
+    "class": null,
+    "why": "no regulation reaches this process"
    }
   },
   {
@@ -2357,7 +2406,7 @@
      "raci": "R"
     },
     {
-     "role": "Network operations representative",
+     "role": "Operations representative",
      "raci": "C"
     }
    ],
@@ -2433,6 +2482,10 @@
    "provenance": {
     "basis": "consensus",
     "primary": "GFMAM Asset Management Landscape subjects 5.1 and 5.3"
+   },
+   "regulatory": {
+    "class": null,
+    "why": "no regulation reaches this process"
    }
   },
   {
@@ -2609,6 +2662,10 @@
    "provenance": {
     "basis": "consensus",
     "primary": "GFMAM subject 5.2 and PODS 7 conceptual model"
+   },
+   "regulatory": {
+    "class": null,
+    "why": "no regulation reaches this process"
    }
   },
   {
@@ -2709,7 +2766,7 @@
      "raci": "A"
     },
     {
-     "role": "Field records coordinator",
+     "role": "Asset and GIS administrator",
      "raci": "C"
     }
    ],
@@ -2800,6 +2857,10 @@
    "provenance": {
     "basis": "consensus",
     "primary": "PODS 7 conceptual model and GFMAM subject 5.3"
+   },
+   "regulatory": {
+    "class": null,
+    "why": "no regulation reaches this process"
    }
   },
   {
@@ -2972,6 +3033,10 @@
    "provenance": {
     "basis": "consensus",
     "primary": "PODS 7 conceptual model and GFMAM subject 5.3"
+   },
+   "regulatory": {
+    "class": null,
+    "why": "no regulation reaches this process"
    }
   },
   {
@@ -3164,6 +3229,10 @@
    "provenance": {
     "basis": "regulation",
     "primary": "49 CFR 192.709(a) and PODS 7 conceptual model"
+   },
+   "regulatory": {
+    "class": "C",
+    "why": "49 CFR 192.709 governs how this is done, not whether it is done"
    }
   },
   {
@@ -3356,6 +3425,10 @@
    "provenance": {
     "basis": "consensus",
     "primary": "PODS 7 conceptual model and GFMAM subject 5.3"
+   },
+   "regulatory": {
+    "class": "C",
+    "why": "49 CFR 192.605 governs how this is done, not whether it is done"
    }
   },
   {
@@ -3547,6 +3620,10 @@
    "provenance": {
     "basis": "regulation",
     "primary": "49 CFR 192.1007(a) and 192.605(b)(3)"
+   },
+   "regulatory": {
+    "class": "C",
+    "why": "49 CFR 192.1007 and 49 CFR 192.605 govern how this is done, not whether it is done"
    }
   },
   {
@@ -3740,6 +3817,10 @@
    "provenance": {
     "basis": "consensus",
     "primary": "GFMAM Asset Management Landscape subject 6.3"
+   },
+   "regulatory": {
+    "class": "C",
+    "why": "49 CFR 192.1007 governs how this is done, not whether it is done"
    }
   },
   {
@@ -3921,6 +4002,10 @@
    "provenance": {
     "basis": "standard",
     "primary": "EN 17007:2017 PRV.1 and ISO 14224 cl. 9.5"
+   },
+   "regulatory": {
+    "class": null,
+    "why": "no regulation reaches this process"
    }
   },
   {
@@ -4098,6 +4183,10 @@
    "provenance": {
     "basis": "consensus",
     "primary": "GFMAM subjects 2.6 and 6.3"
+   },
+   "regulatory": {
+    "class": null,
+    "why": "no regulation reaches this process"
    }
   },
   {
@@ -4290,6 +4379,10 @@
    "provenance": {
     "basis": "consensus",
     "primary": "GFMAM Asset Management Landscape subjects 6.3 and 7.2"
+   },
+   "regulatory": {
+    "class": null,
+    "why": "no regulation reaches this process"
    }
   },
   {
@@ -4486,6 +4579,10 @@
    "provenance": {
     "basis": "standard",
     "primary": "EN 17007:2017 PRV.2 and 49 CFR Part 192 Subpart M"
+   },
+   "regulatory": {
+    "class": "C",
+    "why": "49 CFR 192 governs how this is done, not whether it is done"
    }
   },
   {
@@ -4669,6 +4766,10 @@
    "provenance": {
     "basis": "standard",
     "primary": "EN 17007:2017 PRV.2 and EN 13306 cl. 7"
+   },
+   "regulatory": {
+    "class": null,
+    "why": "no regulation reaches this process"
    }
   },
   {
@@ -4860,6 +4961,10 @@
    "provenance": {
     "basis": "consensus",
     "primary": "GFMAM Asset Management Landscape subjects 6.3 and 5.3"
+   },
+   "regulatory": {
+    "class": null,
+    "why": "no regulation reaches this process"
    }
   },
   {
@@ -5051,6 +5156,10 @@
    "provenance": {
     "basis": "standard",
     "primary": "EN 17007:2017 ACT.2 and DOC.4"
+   },
+   "regulatory": {
+    "class": null,
+    "why": "no regulation reaches this process"
    }
   },
   {
@@ -5243,6 +5352,10 @@
    "provenance": {
     "basis": "standard",
     "primary": "EN 17007:2017 SER.3"
+   },
+   "regulatory": {
+    "class": null,
+    "why": "no regulation reaches this process"
    }
   },
   {
@@ -5440,6 +5553,10 @@
    "provenance": {
     "basis": "regulation",
     "primary": "49 CFR 192.13(c) and GFMAM subject 2.4"
+   },
+   "regulatory": {
+    "class": "R",
+    "why": "49 CFR 192.13(c) requires the operator to maintain, modify and FOLLOW the required plans and procedures"
    }
   },
   {
@@ -5632,6 +5749,10 @@
    "provenance": {
     "basis": "consensus",
     "primary": "GFMAM Asset Management Landscape subjects 2.6 and 3.5"
+   },
+   "regulatory": {
+    "class": "C",
+    "why": "49 CFR 192.1007 governs how this is done, not whether it is done"
    }
   },
   {
@@ -5839,6 +5960,10 @@
    "provenance": {
     "basis": "consensus",
     "primary": "GFMAM Asset Management Landscape subjects 3.4 to 3.6"
+   },
+   "regulatory": {
+    "class": null,
+    "why": "no regulation reaches this process"
    }
   },
   {
@@ -5955,7 +6080,7 @@
      "raci": "C"
     },
     {
-     "role": "Network operations representative",
+     "role": "Operations representative",
      "raci": "C"
     }
    ],
@@ -6053,6 +6178,10 @@
    "provenance": {
     "basis": "standard",
     "primary": "ANSI/ASTM/ISO 55001-2024 cls. 6.3 and 8.2"
+   },
+   "regulatory": {
+    "class": "C",
+    "why": "49 CFR 192.13 governs how this is done, not whether it is done"
    }
   }
  ]

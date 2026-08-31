@@ -65,28 +65,48 @@ And nothing here retires anything. 19.3.5 files the signed evidence against the 
       <bpmndi:BPMNShape id="sh_n_193_cls" bpmnElement="n_193_cls"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_193_gw" bpmnElement="n_193_gw"><dc:Bounds x="467" y="212" width="46" height="46"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_193_store" bpmnElement="n_193_store"><dc:Bounds x="595" y="200" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_193_man" bpmnElement="n_193_man"><dc:Bounds x="765" y="200" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_193_disp" bpmnElement="n_193_disp"><dc:Bounds x="935" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_193_man" bpmnElement="n_193_man"><dc:Bounds x="765" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_193_disp" bpmnElement="n_193_disp"><dc:Bounds x="935" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_193_sign" bpmnElement="n_193_sign"><dc:Bounds x="1105" y="200" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_193_sal" bpmnElement="n_193_sal"><dc:Bounds x="595" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_193_sal" bpmnElement="n_193_sal"><dc:Bounds x="595" y="411.5" width="130" height="87"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_193_can" bpmnElement="n_193_can"><dc:Bounds x="807" y="432" width="46" height="46"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_193_stock" bpmnElement="n_193_stock"><dc:Bounds x="935" y="420" width="130" height="70"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_193_reclass" bpmnElement="n_193_reclass"><dc:Bounds x="765" y="640" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_193_file" bpmnElement="n_193_file"><dc:Bounds x="1275" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_193_file" bpmnElement="n_193_file"><dc:Bounds x="1275" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_193_hand" bpmnElement="n_193_hand"><dc:Bounds x="1445" y="200" width="130" height="70"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_193_end" bpmnElement="n_193_end"><dc:Bounds x="1662" y="217" width="36" height="36"/></bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="ed_f_n_193_start_n_193_cls" bpmnElement="f_n_193_start_n_193_cls"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_193_cls_n_193_gw" bpmnElement="f_n_193_cls_n_193_gw"><di:waypoint x="385" y="235"/><di:waypoint x="467" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_193_gw_n_193_store" bpmnElement="f_n_193_gw_n_193_store"><di:waypoint x="513" y="235"/><di:waypoint x="595" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_193_gw_n_193_sal" bpmnElement="f_n_193_gw_n_193_sal"><di:waypoint x="513" y="235"/><di:waypoint x="570" y="235"/><di:waypoint x="570" y="455"/><di:waypoint x="595" y="455"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_193_gw_n_193_file" bpmnElement="f_n_193_gw_n_193_file"><di:waypoint x="513" y="235"/><di:waypoint x="1275" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_193_gw_n_193_store" bpmnElement="f_n_193_gw_n_193_store"><di:waypoint x="513" y="235"/><di:waypoint x="595" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="496.9" y="173" width="88" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_193_gw_n_193_sal" bpmnElement="f_n_193_gw_n_193_sal"><di:waypoint x="513" y="235"/><di:waypoint x="570" y="235"/><di:waypoint x="570" y="455"/><di:waypoint x="595" y="455"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="521.8" y="446.5" width="43.2" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_193_gw_n_193_file" bpmnElement="f_n_193_gw_n_193_file"><di:waypoint x="513" y="235"/><di:waypoint x="1275" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="733.7" y="168" width="76.8" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_193_store_n_193_man" bpmnElement="f_n_193_store_n_193_man"><di:waypoint x="725" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_193_man_n_193_disp" bpmnElement="f_n_193_man_n_193_disp"><di:waypoint x="895" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_193_disp_n_193_sign" bpmnElement="f_n_193_disp_n_193_sign"><di:waypoint x="1065" y="235"/><di:waypoint x="1105" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_193_sign_n_193_file" bpmnElement="f_n_193_sign_n_193_file"><di:waypoint x="1235" y="235"/><di:waypoint x="1275" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_193_sal_n_193_can" bpmnElement="f_n_193_sal_n_193_can"><di:waypoint x="725" y="455"/><di:waypoint x="807" y="455"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_193_can_n_193_stock" bpmnElement="f_n_193_can_n_193_stock"><di:waypoint x="853" y="455"/><di:waypoint x="935" y="455"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_193_can_n_193_reclass" bpmnElement="f_n_193_can_n_193_reclass"><di:waypoint x="853" y="455"/><di:waypoint x="740" y="455"/><di:waypoint x="740" y="675"/><di:waypoint x="765" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_193_can_n_193_stock" bpmnElement="f_n_193_can_n_193_stock"><di:waypoint x="853" y="455"/><di:waypoint x="935" y="455"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="864" y="433" width="60" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_193_can_n_193_reclass" bpmnElement="f_n_193_can_n_193_reclass"><di:waypoint x="853" y="455"/><di:waypoint x="740" y="455"/><di:waypoint x="740" y="675"/><di:waypoint x="765" y="675"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="652.6" y="666.5" width="82.4" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_193_reclass_n_193_cls" bpmnElement="f_n_193_reclass_n_193_cls"><di:waypoint x="895" y="675"/><di:waypoint x="230" y="675"/><di:waypoint x="230" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_193_stock_n_193_file" bpmnElement="f_n_193_stock_n_193_file"><di:waypoint x="1065" y="455"/><di:waypoint x="1250" y="455"/><di:waypoint x="1250" y="235"/><di:waypoint x="1275" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_193_file_n_193_hand" bpmnElement="f_n_193_file_n_193_hand"><di:waypoint x="1405" y="235"/><di:waypoint x="1445" y="235"/></bpmndi:BPMNEdge>

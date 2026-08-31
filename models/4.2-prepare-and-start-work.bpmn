@@ -3,7 +3,7 @@
   <process id="P_4_2" name="4.2 Prepare, perform and complete the work" isExecutable="false">
     <documentation>4.2.1, 4.2.2, 4.2.3, 4.2.4 and 4.2.6 are drawn; 4.2.5 is a case with its own file. This is the spine of the category and, with 4.4, the most heavily evidenced path in the model.
 
-TWO STOPS ARE DRAWN AS STOPS RATHER THAN AS DECISIONS. 4.2.1 refers a missing or conflicting prerequisite and does not proceed - it does not obtain the permit, which is 2.6, and it does not issue the clearance, which is 18.4.4. And 4.2.3 stops when scope, safety or operating state is no longer valid, handing to 4.2.5 rather than pressing on. Both are the difference between a model of what should happen and a model of what does.
+TWO STOPS ARE DRAWN AS STOPS RATHER THAN AS DECISIONS. 4.2.1 refers a missing or conflicting prerequisite and does not proceed - it does not obtain the permit, which is 2.5, and it does not issue the clearance, which is 18.4.4. And 4.2.3 stops when scope, safety or operating state is no longer valid, handing to 4.2.5 rather than pressing on. Both are the difference between a model of what should happen and a model of what does.
 
 The safety assessment repeats. 29 CFR 1910.269(c)(3)(ii) requires an additional job briefing where there is a significant change affecting employee safety, so 4.2.2 is re-entered from 4.2.3 rather than being a gate passed once at the start.
 
@@ -34,7 +34,7 @@ The safety assessment repeats. 29 CFR 1910.269(c)(3)(ii) requires an additional 
     <userTask id="n_42_rev" name="Review scope, method, location and asset identity"><documentation>4.2.1. Asset identity included - the commonest field failure is correct work on the wrong asset.</documentation></userTask>
     <userTask id="n_42_pre" name="Confirm permits, materials, equipment and qualifications"><documentation>4.2.1. And the approved switching or outage condition where one applies.</documentation></userTask>
     <exclusiveGateway id="n_42_ok" name="Prerequisites complete"/>
-    <sendTask id="n_42_ref" name="Stop and refer the missing prerequisite"><documentation>4.2.1. Referred, not obtained. A permit is 2.6; a clearance is 18.4.4; neither is this crew's to create.</documentation></sendTask>
+    <sendTask id="n_42_ref" name="Stop and refer the missing prerequisite"><documentation>4.2.1. Referred, not obtained. A permit is 2.5; a clearance is 18.4.4; neither is this crew's to create.</documentation></sendTask>
     <userTask id="n_42_jsa" name="Perform the pre-job safety assessment and briefing"><documentation>4.2.2. Hazards, energy sources, roles, qualifications, emergency arrangements, controls - then the briefing. 4.4.1 is the tailboard record.</documentation></userTask>
     <serviceTask id="n_42_area" name="Establish the controlled work area"><documentation>4.2.3.</documentation></serviceTask>
     <userTask id="n_42_do" name="Perform tasks in the authorised sequence"><documentation>4.2.3. Authorised sequence - for work under a clearance that sequence is 1910.269(m)(3)'s and is not the crew's to reorder.</documentation></userTask>
@@ -70,35 +70,59 @@ The safety assessment repeats. 29 CFR 1910.269(c)(3)(ii) requires an additional 
   <bpmndi:BPMNDiagram id="dg_P_4_2">
     <bpmndi:BPMNPlane id="pl_P_4_2" bpmnElement="P_4_2">
       <bpmndi:BPMNShape id="sh_n_42_start" bpmnElement="n_42_start"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_42_rev" bpmnElement="n_42_rev"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_42_pre" bpmnElement="n_42_pre"><dc:Bounds x="425" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_42_rev" bpmnElement="n_42_rev"><dc:Bounds x="255" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_42_pre" bpmnElement="n_42_pre"><dc:Bounds x="425" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_42_ok" bpmnElement="n_42_ok"><dc:Bounds x="637" y="212" width="46" height="46"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_42_ref" bpmnElement="n_42_ref"><dc:Bounds x="595" y="420" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_42_jsa" bpmnElement="n_42_jsa"><dc:Bounds x="765" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_42_jsa" bpmnElement="n_42_jsa"><dc:Bounds x="765" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_42_area" bpmnElement="n_42_area"><dc:Bounds x="935" y="200" width="130" height="70"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_42_do" bpmnElement="n_42_do"><dc:Bounds x="1105" y="200" width="130" height="70"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_42_mon" bpmnElement="n_42_mon"><dc:Bounds x="1317" y="212" width="46" height="46"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_42_chg" bpmnElement="n_42_chg"><dc:Bounds x="1317" y="432" width="46" height="46"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_42_susp" bpmnElement="n_42_susp"><dc:Bounds x="1275" y="640" width="130" height="70"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_42_res" bpmnElement="n_42_res"><dc:Bounds x="1445" y="200" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_42_act" bpmnElement="n_42_act"><dc:Bounds x="1615" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_42_act" bpmnElement="n_42_act"><dc:Bounds x="1615" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_42_sub" bpmnElement="n_42_sub"><dc:Bounds x="1785" y="200" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_42_chk" bpmnElement="n_42_chk"><dc:Bounds x="1955" y="200" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_42_temp" bpmnElement="n_42_temp"><dc:Bounds x="2125" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_42_chk" bpmnElement="n_42_chk"><dc:Bounds x="1955" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_42_temp" bpmnElement="n_42_temp"><dc:Bounds x="2125" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_42_rel" bpmnElement="n_42_rel"><dc:Bounds x="2295" y="200" width="130" height="70"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_42_end" bpmnElement="n_42_end"><dc:Bounds x="2512" y="217" width="36" height="36"/></bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="ed_f_n_42_start_n_42_rev" bpmnElement="f_n_42_start_n_42_rev"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_42_rev_n_42_pre" bpmnElement="f_n_42_rev_n_42_pre"><di:waypoint x="385" y="235"/><di:waypoint x="425" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_42_pre_n_42_ok" bpmnElement="f_n_42_pre_n_42_ok"><di:waypoint x="555" y="235"/><di:waypoint x="637" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_42_ok_n_42_ref" bpmnElement="f_n_42_ok_n_42_ref"><di:waypoint x="683" y="235"/><di:waypoint x="570" y="235"/><di:waypoint x="570" y="455"/><di:waypoint x="595" y="455"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_42_ok_n_42_jsa" bpmnElement="f_n_42_ok_n_42_jsa"><di:waypoint x="683" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_42_ok_n_42_ref" bpmnElement="f_n_42_ok_n_42_ref"><di:waypoint x="683" y="235"/><di:waypoint x="570" y="235"/><di:waypoint x="570" y="455"/><di:waypoint x="595" y="455"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="499.4" y="440" width="65.6" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_42_ok_n_42_jsa" bpmnElement="f_n_42_ok_n_42_jsa"><di:waypoint x="683" y="235"/><di:waypoint x="765" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="699.6" y="213" width="48.8" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_42_jsa_n_42_area" bpmnElement="f_n_42_jsa_n_42_area"><di:waypoint x="895" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_42_area_n_42_do" bpmnElement="f_n_42_area_n_42_do"><di:waypoint x="1065" y="235"/><di:waypoint x="1105" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_42_do_n_42_mon" bpmnElement="f_n_42_do_n_42_mon"><di:waypoint x="1235" y="235"/><di:waypoint x="1317" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_42_mon_n_42_chg" bpmnElement="f_n_42_mon_n_42_chg"><di:waypoint x="1363" y="235"/><di:waypoint x="1292" y="235"/><di:waypoint x="1292" y="455"/><di:waypoint x="1317" y="455"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_42_chg_n_42_jsa" bpmnElement="f_n_42_chg_n_42_jsa"><di:waypoint x="1363" y="455"/><di:waypoint x="740" y="455"/><di:waypoint x="740" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_42_chg_n_42_susp" bpmnElement="f_n_42_chg_n_42_susp"><di:waypoint x="1363" y="455"/><di:waypoint x="1250" y="455"/><di:waypoint x="1250" y="675"/><di:waypoint x="1275" y="675"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_42_mon_n_42_res" bpmnElement="f_n_42_mon_n_42_res"><di:waypoint x="1363" y="235"/><di:waypoint x="1445" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_42_mon_n_42_chg" bpmnElement="f_n_42_mon_n_42_chg"><di:waypoint x="1363" y="235"/><di:waypoint x="1292" y="235"/><di:waypoint x="1292" y="455"/><di:waypoint x="1317" y="455"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1227" y="440" width="60" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_42_chg_n_42_jsa" bpmnElement="f_n_42_chg_n_42_jsa"><di:waypoint x="1363" y="455"/><di:waypoint x="740" y="455"/><di:waypoint x="740" y="235"/><di:waypoint x="765" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1004.7" y="394" width="93.6" height="56" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_42_chg_n_42_susp" bpmnElement="f_n_42_chg_n_42_susp"><di:waypoint x="1363" y="455"/><di:waypoint x="1250" y="455"/><di:waypoint x="1250" y="675"/><di:waypoint x="1275" y="675"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1157" y="666.5" width="88" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_42_mon_n_42_res" bpmnElement="f_n_42_mon_n_42_res"><di:waypoint x="1363" y="235"/><di:waypoint x="1445" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1371.2" y="213" width="65.6" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_42_res_n_42_act" bpmnElement="f_n_42_res_n_42_act"><di:waypoint x="1575" y="235"/><di:waypoint x="1615" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_42_act_n_42_sub" bpmnElement="f_n_42_act_n_42_sub"><di:waypoint x="1745" y="235"/><di:waypoint x="1785" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_42_sub_n_42_chk" bpmnElement="f_n_42_sub_n_42_chk"><di:waypoint x="1915" y="235"/><di:waypoint x="1955" y="235"/></bpmndi:BPMNEdge>

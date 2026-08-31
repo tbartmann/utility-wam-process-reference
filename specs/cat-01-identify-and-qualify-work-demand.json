@@ -8,6 +8,7 @@
   "schema": "eam/specs/SCHEMA.md",
   "authored": "2026-08-28",
   "derivation": "STANDARDS-DERIVED. Every field traces to a standard, a regulation or a recognised industry body. Nothing is generalised from a client programme or a product. Observed material is held separately in eam/specializations/ and is never merged.",
+  "taxonomy_origin": "TAXONOMY ORIGIN, WHICH IS A DIFFERENT FACT FROM THE DERIVATION ABOVE. The derivation line describes where FIELD CONTENT comes from: every field value traces to a standard, a regulation or a recognised industry body and carries its citation. It does NOT describe where the taxonomy comes from. Which processes exist, how they are grouped and what they are called is a practitioner synthesis of delivered implementations, generalised until it is product- and client-neutral. Of the 102 process groups, 43 originate in programme material, 28 in domain research, 20 in a published source and 11 in folder and file names; the provenance layer grades every one and names what to read next. This model is DELIVERED PRACTICE SPECIFIED AGAINST STANDARDS, not a standard turned into a model - and saying so is not a weakness. A taxonomy proven in delivery and then held against the standards is a stronger claim than one derived from a standard and never built.",
   "field_set": "EN 17007:2017 cl. 5.2 maintenance process profile, corroborated by ISO 9001:2015 cl. 4.4.1 a) to h).",
   "primary_sources": [
     "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319)",
@@ -3101,14 +3102,6 @@
         "basis": "standard",
         "primary": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319)"
       }
-    }
-  ],
-  "merge_corrections": [
-    {
-      "date": "2026-08-29",
-      "by": "Claude",
-      "what": "citation form: a status may not claim more than the citation string supports. 'clause-verified' without a clause dropped to 'consensus'; an asserted absence dropped to 'judgment'.",
-      "count": 2
     }
   ]
 }

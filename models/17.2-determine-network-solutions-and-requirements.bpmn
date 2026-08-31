@@ -56,16 +56,16 @@ The requirements branches are parallel and commodity-split by design. An electri
   <bpmndi:BPMNDiagram id="dg_P_17_2">
     <bpmndi:BPMNPlane id="pl_P_17_2" bpmnElement="P_17_2">
       <bpmndi:BPMNShape id="sh_n_172_start" bpmnElement="n_172_start"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_172_opt" bpmnElement="n_172_opt"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_172_cmp" bpmnElement="n_172_cmp"><dc:Bounds x="425" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_172_opt" bpmnElement="n_172_opt"><dc:Bounds x="255" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_172_cmp" bpmnElement="n_172_cmp"><dc:Bounds x="425" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_172_split" bpmnElement="n_172_split"><dc:Bounds x="637" y="212" width="46" height="46"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_172_prot" bpmnElement="n_172_prot"><dc:Bounds x="765" y="200" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_172_sec" bpmnElement="n_172_sec"><dc:Bounds x="765" y="420" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_172_gas" bpmnElement="n_172_gas"><dc:Bounds x="765" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_172_sec" bpmnElement="n_172_sec"><dc:Bounds x="765" y="411.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_172_gas" bpmnElement="n_172_gas"><dc:Bounds x="765" y="625" width="130" height="100"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_172_join" bpmnElement="n_172_join"><dc:Bounds x="977" y="212" width="46" height="46"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_172_sel" bpmnElement="n_172_sel"><dc:Bounds x="1105" y="200" width="130" height="70"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_172_gw" bpmnElement="n_172_gw"><dc:Bounds x="1317" y="212" width="46" height="46"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_172_back" bpmnElement="n_172_back"><dc:Bounds x="1275" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_172_back" bpmnElement="n_172_back"><dc:Bounds x="1275" y="411.5" width="130" height="87"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_172_rel" bpmnElement="n_172_rel"><dc:Bounds x="1445" y="200" width="130" height="70"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_172_end" bpmnElement="n_172_end"><dc:Bounds x="1662" y="217" width="36" height="36"/></bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="ed_f_n_172_start_n_172_opt" bpmnElement="f_n_172_start_n_172_opt"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
@@ -79,8 +79,16 @@ The requirements branches are parallel and commodity-split by design. An electri
       <bpmndi:BPMNEdge id="ed_f_n_172_gas_n_172_join" bpmnElement="f_n_172_gas_n_172_join"><di:waypoint x="895" y="675"/><di:waypoint x="952" y="675"/><di:waypoint x="952" y="235"/><di:waypoint x="977" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_172_join_n_172_sel" bpmnElement="f_n_172_join_n_172_sel"><di:waypoint x="1023" y="235"/><di:waypoint x="1105" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_172_sel_n_172_gw" bpmnElement="f_n_172_sel_n_172_gw"><di:waypoint x="1235" y="235"/><di:waypoint x="1317" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_172_gw_n_172_back" bpmnElement="f_n_172_gw_n_172_back"><di:waypoint x="1363" y="235"/><di:waypoint x="1250" y="235"/><di:waypoint x="1250" y="455"/><di:waypoint x="1275" y="455"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_172_gw_n_172_rel" bpmnElement="f_n_172_gw_n_172_rel"><di:waypoint x="1363" y="235"/><di:waypoint x="1445" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_172_gw_n_172_back" bpmnElement="f_n_172_gw_n_172_back"><di:waypoint x="1363" y="235"/><di:waypoint x="1250" y="235"/><di:waypoint x="1250" y="455"/><di:waypoint x="1275" y="455"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1162.6" y="446.5" width="82.4" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_172_gw_n_172_rel" bpmnElement="f_n_172_gw_n_172_rel"><di:waypoint x="1363" y="235"/><di:waypoint x="1445" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1379.6" y="213" width="48.8" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_172_rel_n_172_end" bpmnElement="f_n_172_rel_n_172_end"><di:waypoint x="1575" y="235"/><di:waypoint x="1662" y="235"/></bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

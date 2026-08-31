@@ -22,9 +22,24 @@
    ],
    "models_built_here": "Twelve artifacts, 6 BPMN, 3 DMN and 3 CMMN. The specification names them; only this side has the generator.",
    "open_finding_notation_why": "OPEN FINDING, ADDED AFTER THE MERGE NOTE ABOVE WAS WRITTEN. That note said no correction was needed, and on the two rejection grounds it was right. Building the behaviour models surfaced a third instance of the same defect family: notation.why - the rationale for why a process is drawn in a given notation - is one text on 24 of the 32 processes. It states the notation RULE ('the process has a repeatable start, ordered activities and a defined completion outcome') rather than which repeatable start THIS process has. Nothing in it is false; it is the BPMN test, correctly applied. But fifteen of the seventeen merged categories carry a distinct rationale on every process and none shares one on more than two. Recorded rather than fixed, and now a WARNING in validate_spec.py - the third check of this shape after control reuse and judgment-citation reuse. The pattern across all three is the same: a category-level truth put where a process-level one belongs, in a file that passed every other check because the field was populated."
+  },
+  {
+   "id": "closed_notation_why",
+   "date": "2026-08-30",
+   "by": "Claude",
+   "what": "The open notation.why finding is closed. 32 rationales rewritten, one per process, each naming the repeatable start and the completion outcome for THAT process rather than restating the notation test.",
+   "why": "The rationale had been written per notation CLASS, so every BPMN process carried the BPMN test. Nothing asserted was false; what was missing is which start and which outcome, which is the only part a reader cannot derive alone. Material came from each process's own trigger, activities and outputs - no new sources, and nothing else in the submission changed."
+  },
+  {
+   "id": "closed_notation_why",
+   "date": "2026-08-30",
+   "by": "Claude",
+   "what": "The open notation.why finding is closed. 32 rationales rewritten, one per process, each naming the repeatable start and the completion outcome for THAT process rather than restating the notation test.",
+   "why": "The rationale had been written per notation CLASS, so every BPMN process carried the BPMN test. Nothing asserted was false; what was missing is which start and which outcome, which is the only part a reader cannot derive alone. Material came from each process's own trigger, activities and outputs - no new sources, and nothing else in the submission changed."
   }
  ],
  "derivation": "STANDARDS-DERIVED. IEC 61968 defines exchanged work information, OSHA constrains field execution, and EN 17007 provides the process spine. Unsourced field-service detail is labelled judgment.",
+ "taxonomy_origin": "TAXONOMY ORIGIN, WHICH IS A DIFFERENT FACT FROM THE DERIVATION ABOVE. The derivation line describes where FIELD CONTENT comes from: every field value traces to a standard, a regulation or a recognised industry body and carries its citation. It does NOT describe where the taxonomy comes from. Which processes exist, how they are grouped and what they are called is a practitioner synthesis of delivered implementations, generalised until it is product- and client-neutral. Of the 102 process groups, 43 originate in programme material, 28 in domain research, 20 in a published source and 11 in folder and file names; the provenance layer grades every one and names what to read next. This model is DELIVERED PRACTICE SPECIFIED AGAINST STANDARDS, not a standard turned into a model - and saying so is not a weakness. A taxonomy proven in delivery and then held against the standards is a stronger claim than one derived from a standard and never built.",
  "field_set": "EN 17007:2017 cl. 5.2 maintenance process profile, corroborated by ISO 9001 cl. 4.4.1 a) to h).",
  "gaps": [
   "Field service management, mobile workforce management and service dispatch are not standards domains. Detailed assignment, dispatch, execution and exception sequences are judgment.",
@@ -173,7 +188,7 @@
    ],
    "notation": {
     "class": "DMN",
-    "why": "The output is an assignment, classification or eligibility value.",
+    "why": "The output is an assignment - which crew or individual - determined from skills, availability and location. Nothing changes state; the dispatch that acts on it is 4.1.2.",
     "artifact": "models/4.1.1-assign-work-to-crew-or-individual.dmn"
    },
    "en17007": {
@@ -216,6 +231,10 @@
    "provenance": {
     "basis": "judgment",
     "primary": "29 CFR 1910.269 and IEC 61968-6:2015"
+   },
+   "regulatory": {
+    "class": "C",
+    "why": "29 CFR 1910.269 governs how this is done, not whether it is done"
    }
   },
   {
@@ -354,7 +373,7 @@
    ],
    "notation": {
     "class": "BPMN",
-    "why": "The process has a repeatable start, ordered activities and a defined completion outcome.",
+    "why": "Every dispatch starts at a release time on assigned work and ends with a recorded delivery status. Who is dispatching changes nothing about the order.",
     "artifact": "models/4.1-dispatch-and-assign.bpmn"
    },
    "en17007": {
@@ -392,6 +411,10 @@
    "provenance": {
     "basis": "judgment",
     "primary": "29 CFR 1910.269 and IEC 61968-6:2015"
+   },
+   "regulatory": {
+    "class": null,
+    "why": "no regulation reaches this process"
    }
   },
   {
@@ -526,7 +549,7 @@
    ],
    "notation": {
     "class": "BPMN",
-    "why": "The process has a repeatable start, ordered activities and a defined completion outcome.",
+    "why": "Starts when the crew receives the dispatch and ends at the last milestone recorded. The milestones are fixed - acknowledge, en route, on site - and only their timing varies.",
     "artifact": "models/4.1-dispatch-and-assign.bpmn"
    },
    "en17007": {
@@ -564,6 +587,10 @@
    "provenance": {
     "basis": "judgment",
     "primary": "29 CFR 1910.269 and IEC 61968-6:2015"
+   },
+   "regulatory": {
+    "class": null,
+    "why": "no regulation reaches this process"
    }
   },
   {
@@ -703,7 +730,7 @@
    ],
    "notation": {
     "class": "CMMN",
-    "why": "The responsible person selects actions according to evolving field evidence and operating conditions.",
+    "why": "Chase, escalate, re-plan or leave alone are all available at once, and which the dispatcher takes depends on the exception in front of them rather than on a fixed order.",
     "artifact": "models/4.1.4-monitor-progress-and-exception.cmmn"
    },
    "en17007": {
@@ -746,6 +773,10 @@
    "provenance": {
     "basis": "judgment",
     "primary": "29 CFR 1910.269 and IEC 61968-6:2015"
+   },
+   "regulatory": {
+    "class": "C",
+    "why": "29 CFR 1910.269 governs how this is done, not whether it is done"
    }
   },
   {
@@ -885,7 +916,7 @@
    ],
    "notation": {
     "class": "CMMN",
-    "why": "The responsible person selects actions according to evolving field evidence and operating conditions.",
+    "why": "Reassign, recall and cancel are three responses to the same situation, and two competent dispatchers legitimately pick differently depending on crew position and customer impact.",
     "artifact": "models/4.1.5-reassign-recall-and-cancel-work.cmmn"
    },
    "en17007": {
@@ -923,6 +954,10 @@
    "provenance": {
     "basis": "judgment",
     "primary": "29 CFR 1910.269 and IEC 61968-6:2015"
+   },
+   "regulatory": {
+    "class": null,
+    "why": "no regulation reaches this process"
    }
   },
   {
@@ -1061,7 +1096,7 @@
    ],
    "notation": {
     "class": "BPMN",
-    "why": "The process has a repeatable start, ordered activities and a defined completion outcome.",
+    "why": "Starts with the crew on site and ends either with prerequisites confirmed or a hold routed to its owner. The checks are the same list every time.",
     "artifact": "models/4.2-prepare-and-start-work.bpmn"
    },
    "en17007": {
@@ -1104,6 +1139,10 @@
    "provenance": {
     "basis": "regulation",
     "primary": "29 CFR 1910.269 and IEC 61968-6:2015"
+   },
+   "regulatory": {
+    "class": "C",
+    "why": "29 CFR 1910.269 governs how this is done, not whether it is done"
    }
   },
   {
@@ -1243,7 +1282,7 @@
    ],
    "notation": {
     "class": "BPMN",
-    "why": "The process has a repeatable start, ordered activities and a defined completion outcome.",
+    "why": "Starts when the crew is ready to begin, or when conditions materially change, and ends with the briefing recorded. 1910.269(c) fixes that it happens; the sequence does not vary.",
     "artifact": "models/4.2-prepare-and-start-work.bpmn"
    },
    "en17007": {
@@ -1286,6 +1325,10 @@
    "provenance": {
     "basis": "regulation",
     "primary": "29 CFR 1910.269 and IEC 61968-6:2015"
+   },
+   "regulatory": {
+    "class": "R",
+    "why": "29 CFR 1910.269(c)(1) requires a job briefing before each job"
    }
   },
   {
@@ -1425,7 +1468,7 @@
    ],
    "notation": {
     "class": "BPMN",
-    "why": "The process has a repeatable start, ordered activities and a defined completion outcome.",
+    "why": "Starts once briefing and operating controls are confirmed and ends when the authorised scope is done or stopped. The authorised sequence is set before the crew begins.",
     "artifact": "models/4.2-prepare-and-start-work.bpmn"
    },
    "en17007": {
@@ -1468,6 +1511,10 @@
    "provenance": {
     "basis": "regulation",
     "primary": "29 CFR 1910.269 and IEC 61968-6:2015"
+   },
+   "regulatory": {
+    "class": "C",
+    "why": "29 CFR 1910.269 governs how this is done, not whether it is done"
    }
   },
   {
@@ -1607,7 +1654,7 @@
    ],
    "notation": {
     "class": "BPMN",
-    "why": "The process has a repeatable start, ordered activities and a defined completion outcome.",
+    "why": "Starts at task completion, suspension or handover and ends with actuals submitted. What is recorded - tasks, labour, materials, exceptions - is the same set each time.",
     "artifact": "models/4.2-prepare-and-start-work.bpmn"
    },
    "en17007": {
@@ -1645,6 +1692,10 @@
    "provenance": {
     "basis": "regulation",
     "primary": "29 CFR 1910.269 and IEC 61968-6:2015"
+   },
+   "regulatory": {
+    "class": null,
+    "why": "no regulation reaches this process"
    }
   },
   {
@@ -1784,7 +1835,7 @@
    ],
    "notation": {
     "class": "CMMN",
-    "why": "The responsible person selects actions according to evolving field evidence and operating conditions.",
+    "why": "Suspend, transfer and escalate are alternatives, not stages. Which fits depends on why the work stopped, and a supervisor may reasonably choose any of them.",
     "artifact": "models/4.2.5-suspend-transfer-or-escalate-work.cmmn"
    },
    "en17007": {
@@ -1827,6 +1878,10 @@
    "provenance": {
     "basis": "regulation",
     "primary": "29 CFR 1910.269 and IEC 61968-6:2015"
+   },
+   "regulatory": {
+    "class": "C",
+    "why": "29 CFR 1910.269 governs how this is done, not whether it is done"
    }
   },
   {
@@ -1966,7 +2021,7 @@
    ],
    "notation": {
     "class": "BPMN",
-    "why": "The process has a repeatable start, ordered activities and a defined completion outcome.",
+    "why": "Starts when the crew reports field execution finished and ends with the crew released and follow-up identified. Every authorised task is dispositioned before release, in that order.",
     "artifact": "models/4.2-prepare-and-start-work.bpmn"
    },
    "en17007": {
@@ -2004,6 +2059,10 @@
    "provenance": {
     "basis": "regulation",
     "primary": "29 CFR 1910.269 and IEC 61968-6:2015"
+   },
+   "regulatory": {
+    "class": null,
+    "why": "no regulation reaches this process"
    }
   },
   {
@@ -2099,7 +2158,7 @@
      "raci": "A"
     },
     {
-     "role": "Records coordinator",
+     "role": "Field forms administrator",
      "raci": "C"
     }
    ],
@@ -2133,7 +2192,7 @@
    ],
    "notation": {
     "class": "BPMN",
-    "why": "The process has a repeatable start, ordered activities and a defined completion outcome.",
+    "why": "Starts when a work step calls for a structured record and ends at submission or a named exception. Open, complete, validate, submit does not vary with the form.",
     "artifact": "models/4.3-capture-field-data.bpmn"
    },
    "en17007": {
@@ -2176,6 +2235,10 @@
    "provenance": {
     "basis": "judgment",
     "primary": "IEC 61968-6:2015 and the Source Authority Pack field-service gap"
+   },
+   "regulatory": {
+    "class": null,
+    "why": "no regulation reaches this process"
    }
   },
   {
@@ -2306,7 +2369,7 @@
    ],
    "notation": {
     "class": "BPMN",
-    "why": "The process has a repeatable start, ordered activities and a defined completion outcome.",
+    "why": "Starts when a condition needs visual evidence and ends with the image linked to the work or rejected for retake. Capture then contextualise, always in that order.",
     "artifact": "models/4.3-capture-field-data.bpmn"
    },
    "en17007": {
@@ -2349,6 +2412,10 @@
    "provenance": {
     "basis": "judgment",
     "primary": "IEC 61968-6:2015 and the Source Authority Pack field-service gap"
+   },
+   "regulatory": {
+    "class": null,
+    "why": "no regulation reaches this process"
    }
   },
   {
@@ -2479,7 +2546,7 @@
    ],
    "notation": {
     "class": "BPMN",
-    "why": "The process has a repeatable start, ordered activities and a defined completion outcome.",
+    "why": "Starts when a task calls for a reading and ends with the value in context or flagged unreliable. Instrument eligibility is checked before the reading, never after.",
     "artifact": "models/4.3-capture-field-data.bpmn"
    },
    "en17007": {
@@ -2522,6 +2589,10 @@
    "provenance": {
     "basis": "judgment",
     "primary": "IEC 61968-6:2015 and the Source Authority Pack field-service gap"
+   },
+   "regulatory": {
+    "class": null,
+    "why": "no regulation reaches this process"
    }
   },
   {
@@ -2655,7 +2726,7 @@
    ],
    "notation": {
     "class": "BPMN",
-    "why": "The process has a repeatable start, ordered activities and a defined completion outcome.",
+    "why": "Starts when the work needs customer acknowledgement and ends with a signature, a refusal or an unavailable-customer record. All three are outcomes, not failures of the flow.",
     "artifact": "models/4.3-capture-field-data.bpmn"
    },
    "en17007": {
@@ -2698,6 +2769,10 @@
    "provenance": {
     "basis": "judgment",
     "primary": "IEC 61968-6:2015 and the Source Authority Pack field-service gap"
+   },
+   "regulatory": {
+    "class": null,
+    "why": "no regulation reaches this process"
    }
   },
   {
@@ -2832,7 +2907,7 @@
    ],
    "notation": {
     "class": "BPMN",
-    "why": "The process has a repeatable start, ordered activities and a defined completion outcome.",
+    "why": "Starts when field work assesses or changes a condition and ends with as-found and as-left both recorded. As-found precedes the work; as-left follows it.",
     "artifact": "models/4.3-capture-field-data.bpmn"
    },
    "en17007": {
@@ -2875,6 +2950,10 @@
    "provenance": {
     "basis": "judgment",
     "primary": "IEC 61968-6:2015 and the Source Authority Pack field-service gap"
+   },
+   "regulatory": {
+    "class": null,
+    "why": "no regulation reaches this process"
    }
   },
   {
@@ -3008,7 +3087,7 @@
    ],
    "notation": {
     "class": "DMN",
-    "why": "The output is an assignment, classification or eligibility value.",
+    "why": "The output is a preliminary failure code determined from observed symptoms against a code set. Confirming the cause is 12.4.2's; this returns the field's first reading.",
     "artifact": "models/4.3.6-capture-failure-symptoms-and-preliminary-codes.dmn"
    },
    "en17007": {
@@ -3051,6 +3130,10 @@
    "provenance": {
     "basis": "judgment",
     "primary": "IEC 61968-6:2015 and the Source Authority Pack field-service gap"
+   },
+   "regulatory": {
+    "class": null,
+    "why": "no regulation reaches this process"
    }
   },
   {
@@ -3152,7 +3235,7 @@
      "raci": "A"
     },
     {
-     "role": "Qualified workers",
+     "role": "Qualified worker",
      "raci": "C"
     },
     {
@@ -3190,7 +3273,7 @@
    ],
    "notation": {
     "class": "BPMN",
-    "why": "The process has a repeatable start, ordered activities and a defined completion outcome.",
+    "why": "Starts when a crew assembles, or a condition changes significantly, and ends with the tailboard recorded. A rebrief re-enters at the same start.",
     "artifact": "models/4.4-work-safely-in-the-field.bpmn"
    },
    "en17007": {
@@ -3233,6 +3316,10 @@
    "provenance": {
     "basis": "regulation",
     "primary": "29 CFR 1910.269 and IEC 61968-6:2015"
+   },
+   "regulatory": {
+    "class": "R",
+    "why": "29 CFR 1910.269(c)(1) requires the briefing; (c)(3)(ii) requires it again on a significant change"
    }
   },
   {
@@ -3372,7 +3459,7 @@
    ],
    "notation": {
     "class": "BPMN",
-    "why": "The process has a repeatable start, ordered activities and a defined completion outcome.",
+    "why": "Starts when a lone-worker activity begins and ends when the control is closed or escalated. The timer runs the sequence; the worker does not choose it.",
     "artifact": "models/4.4-work-safely-in-the-field.bpmn"
    },
    "en17007": {
@@ -3410,6 +3497,10 @@
    "provenance": {
     "basis": "regulation",
     "primary": "29 CFR 1910.269 and IEC 61968-6:2015"
+   },
+   "regulatory": {
+    "class": null,
+    "why": "no regulation reaches this process"
    }
   },
   {
@@ -3549,7 +3640,7 @@
    ],
    "notation": {
     "class": "BPMN",
-    "why": "The process has a repeatable start, ordered activities and a defined completion outcome.",
+    "why": "Starts at the observation and ends with the report and its notifications made. Make safe comes first every time, before classification or recording.",
     "artifact": "models/4.4-work-safely-in-the-field.bpmn"
    },
    "en17007": {
@@ -3587,6 +3678,10 @@
    "provenance": {
     "basis": "regulation",
     "primary": "29 CFR 1910.269 and IEC 61968-6:2015"
+   },
+   "regulatory": {
+    "class": null,
+    "why": "no regulation reaches this process"
    }
   },
   {
@@ -3680,7 +3775,7 @@
    ],
    "roles": [
     {
-     "role": "Employee in charge of clearance",
+     "role": "Employee in charge of the clearance",
      "raci": "R"
     },
     {
@@ -3692,7 +3787,7 @@
      "raci": "C"
     },
     {
-     "role": "Field workers",
+     "role": "Field worker",
      "raci": "I"
     }
    ],
@@ -3726,7 +3821,7 @@
    ],
    "notation": {
     "class": "DMN",
-    "why": "The output is an assignment, classification or eligibility value.",
+    "why": "The output is an eligibility value - whether the isolation and permit conditions hold - tested against what 18.4.4 issued. It authorises nothing itself.",
     "artifact": "models/4.4.4-confirm-isolation-and-permit-to-work.dmn"
    },
    "en17007": {
@@ -3769,6 +3864,10 @@
    "provenance": {
     "basis": "regulation",
     "primary": "29 CFR 1910.269 and IEC 61968-6:2015"
+   },
+   "regulatory": {
+    "class": "R",
+    "why": "29 CFR 1910.269(m)(2)(i) requires all of (m)(3) in the order specified"
    }
   },
   {
@@ -3908,7 +4007,7 @@
    ],
    "notation": {
     "class": "BPMN",
-    "why": "The process has a repeatable start, ordered activities and a defined completion outcome.",
+    "why": "Starts when a field change touches a monitored point and ends with the indication verified or a discrepancy raised. The comparison is against an expected state fixed beforehand.",
     "artifact": "models/4.4-work-safely-in-the-field.bpmn"
    },
    "en17007": {
@@ -3946,6 +4045,10 @@
    "provenance": {
     "basis": "regulation",
     "primary": "29 CFR 1910.269 and IEC 61968-6:2015"
+   },
+   "regulatory": {
+    "class": null,
+    "why": "no regulation reaches this process"
    }
   },
   {
@@ -4045,7 +4148,7 @@
      "raci": "C"
     },
     {
-     "role": "Records coordinator",
+     "role": "Field forms administrator",
      "raci": "I"
     }
    ],
@@ -4079,7 +4182,7 @@
    ],
    "notation": {
     "class": "SPEC",
-    "why": "This is a standing field capability without one repeatable instance boundary.",
+    "why": "A standing capability with no instance boundary: the device is offline for as long as it is offline. The instances are the records it holds, which belong to 4.5.2.",
     "artifact": null
    },
    "en17007": {
@@ -4122,6 +4225,10 @@
    "provenance": {
     "basis": "judgment",
     "primary": "IEC 61968-6:2015 and the Source Authority Pack field-service gap"
+   },
+   "regulatory": {
+    "class": null,
+    "why": "no regulation reaches this process"
    }
   },
   {
@@ -4218,7 +4325,7 @@
      "raci": "A"
     },
     {
-     "role": "Records coordinator",
+     "role": "Field forms administrator",
      "raci": "C"
     },
     {
@@ -4256,7 +4363,7 @@
    ],
    "notation": {
     "class": "BPMN",
-    "why": "The process has a repeatable start, ordered activities and a defined completion outcome.",
+    "why": "Starts when a device with pending records reconnects and ends with every record accepted or its conflict routed. Transmission order is controlled rather than chosen.",
     "artifact": "models/4.5-operate-mobile-and-offline.bpmn"
    },
    "en17007": {
@@ -4299,6 +4406,10 @@
    "provenance": {
     "basis": "judgment",
     "primary": "IEC 61968-6:2015 and the Source Authority Pack field-service gap"
+   },
+   "regulatory": {
+    "class": null,
+    "why": "no regulation reaches this process"
    }
   },
   {
@@ -4432,7 +4543,7 @@
    ],
    "notation": {
     "class": "SPEC",
-    "why": "This is a standing field capability without one repeatable instance boundary.",
+    "why": "A standing capability with no instance boundary. Map and spatial context are held continuously on the device; the syncing of them is 4.5.2's.",
     "artifact": null
    },
    "en17007": {
@@ -4475,6 +4586,10 @@
    "provenance": {
     "basis": "judgment",
     "primary": "IEC 61968-6:2015 and the Source Authority Pack field-service gap"
+   },
+   "regulatory": {
+    "class": null,
+    "why": "no regulation reaches this process"
    }
   },
   {
@@ -4609,7 +4724,7 @@
    ],
    "notation": {
     "class": "BPMN",
-    "why": "The process has a repeatable start, ordered activities and a defined completion outcome.",
+    "why": "Starts at a device request or failure and ends with the device provisioned or custody revoked. Access configuration follows assignment, never precedes it.",
     "artifact": "models/4.5-operate-mobile-and-offline.bpmn"
    },
    "en17007": {
@@ -4652,6 +4767,10 @@
    "provenance": {
     "basis": "judgment",
     "primary": "IEC 61968-6:2015 and the Source Authority Pack field-service gap"
+   },
+   "regulatory": {
+    "class": null,
+    "why": "no regulation reaches this process"
    }
   },
   {
@@ -4790,7 +4909,7 @@
    ],
    "notation": {
     "class": "BPMN",
-    "why": "The process has a repeatable start, ordered activities and a defined completion outcome.",
+    "why": "Starts when work ends before permanent reinstatement is possible and ends with the temporary surface placed and recorded. Assess, select, place, record each time.",
     "artifact": "models/4.6-restore-the-site.bpmn"
    },
    "en17007": {
@@ -4833,6 +4952,10 @@
    "provenance": {
     "basis": "regulation",
     "primary": "MUTCD 11th Edition with Revision 1"
+   },
+   "regulatory": {
+    "class": "C",
+    "why": "MUTCD governs how this is done, not whether it is done"
    }
   },
   {
@@ -4972,7 +5095,7 @@
    ],
    "notation": {
     "class": "BPMN",
-    "why": "The process has a repeatable start, ordered activities and a defined completion outcome.",
+    "why": "Starts when a temporary restoration is open and repeats on its inspection cycle until permanent work closes it. Each pass ends by setting the next due date.",
     "artifact": "models/4.6-restore-the-site.bpmn"
    },
    "en17007": {
@@ -5015,6 +5138,10 @@
    "provenance": {
     "basis": "regulation",
     "primary": "MUTCD 11th Edition with Revision 1"
+   },
+   "regulatory": {
+    "class": "C",
+    "why": "MUTCD governs how this is done, not whether it is done"
    }
   },
   {
@@ -5154,7 +5281,7 @@
    ],
    "notation": {
     "class": "BPMN",
-    "why": "The process has a repeatable start, ordered activities and a defined completion outcome.",
+    "why": "Starts when permanent reinstatement becomes due and ends with linked work scheduled against the jurisdiction deadline. The deadline is recorded before the work is created.",
     "artifact": "models/4.6-restore-the-site.bpmn"
    },
    "en17007": {
@@ -5197,6 +5324,10 @@
    "provenance": {
     "basis": "regulation",
     "primary": "MUTCD 11th Edition with Revision 1"
+   },
+   "regulatory": {
+    "class": "C",
+    "why": "MUTCD governs how this is done, not whether it is done"
    }
   },
   {
@@ -5336,7 +5467,7 @@
    ],
    "notation": {
     "class": "BPMN",
-    "why": "The process has a repeatable start, ordered activities and a defined completion outcome.",
+    "why": "Starts when permanent-restoration work is released and the site is ready, and ends with the surface finished and evidenced. Scope is verified before any material is placed.",
     "artifact": "models/4.6-restore-the-site.bpmn"
    },
    "en17007": {
@@ -5379,6 +5510,10 @@
    "provenance": {
     "basis": "regulation",
     "primary": "MUTCD 11th Edition with Revision 1"
+   },
+   "regulatory": {
+    "class": "C",
+    "why": "MUTCD governs how this is done, not whether it is done"
    }
   },
   {
@@ -5518,7 +5653,7 @@
    ],
    "notation": {
     "class": "BPMN",
-    "why": "The process has a repeatable start, ordered activities and a defined completion outcome.",
+    "why": "Starts at the jurisdiction inspection point and ends in acceptance or corrective work. The utility requests and attends; it does not decide the outcome.",
     "artifact": "models/4.6-restore-the-site.bpmn"
    },
    "en17007": {
@@ -5561,6 +5696,10 @@
    "provenance": {
     "basis": "regulation",
     "primary": "MUTCD 11th Edition with Revision 1"
+   },
+   "regulatory": {
+    "class": "C",
+    "why": "MUTCD governs how this is done, not whether it is done"
    }
   },
   {
@@ -5700,7 +5839,7 @@
    ],
    "notation": {
     "class": "BPMN",
-    "why": "The process has a repeatable start, ordered activities and a defined completion outcome.",
+    "why": "Starts when an open obligation reaches its monitoring threshold and ends with the owner notified or the breach escalated. The deadline is fixed before monitoring begins.",
     "artifact": "models/4.6-restore-the-site.bpmn"
    },
    "en17007": {
@@ -5743,6 +5882,10 @@
    "provenance": {
     "basis": "regulation",
     "primary": "MUTCD 11th Edition with Revision 1"
+   },
+   "regulatory": {
+    "class": "C",
+    "why": "MUTCD governs how this is done, not whether it is done"
    }
   }
  ]

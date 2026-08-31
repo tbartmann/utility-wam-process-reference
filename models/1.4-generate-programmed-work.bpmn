@@ -36,7 +36,7 @@
       <bpmndi:BPMNShape id="sh_t_lead" bpmnElement="t_lead"><dc:Bounds x="425" y="200" width="130" height="70"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_t_cap" bpmnElement="t_cap"><dc:Bounds x="595" y="310" width="130" height="70"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_t_gen" bpmnElement="t_gen"><dc:Bounds x="765" y="200" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_t_recon" bpmnElement="t_recon"><dc:Bounds x="935" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_t_recon" bpmnElement="t_recon"><dc:Bounds x="935" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_g_ok" bpmnElement="g_ok"><dc:Bounds x="1147" y="212" width="46" height="46"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_t_exc" bpmnElement="t_exc"><dc:Bounds x="1105" y="420" width="130" height="70"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_e_ok" bpmnElement="e_ok"><dc:Bounds x="1322" y="217" width="36" height="36"/></bpmndi:BPMNShape>
@@ -45,13 +45,33 @@
       <bpmndi:BPMNEdge id="ed_f_s_insp_t_pop" bpmnElement="f_s_insp_t_pop"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_s_prog_t_pop" bpmnElement="f_s_prog_t_pop"><di:waypoint x="168" y="345"/><di:waypoint x="230" y="345"/><di:waypoint x="230" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_t_pop_t_lead" bpmnElement="f_t_pop_t_lead"><di:waypoint x="385" y="235"/><di:waypoint x="425" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_t_lead_t_cap" bpmnElement="f_t_lead_t_cap"><di:waypoint x="555" y="235"/><di:waypoint x="570" y="235"/><di:waypoint x="570" y="345"/><di:waypoint x="595" y="345"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_t_lead_t_gen" bpmnElement="f_t_lead_t_gen"><di:waypoint x="555" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_t_cap_t_gen" bpmnElement="f_t_cap_t_gen"><di:waypoint x="725" y="345"/><di:waypoint x="740" y="345"/><di:waypoint x="740" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_t_lead_t_cap" bpmnElement="f_t_lead_t_cap"><di:waypoint x="555" y="235"/><di:waypoint x="570" y="235"/><di:waypoint x="570" y="345"/><di:waypoint x="595" y="345"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="575" y="281.5" width="99.2" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_t_lead_t_gen" bpmnElement="f_t_lead_t_gen"><di:waypoint x="555" y="235"/><di:waypoint x="765" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="621.6" y="200" width="76.8" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_t_cap_t_gen" bpmnElement="f_t_cap_t_gen"><di:waypoint x="725" y="345"/><di:waypoint x="740" y="345"/><di:waypoint x="740" y="235"/><di:waypoint x="765" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="745" y="286.1" width="71.2" height="43" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_t_gen_t_recon" bpmnElement="f_t_gen_t_recon"><di:waypoint x="895" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_t_recon_g_ok" bpmnElement="f_t_recon_g_ok"><di:waypoint x="1065" y="235"/><di:waypoint x="1147" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_g_ok_t_exc" bpmnElement="f_g_ok_t_exc"><di:waypoint x="1193" y="235"/><di:waypoint x="1080" y="235"/><di:waypoint x="1080" y="455"/><di:waypoint x="1105" y="455"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_g_ok_e_ok" bpmnElement="f_g_ok_e_ok"><di:waypoint x="1193" y="235"/><di:waypoint x="1322" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_g_ok_t_exc" bpmnElement="f_g_ok_t_exc"><di:waypoint x="1193" y="235"/><di:waypoint x="1080" y="235"/><di:waypoint x="1080" y="455"/><di:waypoint x="1105" y="455"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1009.4" y="440" width="65.6" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_g_ok_e_ok" bpmnElement="f_g_ok_e_ok"><di:waypoint x="1193" y="235"/><di:waypoint x="1322" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1227.5" y="213" width="60" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_t_exc_e_exc" bpmnElement="f_t_exc_e_exc"><di:waypoint x="1235" y="455"/><di:waypoint x="1322" y="455"/></bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

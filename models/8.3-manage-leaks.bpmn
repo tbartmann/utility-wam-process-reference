@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_P_8_3" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <process id="P_8_3" name="8.3 Manage leaks and hazards" isExecutable="false">
+    <documentation>8.3.2 and 8.3.3 are drawn. 8.3.1 is the DMN this flow calls and 8.3.4 is SPEC - the open population is held and aged continuously.
+
+THE LEAK IS THE TRACKED OBJECT, NOT THE VISIT. Every path returns to the same leak record. A re-check that opens a new record destroys the history that shows whether the indication is deteriorating, and that history is the only evidence an operator has that a grade 3 was safe to leave.
+
+TEMPORARY MITIGATION IS NOT REPAIR. GPTC sec. 5.8 treats it as a holding measure and the flow keeps the leak OPEN behind it, with its grade and its clock intact. Closing on mitigation is how a leak leaves the record while remaining in the ground, and it is drawn as a loop back to the open population rather than as an end event.
+
+The grade 1 branch leaves the category. An existing or probable hazard is continuous action under 9.1, not a job in a queue.</documentation>
+    <laneSet id="P_8_3_lanes">
+      <lane id="l_83_comp" name="Compliance and leak records">
+        <flowNodeRef>n_83_start</flowNodeRef>
+        <flowNodeRef>n_83_grade</flowNodeRef>
+        <flowNodeRef>n_83_g1</flowNodeRef>
+        <flowNodeRef>n_83_emg</flowNodeRef>
+        <flowNodeRef>n_83_sched</flowNodeRef>
+        <flowNodeRef>n_83_open</flowNodeRef>
+        <flowNodeRef>n_83_due</flowNodeRef>
+        <flowNodeRef>n_83_end</flowNodeRef>
+      </lane>
+      <lane id="l_83_field" name="Field execution">
+        <flowNodeRef>n_83_safe</flowNodeRef>
+        <flowNodeRef>n_83_can</flowNodeRef>
+        <flowNodeRef>n_83_mit</flowNodeRef>
+        <flowNodeRef>n_83_rep</flowNodeRef>
+        <flowNodeRef>n_83_re</flowNodeRef>
+      </lane>
+    </laneSet>
+    <startEvent id="n_83_start" name="A leak indication has been recorded"><messageEventDefinition id="n_83_start_md"/></startEvent>
+    <businessRuleTask id="n_83_grade" name="Grade the indication and name the authority"><documentation>8.3.1. Returns the grade AND the authority - state adoption, or the operator's 192.605 manual. GPTC is consensus, not law.</documentation></businessRuleTask>
+    <exclusiveGateway id="n_83_g1" name="Existing or probable hazard"/>
+    <sendTask id="n_83_emg" name="Hand to emergency response"><documentation>Grade 1 leaves 8.0. Continuous action under 9.1 until it is no longer hazardous.</documentation></sendTask>
+    <serviceTask id="n_83_sched" name="Schedule against the response time the grade set"><documentation>8.3.2. The response time comes from the authority, not from the section.</documentation></serviceTask>
+    <userTask id="n_83_safe" name="Make the location safe and control ignition sources"><documentation>8.3.2. 192.751 requires ignition sources to be controlled wherever gas may be present.</documentation></userTask>
+    <exclusiveGateway id="n_83_can" name="Repair can be made now"/>
+    <userTask id="n_83_mit" name="Apply temporary mitigation"><documentation>8.3.2. GPTC sec. 5.8. A holding measure. The leak stays OPEN with its grade.</documentation></userTask>
+    <userTask id="n_83_rep" name="Repair the leak"><documentation>8.3.2. 192.703(c): hazardous leaks repaired promptly. Purge under 192.629 is 8.6.5's operation.</documentation></userTask>
+    <serviceTask id="n_83_open" name="Return the leak to the open population"><documentation>8.3.4, SPEC. Aged from the INDICATION, not from the work order.</documentation></serviceTask>
+    <receiveTask id="n_83_due" name="Hold until the follow-up interval falls due"><documentation>8.3.3. GPTC sec. 5.9. No federal section sets a re-check interval.</documentation></receiveTask>
+    <userTask id="n_83_re" name="Re-check the indication"><documentation>8.3.3.</documentation></userTask>
+    <endEvent id="n_83_end" name="Leak repaired and closed"/>
+    <sequenceFlow id="f_n_83_start_n_83_grade" sourceRef="n_83_start" targetRef="n_83_grade" name=""/>
+    <sequenceFlow id="f_n_83_grade_n_83_g1" sourceRef="n_83_grade" targetRef="n_83_g1" name=""/>
+    <sequenceFlow id="f_n_83_g1_n_83_emg" sourceRef="n_83_g1" targetRef="n_83_emg" name="grade 1"><conditionExpression xsi:type="tFormalExpression"><![CDATA[grade = "grade1"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_83_g1_n_83_sched" sourceRef="n_83_g1" targetRef="n_83_sched" name="grade 2 or 3"/>
+    <sequenceFlow id="f_n_83_sched_n_83_safe" sourceRef="n_83_sched" targetRef="n_83_safe" name=""/>
+    <sequenceFlow id="f_n_83_safe_n_83_can" sourceRef="n_83_safe" targetRef="n_83_can" name=""/>
+    <sequenceFlow id="f_n_83_can_n_83_rep" sourceRef="n_83_can" targetRef="n_83_rep" name="repair now"/>
+    <sequenceFlow id="f_n_83_can_n_83_mit" sourceRef="n_83_can" targetRef="n_83_mit" name="cannot yet repair"><conditionExpression xsi:type="tFormalExpression"><![CDATA[repairPossible = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_83_mit_n_83_open" sourceRef="n_83_mit" targetRef="n_83_open" name=""/>
+    <sequenceFlow id="f_n_83_open_n_83_due" sourceRef="n_83_open" targetRef="n_83_due" name=""/>
+    <sequenceFlow id="f_n_83_due_n_83_re" sourceRef="n_83_due" targetRef="n_83_re" name=""/>
+    <sequenceFlow id="f_n_83_re_n_83_grade" sourceRef="n_83_re" targetRef="n_83_grade" name=""/>
+    <sequenceFlow id="f_n_83_rep_n_83_end" sourceRef="n_83_rep" targetRef="n_83_end" name=""/>
+  </process>
+  <bpmndi:BPMNDiagram id="dg_P_8_3">
+    <bpmndi:BPMNPlane id="pl_P_8_3" bpmnElement="P_8_3">
+      <bpmndi:BPMNShape id="sh_n_83_start" bpmnElement="n_83_start"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_83_grade" bpmnElement="n_83_grade"><dc:Bounds x="255" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_83_g1" bpmnElement="n_83_g1"><dc:Bounds x="467" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_83_emg" bpmnElement="n_83_emg"><dc:Bounds x="425" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_83_sched" bpmnElement="n_83_sched"><dc:Bounds x="595" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_83_safe" bpmnElement="n_83_safe"><dc:Bounds x="765" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_83_can" bpmnElement="n_83_can"><dc:Bounds x="977" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_83_mit" bpmnElement="n_83_mit"><dc:Bounds x="935" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_83_rep" bpmnElement="n_83_rep"><dc:Bounds x="1105" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_83_open" bpmnElement="n_83_open"><dc:Bounds x="1105" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_83_due" bpmnElement="n_83_due"><dc:Bounds x="1275" y="411.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_83_re" bpmnElement="n_83_re"><dc:Bounds x="1445" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_83_end" bpmnElement="n_83_end"><dc:Bounds x="1322" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ed_f_n_83_start_n_83_grade" bpmnElement="f_n_83_start_n_83_grade"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_83_grade_n_83_g1" bpmnElement="f_n_83_grade_n_83_g1"><di:waypoint x="385" y="235"/><di:waypoint x="467" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_83_g1_n_83_emg" bpmnElement="f_n_83_g1_n_83_emg"><di:waypoint x="513" y="235"/><di:waypoint x="400" y="235"/><di:waypoint x="400" y="455"/><di:waypoint x="425" y="455"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="351.8" y="446.5" width="43.2" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_83_g1_n_83_sched" bpmnElement="f_n_83_g1_n_83_sched"><di:waypoint x="513" y="235"/><di:waypoint x="595" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="518.4" y="213" width="71.2" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_83_sched_n_83_safe" bpmnElement="f_n_83_sched_n_83_safe"><di:waypoint x="725" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_83_safe_n_83_can" bpmnElement="f_n_83_safe_n_83_can"><di:waypoint x="895" y="235"/><di:waypoint x="977" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_83_can_n_83_rep" bpmnElement="f_n_83_can_n_83_rep"><di:waypoint x="1023" y="235"/><di:waypoint x="1105" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1034" y="213" width="60" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_83_can_n_83_mit" bpmnElement="f_n_83_can_n_83_mit"><di:waypoint x="1023" y="235"/><di:waypoint x="910" y="235"/><di:waypoint x="910" y="455"/><di:waypoint x="935" y="455"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="805.8" y="446.5" width="99.2" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_83_mit_n_83_open" bpmnElement="f_n_83_mit_n_83_open"><di:waypoint x="1065" y="455"/><di:waypoint x="1105" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_83_open_n_83_due" bpmnElement="f_n_83_open_n_83_due"><di:waypoint x="1235" y="455"/><di:waypoint x="1275" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_83_due_n_83_re" bpmnElement="f_n_83_due_n_83_re"><di:waypoint x="1405" y="455"/><di:waypoint x="1445" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_83_re_n_83_grade" bpmnElement="f_n_83_re_n_83_grade"><di:waypoint x="1575" y="455"/><di:waypoint x="230" y="455"/><di:waypoint x="230" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_83_rep_n_83_end" bpmnElement="f_n_83_rep_n_83_end"><di:waypoint x="1235" y="235"/><di:waypoint x="1322" y="235"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/" id="Span_of_control" name="14.2.6 Apply span-of-control and abnormal-condition rules" namespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <description>Gas only, and it exists because 49 CFR 192.805 permits something people assume it forbids: an unqualified individual MAY perform a covered task, when directed and observed by a qualified individual.
+
+THE RATIO IS NOT IN THE CFR AND THIS TABLE DOES NOT INVENT ONE. 192.805 requires the programme to provide for direction and observation and to address abnormal operating conditions. It sets no number. The span-of-control limit is entirely the operator's, it arrives here as an input rather than as a constant, and every row that uses it names it as the operator's rather than citing it to the section. A table with a hard-coded ratio would be a fabrication wearing a citation.
+
+THE ABNORMAL-OPERATING-CONDITION DUTY DOES NOT TRANSFER. It stays with the qualified individual whatever the direction arrangement, which is why the last substantive row refuses an arrangement that would leave nobody carrying it. Recording who was directing is what makes the duty attributable afterwards.
+
+There is no electric equivalent. No federal qualification programme requirement exists for electric distribution workers, so there is nothing to set a span against and this table is not applied to electric work.</description>
+  <inputData id="in_covered" name="The task is a covered task under 49 CFR 192.803"><variable id="in_covered_v" name="The task is a covered task under 49 CFR 192.803" typeRef="boolean"/></inputData>
+  <inputData id="in_directorQualified" name="The directing individual is qualified for the task"><variable id="in_directorQualified_v" name="The directing individual is qualified for the task" typeRef="boolean"/></inputData>
+  <inputData id="in_withinSpan" name="The number directed is within the operator's own limit"><variable id="in_withinSpan_v" name="The number directed is within the operator's own limit" typeRef="boolean"/></inputData>
+  <inputData id="in_aocHeld" name="A qualified individual holds the abnormal-operating-condition duty"><variable id="in_aocHeld_v" name="A qualified individual holds the abnormal-operating-condition duty" typeRef="boolean"/></inputData>
+  <knowledgeSource id="ks_span" name="49 CFR 192.805 Qualification program; 49 CFR 192.801 scope; ASME B31Q-2025"><description>192.805 requires the programme to allow an unqualified individual to perform a covered task only when directed and observed by a qualified individual, and to address abnormal operating conditions. It sets NO span-of-control number. The limit is the operator's and must be recorded as the operator's.</description></knowledgeSource>
+  <decision id="d_14_2_6" name="Arrangement permitted, or the reason it is refused">
+    <variable id="d_14_2_6_v" name="Arrangement permitted, or the reason it is refused" typeRef="string"/>
+    <informationRequirement id="ir_d_14_2_6_ks_span"><requiredInput href="#ks_span"/></informationRequirement>
+    <decisionTable id="d_14_2_6_dt" hitPolicy="FIRST" preferredOrientation="Rule-as-Row">
+      <input id="d_14_2_6_i1" label="Covered task"><inputExpression id="d_14_2_6_i1_e" typeRef="boolean"><text>in_covered</text></inputExpression></input>
+      <input id="d_14_2_6_i2" label="Director qualified"><inputExpression id="d_14_2_6_i2_e" typeRef="boolean"><text>in_directorQualified</text></inputExpression></input>
+      <input id="d_14_2_6_i3" label="Within the operator's span limit"><inputExpression id="d_14_2_6_i3_e" typeRef="boolean"><text>in_withinSpan</text></inputExpression></input>
+      <input id="d_14_2_6_i4" label="Abnormal-condition duty held"><inputExpression id="d_14_2_6_i4_e" typeRef="boolean"><text>in_aocHeld</text></inputExpression></input>
+      <output id="d_14_2_6_o" label="Arrangement permitted, or the reason it is refused" name="Arrangement permitted, or the reason it is refused" typeRef="string"/>
+      <rule id="d_14_2_6_r1">
+        <description>Outside Subpart N. Direction and observation are a competence matter under 14.2.1, not a regulatory one, and this table does not reach it.</description>
+        <inputEntry id="d_14_2_6_r1_ie1"><text>false</text></inputEntry>
+        <inputEntry id="d_14_2_6_r1_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_14_2_6_r1_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_14_2_6_r1_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_14_2_6_r1_oe"><text>"notApplicable_notCovered"</text></outputEntry>
+      </rule>
+      <rule id="d_14_2_6_r2">
+        <description>192.805. The person directing and observing must themselves be qualified for the task. An unqualified director is the arrangement the section exists to prevent.</description>
+        <inputEntry id="d_14_2_6_r2_ie1"><text>true</text></inputEntry>
+        <inputEntry id="d_14_2_6_r2_ie2"><text>false</text></inputEntry>
+        <inputEntry id="d_14_2_6_r2_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_14_2_6_r2_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_14_2_6_r2_oe"><text>"refused_directorNotQualified"</text></outputEntry>
+      </rule>
+      <rule id="d_14_2_6_r3">
+        <description>Exceeds the OPERATOR'S limit. Not a CFR figure - 192.805 sets none - so the refusal is recorded against the operator's programme and the limit is named as the operator's.</description>
+        <inputEntry id="d_14_2_6_r3_ie1"><text>true</text></inputEntry>
+        <inputEntry id="d_14_2_6_r3_ie2"><text>true</text></inputEntry>
+        <inputEntry id="d_14_2_6_r3_ie3"><text>false</text></inputEntry>
+        <inputEntry id="d_14_2_6_r3_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_14_2_6_r3_oe"><text>"refused_exceedsOperatorSpanLimit"</text></outputEntry>
+      </rule>
+      <rule id="d_14_2_6_r4">
+        <description>192.805 requires abnormal operating conditions to be addressed, and the duty stays with a qualified individual. An arrangement leaving nobody holding it is refused even where the span is within limit.</description>
+        <inputEntry id="d_14_2_6_r4_ie1"><text>true</text></inputEntry>
+        <inputEntry id="d_14_2_6_r4_ie2"><text>true</text></inputEntry>
+        <inputEntry id="d_14_2_6_r4_ie3"><text>true</text></inputEntry>
+        <inputEntry id="d_14_2_6_r4_ie4"><text>false</text></inputEntry>
+        <outputEntry id="d_14_2_6_r4_oe"><text>"refused_abnormalConditionDutyUnheld"</text></outputEntry>
+      </rule>
+      <rule id="d_14_2_6_r5">
+        <description>192.805 satisfied: qualified director, within the operator's limit, and the abnormal-operating-condition duty held. The directing individual is recorded, because the duty is attributed to them afterwards.</description>
+        <inputEntry id="d_14_2_6_r5_ie1"><text>true</text></inputEntry>
+        <inputEntry id="d_14_2_6_r5_ie2"><text>true</text></inputEntry>
+        <inputEntry id="d_14_2_6_r5_ie3"><text>true</text></inputEntry>
+        <inputEntry id="d_14_2_6_r5_ie4"><text>true</text></inputEntry>
+        <outputEntry id="d_14_2_6_r5_oe"><text>"permitted_directedAndObserved"</text></outputEntry>
+      </rule>
+      <rule id="d_14_2_6_r6">
+        <description>The arrangement is not established. Refused rather than defaulted, for the same reason as 14.2.4's last row.</description>
+        <inputEntry id="d_14_2_6_r6_ie1"><text>-</text></inputEntry>
+        <inputEntry id="d_14_2_6_r6_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_14_2_6_r6_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_14_2_6_r6_ie4"><text>-</text></inputEntry>
+        <outputEntry id="d_14_2_6_r6_oe"><text>"refused_positionNotEstablished"</text></outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram id="drd_Span_of_control">
+      <dmndi:DMNShape id="sh_in_covered" dmnElementRef="in_covered"><dc:Bounds x="60" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_directorQualified" dmnElementRef="in_directorQualified"><dc:Bounds x="245" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_withinSpan" dmnElementRef="in_withinSpan"><dc:Bounds x="430" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_aocHeld" dmnElementRef="in_aocHeld"><dc:Bounds x="615" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_d_14_2_6" dmnElementRef="d_14_2_6"><dc:Bounds x="60" y="240" width="180" height="70"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_ks_span" dmnElementRef="ks_span"><dc:Bounds x="900" y="100" width="160" height="55"/></dmndi:DMNShape>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</definitions>

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_P_8_8" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <process id="P_8_8" name="8.8 Manage distribution integrity programme" isExecutable="false">
+    <documentation>Five of the seven processes are drawn. 8.8.1 the written programme and 8.8.3 the risk ranking are SPEC.
+
+THIS IS THE ONLY COMPLETE MANAGEMENT CYCLE IN THE REFERENCE THAT A REGULATION WRITES OUT IN FULL. 49 CFR 192.1007 names seven elements in order - (a) know the infrastructure, (b) identify threats, (c) evaluate and rank risk, (d) identify and implement measures, (e) measure performance, (f) periodically evaluate and improve, (g) report results - and the flow follows them rather than a cycle of the author's. Where the rest of the library derives a sequence from consensus or judgment, this one is the rule.
+
+8.8.3 IS SPEC AND THAT IS THE FINDING. 192.1007(c) requires the evaluation and prescribes NO method. Drawing it as a decision table would mean inventing the ranking rule and then citing the CFR for it, which the CFR does not support. The gap is recorded rather than filled.
+
+TWO BOUNDARIES ARE DRAWN AS HANDOVERS. 12.6.2 assesses an ASSET on the operator's own method and is not regulatory; this ranks THREATS to the system under a federal rule, and both are kept because not all asset risk assessment is regulatory. And 8.8.7 produces and validates the four reportable measures while 15.3.1 files the report - producing a number and submitting it have different owners and different evidence. Both ruled by Tim, 2026-08-30.
+
+Gas distribution only. 16 U.S.C. 824o excludes local distribution of electric energy from the bulk-power system, and no electric distribution integrity management regime exists at federal level at all.</documentation>
+    <laneSet id="P_8_8_lanes">
+      <lane id="l_88_int" name="Integrity management">
+        <flowNodeRef>n_88_start</flowNodeRef>
+        <flowNodeRef>n_88_know</flowNodeRef>
+        <flowNodeRef>n_88_thr</flowNodeRef>
+        <flowNodeRef>n_88_attr</flowNodeRef>
+        <flowNodeRef>n_88_rank</flowNodeRef>
+        <flowNodeRef>n_88_ast</flowNodeRef>
+        <flowNodeRef>n_88_sel</flowNodeRef>
+        <flowNodeRef>n_88_how</flowNodeRef>
+        <flowNodeRef>n_88_re</flowNodeRef>
+        <flowNodeRef>n_88_end</flowNodeRef>
+      </lane>
+      <lane id="l_88_del" name="Delivery and reporting">
+        <flowNodeRef>n_88_work</flowNodeRef>
+        <flowNodeRef>n_88_cap</flowNodeRef>
+        <flowNodeRef>n_88_meas</flowNodeRef>
+        <flowNodeRef>n_88_four</flowNodeRef>
+        <flowNodeRef>n_88_file</flowNodeRef>
+      </lane>
+    </laneSet>
+    <startEvent id="n_88_start" name="The programme cycle opens"><timerEventDefinition id="n_88_start_td"/></startEvent>
+    <receiveTask id="n_88_know" name="Take the written programme and system knowledge"><documentation>8.8.1, SPEC. 192.1007(a). Recorded GAPS in knowledge are an input, not an embarrassment: an unknown material or vintage is itself a threat characteristic.</documentation></receiveTask>
+    <userTask id="n_88_thr" name="Identify existing and potential threats"><documentation>8.8.2. 192.1007(b). Inputs include 8.2.5 internal corrosion, 8.3.4 leak backlog, 8.4.5 damage statistics and 8.7.1 cross bore risk - named evidence, not incidental history.</documentation></userTask>
+    <serviceTask id="n_88_attr" name="Attribute each threat to what it reaches"><documentation>8.8.2. A threat identified generically for the whole system tells the ranking nothing.</documentation></serviceTask>
+    <sendTask id="n_88_rank" name="Evaluate and rank the risk"><documentation>8.8.3, SPEC. 192.1007(c) requires the evaluation and prescribes no method. The method and its uncertainty are recorded WITH the rank or it cannot be re-evaluated at 8.8.6.</documentation></sendTask>
+    <sendTask id="n_88_ast" name="Asset-level risk, where it is procedure rather than rule"><documentation>12.6.2. Kept separate because not all asset risk assessment is regulatory.</documentation></sendTask>
+    <userTask id="n_88_sel" name="Select the risk-reduction measures"><documentation>8.8.4. 192.1007(d) requires identification AND implementation; identifying alone does not satisfy the element.</documentation></userTask>
+    <exclusiveGateway id="n_88_how" name="How the measure is delivered"/>
+    <sendTask id="n_88_work" name="Release as maintenance or inspection work"><documentation>8.8.4. Tracked against the THREAT it was selected for, not against the work order.</documentation></sendTask>
+    <sendTask id="n_88_cap" name="Compete it in the capital programme at 17.4"><documentation>8.8.4. The integrity rank is an input to that competition, not an authorisation to spend.</documentation></sendTask>
+    <businessRuleTask id="n_88_meas" name="Measure performance against the baseline"><documentation>8.8.5. 192.1007(e). Against the BASELINE the programme set, not against last period.</documentation></businessRuleTask>
+    <userTask id="n_88_four" name="Produce and validate the four reportable measures"><documentation>8.8.7. 192.1007(e) and (g), reported under 191.11. Reconciliation precedes the number.</documentation></userTask>
+    <sendTask id="n_88_file" name="Hand the validated measures to 15.3.1 to file"><documentation>8.8.7. 15.3.1 submits. This process does not file anything.</documentation></sendTask>
+    <userTask id="n_88_re" name="Re-evaluate the programme and improve it"><documentation>8.8.6. 192.1007(f). 192.1013 requires a deviation to be reported - a quiet change is how a deviation becomes invisible.</documentation></userTask>
+    <endEvent id="n_88_end" name="Programme cycle closed and reissued"/>
+    <sequenceFlow id="f_n_88_start_n_88_know" sourceRef="n_88_start" targetRef="n_88_know" name=""/>
+    <sequenceFlow id="f_n_88_know_n_88_thr" sourceRef="n_88_know" targetRef="n_88_thr" name=""/>
+    <sequenceFlow id="f_n_88_thr_n_88_attr" sourceRef="n_88_thr" targetRef="n_88_attr" name=""/>
+    <sequenceFlow id="f_n_88_attr_n_88_rank" sourceRef="n_88_attr" targetRef="n_88_rank" name=""/>
+    <sequenceFlow id="f_n_88_attr_n_88_ast" sourceRef="n_88_attr" targetRef="n_88_ast" name="asset-level, non-regulatory"/>
+    <sequenceFlow id="f_n_88_rank_n_88_sel" sourceRef="n_88_rank" targetRef="n_88_sel" name=""/>
+    <sequenceFlow id="f_n_88_sel_n_88_how" sourceRef="n_88_sel" targetRef="n_88_how" name=""/>
+    <sequenceFlow id="f_n_88_how_n_88_work" sourceRef="n_88_how" targetRef="n_88_work" name="work"/>
+    <sequenceFlow id="f_n_88_how_n_88_cap" sourceRef="n_88_how" targetRef="n_88_cap" name="replacement programme"/>
+    <sequenceFlow id="f_n_88_how_n_88_meas" sourceRef="n_88_how" targetRef="n_88_meas" name="procedure or training change"/>
+    <sequenceFlow id="f_n_88_work_n_88_meas" sourceRef="n_88_work" targetRef="n_88_meas" name=""/>
+    <sequenceFlow id="f_n_88_cap_n_88_meas" sourceRef="n_88_cap" targetRef="n_88_meas" name=""/>
+    <sequenceFlow id="f_n_88_meas_n_88_four" sourceRef="n_88_meas" targetRef="n_88_four" name=""/>
+    <sequenceFlow id="f_n_88_four_n_88_file" sourceRef="n_88_four" targetRef="n_88_file" name=""/>
+    <sequenceFlow id="f_n_88_file_n_88_re" sourceRef="n_88_file" targetRef="n_88_re" name=""/>
+    <sequenceFlow id="f_n_88_re_n_88_end" sourceRef="n_88_re" targetRef="n_88_end" name=""/>
+  </process>
+  <bpmndi:BPMNDiagram id="dg_P_8_8">
+    <bpmndi:BPMNPlane id="pl_P_8_8" bpmnElement="P_8_8">
+      <bpmndi:BPMNShape id="sh_n_88_start" bpmnElement="n_88_start"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_88_know" bpmnElement="n_88_know"><dc:Bounds x="255" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_88_thr" bpmnElement="n_88_thr"><dc:Bounds x="425" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_88_attr" bpmnElement="n_88_attr"><dc:Bounds x="595" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_88_rank" bpmnElement="n_88_rank"><dc:Bounds x="765" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_88_ast" bpmnElement="n_88_ast"><dc:Bounds x="765" y="411.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_88_sel" bpmnElement="n_88_sel"><dc:Bounds x="935" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_88_how" bpmnElement="n_88_how"><dc:Bounds x="1147" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_88_work" bpmnElement="n_88_work"><dc:Bounds x="1105" y="411.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_88_cap" bpmnElement="n_88_cap"><dc:Bounds x="1105" y="631.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_88_meas" bpmnElement="n_88_meas"><dc:Bounds x="1275" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_88_four" bpmnElement="n_88_four"><dc:Bounds x="1445" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_88_file" bpmnElement="n_88_file"><dc:Bounds x="1615" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_88_re" bpmnElement="n_88_re"><dc:Bounds x="1785" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_88_end" bpmnElement="n_88_end"><dc:Bounds x="2002" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ed_f_n_88_start_n_88_know" bpmnElement="f_n_88_start_n_88_know"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_88_know_n_88_thr" bpmnElement="f_n_88_know_n_88_thr"><di:waypoint x="385" y="235"/><di:waypoint x="425" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_88_thr_n_88_attr" bpmnElement="f_n_88_thr_n_88_attr"><di:waypoint x="555" y="235"/><di:waypoint x="595" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_88_attr_n_88_rank" bpmnElement="f_n_88_attr_n_88_rank"><di:waypoint x="725" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_88_attr_n_88_ast" bpmnElement="f_n_88_attr_n_88_ast"><di:waypoint x="725" y="235"/><di:waypoint x="740" y="235"/><di:waypoint x="740" y="455"/><di:waypoint x="765" y="455"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="745" y="330" width="82.4" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_88_rank_n_88_sel" bpmnElement="f_n_88_rank_n_88_sel"><di:waypoint x="895" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_88_sel_n_88_how" bpmnElement="f_n_88_sel_n_88_how"><di:waypoint x="1065" y="235"/><di:waypoint x="1147" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_88_how_n_88_work" bpmnElement="f_n_88_how_n_88_work"><di:waypoint x="1193" y="235"/><di:waypoint x="1080" y="235"/><di:waypoint x="1080" y="455"/><di:waypoint x="1105" y="455"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1035" y="446.5" width="40" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_88_how_n_88_cap" bpmnElement="f_n_88_how_n_88_cap"><di:waypoint x="1193" y="235"/><di:waypoint x="1080" y="235"/><di:waypoint x="1080" y="675"/><di:waypoint x="1105" y="675"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1009.4" y="660" width="65.6" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_88_how_n_88_meas" bpmnElement="f_n_88_how_n_88_meas"><di:waypoint x="1193" y="235"/><di:waypoint x="1275" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1176.9" y="173" width="88" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_88_work_n_88_meas" bpmnElement="f_n_88_work_n_88_meas"><di:waypoint x="1235" y="455"/><di:waypoint x="1250" y="455"/><di:waypoint x="1250" y="235"/><di:waypoint x="1275" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_88_cap_n_88_meas" bpmnElement="f_n_88_cap_n_88_meas"><di:waypoint x="1235" y="675"/><di:waypoint x="1250" y="675"/><di:waypoint x="1250" y="235"/><di:waypoint x="1275" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_88_meas_n_88_four" bpmnElement="f_n_88_meas_n_88_four"><di:waypoint x="1405" y="235"/><di:waypoint x="1445" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_88_four_n_88_file" bpmnElement="f_n_88_four_n_88_file"><di:waypoint x="1575" y="235"/><di:waypoint x="1615" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_88_file_n_88_re" bpmnElement="f_n_88_file_n_88_re"><di:waypoint x="1745" y="235"/><di:waypoint x="1785" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_88_re_n_88_end" bpmnElement="f_n_88_re_n_88_end"><di:waypoint x="1915" y="235"/><di:waypoint x="2002" y="235"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

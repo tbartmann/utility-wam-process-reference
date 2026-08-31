@@ -4,7 +4,7 @@
 
 The regimes do not substitute for one another and the rows say so. 1910.269(m) governs electric transmission and distribution. 1910.147 lockout/tagout reaches gas distribution work precisely because 1910.147(a)(1)(ii)(C) excludes electric utility installations. Complying with the wrong one is not partial compliance - 1910.269(m)(1) treats a conductor deenergized under anything other than (d) or (m) as still energized.
 
-And a permit is not a clearance. A permit comes from an external authority and is obtained at 2.6; a clearance is an internal act of the system operator. A crew holding a street-opening permit and no clearance has authority to dig and none to touch the plant.</description>
+And a permit is not a clearance. A permit comes from an external authority and is obtained at 2.5; a clearance is an internal act of the system operator. A crew holding a street-opening permit and no clearance has authority to dig and none to touch the plant.</description>
   <inputData id="in_regime" name="Energy-control regime from 18.1.1"><variable id="in_regime_v" name="Energy-control regime from 18.1.1" typeRef="string"/></inputData>
   <inputData id="in_controlExists" name="The clearance or lockout is in place"><variable id="in_controlExists_v" name="The clearance or lockout is in place" typeRef="boolean"/></inputData>
   <inputData id="in_verified" name="Verified with the issuing authority"><variable id="in_verified_v" name="Verified with the issuing authority" typeRef="boolean"/></inputData>

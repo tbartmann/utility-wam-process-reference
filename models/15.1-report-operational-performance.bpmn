@@ -64,16 +64,24 @@ The reconciliation step is drawn rather than assumed. A report compiled over an 
       <bpmndi:BPMNShape id="sh_n_151_end" bpmnElement="n_151_end"><dc:Bounds x="1152" y="217" width="36" height="36"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_151_st" bpmnElement="n_151_st"><dc:Bounds x="132" y="657" width="36" height="36"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_151_coll" bpmnElement="n_151_coll"><dc:Bounds x="255" y="640" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_151_cls" bpmnElement="n_151_cls"><dc:Bounds x="425" y="640" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_151_rev" bpmnElement="n_151_rev"><dc:Bounds x="595" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_151_cls" bpmnElement="n_151_cls"><dc:Bounds x="425" y="631.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_151_rev" bpmnElement="n_151_rev"><dc:Bounds x="595" y="631.5" width="130" height="87"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_151_iss" bpmnElement="n_151_iss"><dc:Bounds x="765" y="640" width="130" height="70"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_151_send" bpmnElement="n_151_send"><dc:Bounds x="982" y="657" width="36" height="36"/></bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="ed_f_n_151_t_n_151_scope" bpmnElement="f_n_151_t_n_151_scope"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_151_scope_n_151_rec" bpmnElement="f_n_151_scope_n_151_rec"><di:waypoint x="385" y="235"/><di:waypoint x="425" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_151_rec_n_151_gap" bpmnElement="f_n_151_rec_n_151_gap"><di:waypoint x="555" y="235"/><di:waypoint x="637" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_151_gap_n_151_dec" bpmnElement="f_n_151_gap_n_151_dec"><di:waypoint x="683" y="235"/><di:waypoint x="570" y="235"/><di:waypoint x="570" y="455"/><di:waypoint x="595" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_151_gap_n_151_dec" bpmnElement="f_n_151_gap_n_151_dec"><di:waypoint x="683" y="235"/><di:waypoint x="570" y="235"/><di:waypoint x="570" y="455"/><di:waypoint x="595" y="455"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="488.2" y="440" width="76.8" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_151_dec_n_151_comp" bpmnElement="f_n_151_dec_n_151_comp"><di:waypoint x="725" y="455"/><di:waypoint x="740" y="455"/><di:waypoint x="740" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_151_gap_n_151_comp" bpmnElement="f_n_151_gap_n_151_comp"><di:waypoint x="683" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_151_gap_n_151_comp" bpmnElement="f_n_151_gap_n_151_comp"><di:waypoint x="683" y="235"/><di:waypoint x="765" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="699.6" y="213" width="48.8" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_151_comp_n_151_pub" bpmnElement="f_n_151_comp_n_151_pub"><di:waypoint x="895" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_151_pub_n_151_end" bpmnElement="f_n_151_pub_n_151_end"><di:waypoint x="1065" y="235"/><di:waypoint x="1152" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_151_st_n_151_coll" bpmnElement="f_n_151_st_n_151_coll"><di:waypoint x="168" y="675"/><di:waypoint x="255" y="675"/></bpmndi:BPMNEdge>

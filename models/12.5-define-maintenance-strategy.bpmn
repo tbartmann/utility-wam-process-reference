@@ -60,15 +60,15 @@ WITHDRAWAL IS DRAWN. A superseded job plan left published is the one the field w
   <bpmndi:BPMNDiagram id="dg_P_12_5">
     <bpmndi:BPMNPlane id="pl_P_12_5" bpmnElement="P_12_5">
       <bpmndi:BPMNShape id="sh_n_125_m" bpmnElement="n_125_m"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_125_sel" bpmnElement="n_125_sel"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_125_sel" bpmnElement="n_125_sel"><dc:Bounds x="255" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_125_route" bpmnElement="n_125_route"><dc:Bounds x="425" y="200" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_125_set" bpmnElement="n_125_set"><dc:Bounds x="595" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_125_set" bpmnElement="n_125_set"><dc:Bounds x="595" y="185" width="130" height="100"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_125_app" bpmnElement="n_125_app"><dc:Bounds x="765" y="200" width="130" height="70"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_125_pub" bpmnElement="n_125_pub"><dc:Bounds x="935" y="200" width="130" height="70"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_125_e1" bpmnElement="n_125_e1"><dc:Bounds x="1152" y="217" width="36" height="36"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_125_j" bpmnElement="n_125_j"><dc:Bounds x="132" y="657" width="36" height="36"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_125_draft" bpmnElement="n_125_draft"><dc:Bounds x="255" y="640" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_125_val" bpmnElement="n_125_val"><dc:Bounds x="425" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_125_val" bpmnElement="n_125_val"><dc:Bounds x="425" y="631.5" width="130" height="87"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_125_rev" bpmnElement="n_125_rev"><dc:Bounds x="595" y="640" width="130" height="70"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_125_ok" bpmnElement="n_125_ok"><dc:Bounds x="807" y="652" width="46" height="46"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_125_jpub" bpmnElement="n_125_jpub"><dc:Bounds x="935" y="640" width="130" height="70"/></bpmndi:BPMNShape>
@@ -84,8 +84,16 @@ WITHDRAWAL IS DRAWN. A superseded job plan left published is the one the field w
       <bpmndi:BPMNEdge id="ed_f_n_125_draft_n_125_val" bpmnElement="f_n_125_draft_n_125_val"><di:waypoint x="385" y="675"/><di:waypoint x="425" y="675"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_125_val_n_125_rev" bpmnElement="f_n_125_val_n_125_rev"><di:waypoint x="555" y="675"/><di:waypoint x="595" y="675"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_125_rev_n_125_ok" bpmnElement="f_n_125_rev_n_125_ok"><di:waypoint x="725" y="675"/><di:waypoint x="807" y="675"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_125_ok_n_125_draft" bpmnElement="f_n_125_ok_n_125_draft"><di:waypoint x="853" y="675"/><di:waypoint x="255" y="675"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_125_ok_n_125_jpub" bpmnElement="f_n_125_ok_n_125_jpub"><di:waypoint x="853" y="675"/><di:waypoint x="935" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_125_ok_n_125_draft" bpmnElement="f_n_125_ok_n_125_draft"><di:waypoint x="853" y="675"/><di:waypoint x="255" y="675"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="565.6" y="617" width="48.8" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_125_ok_n_125_jpub" bpmnElement="f_n_125_ok_n_125_jpub"><di:waypoint x="853" y="675"/><di:waypoint x="935" y="675"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="869.6" y="653" width="48.8" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_125_jpub_n_125_wd" bpmnElement="f_n_125_jpub_n_125_wd"><di:waypoint x="1065" y="675"/><di:waypoint x="1105" y="675"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_125_wd_n_125_e2" bpmnElement="f_n_125_wd_n_125_e2"><di:waypoint x="1235" y="675"/><di:waypoint x="1322" y="675"/></bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>

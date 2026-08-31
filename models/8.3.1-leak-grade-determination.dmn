@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/" id="Leak_grade" name="8.3.1 Classify leak by grade and severity" namespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <description>Returns the grade AND the authority for it, because the authority is the part a reader will get wrong.
+
+LEAK GRADES ARE NOT FEDERAL LAW. 49 CFR 192.703(c) - 'Hazardous leaks must be repaired promptly' - is the entire federal leak requirement. There is no federal grade, no federal response time and no federal table. The three grades come from ANSI/GPTC Z380.1 G-192-11, which is ANSI-accredited consensus published with an AGA secretariat and does NOT appear in the 49 CFR 192.7 incorporation-by-reference list. It binds only where a state has adopted it.
+
+So the table returns two values. The grade decides the response time; the authority decides whether that response time is enforceable, and against whom. A grade recorded without its authority cannot be defended at audit, which is the reason this is a decision table at all rather than a field judgment.
+
+The PHMSA leak detection and repair rule that would have codified grading federally was sent to the Federal Register on 2025-01-16 and withdrawn under the regulatory freeze before publication. It is history, not authority, and it is not in this table.
+
+The first row is the one that leaves this category. A grade 1 is an existing or probable hazard, which is a continuous-action condition and not a scheduling priority - it goes to 9.1's emergency path, not to 8.3.2's repair queue.</description>
+  <inputData id="in_hazard" name="Existing or probable hazard to person or property"><variable id="in_hazard_v" name="Existing or probable hazard to person or property" typeRef="boolean"/></inputData>
+  <inputData id="in_reading" name="Gas reading and its extent"><variable id="in_reading_v" name="Gas reading and its extent" typeRef="string"/></inputData>
+  <inputData id="in_location" name="Where the gas is: building, sub-surface, or open air"><variable id="in_location_v" name="Where the gas is: building, sub-surface, or open air" typeRef="string"/></inputData>
+  <inputData id="in_stateAdopted" name="The state has adopted a leak classification"><variable id="in_stateAdopted_v" name="The state has adopted a leak classification" typeRef="boolean"/></inputData>
+  <knowledgeSource id="ks_leak" name="49 CFR 192.703(c); ANSI/GPTC Z380.1-2025 G-192-11 sec. 5.6 and Tables 3a to 3c; 49 CFR 192.605"><description>192.703(c) is the whole federal requirement and sets no grade. The grades and their response times are GPTC consensus and are not incorporated by reference into Part 192. Where the state has not adopted them the authority is the operator's 192.605 manual, and that is what the response time is measured against.</description></knowledgeSource>
+  <decision id="d_8_3_1" name="Leak grade and its authority">
+    <variable id="d_8_3_1_v" name="Leak grade and its authority" typeRef="string"/>
+    <informationRequirement id="ir_d_8_3_1_ks_leak"><requiredInput href="#ks_leak"/></informationRequirement>
+    <decisionTable id="d_8_3_1_dt" hitPolicy="FIRST" preferredOrientation="Rule-as-Row">
+      <input id="d_8_3_1_i1" label="Hazard now or probable"><inputExpression id="d_8_3_1_i1_e" typeRef="boolean"><text>in_hazard</text></inputExpression></input>
+      <input id="d_8_3_1_i2" label="Location of the gas"><inputExpression id="d_8_3_1_i2_e" typeRef="string"><text>in_location</text></inputExpression></input>
+      <input id="d_8_3_1_i3" label="State has adopted a classification"><inputExpression id="d_8_3_1_i3_e" typeRef="boolean"><text>in_stateAdopted</text></inputExpression></input>
+      <output id="d_8_3_1_o" label="Leak grade and its authority" name="Leak grade and its authority" typeRef="string"/>
+      <rule id="d_8_3_1_r1">
+        <description>An existing or probable hazard. Continuous action until it is no longer hazardous. This leaves 8.0 for 9.1's emergency path; it is NOT a scheduling priority and does not enter 8.3.2's repair queue. 192.703(c) is the federal duty behind it and is the only row here with a federal duty at all.</description>
+        <inputEntry id="d_8_3_1_r1_ie1"><text>true</text></inputEntry>
+        <inputEntry id="d_8_3_1_r1_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_8_3_1_r1_ie3"><text>-</text></inputEntry>
+        <outputEntry id="d_8_3_1_r1_oe"><text>"grade1_emergency"</text></outputEntry>
+      </rule>
+      <rule id="d_8_3_1_r2">
+        <description>Gas inside a structure but not currently hazardous. Grade 2 under the state-adopted classification, and the state adoption is what makes the response time enforceable.</description>
+        <inputEntry id="d_8_3_1_r2_ie1"><text>false</text></inputEntry>
+        <inputEntry id="d_8_3_1_r2_ie2"><text>"building"</text></inputEntry>
+        <inputEntry id="d_8_3_1_r2_ie3"><text>true</text></inputEntry>
+        <outputEntry id="d_8_3_1_r2_oe"><text>"grade2_stateAuthority"</text></outputEntry>
+      </rule>
+      <rule id="d_8_3_1_r3">
+        <description>Same physical situation, different authority. No state adoption, so the response time comes from the operator's 192.605 manual. Record which - GPTC is not law here and saying it is would misstate the obligation.</description>
+        <inputEntry id="d_8_3_1_r3_ie1"><text>false</text></inputEntry>
+        <inputEntry id="d_8_3_1_r3_ie2"><text>"building"</text></inputEntry>
+        <inputEntry id="d_8_3_1_r3_ie3"><text>false</text></inputEntry>
+        <outputEntry id="d_8_3_1_r3_oe"><text>"grade2_operatorManual"</text></outputEntry>
+      </rule>
+      <rule id="d_8_3_1_r4">
+        <description>Sub-surface gas, graded on the reading and extent against the state-adopted tables. The tables are Z380.1 Tables 3a to 3c as the state adopted them.</description>
+        <inputEntry id="d_8_3_1_r4_ie1"><text>false</text></inputEntry>
+        <inputEntry id="d_8_3_1_r4_ie2"><text>"subSurface"</text></inputEntry>
+        <inputEntry id="d_8_3_1_r4_ie3"><text>true</text></inputEntry>
+        <outputEntry id="d_8_3_1_r4_oe"><text>"grade2or3_stateAuthority"</text></outputEntry>
+      </rule>
+      <rule id="d_8_3_1_r5">
+        <description>Sub-surface gas with no state adoption. The operator's manual grades it and its figures are what the re-check interval at 8.3.3 runs on.</description>
+        <inputEntry id="d_8_3_1_r5_ie1"><text>false</text></inputEntry>
+        <inputEntry id="d_8_3_1_r5_ie2"><text>"subSurface"</text></inputEntry>
+        <inputEntry id="d_8_3_1_r5_ie3"><text>false</text></inputEntry>
+        <outputEntry id="d_8_3_1_r5_oe"><text>"grade2or3_operatorManual"</text></outputEntry>
+      </rule>
+      <rule id="d_8_3_1_r6">
+        <description>Non-hazardous and reasonably expected to remain so. Re-checked at 8.3.3 on the interval its authority sets, and it stays an open leak at 8.3.4 until repaired.</description>
+        <inputEntry id="d_8_3_1_r6_ie1"><text>false</text></inputEntry>
+        <inputEntry id="d_8_3_1_r6_ie2"><text>"openAir"</text></inputEntry>
+        <inputEntry id="d_8_3_1_r6_ie3"><text>-</text></inputEntry>
+        <outputEntry id="d_8_3_1_r6_oe"><text>"grade3"</text></outputEntry>
+      </rule>
+      <rule id="d_8_3_1_r7">
+        <description>Hazard status or location not established. A named exception rather than a default to grade 3, because defaulting a leak downward is the one direction that is unsafe.</description>
+        <inputEntry id="d_8_3_1_r7_ie1"><text>-</text></inputEntry>
+        <inputEntry id="d_8_3_1_r7_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_8_3_1_r7_ie3"><text>-</text></inputEntry>
+        <outputEntry id="d_8_3_1_r7_oe"><text>"regradeRequired"</text></outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram id="drd_Leak_grade">
+      <dmndi:DMNShape id="sh_in_hazard" dmnElementRef="in_hazard"><dc:Bounds x="60" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_reading" dmnElementRef="in_reading"><dc:Bounds x="245" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_location" dmnElementRef="in_location"><dc:Bounds x="430" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_stateAdopted" dmnElementRef="in_stateAdopted"><dc:Bounds x="615" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_d_8_3_1" dmnElementRef="d_8_3_1"><dc:Bounds x="60" y="240" width="180" height="70"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_ks_leak" dmnElementRef="ks_leak"><dc:Bounds x="900" y="100" width="160" height="55"/></dmndi:DMNShape>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</definitions>

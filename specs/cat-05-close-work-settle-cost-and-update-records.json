@@ -11,8 +11,16 @@
   "date": "2026-08-29",
   "schema": "eam/specs/SCHEMA.md",
   "derivation": "STANDARDS-DERIVED. Every field traces to a standard, a regulation or a recognised industry body per _Collab/SOURCE_AUTHORITY_PACK.md section D-ter. Nothing is generalised from a client programme or a product.",
+  "taxonomy_origin": "TAXONOMY ORIGIN, WHICH IS A DIFFERENT FACT FROM THE DERIVATION ABOVE. The derivation line describes where FIELD CONTENT comes from: every field value traces to a standard, a regulation or a recognised industry body and carries its citation. It does NOT describe where the taxonomy comes from. Which processes exist, how they are grouped and what they are called is a practitioner synthesis of delivered implementations, generalised until it is product- and client-neutral. Of the 102 process groups, 43 originate in programme material, 28 in domain research, 20 in a published source and 11 in folder and file names; the provenance layer grades every one and names what to read next. This model is DELIVERED PRACTICE SPECIFIED AGAINST STANDARDS, not a standard turned into a model - and saying so is not a weakness. A taxonomy proven in delivery and then held against the standards is a stronger claim than one derived from a standard and never built.",
   "field_set": "EN 17007:2017 cl. 5.2 maintenance process profile, corroborated by ISO 9001:2015 cl. 4.4.1 a) to h).",
   "gaps": [
+    "THE BOUNDARY THIS CATEGORY SITS ON. The work and field systems hold the asset from an OPERATIONS standpoint and do not perform its financial aspects. What crosses is work order actuals for labour and material, which units of property were added and removed, and the in-service date. Everything else - accumulating and clearing construction work in progress, the allowance for funds used during construction, distributing settled cost across units, depreciation and retirement - happens in a property accounting system this discipline does not own. A process accruing the construction allowance was written into 5.2 and withdrawn once that boundary was stated.",
+    "IEC 61968-6 cl. 4.2 has no component for property or plant accounting. Sixteen codes and none is the plant record, so the property system is placed on FIN and the absence is recorded rather than filled with an invented code. The consequence is real: 5.3.2 and 5.3.3 describe an exchange with a separate system of record and the vocabulary cannot name the far end of it.",
+    "A compatible unit and a unit of property are different objects sharing a word. The compatible unit is an estimating and design construct held in the work system, carrying the account assignment; the unit of property is what the accounts capitalise and retire. They frequently correspond and are not the same object.",
+    "Used and useful was deliberately NOT modelled as a process. Plant enters rate base only where it is used and useful, and prudent investment has been struck from rate base on that ground, but the test is applied in a rate proceeding by a function that does not perform utility work. 5.3.5 records the in-service date and carries the test as a control; inventing a determination the work function does not make would be fabrication.",
+    "5.3.5 consumes the handover at 19.1.6 and does not perform it. The operational handover into service and the accounting in-service date are the same moment described by two functions; letting either drive the other silently is how an asset ends up in service on one record and under construction on the other.",
+    "What counts as ready for service is not stated by any source in the pack. The criteria are the operator's engineering judgment and belong per asset class rather than per job, so 5.3.5 states that they are recorded and does not state what they are.",
+    "The allowance for funds used during construction is computed on a formula the regulation prescribes, but its common equity rate is the rate granted in the last rate proceeding before the ratemaking body having primary jurisdiction. The reference cannot hold that number and does not.",
     "The two halves of this category are prescribed to completely different depths. Cost settlement, capitalisation and unitisation are governed in detail by 18 CFR 101 and 18 CFR 125.3 - what may be charged, what a retirement unit is, how long each record is kept. The as-built and asset record half has almost nothing: 49 CFR 192.605(b)(3) requires construction records be AVAILABLE to operating personnel and says nothing about accuracy.",
     "There is no federal as-built requirement for electric distribution at all. 16 U.S.C. 824o excludes local distribution from the bulk-power system and NESC ANSI/IEEE C2-2023 sets no record-keeping duty. Every as-built control in 5.4 is therefore gas-anchored, with the electric position stated as the operator's or a state's.",
     "No federal standard sets positional accuracy for as-built records, gas or electric. ASCE 38-22 gives quality levels A to D as a defensible vocabulary, but the required level is not set by any standard.",
@@ -1245,6 +1253,10 @@
           "text": "Overhead may not be charged by adding an arbitrary percentage or amount to direct construction cost. It is allocated on a defined basis or not at all - the same rule that bound the estimate at 2.3.3."
         },
         {
+          "kind": "regulatory",
+          "text": "The basis is evidentiary: payroll charged to construction overhead comes from time card distributions, or from periodic studies where that is impractical. Only overhead with a definite relation to construction may be capitalised. An estimate's loading at 2.2.3 is not that basis."
+        },
+        {
           "kind": "financial",
           "text": "Settlement against an open work order that still has cost to come produces a false actual, and the variance against estimate is then measuring the settlement date rather than the work."
         }
@@ -1615,18 +1627,18 @@
     {
       "uid": 10137,
       "id": "5.3.2",
-      "name": "Unitise completed capital work",
+      "name": "Identify the units of property added and removed",
       "group": {
         "id": "5.3",
         "name": "Capitalise and unitise completed work",
         "uid": 10135
       },
-      "intent": "Break the completed work into the units of property the accounts recognise.",
+      "intent": "Say which units of property the work added and removed, so the accounts can be made up.",
       "activities": [
         "Identify the retirement units added by the work",
         "Identify the retirement units removed by the work",
-        "Distribute the settled cost across the units added",
-        "Record the units for the addition and retirement entries"
+        "Establish the original cost of each unit removed",
+        "Publish the units added and removed with the settled actuals"
       ],
       "trigger": {
         "kind": "message",
@@ -1717,7 +1729,7 @@
         },
         {
           "kind": "financial",
-          "text": "No standard specifies unitisation mechanics. The federal accounts say what a retirement unit is and that additions and retirements must be recorded; how settled cost is distributed across units is the operator's method."
+          "text": "Distributing settled cost across units is NOT done here - this function supplies the units and the actuals. No standard specifies the mechanics because it translates between two definitions of one physical thing."
         }
       ],
       "measures": [
@@ -1778,18 +1790,18 @@
     {
       "uid": 10138,
       "id": "5.3.3",
-      "name": "Post to fixed asset and property record",
+      "name": "Publish additions and retirements to the property record",
       "group": {
         "id": "5.3",
         "name": "Capitalise and unitise completed work",
         "uid": 10135
       },
-      "intent": "Post the additions and retirements to the fixed asset and property records.",
+      "intent": "Hand the additions and retirements to the property record, and check the two agree.",
       "activities": [
-        "Post the addition to the plant account and the property record",
-        "Post the retirement of the units removed at their original cost",
-        "Update the continuing plant inventory record",
-        "Reconcile the plant account to the property record"
+        "Publish the units added, with the actuals that belong to them",
+        "Publish the units retired, with their original cost",
+        "Confirm the property record accepted what was sent",
+        "Reconcile the operational asset record against the property record"
       ],
       "trigger": {
         "kind": "message",
@@ -1880,8 +1892,8 @@
           "text": "The continuing plant inventory ledger is retained for twenty-five years. The work order sheets behind it may be disposed of five years after clearance to plant account - so the record outlives its evidence by twenty years, which is why the record has to be right at posting."
         },
         {
-          "kind": "financial",
-          "text": "The plant account and the property record are reconciled. A difference between them is a real difference in what the utility believes it owns."
+          "kind": "operational",
+          "text": "This function supplies; it does not post. The two records are reconciled across a SYSTEM boundary - they are not two views of one thing - so a late hand-off is an exception here."
         }
       ],
       "measures": [
@@ -2101,6 +2113,169 @@
       "provenance": {
         "basis": "regulation",
         "primary": "18 CFR Part 101 Uniform System of Accounts (Part 201 for gas)"
+      }
+    },
+    {
+      "uid": 10630,
+      "id": "5.3.5",
+      "name": "Establish and publish the in-service date",
+      "group": {
+        "id": "5.3",
+        "name": "Capitalise and unitise completed work",
+        "uid": 10135
+      },
+      "intent": "Fix the date the plant became ready for service, and publish it to what needs it.",
+      "activities": [
+        "Establish the date the plant was completed and ready for service",
+        "Record the basis on which the date was established",
+        "Publish the date to the asset record and to the accounting systems",
+        "Reissue where commissioning evidence later changes it"
+      ],
+      "trigger": {
+        "kind": "message",
+        "text": "Commissioning evidence shows plant completed and ready for service.",
+        "cim": null
+      },
+      "inputs": [
+        {
+          "what": "Commissioning record and acceptance",
+          "party": "AM",
+          "data": "WorkAsset"
+        },
+        {
+          "what": "Operational handover into service",
+          "party": "AM",
+          "data": "WorkAsset"
+        },
+        {
+          "what": "Units placed in operation where the project is phased",
+          "party": "AM",
+          "data": "WorkAsset"
+        }
+      ],
+      "outputs": [
+        {
+          "what": "Established in-service date and its basis",
+          "party": "AM",
+          "data": "WorkAsset"
+        },
+        {
+          "what": "In-service date published to accounting",
+          "party": "FIN",
+          "data": "Work"
+        }
+      ],
+      "systems": [
+        {
+          "component": "AM",
+          "role": "owning",
+          "service": "In-service date and operational asset state"
+        },
+        {
+          "component": "MAI",
+          "role": "reference",
+          "service": "Work completion"
+        },
+        {
+          "component": "FIN",
+          "role": "receiving",
+          "service": "Date consumed by the accounting systems"
+        }
+      ],
+      "interfaces": [
+        {
+          "from": "AM",
+          "to": "FIN",
+          "payload": "MaintenanceOrder",
+          "verb": "change",
+          "pattern": "event"
+        }
+      ],
+      "roles": [
+        {
+          "role": "Asset engineer",
+          "raci": "R"
+        },
+        {
+          "role": "Field operations manager",
+          "raci": "A"
+        },
+        {
+          "role": "Finance",
+          "raci": "I"
+        }
+      ],
+      "data_objects": [
+        "Work",
+        "WorkAsset"
+      ],
+      "controls": [
+        {
+          "kind": "operational",
+          "text": "This is an operational fact - the plant is ready for service - established from commissioning evidence. What the accounting systems do with it afterwards is theirs."
+        },
+        {
+          "kind": "financial",
+          "text": "It is the most consequential date this function supplies. Several accounting acts depend on it and none can be right if it is late, so it is fixed here rather than inferred downstream."
+        },
+        {
+          "kind": "operational",
+          "text": "This consumes the handover at 19.1.6 and does not perform it. Where a project's units go into service on different dates, each is published as it occurs."
+        }
+      ],
+      "measures": [
+        {
+          "name": "Work Order Aging",
+          "definition": "SMRP 5.4.6, applied to completed work with no in-service date published.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        },
+        {
+          "name": "Rework",
+          "definition": "SMRP 4.1, applied to dates reissued after first publication.",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management"
+        }
+      ],
+      "variants": [
+        "Whole project ready for service on one date",
+        "Phased - a date per unit as each is placed in operation",
+        "Completed but not placed in service",
+        "Date reissued after commissioning evidence changed"
+      ],
+      "notation": {
+        "class": "BPMN",
+        "why": "Known sequence from commissioning evidence to a published date.",
+        "artifact": "models/5.3-capitalise-and-unitise.bpmn"
+      },
+      "en17007": {
+        "process": "DOC",
+        "title": "Deliver the operational documentation",
+        "clause": "6.9"
+      },
+      "sources": [
+        {
+          "for": "process",
+          "cite": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319), cl. 6.9 DOC.4 Update the reference documentation",
+          "status": "verified"
+        },
+        {
+          "for": "why the date matters downstream",
+          "cite": "18 CFR Part 101 Uniform System of Accounts (Part 201 for gas) - Account 107 work orders are cleared after completion and readiness for service; Electric Plant Instruction 3(A)(17) Note ceases the construction allowance at the same point",
+          "status": "regulation"
+        },
+        {
+          "for": "readiness criteria",
+          "cite": "No source in the pack states what makes plant ready for service. The criteria are the operator's and belong per asset class.",
+          "status": "judgment"
+        },
+        {
+          "for": "measures",
+          "cite": "SMRP Best Practices, Pillar 5 Work Management 5.4.6, 4.1",
+          "status": "consensus"
+        }
+      ],
+      "provenance": {
+        "basis": "standard",
+        "primary": "EN 17007:2017 Maintenance process and associated indicators (CEN/TC 319)"
       }
     },
     {
@@ -3268,14 +3443,6 @@
         "basis": "regulation",
         "primary": "49 CFR 192.605(b)(3)"
       }
-    }
-  ],
-  "merge_corrections": [
-    {
-      "date": "2026-08-29",
-      "by": "Claude",
-      "what": "citation form: a status may not claim more than the citation string supports. 'clause-verified' without a clause dropped to 'consensus'; an asserted absence dropped to 'judgment'.",
-      "count": 5
     }
   ]
 }

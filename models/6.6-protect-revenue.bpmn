@@ -38,19 +38,27 @@ SUPPORTED is the load-bearing word and the gate is drawn on it. An adjustment ne
   <bpmndi:BPMNDiagram id="dg_P_6_6">
     <bpmndi:BPMNPlane id="pl_P_6_6" bpmnElement="P_6_6">
       <bpmndi:BPMNShape id="sh_n_66_start" bpmnElement="n_66_start"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_66_fix" bpmnElement="n_66_fix"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_66_ev" bpmnElement="n_66_ev"><dc:Bounds x="425" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_66_fix" bpmnElement="n_66_fix"><dc:Bounds x="255" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_66_ev" bpmnElement="n_66_ev"><dc:Bounds x="425" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_66_sup" bpmnElement="n_66_sup"><dc:Bounds x="637" y="212" width="46" height="46"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_66_close" bpmnElement="n_66_close"><dc:Bounds x="595" y="420" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_66_ref" bpmnElement="n_66_ref"><dc:Bounds x="765" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_66_ref" bpmnElement="n_66_ref"><dc:Bounds x="765" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_66_rec" bpmnElement="n_66_rec"><dc:Bounds x="935" y="200" width="130" height="70"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_66_end" bpmnElement="n_66_end"><dc:Bounds x="1152" y="217" width="36" height="36"/></bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="ed_f_n_66_start_n_66_fix" bpmnElement="f_n_66_start_n_66_fix"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_66_fix_n_66_ev" bpmnElement="f_n_66_fix_n_66_ev"><di:waypoint x="385" y="235"/><di:waypoint x="425" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_66_ev_n_66_sup" bpmnElement="f_n_66_ev_n_66_sup"><di:waypoint x="555" y="235"/><di:waypoint x="637" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_66_sup_n_66_close" bpmnElement="f_n_66_sup_n_66_close"><di:waypoint x="683" y="235"/><di:waypoint x="570" y="235"/><di:waypoint x="570" y="455"/><di:waypoint x="595" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_66_sup_n_66_close" bpmnElement="f_n_66_sup_n_66_close"><di:waypoint x="683" y="235"/><di:waypoint x="570" y="235"/><di:waypoint x="570" y="455"/><di:waypoint x="595" y="455"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="477" y="446.5" width="88" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_66_close_n_66_rec" bpmnElement="f_n_66_close_n_66_rec"><di:waypoint x="725" y="455"/><di:waypoint x="910" y="455"/><di:waypoint x="910" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_66_sup_n_66_ref" bpmnElement="f_n_66_sup_n_66_ref"><di:waypoint x="683" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_66_sup_n_66_ref" bpmnElement="f_n_66_sup_n_66_ref"><di:waypoint x="683" y="235"/><di:waypoint x="765" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="691.2" y="213" width="65.6" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_66_ref_n_66_rec" bpmnElement="f_n_66_ref_n_66_rec"><di:waypoint x="895" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_66_rec_n_66_end" bpmnElement="f_n_66_rec_n_66_end"><di:waypoint x="1065" y="235"/><di:waypoint x="1152" y="235"/></bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>

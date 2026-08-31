@@ -91,28 +91,28 @@ A premise that does not come back stops being a planned outage. It becomes an un
   <bpmndi:BPMNDiagram id="dg_P_18_5">
     <bpmndi:BPMNPlane id="pl_P_18_5" bpmnElement="P_18_5">
       <bpmndi:BPMNShape id="sh_n_185_start" bpmnElement="n_185_start"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_185_conf" bpmnElement="n_185_conf"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_185_not" bpmnElement="n_185_not"><dc:Bounds x="425" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_185_conf" bpmnElement="n_185_conf"><dc:Bounds x="255" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_185_not" bpmnElement="n_185_not"><dc:Bounds x="425" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_185_clr" bpmnElement="n_185_clr"><dc:Bounds x="595" y="200" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_185_gnd" bpmnElement="n_185_gnd"><dc:Bounds x="765" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_185_gnd" bpmnElement="n_185_gnd"><dc:Bounds x="765" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_185_rep" bpmnElement="n_185_rep"><dc:Bounds x="935" y="200" width="130" height="70"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_185_who" bpmnElement="n_185_who"><dc:Bounds x="1147" y="212" width="46" height="46"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_185_ref" bpmnElement="n_185_ref"><dc:Bounds x="1152" y="437" width="36" height="36"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_185_can" bpmnElement="n_185_can"><dc:Bounds x="1275" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_185_can" bpmnElement="n_185_can"><dc:Bounds x="1275" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_185_tag" bpmnElement="n_185_tag"><dc:Bounds x="1445" y="200" width="130" height="70"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_185_last" bpmnElement="n_185_last"><dc:Bounds x="1657" y="212" width="46" height="46"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_185_wait" bpmnElement="n_185_wait"><dc:Bounds x="1662" y="437" width="36" height="36"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_185_bar" bpmnElement="n_185_bar"><dc:Bounds x="1785" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_185_bar" bpmnElement="n_185_bar"><dc:Bounds x="1785" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_185_gwc" bpmnElement="n_185_gwc"><dc:Bounds x="1997" y="212" width="46" height="46"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_185_rev" bpmnElement="n_185_rev"><dc:Bounds x="2125" y="200" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_185_reen" bpmnElement="n_185_reen"><dc:Bounds x="2295" y="200" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_185_gas" bpmnElement="n_185_gas"><dc:Bounds x="2125" y="640" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_185_sup" bpmnElement="n_185_sup"><dc:Bounds x="2465" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_185_rev" bpmnElement="n_185_rev"><dc:Bounds x="2125" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_185_reen" bpmnElement="n_185_reen"><dc:Bounds x="2295" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_185_gas" bpmnElement="n_185_gas"><dc:Bounds x="2125" y="631.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_185_sup" bpmnElement="n_185_sup"><dc:Bounds x="2465" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_185_all" bpmnElement="n_185_all"><dc:Bounds x="2677" y="212" width="46" height="46"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_185_ref9" bpmnElement="n_185_ref9"><dc:Bounds x="2635" y="420" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_185_notp" bpmnElement="n_185_notp"><dc:Bounds x="2805" y="200" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_185_crit" bpmnElement="n_185_crit"><dc:Bounds x="2975" y="200" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_185_rec" bpmnElement="n_185_rec"><dc:Bounds x="3145" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_185_notp" bpmnElement="n_185_notp"><dc:Bounds x="2805" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_185_crit" bpmnElement="n_185_crit"><dc:Bounds x="2975" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_185_rec" bpmnElement="n_185_rec"><dc:Bounds x="3145" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_185_end" bpmnElement="n_185_end"><dc:Bounds x="3362" y="217" width="36" height="36"/></bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="ed_f_n_185_start_n_185_conf" bpmnElement="f_n_185_start_n_185_conf"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_185_conf_n_185_not" bpmnElement="f_n_185_conf_n_185_not"><di:waypoint x="385" y="235"/><di:waypoint x="425" y="235"/></bpmndi:BPMNEdge>
@@ -120,22 +120,54 @@ A premise that does not come back stops being a planned outage. It becomes an un
       <bpmndi:BPMNEdge id="ed_f_n_185_clr_n_185_gnd" bpmnElement="f_n_185_clr_n_185_gnd"><di:waypoint x="725" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_185_gnd_n_185_rep" bpmnElement="f_n_185_gnd_n_185_rep"><di:waypoint x="895" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_185_rep_n_185_who" bpmnElement="f_n_185_rep_n_185_who"><di:waypoint x="1065" y="235"/><di:waypoint x="1147" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_185_who_n_185_ref" bpmnElement="f_n_185_who_n_185_ref"><di:waypoint x="1193" y="235"/><di:waypoint x="1127" y="235"/><di:waypoint x="1127" y="455"/><di:waypoint x="1152" y="455"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_185_who_n_185_can" bpmnElement="f_n_185_who_n_185_can"><di:waypoint x="1193" y="235"/><di:waypoint x="1275" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_185_who_n_185_ref" bpmnElement="f_n_185_who_n_185_ref"><di:waypoint x="1193" y="235"/><di:waypoint x="1127" y="235"/><di:waypoint x="1127" y="455"/><di:waypoint x="1152" y="455"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1056.4" y="446.5" width="65.6" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_185_who_n_185_can" bpmnElement="f_n_185_who_n_185_can"><di:waypoint x="1193" y="235"/><di:waypoint x="1275" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1174.1" y="160" width="93.6" height="43" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_185_can_n_185_tag" bpmnElement="f_n_185_can_n_185_tag"><di:waypoint x="1405" y="235"/><di:waypoint x="1445" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_185_tag_n_185_last" bpmnElement="f_n_185_tag_n_185_last"><di:waypoint x="1575" y="235"/><di:waypoint x="1657" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_185_last_n_185_wait" bpmnElement="f_n_185_last_n_185_wait"><di:waypoint x="1703" y="235"/><di:waypoint x="1637" y="235"/><di:waypoint x="1637" y="455"/><di:waypoint x="1662" y="455"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_185_last_n_185_bar" bpmnElement="f_n_185_last_n_185_bar"><di:waypoint x="1703" y="235"/><di:waypoint x="1785" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_185_last_n_185_wait" bpmnElement="f_n_185_last_n_185_wait"><di:waypoint x="1703" y="235"/><di:waypoint x="1637" y="235"/><di:waypoint x="1637" y="455"/><di:waypoint x="1662" y="455"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1532.8" y="440" width="99.2" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_185_last_n_185_bar" bpmnElement="f_n_185_last_n_185_bar"><di:waypoint x="1703" y="235"/><di:waypoint x="1785" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1719.6" y="213" width="48.8" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_185_bar_n_185_gwc" bpmnElement="f_n_185_bar_n_185_gwc"><di:waypoint x="1915" y="235"/><di:waypoint x="1997" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_185_gwc_n_185_rev" bpmnElement="f_n_185_gwc_n_185_rev"><di:waypoint x="2043" y="235"/><di:waypoint x="2125" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_185_gwc_n_185_gas" bpmnElement="f_n_185_gwc_n_185_gas"><di:waypoint x="2043" y="235"/><di:waypoint x="2100" y="235"/><di:waypoint x="2100" y="675"/><di:waypoint x="2125" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_185_gwc_n_185_rev" bpmnElement="f_n_185_gwc_n_185_rev"><di:waypoint x="2043" y="235"/><di:waypoint x="2125" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2059.6" y="213" width="48.8" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_185_gwc_n_185_gas" bpmnElement="f_n_185_gwc_n_185_gas"><di:waypoint x="2043" y="235"/><di:waypoint x="2100" y="235"/><di:waypoint x="2100" y="675"/><di:waypoint x="2125" y="675"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2055" y="666.5" width="40" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_185_rev_n_185_reen" bpmnElement="f_n_185_rev_n_185_reen"><di:waypoint x="2255" y="235"/><di:waypoint x="2295" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_185_reen_n_185_sup" bpmnElement="f_n_185_reen_n_185_sup"><di:waypoint x="2425" y="235"/><di:waypoint x="2465" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_185_gas_n_185_sup" bpmnElement="f_n_185_gas_n_185_sup"><di:waypoint x="2255" y="675"/><di:waypoint x="2440" y="675"/><di:waypoint x="2440" y="235"/><di:waypoint x="2465" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_185_sup_n_185_all" bpmnElement="f_n_185_sup_n_185_all"><di:waypoint x="2595" y="235"/><di:waypoint x="2677" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_185_all_n_185_ref9" bpmnElement="f_n_185_all_n_185_ref9"><di:waypoint x="2723" y="235"/><di:waypoint x="2610" y="235"/><di:waypoint x="2610" y="455"/><di:waypoint x="2635" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_185_all_n_185_ref9" bpmnElement="f_n_185_all_n_185_ref9"><di:waypoint x="2723" y="235"/><di:waypoint x="2610" y="235"/><di:waypoint x="2610" y="455"/><di:waypoint x="2635" y="455"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2511.4" y="446.5" width="93.6" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_185_ref9_n_185_notp" bpmnElement="f_n_185_ref9_n_185_notp"><di:waypoint x="2765" y="455"/><di:waypoint x="2780" y="455"/><di:waypoint x="2780" y="235"/><di:waypoint x="2805" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_185_all_n_185_notp" bpmnElement="f_n_185_all_n_185_notp"><di:waypoint x="2723" y="235"/><di:waypoint x="2805" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_185_all_n_185_notp" bpmnElement="f_n_185_all_n_185_notp"><di:waypoint x="2723" y="235"/><di:waypoint x="2805" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2739.6" y="213" width="48.8" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_185_notp_n_185_crit" bpmnElement="f_n_185_notp_n_185_crit"><di:waypoint x="2935" y="235"/><di:waypoint x="2975" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_185_crit_n_185_rec" bpmnElement="f_n_185_crit_n_185_rec"><di:waypoint x="3105" y="235"/><di:waypoint x="3145" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_185_rec_n_185_end" bpmnElement="f_n_185_rec_n_185_end"><di:waypoint x="3275" y="235"/><di:waypoint x="3362" y="235"/></bpmndi:BPMNEdge>

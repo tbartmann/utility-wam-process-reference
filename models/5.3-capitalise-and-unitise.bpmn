@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_P_5_3" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
   <process id="P_5_3" name="5.3 Capitalise and unitise completed work" isExecutable="false">
-    <documentation>Tier-4 activities under 5.3.2, 5.3.3 and 5.3.4. The treatment confirmation 5.3.1 is a determination and is in 5.3.1-capitalisation-confirmation.dmn. Note the retention asymmetry this group creates: 18 CFR 125.3 keeps the continuing plant inventory ledger for 25 years and the work order sheets behind it for 5 years after clearance to plant account, so the property record outlives its own evidence by twenty years. That is why the record has to be right at posting.</documentation>
+    <documentation>Tier-4 activities under 5.3.2, 5.3.3 and 5.3.4. The treatment confirmation 5.3.1 is a determination and is in 5.3.1-capitalisation-confirmation.dmn. Note the retention asymmetry this group creates: 18 CFR 125.3 keeps the continuing plant inventory ledger for 25 years and the work order sheets behind it for 5 years after clearance to plant account, so the property record outlives its own evidence by twenty years. That is why the record has to be right at posting. 5.3.5 sits on the capital path before unitisation because clearing construction is what makes the cost plant; unitising a balance still in construction distributes money that is not yet property.</documentation>
     <startEvent id="n_53_start" name="Settled work order requires its treatment"><messageEventDefinition id="n_53_start_md"/></startEvent>
     <businessRuleTask id="n_53_conf" name="Confirm the accounting treatment"><documentation>5.3.1. Calls decision Capitalisation_confirmation.</documentation></businessRuleTask>
     <exclusiveGateway id="n_53_gate" name="Treatment"/>
     <serviceTask id="n_53_exp" name="Post to maintenance expense"><documentation>5.3.1. Expensed work leaves the capital path here.</documentation></serviceTask>
     <endEvent id="n_53_endexp" name="Expensed"/>
+    <userTask id="n_53_isd" name="Establish the in-service date"><documentation>5.3.5. Consumes the handover at 19.1.6; it does not perform it. An operational fact, established from commissioning evidence.</documentation></userTask>
+    <sendTask id="n_53_clear" name="Publish the date to asset and accounting"><documentation>5.3.5. What the accounting systems do with it is theirs - clearing construction and stopping the allowance happen in a system this discipline does not own.</documentation></sendTask>
     <userTask id="n_53_add" name="Identify the retirement units added"><documentation>5.3.2.</documentation></userTask>
     <userTask id="n_53_rem" name="Identify the retirement units removed"><documentation>5.3.2.</documentation></userTask>
-    <serviceTask id="n_53_dist" name="Distribute settled cost across the units added"><documentation>5.3.2. From the as-built at 5.4.3, not from the design. Unitising against the design puts the wrong units in a record kept for twenty-five years.</documentation></serviceTask>
-    <serviceTask id="n_53_post" name="Post additions and retirements to plant"><documentation>5.3.3. Retirements at original cost, which is what the continuing plant inventory record makes possible.</documentation></serviceTask>
+    <serviceTask id="n_53_dist" name="Attach the settled actuals to the units"><documentation>5.3.2. From the as-built at 5.4.3, not from the design. Unitising against the design puts the wrong units in a record kept for twenty-five years.</documentation></serviceTask>
+    <sendTask id="n_53_post" name="Publish additions and retirements"><documentation>5.3.3. Supplied to the property record, not posted here. Retirements carry original cost, which the continuing plant inventory record makes possible.</documentation></sendTask>
     <serviceTask id="n_53_cpr" name="Update the continuing plant inventory record"><documentation>5.3.3. Required by 18 CFR 101 Definition 8.</documentation></serviceTask>
     <serviceTask id="n_53_rec" name="Reconcile plant account to property record"><documentation>5.3.3. A difference between them is a real difference in what the utility believes it owns.</documentation></serviceTask>
     <exclusiveGateway id="n_53_pj" name="Last work order on the project"/>
@@ -21,7 +23,9 @@
     <sequenceFlow id="f_n_53_conf_n_53_gate" sourceRef="n_53_conf" targetRef="n_53_gate" name=""/>
     <sequenceFlow id="f_n_53_gate_n_53_exp" sourceRef="n_53_gate" targetRef="n_53_exp" name="expense"><conditionExpression xsi:type="tFormalExpression"><![CDATA[treatment = "expense"]]></conditionExpression></sequenceFlow>
     <sequenceFlow id="f_n_53_exp_n_53_endexp" sourceRef="n_53_exp" targetRef="n_53_endexp" name=""/>
-    <sequenceFlow id="f_n_53_gate_n_53_add" sourceRef="n_53_gate" targetRef="n_53_add" name="capital"/>
+    <sequenceFlow id="f_n_53_gate_n_53_isd" sourceRef="n_53_gate" targetRef="n_53_isd" name="capital"/>
+    <sequenceFlow id="f_n_53_isd_n_53_clear" sourceRef="n_53_isd" targetRef="n_53_clear" name=""/>
+    <sequenceFlow id="f_n_53_clear_n_53_add" sourceRef="n_53_clear" targetRef="n_53_add" name=""/>
     <sequenceFlow id="f_n_53_add_n_53_rem" sourceRef="n_53_add" targetRef="n_53_rem" name=""/>
     <sequenceFlow id="f_n_53_rem_n_53_dist" sourceRef="n_53_rem" targetRef="n_53_dist" name=""/>
     <sequenceFlow id="f_n_53_dist_n_53_post" sourceRef="n_53_dist" targetRef="n_53_post" name=""/>
@@ -40,31 +44,51 @@
       <bpmndi:BPMNShape id="sh_n_53_gate" bpmnElement="n_53_gate"><dc:Bounds x="467" y="212" width="46" height="46"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_53_exp" bpmnElement="n_53_exp"><dc:Bounds x="425" y="420" width="130" height="70"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_53_endexp" bpmnElement="n_53_endexp"><dc:Bounds x="642" y="437" width="36" height="36"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_53_add" bpmnElement="n_53_add"><dc:Bounds x="595" y="200" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_53_rem" bpmnElement="n_53_rem"><dc:Bounds x="765" y="200" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_53_dist" bpmnElement="n_53_dist"><dc:Bounds x="935" y="200" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_53_post" bpmnElement="n_53_post"><dc:Bounds x="1105" y="200" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_53_cpr" bpmnElement="n_53_cpr"><dc:Bounds x="1275" y="200" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_53_rec" bpmnElement="n_53_rec"><dc:Bounds x="1445" y="200" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_53_pj" bpmnElement="n_53_pj"><dc:Bounds x="1657" y="212" width="46" height="46"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_53_var" bpmnElement="n_53_var"><dc:Bounds x="1615" y="90" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_53_close" bpmnElement="n_53_close"><dc:Bounds x="1785" y="90" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_53_end" bpmnElement="n_53_end"><dc:Bounds x="2002" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_53_isd" bpmnElement="n_53_isd"><dc:Bounds x="595" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_53_clear" bpmnElement="n_53_clear"><dc:Bounds x="765" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_53_add" bpmnElement="n_53_add"><dc:Bounds x="935" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_53_rem" bpmnElement="n_53_rem"><dc:Bounds x="1105" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_53_dist" bpmnElement="n_53_dist"><dc:Bounds x="1275" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_53_post" bpmnElement="n_53_post"><dc:Bounds x="1445" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_53_cpr" bpmnElement="n_53_cpr"><dc:Bounds x="1615" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_53_rec" bpmnElement="n_53_rec"><dc:Bounds x="1785" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_53_pj" bpmnElement="n_53_pj"><dc:Bounds x="1997" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_53_var" bpmnElement="n_53_var"><dc:Bounds x="1955" y="81.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_53_close" bpmnElement="n_53_close"><dc:Bounds x="2125" y="90" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_53_end" bpmnElement="n_53_end"><dc:Bounds x="2342" y="217" width="36" height="36"/></bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="ed_f_n_53_start_n_53_conf" bpmnElement="f_n_53_start_n_53_conf"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_53_conf_n_53_gate" bpmnElement="f_n_53_conf_n_53_gate"><di:waypoint x="385" y="235"/><di:waypoint x="467" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_53_gate_n_53_exp" bpmnElement="f_n_53_gate_n_53_exp"><di:waypoint x="513" y="235"/><di:waypoint x="400" y="235"/><di:waypoint x="400" y="455"/><di:waypoint x="425" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_53_gate_n_53_exp" bpmnElement="f_n_53_gate_n_53_exp"><di:waypoint x="513" y="235"/><di:waypoint x="400" y="235"/><di:waypoint x="400" y="455"/><di:waypoint x="425" y="455"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="351.8" y="446.5" width="43.2" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_53_exp_n_53_endexp" bpmnElement="f_n_53_exp_n_53_endexp"><di:waypoint x="555" y="455"/><di:waypoint x="642" y="455"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_53_gate_n_53_add" bpmnElement="f_n_53_gate_n_53_add"><di:waypoint x="513" y="235"/><di:waypoint x="595" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_53_add_n_53_rem" bpmnElement="f_n_53_add_n_53_rem"><di:waypoint x="725" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_53_rem_n_53_dist" bpmnElement="f_n_53_rem_n_53_dist"><di:waypoint x="895" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_53_dist_n_53_post" bpmnElement="f_n_53_dist_n_53_post"><di:waypoint x="1065" y="235"/><di:waypoint x="1105" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_53_post_n_53_cpr" bpmnElement="f_n_53_post_n_53_cpr"><di:waypoint x="1235" y="235"/><di:waypoint x="1275" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_53_cpr_n_53_rec" bpmnElement="f_n_53_cpr_n_53_rec"><di:waypoint x="1405" y="235"/><di:waypoint x="1445" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_53_rec_n_53_pj" bpmnElement="f_n_53_rec_n_53_pj"><di:waypoint x="1575" y="235"/><di:waypoint x="1657" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_53_pj_n_53_var" bpmnElement="f_n_53_pj_n_53_var"><di:waypoint x="1703" y="235"/><di:waypoint x="1590" y="235"/><di:waypoint x="1590" y="125"/><di:waypoint x="1615" y="125"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_53_var_n_53_close" bpmnElement="f_n_53_var_n_53_close"><di:waypoint x="1745" y="125"/><di:waypoint x="1785" y="125"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_53_close_n_53_end" bpmnElement="f_n_53_close_n_53_end"><di:waypoint x="1915" y="125"/><di:waypoint x="1977" y="125"/><di:waypoint x="1977" y="235"/><di:waypoint x="2002" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_53_pj_n_53_end" bpmnElement="f_n_53_pj_n_53_end"><di:waypoint x="1703" y="235"/><di:waypoint x="2002" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_53_gate_n_53_isd" bpmnElement="f_n_53_gate_n_53_isd"><di:waypoint x="513" y="235"/><di:waypoint x="595" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="532.4" y="213" width="43.2" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_53_isd_n_53_clear" bpmnElement="f_n_53_isd_n_53_clear"><di:waypoint x="725" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_53_clear_n_53_add" bpmnElement="f_n_53_clear_n_53_add"><di:waypoint x="895" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_53_add_n_53_rem" bpmnElement="f_n_53_add_n_53_rem"><di:waypoint x="1065" y="235"/><di:waypoint x="1105" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_53_rem_n_53_dist" bpmnElement="f_n_53_rem_n_53_dist"><di:waypoint x="1235" y="235"/><di:waypoint x="1275" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_53_dist_n_53_post" bpmnElement="f_n_53_dist_n_53_post"><di:waypoint x="1405" y="235"/><di:waypoint x="1445" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_53_post_n_53_cpr" bpmnElement="f_n_53_post_n_53_cpr"><di:waypoint x="1575" y="235"/><di:waypoint x="1615" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_53_cpr_n_53_rec" bpmnElement="f_n_53_cpr_n_53_rec"><di:waypoint x="1745" y="235"/><di:waypoint x="1785" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_53_rec_n_53_pj" bpmnElement="f_n_53_rec_n_53_pj"><di:waypoint x="1915" y="235"/><di:waypoint x="1997" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_53_pj_n_53_var" bpmnElement="f_n_53_pj_n_53_var"><di:waypoint x="2043" y="235"/><di:waypoint x="1930" y="235"/><di:waypoint x="1930" y="125"/><di:waypoint x="1955" y="125"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1825.8" y="110" width="99.2" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_53_var_n_53_close" bpmnElement="f_n_53_var_n_53_close"><di:waypoint x="2085" y="125"/><di:waypoint x="2125" y="125"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_53_close_n_53_end" bpmnElement="f_n_53_close_n_53_end"><di:waypoint x="2255" y="125"/><di:waypoint x="2317" y="125"/><di:waypoint x="2317" y="235"/><di:waypoint x="2342" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_53_pj_n_53_end" bpmnElement="f_n_53_pj_n_53_end"><di:waypoint x="2043" y="235"/><di:waypoint x="2342" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2148.5" y="200" width="88" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
 </definitions>

@@ -7,8 +7,8 @@
   "reconstructed": "parsed from the master reference deck; counts validated against the deck's own declared totals",
   "counts": {
    "categories": 19,
-   "process_groups": 103,
-   "processes": 506,
+   "process_groups": 102,
+   "processes": 504,
    "work_types": 7
   },
   "applicability": {
@@ -354,7 +354,8 @@
    ],
    "_all": "'all' marks an enabling category that serves every stage rather than sitting at one of them."
   },
-  "asset_lifecycle_note": "Categories 17.0 to 19.0 close six themes that APQC PCF Utilities and the GFMAM Asset Management Landscape independently found absent: planned outage and switching, asset operation, asset creation and commissioning, network demand analysis, capital programme and whole-life value, and decommissioning and disposal. Two independent organisations plus ISO 55001:2024 cl. 8.1 meets this repository's promotion rule. See research/The Asset Lifecycle Gap - Finding.md. 18.0 is scoped work-facing only by decision: real-time monitoring, alarms, optimisation and protection settings are SCADA, ADMS and DERMS functions."
+  "asset_lifecycle_note": "Categories 17.0 to 19.0 close six themes that APQC PCF Utilities and the GFMAM Asset Management Landscape independently found absent: planned outage and switching, asset operation, asset creation and commissioning, network demand analysis, capital programme and whole-life value, and decommissioning and disposal. Two independent organisations plus ISO 55001:2024 cl. 8.1 meets this repository's promotion rule. See research/The Asset Lifecycle Gap - Finding.md. 18.0 is scoped work-facing only by decision: real-time monitoring, alarms, optimisation and protection settings are SCADA, ADMS and DERMS functions.",
+  "_counts_note": "Derived from this file, not typed. The previous block said 506 processes and 103 groups against an actual 505 and 102: it was the source deck's declared total, correct on the day it was parsed and stale from the first structural revision onwards. Regenerate it rather than editing it."
  },
  "work_types": [
   {
@@ -626,8 +627,8 @@
    "num": 2,
    "band": "Work Lifecycle",
    "name": "Plan, Design and Estimate Work",
-   "group_count": "6",
-   "process_count": "26",
+   "group_count": 5,
+   "process_count": 22,
    "groups": [
     {
      "id": "2.1",
@@ -680,43 +681,43 @@
     },
     {
      "id": "2.2",
-     "name": "Perform compatible-unit design and estimating",
+     "name": "Estimate work",
      "processes": [
       {
        "id": "2.2.1",
-       "name": "Maintain compatible unit and assembly library",
+       "name": "Produce labour, material and equipment estimate",
        "applies": [
         "gas",
         "electric"
        ],
-       "uid": 10031
+       "uid": 10038
       },
       {
        "id": "2.2.2",
-       "name": "Place compatible units on the spatial design",
+       "name": "Produce contracted-work estimate",
        "applies": [
         "gas",
         "electric"
        ],
-       "uid": 10032
+       "uid": 10039
       },
       {
        "id": "2.2.3",
-       "name": "Derive labour, material and plant from design",
+       "name": "Apply overhead, contingency and escalation",
        "applies": [
         "gas",
         "electric"
        ],
-       "uid": 10033
+       "uid": 10040
       },
       {
        "id": "2.2.4",
-       "name": "Produce compatible-unit cost estimate",
+       "name": "Maintain in-progress estimate revisions",
        "applies": [
         "gas",
         "electric"
        ],
-       "uid": 10034
+       "uid": 10041
       },
       {
        "id": "2.2.5",
@@ -726,15 +727,6 @@
         "electric"
        ],
        "uid": 10035
-      },
-      {
-       "id": "2.2.6",
-       "name": "Release approved design to construction work",
-       "applies": [
-        "gas",
-        "electric"
-       ],
-       "uid": 10036
       }
      ],
      "applicability": "common",
@@ -742,64 +734,15 @@
       "electric",
       "gas"
      ],
-     "process_count": 6,
-     "uid": 10030
-    },
-    {
-     "id": "2.3",
-     "name": "Estimate work",
-     "processes": [
-      {
-       "id": "2.3.1",
-       "name": "Produce labour, material and equipment estimate",
-       "applies": [
-        "gas",
-        "electric"
-       ],
-       "uid": 10038
-      },
-      {
-       "id": "2.3.2",
-       "name": "Produce contracted-work estimate",
-       "applies": [
-        "gas",
-        "electric"
-       ],
-       "uid": 10039
-      },
-      {
-       "id": "2.3.3",
-       "name": "Apply overhead, contingency and escalation",
-       "applies": [
-        "gas",
-        "electric"
-       ],
-       "uid": 10040
-      },
-      {
-       "id": "2.3.4",
-       "name": "Maintain in-progress estimate revisions",
-       "applies": [
-        "gas",
-        "electric"
-       ],
-       "uid": 10041
-      }
-     ],
-     "applicability": "common",
-     "applies": [
-      "electric",
-      "gas"
-     ],
-     "process_count": 4,
+     "process_count": 5,
      "uid": 10037
     },
     {
-     "id": "2.4",
+     "id": "2.3",
      "name": "Authorise work",
      "processes": [
       {
-       "id": "2.4.1",
+       "id": "2.3.1",
        "name": "Validate funding and budget availability",
        "applies": [
         "gas",
@@ -808,7 +751,7 @@
        "uid": 10043
       },
       {
-       "id": "2.4.2",
+       "id": "2.3.2",
        "name": "Route work for approval",
        "applies": [
         "gas",
@@ -817,7 +760,16 @@
        "uid": 10044
       },
       {
-       "id": "2.4.3",
+       "id": "2.3.3",
+       "name": "Release approved design to construction work",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10036
+      },
+      {
+       "id": "2.3.4",
        "name": "Authorise and release work to execution",
        "applies": [
         "gas",
@@ -826,7 +778,7 @@
        "uid": 10045
       },
       {
-       "id": "2.4.4",
+       "id": "2.3.5",
        "name": "Manage change to authorised scope",
        "applies": [
         "gas",
@@ -840,15 +792,15 @@
       "electric",
       "gas"
      ],
-     "process_count": 4,
+     "process_count": 5,
      "uid": 10042
     },
     {
-     "id": "2.5",
+     "id": "2.4",
      "name": "Package work for execution",
      "processes": [
       {
-       "id": "2.5.1",
+       "id": "2.4.1",
        "name": "Build job plan and task structure",
        "applies": [
         "gas",
@@ -857,7 +809,7 @@
        "uid": 10048
       },
       {
-       "id": "2.5.2",
+       "id": "2.4.2",
        "name": "Define crew, skill and equipment requirements",
        "applies": [
         "gas",
@@ -866,7 +818,7 @@
        "uid": 10049
       },
       {
-       "id": "2.5.3",
+       "id": "2.4.3",
        "name": "Assemble drawings, documents and instructions",
        "applies": [
         "gas",
@@ -875,7 +827,7 @@
        "uid": 10050
       },
       {
-       "id": "2.5.4",
+       "id": "2.4.4",
        "name": "Define material requirements",
        "applies": [
         "gas",
@@ -893,11 +845,11 @@
      "uid": 10047
     },
     {
-     "id": "2.6",
+     "id": "2.5",
      "name": "Obtain permits and satisfy prerequisites",
      "processes": [
       {
-       "id": "2.6.1",
+       "id": "2.5.1",
        "name": "Identify permit and consent requirements",
        "applies": [
         "gas",
@@ -906,7 +858,7 @@
        "uid": 10053
       },
       {
-       "id": "2.6.2",
+       "id": "2.5.2",
        "name": "Request, track and receive permits",
        "applies": [
         "gas",
@@ -915,7 +867,7 @@
        "uid": 10054
       },
       {
-       "id": "2.6.3",
+       "id": "2.5.3",
        "name": "Validate prerequisites before release",
        "applies": [
         "gas",
@@ -924,7 +876,7 @@
        "uid": 10055
       },
       {
-       "id": "2.6.4",
+       "id": "2.5.4",
        "name": "Manage permit cost, expiry and renewal",
        "applies": [
         "gas",
@@ -1757,7 +1709,7 @@
       },
       {
        "id": "5.3.2",
-       "name": "Unitise completed capital work",
+       "name": "Identify the units of property added and removed",
        "applies": [
         "gas",
         "electric"
@@ -1767,7 +1719,7 @@
       },
       {
        "id": "5.3.3",
-       "name": "Post to fixed asset and property record",
+       "name": "Publish additions and retirements to the property record",
        "applies": [
         "gas",
         "electric"
@@ -1784,6 +1736,16 @@
        ],
        "legacy_id": "6.3.4",
        "uid": 10139
+      },
+      {
+       "id": "5.3.5",
+       "name": "Establish and publish the in-service date",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "legacy_id": null,
+       "uid": 10630
       }
      ],
      "applicability": "common",
@@ -4662,7 +4624,7 @@
    "band": "Foundations and Enabling",
    "name": "Manage Materials and Supply Chain",
    "group_count": "7",
-   "process_count": "40",
+   "process_count": 41,
    "groups": [
     {
      "id": "13.1",
@@ -5029,6 +4991,15 @@
         "electric"
        ],
        "uid": 10454
+      },
+      {
+       "id": "13.6.5",
+       "name": "Maintain compatible unit and assembly library",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10031
       }
      ],
      "applicability": "common",
@@ -5036,7 +5007,7 @@
       "electric",
       "gas"
      ],
-     "process_count": 4,
+     "process_count": 5,
      "uid": 10450
     },
     {

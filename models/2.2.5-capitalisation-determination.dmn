@@ -8,7 +8,7 @@
   <inputData id="in_retirementWithReplacement" name="Retirement accompanied by replacement"><variable id="in_retirementWithReplacement_v" name="Retirement accompanied by replacement" typeRef="boolean"/></inputData>
   <knowledgeSource id="ks_ferc" name="18 CFR Part 101 (electric) / Part 201 (gas)"><description>FERC Uniform System of Accounts. Electric Plant Instruction 10(A) additions and retirements of electric plant, 10(C)(1) and 10(C)(3) the betterment test, Instruction 11 work order requirement, Definition 34 retirement unit and Definition 18 minor item of property. Binds FPA and NGA entities; a state-regulated distribution utility is bound by what its commission adopted.</description></knowledgeSource>
   <knowledgeSource id="ks_rus" name="7 CFR Part 1767"><description>RUS accounting requirements for electric borrowers, which adopt the FERC system with additions. Binds RUS borrowers only.</description></knowledgeSource>
-  <decision id="d_2_2_5" name="Capitalisation determination">
+  <decision id="d_2_2_4" name="Capitalisation determination">
     <description>2.2.5. The determination is made before authorisation because it changes the funding source and the account the work will charge. Clause references are Electric Plant Instructions 10(A), 10(C)(1) and 10(C)(3) with Definitions 18 and 34; the Part 201 gas parallel is Gas Plant Instruction equivalents. The state-regulated position is a specialization, not a change to this table.</description>
     <variable id="d_2_2_5_v" name="Capitalisation determination" typeRef="string"/>
     <informationRequirement id="ir_d_2_2_5_in_effectOnPlant"><requiredInput href="#in_effectOnPlant"/></informationRequirement>
@@ -16,7 +16,7 @@
     <informationRequirement id="ir_d_2_2_5_in_replacedIndependently"><requiredInput href="#in_replacedIndependently"/></informationRequirement>
     <informationRequirement id="ir_d_2_2_5_in_betterment"><requiredInput href="#in_betterment"/></informationRequirement>
     <informationRequirement id="ir_d_2_2_5_in_retirementWithReplacement"><requiredInput href="#in_retirementWithReplacement"/></informationRequirement>
-    <authorityRequirement id="ar_d_2_2_5"><requiredAuthority href="#ks_ferc"/></authorityRequirement>
+    <authorityRequirement id="ar_d_2_2_4"><requiredAuthority href="#ks_ferc"/></authorityRequirement>
     <decisionTable id="d_2_2_5_dt" hitPolicy="FIRST" preferredOrientation="Rule-as-Row">
       <input id="d_2_2_5_i1" label="Effect on plant"><inputExpression id="d_2_2_5_i1_e" typeRef="string"><text>in_effectOnPlant</text></inputExpression></input>
       <input id="d_2_2_5_i2" label="Property unit affected"><inputExpression id="d_2_2_5_i2_e" typeRef="string"><text>in_propertyUnit</text></inputExpression></input>
@@ -96,7 +96,7 @@
       <dmndi:DMNShape id="sh_in_replacedIndependently" dmnElementRef="in_replacedIndependently"><dc:Bounds x="430" y="420" width="160" height="45"/></dmndi:DMNShape>
       <dmndi:DMNShape id="sh_in_betterment" dmnElementRef="in_betterment"><dc:Bounds x="615" y="420" width="160" height="45"/></dmndi:DMNShape>
       <dmndi:DMNShape id="sh_in_retirementWithReplacement" dmnElementRef="in_retirementWithReplacement"><dc:Bounds x="800" y="420" width="160" height="45"/></dmndi:DMNShape>
-      <dmndi:DMNShape id="sh_d_2_2_5" dmnElementRef="d_2_2_5"><dc:Bounds x="60" y="240" width="180" height="70"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_d_2_2_4" dmnElementRef="d_2_2_4"><dc:Bounds x="60" y="240" width="180" height="70"/></dmndi:DMNShape>
       <dmndi:DMNShape id="sh_ks_ferc" dmnElementRef="ks_ferc"><dc:Bounds x="900" y="100" width="160" height="55"/></dmndi:DMNShape>
       <dmndi:DMNShape id="sh_ks_rus" dmnElementRef="ks_rus"><dc:Bounds x="1080" y="100" width="160" height="55"/></dmndi:DMNShape>
     </dmndi:DMNDiagram>

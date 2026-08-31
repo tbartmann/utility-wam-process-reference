@@ -52,8 +52,8 @@ The assignment is re-confirmed at dispatch rather than trusted. Between 4.1.1 an
   <bpmndi:BPMNDiagram id="dg_P_4_1">
     <bpmndi:BPMNPlane id="pl_P_4_1" bpmnElement="P_4_1">
       <bpmndi:BPMNShape id="sh_n_41_start" bpmnElement="n_41_start"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_41_valid" bpmnElement="n_41_valid"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_41_pack" bpmnElement="n_41_pack"><dc:Bounds x="425" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_41_valid" bpmnElement="n_41_valid"><dc:Bounds x="255" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_41_pack" bpmnElement="n_41_pack"><dc:Bounds x="425" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_41_send" bpmnElement="n_41_send"><dc:Bounds x="595" y="200" width="130" height="70"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_41_del" bpmnElement="n_41_del"><dc:Bounds x="807" y="212" width="46" height="46"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_41_fail" bpmnElement="n_41_fail"><dc:Bounds x="765" y="420" width="130" height="70"/></bpmndi:BPMNShape>
@@ -67,14 +67,30 @@ The assignment is re-confirmed at dispatch rather than trusted. Between 4.1.1 an
       <bpmndi:BPMNEdge id="ed_f_n_41_valid_n_41_pack" bpmnElement="f_n_41_valid_n_41_pack"><di:waypoint x="385" y="235"/><di:waypoint x="425" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_41_pack_n_41_send" bpmnElement="f_n_41_pack_n_41_send"><di:waypoint x="555" y="235"/><di:waypoint x="595" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_41_send_n_41_del" bpmnElement="f_n_41_send_n_41_del"><di:waypoint x="725" y="235"/><di:waypoint x="807" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_41_del_n_41_fail" bpmnElement="f_n_41_del_n_41_fail"><di:waypoint x="853" y="235"/><di:waypoint x="740" y="235"/><di:waypoint x="740" y="455"/><di:waypoint x="765" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_41_del_n_41_fail" bpmnElement="f_n_41_del_n_41_fail"><di:waypoint x="853" y="235"/><di:waypoint x="740" y="235"/><di:waypoint x="740" y="455"/><di:waypoint x="765" y="455"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="658.2" y="446.5" width="76.8" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_41_fail_n_41_exc" bpmnElement="f_n_41_fail_n_41_exc"><di:waypoint x="895" y="455"/><di:waypoint x="1445" y="455"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_41_del_n_41_ack" bpmnElement="f_n_41_del_n_41_ack"><di:waypoint x="853" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_41_del_n_41_ack" bpmnElement="f_n_41_del_n_41_ack"><di:waypoint x="853" y="235"/><di:waypoint x="935" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="866.8" y="213" width="54.4" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_41_ack_n_41_enr" bpmnElement="f_n_41_ack_n_41_enr"><di:waypoint x="1065" y="235"/><di:waypoint x="1105" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_41_enr_n_41_site" bpmnElement="f_n_41_enr_n_41_site"><di:waypoint x="1235" y="235"/><di:waypoint x="1275" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_41_site_n_41_miss" bpmnElement="f_n_41_site_n_41_miss"><di:waypoint x="1405" y="235"/><di:waypoint x="1487" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_41_miss_n_41_exc" bpmnElement="f_n_41_miss_n_41_exc"><di:waypoint x="1533" y="235"/><di:waypoint x="1420" y="235"/><di:waypoint x="1420" y="455"/><di:waypoint x="1445" y="455"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_41_miss_n_41_end" bpmnElement="f_n_41_miss_n_41_end"><di:waypoint x="1533" y="235"/><di:waypoint x="1662" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_41_miss_n_41_exc" bpmnElement="f_n_41_miss_n_41_exc"><di:waypoint x="1533" y="235"/><di:waypoint x="1420" y="235"/><di:waypoint x="1420" y="455"/><di:waypoint x="1445" y="455"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1321.4" y="446.5" width="93.6" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_41_miss_n_41_end" bpmnElement="f_n_41_miss_n_41_end"><di:waypoint x="1533" y="235"/><di:waypoint x="1662" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1575.9" y="213" width="43.2" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
 </definitions>

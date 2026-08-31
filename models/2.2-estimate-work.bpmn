@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_P_2_2" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <process id="P_2_2" name="2.2 Estimate work" isExecutable="false">
+    <documentation>Tier-4 activities under 2.2.1, 2.2.2 and 2.2.4. The allowance determination 2.2.3 is in 2.2.3-contingency-and-escalation.dmn. Estimate classification follows AACE 96R-18 for transmission and distribution and 97R-18 for pipeline; AACE states in RP 17R-97 that its recommended practices are guidelines, not standards, and no AACE RP is ANSI-recognised, so they are cited as consensus.</documentation>
+    <startEvent id="n_22_start" name="Work requires a cost estimate"><messageEventDefinition id="n_22_start_md"/></startEvent>
+    <userTask id="n_22_class" name="Establish the estimate class from definition maturity"><documentation>2.2.1. The class is set by how far the design is defined, not by how much time is available to estimate.</documentation></userTask>
+    <exclusiveGateway id="n_22_split" name="Delivery route"/>
+    <userTask id="n_22_lab" name="Estimate labour by skill and duration"><documentation>2.2.1.</documentation></userTask>
+    <userTask id="n_22_mat" name="Estimate material and equipment"><documentation>2.2.1. From the design where one exists, from history where it does not.</documentation></userTask>
+    <userTask id="n_22_ext" name="Estimate against contract or schedule of rates"><documentation>2.2.2. Where no contract is in place the figure is a forecast and must be labelled as one.</documentation></userTask>
+    <userTask id="n_22_ret" name="Estimate the retained cost of oversight and acceptance"><documentation>2.2.2. The internal cost of managing external delivery is real and is routinely omitted.</documentation></userTask>
+    <exclusiveGateway id="n_22_join" name=""/>
+    <userTask id="n_22_basis" name="Document the basis, assumptions and exclusions"><documentation>2.2.1 and 2.2.2. ASTM E2516-11(2024) gives the classification framework for the basis; AACE 34R-05 gives the content.</documentation></userTask>
+    <businessRuleTask id="n_22_allow" name="Determine overhead, contingency and escalation"><documentation>2.2.3. Calls decision Allowance_determination in 2.2.3-contingency-and-escalation.dmn.</documentation></businessRuleTask>
+    <serviceTask id="n_22_est" name="Record the estimate with allowances stated separately"><documentation>2.2.3. Rolling allowances into the base estimate hides both.</documentation></serviceTask>
+    <endEvent id="n_22_end" name="Estimate issued at a stated class"/>
+    <startEvent id="n_22_rstart" name="Scope, price or period changes materially"><conditionalEventDefinition id="n_22_rstart_cd"><condition/></conditionalEventDefinition></startEvent>
+    <userTask id="n_22_reest" name="Re-estimate the affected scope"><documentation>2.2.4.</documentation></userTask>
+    <userTask id="n_22_rclass" name="Restate the estimate class where definition matured"><documentation>2.2.4. Maturing definition should narrow the accuracy range; if it does not, the class was overstated.</documentation></userTask>
+    <serviceTask id="n_22_keep" name="Retain the superseded estimate and the reason"><documentation>2.2.4. Without the superseded version the variance cannot be attributed.</documentation></serviceTask>
+    <endEvent id="n_22_rend" name="Estimate revised"/>
+    <sequenceFlow id="f_n_22_start_n_22_class" sourceRef="n_22_start" targetRef="n_22_class" name=""/>
+    <sequenceFlow id="f_n_22_class_n_22_split" sourceRef="n_22_class" targetRef="n_22_split" name=""/>
+    <sequenceFlow id="f_n_22_split_n_22_lab" sourceRef="n_22_split" targetRef="n_22_lab" name="internally delivered"><conditionExpression xsi:type="tFormalExpression"><![CDATA[deliveryRoute = "internal"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_22_split_n_22_ext" sourceRef="n_22_split" targetRef="n_22_ext" name="externally delivered"><conditionExpression xsi:type="tFormalExpression"><![CDATA[deliveryRoute = "externalService"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_22_lab_n_22_mat" sourceRef="n_22_lab" targetRef="n_22_mat" name=""/>
+    <sequenceFlow id="f_n_22_mat_n_22_join" sourceRef="n_22_mat" targetRef="n_22_join" name=""/>
+    <sequenceFlow id="f_n_22_ext_n_22_ret" sourceRef="n_22_ext" targetRef="n_22_ret" name=""/>
+    <sequenceFlow id="f_n_22_ret_n_22_join" sourceRef="n_22_ret" targetRef="n_22_join" name=""/>
+    <sequenceFlow id="f_n_22_join_n_22_basis" sourceRef="n_22_join" targetRef="n_22_basis" name=""/>
+    <sequenceFlow id="f_n_22_basis_n_22_allow" sourceRef="n_22_basis" targetRef="n_22_allow" name=""/>
+    <sequenceFlow id="f_n_22_allow_n_22_est" sourceRef="n_22_allow" targetRef="n_22_est" name=""/>
+    <sequenceFlow id="f_n_22_est_n_22_end" sourceRef="n_22_est" targetRef="n_22_end" name=""/>
+    <sequenceFlow id="f_n_22_rstart_n_22_reest" sourceRef="n_22_rstart" targetRef="n_22_reest" name=""/>
+    <sequenceFlow id="f_n_22_reest_n_22_rclass" sourceRef="n_22_reest" targetRef="n_22_rclass" name=""/>
+    <sequenceFlow id="f_n_22_rclass_n_22_keep" sourceRef="n_22_rclass" targetRef="n_22_keep" name=""/>
+    <sequenceFlow id="f_n_22_keep_n_22_rend" sourceRef="n_22_keep" targetRef="n_22_rend" name=""/>
+  </process>
+  <bpmndi:BPMNDiagram id="dg_P_2_2">
+    <bpmndi:BPMNPlane id="pl_P_2_2" bpmnElement="P_2_2">
+      <bpmndi:BPMNShape id="sh_n_22_start" bpmnElement="n_22_start"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_22_class" bpmnElement="n_22_class"><dc:Bounds x="255" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_22_split" bpmnElement="n_22_split"><dc:Bounds x="467" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_22_lab" bpmnElement="n_22_lab"><dc:Bounds x="595" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_22_mat" bpmnElement="n_22_mat"><dc:Bounds x="765" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_22_ext" bpmnElement="n_22_ext"><dc:Bounds x="595" y="411.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_22_ret" bpmnElement="n_22_ret"><dc:Bounds x="765" y="411.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_22_join" bpmnElement="n_22_join"><dc:Bounds x="977" y="322" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_22_basis" bpmnElement="n_22_basis"><dc:Bounds x="1105" y="301.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_22_allow" bpmnElement="n_22_allow"><dc:Bounds x="1275" y="301.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_22_est" bpmnElement="n_22_est"><dc:Bounds x="1445" y="301.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_22_end" bpmnElement="n_22_end"><dc:Bounds x="1662" y="327" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_22_rstart" bpmnElement="n_22_rstart"><dc:Bounds x="1152" y="657" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_22_reest" bpmnElement="n_22_reest"><dc:Bounds x="1275" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_22_rclass" bpmnElement="n_22_rclass"><dc:Bounds x="1445" y="631.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_22_keep" bpmnElement="n_22_keep"><dc:Bounds x="1615" y="631.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_22_rend" bpmnElement="n_22_rend"><dc:Bounds x="1832" y="657" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ed_f_n_22_start_n_22_class" bpmnElement="f_n_22_start_n_22_class"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_22_class_n_22_split" bpmnElement="f_n_22_class_n_22_split"><di:waypoint x="385" y="235"/><di:waypoint x="467" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_22_split_n_22_lab" bpmnElement="f_n_22_split_n_22_lab"><di:waypoint x="513" y="235"/><di:waypoint x="595" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="524" y="200" width="60" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_22_split_n_22_ext" bpmnElement="f_n_22_split_n_22_ext"><di:waypoint x="513" y="235"/><di:waypoint x="570" y="235"/><di:waypoint x="570" y="455"/><di:waypoint x="595" y="455"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="505" y="440" width="60" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_22_lab_n_22_mat" bpmnElement="f_n_22_lab_n_22_mat"><di:waypoint x="725" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_22_mat_n_22_join" bpmnElement="f_n_22_mat_n_22_join"><di:waypoint x="895" y="235"/><di:waypoint x="952" y="235"/><di:waypoint x="952" y="345"/><di:waypoint x="977" y="345"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_22_ext_n_22_ret" bpmnElement="f_n_22_ext_n_22_ret"><di:waypoint x="725" y="455"/><di:waypoint x="765" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_22_ret_n_22_join" bpmnElement="f_n_22_ret_n_22_join"><di:waypoint x="895" y="455"/><di:waypoint x="952" y="455"/><di:waypoint x="952" y="345"/><di:waypoint x="977" y="345"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_22_join_n_22_basis" bpmnElement="f_n_22_join_n_22_basis"><di:waypoint x="1023" y="345"/><di:waypoint x="1105" y="345"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_22_basis_n_22_allow" bpmnElement="f_n_22_basis_n_22_allow"><di:waypoint x="1235" y="345"/><di:waypoint x="1275" y="345"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_22_allow_n_22_est" bpmnElement="f_n_22_allow_n_22_est"><di:waypoint x="1405" y="345"/><di:waypoint x="1445" y="345"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_22_est_n_22_end" bpmnElement="f_n_22_est_n_22_end"><di:waypoint x="1575" y="345"/><di:waypoint x="1662" y="345"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_22_rstart_n_22_reest" bpmnElement="f_n_22_rstart_n_22_reest"><di:waypoint x="1188" y="675"/><di:waypoint x="1275" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_22_reest_n_22_rclass" bpmnElement="f_n_22_reest_n_22_rclass"><di:waypoint x="1405" y="675"/><di:waypoint x="1445" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_22_rclass_n_22_keep" bpmnElement="f_n_22_rclass_n_22_keep"><di:waypoint x="1575" y="675"/><di:waypoint x="1615" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_22_keep_n_22_rend" bpmnElement="f_n_22_keep_n_22_rend"><di:waypoint x="1745" y="675"/><di:waypoint x="1832" y="675"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

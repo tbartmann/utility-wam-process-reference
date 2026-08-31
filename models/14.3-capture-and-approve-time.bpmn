@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_P_14_3" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <process id="P_14_3" name="14.3 Capture and approve time" isExecutable="false">
+    <documentation>All four processes are drawn, and the group is one path because time only moves one way: captured at the work, cascaded to the people who did it, corrected by them, approved by a supervisor, and released.
+
+TIME IS RECORDED AGAINST THE WORK, NOT AGAINST THE DAY, and that single choice is what makes 5.2.1 possible. A daily total cannot be settled to a work order, and 5.2.1 is where the cost of the work actually lands. The flow therefore starts from the assignment rather than from the shift.
+
+OFFLINE IS THE NORMAL CASE, NOT AN EXCEPTION, and it is drawn as a hold rather than as an error path. Field work happens where there is no connectivity. What the device does while disconnected, and how it resolves a sync conflict, are entirely vendor-defined - the reference specifies WHAT is captured and is silent on how the device behaves, because no standard reaches it.
+
+THE CASCADE RUNS AGAINST THE CREW AS CONSTITUTED, not as planned. A planned crew that differs from the actual one produces time for people who were not there, and that only surfaces at 14.4.4 if it surfaces at all.
+
+A CORRECTION RETAINS THE ORIGINAL. Overwriting time already settled to a work order breaks the cost record with nothing left to reconcile against, and 5.2.5 then has an exception with no history. The reopen path is drawn, and the path for a period already sent to payroll deliberately is not - that is 14.4.4's, because 14.3.3 must never look as though it can undo a payment.</documentation>
+    <laneSet id="P_14_3_lanes">
+      <lane id="l_143_field" name="Field capture">
+        <flowNodeRef>n_143_start</flowNodeRef>
+        <flowNodeRef>n_143_cap</flowNodeRef>
+        <flowNodeRef>n_143_conn</flowNodeRef>
+        <flowNodeRef>n_143_hold</flowNodeRef>
+        <flowNodeRef>n_143_crew</flowNodeRef>
+        <flowNodeRef>n_143_casc</flowNodeRef>
+        <flowNodeRef>n_143_pres</flowNodeRef>
+        <flowNodeRef>n_143_edit</flowNodeRef>
+        <flowNodeRef>n_143_reason</flowNodeRef>
+        <flowNodeRef>n_143_sub</flowNodeRef>
+      </lane>
+      <lane id="l_143_appr" name="Approval">
+        <flowNodeRef>n_143_test</flowNodeRef>
+        <flowNodeRef>n_143_dec</flowNodeRef>
+        <flowNodeRef>n_143_back</flowNodeRef>
+        <flowNodeRef>n_143_rel</flowNodeRef>
+        <flowNodeRef>n_143_end</flowNodeRef>
+      </lane>
+    </laneSet>
+    <startEvent id="n_143_start" name="A worker records time against work"><messageEventDefinition id="n_143_start_md"/></startEvent>
+    <userTask id="n_143_cap" name="Record time against the work order and task"><documentation>14.3.1. Against the WORK, not the day. Capturing the type and premium triggers here is what lets 14.4.1 value it later.</documentation></userTask>
+    <exclusiveGateway id="n_143_conn" name="Device connected"/>
+    <receiveTask id="n_143_hold" name="Hold locally until connectivity returns"><documentation>14.3.1. The normal case. Offline behaviour and sync conflict resolution are vendor-defined; the reference does not specify them.</documentation></receiveTask>
+    <exclusiveGateway id="n_143_crew" name="Entered for a crew"/>
+    <serviceTask id="n_143_casc" name="Cascade to the crew as constituted"><documentation>14.3.2. As CONSTITUTED, not as planned. Each member's entry must stand alone afterwards, with its own type and exceptions.</documentation></serviceTask>
+    <userTask id="n_143_pres" name="Present the period back to the worker"><documentation>14.3.3. Before anyone approves it.</documentation></userTask>
+    <exclusiveGateway id="n_143_edit" name="Edits made"/>
+    <serviceTask id="n_143_reason" name="Record the edit with its reason"><documentation>14.3.3. An unexplained edit is indistinguishable from an error and from a manipulation, and the difference matters where hours drive a premium.</documentation></serviceTask>
+    <sendTask id="n_143_sub" name="Submit the timesheet"><documentation>14.3.3.</documentation></sendTask>
+    <businessRuleTask id="n_143_test" name="Test against the operator's exception rules"><documentation>14.3.4. The rules are the operator's - no standard defines what an anomalous timesheet looks like.</documentation></businessRuleTask>
+    <exclusiveGateway id="n_143_dec" name="Approve, query or reject"/>
+    <sendTask id="n_143_back" name="Return for correction with the reason"><documentation>14.3.4. Back to 14.3.3, which retains the original entry.</documentation></sendTask>
+    <sendTask id="n_143_rel" name="Release approved time to costing and to pay"><documentation>14.3.4. The same hours go to 5.2.1 as work cost and to 14.4.3 as pay. Approving them separately is how the two stop reconciling.</documentation></sendTask>
+    <endEvent id="n_143_end" name="Time approved and released"/>
+    <sequenceFlow id="f_n_143_start_n_143_cap" sourceRef="n_143_start" targetRef="n_143_cap" name=""/>
+    <sequenceFlow id="f_n_143_cap_n_143_conn" sourceRef="n_143_cap" targetRef="n_143_conn" name=""/>
+    <sequenceFlow id="f_n_143_conn_n_143_hold" sourceRef="n_143_conn" targetRef="n_143_hold" name="offline"><conditionExpression xsi:type="tFormalExpression"><![CDATA[connected = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_143_hold_n_143_crew" sourceRef="n_143_hold" targetRef="n_143_crew" name=""/>
+    <sequenceFlow id="f_n_143_conn_n_143_crew" sourceRef="n_143_conn" targetRef="n_143_crew" name="connected"/>
+    <sequenceFlow id="f_n_143_crew_n_143_casc" sourceRef="n_143_crew" targetRef="n_143_casc" name="crew entry"><conditionExpression xsi:type="tFormalExpression"><![CDATA[crewEntry = true]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_143_casc_n_143_pres" sourceRef="n_143_casc" targetRef="n_143_pres" name=""/>
+    <sequenceFlow id="f_n_143_crew_n_143_pres" sourceRef="n_143_crew" targetRef="n_143_pres" name="individual entry"/>
+    <sequenceFlow id="f_n_143_pres_n_143_edit" sourceRef="n_143_pres" targetRef="n_143_edit" name=""/>
+    <sequenceFlow id="f_n_143_edit_n_143_reason" sourceRef="n_143_edit" targetRef="n_143_reason" name="edited"><conditionExpression xsi:type="tFormalExpression"><![CDATA[edited = true]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_143_reason_n_143_sub" sourceRef="n_143_reason" targetRef="n_143_sub" name=""/>
+    <sequenceFlow id="f_n_143_edit_n_143_sub" sourceRef="n_143_edit" targetRef="n_143_sub" name="unchanged"/>
+    <sequenceFlow id="f_n_143_sub_n_143_test" sourceRef="n_143_sub" targetRef="n_143_test" name=""/>
+    <sequenceFlow id="f_n_143_test_n_143_dec" sourceRef="n_143_test" targetRef="n_143_dec" name=""/>
+    <sequenceFlow id="f_n_143_dec_n_143_back" sourceRef="n_143_dec" targetRef="n_143_back" name="queried or rejected"/>
+    <sequenceFlow id="f_n_143_back_n_143_pres" sourceRef="n_143_back" targetRef="n_143_pres" name=""/>
+    <sequenceFlow id="f_n_143_dec_n_143_rel" sourceRef="n_143_dec" targetRef="n_143_rel" name="approved"/>
+    <sequenceFlow id="f_n_143_rel_n_143_end" sourceRef="n_143_rel" targetRef="n_143_end" name=""/>
+  </process>
+  <bpmndi:BPMNDiagram id="dg_P_14_3">
+    <bpmndi:BPMNPlane id="pl_P_14_3" bpmnElement="P_14_3">
+      <bpmndi:BPMNShape id="sh_n_143_start" bpmnElement="n_143_start"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_143_cap" bpmnElement="n_143_cap"><dc:Bounds x="255" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_143_conn" bpmnElement="n_143_conn"><dc:Bounds x="467" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_143_hold" bpmnElement="n_143_hold"><dc:Bounds x="425" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_143_crew" bpmnElement="n_143_crew"><dc:Bounds x="637" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_143_casc" bpmnElement="n_143_casc"><dc:Bounds x="595" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_143_pres" bpmnElement="n_143_pres"><dc:Bounds x="765" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_143_edit" bpmnElement="n_143_edit"><dc:Bounds x="977" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_143_reason" bpmnElement="n_143_reason"><dc:Bounds x="935" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_143_sub" bpmnElement="n_143_sub"><dc:Bounds x="1105" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_143_test" bpmnElement="n_143_test"><dc:Bounds x="1275" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_143_dec" bpmnElement="n_143_dec"><dc:Bounds x="1487" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_143_back" bpmnElement="n_143_back"><dc:Bounds x="1445" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_143_rel" bpmnElement="n_143_rel"><dc:Bounds x="1615" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_143_end" bpmnElement="n_143_end"><dc:Bounds x="1832" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ed_f_n_143_start_n_143_cap" bpmnElement="f_n_143_start_n_143_cap"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_143_cap_n_143_conn" bpmnElement="f_n_143_cap_n_143_conn"><di:waypoint x="385" y="235"/><di:waypoint x="467" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_143_conn_n_143_hold" bpmnElement="f_n_143_conn_n_143_hold"><di:waypoint x="513" y="235"/><di:waypoint x="400" y="235"/><di:waypoint x="400" y="455"/><di:waypoint x="425" y="455"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="351.8" y="446.5" width="43.2" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_143_hold_n_143_crew" bpmnElement="f_n_143_hold_n_143_crew"><di:waypoint x="555" y="455"/><di:waypoint x="612" y="455"/><di:waypoint x="612" y="235"/><di:waypoint x="637" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_143_conn_n_143_crew" bpmnElement="f_n_143_conn_n_143_crew"><di:waypoint x="513" y="235"/><di:waypoint x="637" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="547.8" y="213" width="54.4" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_143_crew_n_143_casc" bpmnElement="f_n_143_crew_n_143_casc"><di:waypoint x="683" y="235"/><di:waypoint x="570" y="235"/><di:waypoint x="570" y="455"/><di:waypoint x="595" y="455"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="575" y="336.5" width="60" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_143_casc_n_143_pres" bpmnElement="f_n_143_casc_n_143_pres"><di:waypoint x="725" y="455"/><di:waypoint x="740" y="455"/><di:waypoint x="740" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_143_crew_n_143_pres" bpmnElement="f_n_143_crew_n_143_pres"><di:waypoint x="683" y="235"/><di:waypoint x="765" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="664.1" y="186" width="93.6" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_143_pres_n_143_edit" bpmnElement="f_n_143_pres_n_143_edit"><di:waypoint x="895" y="235"/><di:waypoint x="977" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_143_edit_n_143_reason" bpmnElement="f_n_143_edit_n_143_reason"><di:waypoint x="1023" y="235"/><di:waypoint x="910" y="235"/><di:waypoint x="910" y="455"/><di:waypoint x="935" y="455"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="865" y="446.5" width="40" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_143_reason_n_143_sub" bpmnElement="f_n_143_reason_n_143_sub"><di:waypoint x="1065" y="455"/><di:waypoint x="1080" y="455"/><di:waypoint x="1080" y="235"/><di:waypoint x="1105" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_143_edit_n_143_sub" bpmnElement="f_n_143_edit_n_143_sub"><di:waypoint x="1023" y="235"/><di:waypoint x="1105" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1036.8" y="213" width="54.4" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_143_sub_n_143_test" bpmnElement="f_n_143_sub_n_143_test"><di:waypoint x="1235" y="235"/><di:waypoint x="1275" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_143_test_n_143_dec" bpmnElement="f_n_143_test_n_143_dec"><di:waypoint x="1405" y="235"/><di:waypoint x="1487" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_143_dec_n_143_back" bpmnElement="f_n_143_dec_n_143_back"><di:waypoint x="1533" y="235"/><di:waypoint x="1420" y="235"/><di:waypoint x="1420" y="455"/><di:waypoint x="1445" y="455"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1355" y="440" width="60" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_143_back_n_143_pres" bpmnElement="f_n_143_back_n_143_pres"><di:waypoint x="1575" y="455"/><di:waypoint x="740" y="455"/><di:waypoint x="740" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_143_dec_n_143_rel" bpmnElement="f_n_143_dec_n_143_rel"><di:waypoint x="1533" y="235"/><di:waypoint x="1615" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1549.6" y="213" width="48.8" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_143_rel_n_143_end" bpmnElement="f_n_143_rel_n_143_end"><di:waypoint x="1745" y="235"/><di:waypoint x="1832" y="235"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

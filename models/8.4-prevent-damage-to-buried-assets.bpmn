@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_P_8_4" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <process id="P_8_4" name="8.4 Prevent damage to buried assets" isExecutable="false">
+    <documentation>Four of the five processes are drawn. 8.4.4 damage investigation is CMMN and is shown as the branch this flow hands to.
+
+THE CLOCK IS NOT FEDERAL. 49 CFR 192.614 requires the operator to have a written damage prevention programme and to participate in the notification system. It does not set the response window. The call-before-you-dig duty and its clock are STATE one-call statute and they differ between states, so the flow reads the window rather than carrying a figure.
+
+SILENCE IS NOT AN ANSWER. A no-conflict result is a response and is returned and recorded like any other. No state one-call regime permits an operator to say nothing, and the flow has no path that ends without a response.
+
+The evidence set is what defends a claim at 8.4.4, and it is assembled here rather than reconstructed later. Marks without photographs, or photographs with no timestamp and location, leave the operator unable to show what was on the ground when the excavator dug.</documentation>
+    <laneSet id="P_8_4_lanes">
+      <lane id="l_84_dp" name="Damage prevention">
+        <flowNodeRef>n_84_start</flowNodeRef>
+        <flowNodeRef>n_84_read</flowNodeRef>
+        <flowNodeRef>n_84_pres</flowNodeRef>
+        <flowNodeRef>n_84_nc</flowNodeRef>
+        <flowNodeRef>n_84_clar</flowNodeRef>
+        <flowNodeRef>n_84_loc</flowNodeRef>
+        <flowNodeRef>n_84_ev</flowNodeRef>
+        <flowNodeRef>n_84_resp</flowNodeRef>
+        <flowNodeRef>n_84_dig</flowNodeRef>
+        <flowNodeRef>n_84_dmg</flowNodeRef>
+        <flowNodeRef>n_84_stat</flowNodeRef>
+        <flowNodeRef>n_84_end</flowNodeRef>
+      </lane>
+      <lane id="l_84_field" name="Locating">
+        <flowNodeRef>n_84_mark</flowNodeRef>
+        <flowNodeRef>n_84_disc</flowNodeRef>
+        <flowNodeRef>n_84_gis</flowNodeRef>
+      </lane>
+    </laneSet>
+    <startEvent id="n_84_start" name="A one-call centre transmits an excavation notice"><messageEventDefinition id="n_84_start_md"/></startEvent>
+    <serviceTask id="n_84_read" name="Read the described area and the statutory window"><documentation>8.4.1. The window is state statute. 192.614 requires the programme, not the clock.</documentation></serviceTask>
+    <exclusiveGateway id="n_84_pres" name="Facilities in the described area"/>
+    <sendTask id="n_84_nc" name="Return a clear no-conflict response"><documentation>8.4.1. A response, not an absence of one. Silence is not permitted anywhere.</documentation></sendTask>
+    <sendTask id="n_84_clar" name="Seek clarification within the window"><documentation>8.4.1. Where the description is inadequate. Guessing the extent is not the alternative.</documentation></sendTask>
+    <serviceTask id="n_84_loc" name="Raise the locate with its due time"><documentation>8.4.1.</documentation></serviceTask>
+    <userTask id="n_84_mark" name="Establish position and mark to the colour code"><documentation>8.4.2. APWA uniform colour code, adopted into most state statutes rather than set federally. The tolerance zone is the state's and differs.</documentation></userTask>
+    <exclusiveGateway id="n_84_disc" name="Field position differs from the record"/>
+    <sendTask id="n_84_gis" name="Raise the discrepancy to 12.2.2"><documentation>8.4.2. Or the same error repeats on the next notice at the same address.</documentation></sendTask>
+    <serviceTask id="n_84_ev" name="Assemble marks, photographs and extent"><documentation>8.4.3. This set is what defends a claim at 8.4.4.</documentation></serviceTask>
+    <sendTask id="n_84_resp" name="Return the positive response and capture the acknowledgement"><documentation>8.4.3. Where the state operates a positive-response system; not every state does.</documentation></sendTask>
+    <eventBasedGateway id="n_84_dig" name="What happens at the excavation"/>
+    <sendTask id="n_84_dmg" name="Hand a reported damage to investigation"><documentation>8.4.4, CMMN. Evidential and adversarial, and largely lost once the site is backfilled.</documentation></sendTask>
+    <serviceTask id="n_84_stat" name="Add the determined cause to the period statistics"><documentation>8.4.5. Normalised per thousand NOTICES, not counted raw.</documentation></serviceTask>
+    <endEvent id="n_84_end" name="Notice answered and evidenced"/>
+    <sequenceFlow id="f_n_84_start_n_84_read" sourceRef="n_84_start" targetRef="n_84_read" name=""/>
+    <sequenceFlow id="f_n_84_read_n_84_pres" sourceRef="n_84_read" targetRef="n_84_pres" name=""/>
+    <sequenceFlow id="f_n_84_pres_n_84_nc" sourceRef="n_84_pres" targetRef="n_84_nc" name="no facilities"><conditionExpression xsi:type="tFormalExpression"><![CDATA[facilitiesPresent = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_84_pres_n_84_clar" sourceRef="n_84_pres" targetRef="n_84_clar" name="description inadequate"/>
+    <sequenceFlow id="f_n_84_clar_n_84_read" sourceRef="n_84_clar" targetRef="n_84_read" name=""/>
+    <sequenceFlow id="f_n_84_pres_n_84_loc" sourceRef="n_84_pres" targetRef="n_84_loc" name="facilities present"/>
+    <sequenceFlow id="f_n_84_nc_n_84_end" sourceRef="n_84_nc" targetRef="n_84_end" name=""/>
+    <sequenceFlow id="f_n_84_loc_n_84_mark" sourceRef="n_84_loc" targetRef="n_84_mark" name=""/>
+    <sequenceFlow id="f_n_84_mark_n_84_disc" sourceRef="n_84_mark" targetRef="n_84_disc" name=""/>
+    <sequenceFlow id="f_n_84_disc_n_84_gis" sourceRef="n_84_disc" targetRef="n_84_gis" name="differs"><conditionExpression xsi:type="tFormalExpression"><![CDATA[recordMatches = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_84_gis_n_84_ev" sourceRef="n_84_gis" targetRef="n_84_ev" name=""/>
+    <sequenceFlow id="f_n_84_disc_n_84_ev" sourceRef="n_84_disc" targetRef="n_84_ev" name="matches"/>
+    <sequenceFlow id="f_n_84_ev_n_84_resp" sourceRef="n_84_ev" targetRef="n_84_resp" name=""/>
+    <sequenceFlow id="f_n_84_resp_n_84_dig" sourceRef="n_84_resp" targetRef="n_84_dig" name=""/>
+    <sequenceFlow id="f_n_84_dig_n_84_dmg" sourceRef="n_84_dig" targetRef="n_84_dmg" name="damage reported"/>
+    <sequenceFlow id="f_n_84_dmg_n_84_stat" sourceRef="n_84_dmg" targetRef="n_84_stat" name=""/>
+    <sequenceFlow id="f_n_84_dig_n_84_stat" sourceRef="n_84_dig" targetRef="n_84_stat" name="no damage"/>
+    <sequenceFlow id="f_n_84_stat_n_84_end" sourceRef="n_84_stat" targetRef="n_84_end" name=""/>
+  </process>
+  <bpmndi:BPMNDiagram id="dg_P_8_4">
+    <bpmndi:BPMNPlane id="pl_P_8_4" bpmnElement="P_8_4">
+      <bpmndi:BPMNShape id="sh_n_84_start" bpmnElement="n_84_start"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_84_read" bpmnElement="n_84_read"><dc:Bounds x="255" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_84_pres" bpmnElement="n_84_pres"><dc:Bounds x="467" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_84_nc" bpmnElement="n_84_nc"><dc:Bounds x="425" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_84_clar" bpmnElement="n_84_clar"><dc:Bounds x="425" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_84_loc" bpmnElement="n_84_loc"><dc:Bounds x="595" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_84_mark" bpmnElement="n_84_mark"><dc:Bounds x="765" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_84_disc" bpmnElement="n_84_disc"><dc:Bounds x="977" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_84_gis" bpmnElement="n_84_gis"><dc:Bounds x="935" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_84_ev" bpmnElement="n_84_ev"><dc:Bounds x="1105" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_84_resp" bpmnElement="n_84_resp"><dc:Bounds x="1275" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_84_dig" bpmnElement="n_84_dig"><dc:Bounds x="1487" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_84_dmg" bpmnElement="n_84_dmg"><dc:Bounds x="1445" y="411.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_84_stat" bpmnElement="n_84_stat"><dc:Bounds x="1615" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_84_end" bpmnElement="n_84_end"><dc:Bounds x="1832" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ed_f_n_84_start_n_84_read" bpmnElement="f_n_84_start_n_84_read"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_84_read_n_84_pres" bpmnElement="f_n_84_read_n_84_pres"><di:waypoint x="385" y="235"/><di:waypoint x="467" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_84_pres_n_84_nc" bpmnElement="f_n_84_pres_n_84_nc"><di:waypoint x="513" y="235"/><di:waypoint x="400" y="235"/><di:waypoint x="400" y="455"/><di:waypoint x="425" y="455"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="318.2" y="446.5" width="76.8" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_84_pres_n_84_clar" bpmnElement="f_n_84_pres_n_84_clar"><di:waypoint x="513" y="235"/><di:waypoint x="400" y="235"/><di:waypoint x="400" y="675"/><di:waypoint x="425" y="675"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="329.4" y="660" width="65.6" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_84_clar_n_84_read" bpmnElement="f_n_84_clar_n_84_read"><di:waypoint x="555" y="675"/><di:waypoint x="230" y="675"/><di:waypoint x="230" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_84_pres_n_84_loc" bpmnElement="f_n_84_pres_n_84_loc"><di:waypoint x="513" y="235"/><di:waypoint x="595" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="524" y="200" width="60" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_84_nc_n_84_end" bpmnElement="f_n_84_nc_n_84_end"><di:waypoint x="555" y="455"/><di:waypoint x="1807" y="455"/><di:waypoint x="1807" y="235"/><di:waypoint x="1832" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_84_loc_n_84_mark" bpmnElement="f_n_84_loc_n_84_mark"><di:waypoint x="725" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_84_mark_n_84_disc" bpmnElement="f_n_84_mark_n_84_disc"><di:waypoint x="895" y="235"/><di:waypoint x="977" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_84_disc_n_84_gis" bpmnElement="f_n_84_disc_n_84_gis"><di:waypoint x="1023" y="235"/><di:waypoint x="910" y="235"/><di:waypoint x="910" y="455"/><di:waypoint x="935" y="455"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="861.8" y="446.5" width="43.2" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_84_gis_n_84_ev" bpmnElement="f_n_84_gis_n_84_ev"><di:waypoint x="1065" y="455"/><di:waypoint x="1080" y="455"/><di:waypoint x="1080" y="235"/><di:waypoint x="1105" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_84_disc_n_84_ev" bpmnElement="f_n_84_disc_n_84_ev"><di:waypoint x="1023" y="235"/><di:waypoint x="1105" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1042.4" y="213" width="43.2" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_84_ev_n_84_resp" bpmnElement="f_n_84_ev_n_84_resp"><di:waypoint x="1235" y="235"/><di:waypoint x="1275" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_84_resp_n_84_dig" bpmnElement="f_n_84_resp_n_84_dig"><di:waypoint x="1405" y="235"/><di:waypoint x="1487" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_84_dig_n_84_dmg" bpmnElement="f_n_84_dig_n_84_dmg"><di:waypoint x="1533" y="235"/><di:waypoint x="1420" y="235"/><di:waypoint x="1420" y="455"/><di:waypoint x="1445" y="455"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1327" y="446.5" width="88" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_84_dmg_n_84_stat" bpmnElement="f_n_84_dmg_n_84_stat"><di:waypoint x="1575" y="455"/><di:waypoint x="1590" y="455"/><di:waypoint x="1590" y="235"/><di:waypoint x="1615" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_84_dig_n_84_stat" bpmnElement="f_n_84_dig_n_84_stat"><di:waypoint x="1533" y="235"/><di:waypoint x="1615" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1546.8" y="213" width="54.4" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_84_stat_n_84_end" bpmnElement="f_n_84_stat_n_84_end"><di:waypoint x="1745" y="235"/><di:waypoint x="1832" y="235"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

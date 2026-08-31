@@ -58,15 +58,15 @@ The method is selected before the evidence is collected, and the gateway says so
       <bpmndi:BPMNShape id="sh_n_124_t" bpmnElement="n_124_t"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_124_scope" bpmnElement="n_124_scope"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_124_meth" bpmnElement="n_124_meth"><dc:Bounds x="425" y="200" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_124_coll" bpmnElement="n_124_coll"><dc:Bounds x="595" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_124_coll" bpmnElement="n_124_coll"><dc:Bounds x="595" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_124_ev" bpmnElement="n_124_ev"><dc:Bounds x="765" y="200" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_124_rec" bpmnElement="n_124_rec"><dc:Bounds x="935" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_124_rec" bpmnElement="n_124_rec"><dc:Bounds x="935" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_124_gw" bpmnElement="n_124_gw"><dc:Bounds x="1147" y="212" width="46" height="46"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_124_case" bpmnElement="n_124_case"><dc:Bounds x="1105" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_124_case" bpmnElement="n_124_case"><dc:Bounds x="1105" y="411.5" width="130" height="87"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_124_e1" bpmnElement="n_124_e1"><dc:Bounds x="1322" y="217" width="36" height="36"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_124_pt" bpmnElement="n_124_pt"><dc:Bounds x="132" y="657" width="36" height="36"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_124_pop" bpmnElement="n_124_pop"><dc:Bounds x="255" y="640" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_124_asm" bpmnElement="n_124_asm"><dc:Bounds x="425" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_124_pop" bpmnElement="n_124_pop"><dc:Bounds x="255" y="631.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_124_asm" bpmnElement="n_124_asm"><dc:Bounds x="425" y="631.5" width="130" height="87"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_124_calc" bpmnElement="n_124_calc"><dc:Bounds x="595" y="640" width="130" height="70"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_124_route" bpmnElement="n_124_route"><dc:Bounds x="765" y="640" width="130" height="70"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_124_e2" bpmnElement="n_124_e2"><dc:Bounds x="982" y="657" width="36" height="36"/></bpmndi:BPMNShape>
@@ -76,9 +76,17 @@ The method is selected before the evidence is collected, and the gateway says so
       <bpmndi:BPMNEdge id="ed_f_n_124_coll_n_124_ev" bpmnElement="f_n_124_coll_n_124_ev"><di:waypoint x="725" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_124_ev_n_124_rec" bpmnElement="f_n_124_ev_n_124_rec"><di:waypoint x="895" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_124_rec_n_124_gw" bpmnElement="f_n_124_rec_n_124_gw"><di:waypoint x="1065" y="235"/><di:waypoint x="1147" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_124_gw_n_124_case" bpmnElement="f_n_124_gw_n_124_case"><di:waypoint x="1193" y="235"/><di:waypoint x="1080" y="235"/><di:waypoint x="1080" y="455"/><di:waypoint x="1105" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_124_gw_n_124_case" bpmnElement="f_n_124_gw_n_124_case"><di:waypoint x="1193" y="235"/><di:waypoint x="1080" y="235"/><di:waypoint x="1080" y="455"/><di:waypoint x="1105" y="455"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="981.4" y="440" width="93.6" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_124_case_n_124_e1" bpmnElement="f_n_124_case_n_124_e1"><di:waypoint x="1235" y="455"/><di:waypoint x="1297" y="455"/><di:waypoint x="1297" y="235"/><di:waypoint x="1322" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_124_gw_n_124_e1" bpmnElement="f_n_124_gw_n_124_e1"><di:waypoint x="1193" y="235"/><di:waypoint x="1322" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_124_gw_n_124_e1" bpmnElement="f_n_124_gw_n_124_e1"><di:waypoint x="1193" y="235"/><di:waypoint x="1322" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1216.3" y="213" width="82.4" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_124_pt_n_124_pop" bpmnElement="f_n_124_pt_n_124_pop"><di:waypoint x="168" y="675"/><di:waypoint x="255" y="675"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_124_pop_n_124_asm" bpmnElement="f_n_124_pop_n_124_asm"><di:waypoint x="385" y="675"/><di:waypoint x="425" y="675"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_124_asm_n_124_calc" bpmnElement="f_n_124_asm_n_124_calc"><di:waypoint x="555" y="675"/><di:waypoint x="595" y="675"/></bpmndi:BPMNEdge>

@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_P_2_5" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <process id="P_2_5" name="2.5 Obtain permits and satisfy prerequisites" isExecutable="false">
+    <documentation>Tier-4 activities under 2.5.2, 2.5.3 and 2.5.4. The permit determination 2.5.1 is in 2.5.1-permit-determination.dmn. NOTE: no consensus practice exists for permit management as a process. CGA Best Practices covers the 811 locate request comprehensively and nothing else; obtaining, tracking, expiring and closing out road-opening, railroad and environmental permits is judgment, framed here against EN 17007 cl. 6.5.3 ACT.2.</documentation>
+    <startEvent id="n_25_start" name="Permit requirement determined"><messageEventDefinition id="n_25_start_md"/></startEvent>
+    <sendTask id="n_25_sub" name="Submit each request to its issuing party"><documentation>2.5.2. The one-call request goes to the centre; municipal, railroad and environmental requests each go to a different party on a different clock.</documentation></sendTask>
+    <receiveTask id="n_25_track" name="Track against the expected response time"><documentation>2.5.2. The statutory locate window is state law; a municipal ordinance window is not standardised at all.</documentation></receiveTask>
+    <exclusiveGateway id="n_25_ovr" name="Response received"/>
+    <userTask id="n_25_chase" name="Chase or escalate the overdue response"><documentation>2.5.2. An overdue locate is not a reason to dig; the waiting period is a hard constraint on the earliest start.</documentation></userTask>
+    <sendTask id="n_25_emer" name="Notify under the emergency provision"><documentation>2.5.2 variant. Where the statutory waiting window does not apply. The provision is state law and its conditions are narrow.</documentation></sendTask>
+    <serviceTask id="n_25_rec" name="Record the permit with its conditions and validity"><documentation>2.5.2. Conditions travel on the work, not in the permit coordinator's head.</documentation></serviceTask>
+    <userTask id="n_25_chk" name="Check permits, material, qualification and safety prerequisites"><documentation>2.5.3. Including the isolation, clearance or briefing the method requires.</documentation></userTask>
+    <exclusiveGateway id="n_25_gate" name="All prerequisites held"/>
+    <userTask id="n_25_hold" name="Hold against the named missing prerequisite"><documentation>2.5.3. Named, not generic. 'Not ready' with no reason is what makes ready backlog meaningless.</documentation></userTask>
+    <serviceTask id="n_25_ready" name="Release the work as ready to schedule"><documentation>2.5.3. Ready is a defined state, not an opinion.</documentation></serviceTask>
+    <endEvent id="n_25_end" name="Work ready to schedule"/>
+    <endEvent id="n_25_endh" name="Held with a named prerequisite"/>
+    <startEvent id="n_25_tstart" name="Permit approaching expiry"><timerEventDefinition id="n_25_tstart_td"/></startEvent>
+    <exclusiveGateway id="n_25_exp" name="Work will complete in time"/>
+    <sendTask id="n_25_ren" name="Renew or extend before expiry"><documentation>2.5.4. A locate update before expiry is the common case and is the one most often missed.</documentation></sendTask>
+    <userTask id="n_25_lapse" name="Stop work and re-request"><documentation>2.5.4 variant. A lapsed permit stops the work; continuing is an offence, not a risk to be managed.</documentation></userTask>
+    <serviceTask id="n_25_cost" name="Record permit cost against the work"><documentation>2.5.4.</documentation></serviceTask>
+    <userTask id="n_25_close" name="Close out and satisfy any reinstatement condition"><documentation>2.5.4. Reinstatement is a permit condition and is charged to the work.</documentation></userTask>
+    <endEvent id="n_25_tend" name="Permit closed out"/>
+    <sequenceFlow id="f_n_25_start_n_25_sub" sourceRef="n_25_start" targetRef="n_25_sub" name=""/>
+    <sequenceFlow id="f_n_25_emer_n_25_rec" sourceRef="n_25_emer" targetRef="n_25_rec" name=""/>
+    <sequenceFlow id="f_n_25_sub_n_25_track" sourceRef="n_25_sub" targetRef="n_25_track" name=""/>
+    <sequenceFlow id="f_n_25_track_n_25_ovr" sourceRef="n_25_track" targetRef="n_25_ovr" name=""/>
+    <sequenceFlow id="f_n_25_ovr_n_25_chase" sourceRef="n_25_ovr" targetRef="n_25_chase" name="overdue"><conditionExpression xsi:type="tFormalExpression"><![CDATA[responseOverdue = true]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_25_chase_n_25_track" sourceRef="n_25_chase" targetRef="n_25_track" name="chased"/>
+    <sequenceFlow id="f_n_25_ovr_n_25_rec" sourceRef="n_25_ovr" targetRef="n_25_rec" name="received"/>
+    <sequenceFlow id="f_n_25_rec_n_25_chk" sourceRef="n_25_rec" targetRef="n_25_chk" name=""/>
+    <sequenceFlow id="f_n_25_chk_n_25_gate" sourceRef="n_25_chk" targetRef="n_25_gate" name=""/>
+    <sequenceFlow id="f_n_25_gate_n_25_hold" sourceRef="n_25_gate" targetRef="n_25_hold" name="prerequisite missing"><conditionExpression xsi:type="tFormalExpression"><![CDATA[prerequisitesHeld = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_25_hold_n_25_endh" sourceRef="n_25_hold" targetRef="n_25_endh" name=""/>
+    <sequenceFlow id="f_n_25_gate_n_25_ready" sourceRef="n_25_gate" targetRef="n_25_ready" name="all held"/>
+    <sequenceFlow id="f_n_25_ready_n_25_end" sourceRef="n_25_ready" targetRef="n_25_end" name=""/>
+    <sequenceFlow id="f_n_25_tstart_n_25_exp" sourceRef="n_25_tstart" targetRef="n_25_exp" name=""/>
+    <sequenceFlow id="f_n_25_exp_n_25_ren" sourceRef="n_25_exp" targetRef="n_25_ren" name="work will not complete in time"><conditionExpression xsi:type="tFormalExpression"><![CDATA[completesBeforeExpiry = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_25_ren_n_25_lapse" sourceRef="n_25_ren" targetRef="n_25_lapse" name="renewal refused or late"><conditionExpression xsi:type="tFormalExpression"><![CDATA[renewalGranted = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_25_ren_n_25_cost" sourceRef="n_25_ren" targetRef="n_25_cost" name="renewed"/>
+    <sequenceFlow id="f_n_25_lapse_n_25_cost" sourceRef="n_25_lapse" targetRef="n_25_cost" name=""/>
+    <sequenceFlow id="f_n_25_exp_n_25_cost" sourceRef="n_25_exp" targetRef="n_25_cost" name="completes in time"/>
+    <sequenceFlow id="f_n_25_cost_n_25_close" sourceRef="n_25_cost" targetRef="n_25_close" name=""/>
+    <sequenceFlow id="f_n_25_close_n_25_tend" sourceRef="n_25_close" targetRef="n_25_tend" name=""/>
+  </process>
+  <bpmndi:BPMNDiagram id="dg_P_2_5">
+    <bpmndi:BPMNPlane id="pl_P_2_5" bpmnElement="P_2_5">
+      <bpmndi:BPMNShape id="sh_n_25_start" bpmnElement="n_25_start"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_25_sub" bpmnElement="n_25_sub"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_25_track" bpmnElement="n_25_track"><dc:Bounds x="425" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_25_ovr" bpmnElement="n_25_ovr"><dc:Bounds x="637" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_25_chase" bpmnElement="n_25_chase"><dc:Bounds x="595" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_25_emer" bpmnElement="n_25_emer"><dc:Bounds x="255" y="90" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_25_rec" bpmnElement="n_25_rec"><dc:Bounds x="765" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_25_chk" bpmnElement="n_25_chk"><dc:Bounds x="935" y="185" width="130" height="100"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_25_gate" bpmnElement="n_25_gate"><dc:Bounds x="1147" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_25_hold" bpmnElement="n_25_hold"><dc:Bounds x="1105" y="411.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_25_ready" bpmnElement="n_25_ready"><dc:Bounds x="1275" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_25_end" bpmnElement="n_25_end"><dc:Bounds x="1492" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_25_endh" bpmnElement="n_25_endh"><dc:Bounds x="1322" y="437" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_25_tstart" bpmnElement="n_25_tstart"><dc:Bounds x="812" y="657" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_25_exp" bpmnElement="n_25_exp"><dc:Bounds x="977" y="652" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_25_ren" bpmnElement="n_25_ren"><dc:Bounds x="935" y="750" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_25_lapse" bpmnElement="n_25_lapse"><dc:Bounds x="1105" y="750" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_25_cost" bpmnElement="n_25_cost"><dc:Bounds x="1105" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_25_close" bpmnElement="n_25_close"><dc:Bounds x="1275" y="631.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_25_tend" bpmnElement="n_25_tend"><dc:Bounds x="1492" y="657" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ed_f_n_25_start_n_25_sub" bpmnElement="f_n_25_start_n_25_sub"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_25_emer_n_25_rec" bpmnElement="f_n_25_emer_n_25_rec"><di:waypoint x="385" y="125"/><di:waypoint x="740" y="125"/><di:waypoint x="740" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_25_sub_n_25_track" bpmnElement="f_n_25_sub_n_25_track"><di:waypoint x="385" y="235"/><di:waypoint x="425" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_25_track_n_25_ovr" bpmnElement="f_n_25_track_n_25_ovr"><di:waypoint x="555" y="235"/><di:waypoint x="637" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_25_ovr_n_25_chase" bpmnElement="f_n_25_ovr_n_25_chase"><di:waypoint x="683" y="235"/><di:waypoint x="570" y="235"/><di:waypoint x="570" y="455"/><di:waypoint x="595" y="455"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="521.8" y="446.5" width="43.2" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_25_chase_n_25_track" bpmnElement="f_n_25_chase_n_25_track"><di:waypoint x="725" y="455"/><di:waypoint x="400" y="455"/><di:waypoint x="400" y="235"/><di:waypoint x="425" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="451.5" y="433" width="40" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_25_ovr_n_25_rec" bpmnElement="f_n_25_ovr_n_25_rec"><di:waypoint x="683" y="235"/><di:waypoint x="765" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="699.6" y="213" width="48.8" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_25_rec_n_25_chk" bpmnElement="f_n_25_rec_n_25_chk"><di:waypoint x="895" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_25_chk_n_25_gate" bpmnElement="f_n_25_chk_n_25_gate"><di:waypoint x="1065" y="235"/><di:waypoint x="1147" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_25_gate_n_25_hold" bpmnElement="f_n_25_gate_n_25_hold"><di:waypoint x="1193" y="235"/><di:waypoint x="1080" y="235"/><di:waypoint x="1080" y="455"/><di:waypoint x="1105" y="455"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1003.8" y="440" width="71.2" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_25_hold_n_25_endh" bpmnElement="f_n_25_hold_n_25_endh"><di:waypoint x="1235" y="455"/><di:waypoint x="1322" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_25_gate_n_25_ready" bpmnElement="f_n_25_gate_n_25_ready"><di:waypoint x="1193" y="235"/><di:waypoint x="1275" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1209.6" y="213" width="48.8" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_25_ready_n_25_end" bpmnElement="f_n_25_ready_n_25_end"><di:waypoint x="1405" y="235"/><di:waypoint x="1492" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_25_tstart_n_25_exp" bpmnElement="f_n_25_tstart_n_25_exp"><di:waypoint x="848" y="675"/><di:waypoint x="977" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_25_exp_n_25_ren" bpmnElement="f_n_25_exp_n_25_ren"><di:waypoint x="1023" y="675"/><di:waypoint x="910" y="675"/><di:waypoint x="910" y="785"/><di:waypoint x="935" y="785"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="811.4" y="770" width="93.6" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_25_ren_n_25_lapse" bpmnElement="f_n_25_ren_n_25_lapse"><di:waypoint x="1065" y="785"/><di:waypoint x="1105" y="785"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1041" y="714" width="88" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_25_ren_n_25_cost" bpmnElement="f_n_25_ren_n_25_cost"><di:waypoint x="1065" y="785"/><di:waypoint x="1080" y="785"/><di:waypoint x="1080" y="675"/><di:waypoint x="1105" y="675"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1031.8" y="690.7" width="43.2" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_25_lapse_n_25_cost" bpmnElement="f_n_25_lapse_n_25_cost"><di:waypoint x="1235" y="785"/><di:waypoint x="1080" y="785"/><di:waypoint x="1080" y="675"/><di:waypoint x="1105" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_25_exp_n_25_cost" bpmnElement="f_n_25_exp_n_25_cost"><di:waypoint x="1023" y="675"/><di:waypoint x="1105" y="675"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1001.3" y="626" width="99.2" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_25_cost_n_25_close" bpmnElement="f_n_25_cost_n_25_close"><di:waypoint x="1235" y="675"/><di:waypoint x="1275" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_25_close_n_25_tend" bpmnElement="f_n_25_close_n_25_tend"><di:waypoint x="1405" y="675"/><di:waypoint x="1492" y="675"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

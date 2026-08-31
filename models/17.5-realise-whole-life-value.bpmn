@@ -57,13 +57,13 @@ The do-nothing case is drawn rather than annotated, because it is what makes a p
     <bpmndi:BPMNPlane id="pl_P_17_5" bpmnElement="P_17_5">
       <bpmndi:BPMNShape id="sh_n_175_start" bpmnElement="n_175_start"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_175_basis" bpmnElement="n_175_basis"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_175_apply" bpmnElement="n_175_apply"><dc:Bounds x="425" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_175_apply" bpmnElement="n_175_apply"><dc:Bounds x="425" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_175_dn" bpmnElement="n_175_dn"><dc:Bounds x="595" y="200" width="130" height="70"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_175_out" bpmnElement="n_175_out"><dc:Bounds x="765" y="200" width="130" height="70"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_175_end" bpmnElement="n_175_end"><dc:Bounds x="982" y="217" width="36" height="36"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_175_is" bpmnElement="n_175_is"><dc:Bounds x="132" y="437" width="36" height="36"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_175_case" bpmnElement="n_175_case"><dc:Bounds x="255" y="420" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_175_cmp" bpmnElement="n_175_cmp"><dc:Bounds x="425" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_175_case" bpmnElement="n_175_case"><dc:Bounds x="255" y="411.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_175_cmp" bpmnElement="n_175_cmp"><dc:Bounds x="425" y="411.5" width="130" height="87"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_175_res" bpmnElement="n_175_res"><dc:Bounds x="637" y="432" width="46" height="46"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_175_met" bpmnElement="n_175_met"><dc:Bounds x="642" y="657" width="36" height="36"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_175_dec" bpmnElement="n_175_dec"><dc:Bounds x="765" y="420" width="130" height="70"/></bpmndi:BPMNShape>
@@ -77,8 +77,16 @@ The do-nothing case is drawn rather than annotated, because it is what makes a p
       <bpmndi:BPMNEdge id="ed_f_n_175_is_n_175_case" bpmnElement="f_n_175_is_n_175_case"><di:waypoint x="168" y="455"/><di:waypoint x="255" y="455"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_175_case_n_175_cmp" bpmnElement="f_n_175_case_n_175_cmp"><di:waypoint x="385" y="455"/><di:waypoint x="425" y="455"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_175_cmp_n_175_res" bpmnElement="f_n_175_cmp_n_175_res"><di:waypoint x="555" y="455"/><di:waypoint x="637" y="455"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_175_res_n_175_met" bpmnElement="f_n_175_res_n_175_met"><di:waypoint x="683" y="455"/><di:waypoint x="617" y="455"/><di:waypoint x="617" y="675"/><di:waypoint x="642" y="675"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_175_res_n_175_dec" bpmnElement="f_n_175_res_n_175_dec"><di:waypoint x="683" y="455"/><di:waypoint x="765" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_175_res_n_175_met" bpmnElement="f_n_175_res_n_175_met"><di:waypoint x="683" y="455"/><di:waypoint x="617" y="455"/><di:waypoint x="617" y="675"/><di:waypoint x="642" y="675"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="524" y="660" width="88" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_175_res_n_175_dec" bpmnElement="f_n_175_res_n_175_dec"><di:waypoint x="683" y="455"/><di:waypoint x="765" y="455"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="704" y="433" width="40" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_175_dec_n_175_raise" bpmnElement="f_n_175_dec_n_175_raise"><di:waypoint x="895" y="455"/><di:waypoint x="935" y="455"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_175_raise_n_175_fend" bpmnElement="f_n_175_raise_n_175_fend"><di:waypoint x="1065" y="455"/><di:waypoint x="1152" y="455"/></bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>

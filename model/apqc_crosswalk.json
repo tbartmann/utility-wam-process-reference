@@ -49,7 +49,7 @@
    "apqc_name": "Manage capital program for productive assets",
    "status": "covered",
    "model_groups": "17.4",
-   "note": "Manage capital programme. Closed 2026-08-29 by the Asset Lifecycle band: 17.4.1 investment plan, 17.4.3 financing, 17.4.5 programme monitoring. 2.4.1 still validates funding for the individual work item against what 17.4 produced."
+   "note": "Manage capital programme. Closed 2026-08-29 by the Asset Lifecycle band: 17.4.1 investment plan, 17.4.3 financing, 17.4.5 programme monitoring. 2.3.1 still validates funding for the individual work item against what 17.4 produced."
   },
   {
    "apqc": "10.2.2",
@@ -64,8 +64,8 @@
    "pcf_id": "20139",
    "apqc_name": "Design and plan asset construction",
    "status": "covered",
-   "model_groups": "2.1, 2.6",
-   "note": "Design and plan asset construction. 19222 Design assets is 2.1; 19221 Obtain asset construction permissions is 2.6; 19223 Plan construction resources is 2.5 and 3.1. 19220 Develop construction strategy has no model home."
+   "model_groups": "2.1, 2.5",
+   "note": "Design and plan asset construction. 19222 Design assets is 2.1; 19221 Obtain asset construction permissions is 2.5; 19223 Plan construction resources is 2.4 and 3.1. 19220 Develop construction strategy has no model home."
   },
   {
    "apqc": "10.2.4",
@@ -201,7 +201,7 @@
    "apqc_name": "Perform planned network operation",
    "status": "covered",
    "model_groups": "18.1, 18.2, 18.3, 18.4, 18.5",
-   "note": "Perform planned network operation. Closed 2026-08-29 and the reason the Asset Lifecycle band exists. All seven APQC activities map: 19286 submit to 18.2.1, 19287 approve or reject to 18.2.2, 19288 schedule to 18.2.3, 19289 notify to 18.3, 19290 execute switching to 18.4.1, 19291 coordinate with maintenance and construction to 18.2.5, 19292 return to service to 18.5. 2.6.3 and 4.4.4 now name 18.4.4 as the producing process for the clearance."
+   "note": "Perform planned network operation. Closed 2026-08-29 and the reason the Asset Lifecycle band exists. All seven APQC activities map: 19286 submit to 18.2.1, 19287 approve or reject to 18.2.2, 19288 schedule to 18.2.3, 19289 notify to 18.3, 19290 execute switching to 18.4.1, 19291 coordinate with maintenance and construction to 18.2.5, 19292 return to service to 18.5. 2.5.3 and 4.4.4 now name 18.4.4 as the producing process for the clearance."
   },
   {
    "apqc": "14.1.7",

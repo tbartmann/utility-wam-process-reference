@@ -63,25 +63,37 @@ The final read on a removal and the initial read on a set are billing determinan
   <bpmndi:BPMNDiagram id="dg_P_6_2">
     <bpmndi:BPMNPlane id="pl_P_6_2" bpmnElement="P_6_2">
       <bpmndi:BPMNShape id="sh_n_62_start" bpmnElement="n_62_start"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_62_sp" bpmnElement="n_62_sp"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_62_sp" bpmnElement="n_62_sp"><dc:Bounds x="255" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_62_kind" bpmnElement="n_62_kind"><dc:Bounds x="467" y="212" width="46" height="46"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_62_fin" bpmnElement="n_62_fin"><dc:Bounds x="595" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_62_fin" bpmnElement="n_62_fin"><dc:Bounds x="595" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_62_op" bpmnElement="n_62_op"><dc:Bounds x="765" y="200" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_62_new" bpmnElement="n_62_new"><dc:Bounds x="935" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_62_new" bpmnElement="n_62_new"><dc:Bounds x="935" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_62_safe" bpmnElement="n_62_safe"><dc:Bounds x="595" y="420" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_62_state" bpmnElement="n_62_state"><dc:Bounds x="765" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_62_state" bpmnElement="n_62_state"><dc:Bounds x="765" y="411.5" width="130" height="87"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_62_dev" bpmnElement="n_62_dev"><dc:Bounds x="595" y="640" width="130" height="70"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_62_link" bpmnElement="n_62_link"><dc:Bounds x="765" y="640" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_62_pass" bpmnElement="n_62_pass"><dc:Bounds x="935" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_62_pass" bpmnElement="n_62_pass"><dc:Bounds x="935" y="631.5" width="130" height="87"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_62_ok" bpmnElement="n_62_ok"><dc:Bounds x="1147" y="212" width="46" height="46"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_62_case" bpmnElement="n_62_case"><dc:Bounds x="1105" y="420" width="130" height="70"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_62_close" bpmnElement="n_62_close"><dc:Bounds x="1275" y="200" width="130" height="70"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_62_end" bpmnElement="n_62_end"><dc:Bounds x="1492" y="217" width="36" height="36"/></bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="ed_f_n_62_start_n_62_sp" bpmnElement="f_n_62_start_n_62_sp"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_62_sp_n_62_kind" bpmnElement="f_n_62_sp_n_62_kind"><di:waypoint x="385" y="235"/><di:waypoint x="467" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_62_kind_n_62_fin" bpmnElement="f_n_62_kind_n_62_fin"><di:waypoint x="513" y="235"/><di:waypoint x="595" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_62_kind_n_62_safe" bpmnElement="f_n_62_kind_n_62_safe"><di:waypoint x="513" y="235"/><di:waypoint x="570" y="235"/><di:waypoint x="570" y="455"/><di:waypoint x="595" y="455"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_62_kind_n_62_dev" bpmnElement="f_n_62_kind_n_62_dev"><di:waypoint x="513" y="235"/><di:waypoint x="570" y="235"/><di:waypoint x="570" y="675"/><di:waypoint x="595" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_62_kind_n_62_fin" bpmnElement="f_n_62_kind_n_62_fin"><di:waypoint x="513" y="235"/><di:waypoint x="595" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="494.1" y="173" width="93.6" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_62_kind_n_62_safe" bpmnElement="f_n_62_kind_n_62_safe"><di:waypoint x="513" y="235"/><di:waypoint x="570" y="235"/><di:waypoint x="570" y="455"/><di:waypoint x="595" y="455"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="465.8" y="440" width="99.2" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_62_kind_n_62_dev" bpmnElement="f_n_62_kind_n_62_dev"><di:waypoint x="513" y="235"/><di:waypoint x="570" y="235"/><di:waypoint x="570" y="675"/><di:waypoint x="595" y="675"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="499.4" y="660" width="65.6" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_62_fin_n_62_op" bpmnElement="f_n_62_fin_n_62_op"><di:waypoint x="725" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_62_op_n_62_new" bpmnElement="f_n_62_op_n_62_new"><di:waypoint x="895" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_62_new_n_62_ok" bpmnElement="f_n_62_new_n_62_ok"><di:waypoint x="1065" y="235"/><di:waypoint x="1147" y="235"/></bpmndi:BPMNEdge>
@@ -90,9 +102,17 @@ The final read on a removal and the initial read on a set are billing determinan
       <bpmndi:BPMNEdge id="ed_f_n_62_dev_n_62_link" bpmnElement="f_n_62_dev_n_62_link"><di:waypoint x="725" y="675"/><di:waypoint x="765" y="675"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_62_link_n_62_pass" bpmnElement="f_n_62_link_n_62_pass"><di:waypoint x="895" y="675"/><di:waypoint x="935" y="675"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_62_pass_n_62_ok" bpmnElement="f_n_62_pass_n_62_ok"><di:waypoint x="1065" y="675"/><di:waypoint x="1122" y="675"/><di:waypoint x="1122" y="235"/><di:waypoint x="1147" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_62_ok_n_62_case" bpmnElement="f_n_62_ok_n_62_case"><di:waypoint x="1193" y="235"/><di:waypoint x="1080" y="235"/><di:waypoint x="1080" y="455"/><di:waypoint x="1105" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_62_ok_n_62_case" bpmnElement="f_n_62_ok_n_62_case"><di:waypoint x="1193" y="235"/><di:waypoint x="1080" y="235"/><di:waypoint x="1080" y="455"/><di:waypoint x="1105" y="455"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="975.8" y="440" width="99.2" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_62_case_n_62_close" bpmnElement="f_n_62_case_n_62_close"><di:waypoint x="1235" y="455"/><di:waypoint x="1250" y="455"/><di:waypoint x="1250" y="235"/><di:waypoint x="1275" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_62_ok_n_62_close" bpmnElement="f_n_62_ok_n_62_close"><di:waypoint x="1193" y="235"/><di:waypoint x="1275" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_62_ok_n_62_close" bpmnElement="f_n_62_ok_n_62_close"><di:waypoint x="1193" y="235"/><di:waypoint x="1275" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1206.8" y="213" width="54.4" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_62_close_n_62_end" bpmnElement="f_n_62_close_n_62_end"><di:waypoint x="1405" y="235"/><di:waypoint x="1492" y="235"/></bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

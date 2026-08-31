@@ -3,7 +3,7 @@
   <process id="P_4_6" name="4.6 Restore the work site" isExecutable="false">
     <documentation>All six processes are drawn. This group came into the model later than the rest of 4.0, from the 2026 read of the programme documents, and it is graded P/1 rather than P/2 because one programme documented it as a contracted two-stage programme.
 
-THE PERMIT CLOCK IS THE SPINE, and it is why 4.6.6 exists as a process rather than as a status field. A temporary reinstatement is lawful for a period the jurisdiction sets, and the obligation to make it permanent survives the work order, the crew and often the contractor. 2.6.4 owns the permit cost, expiry and renewal; this group tracks the restoration against it and escalates BEFORE breach rather than reporting after.
+THE PERMIT CLOCK IS THE SPINE, and it is why 4.6.6 exists as a process rather than as a status field. A temporary reinstatement is lawful for a period the jurisdiction sets, and the obligation to make it permanent survives the work order, the crew and often the contractor. 2.5.4 owns the permit cost, expiry and renewal; this group tracks the restoration against it and escalates BEFORE breach rather than reporting after.
 
 Two stages, not one act, and the gap between them is the process. 4.6.2 inspects and repairs the temporary condition for as long as it stands, because a temporary reinstatement that degrades is a public hazard and a claim - and it is the step that quietly does not happen when a permanent-restoration backlog builds.
 
@@ -84,18 +84,18 @@ MUTCD is cited at 4.6.4 for traffic and public protection. It is public law and 
       <bpmndi:BPMNShape id="sh_n_46_ass" bpmnElement="n_46_ass"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_46_tmp" bpmnElement="n_46_tmp"><dc:Bounds x="425" y="200" width="130" height="70"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_46_need" bpmnElement="n_46_need"><dc:Bounds x="637" y="212" width="46" height="46"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_46_raise" bpmnElement="n_46_raise"><dc:Bounds x="765" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_46_raise" bpmnElement="n_46_raise"><dc:Bounds x="765" y="185" width="130" height="100"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_46_work" bpmnElement="n_46_work"><dc:Bounds x="935" y="200" width="130" height="70"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_46_t" bpmnElement="n_46_t"><dc:Bounds x="132" y="657" width="36" height="36"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_46_insp" bpmnElement="n_46_insp"><dc:Bounds x="255" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_46_insp" bpmnElement="n_46_insp"><dc:Bounds x="255" y="631.5" width="130" height="87"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_46_acc" bpmnElement="n_46_acc"><dc:Bounds x="467" y="652" width="46" height="46"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_46_fix" bpmnElement="n_46_fix"><dc:Bounds x="425" y="860" width="130" height="70"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_46_rec" bpmnElement="n_46_rec"><dc:Bounds x="595" y="640" width="130" height="70"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_46_risk" bpmnElement="n_46_risk"><dc:Bounds x="807" y="652" width="46" height="46"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_46_esc" bpmnElement="n_46_esc"><dc:Bounds x="765" y="860" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_46_perm" bpmnElement="n_46_perm"><dc:Bounds x="1105" y="200" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_46_evid" bpmnElement="n_46_evid"><dc:Bounds x="1275" y="200" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_46_ins2" bpmnElement="n_46_ins2"><dc:Bounds x="1445" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_46_perm" bpmnElement="n_46_perm"><dc:Bounds x="1105" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_46_evid" bpmnElement="n_46_evid"><dc:Bounds x="1275" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_46_ins2" bpmnElement="n_46_ins2"><dc:Bounds x="1445" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_46_rel" bpmnElement="n_46_rel"><dc:Bounds x="1657" y="212" width="46" height="46"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_46_corr" bpmnElement="n_46_corr"><dc:Bounds x="1615" y="420" width="130" height="70"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_46_close" bpmnElement="n_46_close"><dc:Bounds x="1785" y="200" width="130" height="70"/></bpmndi:BPMNShape>
@@ -103,25 +103,57 @@ MUTCD is cited at 4.6.4 for traffic and public protection. It is public law and 
       <bpmndi:BPMNEdge id="ed_f_n_46_start_n_46_ass" bpmnElement="f_n_46_start_n_46_ass"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_46_ass_n_46_tmp" bpmnElement="f_n_46_ass_n_46_tmp"><di:waypoint x="385" y="235"/><di:waypoint x="425" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_46_tmp_n_46_need" bpmnElement="f_n_46_tmp_n_46_need"><di:waypoint x="555" y="235"/><di:waypoint x="637" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_46_need_n_46_raise" bpmnElement="f_n_46_need_n_46_raise"><di:waypoint x="683" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_46_need_n_46_close" bpmnElement="f_n_46_need_n_46_close"><di:waypoint x="683" y="235"/><di:waypoint x="1785" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_46_need_n_46_raise" bpmnElement="f_n_46_need_n_46_raise"><di:waypoint x="683" y="235"/><di:waypoint x="765" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="696.8" y="200" width="54.4" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_46_need_n_46_close" bpmnElement="f_n_46_need_n_46_close"><di:waypoint x="683" y="235"/><di:waypoint x="1785" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1495.8" y="155" width="93.6" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_46_raise_n_46_work" bpmnElement="f_n_46_raise_n_46_work"><di:waypoint x="895" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_46_work_n_46_perm" bpmnElement="f_n_46_work_n_46_perm"><di:waypoint x="1065" y="235"/><di:waypoint x="1105" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_46_t_n_46_insp" bpmnElement="f_n_46_t_n_46_insp"><di:waypoint x="168" y="675"/><di:waypoint x="255" y="675"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_46_insp_n_46_acc" bpmnElement="f_n_46_insp_n_46_acc"><di:waypoint x="385" y="675"/><di:waypoint x="467" y="675"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_46_acc_n_46_fix" bpmnElement="f_n_46_acc_n_46_fix"><di:waypoint x="513" y="675"/><di:waypoint x="400" y="675"/><di:waypoint x="400" y="895"/><di:waypoint x="425" y="895"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_46_acc_n_46_fix" bpmnElement="f_n_46_acc_n_46_fix"><di:waypoint x="513" y="675"/><di:waypoint x="400" y="675"/><di:waypoint x="400" y="895"/><di:waypoint x="425" y="895"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="312.6" y="886.5" width="82.4" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_46_fix_n_46_rec" bpmnElement="f_n_46_fix_n_46_rec"><di:waypoint x="555" y="895"/><di:waypoint x="570" y="895"/><di:waypoint x="570" y="675"/><di:waypoint x="595" y="675"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_46_acc_n_46_rec" bpmnElement="f_n_46_acc_n_46_rec"><di:waypoint x="513" y="675"/><di:waypoint x="595" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_46_acc_n_46_rec" bpmnElement="f_n_46_acc_n_46_rec"><di:waypoint x="513" y="675"/><di:waypoint x="595" y="675"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="524" y="653" width="60" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_46_rec_n_46_risk" bpmnElement="f_n_46_rec_n_46_risk"><di:waypoint x="725" y="675"/><di:waypoint x="807" y="675"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_46_risk_n_46_esc" bpmnElement="f_n_46_risk_n_46_esc"><di:waypoint x="853" y="675"/><di:waypoint x="740" y="675"/><di:waypoint x="740" y="895"/><di:waypoint x="765" y="895"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_46_risk_n_46_t" bpmnElement="f_n_46_risk_n_46_t"><di:waypoint x="853" y="675"/><di:waypoint x="132" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_46_risk_n_46_esc" bpmnElement="f_n_46_risk_n_46_esc"><di:waypoint x="853" y="675"/><di:waypoint x="740" y="675"/><di:waypoint x="740" y="895"/><di:waypoint x="765" y="895"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="641.4" y="886.5" width="93.6" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_46_risk_n_46_t" bpmnElement="f_n_46_risk_n_46_t"><di:waypoint x="853" y="675"/><di:waypoint x="132" y="675"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="468.1" y="626" width="48.8" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_46_esc_n_46_perm" bpmnElement="f_n_46_esc_n_46_perm"><di:waypoint x="895" y="895"/><di:waypoint x="1080" y="895"/><di:waypoint x="1080" y="235"/><di:waypoint x="1105" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_46_perm_n_46_evid" bpmnElement="f_n_46_perm_n_46_evid"><di:waypoint x="1235" y="235"/><di:waypoint x="1275" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_46_evid_n_46_ins2" bpmnElement="f_n_46_evid_n_46_ins2"><di:waypoint x="1405" y="235"/><di:waypoint x="1445" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_46_ins2_n_46_rel" bpmnElement="f_n_46_ins2_n_46_rel"><di:waypoint x="1575" y="235"/><di:waypoint x="1657" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_46_rel_n_46_corr" bpmnElement="f_n_46_rel_n_46_corr"><di:waypoint x="1703" y="235"/><di:waypoint x="1590" y="235"/><di:waypoint x="1590" y="455"/><di:waypoint x="1615" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_46_rel_n_46_corr" bpmnElement="f_n_46_rel_n_46_corr"><di:waypoint x="1703" y="235"/><di:waypoint x="1590" y="235"/><di:waypoint x="1590" y="455"/><di:waypoint x="1615" y="455"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1536.2" y="446.5" width="48.8" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_46_corr_n_46_ins2" bpmnElement="f_n_46_corr_n_46_ins2"><di:waypoint x="1745" y="455"/><di:waypoint x="1420" y="455"/><di:waypoint x="1420" y="235"/><di:waypoint x="1445" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_46_rel_n_46_close" bpmnElement="f_n_46_rel_n_46_close"><di:waypoint x="1703" y="235"/><di:waypoint x="1785" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_46_rel_n_46_close" bpmnElement="f_n_46_rel_n_46_close"><di:waypoint x="1703" y="235"/><di:waypoint x="1785" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1719.6" y="213" width="48.8" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_46_close_n_46_end" bpmnElement="f_n_46_close_n_46_end"><di:waypoint x="1915" y="235"/><di:waypoint x="2002" y="235"/></bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

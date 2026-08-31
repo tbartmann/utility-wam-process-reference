@@ -40,24 +40,40 @@ Correction at the AUTHORITATIVE SOURCE rather than in the consuming record is th
   <bpmndi:BPMNDiagram id="dg_P_15_4">
     <bpmndi:BPMNPlane id="pl_P_15_4" bpmnElement="P_15_4">
       <bpmndi:BPMNShape id="sh_n_154_start" bpmnElement="n_154_start"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_154_cls" bpmnElement="n_154_cls"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_154_cls" bpmnElement="n_154_cls"><dc:Bounds x="255" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_154_own" bpmnElement="n_154_own"><dc:Bounds x="425" y="200" width="130" height="70"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_154_src" bpmnElement="n_154_src"><dc:Bounds x="637" y="212" width="46" height="46"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_154_esc" bpmnElement="n_154_esc"><dc:Bounds x="595" y="420" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_154_fix" bpmnElement="n_154_fix"><dc:Bounds x="765" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_154_fix" bpmnElement="n_154_fix"><dc:Bounds x="765" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_154_ver" bpmnElement="n_154_ver"><dc:Bounds x="935" y="200" width="130" height="70"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_154_ok" bpmnElement="n_154_ok"><dc:Bounds x="1147" y="212" width="46" height="46"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_154_end" bpmnElement="n_154_end"><dc:Bounds x="1322" y="217" width="36" height="36"/></bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="ed_f_n_154_start_n_154_cls" bpmnElement="f_n_154_start_n_154_cls"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_154_cls_n_154_own" bpmnElement="f_n_154_cls_n_154_own"><di:waypoint x="385" y="235"/><di:waypoint x="425" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_154_own_n_154_src" bpmnElement="f_n_154_own_n_154_src"><di:waypoint x="555" y="235"/><di:waypoint x="637" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_154_src_n_154_esc" bpmnElement="f_n_154_src_n_154_esc"><di:waypoint x="683" y="235"/><di:waypoint x="570" y="235"/><di:waypoint x="570" y="455"/><di:waypoint x="595" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_154_src_n_154_esc" bpmnElement="f_n_154_src_n_154_esc"><di:waypoint x="683" y="235"/><di:waypoint x="570" y="235"/><di:waypoint x="570" y="455"/><di:waypoint x="595" y="455"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="510.6" y="440" width="54.4" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_154_esc_n_154_fix" bpmnElement="f_n_154_esc_n_154_fix"><di:waypoint x="725" y="455"/><di:waypoint x="740" y="455"/><di:waypoint x="740" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_154_src_n_154_fix" bpmnElement="f_n_154_src_n_154_fix"><di:waypoint x="683" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_154_src_n_154_fix" bpmnElement="f_n_154_src_n_154_fix"><di:waypoint x="683" y="235"/><di:waypoint x="765" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="666.9" y="186" width="88" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_154_fix_n_154_ver" bpmnElement="f_n_154_fix_n_154_ver"><di:waypoint x="895" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_154_ver_n_154_ok" bpmnElement="f_n_154_ver_n_154_ok"><di:waypoint x="1065" y="235"/><di:waypoint x="1147" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_154_ok_n_154_fix" bpmnElement="f_n_154_ok_n_154_fix"><di:waypoint x="1193" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_154_ok_n_154_end" bpmnElement="f_n_154_ok_n_154_end"><di:waypoint x="1193" y="235"/><di:waypoint x="1322" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_154_ok_n_154_fix" bpmnElement="f_n_154_ok_n_154_fix"><di:waypoint x="1193" y="235"/><di:waypoint x="765" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="943.4" y="177" width="71.2" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_154_ok_n_154_end" bpmnElement="f_n_154_ok_n_154_end"><di:waypoint x="1193" y="235"/><di:waypoint x="1322" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1233.1" y="213" width="48.8" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
 </definitions>

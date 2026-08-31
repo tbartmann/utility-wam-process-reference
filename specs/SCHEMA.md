@@ -175,3 +175,126 @@ different claims and only one of them is about the shape of the work.
     specs/cat-01-identify-and-qualify-work-demand.json
     ../models/<id>-<slug>.bpmn | .dmn | .cmmn      OMG-valid, no vendor attributes
     ../specializations/<client>/                   observed overlays, never merged
+
+## Optional fields: structure built now, content researched later
+
+Five things four operators showed the reference cannot express. The fields exist so the
+work can be done; none is populated, and absent is a legal state. The validator
+shape-checks them only when present, because a half-filled field that looks researched is
+worse than an empty one.
+
+| Field | On | Holds |
+|---|---|---|
+| `handoffs` | process | `to`, `what`, `trigger` — which process this one hands to, and what passes |
+| `evidence` | process | `record`, `retention`, `authority_ref` — the compliance record produced or updated |
+| `controls[].authority` | control | who imposes it: `federal-rule`, `federal-statute`, `state-code`, `commission-order`, `consensus-standard`, `commitment`, `operator-set` |
+| `controls[].jurisdiction` | control | `federal`, or a two-letter state. Required when the authority is a state code or a commission order |
+| `vocabularies` | process | names of the controlled value sets this process depends on |
+
+### Why `handoffs` exists when `interfaces` already does
+
+EN 17007 cl. 5.2 asks for "the interfaces with the **other processes**". The `interfaces`
+field is mapped to that element and populated with something else: system-to-system message
+flows between landscape components — `{"from": "MAI", "to": "FRD", "payload":
+"WorkRequest"}`. Those are IEC 61968-6 component interfaces, and they are worth having, but
+they are not what the cited clause asks for.
+
+So the slot for process handoffs was not empty, it was occupied. `handoffs` restores the
+EN 17007 element and leaves `interfaces` doing the landscape job it actually does.
+
+This matters because the seams are where integrated work fails. An operator's own test
+scenarios carried a column for exactly this — "other process designs touched" — and it was
+answered "N/A" in twenty-one of twenty-three rows. An optional column gets skipped; a field
+with a shape check does not.
+
+### Why `evidence` is a field and not a note
+
+55 regulatory controls across the library require a record or evidence, and the data layer
+offers 17 CIM classes, every one of them work, asset or resource centric. `WorkActivityRecord`
+is the closest and it is bound to a work activity, so it dies with the order.
+
+The reference states the problem in its own words at 1.2.2: "each report of a hazard needs
+its own evidence of investigation and response **even where the resulting work is merged**".
+A work-centric model loses one of two merged reports. `evidence` is where the thing that
+survives the merge is named.
+
+### Why authority is separate from the clause
+
+The library cites 298 federal instruments and four state ones. Above the federal floor is
+exactly where operators in different states differ, and a clause alone cannot say who
+imposes it — 18 CFR 101 is the federal uniform system of accounts, and a state commission
+adopting that same text for intrastate ratemaking is a different authority applying
+identical wording.
+
+`commitment` and `operator-set` matter more than their counts suggest. A rate case or
+settlement commitment binds as firmly as a rule and appears in no code book. And
+`operator-set` is the honest label for an interval nobody imposed — the case where a
+client's difference is a free choice rather than a deficiency.
+
+## Declaring what is not established
+
+The reference is built at varying levels of completeness on purpose. It will never be
+finished: it accumulates from standards research, client input and recall, and each pass
+knows more than the last. So a process may declare fields it cannot yet establish:
+
+```json
+"not_established": {
+  "measures": "EN 15341 individual indicator names are paywalled; no cited indicator
+               exists for this process yet."
+}
+```
+
+A declared field may then be empty, and the specification validates. The cardinality
+budgets skip it too.
+
+**Why this is allowed at all.** Requiring every field to be non-empty does not produce
+completeness. It produces **fabrication**. An author with no evidence and a validator
+demanding content writes judgment, and the judgment reads exactly like a fact once it is
+on the page — same font, same field, same slide. Every instance of that defect found in
+this library began there: four roles on all forty-nine processes because the field could
+not be empty; one rationale repeated on a hundred and seventy-two; a notation reason
+copied because something had to be written.
+
+A declared unknown costs a sentence of reasoning, and it is cheaper than the fabrication
+it replaces in every direction: it is honest, it is countable, and it hands the next
+research pass a worklist instead of five hundred and three processes to re-read.
+
+**What it is not.** It is not a licence to leave work undone quietly. The reason is
+mandatory, it is reported on every run, and a declaration that names a field nobody
+recognises is an error. The counts appear at the end of each validation:
+
+```
+completeness: 359 field(s) established, 1 declared not established (measures 1)
+optional carried: handoffs 1, evidence 1
+```
+
+**Where it sits relative to citation status.** They are different axes and both are needed.
+Citation status says how well a stated fact is evidenced, and may only ever be lowered.
+`not_established` says no fact is stated yet, and is expected to be removed as research
+arrives. A field can be established and weakly cited; it cannot be both established and
+not established.
+
+
+## The envelope `gaps` array, and why it is not `not_established`
+
+Every envelope carries a `gaps` array: prose statements about what this category could
+not source. There are 179 of them. They are NOT candidates for `not_established`, and the
+distinction matters enough to write down, because it was tested and it failed.
+
+`not_established` says no fact is stated yet, so the field may be empty. Every field the
+179 statements name is populated, and populated correctly — the absence of an authority
+is already recorded on the axis built for it: citation status `judgment`, notation class
+`SPEC`, or a control whose text says in words that the operator must set the rule.
+Converting them would mean DELETING established content to make room for a declaration
+saying less than the content did. A field can be established and weakly cited; it cannot
+be both established and not established.
+
+What the array needed was not a different field but a TYPE. Flattened into one array it
+mixes at least four kinds that want four different responses — an instrument that exists
+and is not held, an instrument that exists and does not bind, a rule that belongs to a
+State, a boundary held on purpose, and an internal inconsistency somebody still has to
+decide — and the ones that are actionable hide among the ones that are not.
+`eam/gaps/classify_gaps.py` types them and writes `eam/gaps/REPORT.md`. It is derived:
+the envelope prose stays the record, statements are keyed by a hash of their own text so
+a rewording shows up as a new statement, and twelve of the nineteen envelopes are other
+platforms' submissions and are never edited.

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_P_8_9" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <process id="P_8_9" name="8.9 Conduct pipeline public awareness" isExecutable="false">
+    <documentation>Three of the four processes are drawn. 8.9.1 the written programme is SPEC and is what this cycle runs against.
+
+THE AUDIENCE IS A SPATIAL QUESTION BEFORE IT IS A COMMUNICATIONS ONE. The affected public is defined by proximity to the system, so the list is built from the network footprint and NOT from the customer list. A resident who is not a customer is still affected public, and building the audience from billing data quietly drops exactly the people the rule is about.
+
+49 CFR 192.616 requires a written continuing public education programme following the guidance in API RP 1162, and names four audiences: the affected public, emergency officials, local public officials and excavators. The section sets no interval figure of its own - the delivery frequencies come from the RP, which is recommended practice from a member-gated body and not law in itself. Where the programme departs from it, the departure and its rationale are recorded.
+
+REACH IS NOT EFFECTIVENESS. 192.616 requires the effectiveness of the programme to be evaluated, and reach can be read off the delivery record while comprehension cannot - it requires asking the audience. A programme that reports only what it sent has not evaluated anything, and the flow draws the two as separate tasks for that reason.
+
+Gas only. No electric distribution public awareness obligation of this kind exists.</documentation>
+    <laneSet id="P_8_9_lanes">
+      <lane id="l_89_prog" name="Public awareness programme">
+        <flowNodeRef>n_89_start</flowNodeRef>
+        <flowNodeRef>n_89_prog</flowNodeRef>
+        <flowNodeRef>n_89_foot</flowNodeRef>
+        <flowNodeRef>n_89_aud</flowNodeRef>
+        <flowNodeRef>n_89_reach</flowNodeRef>
+        <flowNodeRef>n_89_un</flowNodeRef>
+        <flowNodeRef>n_89_rch</flowNodeRef>
+        <flowNodeRef>n_89_comp</flowNodeRef>
+        <flowNodeRef>n_89_ev</flowNodeRef>
+        <flowNodeRef>n_89_ret</flowNodeRef>
+        <flowNodeRef>n_89_end</flowNodeRef>
+      </lane>
+      <lane id="l_89_del" name="Delivery">
+        <flowNodeRef>n_89_del</flowNodeRef>
+        <flowNodeRef>n_89_sup</flowNodeRef>
+        <flowNodeRef>n_89_sup2</flowNodeRef>
+        <flowNodeRef>n_89_cap</flowNodeRef>
+      </lane>
+    </laneSet>
+    <startEvent id="n_89_start" name="The programme cycle opens"><timerEventDefinition id="n_89_start_td"/></startEvent>
+    <receiveTask id="n_89_prog" name="Take the written programme and its message set"><documentation>8.9.1, SPEC. 192.616, following API RP 1162.</documentation></receiveTask>
+    <serviceTask id="n_89_foot" name="Take the network footprint and the areas it passes"><documentation>8.9.2. Spatial. NOT the customer list.</documentation></serviceTask>
+    <userTask id="n_89_aud" name="Identify the four audiences and size each"><documentation>8.9.2. Affected public, emergency officials, local public officials, excavators - named by the section, not chosen by the operator.</documentation></userTask>
+    <exclusiveGateway id="n_89_reach" name="A working reach method exists"/>
+    <serviceTask id="n_89_un" name="Record the audience as unreachable"><documentation>8.9.2. An effectiveness finding for 8.9.4, not a quiet exclusion from the population.</documentation></serviceTask>
+    <userTask id="n_89_del" name="Deliver the baseline messages at the stated frequency"><documentation>8.9.3. The frequencies are the RP's; 192.616 sets none.</documentation></userTask>
+    <exclusiveGateway id="n_89_sup" name="A supplemental trigger has arisen"/>
+    <userTask id="n_89_sup2" name="Deliver the supplemental messages"><documentation>8.9.3. A different obligation. Delivering more baseline does not discharge it.</documentation></userTask>
+    <serviceTask id="n_89_cap" name="Capture what was sent, to whom, how and when"><documentation>8.9.3. Undeliverable contacts are a finding, carried forward to the next audience identification.</documentation></serviceTask>
+    <businessRuleTask id="n_89_rch" name="Measure reach from the delivery record"><documentation>8.9.4. What was sent and received.</documentation></businessRuleTask>
+    <userTask id="n_89_comp" name="Measure comprehension by asking the audience"><documentation>8.9.4. Cannot be read off the delivery record. A programme reporting only reach has not evaluated effectiveness.</documentation></userTask>
+    <serviceTask id="n_89_ev" name="Evaluate against the programme objectives"><documentation>8.9.4. 192.616 requires the effectiveness to be evaluated.</documentation></serviceTask>
+    <sendTask id="n_89_ret" name="Retain the evidence and return the findings"><documentation>8.9.4. Message content, audience list, delivery record and evaluation - what a regulator inspects, not the evaluation alone.</documentation></sendTask>
+    <endEvent id="n_89_end" name="Cycle evaluated and evidenced"/>
+    <sequenceFlow id="f_n_89_start_n_89_prog" sourceRef="n_89_start" targetRef="n_89_prog" name=""/>
+    <sequenceFlow id="f_n_89_prog_n_89_foot" sourceRef="n_89_prog" targetRef="n_89_foot" name=""/>
+    <sequenceFlow id="f_n_89_foot_n_89_aud" sourceRef="n_89_foot" targetRef="n_89_aud" name=""/>
+    <sequenceFlow id="f_n_89_aud_n_89_reach" sourceRef="n_89_aud" targetRef="n_89_reach" name=""/>
+    <sequenceFlow id="f_n_89_reach_n_89_un" sourceRef="n_89_reach" targetRef="n_89_un" name="no reliable method"><conditionExpression xsi:type="tFormalExpression"><![CDATA[reachable = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_89_un_n_89_rch" sourceRef="n_89_un" targetRef="n_89_rch" name=""/>
+    <sequenceFlow id="f_n_89_reach_n_89_del" sourceRef="n_89_reach" targetRef="n_89_del" name="reachable"/>
+    <sequenceFlow id="f_n_89_del_n_89_sup" sourceRef="n_89_del" targetRef="n_89_sup" name=""/>
+    <sequenceFlow id="f_n_89_sup_n_89_sup2" sourceRef="n_89_sup" targetRef="n_89_sup2" name="trigger arisen"><conditionExpression xsi:type="tFormalExpression"><![CDATA[supplemental = true]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_89_sup2_n_89_cap" sourceRef="n_89_sup2" targetRef="n_89_cap" name=""/>
+    <sequenceFlow id="f_n_89_sup_n_89_cap" sourceRef="n_89_sup" targetRef="n_89_cap" name="baseline only"/>
+    <sequenceFlow id="f_n_89_cap_n_89_rch" sourceRef="n_89_cap" targetRef="n_89_rch" name=""/>
+    <sequenceFlow id="f_n_89_rch_n_89_comp" sourceRef="n_89_rch" targetRef="n_89_comp" name=""/>
+    <sequenceFlow id="f_n_89_comp_n_89_ev" sourceRef="n_89_comp" targetRef="n_89_ev" name=""/>
+    <sequenceFlow id="f_n_89_ev_n_89_ret" sourceRef="n_89_ev" targetRef="n_89_ret" name=""/>
+    <sequenceFlow id="f_n_89_ret_n_89_end" sourceRef="n_89_ret" targetRef="n_89_end" name=""/>
+  </process>
+  <bpmndi:BPMNDiagram id="dg_P_8_9">
+    <bpmndi:BPMNPlane id="pl_P_8_9" bpmnElement="P_8_9">
+      <bpmndi:BPMNShape id="sh_n_89_start" bpmnElement="n_89_start"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_89_prog" bpmnElement="n_89_prog"><dc:Bounds x="255" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_89_foot" bpmnElement="n_89_foot"><dc:Bounds x="425" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_89_aud" bpmnElement="n_89_aud"><dc:Bounds x="595" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_89_reach" bpmnElement="n_89_reach"><dc:Bounds x="807" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_89_un" bpmnElement="n_89_un"><dc:Bounds x="765" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_89_del" bpmnElement="n_89_del"><dc:Bounds x="935" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_89_sup" bpmnElement="n_89_sup"><dc:Bounds x="1147" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_89_sup2" bpmnElement="n_89_sup2"><dc:Bounds x="1105" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_89_cap" bpmnElement="n_89_cap"><dc:Bounds x="1275" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_89_rch" bpmnElement="n_89_rch"><dc:Bounds x="1445" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_89_comp" bpmnElement="n_89_comp"><dc:Bounds x="1615" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_89_ev" bpmnElement="n_89_ev"><dc:Bounds x="1785" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_89_ret" bpmnElement="n_89_ret"><dc:Bounds x="1955" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_89_end" bpmnElement="n_89_end"><dc:Bounds x="2172" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ed_f_n_89_start_n_89_prog" bpmnElement="f_n_89_start_n_89_prog"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_89_prog_n_89_foot" bpmnElement="f_n_89_prog_n_89_foot"><di:waypoint x="385" y="235"/><di:waypoint x="425" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_89_foot_n_89_aud" bpmnElement="f_n_89_foot_n_89_aud"><di:waypoint x="555" y="235"/><di:waypoint x="595" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_89_aud_n_89_reach" bpmnElement="f_n_89_aud_n_89_reach"><di:waypoint x="725" y="235"/><di:waypoint x="807" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_89_reach_n_89_un" bpmnElement="f_n_89_reach_n_89_un"><di:waypoint x="853" y="235"/><di:waypoint x="740" y="235"/><di:waypoint x="740" y="455"/><di:waypoint x="765" y="455"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="669.4" y="440" width="65.6" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_89_un_n_89_rch" bpmnElement="f_n_89_un_n_89_rch"><di:waypoint x="895" y="455"/><di:waypoint x="1420" y="455"/><di:waypoint x="1420" y="235"/><di:waypoint x="1445" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_89_reach_n_89_del" bpmnElement="f_n_89_reach_n_89_del"><di:waypoint x="853" y="235"/><di:waypoint x="935" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="866.8" y="213" width="54.4" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_89_del_n_89_sup" bpmnElement="f_n_89_del_n_89_sup"><di:waypoint x="1065" y="235"/><di:waypoint x="1147" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_89_sup_n_89_sup2" bpmnElement="f_n_89_sup_n_89_sup2"><di:waypoint x="1193" y="235"/><di:waypoint x="1080" y="235"/><di:waypoint x="1080" y="455"/><di:waypoint x="1105" y="455"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="992.6" y="446.5" width="82.4" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_89_sup2_n_89_cap" bpmnElement="f_n_89_sup2_n_89_cap"><di:waypoint x="1235" y="455"/><di:waypoint x="1250" y="455"/><di:waypoint x="1250" y="235"/><di:waypoint x="1275" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_89_sup_n_89_cap" bpmnElement="f_n_89_sup_n_89_cap"><di:waypoint x="1193" y="235"/><di:waypoint x="1275" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1182.5" y="186" width="76.8" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_89_cap_n_89_rch" bpmnElement="f_n_89_cap_n_89_rch"><di:waypoint x="1405" y="235"/><di:waypoint x="1445" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_89_rch_n_89_comp" bpmnElement="f_n_89_rch_n_89_comp"><di:waypoint x="1575" y="235"/><di:waypoint x="1615" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_89_comp_n_89_ev" bpmnElement="f_n_89_comp_n_89_ev"><di:waypoint x="1745" y="235"/><di:waypoint x="1785" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_89_ev_n_89_ret" bpmnElement="f_n_89_ev_n_89_ret"><di:waypoint x="1915" y="235"/><di:waypoint x="1955" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_89_ret_n_89_end" bpmnElement="f_n_89_ret_n_89_end"><di:waypoint x="2085" y="235"/><di:waypoint x="2172" y="235"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

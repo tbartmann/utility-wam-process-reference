@@ -72,7 +72,7 @@ Commissioning can happen in the field or later from the operating centre, and bo
   <bpmndi:BPMNDiagram id="dg_P_6_3">
     <bpmndi:BPMNPlane id="pl_P_6_3" bpmnElement="P_6_3">
       <bpmndi:BPMNShape id="sh_n_63_start" bpmnElement="n_63_start"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_63_id" bpmnElement="n_63_id"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_63_id" bpmnElement="n_63_id"><dc:Bounds x="255" y="185" width="130" height="100"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_63_load" bpmnElement="n_63_load"><dc:Bounds x="425" y="200" width="130" height="70"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_63_rb" bpmnElement="n_63_rb"><dc:Bounds x="595" y="200" width="130" height="70"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_63_rbok" bpmnElement="n_63_rbok"><dc:Bounds x="807" y="212" width="46" height="46"/></bpmndi:BPMNShape>
@@ -81,32 +81,64 @@ Commissioning can happen in the field or later from the operating centre, and bo
       <bpmndi:BPMNShape id="sh_n_63_pkg" bpmnElement="n_63_pkg"><dc:Bounds x="1105" y="420" width="130" height="70"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_63_ver" bpmnElement="n_63_ver"><dc:Bounds x="1317" y="432" width="46" height="46"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_63_roll" bpmnElement="n_63_roll"><dc:Bounds x="1275" y="640" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_63_reg" bpmnElement="n_63_reg"><dc:Bounds x="1445" y="200" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_63_resp" bpmnElement="n_63_resp"><dc:Bounds x="1615" y="200" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_63_acc" bpmnElement="n_63_acc"><dc:Bounds x="1785" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_63_reg" bpmnElement="n_63_reg"><dc:Bounds x="1445" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_63_resp" bpmnElement="n_63_resp"><dc:Bounds x="1615" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_63_acc" bpmnElement="n_63_acc"><dc:Bounds x="1785" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_63_gw" bpmnElement="n_63_gw"><dc:Bounds x="1997" y="212" width="46" height="46"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_63_corr" bpmnElement="n_63_corr"><dc:Bounds x="1955" y="420" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_63_aud" bpmnElement="n_63_aud"><dc:Bounds x="2125" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_63_aud" bpmnElement="n_63_aud"><dc:Bounds x="2125" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_63_end" bpmnElement="n_63_end"><dc:Bounds x="2342" y="217" width="36" height="36"/></bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="ed_f_n_63_start_n_63_id" bpmnElement="f_n_63_start_n_63_id"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_63_id_n_63_load" bpmnElement="f_n_63_id_n_63_load"><di:waypoint x="385" y="235"/><di:waypoint x="425" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_63_load_n_63_rb" bpmnElement="f_n_63_load_n_63_rb"><di:waypoint x="555" y="235"/><di:waypoint x="595" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_63_rb_n_63_rbok" bpmnElement="f_n_63_rb_n_63_rbok"><di:waypoint x="725" y="235"/><di:waypoint x="807" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_63_rbok_n_63_rbf" bpmnElement="f_n_63_rbok_n_63_rbf"><di:waypoint x="853" y="235"/><di:waypoint x="740" y="235"/><di:waypoint x="740" y="455"/><di:waypoint x="765" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_63_rbok_n_63_rbf" bpmnElement="f_n_63_rbok_n_63_rbf"><di:waypoint x="853" y="235"/><di:waypoint x="740" y="235"/><di:waypoint x="740" y="455"/><di:waypoint x="765" y="455"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="686.2" y="446.5" width="48.8" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_63_rbf_n_63_aud" bpmnElement="f_n_63_rbf_n_63_aud"><di:waypoint x="895" y="455"/><di:waypoint x="2100" y="455"/><di:waypoint x="2100" y="235"/><di:waypoint x="2125" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_63_rbok_n_63_fw" bpmnElement="f_n_63_rbok_n_63_fw"><di:waypoint x="853" y="235"/><di:waypoint x="977" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_63_fw_n_63_pkg" bpmnElement="f_n_63_fw_n_63_pkg"><di:waypoint x="1023" y="235"/><di:waypoint x="1080" y="235"/><di:waypoint x="1080" y="455"/><di:waypoint x="1105" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_63_rbok_n_63_fw" bpmnElement="f_n_63_rbok_n_63_fw"><di:waypoint x="853" y="235"/><di:waypoint x="977" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="893.4" y="213" width="43.2" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_63_fw_n_63_pkg" bpmnElement="f_n_63_fw_n_63_pkg"><di:waypoint x="1023" y="235"/><di:waypoint x="1080" y="235"/><di:waypoint x="1080" y="455"/><di:waypoint x="1105" y="455"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="981.4" y="446.5" width="93.6" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_63_pkg_n_63_ver" bpmnElement="f_n_63_pkg_n_63_ver"><di:waypoint x="1235" y="455"/><di:waypoint x="1317" y="455"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_63_ver_n_63_roll" bpmnElement="f_n_63_ver_n_63_roll"><di:waypoint x="1363" y="455"/><di:waypoint x="1250" y="455"/><di:waypoint x="1250" y="675"/><di:waypoint x="1275" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_63_ver_n_63_roll" bpmnElement="f_n_63_ver_n_63_roll"><di:waypoint x="1363" y="455"/><di:waypoint x="1250" y="455"/><di:waypoint x="1250" y="675"/><di:waypoint x="1275" y="675"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1173.8" y="666.5" width="71.2" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_63_roll_n_63_aud" bpmnElement="f_n_63_roll_n_63_aud"><di:waypoint x="1405" y="675"/><di:waypoint x="2100" y="675"/><di:waypoint x="2100" y="235"/><di:waypoint x="2125" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_63_ver_n_63_reg" bpmnElement="f_n_63_ver_n_63_reg"><di:waypoint x="1363" y="455"/><di:waypoint x="1420" y="455"/><di:waypoint x="1420" y="235"/><di:waypoint x="1445" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_63_fw_n_63_reg" bpmnElement="f_n_63_fw_n_63_reg"><di:waypoint x="1023" y="235"/><di:waypoint x="1445" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_63_ver_n_63_reg" bpmnElement="f_n_63_ver_n_63_reg"><di:waypoint x="1363" y="455"/><di:waypoint x="1420" y="455"/><di:waypoint x="1420" y="235"/><di:waypoint x="1445" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1366.2" y="226.5" width="48.8" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_63_fw_n_63_reg" bpmnElement="f_n_63_fw_n_63_reg"><di:waypoint x="1023" y="235"/><di:waypoint x="1445" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1204" y="200" width="60" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_63_reg_n_63_resp" bpmnElement="f_n_63_reg_n_63_resp"><di:waypoint x="1575" y="235"/><di:waypoint x="1615" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_63_resp_n_63_acc" bpmnElement="f_n_63_resp_n_63_acc"><di:waypoint x="1745" y="235"/><di:waypoint x="1785" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_63_acc_n_63_gw" bpmnElement="f_n_63_acc_n_63_gw"><di:waypoint x="1915" y="235"/><di:waypoint x="1997" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_63_gw_n_63_corr" bpmnElement="f_n_63_gw_n_63_corr"><di:waypoint x="2043" y="235"/><di:waypoint x="1930" y="235"/><di:waypoint x="1930" y="455"/><di:waypoint x="1955" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_63_gw_n_63_corr" bpmnElement="f_n_63_gw_n_63_corr"><di:waypoint x="2043" y="235"/><di:waypoint x="1930" y="235"/><di:waypoint x="1930" y="455"/><di:waypoint x="1955" y="455"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1853.8" y="446.5" width="71.2" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_63_corr_n_63_aud" bpmnElement="f_n_63_corr_n_63_aud"><di:waypoint x="2085" y="455"/><di:waypoint x="2100" y="455"/><di:waypoint x="2100" y="235"/><di:waypoint x="2125" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_63_gw_n_63_aud" bpmnElement="f_n_63_gw_n_63_aud"><di:waypoint x="2043" y="235"/><di:waypoint x="2125" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_63_gw_n_63_aud" bpmnElement="f_n_63_gw_n_63_aud"><di:waypoint x="2043" y="235"/><di:waypoint x="2125" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2059.6" y="213" width="48.8" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_63_aud_n_63_end" bpmnElement="f_n_63_aud_n_63_end"><di:waypoint x="2255" y="235"/><di:waypoint x="2342" y="235"/></bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

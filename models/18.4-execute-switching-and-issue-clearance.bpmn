@@ -93,32 +93,40 @@ The gas path is a different regime, not a shorter one. It has no clearance, no t
       <bpmndi:BPMNShape id="sh_n_184_start" bpmnElement="n_184_start"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_184_brief" bpmnElement="n_184_brief"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_184_gw" bpmnElement="n_184_gw"><dc:Bounds x="467" y="212" width="46" height="46"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_184_req" bpmnElement="n_184_req"><dc:Bounds x="595" y="200" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_184_open" bpmnElement="n_184_open"><dc:Bounds x="765" y="200" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_184_inop" bpmnElement="n_184_inop"><dc:Bounds x="935" y="200" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_184_remote" bpmnElement="n_184_remote"><dc:Bounds x="1105" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_184_req" bpmnElement="n_184_req"><dc:Bounds x="595" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_184_open" bpmnElement="n_184_open"><dc:Bounds x="765" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_184_inop" bpmnElement="n_184_inop"><dc:Bounds x="935" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_184_remote" bpmnElement="n_184_remote"><dc:Bounds x="1105" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_184_give" bpmnElement="n_184_give"><dc:Bounds x="1275" y="200" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_184_regr" bpmnElement="n_184_regr"><dc:Bounds x="1445" y="200" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_184_test" bpmnElement="n_184_test"><dc:Bounds x="1615" y="200" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_184_gnd" bpmnElement="n_184_gnd"><dc:Bounds x="1785" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_184_regr" bpmnElement="n_184_regr"><dc:Bounds x="1445" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_184_test" bpmnElement="n_184_test"><dc:Bounds x="1615" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_184_gnd" bpmnElement="n_184_gnd"><dc:Bounds x="1785" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_184_deen" bpmnElement="n_184_deen"><dc:Bounds x="2002" y="217" width="36" height="36"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_184_shut" bpmnElement="n_184_shut"><dc:Bounds x="595" y="640" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_184_ign" bpmnElement="n_184_ign"><dc:Bounds x="765" y="640" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_184_purge" bpmnElement="n_184_purge"><dc:Bounds x="935" y="640" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_184_atm" bpmnElement="n_184_atm"><dc:Bounds x="1105" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_184_ign" bpmnElement="n_184_ign"><dc:Bounds x="765" y="631.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_184_purge" bpmnElement="n_184_purge"><dc:Bounds x="935" y="631.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_184_atm" bpmnElement="n_184_atm"><dc:Bounds x="1105" y="631.5" width="130" height="87"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_184_loto" bpmnElement="n_184_loto"><dc:Bounds x="1275" y="640" width="130" height="70"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_184_gend" bpmnElement="n_184_gend"><dc:Bounds x="1492" y="657" width="36" height="36"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_184_xstart" bpmnElement="n_184_xstart"><dc:Bounds x="132" y="1097" width="36" height="36"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_184_xwho" bpmnElement="n_184_xwho"><dc:Bounds x="297" y="1092" width="46" height="46"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_184_xno" bpmnElement="n_184_xno"><dc:Bounds x="302" y="1317" width="36" height="36"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_184_xinf" bpmnElement="n_184_xinf"><dc:Bounds x="425" y="1080" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_184_xnew" bpmnElement="n_184_xnew"><dc:Bounds x="595" y="1080" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_184_xnew" bpmnElement="n_184_xnew"><dc:Bounds x="595" y="1071.5" width="130" height="87"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_184_xreg" bpmnElement="n_184_xreg"><dc:Bounds x="765" y="1080" width="130" height="70"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_184_xend" bpmnElement="n_184_xend"><dc:Bounds x="982" y="1097" width="36" height="36"/></bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="ed_f_n_184_start_n_184_brief" bpmnElement="f_n_184_start_n_184_brief"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_184_brief_n_184_gw" bpmnElement="f_n_184_brief_n_184_gw"><di:waypoint x="385" y="235"/><di:waypoint x="467" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_184_gw_n_184_req" bpmnElement="f_n_184_gw_n_184_req"><di:waypoint x="513" y="235"/><di:waypoint x="595" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_184_gw_n_184_shut" bpmnElement="f_n_184_gw_n_184_shut"><di:waypoint x="513" y="235"/><di:waypoint x="570" y="235"/><di:waypoint x="570" y="675"/><di:waypoint x="595" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_184_gw_n_184_req" bpmnElement="f_n_184_gw_n_184_req"><di:waypoint x="513" y="235"/><di:waypoint x="595" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="529.6" y="213" width="48.8" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_184_gw_n_184_shut" bpmnElement="f_n_184_gw_n_184_shut"><di:waypoint x="513" y="235"/><di:waypoint x="570" y="235"/><di:waypoint x="570" y="675"/><di:waypoint x="595" y="675"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="525" y="666.5" width="40" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_184_req_n_184_open" bpmnElement="f_n_184_req_n_184_open"><di:waypoint x="725" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_184_open_n_184_inop" bpmnElement="f_n_184_open_n_184_inop"><di:waypoint x="895" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_184_inop_n_184_remote" bpmnElement="f_n_184_inop_n_184_remote"><di:waypoint x="1065" y="235"/><di:waypoint x="1105" y="235"/></bpmndi:BPMNEdge>
@@ -133,8 +141,16 @@ The gas path is a different regime, not a shorter one. It has no clearance, no t
       <bpmndi:BPMNEdge id="ed_f_n_184_atm_n_184_loto" bpmnElement="f_n_184_atm_n_184_loto"><di:waypoint x="1235" y="675"/><di:waypoint x="1275" y="675"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_184_loto_n_184_gend" bpmnElement="f_n_184_loto_n_184_gend"><di:waypoint x="1405" y="675"/><di:waypoint x="1492" y="675"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_184_xstart_n_184_xwho" bpmnElement="f_n_184_xstart_n_184_xwho"><di:waypoint x="168" y="1115"/><di:waypoint x="297" y="1115"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_184_xwho_n_184_xno" bpmnElement="f_n_184_xwho_n_184_xno"><di:waypoint x="343" y="1115"/><di:waypoint x="277" y="1115"/><di:waypoint x="277" y="1335"/><di:waypoint x="302" y="1335"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_184_xwho_n_184_xinf" bpmnElement="f_n_184_xwho_n_184_xinf"><di:waypoint x="343" y="1115"/><di:waypoint x="425" y="1115"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_184_xwho_n_184_xno" bpmnElement="f_n_184_xwho_n_184_xno"><di:waypoint x="343" y="1115"/><di:waypoint x="277" y="1115"/><di:waypoint x="277" y="1335"/><di:waypoint x="302" y="1335"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="206.4" y="1326.5" width="65.6" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_184_xwho_n_184_xinf" bpmnElement="f_n_184_xwho_n_184_xinf"><di:waypoint x="343" y="1115"/><di:waypoint x="425" y="1115"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="329.7" y="1027" width="82.4" height="56" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_184_xinf_n_184_xnew" bpmnElement="f_n_184_xinf_n_184_xnew"><di:waypoint x="555" y="1115"/><di:waypoint x="595" y="1115"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_184_xnew_n_184_xreg" bpmnElement="f_n_184_xnew_n_184_xreg"><di:waypoint x="725" y="1115"/><di:waypoint x="765" y="1115"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_184_xreg_n_184_xend" bpmnElement="f_n_184_xreg_n_184_xend"><di:waypoint x="895" y="1115"/><di:waypoint x="982" y="1115"/></bpmndi:BPMNEdge>

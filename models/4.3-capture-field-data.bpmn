@@ -64,7 +64,7 @@ The instrument-eligibility check on 4.3.3 is the one with a source behind it: 6.
     <bpmndi:BPMNPlane id="pl_P_4_3" bpmnElement="P_4_3">
       <bpmndi:BPMNShape id="sh_n_43_start" bpmnElement="n_43_start"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_43_kind" bpmnElement="n_43_kind"><dc:Bounds x="297" y="212" width="46" height="46"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_43_form" bpmnElement="n_43_form"><dc:Bounds x="425" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_43_form" bpmnElement="n_43_form"><dc:Bounds x="425" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_43_photo" bpmnElement="n_43_photo"><dc:Bounds x="425" y="420" width="130" height="70"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_43_read" bpmnElement="n_43_read"><dc:Bounds x="425" y="640" width="130" height="70"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_43_sig" bpmnElement="n_43_sig"><dc:Bounds x="425" y="860" width="130" height="70"/></bpmndi:BPMNShape>
@@ -73,27 +73,63 @@ The instrument-eligibility check on 4.3.3 is the one with a source behind it: 6.
       <bpmndi:BPMNShape id="sh_n_43_hold" bpmnElement="n_43_hold"><dc:Bounds x="595" y="1300" width="130" height="70"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_43_link" bpmnElement="n_43_link"><dc:Bounds x="765" y="200" width="130" height="70"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_43_cmp" bpmnElement="n_43_cmp"><dc:Bounds x="977" y="212" width="46" height="46"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_43_fu" bpmnElement="n_43_fu"><dc:Bounds x="935" y="420" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_43_sym" bpmnElement="n_43_sym"><dc:Bounds x="1105" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_43_fu" bpmnElement="n_43_fu"><dc:Bounds x="935" y="411.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_43_sym" bpmnElement="n_43_sym"><dc:Bounds x="1105" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_43_end" bpmnElement="n_43_end"><dc:Bounds x="1322" y="217" width="36" height="36"/></bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="ed_f_n_43_start_n_43_kind" bpmnElement="f_n_43_start_n_43_kind"><di:waypoint x="168" y="235"/><di:waypoint x="297" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_43_kind_n_43_form" bpmnElement="f_n_43_kind_n_43_form"><di:waypoint x="343" y="235"/><di:waypoint x="425" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_43_kind_n_43_photo" bpmnElement="f_n_43_kind_n_43_photo"><di:waypoint x="343" y="235"/><di:waypoint x="400" y="235"/><di:waypoint x="400" y="455"/><di:waypoint x="425" y="455"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_43_kind_n_43_read" bpmnElement="f_n_43_kind_n_43_read"><di:waypoint x="343" y="235"/><di:waypoint x="400" y="235"/><di:waypoint x="400" y="675"/><di:waypoint x="425" y="675"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_43_kind_n_43_sig" bpmnElement="f_n_43_kind_n_43_sig"><di:waypoint x="343" y="235"/><di:waypoint x="400" y="235"/><di:waypoint x="400" y="895"/><di:waypoint x="425" y="895"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_43_kind_n_43_cond" bpmnElement="f_n_43_kind_n_43_cond"><di:waypoint x="343" y="235"/><di:waypoint x="400" y="235"/><di:waypoint x="400" y="1115"/><di:waypoint x="425" y="1115"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_43_kind_n_43_form" bpmnElement="f_n_43_kind_n_43_form"><di:waypoint x="343" y="235"/><di:waypoint x="425" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="321.3" y="186" width="99.2" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_43_kind_n_43_photo" bpmnElement="f_n_43_kind_n_43_photo"><di:waypoint x="343" y="235"/><di:waypoint x="400" y="235"/><di:waypoint x="400" y="455"/><di:waypoint x="425" y="455"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="335" y="446.5" width="60" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_43_kind_n_43_read" bpmnElement="f_n_43_kind_n_43_read"><di:waypoint x="343" y="235"/><di:waypoint x="400" y="235"/><di:waypoint x="400" y="675"/><di:waypoint x="425" y="675"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="329.4" y="660" width="65.6" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_43_kind_n_43_sig" bpmnElement="f_n_43_kind_n_43_sig"><di:waypoint x="343" y="235"/><di:waypoint x="400" y="235"/><di:waypoint x="400" y="895"/><di:waypoint x="425" y="895"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="307" y="880" width="88" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_43_kind_n_43_cond" bpmnElement="f_n_43_kind_n_43_cond"><di:waypoint x="343" y="235"/><di:waypoint x="400" y="235"/><di:waypoint x="400" y="1115"/><di:waypoint x="425" y="1115"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="323.8" y="1100" width="71.2" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_43_form_n_43_val" bpmnElement="f_n_43_form_n_43_val"><di:waypoint x="555" y="235"/><di:waypoint x="637" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_43_photo_n_43_val" bpmnElement="f_n_43_photo_n_43_val"><di:waypoint x="555" y="455"/><di:waypoint x="612" y="455"/><di:waypoint x="612" y="235"/><di:waypoint x="637" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_43_read_n_43_val" bpmnElement="f_n_43_read_n_43_val"><di:waypoint x="555" y="675"/><di:waypoint x="612" y="675"/><di:waypoint x="612" y="235"/><di:waypoint x="637" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_43_sig_n_43_val" bpmnElement="f_n_43_sig_n_43_val"><di:waypoint x="555" y="895"/><di:waypoint x="612" y="895"/><di:waypoint x="612" y="235"/><di:waypoint x="637" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_43_cond_n_43_val" bpmnElement="f_n_43_cond_n_43_val"><di:waypoint x="555" y="1115"/><di:waypoint x="612" y="1115"/><di:waypoint x="612" y="235"/><di:waypoint x="637" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_43_val_n_43_hold" bpmnElement="f_n_43_val_n_43_hold"><di:waypoint x="683" y="235"/><di:waypoint x="570" y="235"/><di:waypoint x="570" y="1335"/><di:waypoint x="595" y="1335"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_43_val_n_43_hold" bpmnElement="f_n_43_val_n_43_hold"><di:waypoint x="683" y="235"/><di:waypoint x="570" y="235"/><di:waypoint x="570" y="1335"/><di:waypoint x="595" y="1335"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="471.4" y="1320" width="93.6" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_43_hold_n_43_link" bpmnElement="f_n_43_hold_n_43_link"><di:waypoint x="725" y="1335"/><di:waypoint x="740" y="1335"/><di:waypoint x="740" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_43_val_n_43_link" bpmnElement="f_n_43_val_n_43_link"><di:waypoint x="683" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_43_val_n_43_link" bpmnElement="f_n_43_val_n_43_link"><di:waypoint x="683" y="235"/><di:waypoint x="765" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="704" y="213" width="40" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_43_link_n_43_cmp" bpmnElement="f_n_43_link_n_43_cmp"><di:waypoint x="895" y="235"/><di:waypoint x="977" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_43_cmp_n_43_fu" bpmnElement="f_n_43_cmp_n_43_fu"><di:waypoint x="1023" y="235"/><di:waypoint x="910" y="235"/><di:waypoint x="910" y="455"/><di:waypoint x="935" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_43_cmp_n_43_fu" bpmnElement="f_n_43_cmp_n_43_fu"><di:waypoint x="1023" y="235"/><di:waypoint x="910" y="235"/><di:waypoint x="910" y="455"/><di:waypoint x="935" y="455"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="845" y="440" width="60" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_43_fu_n_43_sym" bpmnElement="f_n_43_fu_n_43_sym"><di:waypoint x="1065" y="455"/><di:waypoint x="1080" y="455"/><di:waypoint x="1080" y="235"/><di:waypoint x="1105" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_43_cmp_n_43_sym" bpmnElement="f_n_43_cmp_n_43_sym"><di:waypoint x="1023" y="235"/><di:waypoint x="1105" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_43_cmp_n_43_sym" bpmnElement="f_n_43_cmp_n_43_sym"><di:waypoint x="1023" y="235"/><di:waypoint x="1105" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1004.1" y="186" width="93.6" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_43_sym_n_43_end" bpmnElement="f_n_43_sym_n_43_end"><di:waypoint x="1235" y="235"/><di:waypoint x="1322" y="235"/></bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

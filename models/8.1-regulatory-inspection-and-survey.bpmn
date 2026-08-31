@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_P_8_1" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <process id="P_8_1" name="8.1 Perform regulatory inspection and survey" isExecutable="false">
+    <documentation>Seven of the eight processes are drawn. 8.1.4 is SPEC - evidence is held continuously and has no instance boundary - and the flow ends by handing to it.
+
+The group is one path because every regulatory inspection is one: a population falls due, it is walked, findings are recorded, and a completion date becomes the evidence. What varies is which rule set the interval, and that is drawn as a gateway at the front rather than as five separate flows.
+
+THE COMPLETION DATE IS THE POINT. It is what 1.3.3 reads to compute the next due date, so the flow writes it to the compliance record explicitly rather than letting it fall out of closing a work order. A wrong date here silently moves a mandated interval and nothing downstream can detect it.
+
+The commodity gateway is not decoration. 49 CFR 192.721, 192.723, 192.747 and 192.749 set gas intervals; electric distribution has no federal interval at all, because 16 U.S.C. 824o excludes local distribution from the bulk-power system. The electric branch reads a STATE interval or, in New Jersey, a programme with no interval at all.</documentation>
+    <laneSet id="P_8_1_lanes">
+      <lane id="l_81_comp" name="Compliance and records">
+        <flowNodeRef>n_81_start</flowNodeRef>
+        <flowNodeRef>n_81_pop</flowNodeRef>
+        <flowNodeRef>n_81_reg</flowNodeRef>
+        <flowNodeRef>n_81_gas</flowNodeRef>
+        <flowNodeRef>n_81_ele</flowNodeRef>
+        <flowNodeRef>n_81_date</flowNodeRef>
+        <flowNodeRef>n_81_hand</flowNodeRef>
+        <flowNodeRef>n_81_end</flowNodeRef>
+      </lane>
+      <lane id="l_81_field" name="Field execution">
+        <flowNodeRef>n_81_rel</flowNodeRef>
+        <flowNodeRef>n_81_walk</flowNodeRef>
+        <flowNodeRef>n_81_entry</flowNodeRef>
+        <flowNodeRef>n_81_atm</flowNodeRef>
+        <flowNodeRef>n_81_find</flowNodeRef>
+        <flowNodeRef>n_81_any</flowNodeRef>
+        <flowNodeRef>n_81_raise</flowNodeRef>
+      </lane>
+    </laneSet>
+    <startEvent id="n_81_start" name="An inspection or survey cycle falls due"><timerEventDefinition id="n_81_start_td"/></startEvent>
+    <serviceTask id="n_81_pop" name="Take the population and the obligation that selects it"><documentation>8.1.1, 8.1.2. The population is selected by the obligation, not by the asset class. 192.723(b) picks three different populations from one system.</documentation></serviceTask>
+    <exclusiveGateway id="n_81_reg" name="Which regime sets the interval"/>
+    <businessRuleTask id="n_81_gas" name="Read the Part 192 interval"><documentation>192.721 patrol, 192.723 leakage survey, 192.747 valves, 192.749 vaults. Each carries a month figure and a calendar-year figure and BOTH bind.</documentation></businessRuleTask>
+    <businessRuleTask id="n_81_ele" name="Read the state interval, or record that none exists"><documentation>CPUC GO 165, 52 Pa. Code 57.198, Ohio OAC 4901:1-10-27. N.J.A.C. 14:5-8.6 requires a programme and sets NO interval. NESC 214A2 sets no figure.</documentation></businessRuleTask>
+    <serviceTask id="n_81_rel" name="Release the work against the due date"><documentation>1.4.2 generates the cycle; this group services it.</documentation></serviceTask>
+    <userTask id="n_81_walk" name="Patrol, survey, inspect or test to the method"><documentation>8.1.1 leak survey, 8.1.2 patrol, 8.1.3 pressure test, 8.1.5 diagnostic, 8.1.6 valves, 8.1.7 vaults, 8.1.8 structures.</documentation></userTask>
+    <exclusiveGateway id="n_81_entry" name="Entry into an enclosed space required"/>
+    <userTask id="n_81_atm" name="Test the atmosphere before anyone enters"><documentation>8.1.7. 1910.269(e) enclosed spaces, NOT 1910.146 permit-required confined spaces. The most misattributed pairing in utility safety.</documentation></userTask>
+    <userTask id="n_81_find" name="Record every finding against the asset"><documentation>8.1.1 records indications; grading is 8.3.1 and is not done here.</documentation></userTask>
+    <exclusiveGateway id="n_81_any" name="Findings requiring work"/>
+    <sendTask id="n_81_raise" name="Raise follow-on work"><documentation>8.1.2. A finding that raises no work still completes the obligation; the two outcomes are separate.</documentation></sendTask>
+    <serviceTask id="n_81_date" name="Write the completion date as compliance evidence"><documentation>8.1.4. This is what 1.3.3 reads to compute the next due date. Not a side effect of closing the work order.</documentation></serviceTask>
+    <sendTask id="n_81_hand" name="Hand the evidence to retention"><documentation>8.1.4, which is SPEC: evidence is held and retained continuously.</documentation></sendTask>
+    <endEvent id="n_81_end" name="Obligation satisfied and evidenced"/>
+    <sequenceFlow id="f_n_81_start_n_81_pop" sourceRef="n_81_start" targetRef="n_81_pop" name=""/>
+    <sequenceFlow id="f_n_81_pop_n_81_reg" sourceRef="n_81_pop" targetRef="n_81_reg" name=""/>
+    <sequenceFlow id="f_n_81_reg_n_81_gas" sourceRef="n_81_reg" targetRef="n_81_gas" name="gas"><conditionExpression xsi:type="tFormalExpression"><![CDATA[commodity = "gas"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_81_reg_n_81_ele" sourceRef="n_81_reg" targetRef="n_81_ele" name="electric"><conditionExpression xsi:type="tFormalExpression"><![CDATA[commodity = "electric"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_81_gas_n_81_rel" sourceRef="n_81_gas" targetRef="n_81_rel" name=""/>
+    <sequenceFlow id="f_n_81_ele_n_81_rel" sourceRef="n_81_ele" targetRef="n_81_rel" name=""/>
+    <sequenceFlow id="f_n_81_rel_n_81_walk" sourceRef="n_81_rel" targetRef="n_81_walk" name=""/>
+    <sequenceFlow id="f_n_81_walk_n_81_entry" sourceRef="n_81_walk" targetRef="n_81_entry" name=""/>
+    <sequenceFlow id="f_n_81_entry_n_81_atm" sourceRef="n_81_entry" targetRef="n_81_atm" name="entry required"><conditionExpression xsi:type="tFormalExpression"><![CDATA[entryRequired = true]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_81_atm_n_81_find" sourceRef="n_81_atm" targetRef="n_81_find" name=""/>
+    <sequenceFlow id="f_n_81_entry_n_81_find" sourceRef="n_81_entry" targetRef="n_81_find" name="no entry"/>
+    <sequenceFlow id="f_n_81_find_n_81_any" sourceRef="n_81_find" targetRef="n_81_any" name=""/>
+    <sequenceFlow id="f_n_81_any_n_81_raise" sourceRef="n_81_any" targetRef="n_81_raise" name="findings"><conditionExpression xsi:type="tFormalExpression"><![CDATA[findings = true]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_81_raise_n_81_date" sourceRef="n_81_raise" targetRef="n_81_date" name=""/>
+    <sequenceFlow id="f_n_81_any_n_81_date" sourceRef="n_81_any" targetRef="n_81_date" name="none"/>
+    <sequenceFlow id="f_n_81_date_n_81_hand" sourceRef="n_81_date" targetRef="n_81_hand" name=""/>
+    <sequenceFlow id="f_n_81_hand_n_81_end" sourceRef="n_81_hand" targetRef="n_81_end" name=""/>
+  </process>
+  <bpmndi:BPMNDiagram id="dg_P_8_1">
+    <bpmndi:BPMNPlane id="pl_P_8_1" bpmnElement="P_8_1">
+      <bpmndi:BPMNShape id="sh_n_81_start" bpmnElement="n_81_start"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_81_pop" bpmnElement="n_81_pop"><dc:Bounds x="255" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_81_reg" bpmnElement="n_81_reg"><dc:Bounds x="467" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_81_gas" bpmnElement="n_81_gas"><dc:Bounds x="425" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_81_ele" bpmnElement="n_81_ele"><dc:Bounds x="425" y="631.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_81_rel" bpmnElement="n_81_rel"><dc:Bounds x="595" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_81_walk" bpmnElement="n_81_walk"><dc:Bounds x="765" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_81_entry" bpmnElement="n_81_entry"><dc:Bounds x="977" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_81_atm" bpmnElement="n_81_atm"><dc:Bounds x="935" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_81_find" bpmnElement="n_81_find"><dc:Bounds x="1105" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_81_any" bpmnElement="n_81_any"><dc:Bounds x="1317" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_81_raise" bpmnElement="n_81_raise"><dc:Bounds x="1275" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_81_date" bpmnElement="n_81_date"><dc:Bounds x="1445" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_81_hand" bpmnElement="n_81_hand"><dc:Bounds x="1615" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_81_end" bpmnElement="n_81_end"><dc:Bounds x="1832" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ed_f_n_81_start_n_81_pop" bpmnElement="f_n_81_start_n_81_pop"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_81_pop_n_81_reg" bpmnElement="f_n_81_pop_n_81_reg"><di:waypoint x="385" y="235"/><di:waypoint x="467" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_81_reg_n_81_gas" bpmnElement="f_n_81_reg_n_81_gas"><di:waypoint x="513" y="235"/><di:waypoint x="400" y="235"/><di:waypoint x="400" y="455"/><di:waypoint x="425" y="455"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="355" y="446.5" width="40" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_81_reg_n_81_ele" bpmnElement="f_n_81_reg_n_81_ele"><di:waypoint x="513" y="235"/><di:waypoint x="400" y="235"/><di:waypoint x="400" y="675"/><di:waypoint x="425" y="675"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="346.2" y="666.5" width="48.8" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_81_gas_n_81_rel" bpmnElement="f_n_81_gas_n_81_rel"><di:waypoint x="555" y="455"/><di:waypoint x="570" y="455"/><di:waypoint x="570" y="235"/><di:waypoint x="595" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_81_ele_n_81_rel" bpmnElement="f_n_81_ele_n_81_rel"><di:waypoint x="555" y="675"/><di:waypoint x="570" y="675"/><di:waypoint x="570" y="235"/><di:waypoint x="595" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_81_rel_n_81_walk" bpmnElement="f_n_81_rel_n_81_walk"><di:waypoint x="725" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_81_walk_n_81_entry" bpmnElement="f_n_81_walk_n_81_entry"><di:waypoint x="895" y="235"/><di:waypoint x="977" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_81_entry_n_81_atm" bpmnElement="f_n_81_entry_n_81_atm"><di:waypoint x="1023" y="235"/><di:waypoint x="910" y="235"/><di:waypoint x="910" y="455"/><di:waypoint x="935" y="455"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="822.6" y="446.5" width="82.4" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_81_atm_n_81_find" bpmnElement="f_n_81_atm_n_81_find"><di:waypoint x="1065" y="455"/><di:waypoint x="1080" y="455"/><di:waypoint x="1080" y="235"/><di:waypoint x="1105" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_81_entry_n_81_find" bpmnElement="f_n_81_entry_n_81_find"><di:waypoint x="1023" y="235"/><di:waypoint x="1105" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1039.6" y="213" width="48.8" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_81_find_n_81_any" bpmnElement="f_n_81_find_n_81_any"><di:waypoint x="1235" y="235"/><di:waypoint x="1317" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_81_any_n_81_raise" bpmnElement="f_n_81_any_n_81_raise"><di:waypoint x="1363" y="235"/><di:waypoint x="1250" y="235"/><di:waypoint x="1250" y="455"/><di:waypoint x="1275" y="455"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1196.2" y="446.5" width="48.8" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_81_raise_n_81_date" bpmnElement="f_n_81_raise_n_81_date"><di:waypoint x="1405" y="455"/><di:waypoint x="1420" y="455"/><di:waypoint x="1420" y="235"/><di:waypoint x="1445" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_81_any_n_81_date" bpmnElement="f_n_81_any_n_81_date"><di:waypoint x="1363" y="235"/><di:waypoint x="1445" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1384" y="213" width="40" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_81_date_n_81_hand" bpmnElement="f_n_81_date_n_81_hand"><di:waypoint x="1575" y="235"/><di:waypoint x="1615" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_81_hand_n_81_end" bpmnElement="f_n_81_hand_n_81_end"><di:waypoint x="1745" y="235"/><di:waypoint x="1832" y="235"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

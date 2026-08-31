@@ -42,7 +42,7 @@ The loop at the end is the point. An improvement action that is never measured i
   <bpmndi:BPMNDiagram id="dg_P_15_2">
     <bpmndi:BPMNPlane id="pl_P_15_2" bpmnElement="P_15_2">
       <bpmndi:BPMNShape id="sh_n_152_sig" bpmnElement="n_152_sig"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_152_an" bpmnElement="n_152_an"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_152_an" bpmnElement="n_152_an"><dc:Bounds x="255" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_152_pri" bpmnElement="n_152_pri"><dc:Bounds x="425" y="200" width="130" height="70"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_152_go" bpmnElement="n_152_go"><dc:Bounds x="637" y="212" width="46" height="46"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_152_park" bpmnElement="n_152_park"><dc:Bounds x="642" y="437" width="36" height="36"/></bpmndi:BPMNShape>
@@ -54,13 +54,29 @@ The loop at the end is the point. An improvement action that is never measured i
       <bpmndi:BPMNEdge id="ed_f_n_152_sig_n_152_an" bpmnElement="f_n_152_sig_n_152_an"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_152_an_n_152_pri" bpmnElement="f_n_152_an_n_152_pri"><di:waypoint x="385" y="235"/><di:waypoint x="425" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_152_pri_n_152_go" bpmnElement="f_n_152_pri_n_152_go"><di:waypoint x="555" y="235"/><di:waypoint x="637" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_152_go_n_152_park" bpmnElement="f_n_152_go_n_152_park"><di:waypoint x="683" y="235"/><di:waypoint x="617" y="235"/><di:waypoint x="617" y="455"/><di:waypoint x="642" y="455"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_152_go_n_152_act" bpmnElement="f_n_152_go_n_152_act"><di:waypoint x="683" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_152_go_n_152_park" bpmnElement="f_n_152_go_n_152_park"><di:waypoint x="683" y="235"/><di:waypoint x="617" y="235"/><di:waypoint x="617" y="455"/><di:waypoint x="642" y="455"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="512.8" y="446.5" width="99.2" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_152_go_n_152_act" bpmnElement="f_n_152_go_n_152_act"><di:waypoint x="683" y="235"/><di:waypoint x="765" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="672.5" y="186" width="76.8" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_152_act_n_152_meas" bpmnElement="f_n_152_act_n_152_meas"><di:waypoint x="895" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_152_meas_n_152_ok" bpmnElement="f_n_152_meas_n_152_ok"><di:waypoint x="1065" y="235"/><di:waypoint x="1147" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_152_ok_n_152_rev" bpmnElement="f_n_152_ok_n_152_rev"><di:waypoint x="1193" y="235"/><di:waypoint x="1080" y="235"/><di:waypoint x="1080" y="455"/><di:waypoint x="1105" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_152_ok_n_152_rev" bpmnElement="f_n_152_ok_n_152_rev"><di:waypoint x="1193" y="235"/><di:waypoint x="1080" y="235"/><di:waypoint x="1080" y="455"/><di:waypoint x="1105" y="455"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1015" y="446.5" width="60" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_152_rev_n_152_act" bpmnElement="f_n_152_rev_n_152_act"><di:waypoint x="1235" y="455"/><di:waypoint x="740" y="455"/><di:waypoint x="740" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_152_ok_n_152_end" bpmnElement="f_n_152_ok_n_152_end"><di:waypoint x="1193" y="235"/><di:waypoint x="1322" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_152_ok_n_152_end" bpmnElement="f_n_152_ok_n_152_end"><di:waypoint x="1193" y="235"/><di:waypoint x="1322" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1237.5" y="213" width="40" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
 </definitions>

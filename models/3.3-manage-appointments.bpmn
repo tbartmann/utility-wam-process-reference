@@ -45,13 +45,13 @@
   <bpmndi:BPMNDiagram id="dg_P_3_3">
     <bpmndi:BPMNPlane id="pl_P_3_3" bpmnElement="P_3_3">
       <bpmndi:BPMNShape id="sh_n_33_start" bpmnElement="n_33_start"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_33_take" bpmnElement="n_33_take"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_33_free" bpmnElement="n_33_free"><dc:Bounds x="425" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_33_take" bpmnElement="n_33_take"><dc:Bounds x="255" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_33_free" bpmnElement="n_33_free"><dc:Bounds x="425" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_33_gate" bpmnElement="n_33_gate"><dc:Bounds x="637" y="212" width="46" height="46"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_33_rej" bpmnElement="n_33_rej"><dc:Bounds x="595" y="420" width="130" height="70"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_33_endrej" bpmnElement="n_33_endrej"><dc:Bounds x="812" y="437" width="36" height="36"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_33_res" bpmnElement="n_33_res"><dc:Bounds x="765" y="200" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_33_conf" bpmnElement="n_33_conf"><dc:Bounds x="935" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_33_res" bpmnElement="n_33_res"><dc:Bounds x="765" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_33_conf" bpmnElement="n_33_conf"><dc:Bounds x="935" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_33_ev" bpmnElement="n_33_ev"><dc:Bounds x="1147" y="212" width="46" height="46"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_33_amend" bpmnElement="n_33_amend"><dc:Bounds x="1105" y="90" width="130" height="70"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_33_cancel" bpmnElement="n_33_cancel"><dc:Bounds x="1275" y="90" width="130" height="70"/></bpmndi:BPMNShape>
@@ -60,14 +60,22 @@
       <bpmndi:BPMNShape id="sh_n_33_why" bpmnElement="n_33_why"><dc:Bounds x="1445" y="310" width="130" height="70"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_33_hold" bpmnElement="n_33_hold"><dc:Bounds x="1657" y="322" width="46" height="46"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_33_re" bpmnElement="n_33_re"><dc:Bounds x="1615" y="200" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_33_close" bpmnElement="n_33_close"><dc:Bounds x="1785" y="310" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_33_close" bpmnElement="n_33_close"><dc:Bounds x="1785" y="301.5" width="130" height="87"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_33_end" bpmnElement="n_33_end"><dc:Bounds x="2002" y="217" width="36" height="36"/></bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="ed_f_n_33_start_n_33_take" bpmnElement="f_n_33_start_n_33_take"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_33_take_n_33_free" bpmnElement="f_n_33_take_n_33_free"><di:waypoint x="385" y="235"/><di:waypoint x="425" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_33_free_n_33_gate" bpmnElement="f_n_33_free_n_33_gate"><di:waypoint x="555" y="235"/><di:waypoint x="637" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_33_gate_n_33_rej" bpmnElement="f_n_33_gate_n_33_rej"><di:waypoint x="683" y="235"/><di:waypoint x="570" y="235"/><di:waypoint x="570" y="455"/><di:waypoint x="595" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_33_gate_n_33_rej" bpmnElement="f_n_33_gate_n_33_rej"><di:waypoint x="683" y="235"/><di:waypoint x="570" y="235"/><di:waypoint x="570" y="455"/><di:waypoint x="595" y="455"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="525" y="446.5" width="40" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_33_rej_n_33_endrej" bpmnElement="f_n_33_rej_n_33_endrej"><di:waypoint x="725" y="455"/><di:waypoint x="812" y="455"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_33_gate_n_33_res" bpmnElement="f_n_33_gate_n_33_res"><di:waypoint x="683" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_33_gate_n_33_res" bpmnElement="f_n_33_gate_n_33_res"><di:waypoint x="683" y="235"/><di:waypoint x="765" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="704" y="213" width="40" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_33_res_n_33_conf" bpmnElement="f_n_33_res_n_33_conf"><di:waypoint x="895" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_33_conf_n_33_ev" bpmnElement="f_n_33_conf_n_33_ev"><di:waypoint x="1065" y="235"/><di:waypoint x="1147" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_33_ev_n_33_amend" bpmnElement="f_n_33_ev_n_33_amend"><di:waypoint x="1193" y="235"/><di:waypoint x="1080" y="235"/><di:waypoint x="1080" y="125"/><di:waypoint x="1105" y="125"/></bpmndi:BPMNEdge>
@@ -75,12 +83,28 @@
       <bpmndi:BPMNEdge id="ed_f_n_33_ev_n_33_fail" bpmnElement="f_n_33_ev_n_33_fail"><di:waypoint x="1193" y="235"/><di:waypoint x="1250" y="235"/><di:waypoint x="1250" y="345"/><di:waypoint x="1275" y="345"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_33_amend_n_33_rel" bpmnElement="f_n_33_amend_n_33_rel"><di:waypoint x="1235" y="125"/><di:waypoint x="1445" y="125"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_33_cancel_n_33_rel" bpmnElement="f_n_33_cancel_n_33_rel"><di:waypoint x="1405" y="125"/><di:waypoint x="1445" y="125"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_33_rel_n_33_re" bpmnElement="f_n_33_rel_n_33_re"><di:waypoint x="1575" y="125"/><di:waypoint x="1590" y="125"/><di:waypoint x="1590" y="235"/><di:waypoint x="1615" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_33_rel_n_33_end" bpmnElement="f_n_33_rel_n_33_end"><di:waypoint x="1575" y="125"/><di:waypoint x="1977" y="125"/><di:waypoint x="1977" y="235"/><di:waypoint x="2002" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_33_rel_n_33_re" bpmnElement="f_n_33_rel_n_33_re"><di:waypoint x="1575" y="125"/><di:waypoint x="1590" y="125"/><di:waypoint x="1590" y="235"/><di:waypoint x="1615" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1595" y="165" width="76.8" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_33_rel_n_33_end" bpmnElement="f_n_33_rel_n_33_end"><di:waypoint x="1575" y="125"/><di:waypoint x="1977" y="125"/><di:waypoint x="1977" y="235"/><di:waypoint x="2002" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1756" y="103" width="40" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_33_fail_n_33_why" bpmnElement="f_n_33_fail_n_33_why"><di:waypoint x="1405" y="345"/><di:waypoint x="1445" y="345"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_33_why_n_33_hold" bpmnElement="f_n_33_why_n_33_hold"><di:waypoint x="1575" y="345"/><di:waypoint x="1657" y="345"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_33_hold_n_33_re" bpmnElement="f_n_33_hold_n_33_re"><di:waypoint x="1703" y="345"/><di:waypoint x="1590" y="345"/><di:waypoint x="1590" y="235"/><di:waypoint x="1615" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_33_hold_n_33_close" bpmnElement="f_n_33_hold_n_33_close"><di:waypoint x="1703" y="345"/><di:waypoint x="1785" y="345"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_33_hold_n_33_re" bpmnElement="f_n_33_hold_n_33_re"><di:waypoint x="1703" y="345"/><di:waypoint x="1590" y="345"/><di:waypoint x="1590" y="235"/><di:waypoint x="1615" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1485.8" y="226.5" width="99.2" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_33_hold_n_33_close" bpmnElement="f_n_33_hold_n_33_close"><di:waypoint x="1703" y="345"/><di:waypoint x="1785" y="345"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1689.7" y="283" width="82.4" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_33_re_n_33_end" bpmnElement="f_n_33_re_n_33_end"><di:waypoint x="1745" y="235"/><di:waypoint x="2002" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_33_close_n_33_end" bpmnElement="f_n_33_close_n_33_end"><di:waypoint x="1915" y="345"/><di:waypoint x="1977" y="345"/><di:waypoint x="1977" y="235"/><di:waypoint x="2002" y="235"/></bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>

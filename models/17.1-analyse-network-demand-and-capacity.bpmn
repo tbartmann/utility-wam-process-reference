@@ -58,13 +58,13 @@ NETWORK demand is not WORK demand. 3.1 forecasts crew hours and work volume; thi
     <bpmndi:BPMNPlane id="pl_P_17_1" bpmnElement="P_17_1">
       <bpmndi:BPMNShape id="sh_n_171_t" bpmnElement="n_171_t"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_171_dem" bpmnElement="n_171_dem"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_171_cap" bpmnElement="n_171_cap"><dc:Bounds x="425" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_171_cap" bpmnElement="n_171_cap"><dc:Bounds x="425" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_171_mod" bpmnElement="n_171_mod"><dc:Bounds x="595" y="200" width="130" height="70"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_171_run" bpmnElement="n_171_run"><dc:Bounds x="765" y="200" width="130" height="70"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_171_held" bpmnElement="n_171_held"><dc:Bounds x="977" y="212" width="46" height="46"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_171_ok" bpmnElement="n_171_ok"><dc:Bounds x="982" y="437" width="36" height="36"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_171_c" bpmnElement="n_171_c"><dc:Bounds x="132" y="657" width="36" height="36"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_171_test" bpmnElement="n_171_test"><dc:Bounds x="255" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_171_test" bpmnElement="n_171_test"><dc:Bounds x="255" y="631.5" width="130" height="87"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_171_fit" bpmnElement="n_171_fit"><dc:Bounds x="467" y="652" width="46" height="46"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_171_fits" bpmnElement="n_171_fits"><dc:Bounds x="472" y="877" width="36" height="36"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_171_sf" bpmnElement="n_171_sf"><dc:Bounds x="1105" y="200" width="130" height="70"/></bpmndi:BPMNShape>
@@ -75,12 +75,28 @@ NETWORK demand is not WORK demand. 3.1 forecasts crew hours and work volume; thi
       <bpmndi:BPMNEdge id="ed_f_n_171_cap_n_171_mod" bpmnElement="f_n_171_cap_n_171_mod"><di:waypoint x="555" y="235"/><di:waypoint x="595" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_171_mod_n_171_run" bpmnElement="f_n_171_mod_n_171_run"><di:waypoint x="725" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_171_run_n_171_held" bpmnElement="f_n_171_run_n_171_held"><di:waypoint x="895" y="235"/><di:waypoint x="977" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_171_held_n_171_ok" bpmnElement="f_n_171_held_n_171_ok"><di:waypoint x="1023" y="235"/><di:waypoint x="957" y="235"/><di:waypoint x="957" y="455"/><di:waypoint x="982" y="455"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_171_held_n_171_sf" bpmnElement="f_n_171_held_n_171_sf"><di:waypoint x="1023" y="235"/><di:waypoint x="1105" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_171_held_n_171_ok" bpmnElement="f_n_171_held_n_171_ok"><di:waypoint x="1023" y="235"/><di:waypoint x="957" y="235"/><di:waypoint x="957" y="455"/><di:waypoint x="982" y="455"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="869.6" y="446.5" width="82.4" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_171_held_n_171_sf" bpmnElement="f_n_171_held_n_171_sf"><di:waypoint x="1023" y="235"/><di:waypoint x="1105" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1009.7" y="173" width="82.4" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_171_c_n_171_test" bpmnElement="f_n_171_c_n_171_test"><di:waypoint x="168" y="675"/><di:waypoint x="255" y="675"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_171_test_n_171_fit" bpmnElement="f_n_171_test_n_171_fit"><di:waypoint x="385" y="675"/><di:waypoint x="467" y="675"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_171_fit_n_171_fits" bpmnElement="f_n_171_fit_n_171_fits"><di:waypoint x="513" y="675"/><di:waypoint x="447" y="675"/><di:waypoint x="447" y="895"/><di:waypoint x="472" y="895"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_171_fit_n_171_sf" bpmnElement="f_n_171_fit_n_171_sf"><di:waypoint x="513" y="675"/><di:waypoint x="1080" y="675"/><di:waypoint x="1080" y="235"/><di:waypoint x="1105" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_171_fit_n_171_fits" bpmnElement="f_n_171_fit_n_171_fits"><di:waypoint x="513" y="675"/><di:waypoint x="447" y="675"/><di:waypoint x="447" y="895"/><di:waypoint x="472" y="895"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="354" y="880" width="88" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_171_fit_n_171_sf" bpmnElement="f_n_171_fit_n_171_sf"><di:waypoint x="513" y="675"/><di:waypoint x="1080" y="675"/><di:waypoint x="1080" y="235"/><di:waypoint x="1105" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="769.3" y="653" width="54.4" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_171_sf_n_171_rel" bpmnElement="f_n_171_sf_n_171_rel"><di:waypoint x="1235" y="235"/><di:waypoint x="1275" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_171_rel_n_171_end" bpmnElement="f_n_171_rel_n_171_end"><di:waypoint x="1405" y="235"/><di:waypoint x="1492" y="235"/></bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>

@@ -42,20 +42,20 @@
     <bpmndi:BPMNPlane id="pl_P_3_2" bpmnElement="P_3_2">
       <bpmndi:BPMNShape id="sh_n_32_start" bpmnElement="n_32_start"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_32_cover" bpmnElement="n_32_cover"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_32_place" bpmnElement="n_32_place"><dc:Bounds x="425" y="200" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_32_bal" bpmnElement="n_32_bal"><dc:Bounds x="595" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_32_place" bpmnElement="n_32_place"><dc:Bounds x="425" y="185" width="130" height="100"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_32_bal" bpmnElement="n_32_bal"><dc:Bounds x="595" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_32_draft" bpmnElement="n_32_draft"><dc:Bounds x="765" y="200" width="130" height="70"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_32_lstart" bpmnElement="n_32_lstart"><dc:Bounds x="642" y="437" width="36" height="36"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_32_leave" bpmnElement="n_32_leave"><dc:Bounds x="765" y="420" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_32_standby" bpmnElement="n_32_standby"><dc:Bounds x="935" y="420" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_32_test" bpmnElement="n_32_test"><dc:Bounds x="935" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_32_standby" bpmnElement="n_32_standby"><dc:Bounds x="935" y="411.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_32_test" bpmnElement="n_32_test"><dc:Bounds x="935" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_32_gap" bpmnElement="n_32_gap"><dc:Bounds x="1147" y="212" width="46" height="46"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_32_split" bpmnElement="n_32_split"><dc:Bounds x="1105" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_32_split" bpmnElement="n_32_split"><dc:Bounds x="1105" y="411.5" width="130" height="87"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_32_commit" bpmnElement="n_32_commit"><dc:Bounds x="1275" y="420" width="130" height="70"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_32_close" bpmnElement="n_32_close"><dc:Bounds x="1275" y="200" width="130" height="70"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_32_issue" bpmnElement="n_32_issue"><dc:Bounds x="1445" y="200" width="130" height="70"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_32_sched" bpmnElement="n_32_sched"><dc:Bounds x="1615" y="200" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_32_ack" bpmnElement="n_32_ack"><dc:Bounds x="1785" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_32_ack" bpmnElement="n_32_ack"><dc:Bounds x="1785" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_32_end" bpmnElement="n_32_end"><dc:Bounds x="2002" y="217" width="36" height="36"/></bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="ed_f_n_32_start_n_32_cover" bpmnElement="f_n_32_start_n_32_cover"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_32_cover_n_32_place" bpmnElement="f_n_32_cover_n_32_place"><di:waypoint x="385" y="235"/><di:waypoint x="425" y="235"/></bpmndi:BPMNEdge>
@@ -66,11 +66,27 @@
       <bpmndi:BPMNEdge id="ed_f_n_32_standby_n_32_test" bpmnElement="f_n_32_standby_n_32_test"><di:waypoint x="1065" y="455"/><di:waypoint x="910" y="455"/><di:waypoint x="910" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_32_draft_n_32_test" bpmnElement="f_n_32_draft_n_32_test"><di:waypoint x="895" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_32_test_n_32_gap" bpmnElement="f_n_32_test_n_32_gap"><di:waypoint x="1065" y="235"/><di:waypoint x="1147" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_32_gap_n_32_split" bpmnElement="f_n_32_gap_n_32_split"><di:waypoint x="1193" y="235"/><di:waypoint x="1080" y="235"/><di:waypoint x="1080" y="455"/><di:waypoint x="1105" y="455"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_32_split_n_32_commit" bpmnElement="f_n_32_split_n_32_commit"><di:waypoint x="1235" y="455"/><di:waypoint x="1275" y="455"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_32_split_n_32_close" bpmnElement="f_n_32_split_n_32_close"><di:waypoint x="1235" y="455"/><di:waypoint x="1250" y="455"/><di:waypoint x="1250" y="235"/><di:waypoint x="1275" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_32_gap_n_32_split" bpmnElement="f_n_32_gap_n_32_split"><di:waypoint x="1193" y="235"/><di:waypoint x="1080" y="235"/><di:waypoint x="1080" y="455"/><di:waypoint x="1105" y="455"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1085" y="336.5" width="76.8" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_32_split_n_32_commit" bpmnElement="f_n_32_split_n_32_commit"><di:waypoint x="1235" y="455"/><di:waypoint x="1275" y="455"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1252.6" y="384" width="76.8" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_32_split_n_32_close" bpmnElement="f_n_32_split_n_32_close"><di:waypoint x="1235" y="455"/><di:waypoint x="1250" y="455"/><di:waypoint x="1250" y="235"/><di:waypoint x="1275" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1255" y="336.5" width="76.8" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_32_commit_n_32_close" bpmnElement="f_n_32_commit_n_32_close"><di:waypoint x="1405" y="455"/><di:waypoint x="1250" y="455"/><di:waypoint x="1250" y="235"/><di:waypoint x="1275" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_32_gap_n_32_close" bpmnElement="f_n_32_gap_n_32_close"><di:waypoint x="1193" y="235"/><di:waypoint x="1275" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_32_gap_n_32_close" bpmnElement="f_n_32_gap_n_32_close"><di:waypoint x="1193" y="235"/><di:waypoint x="1275" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1206.8" y="213" width="54.4" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_32_close_n_32_issue" bpmnElement="f_n_32_close_n_32_issue"><di:waypoint x="1405" y="235"/><di:waypoint x="1445" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_32_issue_n_32_sched" bpmnElement="f_n_32_issue_n_32_sched"><di:waypoint x="1575" y="235"/><di:waypoint x="1615" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_32_sched_n_32_ack" bpmnElement="f_n_32_sched_n_32_ack"><di:waypoint x="1745" y="235"/><di:waypoint x="1785" y="235"/></bpmndi:BPMNEdge>

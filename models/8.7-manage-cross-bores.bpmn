@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_P_8_7" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <process id="P_8_7" name="8.7 Manage cross bores and subsurface conflicts" isExecutable="false">
+    <documentation>Two of the four processes are drawn. 8.7.1 identification and 8.7.4 the register are SPEC.
+
+THIS IS THE LEAST EVIDENCED GROUP IN THE CATEGORY AND THE FLOW SAYS SO. There is no federal rule requiring cross bore identification, inspection or remediation, no numbered requirement to cite, and no prescribed timescale. PHMSA has issued public guidance and advisory material, and advisory bulletins expressly create no obligations. Everything drawn here is operator practice, and 8.7.1's ranking is SPEC precisely because no source states the criterion.
+
+THREE OUTCOMES, NOT TWO. Confirmed, clear and inconclusive are carried separately and the flow returns inconclusive results to the open population. Most laterals are on private property and access depends on the customer, so the inaccessible case is common rather than exceptional. Collapsing it into 'clear' makes coverage look complete when nobody could see, which is the exact failure this programme exists to prevent.
+
+THE WARNING COMES BEFORE THE EXCAVATION. From the moment a bore is confirmed, the hazard is that someone clears that sewer mechanically through a live gas line and releases gas inside a building. Warning the customer and the sewer owner is the only control available while the bore is still in place, so it is the first task after confirmation and not part of the remediation work order.</documentation>
+    <laneSet id="P_8_7_lanes">
+      <lane id="l_87_int" name="Integrity and records">
+        <flowNodeRef>n_87_start</flowNodeRef>
+        <flowNodeRef>n_87_got</flowNodeRef>
+        <flowNodeRef>n_87_inc</flowNodeRef>
+        <flowNodeRef>n_87_res</flowNodeRef>
+        <flowNodeRef>n_87_clear</flowNodeRef>
+        <flowNodeRef>n_87_warn</flowNodeRef>
+        <flowNodeRef>n_87_reg</flowNodeRef>
+        <flowNodeRef>n_87_end</flowNodeRef>
+      </lane>
+      <lane id="l_87_field" name="Field execution">
+        <flowNodeRef>n_87_acc</flowNodeRef>
+        <flowNodeRef>n_87_cam</flowNodeRef>
+        <flowNodeRef>n_87_safe</flowNodeRef>
+        <flowNodeRef>n_87_fix</flowNodeRef>
+        <flowNodeRef>n_87_rest</flowNodeRef>
+      </lane>
+    </laneSet>
+    <startEvent id="n_87_start" name="A ranked crossing is released for inspection"><messageEventDefinition id="n_87_start_md"/></startEvent>
+    <userTask id="n_87_acc" name="Arrange access to the sewer lateral"><documentation>8.7.2. Mostly private property. Access depends on the customer.</documentation></userTask>
+    <exclusiveGateway id="n_87_got" name="Access obtained"/>
+    <serviceTask id="n_87_inc" name="Record inconclusive and keep it in the population"><documentation>8.7.2. NOT a clear result. It stays open at 8.7.4 and reduces measured coverage.</documentation></serviceTask>
+    <userTask id="n_87_cam" name="Inspect the lateral by camera"><documentation>8.7.2.</documentation></userTask>
+    <exclusiveGateway id="n_87_res" name="What the camera found"/>
+    <serviceTask id="n_87_clear" name="Record the crossing clear"><documentation>8.7.2.</documentation></serviceTask>
+    <sendTask id="n_87_warn" name="Warn the customer and the sewer owner not to clear it"><documentation>8.7.3. FIRST, and before any excavation. The only control available while the bore is still in place.</documentation></sendTask>
+    <userTask id="n_87_safe" name="Make the gas line safe and expose the crossing"><documentation>8.7.3. Isolation through 18.4 where the main comes out of service.</documentation></userTask>
+    <userTask id="n_87_fix" name="Reroute or replace the gas line clear of the sewer"><documentation>8.7.3. Purge under 192.629 is 8.6.5's operation.</documentation></userTask>
+    <userTask id="n_87_rest" name="Restore the sewer and confirm it is clear"><documentation>8.7.3.</documentation></userTask>
+    <serviceTask id="n_87_reg" name="Write the result and date to the crossing register"><documentation>8.7.4, SPEC. Held where 8.4.2 can read it during a locate, or the whole programme is wasted.</documentation></serviceTask>
+    <endEvent id="n_87_end" name="Crossing resolved and recorded"/>
+    <sequenceFlow id="f_n_87_start_n_87_acc" sourceRef="n_87_start" targetRef="n_87_acc" name=""/>
+    <sequenceFlow id="f_n_87_acc_n_87_got" sourceRef="n_87_acc" targetRef="n_87_got" name=""/>
+    <sequenceFlow id="f_n_87_got_n_87_inc" sourceRef="n_87_got" targetRef="n_87_inc" name="no access"><conditionExpression xsi:type="tFormalExpression"><![CDATA[accessObtained = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_87_inc_n_87_reg" sourceRef="n_87_inc" targetRef="n_87_reg" name=""/>
+    <sequenceFlow id="f_n_87_got_n_87_cam" sourceRef="n_87_got" targetRef="n_87_cam" name="access obtained"/>
+    <sequenceFlow id="f_n_87_cam_n_87_res" sourceRef="n_87_cam" targetRef="n_87_res" name=""/>
+    <sequenceFlow id="f_n_87_res_n_87_clear" sourceRef="n_87_res" targetRef="n_87_clear" name="no cross bore"/>
+    <sequenceFlow id="f_n_87_clear_n_87_reg" sourceRef="n_87_clear" targetRef="n_87_reg" name=""/>
+    <sequenceFlow id="f_n_87_res_n_87_warn" sourceRef="n_87_res" targetRef="n_87_warn" name="cross bore confirmed"><conditionExpression xsi:type="tFormalExpression"><![CDATA[crossBore = true]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_87_warn_n_87_safe" sourceRef="n_87_warn" targetRef="n_87_safe" name=""/>
+    <sequenceFlow id="f_n_87_safe_n_87_fix" sourceRef="n_87_safe" targetRef="n_87_fix" name=""/>
+    <sequenceFlow id="f_n_87_fix_n_87_rest" sourceRef="n_87_fix" targetRef="n_87_rest" name=""/>
+    <sequenceFlow id="f_n_87_rest_n_87_reg" sourceRef="n_87_rest" targetRef="n_87_reg" name=""/>
+    <sequenceFlow id="f_n_87_reg_n_87_end" sourceRef="n_87_reg" targetRef="n_87_end" name=""/>
+  </process>
+  <bpmndi:BPMNDiagram id="dg_P_8_7">
+    <bpmndi:BPMNPlane id="pl_P_8_7" bpmnElement="P_8_7">
+      <bpmndi:BPMNShape id="sh_n_87_start" bpmnElement="n_87_start"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_87_acc" bpmnElement="n_87_acc"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_87_got" bpmnElement="n_87_got"><dc:Bounds x="467" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_87_inc" bpmnElement="n_87_inc"><dc:Bounds x="425" y="411.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_87_cam" bpmnElement="n_87_cam"><dc:Bounds x="595" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_87_res" bpmnElement="n_87_res"><dc:Bounds x="807" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_87_clear" bpmnElement="n_87_clear"><dc:Bounds x="765" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_87_warn" bpmnElement="n_87_warn"><dc:Bounds x="935" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_87_safe" bpmnElement="n_87_safe"><dc:Bounds x="1105" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_87_fix" bpmnElement="n_87_fix"><dc:Bounds x="1275" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_87_rest" bpmnElement="n_87_rest"><dc:Bounds x="1445" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_87_reg" bpmnElement="n_87_reg"><dc:Bounds x="1615" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_87_end" bpmnElement="n_87_end"><dc:Bounds x="1832" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ed_f_n_87_start_n_87_acc" bpmnElement="f_n_87_start_n_87_acc"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_87_acc_n_87_got" bpmnElement="f_n_87_acc_n_87_got"><di:waypoint x="385" y="235"/><di:waypoint x="467" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_87_got_n_87_inc" bpmnElement="f_n_87_got_n_87_inc"><di:waypoint x="513" y="235"/><di:waypoint x="400" y="235"/><di:waypoint x="400" y="455"/><di:waypoint x="425" y="455"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="340.6" y="446.5" width="54.4" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_87_inc_n_87_reg" bpmnElement="f_n_87_inc_n_87_reg"><di:waypoint x="555" y="455"/><di:waypoint x="1590" y="455"/><di:waypoint x="1590" y="235"/><di:waypoint x="1615" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_87_got_n_87_cam" bpmnElement="f_n_87_got_n_87_cam"><di:waypoint x="513" y="235"/><di:waypoint x="595" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="496.9" y="186" width="88" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_87_cam_n_87_res" bpmnElement="f_n_87_cam_n_87_res"><di:waypoint x="725" y="235"/><di:waypoint x="807" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_87_res_n_87_clear" bpmnElement="f_n_87_res_n_87_clear"><di:waypoint x="853" y="235"/><di:waypoint x="740" y="235"/><di:waypoint x="740" y="455"/><di:waypoint x="765" y="455"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="658.2" y="446.5" width="76.8" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_87_clear_n_87_reg" bpmnElement="f_n_87_clear_n_87_reg"><di:waypoint x="895" y="455"/><di:waypoint x="1590" y="455"/><di:waypoint x="1590" y="235"/><di:waypoint x="1615" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_87_res_n_87_warn" bpmnElement="f_n_87_res_n_87_warn"><di:waypoint x="853" y="235"/><di:waypoint x="935" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="864" y="200" width="60" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_87_warn_n_87_safe" bpmnElement="f_n_87_warn_n_87_safe"><di:waypoint x="1065" y="235"/><di:waypoint x="1105" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_87_safe_n_87_fix" bpmnElement="f_n_87_safe_n_87_fix"><di:waypoint x="1235" y="235"/><di:waypoint x="1275" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_87_fix_n_87_rest" bpmnElement="f_n_87_fix_n_87_rest"><di:waypoint x="1405" y="235"/><di:waypoint x="1445" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_87_rest_n_87_reg" bpmnElement="f_n_87_rest_n_87_reg"><di:waypoint x="1575" y="235"/><di:waypoint x="1615" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_87_reg_n_87_end" bpmnElement="f_n_87_reg_n_87_end"><di:waypoint x="1745" y="235"/><di:waypoint x="1832" y="235"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

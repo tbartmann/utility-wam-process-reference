@@ -29,7 +29,7 @@
   <bpmndi:BPMNDiagram id="dg_P_3_5_2">
     <bpmndi:BPMNPlane id="pl_P_3_5_2" bpmnElement="P_3_5_2">
       <bpmndi:BPMNShape id="sh_n_352_start" bpmnElement="n_352_start"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_352_need" bpmnElement="n_352_need"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_352_need" bpmnElement="n_352_need"><dc:Bounds x="255" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_352_pool" bpmnElement="n_352_pool"><dc:Bounds x="425" y="200" width="130" height="70"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_352_gate" bpmnElement="n_352_gate"><dc:Bounds x="637" y="212" width="46" height="46"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_352_ded" bpmnElement="n_352_ded"><dc:Bounds x="595" y="90" width="130" height="70"/></bpmndi:BPMNShape>
@@ -37,14 +37,26 @@
       <bpmndi:BPMNShape id="sh_n_352_spec" bpmnElement="n_352_spec"><dc:Bounds x="765" y="310" width="130" height="70"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_352_rec" bpmnElement="n_352_rec"><dc:Bounds x="935" y="200" width="130" height="70"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_352_down" bpmnElement="n_352_down"><dc:Bounds x="1105" y="200" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_352_pub" bpmnElement="n_352_pub"><dc:Bounds x="1275" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_352_pub" bpmnElement="n_352_pub"><dc:Bounds x="1275" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_352_end" bpmnElement="n_352_end"><dc:Bounds x="1492" y="217" width="36" height="36"/></bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="ed_f_n_352_start_n_352_need" bpmnElement="f_n_352_start_n_352_need"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_352_need_n_352_pool" bpmnElement="f_n_352_need_n_352_pool"><di:waypoint x="385" y="235"/><di:waypoint x="425" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_352_pool_n_352_gate" bpmnElement="f_n_352_pool_n_352_gate"><di:waypoint x="555" y="235"/><di:waypoint x="637" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_352_gate_n_352_ded" bpmnElement="f_n_352_gate_n_352_ded"><di:waypoint x="683" y="235"/><di:waypoint x="570" y="235"/><di:waypoint x="570" y="125"/><di:waypoint x="595" y="125"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_352_gate_n_352_spec" bpmnElement="f_n_352_gate_n_352_spec"><di:waypoint x="683" y="235"/><di:waypoint x="740" y="235"/><di:waypoint x="740" y="345"/><di:waypoint x="765" y="345"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_352_gate_n_352_shared" bpmnElement="f_n_352_gate_n_352_shared"><di:waypoint x="683" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_352_gate_n_352_ded" bpmnElement="f_n_352_gate_n_352_ded"><di:waypoint x="683" y="235"/><di:waypoint x="570" y="235"/><di:waypoint x="570" y="125"/><di:waypoint x="595" y="125"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="465.8" y="110" width="99.2" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_352_gate_n_352_spec" bpmnElement="f_n_352_gate_n_352_spec"><di:waypoint x="683" y="235"/><di:waypoint x="740" y="235"/><di:waypoint x="740" y="345"/><di:waypoint x="765" y="345"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="647" y="330" width="88" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_352_gate_n_352_shared" bpmnElement="f_n_352_gate_n_352_shared"><di:waypoint x="683" y="235"/><di:waypoint x="765" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="666.9" y="173" width="88" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_352_ded_n_352_rec" bpmnElement="f_n_352_ded_n_352_rec"><di:waypoint x="725" y="125"/><di:waypoint x="910" y="125"/><di:waypoint x="910" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_352_shared_n_352_rec" bpmnElement="f_n_352_shared_n_352_rec"><di:waypoint x="895" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_352_spec_n_352_rec" bpmnElement="f_n_352_spec_n_352_rec"><di:waypoint x="895" y="345"/><di:waypoint x="910" y="345"/><di:waypoint x="910" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>

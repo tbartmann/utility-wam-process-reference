@@ -20,7 +20,7 @@ What this reference does NOT state, and the table therefore does not encode: any
       <input id="d_4_1_1_i4" label="Blocking constraint"><inputExpression id="d_4_1_1_i4_e" typeRef="boolean"><text>in_constraint</text></inputExpression></input>
       <output id="d_4_1_1_o" label="Assignment outcome" name="Assignment outcome" typeRef="string"/>
       <rule id="d_4_1_1_r1">
-        <description>Prerequisites unresolved. Back to 2.5 or 2.6; dispatching work whose prerequisites are open is what 4.2.1 then has to stop on site.</description>
+        <description>Prerequisites unresolved. Back to 2.4 or 2.5; dispatching work whose prerequisites are open is what 4.2.1 then has to stop on site.</description>
         <inputEntry id="d_4_1_1_r1_ie1"><text>false</text></inputEntry>
         <inputEntry id="d_4_1_1_r1_ie2"><text>-</text></inputEntry>
         <inputEntry id="d_4_1_1_r1_ie3"><text>-</text></inputEntry>

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_P_8_5" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <process id="P_8_5" name="8.5 Manage health, safety and environment" isExecutable="false">
+    <documentation>Four of the five processes are drawn. 8.5.2 incident investigation is CMMN and is the branch this flow hands to.
+
+THE ASYMMETRY IS THE REVERSE OF THE REST OF THE CATEGORY. Everywhere else in 8.0, gas carries the obligation and electric carries none. Here 29 CFR 1910.269 reaches electric power generation, transmission and distribution directly, and 29 CFR Part 1904 reaches both commodities. What gas has that electric does not is the 192.605 procedural manual and 192.13(c)'s duty to FOLLOW it - so a gas operator can breach by holding a current manual and not working to it, and an electric operator cannot breach that way because no section requires the document.
+
+1910.147 LOTO is the trap and it is drawn out of this flow deliberately. It EXCLUDES installations under the exclusive control of electric utilities for generation, transmission and distribution, at 1910.147(a)(1)(ii)(C). Electric T&amp;D uses 1910.269(d) and (m). Gas distribution is NOT excluded, so 1910.147 does apply to gas work. Listing LOTO as a shared standard is wrong in both directions at once.
+
+8.5.5 is electric only, which is why it hangs off its own branch: a gas network has no avian exposure of this kind.</documentation>
+    <laneSet id="P_8_5_lanes">
+      <lane id="l_85_saf" name="Safety and environment">
+        <flowNodeRef>n_85_start</flowNodeRef>
+        <flowNodeRef>n_85_what</flowNodeRef>
+        <flowNodeRef>n_85_proc</flowNodeRef>
+        <flowNodeRef>n_85_appr</flowNodeRef>
+        <flowNodeRef>n_85_train</flowNodeRef>
+        <flowNodeRef>n_85_inc</flowNodeRef>
+        <flowNodeRef>n_85_env</flowNodeRef>
+        <flowNodeRef>n_85_av</flowNodeRef>
+        <flowNodeRef>n_85_rec</flowNodeRef>
+      </lane>
+      <lane id="l_85_rep" name="Performance reporting">
+        <flowNodeRef>n_85_per</flowNodeRef>
+        <flowNodeRef>n_85_calc</flowNodeRef>
+        <flowNodeRef>n_85_rep</flowNodeRef>
+        <flowNodeRef>n_85_end</flowNodeRef>
+      </lane>
+    </laneSet>
+    <startEvent id="n_85_start" name="A hazard, a regulatory change or an event requires action"><conditionalEventDefinition id="n_85_start_cd"><condition/></conditionalEventDefinition></startEvent>
+    <exclusiveGateway id="n_85_what" name="What has arisen"/>
+    <userTask id="n_85_proc" name="Write or revise the procedure and its controls"><documentation>8.5.1. Gas holds it under 192.605 and must FOLLOW it under 192.13(c). Electric holds it because it needs it.</documentation></userTask>
+    <userTask id="n_85_appr" name="Review, approve and issue the version"><documentation>8.5.1.</documentation></userTask>
+    <sendTask id="n_85_train" name="Raise the training demand"><documentation>8.5.1. A change to what a qualified person must do is a training event. Issued without it, the workforce stays qualified against a withdrawn version.</documentation></sendTask>
+    <sendTask id="n_85_inc" name="Hand the incident to investigation"><documentation>8.5.2, CMMN. The 191.5 immediate-notice clock runs independently and is not waited on.</documentation></sendTask>
+    <userTask id="n_85_env" name="Contain the release and give the required notices"><documentation>8.5.3. 40 CFR 112 where an SPCC plan applies. PCB classification is 19.3.1's, not this process's.</documentation></userTask>
+    <userTask id="n_85_av" name="Apply avian protection at the structure"><documentation>8.5.5. Electric only. 16 U.S.C. 703 is the obligation and APLIC is the practice - consensus, not a standard.</documentation></userTask>
+    <serviceTask id="n_85_rec" name="Record what was done and why"><documentation>Findings, releases and measures all land in the same record set that 8.5.4 reads.</documentation></serviceTask>
+    <receiveTask id="n_85_per" name="Hold until the reporting period closes"><documentation>8.5.4.</documentation></receiveTask>
+    <businessRuleTask id="n_85_calc" name="Calculate the rates on the prescribed basis"><documentation>8.5.4. 29 CFR 1904's basis, not one of the operator's choosing, or the result compares to nothing.</documentation></businessRuleTask>
+    <sendTask id="n_85_rep" name="Report performance and return the pattern"><documentation>8.5.4. This produces the numbers. 15.3.1 files the regulatory submissions.</documentation></sendTask>
+    <endEvent id="n_85_end" name="Performance reported and fed back"/>
+    <sequenceFlow id="f_n_85_start_n_85_what" sourceRef="n_85_start" targetRef="n_85_what" name=""/>
+    <sequenceFlow id="f_n_85_what_n_85_proc" sourceRef="n_85_what" targetRef="n_85_proc" name="procedure change"/>
+    <sequenceFlow id="f_n_85_what_n_85_inc" sourceRef="n_85_what" targetRef="n_85_inc" name="incident or near miss"/>
+    <sequenceFlow id="f_n_85_what_n_85_env" sourceRef="n_85_what" targetRef="n_85_env" name="environmental obligation or release"/>
+    <sequenceFlow id="f_n_85_what_n_85_av" sourceRef="n_85_what" targetRef="n_85_av" name="avian risk (electric only)"/>
+    <sequenceFlow id="f_n_85_proc_n_85_appr" sourceRef="n_85_proc" targetRef="n_85_appr" name=""/>
+    <sequenceFlow id="f_n_85_appr_n_85_train" sourceRef="n_85_appr" targetRef="n_85_train" name=""/>
+    <sequenceFlow id="f_n_85_train_n_85_rec" sourceRef="n_85_train" targetRef="n_85_rec" name=""/>
+    <sequenceFlow id="f_n_85_inc_n_85_rec" sourceRef="n_85_inc" targetRef="n_85_rec" name=""/>
+    <sequenceFlow id="f_n_85_env_n_85_rec" sourceRef="n_85_env" targetRef="n_85_rec" name=""/>
+    <sequenceFlow id="f_n_85_av_n_85_rec" sourceRef="n_85_av" targetRef="n_85_rec" name=""/>
+    <sequenceFlow id="f_n_85_rec_n_85_per" sourceRef="n_85_rec" targetRef="n_85_per" name=""/>
+    <sequenceFlow id="f_n_85_per_n_85_calc" sourceRef="n_85_per" targetRef="n_85_calc" name=""/>
+    <sequenceFlow id="f_n_85_calc_n_85_rep" sourceRef="n_85_calc" targetRef="n_85_rep" name=""/>
+    <sequenceFlow id="f_n_85_rep_n_85_end" sourceRef="n_85_rep" targetRef="n_85_end" name=""/>
+  </process>
+  <bpmndi:BPMNDiagram id="dg_P_8_5">
+    <bpmndi:BPMNPlane id="pl_P_8_5" bpmnElement="P_8_5">
+      <bpmndi:BPMNShape id="sh_n_85_start" bpmnElement="n_85_start"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_85_what" bpmnElement="n_85_what"><dc:Bounds x="297" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_85_proc" bpmnElement="n_85_proc"><dc:Bounds x="255" y="411.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_85_appr" bpmnElement="n_85_appr"><dc:Bounds x="425" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_85_train" bpmnElement="n_85_train"><dc:Bounds x="595" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_85_inc" bpmnElement="n_85_inc"><dc:Bounds x="255" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_85_env" bpmnElement="n_85_env"><dc:Bounds x="255" y="851.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_85_av" bpmnElement="n_85_av"><dc:Bounds x="255" y="1071.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_85_rec" bpmnElement="n_85_rec"><dc:Bounds x="765" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_85_per" bpmnElement="n_85_per"><dc:Bounds x="935" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_85_calc" bpmnElement="n_85_calc"><dc:Bounds x="1105" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_85_rep" bpmnElement="n_85_rep"><dc:Bounds x="1275" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_85_end" bpmnElement="n_85_end"><dc:Bounds x="1492" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ed_f_n_85_start_n_85_what" bpmnElement="f_n_85_start_n_85_what"><di:waypoint x="168" y="235"/><di:waypoint x="297" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_85_what_n_85_proc" bpmnElement="f_n_85_what_n_85_proc"><di:waypoint x="343" y="235"/><di:waypoint x="230" y="235"/><di:waypoint x="230" y="455"/><di:waypoint x="255" y="455"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="131.4" y="446.5" width="93.6" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_85_what_n_85_inc" bpmnElement="f_n_85_what_n_85_inc"><di:waypoint x="343" y="235"/><di:waypoint x="230" y="235"/><di:waypoint x="230" y="675"/><di:waypoint x="255" y="675"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="131.4" y="660" width="93.6" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_85_what_n_85_env" bpmnElement="f_n_85_what_n_85_env"><di:waypoint x="343" y="235"/><di:waypoint x="230" y="235"/><di:waypoint x="230" y="895"/><di:waypoint x="255" y="895"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="148.2" y="873.5" width="76.8" height="43" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_85_what_n_85_av" bpmnElement="f_n_85_what_n_85_av"><di:waypoint x="343" y="235"/><di:waypoint x="230" y="235"/><di:waypoint x="230" y="1115"/><di:waypoint x="255" y="1115"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="137" y="1100" width="88" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_85_proc_n_85_appr" bpmnElement="f_n_85_proc_n_85_appr"><di:waypoint x="385" y="455"/><di:waypoint x="425" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_85_appr_n_85_train" bpmnElement="f_n_85_appr_n_85_train"><di:waypoint x="555" y="455"/><di:waypoint x="595" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_85_train_n_85_rec" bpmnElement="f_n_85_train_n_85_rec"><di:waypoint x="725" y="455"/><di:waypoint x="740" y="455"/><di:waypoint x="740" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_85_inc_n_85_rec" bpmnElement="f_n_85_inc_n_85_rec"><di:waypoint x="385" y="675"/><di:waypoint x="740" y="675"/><di:waypoint x="740" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_85_env_n_85_rec" bpmnElement="f_n_85_env_n_85_rec"><di:waypoint x="385" y="895"/><di:waypoint x="740" y="895"/><di:waypoint x="740" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_85_av_n_85_rec" bpmnElement="f_n_85_av_n_85_rec"><di:waypoint x="385" y="1115"/><di:waypoint x="740" y="1115"/><di:waypoint x="740" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_85_rec_n_85_per" bpmnElement="f_n_85_rec_n_85_per"><di:waypoint x="895" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_85_per_n_85_calc" bpmnElement="f_n_85_per_n_85_calc"><di:waypoint x="1065" y="235"/><di:waypoint x="1105" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_85_calc_n_85_rep" bpmnElement="f_n_85_calc_n_85_rep"><di:waypoint x="1235" y="235"/><di:waypoint x="1275" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_85_rep_n_85_end" bpmnElement="f_n_85_rep_n_85_end"><di:waypoint x="1405" y="235"/><di:waypoint x="1492" y="235"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

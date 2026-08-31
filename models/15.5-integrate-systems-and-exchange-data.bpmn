@@ -55,21 +55,41 @@ THE ACKNOWLEDGEMENT GATE IS THE ONE THAT MATTERS. A transport acknowledgement sa
       <bpmndi:BPMNShape id="sh_n_155_start" bpmnElement="n_155_start"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_155_kind" bpmnElement="n_155_kind"><dc:Bounds x="297" y="212" width="46" height="46"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_155_w" bpmnElement="n_155_w"><dc:Bounds x="425" y="200" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_155_a" bpmnElement="n_155_a"><dc:Bounds x="425" y="420" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_155_f" bpmnElement="n_155_f"><dc:Bounds x="425" y="640" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_155_d" bpmnElement="n_155_d"><dc:Bounds x="425" y="860" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_155_p" bpmnElement="n_155_p"><dc:Bounds x="425" y="1080" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_155_a" bpmnElement="n_155_a"><dc:Bounds x="425" y="411.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_155_f" bpmnElement="n_155_f"><dc:Bounds x="425" y="631.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_155_d" bpmnElement="n_155_d"><dc:Bounds x="425" y="851.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_155_p" bpmnElement="n_155_p"><dc:Bounds x="425" y="1071.5" width="130" height="87"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_155_map" bpmnElement="n_155_map"><dc:Bounds x="595" y="200" width="130" height="70"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_155_del" bpmnElement="n_155_del"><dc:Bounds x="765" y="200" width="130" height="70"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_155_ack" bpmnElement="n_155_ack"><dc:Bounds x="977" y="212" width="46" height="46"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_155_exc" bpmnElement="n_155_exc"><dc:Bounds x="935" y="420" width="130" height="70"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_155_end" bpmnElement="n_155_end"><dc:Bounds x="1152" y="217" width="36" height="36"/></bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="ed_f_n_155_start_n_155_kind" bpmnElement="f_n_155_start_n_155_kind"><di:waypoint x="168" y="235"/><di:waypoint x="297" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_155_kind_n_155_w" bpmnElement="f_n_155_kind_n_155_w"><di:waypoint x="343" y="235"/><di:waypoint x="425" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_155_kind_n_155_a" bpmnElement="f_n_155_kind_n_155_a"><di:waypoint x="343" y="235"/><di:waypoint x="400" y="235"/><di:waypoint x="400" y="455"/><di:waypoint x="425" y="455"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_155_kind_n_155_f" bpmnElement="f_n_155_kind_n_155_f"><di:waypoint x="343" y="235"/><di:waypoint x="400" y="235"/><di:waypoint x="400" y="675"/><di:waypoint x="425" y="675"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_155_kind_n_155_d" bpmnElement="f_n_155_kind_n_155_d"><di:waypoint x="343" y="235"/><di:waypoint x="400" y="235"/><di:waypoint x="400" y="895"/><di:waypoint x="425" y="895"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_155_kind_n_155_p" bpmnElement="f_n_155_kind_n_155_p"><di:waypoint x="343" y="235"/><di:waypoint x="400" y="235"/><di:waypoint x="400" y="1115"/><di:waypoint x="425" y="1115"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_155_kind_n_155_w" bpmnElement="f_n_155_kind_n_155_w"><di:waypoint x="343" y="235"/><di:waypoint x="425" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="321.3" y="186" width="99.2" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_155_kind_n_155_a" bpmnElement="f_n_155_kind_n_155_a"><di:waypoint x="343" y="235"/><di:waypoint x="400" y="235"/><di:waypoint x="400" y="455"/><di:waypoint x="425" y="455"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="295.8" y="446.5" width="99.2" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_155_kind_n_155_f" bpmnElement="f_n_155_kind_n_155_f"><di:waypoint x="343" y="235"/><di:waypoint x="400" y="235"/><di:waypoint x="400" y="675"/><di:waypoint x="425" y="675"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="312.6" y="660" width="82.4" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_155_kind_n_155_d" bpmnElement="f_n_155_kind_n_155_d"><di:waypoint x="343" y="235"/><di:waypoint x="400" y="235"/><di:waypoint x="400" y="895"/><di:waypoint x="425" y="895"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="323.8" y="880" width="71.2" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_155_kind_n_155_p" bpmnElement="f_n_155_kind_n_155_p"><di:waypoint x="343" y="235"/><di:waypoint x="400" y="235"/><di:waypoint x="400" y="1115"/><di:waypoint x="425" y="1115"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="323.8" y="1093.5" width="71.2" height="43" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_155_w_n_155_map" bpmnElement="f_n_155_w_n_155_map"><di:waypoint x="555" y="235"/><di:waypoint x="595" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_155_a_n_155_map" bpmnElement="f_n_155_a_n_155_map"><di:waypoint x="555" y="455"/><di:waypoint x="570" y="455"/><di:waypoint x="570" y="235"/><di:waypoint x="595" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_155_f_n_155_map" bpmnElement="f_n_155_f_n_155_map"><di:waypoint x="555" y="675"/><di:waypoint x="570" y="675"/><di:waypoint x="570" y="235"/><di:waypoint x="595" y="235"/></bpmndi:BPMNEdge>
@@ -77,8 +97,16 @@ THE ACKNOWLEDGEMENT GATE IS THE ONE THAT MATTERS. A transport acknowledgement sa
       <bpmndi:BPMNEdge id="ed_f_n_155_p_n_155_map" bpmnElement="f_n_155_p_n_155_map"><di:waypoint x="555" y="1115"/><di:waypoint x="570" y="1115"/><di:waypoint x="570" y="235"/><di:waypoint x="595" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_155_map_n_155_del" bpmnElement="f_n_155_map_n_155_del"><di:waypoint x="725" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_155_del_n_155_ack" bpmnElement="f_n_155_del_n_155_ack"><di:waypoint x="895" y="235"/><di:waypoint x="977" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_155_ack_n_155_exc" bpmnElement="f_n_155_ack_n_155_exc"><di:waypoint x="1023" y="235"/><di:waypoint x="910" y="235"/><di:waypoint x="910" y="455"/><di:waypoint x="935" y="455"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_155_ack_n_155_end" bpmnElement="f_n_155_ack_n_155_end"><di:waypoint x="1023" y="235"/><di:waypoint x="1152" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_155_ack_n_155_exc" bpmnElement="f_n_155_ack_n_155_exc"><di:waypoint x="1023" y="235"/><di:waypoint x="910" y="235"/><di:waypoint x="910" y="455"/><di:waypoint x="935" y="455"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="833.8" y="433.5" width="71.2" height="43" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_155_ack_n_155_end" bpmnElement="f_n_155_ack_n_155_end"><di:waypoint x="1023" y="235"/><di:waypoint x="1152" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1063.1" y="213" width="48.8" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
 </definitions>

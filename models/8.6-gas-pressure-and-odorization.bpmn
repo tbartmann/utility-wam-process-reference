@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_P_8_6" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <process id="P_8_6" name="8.6 Manage gas pressure and odorization" isExecutable="false">
+    <documentation>Five of the six processes are drawn. 8.6.2 relief capacity is SPEC, because 49 CFR 192.743 requires the capacity to be adequate and prescribes no method - drawing the calculation would mean inventing it.
+
+TWO DIFFERENT KINDS OF WORK SHARE THIS GROUP and the flow keeps them apart. 8.6.1, 8.6.3 and 8.6.4 are cyclic surveillance of a live system. 8.6.5 and 8.6.6 are one-off gas operations - a purge to bring pipe into service and a purge to take it out. They sit together because 192.629 and 192.751 govern both, not because they run on the same trigger.
+
+THE ODORANT TEST IS DETECTABILITY, NOT INJECTION RATE. 192.625 requires gas to be readily detectable by a person with a normal sense of smell at one-fifth of the lower explosive limit, and requires periodic sampling to demonstrate it. An injection rate held constant is not evidence; the sample at the extremity is.
+
+THE LIFECYCLE DECISION IS NOT HERE. 19.1 decides to commission and 19.2.4 returns the end state under 192.727(b), (c) or (d). This group performs the gas operation those decisions require and records it. Both purge tasks are drawn as receiving an authorised decision rather than making one.
+
+Gas only, throughout.</documentation>
+    <laneSet id="P_8_6_lanes">
+      <lane id="l_86_ops" name="Gas operations and control">
+        <flowNodeRef>n_86_start</flowNodeRef>
+        <flowNodeRef>n_86_due</flowNodeRef>
+        <flowNodeRef>n_86_mon</flowNodeRef>
+        <flowNodeRef>n_86_ab</flowNodeRef>
+        <flowNodeRef>n_86_maop</flowNodeRef>
+        <flowNodeRef>n_86_emg</flowNodeRef>
+        <flowNodeRef>n_86_decl</flowNodeRef>
+        <flowNodeRef>n_86_auth</flowNodeRef>
+        <flowNodeRef>n_86_cap</flowNodeRef>
+        <flowNodeRef>n_86_rec</flowNodeRef>
+        <flowNodeRef>n_86_gis</flowNodeRef>
+        <flowNodeRef>n_86_end</flowNodeRef>
+      </lane>
+      <lane id="l_86_field" name="Field execution">
+        <flowNodeRef>n_86_stn</flowNodeRef>
+        <flowNodeRef>n_86_od</flowNodeRef>
+        <flowNodeRef>n_86_ign</flowNodeRef>
+        <flowNodeRef>n_86_dir</flowNodeRef>
+        <flowNodeRef>n_86_in</flowNodeRef>
+        <flowNodeRef>n_86_out</flowNodeRef>
+      </lane>
+    </laneSet>
+    <eventBasedGateway id="n_86_start" name="What has arisen on the gas system"/>
+    <startEvent id="n_86_due" name="A station, pressure or odorant cycle falls due"><timerEventDefinition id="n_86_due_td"/></startEvent>
+    <userTask id="n_86_stn" name="Inspect and test the regulating and limiting devices"><documentation>8.6.1. 192.739: intervals not exceeding 15 months but at least once each calendar year. Set points verified against the DESIGN, not against what was last found.</documentation></userTask>
+    <sendTask id="n_86_cap" name="Hand the relief capacity to review"><documentation>8.6.2, SPEC. 192.743 requires adequate capacity and gives no method. Judged against the flow the regulator could pass wide open, not against normal load.</documentation></sendTask>
+    <userTask id="n_86_od" name="Sample odorant at the system extremities"><documentation>8.6.4. 192.625. Sampling near the injection point demonstrates only that odorant was injected.</documentation></userTask>
+    <serviceTask id="n_86_mon" name="Compare system pressure against MAOP and the envelope"><documentation>8.6.3. 192.605(a) reaches TRANSMISSION lines; a distribution-only operator is not obliged to hold abnormal-operations procedures by that paragraph.</documentation></serviceTask>
+    <exclusiveGateway id="n_86_ab" name="Outside the envelope"/>
+    <exclusiveGateway id="n_86_maop" name="Above MAOP"/>
+    <sendTask id="n_86_emg" name="Hand to emergency response"><documentation>8.6.3. Operating above MAOP is a breach to be corrected, not an abnormal condition to be managed. It leaves 8.0 for 9.1.</documentation></sendTask>
+    <serviceTask id="n_86_decl" name="Declare the abnormal operating condition"><documentation>8.6.3. Declaring is the act that matters. A reading outside the envelope that nobody declares leaves the system operating abnormally with no record.</documentation></serviceTask>
+    <receiveTask id="n_86_auth" name="Receive the authorised lifecycle decision"><documentation>19.1 to commission, 19.2.4 to abandon or deactivate. This group does not choose.</documentation></receiveTask>
+    <userTask id="n_86_ign" name="Control ignition sources across the work area"><documentation>8.6.5, 8.6.6. 192.751, wherever gas may be present. Neither section is sufficient alone.</documentation></userTask>
+    <exclusiveGateway id="n_86_dir" name="Into service or out of it"/>
+    <userTask id="n_86_in" name="Purge and connect the tested pipe"><documentation>8.6.5. 192.629 so that an explosive mixture does not form. 192.503 required the test before this point.</documentation></userTask>
+    <userTask id="n_86_out" name="Disconnect from all sources, purge, seal the ends"><documentation>8.6.6. 192.727(b) names all three and the order is not optional.</documentation></userTask>
+    <serviceTask id="n_86_rec" name="Record the result against the asset"><documentation>Purge, tie-in, sampling and inspection records all land against the asset.</documentation></serviceTask>
+    <sendTask id="n_86_gis" name="Tell 12.2 what changed on the network"><documentation>8.6.5, 8.6.6. The network model has to show what is connected and what was left.</documentation></sendTask>
+    <endEvent id="n_86_end" name="Operation complete and recorded"/>
+    <sequenceFlow id="f_n_86_due_n_86_stn" sourceRef="n_86_due" targetRef="n_86_stn" name="station inspection"/>
+    <sequenceFlow id="f_n_86_due_n_86_od" sourceRef="n_86_due" targetRef="n_86_od" name="odorant sampling"/>
+    <sequenceFlow id="f_n_86_due_n_86_mon" sourceRef="n_86_due" targetRef="n_86_mon" name="pressure monitoring"/>
+    <sequenceFlow id="f_n_86_stn_n_86_cap" sourceRef="n_86_stn" targetRef="n_86_cap" name=""/>
+    <sequenceFlow id="f_n_86_cap_n_86_rec" sourceRef="n_86_cap" targetRef="n_86_rec" name=""/>
+    <sequenceFlow id="f_n_86_od_n_86_rec" sourceRef="n_86_od" targetRef="n_86_rec" name=""/>
+    <sequenceFlow id="f_n_86_mon_n_86_ab" sourceRef="n_86_mon" targetRef="n_86_ab" name=""/>
+    <sequenceFlow id="f_n_86_ab_n_86_rec" sourceRef="n_86_ab" targetRef="n_86_rec" name="within the envelope"/>
+    <sequenceFlow id="f_n_86_ab_n_86_maop" sourceRef="n_86_ab" targetRef="n_86_maop" name="outside"><conditionExpression xsi:type="tFormalExpression"><![CDATA[withinEnvelope = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_86_maop_n_86_emg" sourceRef="n_86_maop" targetRef="n_86_emg" name="above MAOP"><conditionExpression xsi:type="tFormalExpression"><![CDATA[aboveMaop = true]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_86_maop_n_86_decl" sourceRef="n_86_maop" targetRef="n_86_decl" name="below MAOP"/>
+    <sequenceFlow id="f_n_86_decl_n_86_rec" sourceRef="n_86_decl" targetRef="n_86_rec" name=""/>
+    <sequenceFlow id="f_n_86_start_n_86_auth" sourceRef="n_86_start" targetRef="n_86_auth" name="an authorised lifecycle decision arrives"/>
+    <sequenceFlow id="f_n_86_auth_n_86_ign" sourceRef="n_86_auth" targetRef="n_86_ign" name=""/>
+    <sequenceFlow id="f_n_86_ign_n_86_dir" sourceRef="n_86_ign" targetRef="n_86_dir" name=""/>
+    <sequenceFlow id="f_n_86_dir_n_86_in" sourceRef="n_86_dir" targetRef="n_86_in" name="into service"/>
+    <sequenceFlow id="f_n_86_dir_n_86_out" sourceRef="n_86_dir" targetRef="n_86_out" name="out of service"/>
+    <sequenceFlow id="f_n_86_in_n_86_rec" sourceRef="n_86_in" targetRef="n_86_rec" name=""/>
+    <sequenceFlow id="f_n_86_out_n_86_rec" sourceRef="n_86_out" targetRef="n_86_rec" name=""/>
+    <sequenceFlow id="f_n_86_rec_n_86_gis" sourceRef="n_86_rec" targetRef="n_86_gis" name=""/>
+    <sequenceFlow id="f_n_86_gis_n_86_end" sourceRef="n_86_gis" targetRef="n_86_end" name=""/>
+  </process>
+  <bpmndi:BPMNDiagram id="dg_P_8_6">
+    <bpmndi:BPMNPlane id="pl_P_8_6" bpmnElement="P_8_6">
+      <bpmndi:BPMNShape id="sh_n_86_start" bpmnElement="n_86_start"><dc:Bounds x="127" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_86_due" bpmnElement="n_86_due"><dc:Bounds x="132" y="437" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_86_stn" bpmnElement="n_86_stn"><dc:Bounds x="255" y="411.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_86_cap" bpmnElement="n_86_cap"><dc:Bounds x="425" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_86_od" bpmnElement="n_86_od"><dc:Bounds x="255" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_86_mon" bpmnElement="n_86_mon"><dc:Bounds x="255" y="851.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_86_ab" bpmnElement="n_86_ab"><dc:Bounds x="467" y="872" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_86_maop" bpmnElement="n_86_maop"><dc:Bounds x="637" y="872" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_86_emg" bpmnElement="n_86_emg"><dc:Bounds x="595" y="1080" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_86_decl" bpmnElement="n_86_decl"><dc:Bounds x="765" y="860" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_86_auth" bpmnElement="n_86_auth"><dc:Bounds x="85" y="1291.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_86_ign" bpmnElement="n_86_ign"><dc:Bounds x="255" y="1291.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_86_dir" bpmnElement="n_86_dir"><dc:Bounds x="467" y="1312" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_86_in" bpmnElement="n_86_in"><dc:Bounds x="425" y="1520" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_86_out" bpmnElement="n_86_out"><dc:Bounds x="595" y="1291.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_86_rec" bpmnElement="n_86_rec"><dc:Bounds x="935" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_86_gis" bpmnElement="n_86_gis"><dc:Bounds x="1105" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_86_end" bpmnElement="n_86_end"><dc:Bounds x="1322" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ed_f_n_86_due_n_86_stn" bpmnElement="f_n_86_due_n_86_stn"><di:waypoint x="168" y="455"/><di:waypoint x="255" y="455"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="181.5" y="420" width="60" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_86_due_n_86_od" bpmnElement="f_n_86_due_n_86_od"><di:waypoint x="168" y="455"/><di:waypoint x="230" y="455"/><di:waypoint x="230" y="675"/><di:waypoint x="255" y="675"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="235" y="556.5" width="93.6" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_86_due_n_86_mon" bpmnElement="f_n_86_due_n_86_mon"><di:waypoint x="168" y="455"/><di:waypoint x="230" y="455"/><di:waypoint x="230" y="895"/><di:waypoint x="255" y="895"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="165" y="660" width="60" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_86_stn_n_86_cap" bpmnElement="f_n_86_stn_n_86_cap"><di:waypoint x="385" y="455"/><di:waypoint x="400" y="455"/><di:waypoint x="400" y="675"/><di:waypoint x="425" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_86_cap_n_86_rec" bpmnElement="f_n_86_cap_n_86_rec"><di:waypoint x="555" y="675"/><di:waypoint x="910" y="675"/><di:waypoint x="910" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_86_od_n_86_rec" bpmnElement="f_n_86_od_n_86_rec"><di:waypoint x="385" y="675"/><di:waypoint x="910" y="675"/><di:waypoint x="910" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_86_mon_n_86_ab" bpmnElement="f_n_86_mon_n_86_ab"><di:waypoint x="385" y="895"/><di:waypoint x="467" y="895"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_86_ab_n_86_rec" bpmnElement="f_n_86_ab_n_86_rec"><di:waypoint x="513" y="895"/><di:waypoint x="910" y="895"/><di:waypoint x="910" y="235"/><di:waypoint x="935" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="845" y="220" width="60" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_86_ab_n_86_maop" bpmnElement="f_n_86_ab_n_86_maop"><di:waypoint x="513" y="895"/><di:waypoint x="637" y="895"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="553.4" y="873" width="43.2" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_86_maop_n_86_emg" bpmnElement="f_n_86_maop_n_86_emg"><di:waypoint x="683" y="895"/><di:waypoint x="570" y="895"/><di:waypoint x="570" y="1115"/><di:waypoint x="595" y="1115"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="505" y="1106.5" width="60" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_86_maop_n_86_decl" bpmnElement="f_n_86_maop_n_86_decl"><di:waypoint x="683" y="895"/><di:waypoint x="765" y="895"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="694" y="873" width="60" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_86_decl_n_86_rec" bpmnElement="f_n_86_decl_n_86_rec"><di:waypoint x="895" y="895"/><di:waypoint x="910" y="895"/><di:waypoint x="910" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_86_start_n_86_auth" bpmnElement="f_n_86_start_n_86_auth"><di:waypoint x="173" y="235"/><di:waypoint x="60" y="235"/><di:waypoint x="60" y="1335"/><di:waypoint x="85" y="1335"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="-38.6" y="1313.5" width="93.6" height="43" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_86_auth_n_86_ign" bpmnElement="f_n_86_auth_n_86_ign"><di:waypoint x="215" y="1335"/><di:waypoint x="255" y="1335"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_86_ign_n_86_dir" bpmnElement="f_n_86_ign_n_86_dir"><di:waypoint x="385" y="1335"/><di:waypoint x="467" y="1335"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_86_dir_n_86_in" bpmnElement="f_n_86_dir_n_86_in"><di:waypoint x="513" y="1335"/><di:waypoint x="400" y="1335"/><di:waypoint x="400" y="1555"/><di:waypoint x="425" y="1555"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="323.8" y="1546.5" width="71.2" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_86_dir_n_86_out" bpmnElement="f_n_86_dir_n_86_out"><di:waypoint x="513" y="1335"/><di:waypoint x="595" y="1335"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="499.7" y="1286" width="82.4" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_86_in_n_86_rec" bpmnElement="f_n_86_in_n_86_rec"><di:waypoint x="555" y="1555"/><di:waypoint x="910" y="1555"/><di:waypoint x="910" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_86_out_n_86_rec" bpmnElement="f_n_86_out_n_86_rec"><di:waypoint x="725" y="1335"/><di:waypoint x="910" y="1335"/><di:waypoint x="910" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_86_rec_n_86_gis" bpmnElement="f_n_86_rec_n_86_gis"><di:waypoint x="1065" y="235"/><di:waypoint x="1105" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_86_gis_n_86_end" bpmnElement="f_n_86_gis_n_86_end"><di:waypoint x="1235" y="235"/><di:waypoint x="1322" y="235"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

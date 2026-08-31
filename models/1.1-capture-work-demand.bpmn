@@ -47,12 +47,12 @@
       <bpmndi:BPMNShape id="sh_s_evt" bpmnElement="s_evt"><dc:Bounds x="132" y="437" width="36" height="36"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_s_field" bpmnElement="s_field"><dc:Bounds x="132" y="547" width="36" height="36"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_s_reg" bpmnElement="s_reg"><dc:Bounds x="132" y="657" width="36" height="36"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_t_cust" bpmnElement="t_cust"><dc:Bounds x="255" y="90" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_t_cond" bpmnElement="t_cond"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_t_insp" bpmnElement="t_insp"><dc:Bounds x="255" y="310" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_t_cust" bpmnElement="t_cust"><dc:Bounds x="255" y="81.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_t_cond" bpmnElement="t_cond"><dc:Bounds x="255" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_t_insp" bpmnElement="t_insp"><dc:Bounds x="255" y="301.5" width="130" height="87"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_t_evt" bpmnElement="t_evt"><dc:Bounds x="255" y="420" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_t_field" bpmnElement="t_field"><dc:Bounds x="255" y="530" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_t_reg" bpmnElement="t_reg"><dc:Bounds x="255" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_t_field" bpmnElement="t_field"><dc:Bounds x="255" y="521.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_t_reg" bpmnElement="t_reg"><dc:Bounds x="255" y="631.5" width="130" height="87"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_g_join" bpmnElement="g_join"><dc:Bounds x="467" y="322" width="46" height="46"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_t_minor" bpmnElement="t_minor"><dc:Bounds x="595" y="640" width="130" height="70"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_t_reg_rev" bpmnElement="t_reg_rev"><dc:Bounds x="595" y="530" width="130" height="70"/></bpmndi:BPMNShape>
@@ -71,10 +71,26 @@
       <bpmndi:BPMNEdge id="ed_f_t_evt_g_join" bpmnElement="f_t_evt_g_join"><di:waypoint x="385" y="455"/><di:waypoint x="442" y="455"/><di:waypoint x="442" y="345"/><di:waypoint x="467" y="345"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_t_field_g_join" bpmnElement="f_t_field_g_join"><di:waypoint x="385" y="565"/><di:waypoint x="442" y="565"/><di:waypoint x="442" y="345"/><di:waypoint x="467" y="345"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_t_reg_g_join" bpmnElement="f_t_reg_g_join"><di:waypoint x="385" y="675"/><di:waypoint x="442" y="675"/><di:waypoint x="442" y="345"/><di:waypoint x="467" y="345"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_g_join_t_minor" bpmnElement="f_g_join_t_minor"><di:waypoint x="513" y="345"/><di:waypoint x="570" y="345"/><di:waypoint x="570" y="675"/><di:waypoint x="595" y="675"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_g_join_t_reg_rev" bpmnElement="f_g_join_t_reg_rev"><di:waypoint x="513" y="345"/><di:waypoint x="570" y="345"/><di:waypoint x="570" y="565"/><di:waypoint x="595" y="565"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_g_join_t_register" bpmnElement="f_g_join_t_register"><di:waypoint x="513" y="345"/><di:waypoint x="595" y="345"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_t_reg_rev_t_register" bpmnElement="f_t_reg_rev_t_register"><di:waypoint x="725" y="565"/><di:waypoint x="570" y="565"/><di:waypoint x="570" y="345"/><di:waypoint x="595" y="345"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_g_join_t_minor" bpmnElement="f_g_join_t_minor"><di:waypoint x="513" y="345"/><di:waypoint x="570" y="345"/><di:waypoint x="570" y="675"/><di:waypoint x="595" y="675"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="471.4" y="660" width="93.6" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_g_join_t_reg_rev" bpmnElement="f_g_join_t_reg_rev"><di:waypoint x="513" y="345"/><di:waypoint x="570" y="345"/><di:waypoint x="570" y="565"/><di:waypoint x="595" y="565"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="493.8" y="556.5" width="71.2" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_g_join_t_register" bpmnElement="f_g_join_t_register"><di:waypoint x="513" y="345"/><di:waypoint x="595" y="345"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="526.8" y="323" width="54.4" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_t_reg_rev_t_register" bpmnElement="f_t_reg_rev_t_register"><di:waypoint x="725" y="565"/><di:waypoint x="570" y="565"/><di:waypoint x="570" y="345"/><di:waypoint x="595" y="345"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="575" y="446.5" width="48.8" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_t_minor_e_log" bpmnElement="f_t_minor_e_log"><di:waypoint x="725" y="675"/><di:waypoint x="812" y="675"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_t_register_e_reg" bpmnElement="f_t_register_e_reg"><di:waypoint x="725" y="345"/><di:waypoint x="812" y="345"/></bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>

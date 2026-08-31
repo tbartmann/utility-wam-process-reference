@@ -78,8 +78,8 @@
    "group": "Governance",
    "name": "Management of Change",
    "status": "partial",
-   "model_groups": "2.4.4, 12.6.4",
-   "note": "Change to authorised work scope (2.4.4) and asset-related technical change (12.6.4). No organisational or management-system change process, which is correct here."
+   "model_groups": "2.3.5, 12.6.4",
+   "note": "Change to authorised work scope (2.3.5) and asset-related technical change (12.6.4). No organisational or management-system change process, which is correct here."
   },
   {
    "subject": "2.6",
@@ -126,7 +126,7 @@
    "group": "Asset Management Planning",
    "name": "Decision-Making",
    "status": "covered",
-   "model_groups": "1.3, 2.4.2, 12.6",
+   "model_groups": "1.3, 2.3.2, 12.6",
    "note": "Prioritisation, approval routing and asset risk. The model expresses these as DMN decision tables, which is exactly the auditability GFMAM asks for."
   },
   {
@@ -206,7 +206,7 @@
    "group": "Leadership and People",
    "name": "Knowledge Management",
    "status": "partial",
-   "model_groups": "12.5.4, 2.5.3",
+   "model_groups": "12.5.4, 2.4.3",
    "note": "Job plan and task libraries, and the document set at the place of work."
   },
   {

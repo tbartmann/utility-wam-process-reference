@@ -80,32 +80,40 @@ THE MEASURE BASIS IS CARRIED WITH EVERY EVENT AND THAT IS THE WHOLE DISCIPLINE. 
   <bpmndi:BPMNDiagram id="dg_P_12_3">
     <bpmndi:BPMNPlane id="pl_P_12_3" bpmnElement="P_12_3">
       <bpmndi:BPMNShape id="sh_n_123_e" bpmnElement="n_123_e"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_123_route" bpmnElement="n_123_route"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_123_route" bpmnElement="n_123_route"><dc:Bounds x="255" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_123_meas" bpmnElement="n_123_meas"><dc:Bounds x="425" y="200" width="130" height="70"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_123_val" bpmnElement="n_123_val"><dc:Bounds x="637" y="212" width="46" height="46"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_123_rej" bpmnElement="n_123_rej"><dc:Bounds x="642" y="437" width="36" height="36"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_123_pub" bpmnElement="n_123_pub"><dc:Bounds x="765" y="200" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_123_rec" bpmnElement="n_123_rec"><dc:Bounds x="935" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_123_rec" bpmnElement="n_123_rec"><dc:Bounds x="935" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_123_e1" bpmnElement="n_123_e1"><dc:Bounds x="1152" y="217" width="36" height="36"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_123_v" bpmnElement="n_123_v"><dc:Bounds x="132" y="657" width="36" height="36"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_123_ord" bpmnElement="n_123_ord"><dc:Bounds x="255" y="640" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_123_seg" bpmnElement="n_123_seg"><dc:Bounds x="425" y="640" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_123_spub" bpmnElement="n_123_spub"><dc:Bounds x="595" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_123_ord" bpmnElement="n_123_ord"><dc:Bounds x="255" y="631.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_123_seg" bpmnElement="n_123_seg"><dc:Bounds x="425" y="631.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_123_spub" bpmnElement="n_123_spub"><dc:Bounds x="595" y="631.5" width="130" height="87"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_123_e2" bpmnElement="n_123_e2"><dc:Bounds x="812" y="657" width="36" height="36"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_123_g" bpmnElement="n_123_g"><dc:Bounds x="132" y="877" width="36" height="36"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_123_gk" bpmnElement="n_123_gk"><dc:Bounds x="297" y="872" width="46" height="46"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_123_tr" bpmnElement="n_123_tr"><dc:Bounds x="425" y="860" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_123_tr" bpmnElement="n_123_tr"><dc:Bounds x="425" y="851.5" width="130" height="87"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_123_re" bpmnElement="n_123_re"><dc:Bounds x="595" y="860" width="130" height="70"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_123_orph" bpmnElement="n_123_orph"><dc:Bounds x="765" y="860" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_123_conn" bpmnElement="n_123_conn"><dc:Bounds x="425" y="1080" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_123_conn" bpmnElement="n_123_conn"><dc:Bounds x="425" y="1071.5" width="130" height="87"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_123_cw" bpmnElement="n_123_cw"><dc:Bounds x="595" y="1080" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_123_cpub" bpmnElement="n_123_cpub"><dc:Bounds x="765" y="1080" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_123_cpub" bpmnElement="n_123_cpub"><dc:Bounds x="765" y="1071.5" width="130" height="87"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_123_e3" bpmnElement="n_123_e3"><dc:Bounds x="982" y="877" width="36" height="36"/></bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="ed_f_n_123_e_n_123_route" bpmnElement="f_n_123_e_n_123_route"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_123_route_n_123_meas" bpmnElement="f_n_123_route_n_123_meas"><di:waypoint x="385" y="235"/><di:waypoint x="425" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_123_meas_n_123_val" bpmnElement="f_n_123_meas_n_123_val"><di:waypoint x="555" y="235"/><di:waypoint x="637" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_123_val_n_123_rej" bpmnElement="f_n_123_val_n_123_rej"><di:waypoint x="683" y="235"/><di:waypoint x="617" y="235"/><di:waypoint x="617" y="455"/><di:waypoint x="642" y="455"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_123_val_n_123_pub" bpmnElement="f_n_123_val_n_123_pub"><di:waypoint x="683" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_123_val_n_123_rej" bpmnElement="f_n_123_val_n_123_rej"><di:waypoint x="683" y="235"/><di:waypoint x="617" y="235"/><di:waypoint x="617" y="455"/><di:waypoint x="642" y="455"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="540.8" y="440" width="71.2" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_123_val_n_123_pub" bpmnElement="f_n_123_val_n_123_pub"><di:waypoint x="683" y="235"/><di:waypoint x="765" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="704" y="213" width="40" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_123_pub_n_123_rec" bpmnElement="f_n_123_pub_n_123_rec"><di:waypoint x="895" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_123_rec_n_123_e1" bpmnElement="f_n_123_rec_n_123_e1"><di:waypoint x="1065" y="235"/><di:waypoint x="1152" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_123_v_n_123_ord" bpmnElement="f_n_123_v_n_123_ord"><di:waypoint x="168" y="675"/><di:waypoint x="255" y="675"/></bpmndi:BPMNEdge>
@@ -113,8 +121,16 @@ THE MEASURE BASIS IS CARRIED WITH EVERY EVENT AND THAT IS THE WHOLE DISCIPLINE. 
       <bpmndi:BPMNEdge id="ed_f_n_123_seg_n_123_spub" bpmnElement="f_n_123_seg_n_123_spub"><di:waypoint x="555" y="675"/><di:waypoint x="595" y="675"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_123_spub_n_123_e2" bpmnElement="f_n_123_spub_n_123_e2"><di:waypoint x="725" y="675"/><di:waypoint x="812" y="675"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_123_g_n_123_gk" bpmnElement="f_n_123_g_n_123_gk"><di:waypoint x="168" y="895"/><di:waypoint x="297" y="895"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_123_gk_n_123_tr" bpmnElement="f_n_123_gk_n_123_tr"><di:waypoint x="343" y="895"/><di:waypoint x="425" y="895"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_123_gk_n_123_conn" bpmnElement="f_n_123_gk_n_123_conn"><di:waypoint x="343" y="895"/><di:waypoint x="400" y="895"/><di:waypoint x="400" y="1115"/><di:waypoint x="425" y="1115"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_123_gk_n_123_tr" bpmnElement="f_n_123_gk_n_123_tr"><di:waypoint x="343" y="895"/><di:waypoint x="425" y="895"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="351.2" y="860" width="65.6" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_123_gk_n_123_conn" bpmnElement="f_n_123_gk_n_123_conn"><di:waypoint x="343" y="895"/><di:waypoint x="400" y="895"/><di:waypoint x="400" y="1115"/><di:waypoint x="425" y="1115"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="323.8" y="1106.5" width="71.2" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_123_tr_n_123_re" bpmnElement="f_n_123_tr_n_123_re"><di:waypoint x="555" y="895"/><di:waypoint x="595" y="895"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_123_re_n_123_orph" bpmnElement="f_n_123_re_n_123_orph"><di:waypoint x="725" y="895"/><di:waypoint x="765" y="895"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_123_orph_n_123_e3" bpmnElement="f_n_123_orph_n_123_e3"><di:waypoint x="895" y="895"/><di:waypoint x="982" y="895"/></bpmndi:BPMNEdge>

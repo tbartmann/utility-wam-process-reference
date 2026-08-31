@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/" id="Assignment_restriction" name="14.2.4 Restrict assignment on lapsed qualification" namespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <description>Returns permitted or refused AND the reason, because the reason decides the remedy. 'Not qualified', 'qualification lapsed' and 'restricted under Part 199' produce the same refusal and three entirely different next steps.
+
+THIS TABLE IS CONSUMED, NOT RE-DECIDED. Merged specifications in 3.0 and 16.0 both take the restriction from here rather than testing qualification themselves. A second test in either place will eventually disagree with this one, and the disagreement will be discovered at dispatch.
+
+THE ASYMMETRY IS THE POINT OF THE TABLE. For a gas covered task the authority is 49 CFR 192.805, a written programme with identified tasks and evaluated individuals. For electric work it is 29 CFR 1910.269(a)(2), which DEFINES a qualified employee and requires nothing programmatic; for excavation it is 1926 Subpart P's competent person. These are not equivalents and the rows do not pretend they are - no federal qualification programme requirement exists for electric distribution workers at all.
+
+49 CFR Part 199 sits in the table for the same reason it sits in 14.1.3: a positive result or a refusal removes a gas covered employee from work, and it does so independently of whether they are qualified. Electric utilities are not covered by Part 199.</description>
+  <inputData id="in_commodity" name="Commodity of the work"><variable id="in_commodity_v" name="Commodity of the work" typeRef="string"/></inputData>
+  <inputData id="in_covered" name="The task is a covered task under 49 CFR 192.803"><variable id="in_covered_v" name="The task is a covered task under 49 CFR 192.803" typeRef="boolean"/></inputData>
+  <inputData id="in_qualCurrent" name="The person's qualification for the task is current"><variable id="in_qualCurrent_v" name="The person's qualification for the task is current" typeRef="boolean"/></inputData>
+  <inputData id="in_p199" name="The person is removed under 49 CFR Part 199"><variable id="in_p199_v" name="The person is removed under 49 CFR Part 199" typeRef="boolean"/></inputData>
+  <inputData id="in_excavation" name="The work is an excavation requiring a competent person"><variable id="in_excavation_v" name="The work is an excavation requiring a competent person" typeRef="boolean"/></inputData>
+  <knowledgeSource id="ks_qual" name="49 CFR 192.803 and 192.805; 29 CFR 1910.269(a)(2); 29 CFR 1926 Subpart P; 49 CFR Part 199; 16 U.S.C. 824o"><description>Subpart N is a qualification PROGRAMME and applies to gas. 1910.269(a)(2) is a definition of a qualified employee and 1926.651(k) a competent person for excavations; neither is a programme. Part 199 is gas-only testing. 16 U.S.C. 824o excludes local distribution of electric energy from the bulk-power system, which is why no federal electric qualification programme exists to cite.</description></knowledgeSource>
+  <decision id="d_14_2_4" name="Assignment permitted, or the reason it is refused">
+    <variable id="d_14_2_4_v" name="Assignment permitted, or the reason it is refused" typeRef="string"/>
+    <informationRequirement id="ir_d_14_2_4_ks_qual"><requiredInput href="#ks_qual"/></informationRequirement>
+    <decisionTable id="d_14_2_4_dt" hitPolicy="FIRST" preferredOrientation="Rule-as-Row">
+      <input id="d_14_2_4_i1" label="Commodity"><inputExpression id="d_14_2_4_i1_e" typeRef="string"><text>in_commodity</text></inputExpression></input>
+      <input id="d_14_2_4_i2" label="Covered task"><inputExpression id="d_14_2_4_i2_e" typeRef="boolean"><text>in_covered</text></inputExpression></input>
+      <input id="d_14_2_4_i3" label="Qualification current"><inputExpression id="d_14_2_4_i3_e" typeRef="boolean"><text>in_qualCurrent</text></inputExpression></input>
+      <input id="d_14_2_4_i4" label="Removed under Part 199"><inputExpression id="d_14_2_4_i4_e" typeRef="boolean"><text>in_p199</text></inputExpression></input>
+      <input id="d_14_2_4_i5" label="Excavation"><inputExpression id="d_14_2_4_i5_e" typeRef="boolean"><text>in_excavation</text></inputExpression></input>
+      <output id="d_14_2_4_o" label="Assignment permitted, or the reason it is refused" name="Assignment permitted, or the reason it is refused" typeRef="string"/>
+      <rule id="d_14_2_4_r1">
+        <description>49 CFR Part 199. Removed regardless of qualification, and the remedy is the testing programme's, not the training coordinator's. This row is first because it overrides everything below it.</description>
+        <inputEntry id="d_14_2_4_r1_ie1"><text>"gas"</text></inputEntry>
+        <inputEntry id="d_14_2_4_r1_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_14_2_4_r1_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_14_2_4_r1_ie4"><text>true</text></inputEntry>
+        <inputEntry id="d_14_2_4_r1_ie5"><text>-</text></inputEntry>
+        <outputEntry id="d_14_2_4_r1_oe"><text>"refused_part199Removal"</text></outputEntry>
+      </rule>
+      <rule id="d_14_2_4_r2">
+        <description>Electric utilities are NOT covered by 49 CFR Part 199. A Part 199 flag on an electric worker is a data error, not a restriction, and treating it as one borrows a gas rule across a commodity it does not govern.</description>
+        <inputEntry id="d_14_2_4_r2_ie1"><text>"electric"</text></inputEntry>
+        <inputEntry id="d_14_2_4_r2_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_14_2_4_r2_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_14_2_4_r2_ie4"><text>true</text></inputEntry>
+        <inputEntry id="d_14_2_4_r2_ie5"><text>-</text></inputEntry>
+        <outputEntry id="d_14_2_4_r2_oe"><text>"permitted_part199NotApplicable"</text></outputEntry>
+      </rule>
+      <rule id="d_14_2_4_r3">
+        <description>49 CFR 192.805. A covered task with no current qualification. The remedy is evaluation at 14.2.5, or direction and observation under 14.2.6.</description>
+        <inputEntry id="d_14_2_4_r3_ie1"><text>"gas"</text></inputEntry>
+        <inputEntry id="d_14_2_4_r3_ie2"><text>true</text></inputEntry>
+        <inputEntry id="d_14_2_4_r3_ie3"><text>false</text></inputEntry>
+        <inputEntry id="d_14_2_4_r3_ie4"><text>false</text></inputEntry>
+        <inputEntry id="d_14_2_4_r3_ie5"><text>-</text></inputEntry>
+        <outputEntry id="d_14_2_4_r3_oe"><text>"refused_notQualified192805"</text></outputEntry>
+      </rule>
+      <rule id="d_14_2_4_r4">
+        <description>Evaluated and current under the operator's programme. 192.805(g) sets no requalification figure, so 'current' means current against the operator's own interval and that interval is recorded with the qualification.</description>
+        <inputEntry id="d_14_2_4_r4_ie1"><text>"gas"</text></inputEntry>
+        <inputEntry id="d_14_2_4_r4_ie2"><text>true</text></inputEntry>
+        <inputEntry id="d_14_2_4_r4_ie3"><text>true</text></inputEntry>
+        <inputEntry id="d_14_2_4_r4_ie4"><text>false</text></inputEntry>
+        <inputEntry id="d_14_2_4_r4_ie5"><text>-</text></inputEntry>
+        <outputEntry id="d_14_2_4_r4_oe"><text>"permitted_qualified192805"</text></outputEntry>
+      </rule>
+      <rule id="d_14_2_4_r5">
+        <description>Not a covered task, but an excavation. 1926.651(k) requires a competent person, which gates who may be there rather than who may do the task.</description>
+        <inputEntry id="d_14_2_4_r5_ie1"><text>"gas"</text></inputEntry>
+        <inputEntry id="d_14_2_4_r5_ie2"><text>false</text></inputEntry>
+        <inputEntry id="d_14_2_4_r5_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_14_2_4_r5_ie4"><text>false</text></inputEntry>
+        <inputEntry id="d_14_2_4_r5_ie5"><text>true</text></inputEntry>
+        <outputEntry id="d_14_2_4_r5_oe"><text>"permitted_competentPersonRequired"</text></outputEntry>
+      </rule>
+      <rule id="d_14_2_4_r6">
+        <description>Outside Subpart N. Competence still applies through 14.2.1; qualification does not.</description>
+        <inputEntry id="d_14_2_4_r6_ie1"><text>"gas"</text></inputEntry>
+        <inputEntry id="d_14_2_4_r6_ie2"><text>false</text></inputEntry>
+        <inputEntry id="d_14_2_4_r6_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_14_2_4_r6_ie4"><text>false</text></inputEntry>
+        <inputEntry id="d_14_2_4_r6_ie5"><text>false</text></inputEntry>
+        <outputEntry id="d_14_2_4_r6_oe"><text>"permitted_notACoveredTask"</text></outputEntry>
+      </rule>
+      <rule id="d_14_2_4_r7">
+        <description>29 CFR 1926 Subpart P. The excavation competent-person requirement is the one electric gate with real teeth, and it is about the excavation rather than the electrical work.</description>
+        <inputEntry id="d_14_2_4_r7_ie1"><text>"electric"</text></inputEntry>
+        <inputEntry id="d_14_2_4_r7_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_14_2_4_r7_ie3"><text>false</text></inputEntry>
+        <inputEntry id="d_14_2_4_r7_ie4"><text>false</text></inputEntry>
+        <inputEntry id="d_14_2_4_r7_ie5"><text>true</text></inputEntry>
+        <outputEntry id="d_14_2_4_r7_oe"><text>"refused_notCompetentPerson"</text></outputEntry>
+      </rule>
+      <rule id="d_14_2_4_r8">
+        <description>29 CFR 1910.269(a)(2). A definition of a qualified employee, not a programme. There is no federal electric distribution qualification programme to cite, and borrowing 192.805 across would be wrong.</description>
+        <inputEntry id="d_14_2_4_r8_ie1"><text>"electric"</text></inputEntry>
+        <inputEntry id="d_14_2_4_r8_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_14_2_4_r8_ie3"><text>false</text></inputEntry>
+        <inputEntry id="d_14_2_4_r8_ie4"><text>false</text></inputEntry>
+        <inputEntry id="d_14_2_4_r8_ie5"><text>false</text></inputEntry>
+        <outputEntry id="d_14_2_4_r8_oe"><text>"refused_notQualifiedEmployee"</text></outputEntry>
+      </rule>
+      <rule id="d_14_2_4_r9">
+        <description>Qualified employee under 1910.269(a)(2), on the operator's own criteria.</description>
+        <inputEntry id="d_14_2_4_r9_ie1"><text>"electric"</text></inputEntry>
+        <inputEntry id="d_14_2_4_r9_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_14_2_4_r9_ie3"><text>true</text></inputEntry>
+        <inputEntry id="d_14_2_4_r9_ie4"><text>false</text></inputEntry>
+        <inputEntry id="d_14_2_4_r9_ie5"><text>-</text></inputEntry>
+        <outputEntry id="d_14_2_4_r9_oe"><text>"permitted_qualifiedEmployee"</text></outputEntry>
+      </rule>
+      <rule id="d_14_2_4_r10">
+        <description>Commodity or qualification position not established. Refused rather than defaulted, because defaulting an assignment to permitted is the one direction that is unsafe.</description>
+        <inputEntry id="d_14_2_4_r10_ie1"><text>-</text></inputEntry>
+        <inputEntry id="d_14_2_4_r10_ie2"><text>-</text></inputEntry>
+        <inputEntry id="d_14_2_4_r10_ie3"><text>-</text></inputEntry>
+        <inputEntry id="d_14_2_4_r10_ie4"><text>-</text></inputEntry>
+        <inputEntry id="d_14_2_4_r10_ie5"><text>-</text></inputEntry>
+        <outputEntry id="d_14_2_4_r10_oe"><text>"refused_positionNotEstablished"</text></outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram id="drd_Assignment_restriction">
+      <dmndi:DMNShape id="sh_in_commodity" dmnElementRef="in_commodity"><dc:Bounds x="60" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_covered" dmnElementRef="in_covered"><dc:Bounds x="245" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_qualCurrent" dmnElementRef="in_qualCurrent"><dc:Bounds x="430" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_p199" dmnElementRef="in_p199"><dc:Bounds x="615" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_in_excavation" dmnElementRef="in_excavation"><dc:Bounds x="800" y="420" width="160" height="45"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_d_14_2_4" dmnElementRef="d_14_2_4"><dc:Bounds x="60" y="240" width="180" height="70"/></dmndi:DMNShape>
+      <dmndi:DMNShape id="sh_ks_qual" dmnElementRef="ks_qual"><dc:Bounds x="900" y="100" width="160" height="55"/></dmndi:DMNShape>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</definitions>

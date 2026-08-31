@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_P_14_4" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <process id="P_14_4" name="14.4 Cost labour and interface to payroll" isExecutable="false">
+    <documentation>Three of the four processes are drawn. 14.4.1 the pay rules are SPEC - they are held and maintained continuously, and the valuing of a particular set of hours is an instance of 14.4.2 rather than of them.
+
+APPROVED HOURS FORK HERE, AND THAT FORK IS THE WHOLE GROUP. The same hours become cost on a work order and become pay to a person, and after the fork nothing keeps them equal except 14.4.4. That is why the reconciliation is a process rather than a report: three populations have to agree, and the one that drifts is almost always the work cost, because nobody is paid by it.
+
+14.4.1 OWNS PAY RULES, PREMIUMS AND OVERTIME. 3.2 consumes the labour-agreement constraints and is explicitly forbidden from inventing them, so the flow publishes constraints outward and takes none back. A second rule set in scheduling will eventually pay differently from this one.
+
+HOURS ARE VALUED AT THE RULE IN FORCE WHEN THEY WERE WORKED. Agreement terms change on effective dates, and applying today's rate to last period's hours is the most expensive error available in this group. Every valued entry therefore records the rule that valued it, or a renegotiation leaves back-pay with no basis to recompute from.
+
+THE TRANSFER HAPPENS ONCE PER PERIOD and the acknowledgement is what proves it. A re-sent period pays twice. Time that misses the cut-off is HELD with its original dates, not dropped - losing those dates is what breaks the reconciliation that follows. 15.5 owns the interface mechanics; this group owns what is transferred and whether it arrived.</documentation>
+    <laneSet id="P_14_4_lanes">
+      <lane id="l_144_fin" name="Labour cost">
+        <flowNodeRef>n_144_start</flowNodeRef>
+        <flowNodeRef>n_144_val</flowNodeRef>
+        <flowNodeRef>n_144_pub</flowNodeRef>
+        <flowNodeRef>n_144_fork</flowNodeRef>
+        <flowNodeRef>n_144_post</flowNodeRef>
+        <flowNodeRef>n_144_pex</flowNodeRef>
+        <flowNodeRef>n_144_pexc</flowNodeRef>
+        <flowNodeRef>n_144_join</flowNodeRef>
+      </lane>
+      <lane id="l_144_pay" name="Payroll and reconciliation">
+        <flowNodeRef>n_144_cut</flowNodeRef>
+        <flowNodeRef>n_144_xfer</flowNodeRef>
+        <flowNodeRef>n_144_ack</flowNodeRef>
+        <flowNodeRef>n_144_held</flowNodeRef>
+        <flowNodeRef>n_144_rec</flowNodeRef>
+        <flowNodeRef>n_144_diff</flowNodeRef>
+        <flowNodeRef>n_144_corr</flowNodeRef>
+        <flowNodeRef>n_144_res</flowNodeRef>
+        <flowNodeRef>n_144_end</flowNodeRef>
+      </lane>
+    </laneSet>
+    <startEvent id="n_144_start" name="Approved hours are released"><messageEventDefinition id="n_144_start_md"/></startEvent>
+    <businessRuleTask id="n_144_val" name="Value the hours at the rule in force when worked"><documentation>14.4.1, SPEC. Effective-dated terms. The rule that valued the entry is recorded with it.</documentation></businessRuleTask>
+    <sendTask id="n_144_pub" name="Publish the labour-agreement constraints to scheduling"><documentation>14.4.1. PUBLISH only. 3.2 consumes these and must not invent them.</documentation></sendTask>
+    <parallelGateway id="n_144_fork" name="Cost and pay diverge"/>
+    <serviceTask id="n_144_post" name="Post labour cost to the work order and project"><documentation>14.4.2. Hours crossing work orders split HERE, not at capture.</documentation></serviceTask>
+    <exclusiveGateway id="n_144_pex" name="Posting succeeded"/>
+    <serviceTask id="n_144_pexc" name="Raise a posting exception"><documentation>14.4.2. A posting that fails is an exception, not a silent loss. Hours that will not post still have to land somewhere.</documentation></serviceTask>
+    <receiveTask id="n_144_cut" name="Hold until the payroll cut-off"><documentation>14.4.3.</documentation></receiveTask>
+    <sendTask id="n_144_xfer" name="Transfer the period to payroll"><documentation>14.4.3. Once. A re-sent period pays twice. 15.5 owns the interface mechanics.</documentation></sendTask>
+    <receiveTask id="n_144_ack" name="Capture the acknowledgement"><documentation>14.4.3. What proves it was sent and received rather than sent twice or not at all.</documentation></receiveTask>
+    <serviceTask id="n_144_held" name="Hold what the cut-off excluded, with its dates"><documentation>14.4.3. Original dates intact, or 14.4.4 cannot reconcile it.</documentation></serviceTask>
+    <parallelGateway id="n_144_join" name="Cost and pay reconciled"/>
+    <userTask id="n_144_rec" name="Compare approved, posted and paid hours"><documentation>14.4.4. Three populations. Reconciling two leaves the third free to drift.</documentation></userTask>
+    <exclusiveGateway id="n_144_diff" name="Differences found"/>
+    <sendTask id="n_144_corr" name="Route the correction to the side at fault"><documentation>14.4.4. Time already paid is adjusted in the following period; 14.3.3 must never look as though it can undo a payment.</documentation></sendTask>
+    <serviceTask id="n_144_res" name="Record the residual and why it stands"><documentation>14.4.4. Recorded, not written off. A residual repeating each period is a systematic defect and is only visible if it is kept.</documentation></serviceTask>
+    <endEvent id="n_144_end" name="Period costed, paid and reconciled"/>
+    <sequenceFlow id="f_n_144_start_n_144_val" sourceRef="n_144_start" targetRef="n_144_val" name=""/>
+    <sequenceFlow id="f_n_144_val_n_144_pub" sourceRef="n_144_val" targetRef="n_144_pub" name=""/>
+    <sequenceFlow id="f_n_144_val_n_144_fork" sourceRef="n_144_val" targetRef="n_144_fork" name=""/>
+    <sequenceFlow id="f_n_144_fork_n_144_post" sourceRef="n_144_fork" targetRef="n_144_post" name=""/>
+    <sequenceFlow id="f_n_144_fork_n_144_cut" sourceRef="n_144_fork" targetRef="n_144_cut" name=""/>
+    <sequenceFlow id="f_n_144_post_n_144_pex" sourceRef="n_144_post" targetRef="n_144_pex" name=""/>
+    <sequenceFlow id="f_n_144_pex_n_144_pexc" sourceRef="n_144_pex" targetRef="n_144_pexc" name="failed"><conditionExpression xsi:type="tFormalExpression"><![CDATA[posted = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_144_pexc_n_144_join" sourceRef="n_144_pexc" targetRef="n_144_join" name=""/>
+    <sequenceFlow id="f_n_144_pex_n_144_join" sourceRef="n_144_pex" targetRef="n_144_join" name="posted"/>
+    <sequenceFlow id="f_n_144_cut_n_144_xfer" sourceRef="n_144_cut" targetRef="n_144_xfer" name=""/>
+    <sequenceFlow id="f_n_144_xfer_n_144_ack" sourceRef="n_144_xfer" targetRef="n_144_ack" name=""/>
+    <sequenceFlow id="f_n_144_ack_n_144_held" sourceRef="n_144_ack" targetRef="n_144_held" name=""/>
+    <sequenceFlow id="f_n_144_held_n_144_join" sourceRef="n_144_held" targetRef="n_144_join" name=""/>
+    <sequenceFlow id="f_n_144_join_n_144_rec" sourceRef="n_144_join" targetRef="n_144_rec" name=""/>
+    <sequenceFlow id="f_n_144_rec_n_144_diff" sourceRef="n_144_rec" targetRef="n_144_diff" name=""/>
+    <sequenceFlow id="f_n_144_diff_n_144_corr" sourceRef="n_144_diff" targetRef="n_144_corr" name="differences"><conditionExpression xsi:type="tFormalExpression"><![CDATA[reconciled = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_144_corr_n_144_res" sourceRef="n_144_corr" targetRef="n_144_res" name=""/>
+    <sequenceFlow id="f_n_144_diff_n_144_res" sourceRef="n_144_diff" targetRef="n_144_res" name="agree"/>
+    <sequenceFlow id="f_n_144_res_n_144_end" sourceRef="n_144_res" targetRef="n_144_end" name=""/>
+  </process>
+  <bpmndi:BPMNDiagram id="dg_P_14_4">
+    <bpmndi:BPMNPlane id="pl_P_14_4" bpmnElement="P_14_4">
+      <bpmndi:BPMNShape id="sh_n_144_start" bpmnElement="n_144_start"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_144_val" bpmnElement="n_144_val"><dc:Bounds x="255" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_144_pub" bpmnElement="n_144_pub"><dc:Bounds x="255" y="405" width="130" height="100"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_144_fork" bpmnElement="n_144_fork"><dc:Bounds x="467" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_144_post" bpmnElement="n_144_post"><dc:Bounds x="595" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_144_pex" bpmnElement="n_144_pex"><dc:Bounds x="807" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_144_pexc" bpmnElement="n_144_pexc"><dc:Bounds x="765" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_144_cut" bpmnElement="n_144_cut"><dc:Bounds x="595" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_144_xfer" bpmnElement="n_144_xfer"><dc:Bounds x="765" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_144_ack" bpmnElement="n_144_ack"><dc:Bounds x="935" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_144_held" bpmnElement="n_144_held"><dc:Bounds x="1105" y="631.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_144_join" bpmnElement="n_144_join"><dc:Bounds x="1317" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_144_rec" bpmnElement="n_144_rec"><dc:Bounds x="1445" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_144_diff" bpmnElement="n_144_diff"><dc:Bounds x="1657" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_144_corr" bpmnElement="n_144_corr"><dc:Bounds x="1615" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_144_res" bpmnElement="n_144_res"><dc:Bounds x="1785" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_144_end" bpmnElement="n_144_end"><dc:Bounds x="2002" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ed_f_n_144_start_n_144_val" bpmnElement="f_n_144_start_n_144_val"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_144_val_n_144_pub" bpmnElement="f_n_144_val_n_144_pub"><di:waypoint x="385" y="235"/><di:waypoint x="230" y="235"/><di:waypoint x="230" y="455"/><di:waypoint x="255" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_144_val_n_144_fork" bpmnElement="f_n_144_val_n_144_fork"><di:waypoint x="385" y="235"/><di:waypoint x="467" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_144_fork_n_144_post" bpmnElement="f_n_144_fork_n_144_post"><di:waypoint x="513" y="235"/><di:waypoint x="595" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_144_fork_n_144_cut" bpmnElement="f_n_144_fork_n_144_cut"><di:waypoint x="513" y="235"/><di:waypoint x="570" y="235"/><di:waypoint x="570" y="675"/><di:waypoint x="595" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_144_post_n_144_pex" bpmnElement="f_n_144_post_n_144_pex"><di:waypoint x="725" y="235"/><di:waypoint x="807" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_144_pex_n_144_pexc" bpmnElement="f_n_144_pex_n_144_pexc"><di:waypoint x="853" y="235"/><di:waypoint x="740" y="235"/><di:waypoint x="740" y="455"/><di:waypoint x="765" y="455"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="695" y="446.5" width="40" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_144_pexc_n_144_join" bpmnElement="f_n_144_pexc_n_144_join"><di:waypoint x="895" y="455"/><di:waypoint x="1292" y="455"/><di:waypoint x="1292" y="235"/><di:waypoint x="1317" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_144_pex_n_144_join" bpmnElement="f_n_144_pex_n_144_join"><di:waypoint x="853" y="235"/><di:waypoint x="1317" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1065" y="213" width="40" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_144_cut_n_144_xfer" bpmnElement="f_n_144_cut_n_144_xfer"><di:waypoint x="725" y="675"/><di:waypoint x="765" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_144_xfer_n_144_ack" bpmnElement="f_n_144_xfer_n_144_ack"><di:waypoint x="895" y="675"/><di:waypoint x="935" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_144_ack_n_144_held" bpmnElement="f_n_144_ack_n_144_held"><di:waypoint x="1065" y="675"/><di:waypoint x="1105" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_144_held_n_144_join" bpmnElement="f_n_144_held_n_144_join"><di:waypoint x="1235" y="675"/><di:waypoint x="1292" y="675"/><di:waypoint x="1292" y="235"/><di:waypoint x="1317" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_144_join_n_144_rec" bpmnElement="f_n_144_join_n_144_rec"><di:waypoint x="1363" y="235"/><di:waypoint x="1445" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_144_rec_n_144_diff" bpmnElement="f_n_144_rec_n_144_diff"><di:waypoint x="1575" y="235"/><di:waypoint x="1657" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_144_diff_n_144_corr" bpmnElement="f_n_144_diff_n_144_corr"><di:waypoint x="1703" y="235"/><di:waypoint x="1590" y="235"/><di:waypoint x="1590" y="455"/><di:waypoint x="1615" y="455"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1519.4" y="446.5" width="65.6" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_144_corr_n_144_res" bpmnElement="f_n_144_corr_n_144_res"><di:waypoint x="1745" y="455"/><di:waypoint x="1760" y="455"/><di:waypoint x="1760" y="235"/><di:waypoint x="1785" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_144_diff_n_144_res" bpmnElement="f_n_144_diff_n_144_res"><di:waypoint x="1703" y="235"/><di:waypoint x="1785" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1724" y="213" width="40" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_144_res_n_144_end" bpmnElement="f_n_144_res_n_144_end"><di:waypoint x="1915" y="235"/><di:waypoint x="2002" y="235"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

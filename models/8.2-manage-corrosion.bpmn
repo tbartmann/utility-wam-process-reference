@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_P_8_2" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <process id="P_8_2" name="8.2 Manage corrosion" isExecutable="false">
+    <documentation>Four of the six processes are drawn. 8.2.3 close interval survey and 8.2.5 internal corrosion are SPEC and are shown as the two places the flow leaves the cycle.
+
+THE CLOSING EVENT IS A READING, NOT A SIGNATURE. 8.2.6 tracks the DEFICIENCY, and the flow returns to the reading to close it. Closing on the work order is how a deficiency disappears from the record while remaining in the ground, and it corrupts the 192.1007(e) programme measure at the same time.
+
+49 CFR 192.465 carries the shortest recurring interval in the reference: (b) rectifiers six times each calendar year at intervals not exceeding 2.5 months. (a) sets 15 months for test station potentials, and (d) requires PROMPT remedial action without giving a figure - the figure is the operator's 192.605 manual, and that is what the tracking is measured against.
+
+Gas only. There is no electric distribution corrosion regime because there is no federal electric distribution regime at all.</documentation>
+    <laneSet id="P_8_2_lanes">
+      <lane id="l_82_corr" name="Corrosion control">
+        <flowNodeRef>n_82_start</flowNodeRef>
+        <flowNodeRef>n_82_which</flowNodeRef>
+        <flowNodeRef>n_82_rect</flowNodeRef>
+        <flowNodeRef>n_82_ts</flowNodeRef>
+        <flowNodeRef>n_82_atm</flowNodeRef>
+        <flowNodeRef>n_82_rec</flowNodeRef>
+        <flowNodeRef>n_82_ok</flowNodeRef>
+        <flowNodeRef>n_82_esc</flowNodeRef>
+        <flowNodeRef>n_82_cis</flowNodeRef>
+        <flowNodeRef>n_82_def</flowNodeRef>
+        <flowNodeRef>n_82_int</flowNodeRef>
+        <flowNodeRef>n_82_end</flowNodeRef>
+      </lane>
+      <lane id="l_82_field" name="Field execution">
+        <flowNodeRef>n_82_work</flowNodeRef>
+        <flowNodeRef>n_82_reread</flowNodeRef>
+        <flowNodeRef>n_82_cl</flowNodeRef>
+      </lane>
+    </laneSet>
+    <startEvent id="n_82_start" name="A corrosion monitoring reading falls due"><timerEventDefinition id="n_82_start_td"/></startEvent>
+    <exclusiveGateway id="n_82_which" name="Which monitoring obligation"/>
+    <userTask id="n_82_rect" name="Read rectifier output"><documentation>8.2.1. 192.465(b): six times each calendar year at intervals not exceeding 2.5 months. The easiest interval in Subpart I to breach.</documentation></userTask>
+    <userTask id="n_82_ts" name="Read pipe-to-soil potential at the test station"><documentation>8.2.2. 192.465(a): at least once each calendar year at intervals not exceeding 15 months, against the criterion the operator adopted under 192.463.</documentation></userTask>
+    <userTask id="n_82_atm" name="Inspect exposed pipe for atmospheric corrosion"><documentation>8.2.4. 192.481, and (d) shortens the next interval where corrosion was found.</documentation></userTask>
+    <serviceTask id="n_82_rec" name="Record the reading with its method and criterion"><documentation>A reading without the criterion it was judged against cannot be re-evaluated.</documentation></serviceTask>
+    <exclusiveGateway id="n_82_ok" name="Within the criterion"/>
+    <exclusiveGateway id="n_82_esc" name="Locating the deficiency needs more than a reading"/>
+    <sendTask id="n_82_cis" name="Select a close interval survey"><documentation>8.2.3, SPEC. Part 192 neither requires nor defines it; AMPP SP0169 is the method and the trigger is the operator's.</documentation></sendTask>
+    <serviceTask id="n_82_def" name="Open the deficiency and start its clock"><documentation>8.2.6. The DEFICIENCY is the tracked object, not the work order.</documentation></serviceTask>
+    <sendTask id="n_82_work" name="Raise remedial work"><documentation>8.2.6. 192.465(d) requires prompt remedial action; 192.605 sets what prompt means.</documentation></sendTask>
+    <userTask id="n_82_reread" name="Take the confirming reading"><documentation>8.2.6.</documentation></userTask>
+    <exclusiveGateway id="n_82_cl" name="Deficiency corrected"/>
+    <serviceTask id="n_82_int" name="Feed the finding to threat identification"><documentation>8.2.5 and 8.8.2. Internal corrosion found on removed pipe is a named threat input, not incidental history.</documentation></serviceTask>
+    <endEvent id="n_82_end" name="Reading recorded, deficiency closed"/>
+    <sequenceFlow id="f_n_82_start_n_82_which" sourceRef="n_82_start" targetRef="n_82_which" name=""/>
+    <sequenceFlow id="f_n_82_which_n_82_rect" sourceRef="n_82_which" targetRef="n_82_rect" name="rectifier or power source"/>
+    <sequenceFlow id="f_n_82_which_n_82_ts" sourceRef="n_82_which" targetRef="n_82_ts" name="test station"/>
+    <sequenceFlow id="f_n_82_which_n_82_atm" sourceRef="n_82_which" targetRef="n_82_atm" name="exposed pipe"/>
+    <sequenceFlow id="f_n_82_rect_n_82_rec" sourceRef="n_82_rect" targetRef="n_82_rec" name=""/>
+    <sequenceFlow id="f_n_82_ts_n_82_rec" sourceRef="n_82_ts" targetRef="n_82_rec" name=""/>
+    <sequenceFlow id="f_n_82_atm_n_82_rec" sourceRef="n_82_atm" targetRef="n_82_rec" name=""/>
+    <sequenceFlow id="f_n_82_rec_n_82_ok" sourceRef="n_82_rec" targetRef="n_82_ok" name=""/>
+    <sequenceFlow id="f_n_82_ok_n_82_int" sourceRef="n_82_ok" targetRef="n_82_int" name="within criterion"/>
+    <sequenceFlow id="f_n_82_ok_n_82_esc" sourceRef="n_82_ok" targetRef="n_82_esc" name="deficiency"><conditionExpression xsi:type="tFormalExpression"><![CDATA[withinCriterion = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_82_esc_n_82_cis" sourceRef="n_82_esc" targetRef="n_82_cis" name="cannot be located from readings"/>
+    <sequenceFlow id="f_n_82_cis_n_82_def" sourceRef="n_82_cis" targetRef="n_82_def" name=""/>
+    <sequenceFlow id="f_n_82_esc_n_82_def" sourceRef="n_82_esc" targetRef="n_82_def" name="located"/>
+    <sequenceFlow id="f_n_82_def_n_82_work" sourceRef="n_82_def" targetRef="n_82_work" name=""/>
+    <sequenceFlow id="f_n_82_work_n_82_reread" sourceRef="n_82_work" targetRef="n_82_reread" name=""/>
+    <sequenceFlow id="f_n_82_reread_n_82_cl" sourceRef="n_82_reread" targetRef="n_82_cl" name=""/>
+    <sequenceFlow id="f_n_82_cl_n_82_work" sourceRef="n_82_cl" targetRef="n_82_work" name="not yet corrected"><conditionExpression xsi:type="tFormalExpression"><![CDATA[corrected = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_82_cl_n_82_int" sourceRef="n_82_cl" targetRef="n_82_int" name="corrected"/>
+    <sequenceFlow id="f_n_82_int_n_82_end" sourceRef="n_82_int" targetRef="n_82_end" name=""/>
+  </process>
+  <bpmndi:BPMNDiagram id="dg_P_8_2">
+    <bpmndi:BPMNPlane id="pl_P_8_2" bpmnElement="P_8_2">
+      <bpmndi:BPMNShape id="sh_n_82_start" bpmnElement="n_82_start"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_82_which" bpmnElement="n_82_which"><dc:Bounds x="297" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_82_rect" bpmnElement="n_82_rect"><dc:Bounds x="255" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_82_ts" bpmnElement="n_82_ts"><dc:Bounds x="425" y="411.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_82_atm" bpmnElement="n_82_atm"><dc:Bounds x="595" y="411.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_82_rec" bpmnElement="n_82_rec"><dc:Bounds x="765" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_82_ok" bpmnElement="n_82_ok"><dc:Bounds x="977" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_82_esc" bpmnElement="n_82_esc"><dc:Bounds x="977" y="432" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_82_cis" bpmnElement="n_82_cis"><dc:Bounds x="1105" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_82_def" bpmnElement="n_82_def"><dc:Bounds x="1105" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_82_work" bpmnElement="n_82_work"><dc:Bounds x="1275" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_82_reread" bpmnElement="n_82_reread"><dc:Bounds x="1445" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_82_cl" bpmnElement="n_82_cl"><dc:Bounds x="1657" y="432" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_82_int" bpmnElement="n_82_int"><dc:Bounds x="1105" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_82_end" bpmnElement="n_82_end"><dc:Bounds x="1832" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ed_f_n_82_start_n_82_which" bpmnElement="f_n_82_start_n_82_which"><di:waypoint x="168" y="235"/><di:waypoint x="297" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_82_which_n_82_rect" bpmnElement="f_n_82_which_n_82_rect"><di:waypoint x="343" y="235"/><di:waypoint x="230" y="235"/><di:waypoint x="230" y="455"/><di:waypoint x="255" y="455"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="153.8" y="440" width="71.2" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_82_which_n_82_ts" bpmnElement="f_n_82_which_n_82_ts"><di:waypoint x="343" y="235"/><di:waypoint x="400" y="235"/><di:waypoint x="400" y="455"/><di:waypoint x="425" y="455"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="405" y="336.5" width="71.2" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_82_which_n_82_atm" bpmnElement="f_n_82_which_n_82_atm"><di:waypoint x="343" y="235"/><di:waypoint x="570" y="235"/><di:waypoint x="570" y="455"/><di:waypoint x="595" y="455"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="420.9" y="213" width="71.2" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_82_rect_n_82_rec" bpmnElement="f_n_82_rect_n_82_rec"><di:waypoint x="385" y="455"/><di:waypoint x="740" y="455"/><di:waypoint x="740" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_82_ts_n_82_rec" bpmnElement="f_n_82_ts_n_82_rec"><di:waypoint x="555" y="455"/><di:waypoint x="740" y="455"/><di:waypoint x="740" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_82_atm_n_82_rec" bpmnElement="f_n_82_atm_n_82_rec"><di:waypoint x="725" y="455"/><di:waypoint x="740" y="455"/><di:waypoint x="740" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_82_rec_n_82_ok" bpmnElement="f_n_82_rec_n_82_ok"><di:waypoint x="895" y="235"/><di:waypoint x="977" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_82_ok_n_82_int" bpmnElement="f_n_82_ok_n_82_int"><di:waypoint x="1023" y="235"/><di:waypoint x="1105" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1004.1" y="186" width="93.6" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_82_ok_n_82_esc" bpmnElement="f_n_82_ok_n_82_esc"><di:waypoint x="1023" y="235"/><di:waypoint x="952" y="235"/><di:waypoint x="952" y="455"/><di:waypoint x="977" y="455"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="887" y="446.5" width="60" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_82_esc_n_82_cis" bpmnElement="f_n_82_esc_n_82_cis"><di:waypoint x="1023" y="455"/><di:waypoint x="1080" y="455"/><di:waypoint x="1080" y="675"/><di:waypoint x="1105" y="675"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="975.8" y="660" width="99.2" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_82_cis_n_82_def" bpmnElement="f_n_82_cis_n_82_def"><di:waypoint x="1235" y="675"/><di:waypoint x="1080" y="675"/><di:waypoint x="1080" y="455"/><di:waypoint x="1105" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_82_esc_n_82_def" bpmnElement="f_n_82_esc_n_82_def"><di:waypoint x="1023" y="455"/><di:waypoint x="1105" y="455"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1042.4" y="433" width="43.2" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_82_def_n_82_work" bpmnElement="f_n_82_def_n_82_work"><di:waypoint x="1235" y="455"/><di:waypoint x="1275" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_82_work_n_82_reread" bpmnElement="f_n_82_work_n_82_reread"><di:waypoint x="1405" y="455"/><di:waypoint x="1445" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_82_reread_n_82_cl" bpmnElement="f_n_82_reread_n_82_cl"><di:waypoint x="1575" y="455"/><di:waypoint x="1657" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_82_cl_n_82_work" bpmnElement="f_n_82_cl_n_82_work"><di:waypoint x="1703" y="455"/><di:waypoint x="1275" y="455"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1439.4" y="397" width="99.2" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_82_cl_n_82_int" bpmnElement="f_n_82_cl_n_82_int"><di:waypoint x="1703" y="455"/><di:waypoint x="1080" y="455"/><di:waypoint x="1080" y="235"/><di:waypoint x="1105" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1085" y="336.5" width="54.4" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_82_int_n_82_end" bpmnElement="f_n_82_int_n_82_end"><di:waypoint x="1235" y="235"/><di:waypoint x="1832" y="235"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

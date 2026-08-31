@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/CMMN/20151109/MODEL" xmlns:cmmndi="http://www.omg.org/spec/CMMN/20151109/CMMNDI" xmlns:dc="http://www.omg.org/spec/CMMN/20151109/DC" xmlns:di="http://www.omg.org/spec/CMMN/20151109/DI" id="defs_Damage_investigation" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <case id="Damage_investigation" name="8.4.4 Investigate and manage damage claims">
+    <caseFileModel id="Damage_investigation_cfm">
+      <caseFileItem id="cf_site" name="Site evidence: marks, depth, position of the strike"/>
+      <caseFileItem id="cf_ticket" name="The ticket, the response returned and the retained evidence set"/>
+      <caseFileItem id="cf_account" name="The excavator's account of what was seen and done"/>
+      <caseFileItem id="cf_cost" name="Repair cost and the consequence of any outage"/>
+    </caseFileModel>
+    <casePlanModel id="Damage_investigation_plan" name="8.4.4 Investigate and manage damage claims" autoComplete="true">
+      <documentation>Two competent investigators will not take these in the same order, which is the CMMN test. The site, the excavator's account, the ticket record and the repair crew's evidence are all live from the moment the damage is reported, and which is taken first depends on what is perishable rather than on a defined sequence.
+
+ONE THING DOES NOT MOVE. Securing the site evidence is a required item, and it is required because it is the only item with an expiry. Once the excavation is backfilled the marks, the depth and the position of the strike are gone, and no amount of later record work reconstructs them. An investigation opened after backfill is usually already lost.
+
+THE CLAIM AND THE CAUSE ARE SEPARATE OUTCOMES, and the case carries both milestones rather than one. A claim settled commercially does not settle the cause, and recording the commercial outcome as the cause corrupts 8.4.5's statistics - which are then normalised, reported and used to judge the programme.
+
+49 CFR 192.614 requires the investigation. It does not set the cause categories; those are CGA's and are consensus. Camunda 8 dropped CMMN, so a runtime for this file means Flowable or an equivalent.</documentation>
+      <planItem id="pi_t_secure" name="Secure the site evidence before backfill" definitionRef="t_secure_def">
+        <itemControl id="ic_t_secure">
+          <requiredRule id="rr_t_secure"><condition><![CDATA[true]]></condition></requiredRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_ticket" name="Reconstruct the ticket, the marks and the response" definitionRef="t_ticket_def">
+        <itemControl id="ic_t_ticket">
+          <requiredRule id="rr_t_ticket"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_ticket"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_interview" name="Take the excavator's account" definitionRef="t_interview_def">
+        <itemControl id="ic_t_interview">
+          <requiredRule id="rr_t_interview"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_interview"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_cause" name="Determine the root cause against the CGA categories" definitionRef="t_cause_def">
+        <itemControl id="ic_t_cause">
+          <requiredRule id="rr_t_cause"><condition><![CDATA[true]]></condition></requiredRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_claim" name="Raise, pursue or defend the claim" definitionRef="t_claim_def">
+        <itemControl id="ic_t_claim">
+          <requiredRule id="rr_t_claim"><condition><![CDATA[false]]></condition></requiredRule>
+          <manualActivationRule id="mar_t_claim"><condition><![CDATA[true]]></condition></manualActivationRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_t_report" name="Return the cause for the period statistics" definitionRef="t_report_def">
+        <itemControl id="ic_t_report">
+          <requiredRule id="rr_t_report"><condition><![CDATA[false]]></condition></requiredRule>
+        </itemControl>
+      </planItem>
+      <planItem id="pi_m_cause" name="Root cause determined and attributable" definitionRef="m_cause_def"/>
+      <planItem id="pi_m_claim" name="Claim settled or defended" definitionRef="m_claim_def"/>
+      <humanTask id="t_secure_def" name="Secure the site evidence before backfill" isBlocking="true"><documentation>Required, and the only item with an expiry. Everything else in this case can be reconstructed later; this cannot.</documentation></humanTask>
+      <humanTask id="t_ticket_def" name="Reconstruct the ticket, the marks and the response" isBlocking="true"><documentation>8.4.3's retained evidence set. Whether it is complete decides most of what follows.</documentation></humanTask>
+      <humanTask id="t_interview_def" name="Take the excavator's account" isBlocking="true"><documentation>Adversarial. Taken early where memory is the evidence, later where the record will contradict it.</documentation></humanTask>
+      <humanTask id="t_cause_def" name="Determine the root cause against the CGA categories" isBlocking="true"><documentation>Required. 192.614 requires the investigation; the categories are CGA consensus, not regulation.</documentation></humanTask>
+      <humanTask id="t_claim_def" name="Raise, pursue or defend the claim" isBlocking="true"><documentation>Commercial, and it runs on its own timescale. It does not decide the cause.</documentation></humanTask>
+      <processTask id="t_report_def" name="Return the cause for the period statistics"><documentation>8.4.5. The cause, not the commercial outcome.</documentation></processTask>
+      <milestone id="m_cause_def" name="Root cause determined and attributable"><documentation>The regulatory outcome. 192.614's investigation requirement is satisfied here and nowhere else in the case.</documentation></milestone>
+      <milestone id="m_claim_def" name="Claim settled or defended"><documentation>The commercial outcome. Separate on purpose: a settlement is not a finding of cause.</documentation></milestone>
+    </casePlanModel>
+  </case>
+  <cmmndi:CMMNDI>
+    <cmmndi:CMMNDiagram id="dg_Damage_investigation">
+      <cmmndi:CMMNShape id="sh_plan" cmmnElementRef="Damage_investigation_plan"><dc:Bounds x="40" y="40" width="820" height="300"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_secure" cmmnElementRef="pi_t_secure"><dc:Bounds x="80" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_ticket" cmmnElementRef="pi_t_ticket"><dc:Bounds x="270" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_interview" cmmnElementRef="pi_t_interview"><dc:Bounds x="460" y="90" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_cause" cmmnElementRef="pi_t_cause"><dc:Bounds x="80" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_claim" cmmnElementRef="pi_t_claim"><dc:Bounds x="270" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_t_report" cmmnElementRef="pi_t_report"><dc:Bounds x="460" y="190" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_m_cause" cmmnElementRef="pi_m_cause"><dc:Bounds x="80" y="290" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+      <cmmndi:CMMNShape id="sh_pi_m_claim" cmmnElementRef="pi_m_claim"><dc:Bounds x="270" y="290" width="150" height="60"/><cmmndi:CMMNLabel/></cmmndi:CMMNShape>
+    </cmmndi:CMMNDiagram>
+  </cmmndi:CMMNDI>
+</definitions>

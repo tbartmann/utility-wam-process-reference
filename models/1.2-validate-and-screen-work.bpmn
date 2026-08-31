@@ -30,7 +30,7 @@
   <bpmndi:BPMNDiagram id="dg_Validate_and_screen_work">
     <bpmndi:BPMNPlane id="pl_Validate_and_screen_work" bpmnElement="Validate_and_screen_work">
       <bpmndi:BPMNShape id="sh_s" bpmnElement="s"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_t_enrich" bpmnElement="t_enrich"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_t_enrich" bpmnElement="t_enrich"><dc:Bounds x="255" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_g_enriched" bpmnElement="g_enriched"><dc:Bounds x="467" y="212" width="46" height="46"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_t_except" bpmnElement="t_except"><dc:Bounds x="425" y="420" width="130" height="70"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_t_confirm" bpmnElement="t_confirm"><dc:Bounds x="595" y="200" width="130" height="70"/></bpmndi:BPMNShape>
@@ -43,14 +43,38 @@
       <bpmndi:BPMNShape id="sh_e_closed" bpmnElement="e_closed"><dc:Bounds x="1322" y="437" width="36" height="36"/></bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="ed_f_s_t_enrich" bpmnElement="f_s_t_enrich"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_t_enrich_g_enriched" bpmnElement="f_t_enrich_g_enriched"><di:waypoint x="385" y="235"/><di:waypoint x="467" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_g_enriched_t_except" bpmnElement="f_g_enriched_t_except"><di:waypoint x="513" y="235"/><di:waypoint x="400" y="235"/><di:waypoint x="400" y="455"/><di:waypoint x="425" y="455"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_g_enriched_t_confirm" bpmnElement="f_g_enriched_t_confirm"><di:waypoint x="513" y="235"/><di:waypoint x="595" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_t_except_t_confirm" bpmnElement="f_t_except_t_confirm"><di:waypoint x="555" y="455"/><di:waypoint x="570" y="455"/><di:waypoint x="570" y="235"/><di:waypoint x="595" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_g_enriched_t_except" bpmnElement="f_g_enriched_t_except"><di:waypoint x="513" y="235"/><di:waypoint x="400" y="235"/><di:waypoint x="400" y="455"/><di:waypoint x="425" y="455"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="312.6" y="446.5" width="82.4" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_g_enriched_t_confirm" bpmnElement="f_g_enriched_t_confirm"><di:waypoint x="513" y="235"/><di:waypoint x="595" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="529.6" y="213" width="48.8" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_t_except_t_confirm" bpmnElement="f_t_except_t_confirm"><di:waypoint x="555" y="455"/><di:waypoint x="570" y="455"/><di:waypoint x="570" y="235"/><di:waypoint x="595" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="575" y="336.5" width="99.2" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_t_confirm_t_dup" bpmnElement="f_t_confirm_t_dup"><di:waypoint x="725" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_t_dup_g_dup" bpmnElement="f_t_dup_g_dup"><di:waypoint x="895" y="235"/><di:waypoint x="977" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_g_dup_t_merge" bpmnElement="f_g_dup_t_merge"><di:waypoint x="1023" y="235"/><di:waypoint x="1080" y="235"/><di:waypoint x="1080" y="125"/><di:waypoint x="1105" y="125"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_g_dup_t_scope" bpmnElement="f_g_dup_t_scope"><di:waypoint x="1023" y="235"/><di:waypoint x="1080" y="235"/><di:waypoint x="1080" y="455"/><di:waypoint x="1105" y="455"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_g_dup_e_screened" bpmnElement="f_g_dup_e_screened"><di:waypoint x="1023" y="235"/><di:waypoint x="1322" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_g_dup_t_merge" bpmnElement="f_g_dup_t_merge"><di:waypoint x="1023" y="235"/><di:waypoint x="1080" y="235"/><di:waypoint x="1080" y="125"/><di:waypoint x="1105" y="125"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1020.6" y="116.5" width="54.4" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_g_dup_t_scope" bpmnElement="f_g_dup_t_scope"><di:waypoint x="1023" y="235"/><di:waypoint x="1080" y="235"/><di:waypoint x="1080" y="455"/><di:waypoint x="1105" y="455"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1003.8" y="446.5" width="71.2" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_g_dup_e_screened" bpmnElement="f_g_dup_e_screened"><di:waypoint x="1023" y="235"/><di:waypoint x="1322" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1148.1" y="213" width="48.8" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_t_merge_e_merged" bpmnElement="f_t_merge_e_merged"><di:waypoint x="1235" y="125"/><di:waypoint x="1322" y="125"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_t_scope_e_closed" bpmnElement="f_t_scope_e_closed"><di:waypoint x="1235" y="455"/><di:waypoint x="1322" y="455"/></bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>

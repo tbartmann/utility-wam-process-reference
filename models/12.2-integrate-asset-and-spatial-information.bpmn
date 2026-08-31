@@ -74,36 +74,52 @@ The reconciliation loop closes into a case rather than into a correction. An orp
       <bpmndi:BPMNShape id="sh_n_122_t" bpmnElement="n_122_t"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_122_scope" bpmnElement="n_122_scope"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_122_match" bpmnElement="n_122_match"><dc:Bounds x="425" y="200" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_122_cmp" bpmnElement="n_122_cmp"><dc:Bounds x="595" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_122_cmp" bpmnElement="n_122_cmp"><dc:Bounds x="595" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_122_gw" bpmnElement="n_122_gw"><dc:Bounds x="807" y="212" width="46" height="46"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_122_fix" bpmnElement="n_122_fix"><dc:Bounds x="935" y="200" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_122_case" bpmnElement="n_122_case"><dc:Bounds x="765" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_122_case" bpmnElement="n_122_case"><dc:Bounds x="765" y="411.5" width="130" height="87"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_122_e1" bpmnElement="n_122_e1"><dc:Bounds x="1152" y="217" width="36" height="36"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_122_p" bpmnElement="n_122_p"><dc:Bounds x="132" y="657" width="36" height="36"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_122_res" bpmnElement="n_122_res"><dc:Bounds x="255" y="640" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_122_app" bpmnElement="n_122_app"><dc:Bounds x="425" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_122_app" bpmnElement="n_122_app"><dc:Bounds x="425" y="631.5" width="130" height="87"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_122_ok" bpmnElement="n_122_ok"><dc:Bounds x="637" y="652" width="46" height="46"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_122_exc" bpmnElement="n_122_exc"><dc:Bounds x="595" y="860" width="130" height="70"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_122_e2" bpmnElement="n_122_e2"><dc:Bounds x="812" y="657" width="36" height="36"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_122_c" bpmnElement="n_122_c"><dc:Bounds x="132" y="1097" width="36" height="36"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_122_cres" bpmnElement="n_122_cres"><dc:Bounds x="255" y="1080" width="130" height="70"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_122_cupd" bpmnElement="n_122_cupd"><dc:Bounds x="425" y="1080" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_122_cupd" bpmnElement="n_122_cupd"><dc:Bounds x="425" y="1071.5" width="130" height="87"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_122_cack" bpmnElement="n_122_cack"><dc:Bounds x="595" y="1080" width="130" height="70"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_122_e3" bpmnElement="n_122_e3"><dc:Bounds x="812" y="1097" width="36" height="36"/></bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="ed_f_n_122_t_n_122_scope" bpmnElement="f_n_122_t_n_122_scope"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_122_scope_n_122_match" bpmnElement="f_n_122_scope_n_122_match"><di:waypoint x="385" y="235"/><di:waypoint x="425" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_122_match_n_122_cmp" bpmnElement="f_n_122_match_n_122_cmp"><di:waypoint x="555" y="235"/><di:waypoint x="595" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_122_cmp_n_122_gw" bpmnElement="f_n_122_cmp_n_122_gw"><di:waypoint x="725" y="235"/><di:waypoint x="807" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_122_gw_n_122_case" bpmnElement="f_n_122_gw_n_122_case"><di:waypoint x="853" y="235"/><di:waypoint x="740" y="235"/><di:waypoint x="740" y="455"/><di:waypoint x="765" y="455"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_122_gw_n_122_fix" bpmnElement="f_n_122_gw_n_122_fix"><di:waypoint x="853" y="235"/><di:waypoint x="935" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_122_gw_n_122_case" bpmnElement="f_n_122_gw_n_122_case"><di:waypoint x="853" y="235"/><di:waypoint x="740" y="235"/><di:waypoint x="740" y="455"/><di:waypoint x="765" y="455"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="635.8" y="433.5" width="99.2" height="43" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_122_gw_n_122_fix" bpmnElement="f_n_122_gw_n_122_fix"><di:waypoint x="853" y="235"/><di:waypoint x="935" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="864" y="200" width="60" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_122_case_n_122_e1" bpmnElement="f_n_122_case_n_122_e1"><di:waypoint x="895" y="455"/><di:waypoint x="1127" y="455"/><di:waypoint x="1127" y="235"/><di:waypoint x="1152" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_122_fix_n_122_e1" bpmnElement="f_n_122_fix_n_122_e1"><di:waypoint x="1065" y="235"/><di:waypoint x="1152" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_122_p_n_122_res" bpmnElement="f_n_122_p_n_122_res"><di:waypoint x="168" y="675"/><di:waypoint x="255" y="675"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_122_res_n_122_app" bpmnElement="f_n_122_res_n_122_app"><di:waypoint x="385" y="675"/><di:waypoint x="425" y="675"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_122_app_n_122_ok" bpmnElement="f_n_122_app_n_122_ok"><di:waypoint x="555" y="675"/><di:waypoint x="637" y="675"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_122_ok_n_122_exc" bpmnElement="f_n_122_ok_n_122_exc"><di:waypoint x="683" y="675"/><di:waypoint x="570" y="675"/><di:waypoint x="570" y="895"/><di:waypoint x="595" y="895"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_122_ok_n_122_exc" bpmnElement="f_n_122_ok_n_122_exc"><di:waypoint x="683" y="675"/><di:waypoint x="570" y="675"/><di:waypoint x="570" y="895"/><di:waypoint x="595" y="895"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="499.4" y="886.5" width="65.6" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_122_exc_n_122_e2" bpmnElement="f_n_122_exc_n_122_e2"><di:waypoint x="725" y="895"/><di:waypoint x="787" y="895"/><di:waypoint x="787" y="675"/><di:waypoint x="812" y="675"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_122_ok_n_122_e2" bpmnElement="f_n_122_ok_n_122_e2"><di:waypoint x="683" y="675"/><di:waypoint x="812" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_122_ok_n_122_e2" bpmnElement="f_n_122_ok_n_122_e2"><di:waypoint x="683" y="675"/><di:waypoint x="812" y="675"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="725.9" y="653" width="43.2" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_122_c_n_122_cres" bpmnElement="f_n_122_c_n_122_cres"><di:waypoint x="168" y="1115"/><di:waypoint x="255" y="1115"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_122_cres_n_122_cupd" bpmnElement="f_n_122_cres_n_122_cupd"><di:waypoint x="385" y="1115"/><di:waypoint x="425" y="1115"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_122_cupd_n_122_cack" bpmnElement="f_n_122_cupd_n_122_cack"><di:waypoint x="555" y="1115"/><di:waypoint x="595" y="1115"/></bpmndi:BPMNEdge>

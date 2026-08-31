@@ -23,10 +23,25 @@
    "models_built_here": "Sixteen artifacts, 6 BPMN, 6 DMN and 4 CMMN.",
    "open_finding": "The category does not use the words meter shop, billing or premise state. Client material shows a meter is operated on at a billing-active premise, at an inactive premise, or in the shop, and that disposal is a shop act - which also settles 6.1.4 (retire the RECORD) against 6.4.5 (condemn the UNIT). Recorded here for the enrichment pass; not changed at merge, because it is programme practice and belongs in a P-graded revision written product-neutrally.",
    "open_finding_notation_why": "OPEN FINDING, ADDED AFTER THE MERGE NOTE ABOVE WAS WRITTEN. That note said no correction was needed, and on the two rejection grounds it was right. Building the behaviour models surfaced a third instance of the same defect family: notation.why - the rationale for why a process is drawn in a given notation - is one text on 16 of the 26 processes. It states the notation RULE ('the process has a repeatable start, ordered activities and a defined completion outcome') rather than which repeatable start THIS process has. Nothing in it is false; it is the BPMN test, correctly applied. But fifteen of the seventeen merged categories carry a distinct rationale on every process and none shares one on more than two. Recorded rather than fixed, and now a WARNING in validate_spec.py - the third check of this shape after control reuse and judgment-citation reuse. The pattern across all three is the same: a category-level truth put where a process-level one belongs, in a file that passed every other check because the field was populated."
+  },
+  {
+   "id": "closed_notation_why",
+   "date": "2026-08-30",
+   "by": "Claude",
+   "what": "The open notation.why finding is closed. 26 rationales rewritten, one per process, each naming the repeatable start and the completion outcome for THAT process rather than restating the notation test.",
+   "why": "The rationale had been written per notation CLASS, so every BPMN process carried the BPMN test. Nothing asserted was false; what was missing is which start and which outcome, which is the only part a reader cannot derive alone. Material came from each process's own trigger, activities and outputs - no new sources, and nothing else in the submission changed."
+  },
+  {
+   "id": "closed_meter_shop_premise_state",
+   "date": "2026-08-30",
+   "by": "Claude",
+   "what": "The open finding on meter shop, billing and premise state is closed. Four facts added across 6.1.1, 6.1.4, 6.2.1, 6.4.5, each cited 'experience': the meter is located to the PREMISE not the customer; meter work carries a billing consequence other field work does not; the shop is an operating location where receipt, test, refurbishment and condemnation happen; and disposal is a shop act. The last settles 6.1.4 (retire the RECORD) against 6.4.5 (condemn the UNIT).",
+   "why": "The facts are how metering runs rather than what any standard says, so under the standards-only rule they could not enter the reference at all. Tim ruled on 2026-08-30 that the library is built from customer experience, inputs, research and judgment, and the 'experience' status was added to carry them - generalised, product-neutral, and guarded by the validator against naming either a document or an operator. Product names, named groups, system topology and report cadences were left out as one operator's implementation."
   }
  ],
  "schema": "specs/SCHEMA.md",
  "derivation": "STANDARDS-DERIVED. IEC 61968, EN 17007, APQC structural precedent and SMRP supply the permitted authority. Unsourced operating detail is labelled judgment.",
+ "taxonomy_origin": "TAXONOMY ORIGIN, WHICH IS A DIFFERENT FACT FROM THE DERIVATION ABOVE. The derivation line describes where FIELD CONTENT comes from: every field value traces to a standard, a regulation or a recognised industry body and carries its citation. It does NOT describe where the taxonomy comes from. Which processes exist, how they are grouped and what they are called is a practitioner synthesis of delivered implementations, generalised until it is product- and client-neutral. Of the 102 process groups, 43 originate in programme material, 28 in domain research, 20 in a published source and 11 in folder and file names; the provenance layer grades every one and names what to read next. This model is DELIVERED PRACTICE SPECIFIED AGAINST STANDARDS, not a standard turned into a model - and saying so is not a weakness. A taxonomy proven in delivery and then held against the standards is a stronger claim than one derived from a standard and never built.",
  "field_set": "EN 17007:2017 cl. 5.2 maintenance process profile, corroborated by ISO 9001 cl. 4.4.1 a) to h).",
  "gaps": [
   "The Source Authority Pack contains no detailed meter accuracy, proving, certification, calibration or estimation standard. IEC 61968-9:2024 Ed. 3 establishes meter reading and control scope but its clause bodies are paywalled and are not paraphrased.",
@@ -147,6 +162,10 @@
     {
      "kind": "operational",
      "text": "Publish the changed record only after required attributes and the prior-to-current relationship pass validation."
+    },
+    {
+     "kind": "operational",
+     "text": "The meter's location is the PREMISE, not the customer. Customers change without the meter moving, and a record keyed to the customer loses its own history at every change of occupancy."
     }
    ],
    "measures": [
@@ -163,7 +182,7 @@
    ],
    "notation": {
     "class": "BPMN",
-    "why": "The process has a repeatable start, sequence and completion outcome.",
+    "why": "Starts at an install, change, inspection or removal and ends with the record published. Validation of identity and location precedes the change every time.",
     "artifact": "models/6.1-maintain-meter-assets.bpmn"
    },
    "en17007": {
@@ -206,11 +225,20 @@
      "for": "variants",
      "cite": "APQC PCF Utilities v7.2.1 14.3.1 Manage meter information, pcf_id 19308; exact lifecycle branches are judgment",
      "status": "judgment"
+    },
+    {
+     "for": "premise as the meter's location",
+     "cite": "Observed in gas distribution practice: the meter is located to a premise and the customer relationship is held separately, so occupancy changes leave the meter record intact",
+     "status": "experience"
     }
    ],
    "provenance": {
     "basis": "standard",
     "primary": "IEC 61968-4:2019 records and asset management; IEC 61968-9:2024 Ed. 3"
+   },
+   "regulatory": {
+    "class": null,
+    "why": "no regulation reaches this process"
    }
   },
   {
@@ -339,7 +367,7 @@
    ],
    "notation": {
     "class": "DMN",
-    "why": "The output is a classification, eligibility, disposition or calculated value.",
+    "why": "The output is a deployment plan value - which meters change out, in what order - determined from age, type and route. The work it becomes is 6.2.1's.",
     "artifact": "models/6.1.2-plan-meter-deployment-and-change-out-programme.dmn"
    },
    "en17007": {
@@ -387,6 +415,10 @@
    "provenance": {
     "basis": "standard",
     "primary": "IEC 61968-4:2019 records and asset management; IEC 61968-9:2024 Ed. 3"
+   },
+   "regulatory": {
+    "class": null,
+    "why": "no regulation reaches this process"
    }
   },
   {
@@ -515,7 +547,7 @@
    ],
    "notation": {
     "class": "BPMN",
-    "why": "The process has a repeatable start, sequence and completion outcome.",
+    "why": "Starts at receipt, reservation, issue or return and ends with the meter's disposition current. One stock lifecycle, entered at whichever point the event is.",
     "artifact": "models/6.1-maintain-meter-assets.bpmn"
    },
    "en17007": {
@@ -563,6 +595,10 @@
    "provenance": {
     "basis": "standard",
     "primary": "IEC 61968-4:2019 records and asset management; IEC 61968-9:2024 Ed. 3"
+   },
+   "regulatory": {
+    "class": null,
+    "why": "no regulation reaches this process"
    }
   },
   {
@@ -675,6 +711,10 @@
     {
      "kind": "operational",
      "text": "Route the removed unit to reuse, repair or disposal under its recorded test and condition status."
+    },
+    {
+     "kind": "operational",
+     "text": "This retires the RECORD. 6.4.5 decides the fate of the UNIT, and it does so from the shop after test. A meter can be retired from a premise and refurbished back into stock, so the two are not one act."
     }
    ],
    "measures": [
@@ -691,7 +731,7 @@
    ],
    "notation": {
     "class": "BPMN",
-    "why": "The process has a repeatable start, sequence and completion outcome.",
+    "why": "Starts when a removed meter is declared no longer eligible and ends with the record retired and the unit routed. The record is retired here; condemning the unit is 6.4.5.",
     "artifact": "models/6.1-maintain-meter-assets.bpmn"
    },
    "en17007": {
@@ -734,11 +774,20 @@
      "for": "variants",
      "cite": "EN 17007:2017 SPP.10 Assess replaced items, SPP.11 Repair replaced items and SPP.12 Disposal of faulty or damaged items",
      "status": "verified"
+    },
+    {
+     "for": "record and unit are separate",
+     "cite": "Observed in gas distribution practice: retiring a meter record at the premise and condemning the physical unit are separate decisions taken by different people at different places",
+     "status": "experience"
     }
    ],
    "provenance": {
     "basis": "standard",
     "primary": "IEC 61968-4:2019 records and asset management; IEC 61968-9:2024 Ed. 3"
+   },
+   "regulatory": {
+    "class": null,
+    "why": "no regulation reaches this process"
    }
   },
   {
@@ -852,6 +901,10 @@
     {
      "kind": "operational",
      "text": "Close the field record only when final and initial reads, installed identity and seal status are captured or an exception is raised."
+    },
+    {
+     "kind": "financial",
+     "text": "Meter work carries a billing consequence other field work does not. Whether the work changed what can be billed is determined at completion and notified to the revenue function, so this cannot simply close."
     }
    ],
    "measures": [
@@ -864,11 +917,13 @@
    "variants": [
     "Initial meter set",
     "Like-for-like or technology exchange",
-    "Removal without immediate replacement"
+    "Removal without immediate replacement",
+    "Meter operated at a billing-active premise",
+    "Meter operated at an inactive premise with no billing relationship"
    ],
    "notation": {
     "class": "BPMN",
-    "why": "The process has a repeatable start, sequence and completion outcome.",
+    "why": "Starts when authorised meter field work is released and ends with the asset change recorded. The final read is captured before the meter comes out, never after.",
     "artifact": "models/6.2-perform-meter-field-work.bpmn"
    },
    "en17007": {
@@ -893,8 +948,8 @@
      "status": "clause-verified"
     },
     {
-     "for": "taxonomy coverage",
-     "cite": "APQC PCF Utilities v7.2.1 category 14.3 Metering and 14.4.2 to 14.4.4 meter operations, used as structural precedent",
+     "for": "taxonomy coverage and variants",
+     "cite": "APQC PCF Utilities v7.2.1 category 14.3 Metering and 14.4.2 Install/remove/energize/re-energize meters (pcf_id 19329), used as structural precedent only",
      "status": "consensus"
     },
     {
@@ -913,14 +968,18 @@
      "status": "regulation"
     },
     {
-     "for": "variants",
-     "cite": "APQC PCF Utilities v7.2.1 14.4.2 Install/remove/energize/re-energize meters, pcf_id 19329",
-     "status": "consensus"
+     "for": "billing consequence of meter work",
+     "cite": "Observed in gas distribution practice: completion of meter work is classified by whether it changed what can be billed, and a change notifies the revenue function",
+     "status": "experience"
     }
    ],
    "provenance": {
     "basis": "standard",
     "primary": "IEC 61968-4:2019 records and asset management; IEC 61968-9:2024 Ed. 3"
+   },
+   "regulatory": {
+    "class": "C",
+    "why": "29 CFR 1910.269 governs how this is done, not whether it is done"
    }
   },
   {
@@ -1050,7 +1109,7 @@
    ],
    "notation": {
     "class": "BPMN",
-    "why": "The process has a repeatable start, sequence and completion outcome.",
+    "why": "Starts when an authorised service-state change is released and ends with the state confirmed. Field condition and safety controls are checked before the device is operated.",
     "artifact": "models/6.2-perform-meter-field-work.bpmn"
    },
    "en17007": {
@@ -1103,6 +1162,10 @@
    "provenance": {
     "basis": "standard",
     "primary": "IEC 61968-4:2019 records and asset management; IEC 61968-9:2024 Ed. 3"
+   },
+   "regulatory": {
+    "class": "C",
+    "why": "29 CFR 1910.269 governs how this is done, not whether it is done"
    }
   },
   {
@@ -1231,7 +1294,7 @@
    ],
    "notation": {
     "class": "BPMN",
-    "why": "The process has a repeatable start, sequence and completion outcome.",
+    "why": "Starts when an authorised endpoint installation is released and ends with the endpoint installed and passed on. Commissioning is 6.3.3 and deliberately not part of this.",
     "artifact": "models/6.2-perform-meter-field-work.bpmn"
    },
    "en17007": {
@@ -1284,6 +1347,10 @@
    "provenance": {
     "basis": "standard",
     "primary": "IEC 61968-4:2019 records and asset management; IEC 61968-9:2024 Ed. 3"
+   },
+   "regulatory": {
+    "class": "C",
+    "why": "29 CFR 1910.269 governs how this is done, not whether it is done"
    }
   },
   {
@@ -1412,7 +1479,7 @@
    ],
    "notation": {
     "class": "CMMN",
-    "why": "Evidence determines which investigative or corrective actions are appropriate and their order.",
+    "why": "Access, condition and customer circumstance are all live at once, and which a field worker pursues first depends on what they find rather than on a set sequence.",
     "artifact": "models/6.2.4-investigate-meter-condition-and-access-issues.cmmn"
    },
    "en17007": {
@@ -1465,6 +1532,10 @@
    "provenance": {
     "basis": "standard",
     "primary": "IEC 61968-4:2019 records and asset management; IEC 61968-9:2024 Ed. 3"
+   },
+   "regulatory": {
+    "class": "C",
+    "why": "29 CFR 1910.269 governs how this is done, not whether it is done"
    }
   },
   {
@@ -1593,7 +1664,7 @@
    ],
    "notation": {
     "class": "BPMN",
-    "why": "The process has a repeatable start, sequence and completion outcome.",
+    "why": "Starts when a device needs programming and ends with the values read back. The read-back is what completes it - loading parameters alone does not.",
     "artifact": "models/6.3-configure-and-commission-endpoints.bpmn"
    },
    "en17007": {
@@ -1641,6 +1712,10 @@
    "provenance": {
     "basis": "standard",
     "primary": "IEC 61968-4:2019 records and asset management; IEC 61968-9:2024 Ed. 3"
+   },
+   "regulatory": {
+    "class": null,
+    "why": "no regulation reaches this process"
    }
   },
   {
@@ -1769,7 +1844,7 @@
    ],
    "notation": {
     "class": "BPMN",
-    "why": "The process has a repeatable start, sequence and completion outcome.",
+    "why": "Starts when an authorised configuration or firmware change is released and ends with the version verified after the change. Eligibility is confirmed before anything is applied.",
     "artifact": "models/6.3-configure-and-commission-endpoints.bpmn"
    },
    "en17007": {
@@ -1817,6 +1892,10 @@
    "provenance": {
     "basis": "standard",
     "primary": "IEC 61968-4:2019 records and asset management; IEC 61968-9:2024 Ed. 3"
+   },
+   "regulatory": {
+    "class": null,
+    "why": "no regulation reaches this process"
    }
   },
   {
@@ -1945,7 +2024,7 @@
    ],
    "notation": {
     "class": "BPMN",
-    "why": "The process has a repeatable start, sequence and completion outcome.",
+    "why": "Starts when an installed endpoint is ready and ends when the communication state is confirmed. Registration precedes initiation; the response is what closes it.",
     "artifact": "models/6.3-configure-and-commission-endpoints.bpmn"
    },
    "en17007": {
@@ -1993,6 +2072,10 @@
    "provenance": {
     "basis": "standard",
     "primary": "IEC 61968-4:2019 records and asset management; IEC 61968-9:2024 Ed. 3"
+   },
+   "regulatory": {
+    "class": null,
+    "why": "no regulation reaches this process"
    }
   },
   {
@@ -2121,7 +2204,7 @@
    ],
    "notation": {
     "class": "DMN",
-    "why": "The output is a classification, eligibility, disposition or calculated value.",
+    "why": "The output is a pass or fail on identity, read and signal against expected values. A determination, not a state change; the remediation it triggers is elsewhere.",
     "artifact": "models/6.3.4-validate-installation-read-and-signal.dmn"
    },
    "en17007": {
@@ -2169,6 +2252,10 @@
    "provenance": {
     "basis": "standard",
     "primary": "IEC 61968-4:2019 records and asset management; IEC 61968-9:2024 Ed. 3"
+   },
+   "regulatory": {
+    "class": null,
+    "why": "no regulation reaches this process"
    }
   },
   {
@@ -2297,7 +2384,7 @@
    ],
    "notation": {
     "class": "BPMN",
-    "why": "The process has a repeatable start, sequence and completion outcome.",
+    "why": "Starts whenever programming or commissioning produces a result and ends with the audit record available. It follows every such result, so its start repeats with theirs.",
     "artifact": "models/6.3-configure-and-commission-endpoints.bpmn"
    },
    "en17007": {
@@ -2345,6 +2432,10 @@
    "provenance": {
     "basis": "standard",
     "primary": "IEC 61968-4:2019 records and asset management; IEC 61968-9:2024 Ed. 3"
+   },
+   "regulatory": {
+    "class": null,
+    "why": "no regulation reaches this process"
    }
   },
   {
@@ -2473,7 +2564,7 @@
    ],
    "notation": {
     "class": "BPMN",
-    "why": "The process has a repeatable start, sequence and completion outcome.",
+    "why": "Starts when a returned meter arrives at the facility and ends with its condition and disposition recorded. Chain of custody is captured on receipt, not reconstructed later.",
     "artifact": "models/6.4-test-and-certify-meters.bpmn"
    },
    "en17007": {
@@ -2521,6 +2612,10 @@
    "provenance": {
     "basis": "standard",
     "primary": "IEC 61968-9:2024 Ed. 3, meter reading and control scope; detailed accuracy and calibration rules are not supplied"
+   },
+   "regulatory": {
+    "class": null,
+    "why": "no regulation reaches this process"
    }
   },
   {
@@ -2650,7 +2745,7 @@
    ],
    "notation": {
     "class": "BPMN",
-    "why": "The process has a repeatable start, sequence and completion outcome.",
+    "why": "Starts when a meter is released for testing and ends with observed error recorded. Equipment calibration is confirmed before the first test point, which fixes the order.",
     "artifact": "models/6.4-test-and-certify-meters.bpmn"
    },
    "en17007": {
@@ -2698,6 +2793,10 @@
    "provenance": {
     "basis": "standard",
     "primary": "IEC 61968-9:2024 Ed. 3, meter reading and control scope; detailed accuracy and calibration rules are not supplied"
+   },
+   "regulatory": {
+    "class": null,
+    "why": "no regulation reaches this process"
    }
   },
   {
@@ -2826,7 +2925,7 @@
    ],
    "notation": {
     "class": "DMN",
-    "why": "The output is a classification, eligibility, disposition or calculated value.",
+    "why": "The output is a certification value - within tolerance or not - determined from observed error against the applicable limits. The disposition that follows is 6.4.5's.",
     "artifact": "models/6.4.3-certify-accuracy-and-record-test-result.dmn"
    },
    "en17007": {
@@ -2874,6 +2973,10 @@
    "provenance": {
     "basis": "standard",
     "primary": "IEC 61968-9:2024 Ed. 3, meter reading and control scope; detailed accuracy and calibration rules are not supplied"
+   },
+   "regulatory": {
+    "class": null,
+    "why": "no regulation reaches this process"
    }
   },
   {
@@ -3002,7 +3105,7 @@
    ],
    "notation": {
     "class": "BPMN",
-    "why": "The process has a repeatable start, sequence and completion outcome.",
+    "why": "Starts when a reporting period or request falls due and ends with the report released. Reconciling complete against invalid tests precedes compiling the result.",
     "artifact": "models/6.4-test-and-certify-meters.bpmn"
    },
    "en17007": {
@@ -3050,6 +3153,10 @@
    "provenance": {
     "basis": "standard",
     "primary": "IEC 61968-9:2024 Ed. 3, meter reading and control scope; detailed accuracy and calibration rules are not supplied"
+   },
+   "regulatory": {
+    "class": null,
+    "why": "no regulation reaches this process"
    }
   },
   {
@@ -3163,6 +3270,10 @@
     {
      "kind": "operational",
      "text": "A repaired meter returns to stock only after required retest and recorded acceptance; condemnation ends reuse eligibility."
+    },
+    {
+     "kind": "operational",
+     "text": "Condemnation happens in the shop, on test evidence, never at the premise. The premise-side act is 6.1.4 retiring the record; a unit removed there may still return to stock refurbished."
     }
    ],
    "measures": [
@@ -3175,11 +3286,12 @@
    "variants": [
     "Repair and retest",
     "Refurbish and recertify for reuse",
-    "Condemn as uneconomic or unfit for repair"
+    "Condemn as uneconomic or unfit for repair",
+    "Condemned in the shop after test, ending reuse eligibility"
    ],
    "notation": {
     "class": "CMMN",
-    "why": "Evidence determines which investigative or corrective actions are appropriate and their order.",
+    "why": "Repair, refurbish and condemn are alternatives decided on inspection and test evidence, and two competent technicians legitimately weigh cost against remaining life differently.",
     "artifact": "models/6.4.5-repair-refurbish-or-condemn-meters.cmmn"
    },
    "en17007": {
@@ -3222,11 +3334,20 @@
      "for": "variants",
      "cite": "EN 17007:2017 SPP.10 Assess replaced items, SPP.11 Repair replaced items and SPP.12 Disposal of faulty or damaged items",
      "status": "verified"
+    },
+    {
+     "for": "the shop as an operating location",
+     "cite": "Observed in gas distribution practice: the meter shop receives, tests, refurbishes and condemns units, and disposal is routed from there rather than from the field",
+     "status": "experience"
     }
    ],
    "provenance": {
     "basis": "standard",
     "primary": "IEC 61968-9:2024 Ed. 3, meter reading and control scope; detailed accuracy and calibration rules are not supplied"
+   },
+   "regulatory": {
+    "class": null,
+    "why": "no regulation reaches this process"
    }
   },
   {
@@ -3355,7 +3476,7 @@
    ],
    "notation": {
     "class": "BPMN",
-    "why": "The process has a repeatable start, sequence and completion outcome.",
+    "why": "Starts at a calibration due date or a failed check and ends with the equipment's status current. Removal from use precedes arranging calibration, not the reverse.",
     "artifact": "models/6.4-test-and-certify-meters.bpmn"
    },
    "en17007": {
@@ -3403,6 +3524,10 @@
    "provenance": {
     "basis": "standard",
     "primary": "IEC 61968-9:2024 Ed. 3, meter reading and control scope; detailed accuracy and calibration rules are not supplied"
+   },
+   "regulatory": {
+    "class": null,
+    "why": "no regulation reaches this process"
    }
   },
   {
@@ -3531,7 +3656,7 @@
    ],
    "notation": {
     "class": "BPMN",
-    "why": "The process has a repeatable start, sequence and completion outcome.",
+    "why": "Starts when a reading cycle or special read falls due and ends with the read submitted. Identity is confirmed at the service point before any value is captured.",
     "artifact": "models/6.5-obtain-and-validate-reads.bpmn"
    },
    "en17007": {
@@ -3579,6 +3704,10 @@
    "provenance": {
     "basis": "standard",
     "primary": "IEC 61968-9:2024 Ed. 3, meter reading and control"
+   },
+   "regulatory": {
+    "class": null,
+    "why": "no regulation reaches this process"
    }
   },
   {
@@ -3707,7 +3836,7 @@
    ],
    "notation": {
     "class": "DMN",
-    "why": "The output is a classification, eligibility, disposition or calculated value.",
+    "why": "The output is a validity disposition for a read, determined against tolerance and history. Estimating a replacement value is 6.5.3, deliberately separate.",
     "artifact": "models/6.5.2-validate-reads-and-resolve-exceptions.dmn"
    },
    "en17007": {
@@ -3755,6 +3884,10 @@
    "provenance": {
     "basis": "standard",
     "primary": "IEC 61968-9:2024 Ed. 3, meter reading and control"
+   },
+   "regulatory": {
+    "class": null,
+    "why": "no regulation reaches this process"
    }
   },
   {
@@ -3883,7 +4016,7 @@
    ],
    "notation": {
     "class": "DMN",
-    "why": "The output is a classification, eligibility, disposition or calculated value.",
+    "why": "The output is an estimated consumption value calculated from history and profile when a read is unavailable. It calculates; it does not decide the read was invalid.",
     "artifact": "models/6.5.3-estimate-consumption-where-read-unavailable.dmn"
    },
    "en17007": {
@@ -3931,6 +4064,10 @@
    "provenance": {
     "basis": "standard",
     "primary": "IEC 61968-9:2024 Ed. 3, meter reading and control"
+   },
+   "regulatory": {
+    "class": null,
+    "why": "no regulation reaches this process"
    }
   },
   {
@@ -4059,7 +4196,7 @@
    ],
    "notation": {
     "class": "CMMN",
-    "why": "Evidence determines which investigative or corrective actions are appropriate and their order.",
+    "why": "Meter, endpoint, communication path and premise are all candidate causes at once, and which is eliminated first depends on the anomaly rather than on a fixed order.",
     "artifact": "models/6.5.4-investigate-measurement-anomalies.cmmn"
    },
    "en17007": {
@@ -4107,6 +4244,10 @@
    "provenance": {
     "basis": "standard",
     "primary": "IEC 61968-9:2024 Ed. 3, meter reading and control"
+   },
+   "regulatory": {
+    "class": null,
+    "why": "no regulation reaches this process"
    }
   },
   {
@@ -4235,7 +4376,7 @@
    ],
    "notation": {
     "class": "DMN",
-    "why": "The output is a classification, eligibility, disposition or calculated value.",
+    "why": "The output is a suspicion classification from consumption pattern and physical indicators. Investigating it is 6.6.2 - a determination cannot conclude theft.",
     "artifact": "models/6.6.1-detect-suspected-theft-or-tamper.dmn"
    },
    "en17007": {
@@ -4288,6 +4429,10 @@
    "provenance": {
     "basis": "standard",
     "primary": "IEC 61968-9:2024 Ed. 3, meter reading and control"
+   },
+   "regulatory": {
+    "class": "C",
+    "why": "29 CFR 1910.269 governs how this is done, not whether it is done"
    }
   },
   {
@@ -4417,7 +4562,7 @@
    ],
    "notation": {
     "class": "CMMN",
-    "why": "Evidence determines which investigative or corrective actions are appropriate and their order.",
+    "why": "Metering, billing and customer evidence are all available from the start, and an investigator legitimately follows whichever thread the anomaly points at first.",
     "artifact": "models/6.6.2-investigate-revenue-anomaly-in-the-field.cmmn"
    },
    "en17007": {
@@ -4470,6 +4615,10 @@
    "provenance": {
     "basis": "standard",
     "primary": "IEC 61968-9:2024 Ed. 3, meter reading and control"
+   },
+   "regulatory": {
+    "class": "C",
+    "why": "29 CFR 1910.269 governs how this is done, not whether it is done"
    }
   },
   {
@@ -4599,7 +4748,7 @@
    ],
    "notation": {
     "class": "BPMN",
-    "why": "The process has a repeatable start, sequence and completion outcome.",
+    "why": "Starts when an investigation confirms a remediable condition and ends with the correction made and an adjustment referred. This process corrects; it does not bill.",
     "artifact": "models/6.6-protect-revenue.bpmn"
    },
    "en17007": {
@@ -4652,6 +4801,10 @@
    "provenance": {
     "basis": "standard",
     "primary": "IEC 61968-9:2024 Ed. 3, meter reading and control"
+   },
+   "regulatory": {
+    "class": "C",
+    "why": "29 CFR 1910.269 governs how this is done, not whether it is done"
    }
   }
  ]

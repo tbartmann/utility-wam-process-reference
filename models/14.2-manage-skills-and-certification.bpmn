@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_P_14_2" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
+  <process id="P_14_2" name="14.2 Manage skills and certification" isExecutable="false">
+    <documentation>Four of the six processes are drawn. 14.2.4 assignment restriction and 14.2.6 span of control are DMN files this flow calls.
+
+THREE RECORDS THAT LOOK ALIKE AND ARE NOT. A competency profile (14.2.1) says what a person can do. A certification (14.2.2) is a credential with an expiry somebody else set. A qualification (14.2.5) is an evaluated individual against an identified covered task under 49 CFR 192 Subpart N. Merging any two makes an unexpired certificate look like current competence, or a training attendance look like an evaluation, and 192.809 is explicit that the INDIVIDUAL is evaluated.
+
+TRAINING IS NOT QUALIFICATION and the flow keeps them on separate paths that meet only at the record. A course delivered is evidence for the profile; only an evaluation qualifies anyone for a covered task.
+
+THE ASYMMETRY. 14.2.5 and 14.2.6 are gas only, because Subpart N applies to gas pipeline operators and no federal qualification programme requirement exists for electric distribution workers - 16 U.S.C. 824o excludes local distribution. The electric branch reaches 1910.269(a)(2)'s qualified employee and 1926 Subpart P's competent person, and neither is a programme.
+
+AND THIS GROUP QUALIFIES OPERATOR PEOPLE ONLY. Contractor qualification is 16.1.4's and must match 192.805 independently; a contractor's own assertion that someone is qualified is not an evaluation the operator holds.</documentation>
+    <laneSet id="P_14_2_lanes">
+      <lane id="l_142_train" name="Competence and training">
+        <flowNodeRef>n_142_start</flowNodeRef>
+        <flowNodeRef>n_142_kind</flowNodeRef>
+        <flowNodeRef>n_142_gap</flowNodeRef>
+        <flowNodeRef>n_142_tr</flowNodeRef>
+        <flowNodeRef>n_142_prof</flowNodeRef>
+        <flowNodeRef>n_142_cred</flowNodeRef>
+        <flowNodeRef>n_142_warn</flowNodeRef>
+        <flowNodeRef>n_142_lapse</flowNodeRef>
+        <flowNodeRef>n_142_mark</flowNodeRef>
+      </lane>
+      <lane id="l_142_qual" name="Qualification">
+        <flowNodeRef>n_142_cov</flowNodeRef>
+        <flowNodeRef>n_142_task</flowNodeRef>
+        <flowNodeRef>n_142_eval</flowNodeRef>
+        <flowNodeRef>n_142_ele</flowNodeRef>
+        <flowNodeRef>n_142_pub</flowNodeRef>
+        <flowNodeRef>n_142_end</flowNodeRef>
+      </lane>
+    </laneSet>
+    <startEvent id="n_142_start" name="Competence is gained, assessed, expires, or a task is identified"><conditionalEventDefinition id="n_142_start_cd"><condition/></conditionalEventDefinition></startEvent>
+    <exclusiveGateway id="n_142_kind" name="Which record is affected"/>
+    <userTask id="n_142_gap" name="Compare required competence against what is held"><documentation>14.2.3. The gap is what the training plan is built from.</documentation></userTask>
+    <userTask id="n_142_tr" name="Plan, deliver or procure the training"><documentation>14.2.3. Training bodies are not standards publishers - MEA EnergyU, NGA and SGA deliver courses on 49 CFR 192 and ASME B31Q; the authority is the regulation.</documentation></userTask>
+    <serviceTask id="n_142_prof" name="Record the competency profile and its evidence"><documentation>14.2.1. What the person can do. NOT a qualification.</documentation></serviceTask>
+    <serviceTask id="n_142_cred" name="Record the credential and its issuer expiry"><documentation>14.2.2. The issuer sets the expiry. An operator review date recorded as the expiry is how a licence lapses while the record says current.</documentation></serviceTask>
+    <sendTask id="n_142_warn" name="Warn ahead of expiry with time to renew"><documentation>14.2.2. A lapse found on the expiry date is a person out of service that day.</documentation></sendTask>
+    <exclusiveGateway id="n_142_lapse" name="Renewed before expiry"/>
+    <serviceTask id="n_142_mark" name="Mark the credential lapsed"><documentation>14.2.2. The lapse is a fact in its own right: 14.2.4 refuses assignment on it and 14.1.4 suspends the access that depended on it.</documentation></serviceTask>
+    <exclusiveGateway id="n_142_cov" name="Gas covered task"/>
+    <userTask id="n_142_task" name="Identify the covered task against the 192.803 test"><documentation>14.2.5. Gas only. No federal qualification programme requirement exists for electric distribution workers.</documentation></userTask>
+    <userTask id="n_142_eval" name="Evaluate the individual and record the outcome"><documentation>14.2.5. 192.809 requires the INDIVIDUAL to be evaluated. Attendance at a course is not an evaluation.</documentation></userTask>
+    <serviceTask id="n_142_ele" name="Record the electric qualification basis"><documentation>1910.269(a)(2) qualified employee, 1926 Subpart P competent person. A definition and a role, not a programme.</documentation></serviceTask>
+    <sendTask id="n_142_pub" name="Publish the position to assignment and access"><documentation>14.2.4 reads this and restricts assignment; 14.1.4 reads it and revises access.</documentation></sendTask>
+    <endEvent id="n_142_end" name="Qualification position current and published"/>
+    <sequenceFlow id="f_n_142_start_n_142_kind" sourceRef="n_142_start" targetRef="n_142_kind" name=""/>
+    <sequenceFlow id="f_n_142_kind_n_142_gap" sourceRef="n_142_kind" targetRef="n_142_gap" name="competence gap or training demand"/>
+    <sequenceFlow id="f_n_142_kind_n_142_cred" sourceRef="n_142_kind" targetRef="n_142_cred" name="credential recorded or expiring"/>
+    <sequenceFlow id="f_n_142_kind_n_142_cov" sourceRef="n_142_kind" targetRef="n_142_cov" name="covered task or evaluation"/>
+    <sequenceFlow id="f_n_142_gap_n_142_tr" sourceRef="n_142_gap" targetRef="n_142_tr" name=""/>
+    <sequenceFlow id="f_n_142_tr_n_142_prof" sourceRef="n_142_tr" targetRef="n_142_prof" name=""/>
+    <sequenceFlow id="f_n_142_prof_n_142_pub" sourceRef="n_142_prof" targetRef="n_142_pub" name=""/>
+    <sequenceFlow id="f_n_142_cred_n_142_warn" sourceRef="n_142_cred" targetRef="n_142_warn" name=""/>
+    <sequenceFlow id="f_n_142_warn_n_142_lapse" sourceRef="n_142_warn" targetRef="n_142_lapse" name=""/>
+    <sequenceFlow id="f_n_142_lapse_n_142_pub" sourceRef="n_142_lapse" targetRef="n_142_pub" name="renewed"/>
+    <sequenceFlow id="f_n_142_lapse_n_142_mark" sourceRef="n_142_lapse" targetRef="n_142_mark" name="lapsed"><conditionExpression xsi:type="tFormalExpression"><![CDATA[renewed = false]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_142_mark_n_142_pub" sourceRef="n_142_mark" targetRef="n_142_pub" name=""/>
+    <sequenceFlow id="f_n_142_cov_n_142_task" sourceRef="n_142_cov" targetRef="n_142_task" name="gas"><conditionExpression xsi:type="tFormalExpression"><![CDATA[commodity = "gas"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_142_cov_n_142_ele" sourceRef="n_142_cov" targetRef="n_142_ele" name="electric"><conditionExpression xsi:type="tFormalExpression"><![CDATA[commodity = "electric"]]></conditionExpression></sequenceFlow>
+    <sequenceFlow id="f_n_142_task_n_142_eval" sourceRef="n_142_task" targetRef="n_142_eval" name=""/>
+    <sequenceFlow id="f_n_142_eval_n_142_pub" sourceRef="n_142_eval" targetRef="n_142_pub" name=""/>
+    <sequenceFlow id="f_n_142_ele_n_142_pub" sourceRef="n_142_ele" targetRef="n_142_pub" name=""/>
+    <sequenceFlow id="f_n_142_pub_n_142_end" sourceRef="n_142_pub" targetRef="n_142_end" name=""/>
+  </process>
+  <bpmndi:BPMNDiagram id="dg_P_14_2">
+    <bpmndi:BPMNPlane id="pl_P_14_2" bpmnElement="P_14_2">
+      <bpmndi:BPMNShape id="sh_n_142_start" bpmnElement="n_142_start"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_142_kind" bpmnElement="n_142_kind"><dc:Bounds x="297" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_142_gap" bpmnElement="n_142_gap"><dc:Bounds x="255" y="411.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_142_tr" bpmnElement="n_142_tr"><dc:Bounds x="425" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_142_prof" bpmnElement="n_142_prof"><dc:Bounds x="595" y="411.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_142_cred" bpmnElement="n_142_cred"><dc:Bounds x="255" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_142_warn" bpmnElement="n_142_warn"><dc:Bounds x="425" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_142_lapse" bpmnElement="n_142_lapse"><dc:Bounds x="637" y="652" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_142_mark" bpmnElement="n_142_mark"><dc:Bounds x="765" y="640" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_142_cov" bpmnElement="n_142_cov"><dc:Bounds x="297" y="872" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_142_task" bpmnElement="n_142_task"><dc:Bounds x="425" y="851.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_142_eval" bpmnElement="n_142_eval"><dc:Bounds x="595" y="851.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_142_ele" bpmnElement="n_142_ele"><dc:Bounds x="425" y="1080" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_142_pub" bpmnElement="n_142_pub"><dc:Bounds x="765" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_142_end" bpmnElement="n_142_end"><dc:Bounds x="982" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="ed_f_n_142_start_n_142_kind" bpmnElement="f_n_142_start_n_142_kind"><di:waypoint x="168" y="235"/><di:waypoint x="297" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_142_kind_n_142_gap" bpmnElement="f_n_142_kind_n_142_gap"><di:waypoint x="343" y="235"/><di:waypoint x="230" y="235"/><di:waypoint x="230" y="455"/><di:waypoint x="255" y="455"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="125.8" y="440" width="99.2" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_142_kind_n_142_cred" bpmnElement="f_n_142_kind_n_142_cred"><di:waypoint x="343" y="235"/><di:waypoint x="230" y="235"/><di:waypoint x="230" y="675"/><di:waypoint x="255" y="675"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="159.4" y="653.5" width="65.6" height="43" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_142_kind_n_142_cov" bpmnElement="f_n_142_kind_n_142_cov"><di:waypoint x="343" y="235"/><di:waypoint x="272" y="235"/><di:waypoint x="272" y="895"/><di:waypoint x="297" y="895"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="179" y="880" width="88" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_142_gap_n_142_tr" bpmnElement="f_n_142_gap_n_142_tr"><di:waypoint x="385" y="455"/><di:waypoint x="425" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_142_tr_n_142_prof" bpmnElement="f_n_142_tr_n_142_prof"><di:waypoint x="555" y="455"/><di:waypoint x="595" y="455"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_142_prof_n_142_pub" bpmnElement="f_n_142_prof_n_142_pub"><di:waypoint x="725" y="455"/><di:waypoint x="740" y="455"/><di:waypoint x="740" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_142_cred_n_142_warn" bpmnElement="f_n_142_cred_n_142_warn"><di:waypoint x="385" y="675"/><di:waypoint x="425" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_142_warn_n_142_lapse" bpmnElement="f_n_142_warn_n_142_lapse"><di:waypoint x="555" y="675"/><di:waypoint x="637" y="675"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_142_lapse_n_142_pub" bpmnElement="f_n_142_lapse_n_142_pub"><di:waypoint x="683" y="675"/><di:waypoint x="740" y="675"/><di:waypoint x="740" y="235"/><di:waypoint x="765" y="235"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="691.8" y="226.5" width="43.2" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_142_lapse_n_142_mark" bpmnElement="f_n_142_lapse_n_142_mark"><di:waypoint x="683" y="675"/><di:waypoint x="765" y="675"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="704" y="653" width="40" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_142_mark_n_142_pub" bpmnElement="f_n_142_mark_n_142_pub"><di:waypoint x="895" y="675"/><di:waypoint x="740" y="675"/><di:waypoint x="740" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_142_cov_n_142_task" bpmnElement="f_n_142_cov_n_142_task"><di:waypoint x="343" y="895"/><di:waypoint x="425" y="895"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="364" y="873" width="40" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_142_cov_n_142_ele" bpmnElement="f_n_142_cov_n_142_ele"><di:waypoint x="343" y="895"/><di:waypoint x="400" y="895"/><di:waypoint x="400" y="1115"/><di:waypoint x="425" y="1115"/>
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="346.2" y="1106.5" width="48.8" height="17" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_142_task_n_142_eval" bpmnElement="f_n_142_task_n_142_eval"><di:waypoint x="555" y="895"/><di:waypoint x="595" y="895"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_142_eval_n_142_pub" bpmnElement="f_n_142_eval_n_142_pub"><di:waypoint x="725" y="895"/><di:waypoint x="740" y="895"/><di:waypoint x="740" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_142_ele_n_142_pub" bpmnElement="f_n_142_ele_n_142_pub"><di:waypoint x="555" y="1115"/><di:waypoint x="740" y="1115"/><di:waypoint x="740" y="235"/><di:waypoint x="765" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_142_pub_n_142_end" bpmnElement="f_n_142_pub_n_142_end"><di:waypoint x="895" y="235"/><di:waypoint x="982" y="235"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

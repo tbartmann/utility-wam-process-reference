@@ -24,6 +24,7 @@
   }
  ],
  "derivation": "STANDARDS-DERIVED. Every field traces to a standard, a regulation, a recognised industry body or an explicit judgment. No client programme or product practice enters this specification.",
+ "taxonomy_origin": "TAXONOMY ORIGIN, WHICH IS A DIFFERENT FACT FROM THE DERIVATION ABOVE. The derivation line describes where FIELD CONTENT comes from: every field value traces to a standard, a regulation or a recognised industry body and carries its citation. It does NOT describe where the taxonomy comes from. Which processes exist, how they are grouped and what they are called is a practitioner synthesis of delivered implementations, generalised until it is product- and client-neutral. Of the 102 process groups, 43 originate in programme material, 28 in domain research, 20 in a published source and 11 in folder and file names; the provenance layer grades every one and names what to read next. This model is DELIVERED PRACTICE SPECIFIED AGAINST STANDARDS, not a standard turned into a model - and saying so is not a weakness. A taxonomy proven in delivery and then held against the standards is a stronger claim than one derived from a standard and never built.",
  "field_set": "EN 17007:2017 cl. 5.2 maintenance process profile, corroborated by ISO 9001:2015 cl. 4.4.1 a) to h).",
  "gaps": [
   "No permitted source defines one operational-reporting semantic model, issue calendar, ad-hoc analysis method or self-service governance model for gas and electric distribution. Report routes, populations and publication controls are judgment.",
@@ -222,6 +223,10 @@
    "provenance": {
     "basis": "standard",
     "primary": "EN 17007:2017 cl. 6.10 DTA.11 and GFMAM subject 7.2"
+   },
+   "regulatory": {
+    "class": null,
+    "why": "no regulation reaches this process"
    }
   },
   {
@@ -404,6 +409,10 @@
    "provenance": {
     "basis": "standard",
     "primary": "EN 17007:2017 cl. 6.10 DTA.4 and GFMAM subjects 5.3 and 7.2"
+   },
+   "regulatory": {
+    "class": null,
+    "why": "no regulation reaches this process"
    }
   },
   {
@@ -509,7 +518,7 @@
      "raci": "C"
     },
     {
-     "role": "Crew leader",
+     "role": "Crew lead",
      "raci": "C"
     }
    ],
@@ -587,6 +596,10 @@
    "provenance": {
     "basis": "standard",
     "primary": "EN 17007:2017 cl. 6.2 MAN.6 and GFMAM subject 7.2"
+   },
+   "regulatory": {
+    "class": null,
+    "why": "no regulation reaches this process"
    }
   },
   {
@@ -769,6 +782,10 @@
    "provenance": {
     "basis": "standard",
     "primary": "EN 17007:2017 cl. 6.10 DTA.11"
+   },
+   "regulatory": {
+    "class": null,
+    "why": "no regulation reaches this process"
    }
   },
   {
@@ -956,6 +973,10 @@
    "provenance": {
     "basis": "standard",
     "primary": "EN 17007:2017 cl. 6.10 DTA.11"
+   },
+   "regulatory": {
+    "class": null,
+    "why": "no regulation reaches this process"
    }
   },
   {
@@ -1140,6 +1161,10 @@
    "provenance": {
     "basis": "standard",
     "primary": "EN 17007:2017 cl. 6.10 DTA.11"
+   },
+   "regulatory": {
+    "class": null,
+    "why": "no regulation reaches this process"
    }
   },
   {
@@ -1323,6 +1348,10 @@
    "provenance": {
     "basis": "standard",
     "primary": "EN 17007:2017 cl. 6.13 OPT.1 and GFMAM subject 7.3"
+   },
+   "regulatory": {
+    "class": null,
+    "why": "no regulation reaches this process"
    }
   },
   {
@@ -1505,6 +1534,10 @@
    "provenance": {
     "basis": "regulation",
     "primary": "49 CFR 192.1007(e) and (g); 49 CFR 191.11"
+   },
+   "regulatory": {
+    "class": "R",
+    "why": "49 CFR 192.1007(e) and 49 CFR 191.11 require the distribution integrity report"
    }
   },
   {
@@ -1693,6 +1726,10 @@
    "provenance": {
     "basis": "regulation",
     "primary": "49 CFR 192.1007(e) and (g), with IEEE 1366-2022 for electric reliability method"
+   },
+   "regulatory": {
+    "class": "R",
+    "why": "49 CFR 192.1007(e) and (g) require the four mandatory integrity measures to be reported"
    }
   },
   {
@@ -1879,6 +1916,10 @@
    "provenance": {
     "basis": "regulation",
     "primary": "18 CFR 125.3 Items 16(b) and 17(a)-(c); 49 CFR 192.709"
+   },
+   "regulatory": {
+    "class": "C",
+    "why": "18 CFR 125.3 and 49 CFR 192.709 govern how this is done, not whether it is done"
    }
   },
   {
@@ -2062,6 +2103,10 @@
    "provenance": {
     "basis": "standard",
     "primary": "GFMAM subjects 5.1 and 5.2; EN 17007:2017 cl. 6.2 MAN.3"
+   },
+   "regulatory": {
+    "class": null,
+    "why": "no regulation reaches this process"
    }
   },
   {
@@ -2241,6 +2286,10 @@
    "provenance": {
     "basis": "standard",
     "primary": "EN 17007:2017 cl. 6.10 DTA.1 and GFMAM subjects 5.2 and 5.3"
+   },
+   "regulatory": {
+    "class": null,
+    "why": "no regulation reaches this process"
    }
   },
   {
@@ -2421,6 +2470,10 @@
    "provenance": {
     "basis": "standard",
     "primary": "GFMAM subject 5.2 and EN 17007:2017 cl. 6.9 DOC.2"
+   },
+   "regulatory": {
+    "class": null,
+    "why": "no regulation reaches this process"
    }
   },
   {
@@ -2599,6 +2652,10 @@
    "provenance": {
     "basis": "standard",
     "primary": "EN 17007:2017 cl. 6.9 DOC.1 and GFMAM subjects 5.1 and 5.2"
+   },
+   "regulatory": {
+    "class": null,
+    "why": "no regulation reaches this process"
    }
   },
   {
@@ -2795,6 +2852,10 @@
    "provenance": {
     "basis": "standard",
     "primary": "IEC 61968-6:2015 cl. 4.2, cl. 5.3-5.5 and Annex A"
+   },
+   "regulatory": {
+    "class": null,
+    "why": "no regulation reaches this process"
    }
   },
   {
@@ -2900,7 +2961,7 @@
      "raci": "C"
     },
     {
-     "role": "Field records coordinator",
+     "role": "Asset and GIS administrator",
      "raci": "C"
     }
    ],
@@ -2983,6 +3044,10 @@
    "provenance": {
     "basis": "standard",
     "primary": "GFMAM subject 5.4 and IEC 61968-11 Asset and Work UML packages"
+   },
+   "regulatory": {
+    "class": null,
+    "why": "no regulation reaches this process"
    }
   },
   {
@@ -3179,6 +3244,10 @@
    "provenance": {
     "basis": "regulation",
     "primary": "18 CFR 101 Electric Plant Instruction 11 and 18 CFR 125.3"
+   },
+   "regulatory": {
+    "class": "C",
+    "why": "18 CFR 101 governs how this is done, not whether it is done"
    }
   },
   {
@@ -3287,7 +3356,7 @@
      "raci": "A"
     },
     {
-     "role": "Field records coordinator",
+     "role": "Asset and GIS administrator",
      "raci": "C"
     },
     {
@@ -3369,6 +3438,10 @@
    "provenance": {
     "basis": "standard",
     "primary": "EN 17007:2017 cl. 6.9 DOC.6 and GFMAM subject 5.4"
+   },
+   "regulatory": {
+    "class": null,
+    "why": "no regulation reaches this process"
    }
   },
   {
@@ -3554,6 +3627,10 @@
    "provenance": {
     "basis": "standard",
     "primary": "EN 17007:2017 cl. 6.10 DTA.1 and GFMAM subject 5.4"
+   },
+   "regulatory": {
+    "class": null,
+    "why": "no regulation reaches this process"
    }
   },
   {
@@ -3749,6 +3826,10 @@
    "provenance": {
     "basis": "regulation",
     "primary": "18 CFR 101 Electric Plant Instruction 11, with GFMAM subjects 5.4 and 6.8"
+   },
+   "regulatory": {
+    "class": "C",
+    "why": "18 CFR 101 governs how this is done, not whether it is done"
    }
   }
  ]
