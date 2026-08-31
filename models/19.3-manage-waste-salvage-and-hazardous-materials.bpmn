@@ -37,7 +37,7 @@ And nothing here retires anything. 19.3.5 files the signed evidence against the 
     <receiveTask id="n_193_sign" name="Receive the signed disposal evidence"><documentation>19.3.3.</documentation></receiveTask>
     <userTask id="n_193_sal" name="Assess whether salvage can return to stock"><documentation>19.3.4.</documentation></userTask>
     <exclusiveGateway id="n_193_can" name="Returnable to stock"/>
-    <sendTask id="n_193_stock" name="Return it to 13.2 as stock"><documentation>19.3.4. Not a plant retirement - the unit accounting is 19.4.3's.</documentation></sendTask>
+    <sendTask id="n_193_stock" name="Return it to 13.2 as stock"><documentation>19.3.4. Not a plant retirement - naming and publishing the retirement unit is 19.4.3's.</documentation></sendTask>
     <sendTask id="n_193_reclass" name="Reclassify through 19.3.1"><documentation>19.3.4. Back to the table rather than scrapped on the spot. This is the loop that keeps a contaminated unit out of the storeroom.</documentation></sendTask>
     <serviceTask id="n_193_file" name="File the evidence against the source asset and the work"><documentation>19.3.5. PCB records are kept under 40 CFR 761.180.</documentation></serviceTask>
     <sendTask id="n_193_hand" name="Hand the pack to 12.1.6 and 19.4.4"><documentation>19.3.5. Hand. Nothing in this group retires a register or a property record.</documentation></sendTask>

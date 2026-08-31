@@ -4186,7 +4186,7 @@
       },
       {
        "id": "11.6.4",
-       "name": "Verify and pay rent on third-party structures",
+       "name": "Verify rent due on third-party structures",
        "applies": [
         "electric"
        ],
@@ -4860,7 +4860,7 @@
       },
       {
        "id": "13.4.4",
-       "name": "Process supplier invoice and payment",
+       "name": "Match supplier invoice to order and receipt",
        "applies": [
         "gas",
         "electric"
@@ -6851,7 +6851,7 @@
       },
       {
        "id": "19.4.3",
-       "name": "Retire the accounting and continuing property record",
+       "name": "Establish and publish the retirement of the disposed unit",
        "applies": [
         "gas",
         "electric"

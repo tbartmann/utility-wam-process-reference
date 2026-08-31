@@ -2,9 +2,9 @@
 <definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/" id="Disposal_or_transfer_route" name="19.4.1 Determine the disposal or transfer route" namespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
   <description>Returns where TITLE goes, and names whether 18 CFR 101 or the contract is the authority. It does not re-decide abandon-versus-remove; 19.2.4 settled the physical end-state and this table takes it as an input.
 
-The distinction the table exists to hold: a physical end-state and a title route are independent. Plant abandoned in place has not gone anywhere and the utility still owns it - and the retirement unit is still retired off the continuing property record at 19.4.3. Getting that wrong leaves retired plant on the books or writes off plant that is still owned.
+The distinction the table exists to hold: a physical end-state and a title route are independent. Plant abandoned in place has not gone anywhere and the utility still owns it - and the retirement unit is still established and published to the continuing property record at 19.4.3. Getting that wrong leaves retired plant on the books or writes off plant that is still owned.
 
-18 CFR 101 is the FERC Uniform System of Accounts. Definition 34 defines the retirement unit, which is what 19.4.3 posts against; the sale, trade and transfer terms themselves are in the contract and this reference states none of them.</description>
+18 CFR 101 is the FERC Uniform System of Accounts. Definition 34 defines the retirement unit, which is what 19.4.3 names and publishes; the sale, trade and transfer terms themselves are in the contract and this reference states none of them.</description>
   <inputData id="in_endState" name="Physical end-state from 19.2.4"><variable id="in_endState_v" name="Physical end-state from 19.2.4" typeRef="string"/></inputData>
   <inputData id="in_hasValue" name="Material has recoverable or market value"><variable id="in_hasValue_v" name="Material has recoverable or market value" typeRef="boolean"/></inputData>
   <inputData id="in_counterparty" name="Counterparty type"><variable id="in_counterparty_v" name="Counterparty type" typeRef="string"/></inputData>
@@ -18,7 +18,7 @@ The distinction the table exists to hold: a physical end-state and a title route
       <input id="d_19_4_1_i3" label="Counterparty"><inputExpression id="d_19_4_1_i3_e" typeRef="string"><text>in_counterparty</text></inputExpression></input>
       <output id="d_19_4_1_o" label="Title route" name="Title route" typeRef="string"/>
       <rule id="d_19_4_1_r1">
-        <description>Title does not move - the plant is still owned and, where it is 192.727(c) inactive, still maintained. 19.4.3 STILL retires the unit under 18 CFR 101 Definition 34. Physical end-state and accounting end-state are different things.</description>
+        <description>Title does not move - the plant is still owned and, where it is 192.727(c) inactive, still maintained. 19.4.3 STILL publishes the retirement of the unit named under 18 CFR 101 Definition 34. Physical end-state and accounting end-state are different things.</description>
         <inputEntry id="d_19_4_1_r1_ie1"><text>"abandonInPlaceNoPurge192727b","abandonInPlacePurged192727b","inactiveNotMaintained192727c"</text></inputEntry>
         <inputEntry id="d_19_4_1_r1_ie2"><text>-</text></inputEntry>
         <inputEntry id="d_19_4_1_r1_ie3"><text>-</text></inputEntry>

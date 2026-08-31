@@ -47,9 +47,9 @@
     <startEvent id="n_134_inv" name="Supplier invoice presented"><messageEventDefinition id="n_134_inv_md"/></startEvent>
     <serviceTask id="n_134_three" name="Match invoice to order and receipt"><documentation>13.4.4. EN 17007 cl. 6.8 BUD.4 extracts budgeted and actual expenditures; it is not an invoice-match standard. Evaluated receipt settlement still needs the order-to-receipt match even when no invoice arrives.</documentation></serviceTask>
     <exclusiveGateway id="n_134_ig" name="Three-way match holds"/>
-    <userTask id="n_134_hold" name="Post the match exception"><documentation>13.4.4. Held against the difference, not paid on trust.</documentation></userTask>
-    <serviceTask id="n_134_pay" name="Post the payable and pay the accepted amount"><documentation>13.4.4. Payment terms are contract. 18 CFR Part 101 governs plant cost, not accounts payable.</documentation></serviceTask>
-    <endEvent id="n_134_end" name="Goods received and settled"/>
+    <userTask id="n_134_hold" name="Raise the match exception"><documentation>13.4.4. Held against the difference, not paid on trust.</documentation></userTask>
+    <serviceTask id="n_134_pay" name="Publish the accepted payable to accounts payable"><documentation>13.4.4. This function supplies the accepted payable; accounts payable discharges it. Payment terms are contract. 18 CFR Part 101 governs plant cost, not accounts payable.</documentation></serviceTask>
+    <endEvent id="n_134_end" name="Goods received, payable accepted"/>
     <sequenceFlow id="f_n_134_start_n_134_req" sourceRef="n_134_start" targetRef="n_134_req" name=""/>
     <sequenceFlow id="f_n_134_req_n_134_appr" sourceRef="n_134_req" targetRef="n_134_appr" name=""/>
     <sequenceFlow id="f_n_134_appr_n_134_ag" sourceRef="n_134_appr" targetRef="n_134_ag" name=""/>

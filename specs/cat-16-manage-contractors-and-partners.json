@@ -2179,7 +2179,7 @@
     "name": "Settle and evaluate contractor performance",
     "uid": 10528
    },
-   "intent": "Pay what 16.4.2 said is payable, and nothing that 16.3.4 is still holding.",
+   "intent": "Authorise what 16.4.2 said is payable, and nothing that 16.3.4 is still holding.",
    "activities": [
     "Take payable lines",
     "Confirm no open rework hold on those lines",

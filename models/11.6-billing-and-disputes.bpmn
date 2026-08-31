@@ -54,8 +54,8 @@
     <userTask id="n_116_ver" name="Verify against the utility's outbound permits"><documentation>11.6.4. From 11.2.6. Paying what you cannot reconcile is how a utility rents attachments it removed years ago.</documentation></userTask>
     <exclusiveGateway id="n_116_pg" name="Reconciles"/>
     <sendTask id="n_116_dis" name="Withhold the line and refer to 11.6.6"><documentation>11.6.4.</documentation></sendTask>
-    <serviceTask id="n_116_pay" name="Pay the verified rent"><documentation>11.6.4. Rent for occupying somebody else's plant - not 13.4.4 goods and not 16.4.3 contractor pay.</documentation></serviceTask>
-    <endEvent id="n_116_pend" name="Rent paid"/>
+    <serviceTask id="n_116_pay" name="Release the verified rent for payment"><documentation>11.6.4. Rent for occupying somebody else's plant - not 13.4.4 goods and not 16.4.3 contractor pay.</documentation></serviceTask>
+    <endEvent id="n_116_pend" name="Rent verified and released"/>
     <sequenceFlow id="f_n_116_t_n_116_cnt" sourceRef="n_116_t" targetRef="n_116_cnt" name=""/>
     <sequenceFlow id="f_n_116_cnt_n_116_calc" sourceRef="n_116_cnt" targetRef="n_116_calc" name=""/>
     <sequenceFlow id="f_n_116_calc_n_116_cg" sourceRef="n_116_calc" targetRef="n_116_cg" name=""/>

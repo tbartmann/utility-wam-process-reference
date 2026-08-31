@@ -5206,18 +5206,18 @@
     {
       "uid": 10373,
       "id": "11.6.4",
-      "name": "Verify and pay rent on third-party structures",
+      "name": "Verify rent due on third-party structures",
       "group": {
         "id": "11.6",
         "name": "Bill, settle and resolve attachment disputes",
         "uid": 10369
       },
-      "intent": "Check and pay what the utility owes for its own attachments on other structures.",
+      "intent": "Check what the utility owes for its attachments on other structures and release the verified amount for payment.",
       "activities": [
         "Take the invoice against the utility's outbound permits",
         "Verify the count against the utility's own record",
-        "Dispute or accept, then pay",
-        "Keep the paid position reconcilable to 11.2.6"
+        "Dispute the line or accept it, and release the accepted amount for payment",
+        "Keep the released position reconcilable to 11.2.6"
       ],
       "trigger": {
         "kind": "message",
@@ -5243,7 +5243,7 @@
       ],
       "outputs": [
         {
-          "what": "Verified and paid rent",
+          "what": "Verified rent released for payment",
           "party": "FIN",
           "data": "Work"
         },
@@ -5257,7 +5257,7 @@
         {
           "component": "FIN",
           "role": "system of record",
-          "service": "payable and payment"
+          "service": "payable raised from the verified rent"
         },
         {
           "component": "MAI",
@@ -5281,15 +5281,15 @@
       ],
       "roles": [
         {
-          "role": "Controller",
-          "raci": "A"
-        },
-        {
           "role": "Joint use administrator",
           "raci": "R"
         },
         {
-          "role": "Rates analyst",
+          "role": "Joint use manager",
+          "raci": "A"
+        },
+        {
+          "role": "Controller",
           "raci": "C"
         }
       ],
@@ -5308,7 +5308,7 @@
         },
         {
           "kind": "operational",
-          "text": "13.4.4 pays a goods supplier and 16.4.3 pays a contractor. This pays rent for occupying somebody else's plant. Three different objects."
+          "text": "13.4.4 verifies a goods invoice and 16.4.3 authorises a contractor's; this verifies rent for occupying somebody else's plant. In all three the payment itself is accounts payable's."
         }
       ],
       "measures": [
@@ -5326,7 +5326,7 @@
       ],
       "notation": {
         "class": "BPMN",
-        "why": "Receive, verify, dispute or accept, then pay.",
+        "why": "Receive, verify, dispute or accept, then release the accepted amount for payment.",
         "artifact": "models/11.6-billing-and-disputes.bpmn"
       },
       "en17007": {
@@ -5353,6 +5353,11 @@
         {
           "for": "verification method",
           "cite": "No standard specifies rent verification",
+          "status": "judgment"
+        },
+        {
+          "for": "boundary with accounts payable",
+          "cite": "No pack source makes the payment run part of joint-use administration; the count verification is joint use's, the discharge is accounts payable's",
           "status": "judgment"
         }
       ],

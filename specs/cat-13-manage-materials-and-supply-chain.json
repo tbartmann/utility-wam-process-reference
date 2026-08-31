@@ -3179,18 +3179,18 @@
   {
    "uid": 10441,
    "id": "13.4.4",
-   "name": "Process supplier invoice and payment",
+   "name": "Match supplier invoice to order and receipt",
    "group": {
     "id": "13.4",
     "name": "Procure goods and services",
     "uid": 10437
    },
-   "intent": "Match invoice to order and receipt, then pay, or hold the exception.",
+   "intent": "Match the invoice against the order and receipt and publish the accepted payable, or raise the exception. Payment is accounts payable's.",
    "activities": [
-    "Take the invoice",
-    "Match to purchase order and receipt",
-    "Post the match or the exception",
-    "Pay the accepted amount"
+    "Take the invoice against the purchase order from 13.4.2 and the receipt from 13.4.3",
+    "Match quantity, price and receipt, and establish the accepted amount",
+    "Publish the accepted payable to accounts payable, or raise the match exception",
+    "Do not pay - accounts payable discharges the payable published here"
    ],
    "trigger": {
     "kind": "message",
@@ -3211,26 +3211,26 @@
    ],
    "outputs": [
     {
-     "what": "Accepted payable",
+     "what": "Accepted payable published to accounts payable",
      "party": "FIN",
      "data": "WorkActivityRecord"
     },
     {
      "what": "Match exception",
      "party": "MM",
-     "data": "WorkActivityRecord"
+     "data": "MaterialItem"
     }
    ],
    "systems": [
     {
-     "component": "FIN",
+     "component": "MM",
      "role": "owning",
-     "service": "Invoice and payment"
+     "service": "Invoice match against order and receipt"
     },
     {
-     "component": "MM",
-     "role": "reference",
-     "service": "Order and receipt"
+     "component": "FIN",
+     "role": "holding",
+     "service": "Invoice and the payable it becomes"
     }
    ],
    "interfaces": [
@@ -3244,15 +3244,15 @@
    ],
    "roles": [
     {
-     "role": "Accounts payable clerk",
+     "role": "Buyer",
      "raci": "R"
     },
     {
-     "role": "Finance controller",
+     "role": "Materials manager",
      "raci": "A"
     },
     {
-     "role": "Buyer",
+     "role": "Accounts payable clerk",
      "raci": "C"
     }
    ],
@@ -3263,17 +3263,21 @@
    "controls": [
     {
      "kind": "financial",
-     "text": "EN 17007 BUD.4 extracts budgeted and actual expenditures. It is not an invoice-match standard. 18 CFR 101 governs plant cost, not AP. Payment terms are contract."
+     "text": "EN 17007 BUD.4 extracts budgeted and actual expenditures. It is not an invoice-match standard. 18 CFR 101 governs plant cost, not accounts payable. Payment terms are contract."
     },
     {
      "kind": "operational",
-     "text": "cl. 4.2 has no procurement component. Invoice sits on FIN; the match reads MM."
+     "text": "What this process establishes is that what was ordered arrived and was invoiced for what was agreed. Discharging the payable is an act on the financial record and is not this discipline's; what is owned here is the evidence that makes the payable acceptable."
+    },
+    {
+     "kind": "operational",
+     "text": "cl. 4.2 has no procurement component. The invoice is held on FIN and the match reads MM, so the accepted payable crosses a system boundary rather than moving between two views of one record."
     }
    ],
    "measures": [
     {
      "name": "Work Order Cycle Time",
-     "definition": "SMRP 5.4.7. Receipt to paid, where that blocks a hold.",
+     "definition": "SMRP 5.4.7. Receipt to accepted payable, where that blocks a hold.",
      "cite": "SMRP Best Practices, Pillar 5 Work Management"
     },
     {
@@ -3285,11 +3289,12 @@
    "variants": [
     "Three-way match",
     "Two-way match",
-    "Exception invoice"
+    "Exception invoice",
+    "Evaluated receipt settlement - no invoice arrives, the order-to-receipt match still runs"
    ],
    "notation": {
     "class": "BPMN",
-    "why": "Invoice is matched and paid, or held.",
+    "why": "Invoice, order and receipt are matched to an accepted payable or held as an exception.",
     "artifact": "models/13.4-procure.bpmn"
    },
    "en17007": {
@@ -3305,7 +3310,7 @@
     },
     {
      "for": "plant cost contrast",
-     "cite": "18 CFR Part 101 Electric Plant Instructions",
+     "cite": "18 CFR Part 101 Electric Plant Instructions - plant cost, not accounts payable",
      "status": "regulation"
     },
     {
@@ -3316,6 +3321,11 @@
     {
      "for": "match rules",
      "cite": "Invoice-match rules are not in the pack",
+     "status": "judgment"
+    },
+    {
+     "for": "boundary with accounts payable",
+     "cite": "No pack source makes the payment run part of materials management; the match evidence is materials', the discharge is accounts payable's",
      "status": "judgment"
     }
    ],

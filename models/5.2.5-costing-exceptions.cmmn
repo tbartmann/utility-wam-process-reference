@@ -27,7 +27,7 @@
           <manualActivationRule id="mar_t_525_realloc"><condition><![CDATA[true]]></condition></manualActivationRule>
         </itemControl>
       </planItem>
-      <planItem id="pi_t_525_writeoff" name="Write off with recorded authority" definitionRef="t_525_writeoff_def">
+      <planItem id="pi_t_525_writeoff" name="Refer for write-off with recorded authority" definitionRef="t_525_writeoff_def">
         <itemControl id="ic_t_525_writeoff">
           <requiredRule id="rr_t_525_writeoff"><condition><![CDATA[false]]></condition></requiredRule>
           <manualActivationRule id="mar_t_525_writeoff"><condition><![CDATA[true]]></condition></manualActivationRule>
@@ -43,7 +43,7 @@
       <humanTask id="t_525_identify_def" name="Identify the cost and why it will not settle" isBlocking="true"><documentation>Required and first. Everything else depends on which of the four kinds of exception this is.</documentation></humanTask>
       <humanTask id="t_525_correct_def" name="Correct the charging error" isBlocking="true"><documentation>Repeats where several postings carry the same error. A recurring error of one kind is a process defect, not an accounting one - correct the cause.</documentation></humanTask>
       <humanTask id="t_525_realloc_def" name="Reallocate cost charged to the wrong work" isBlocking="true"><documentation>With the authority recorded. Reallocation between capital and expense is a reportable movement, not a tidy-up.</documentation></humanTask>
-      <humanTask id="t_525_writeoff_def" name="Write off with recorded authority" isBlocking="true"><documentation>Last resort, and never silently. 18 CFR 101 Instruction 11 requires construction to be recorded by work order; a write-off is a statement that cost cannot be attributed to one.</documentation></humanTask>
+      <humanTask id="t_525_writeoff_def" name="Refer for write-off with recorded authority" isBlocking="true"><documentation>Last resort, and never silently. The referral is made here; the write-off entry is the accounting systems'. 18 CFR 101 Instruction 11 requires construction to be recorded by work order; a write-off is a statement that cost cannot be attributed to one.</documentation></humanTask>
       <humanTask id="t_525_escalate_def" name="Escalate what cannot be resolved before period close" isBlocking="true"><documentation>Required, because cost sitting in suspense at period close is either capitalised wrongly or expensed wrongly. Neither is neutral.</documentation></humanTask>
       <milestone id="m_525_cleared_def" name="Cost cleared or escalated before period close"></milestone>
     </casePlanModel>

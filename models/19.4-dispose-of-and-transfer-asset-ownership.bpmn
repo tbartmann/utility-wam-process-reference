@@ -3,13 +3,13 @@
   <process id="P_19_4" name="19.4 Dispose of and transfer asset ownership" isExecutable="false">
     <documentation>19.4.2, 19.4.3 and 19.4.4 are drawn. 19.4.1 is the route decision and has its own table.
 
-THE ACCOUNTING PATH RUNS WHETHER OR NOT ANYTHING MOVED. Plant abandoned in place is still owned and has not gone anywhere, and its retirement unit is still retired off the continuing property record under 18 CFR 101 Definition 34. The transfer branch is optional; the retirement branch is not, and the flow is drawn so that 19.4.3 is reached from both.
+THE ACCOUNTING PATH RUNS WHETHER OR NOT ANYTHING MOVED. Plant abandoned in place is still owned and has not gone anywhere, and its retirement unit is still established and published to the continuing property record under 18 CFR 101 Definition 34. The transfer branch is optional; the retirement branch is not, and the flow is drawn so that 19.4.3 is reached from both.
 
-Three separate records end in three separate places and none of them is this group's: 12.1.6 end-dates the asset register, 19.4.3 retires the property unit, and 19.3.5 holds the disposal evidence. 19.4.4 is the process that waits for all three before it closes anything.
+Three separate records end in three separate places and none of them is this group's: 12.1.6 end-dates the asset register, 19.4.3 publishes the property retirement, and 19.3.5 holds the disposal evidence. 19.4.4 is the process that waits for all three before it closes anything.
 
 The retention clocks at the end are named individually because they expire differently - 18 CFR 125.3 Item 16(b) for the property record, 49 CFR 192.709(a) for pipe repair history, 40 CFR 761.180 for PCB records - and because there is no federal retention clock for electric distribution, which the last activity says rather than implies.</documentation>
     <laneSet id="P_19_4_lanes">
-      <lane id="l_194_fin" name="Property accounting">
+      <lane id="l_194_fin" name="Asset records and close-out">
         <flowNodeRef>n_194_start</flowNodeRef>
         <flowNodeRef>n_194_rt</flowNodeRef>
         <flowNodeRef>n_194_gw</flowNodeRef>
@@ -30,8 +30,8 @@ The retention clocks at the end are named individually because they expire diffe
     <exclusiveGateway id="n_194_gw" name="Route"/>
     <userTask id="n_194_exec" name="Execute the contract that carries title"><documentation>19.4.2. The terms are the contract's; this reference states none of them.</documentation></userTask>
     <sendTask id="n_194_ju" name="Notify 11.1 if it is a jointly used structure"><documentation>19.4.2. Attachers do not transfer with the pole automatically, and 11.0 holds the agreements that say what happens to them.</documentation></sendTask>
-    <serviceTask id="n_194_unit" name="Identify the retirement unit"><documentation>19.4.3. 18 CFR 101 Definition 34.</documentation></serviceTask>
-    <serviceTask id="n_194_post" name="Post the retirement against the continuing property record"><documentation>19.4.3. The asset register is 12.1.6's to end-date; this is the property record, and they are different books.</documentation></serviceTask>
+    <serviceTask id="n_194_unit" name="Establish the retirement unit, cost and date"><documentation>19.4.3. The unit is the one 18 CFR 101 Definition 34 defines.</documentation></serviceTask>
+    <serviceTask id="n_194_post" name="Publish the retirement to the property record"><documentation>19.4.3. This function supplies the retirement; the property record posts it. The asset register is 12.1.6's to end-date, and they are different books.</documentation></serviceTask>
     <receiveTask id="n_194_wait" name="Wait for register, property record and disposal evidence"><documentation>19.4.4. All three: 12.1.6 confirmation, 19.4.3 retirement, 19.3.5 evidence.</documentation></receiveTask>
     <userTask id="n_194_obl" name="Close joint-use, environmental and work obligations"><documentation>19.4.4.</documentation></userTask>
     <serviceTask id="n_194_ret" name="Set the retention clocks that bite"><documentation>19.4.4. 18 CFR 125.3 Item 16(b), 49 CFR 192.709(a), 40 CFR 761.180 - each on its own period. For electric distribution there is no federal clock and none is invented.</documentation></serviceTask>
@@ -55,7 +55,7 @@ The retention clocks at the end are named individually because they expire diffe
       <bpmndi:BPMNShape id="sh_n_194_gw" bpmnElement="n_194_gw"><dc:Bounds x="467" y="212" width="46" height="46"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_194_exec" bpmnElement="n_194_exec"><dc:Bounds x="595" y="420" width="130" height="70"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_194_ju" bpmnElement="n_194_ju"><dc:Bounds x="765" y="411.5" width="130" height="87"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_194_unit" bpmnElement="n_194_unit"><dc:Bounds x="935" y="200" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_194_unit" bpmnElement="n_194_unit"><dc:Bounds x="935" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_194_post" bpmnElement="n_194_post"><dc:Bounds x="1105" y="185" width="130" height="100"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_194_wait" bpmnElement="n_194_wait"><dc:Bounds x="1275" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_194_obl" bpmnElement="n_194_obl"><dc:Bounds x="1445" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>

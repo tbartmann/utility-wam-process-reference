@@ -5,7 +5,7 @@
     <startEvent id="n_53_start" name="Settled work order requires its treatment"><messageEventDefinition id="n_53_start_md"/></startEvent>
     <businessRuleTask id="n_53_conf" name="Confirm the accounting treatment"><documentation>5.3.1. Calls decision Capitalisation_confirmation.</documentation></businessRuleTask>
     <exclusiveGateway id="n_53_gate" name="Treatment"/>
-    <serviceTask id="n_53_exp" name="Post to maintenance expense"><documentation>5.3.1. Expensed work leaves the capital path here.</documentation></serviceTask>
+    <serviceTask id="n_53_exp" name="Release expensed work to maintenance expense"><documentation>5.3.1. Expensed work leaves the capital path here. The treatment is fixed here; the expense entry is the accounting systems'.</documentation></serviceTask>
     <endEvent id="n_53_endexp" name="Expensed"/>
     <userTask id="n_53_isd" name="Establish the in-service date"><documentation>5.3.5. Consumes the handover at 19.1.6; it does not perform it. An operational fact, established from commissioning evidence.</documentation></userTask>
     <sendTask id="n_53_clear" name="Publish the date to asset and accounting"><documentation>5.3.5. What the accounting systems do with it is theirs - clearing construction and stopping the allowance happen in a system this discipline does not own.</documentation></sendTask>
@@ -13,12 +13,12 @@
     <userTask id="n_53_rem" name="Identify the retirement units removed"><documentation>5.3.2.</documentation></userTask>
     <serviceTask id="n_53_dist" name="Attach the settled actuals to the units"><documentation>5.3.2. From the as-built at 5.4.3, not from the design. Unitising against the design puts the wrong units in a record kept for twenty-five years.</documentation></serviceTask>
     <sendTask id="n_53_post" name="Publish additions and retirements"><documentation>5.3.3. Supplied to the property record, not posted here. Retirements carry original cost, which the continuing plant inventory record makes possible.</documentation></sendTask>
-    <serviceTask id="n_53_cpr" name="Update the continuing plant inventory record"><documentation>5.3.3. Required by 18 CFR 101 Definition 8.</documentation></serviceTask>
+    <serviceTask id="n_53_cpr" name="Confirm the property record accepted them"><documentation>5.3.3. The continuing plant inventory record required by 18 CFR 101 Definition 8 is updated by the property record, not here.</documentation></serviceTask>
     <serviceTask id="n_53_rec" name="Reconcile plant account to property record"><documentation>5.3.3. A difference between them is a real difference in what the utility believes it owns.</documentation></serviceTask>
     <exclusiveGateway id="n_53_pj" name="Last work order on the project"/>
     <userTask id="n_53_var" name="Record the outturn variance against the estimate"><documentation>5.3.4. The only honest feedback the estimating process at 2.3 ever receives.</documentation></userTask>
     <serviceTask id="n_53_close" name="Close the project and release funding"><documentation>5.3.4.</documentation></serviceTask>
-    <endEvent id="n_53_end" name="Capitalised and posted"/>
+    <endEvent id="n_53_end" name="Capitalised and published"/>
     <sequenceFlow id="f_n_53_start_n_53_conf" sourceRef="n_53_start" targetRef="n_53_conf" name=""/>
     <sequenceFlow id="f_n_53_conf_n_53_gate" sourceRef="n_53_conf" targetRef="n_53_gate" name=""/>
     <sequenceFlow id="f_n_53_gate_n_53_exp" sourceRef="n_53_gate" targetRef="n_53_exp" name="expense"><conditionExpression xsi:type="tFormalExpression"><![CDATA[treatment = "expense"]]></conditionExpression></sequenceFlow>
@@ -42,7 +42,7 @@
       <bpmndi:BPMNShape id="sh_n_53_start" bpmnElement="n_53_start"><dc:Bounds x="132" y="217" width="36" height="36"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_53_conf" bpmnElement="n_53_conf"><dc:Bounds x="255" y="200" width="130" height="70"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_53_gate" bpmnElement="n_53_gate"><dc:Bounds x="467" y="212" width="46" height="46"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_53_exp" bpmnElement="n_53_exp"><dc:Bounds x="425" y="420" width="130" height="70"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_53_exp" bpmnElement="n_53_exp"><dc:Bounds x="425" y="411.5" width="130" height="87"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_53_endexp" bpmnElement="n_53_endexp"><dc:Bounds x="642" y="437" width="36" height="36"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_53_isd" bpmnElement="n_53_isd"><dc:Bounds x="595" y="200" width="130" height="70"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_53_clear" bpmnElement="n_53_clear"><dc:Bounds x="765" y="200" width="130" height="70"/></bpmndi:BPMNShape>

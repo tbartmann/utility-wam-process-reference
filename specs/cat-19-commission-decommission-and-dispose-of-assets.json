@@ -3099,7 +3099,7 @@
    "controls": [
     {
      "kind": "financial",
-     "text": "18 CFR 101 Electric Plant Instruction 10 and Definition 34 are the retirement unit. A scrap route still retires the unit. A sale or trade is APQC 10.4.3 (pcf_id 10953). Transfer terms, if not a FERC retirement, are the contract."
+     "text": "18 CFR 101 Electric Plant Instruction 10 and Definition 34 are the retirement unit. A scrap route still requires a retirement to be established and published at 19.4.3. A sale or trade is APQC 10.4.3 (pcf_id 10953). Transfer terms, if not a FERC retirement, are the contract."
     },
     {
      "kind": "operational",
@@ -3122,7 +3122,7 @@
     "Scrap, retirement unit under 18 CFR 101 Definition 34",
     "Sell or trade under APQC 10.4.3, terms in the contract",
     "Transfer to another operator, terms in the contract",
-    "Already abandoned in place, title remains, 19.4.3 still retires the unit"
+    "Already abandoned in place, title remains, 19.4.3 still publishes the retirement"
    ],
    "notation": {
     "class": "DMN",
@@ -3356,22 +3356,23 @@
   {
    "uid": 10627,
    "id": "19.4.3",
-   "name": "Retire the accounting and continuing property record",
+   "name": "Establish and publish the retirement of the disposed unit",
    "group": {
     "id": "19.4",
     "name": "Dispose of and transfer asset ownership",
     "uid": 10624
    },
-   "intent": "Take the retirement unit out of the continuing property record. Do not reverse a 5.3 addition here.",
+   "intent": "Establish which unit of property left, on what evidence and when, and publish it to the property record. This function does not post it.",
    "activities": [
-    "Take the physical evidence from 19.2.5 and the route from 19.4.1",
-    "Identify the retirement unit under 18 CFR 101 Definition 34",
-    "Record the retirement against the continuing property record",
-    "Do not end-date the asset register - that is 12.1.6"
+    "Take the disposition evidence from 19.2.5 and the route from 19.4.1",
+    "Establish the retirement unit under 18 CFR 101 Definition 34, its original cost and date",
+    "Record the basis for the retirement",
+    "Publish the retirement to the property record and confirm it was accepted",
+    "Do not post it, and do not end-date the asset register - that is 12.1.6"
    ],
    "trigger": {
     "kind": "conditional",
-    "text": "Physical disposition evidence and a title route are ready to retire the unit.",
+    "text": "Physical disposition evidence and a title route are ready for the retirement to be established.",
     "cim": null
    },
    "inputs": [
@@ -3393,7 +3394,12 @@
    ],
    "outputs": [
     {
-     "what": "Retirement posted to the continuing property record",
+     "what": "Established retirement unit, original cost, date and basis",
+     "party": "AM",
+     "data": "WorkAsset"
+    },
+    {
+     "what": "Retirement published to the property record",
      "party": "FIN",
      "data": "WorkAsset"
     },
@@ -3405,9 +3411,9 @@
    ],
    "systems": [
     {
-     "component": "FIN",
+     "component": "AM",
      "role": "owning",
-     "service": "Property-record retirement"
+     "service": "Retirement identity, cost and date"
     },
     {
      "component": "CON",
@@ -3415,9 +3421,9 @@
      "service": "Physical evidence"
     },
     {
-     "component": "AM",
-     "role": "informed",
-     "service": "Disposition 12.1.6 will read"
+     "component": "FIN",
+     "role": "receiving",
+     "service": "Retirement consumed by plant accounting"
     }
    ],
    "interfaces": [
@@ -3431,15 +3437,15 @@
    ],
    "roles": [
     {
-     "role": "Property accountant",
+     "role": "Asset data steward",
      "raci": "R"
     },
     {
-     "role": "Finance controller",
+     "role": "Asset manager",
      "raci": "A"
     },
     {
-     "role": "Asset data steward",
+     "role": "Property accountant",
      "raci": "C"
     }
    ],
@@ -3451,33 +3457,34 @@
    "controls": [
     {
      "kind": "financial",
-     "text": "18 CFR 101 Electric Plant Instruction 10 is additions AND retirements. Definition 34 is the retirement unit. 5.3 unitises ADDITIONS of completed construction. This process retires the unit. Parallel text is 18 CFR 201 for gas."
+     "text": "18 CFR 101 Electric Plant Instruction 10 covers additions and retirements, and Definition 34 is the retirement unit. This process names the unit and supplies it; the property record posts it. Parallel text is 18 CFR 201 for gas."
     },
     {
-     "kind": "financial",
-     "text": "18 CFR 125.3 Item 16(b) keeps the continuing plant inventory ledger 25 years. Item 17 lets work-order sheets go 5 years after clearance to plant, provided that ledger is maintained. The property record outlives the work order."
+     "kind": "operational",
+     "text": "The act here is establishing an operational fact - which unit left, when, and on what evidence - and handing it across a system boundary. Performing the retirement entry would put this process on the financial record, which this discipline does not own."
     }
    ],
    "measures": [
     {
      "name": "Maintenance cost",
-     "definition": "EN 15341 cl. 12 Mi. Retired original cost against the unit, not a work-order close.",
+     "definition": "EN 15341 cl. 12 Mi. Original cost established against the unit, not against a work-order close.",
      "cite": "EN 15341:2019+A1:2022 cl. 12 Mi maintenance-cost indicators"
     },
     {
      "name": "ICT indicators",
-     "definition": "EN 15341 cl. 12 ICTi. Physical removal with no property-record retirement.",
+     "definition": "EN 15341 cl. 12 ICTi. Physical removal with no retirement published to the property record.",
      "cite": "EN 15341:2019+A1:2022 cl. 12 ICTi"
     }
    ],
    "variants": [
-    "Retirement unit removed, original cost retired",
-    "Abandoned in place, unit still retired",
-    "Sold or transferred, unit retired on the completed 19.4.2"
+    "Unit removed, retirement published with its original cost",
+    "Abandoned in place, retirement still published",
+    "Sold or transferred, retirement published on the completed 19.4.2",
+    "Disposal with no construction work order, original cost established here rather than at 5.3.2"
    ],
    "notation": {
     "class": "BPMN",
-    "why": "Physical evidence plus title route posts a retirement unit off the continuing property record.",
+    "why": "Physical evidence plus title route establishes a retirement unit and publishes it to the property record.",
     "artifact": "models/19.4-dispose-of-and-transfer-asset-ownership.bpmn"
    },
    "en17007": {
@@ -3493,7 +3500,7 @@
     },
     {
      "for": "retirement",
-     "cite": "18 CFR 101 Electric Plant Instruction 10; Definition 34",
+     "cite": "18 CFR 101 Electric Plant Instruction 10; Definition 34 - the definition of the unit, not authority to post it",
      "status": "regulation"
     },
     {
@@ -3517,8 +3524,8 @@
      "status": "clause-verified"
     },
     {
-     "for": "not 5.3",
-     "cite": "5.3 unitises additions of completed construction; 19.4.3 retires the unit",
+     "for": "boundary with 5.3",
+     "cite": "5.3.2 and 5.3.3 establish and publish retirements that accompany completed construction; 19.4.3 does the same for a retirement arising from disposal, which may reach 19.4 with no construction work order behind it",
      "status": "judgment"
     }
    ],
@@ -3559,7 +3566,7 @@
      "data": "Asset"
     },
     {
-     "what": "Property-record retirement from 19.4.3",
+     "what": "Published retirement from 19.4.3",
      "party": "FIN",
      "data": "WorkAsset"
     },

@@ -1827,12 +1827,12 @@
       ],
       "outputs": [
         {
-          "what": "Posted additions and retirements",
+          "what": "Additions and retirements published to the property record",
           "party": "FIN",
           "data": "WorkAsset"
         },
         {
-          "what": "Updated continuing plant inventory record",
+          "what": "Acceptance confirmed and reconciled to the plant inventory record",
           "party": "AM",
           "data": "WorkAsset"
         }
