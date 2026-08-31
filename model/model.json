@@ -8,7 +8,7 @@
   "counts": {
    "categories": 19,
    "process_groups": 102,
-   "processes": 504,
+   "processes": 505,
    "work_types": 7
   },
   "applicability": {
@@ -628,7 +628,7 @@
    "band": "Work Lifecycle",
    "name": "Plan, Design and Estimate Work",
    "group_count": 5,
-   "process_count": 22,
+   "process_count": 23,
    "groups": [
     {
      "id": "2.1",
@@ -721,7 +721,7 @@
       },
       {
        "id": "2.2.5",
-       "name": "Maintain unit accounting and allocation rules",
+       "name": "Determine unit accounting and allocation treatment",
        "applies": [
         "gas",
         "electric"
@@ -785,6 +785,15 @@
         "electric"
        ],
        "uid": 10046
+      },
+      {
+       "id": "2.3.6",
+       "name": "Publish the authorised estimate and planned units",
+       "applies": [
+        "gas",
+        "electric"
+       ],
+       "uid": 10631
       }
      ],
      "applicability": "common",
@@ -792,7 +801,7 @@
       "electric",
       "gas"
      ],
-     "process_count": 5,
+     "process_count": 6,
      "uid": 10042
     },
     {
@@ -868,7 +877,7 @@
       },
       {
        "id": "2.5.3",
-       "name": "Validate prerequisites before release",
+       "name": "Validate prerequisites at each release gate",
        "applies": [
         "gas",
         "electric"
@@ -1573,7 +1582,7 @@
    "band": "Work Lifecycle",
    "name": "Close Work, Settle Cost and Update Records",
    "group_count": "4",
-   "process_count": "20",
+   "process_count": "21",
    "groups": [
     {
      "id": "5.1",
@@ -1753,7 +1762,7 @@
       "electric",
       "gas"
      ],
-     "process_count": 4,
+     "process_count": 5,
      "legacy_id": "6.3",
      "uid": 10135
     },

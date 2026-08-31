@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="defs_P_2_3" targetNamespace="http://tim-method.example/utility-wam/1.0" exporter="Utility WAM Industry Process Reference" exporterVersion="2026-08-28">
   <process id="P_2_3" name="2.3 Authorise work" isExecutable="false">
-    <documentation>Tier-4 activities under 2.3.1 and 2.3.4. Approval routing 2.3.2 is a determination and is in 2.3.2-approval-routing.dmn; change to authorised scope 2.3.5 is case-managed and is in 2.3.5-scope-change.cmmn. ISO 21502:2020 cl. 7.7 covers funding and cl. 7.10 covers change control; ISO 55001:2024 cl. 6.3 requires the decision to be traceable to the asset management objectives.</documentation>
+    <documentation>Tier-4 activities under 2.3.1, 2.3.4 and 2.3.6. Authorisation forks: the work is released to scheduling and the authorised estimate with its planned units is published to the property record, on the same event and neither before the other. Approval routing 2.3.2 is a determination and is in 2.3.2-approval-routing.dmn; change to authorised scope 2.3.5 is case-managed and is in 2.3.5-scope-change.cmmn. ISO 21502:2020 cl. 7.7 covers funding and cl. 7.10 covers change control; ISO 55001:2024 cl. 6.3 requires the decision to be traceable to the asset management objectives.</documentation>
     <startEvent id="n_23_start" name="Estimated work requires authorisation"><messageEventDefinition id="n_23_start_md"/></startEvent>
     <userTask id="n_23_src" name="Identify the funding source and charging account"><documentation>2.3.1. The account follows the capitalisation determination made at 2.2.5.</documentation></userTask>
     <serviceTask id="n_23_avail" name="Confirm the amount is available and uncommitted"><documentation>2.3.1. Available is not the same as budgeted; commitment is what makes it real.</documentation></serviceTask>
@@ -16,7 +16,10 @@
     <userTask id="n_23_esc" name="Escalate or resubmit"><documentation>2.3.2. Declined or deferred work goes back with what changed, not unchanged.</documentation></userTask>
     <serviceTask id="n_23_check" name="Confirm approval, funding and design release"><documentation>2.3.4. All three, or the release is conditional and must say so.</documentation></serviceTask>
     <serviceTask id="n_23_base" name="Record the authorised scope, cost and date basis"><documentation>2.3.4. This is the baseline every later variance is measured against, and the baseline 2.3.5 controls change to.</documentation></serviceTask>
+    <parallelGateway id="n_23_fork" name="On authorisation"/>
     <sendTask id="n_23_rel" name="Release the work to planning and scheduling"><documentation>2.3.4.</documentation></sendTask>
+    <sendTask id="n_23_pub" name="Publish the authorised estimate and planned units"><documentation>2.3.6. The planned units to be installed or retired, with the estimate they were authorised on. Supplied to the property record, not posted here; 5.3 publishes the as-built position against the same work order.</documentation></sendTask>
+    <parallelGateway id="n_23_join" name=""/>
     <endEvent id="n_23_end" name="Work authorised at a fixed baseline"/>
     <endEvent id="n_23_endh" name="Held unfunded"/>
     <sequenceFlow id="f_n_23_start_n_23_src" sourceRef="n_23_start" targetRef="n_23_src" name=""/>
@@ -35,8 +38,12 @@
     <sequenceFlow id="f_n_23_esc_n_23_route" sourceRef="n_23_esc" targetRef="n_23_route" name="resubmitted"/>
     <sequenceFlow id="f_n_23_gate_n_23_check" sourceRef="n_23_gate" targetRef="n_23_check" name="approved"/>
     <sequenceFlow id="f_n_23_check_n_23_base" sourceRef="n_23_check" targetRef="n_23_base" name=""/>
-    <sequenceFlow id="f_n_23_base_n_23_rel" sourceRef="n_23_base" targetRef="n_23_rel" name=""/>
-    <sequenceFlow id="f_n_23_rel_n_23_end" sourceRef="n_23_rel" targetRef="n_23_end" name=""/>
+    <sequenceFlow id="f_n_23_base_n_23_fork" sourceRef="n_23_base" targetRef="n_23_fork" name=""/>
+    <sequenceFlow id="f_n_23_fork_n_23_rel" sourceRef="n_23_fork" targetRef="n_23_rel" name=""/>
+    <sequenceFlow id="f_n_23_fork_n_23_pub" sourceRef="n_23_fork" targetRef="n_23_pub" name=""/>
+    <sequenceFlow id="f_n_23_rel_n_23_join" sourceRef="n_23_rel" targetRef="n_23_join" name=""/>
+    <sequenceFlow id="f_n_23_pub_n_23_join" sourceRef="n_23_pub" targetRef="n_23_join" name=""/>
+    <sequenceFlow id="f_n_23_join_n_23_end" sourceRef="n_23_join" targetRef="n_23_end" name=""/>
   </process>
   <bpmndi:BPMNDiagram id="dg_P_2_3">
     <bpmndi:BPMNPlane id="pl_P_2_3" bpmnElement="P_2_3">
@@ -54,8 +61,11 @@
       <bpmndi:BPMNShape id="sh_n_23_esc" bpmnElement="n_23_esc"><dc:Bounds x="1445" y="420" width="130" height="70"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_23_check" bpmnElement="n_23_check"><dc:Bounds x="1615" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_23_base" bpmnElement="n_23_base"><dc:Bounds x="1785" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_23_rel" bpmnElement="n_23_rel"><dc:Bounds x="1955" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="sh_n_23_end" bpmnElement="n_23_end"><dc:Bounds x="2172" y="217" width="36" height="36"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_23_fork" bpmnElement="n_23_fork"><dc:Bounds x="1955" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_23_rel" bpmnElement="n_23_rel"><dc:Bounds x="2050" y="191.5" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_23_pub" bpmnElement="n_23_pub"><dc:Bounds x="2050" y="80" width="130" height="87"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_23_join" bpmnElement="n_23_join"><dc:Bounds x="2230" y="212" width="46" height="46"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="sh_n_23_end" bpmnElement="n_23_end"><dc:Bounds x="2330" y="217" width="36" height="36"/></bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="sh_n_23_endh" bpmnElement="n_23_endh"><dc:Bounds x="812" y="437" width="36" height="36"/></bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="ed_f_n_23_start_n_23_src" bpmnElement="f_n_23_start_n_23_src"><di:waypoint x="168" y="235"/><di:waypoint x="255" y="235"/></bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_23_src_n_23_avail" bpmnElement="f_n_23_src_n_23_avail"><di:waypoint x="385" y="235"/><di:waypoint x="425" y="235"/></bpmndi:BPMNEdge>
@@ -97,8 +107,12 @@
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="ed_f_n_23_check_n_23_base" bpmnElement="f_n_23_check_n_23_base"><di:waypoint x="1745" y="235"/><di:waypoint x="1785" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_23_base_n_23_rel" bpmnElement="f_n_23_base_n_23_rel"><di:waypoint x="1915" y="235"/><di:waypoint x="1955" y="235"/></bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="ed_f_n_23_rel_n_23_end" bpmnElement="f_n_23_rel_n_23_end"><di:waypoint x="2085" y="235"/><di:waypoint x="2172" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_23_base_n_23_fork" bpmnElement="f_n_23_base_n_23_fork"><di:waypoint x="1915" y="235"/><di:waypoint x="1955" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_23_fork_n_23_rel" bpmnElement="f_n_23_fork_n_23_rel"><di:waypoint x="2001" y="235"/><di:waypoint x="2050" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_23_fork_n_23_pub" bpmnElement="f_n_23_fork_n_23_pub"><di:waypoint x="1978" y="212"/><di:waypoint x="1978" y="123"/><di:waypoint x="2050" y="123"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_23_rel_n_23_join" bpmnElement="f_n_23_rel_n_23_join"><di:waypoint x="2180" y="235"/><di:waypoint x="2230" y="235"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_23_pub_n_23_join" bpmnElement="f_n_23_pub_n_23_join"><di:waypoint x="2180" y="123"/><di:waypoint x="2253" y="123"/><di:waypoint x="2253" y="212"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="ed_f_n_23_join_n_23_end" bpmnElement="f_n_23_join_n_23_end"><di:waypoint x="2276" y="235"/><di:waypoint x="2330" y="235"/></bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
 </definitions>

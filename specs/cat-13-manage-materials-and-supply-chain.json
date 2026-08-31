@@ -4902,12 +4902,13 @@
     "id": "13.6",
     "name": "Maintain item and catalogue information"
    },
-   "intent": "Maintain the library of standard assemblies work is designed and costed from.",
+   "intent": "Maintain the library of standard assemblies work is designed and costed from, and what each unit charges.",
    "activities": [
     "Define each unit and what it comprises",
     "Attach labour, material and plant content to the unit",
-    "Align the unit set to the property units listing used for accounting",
-    "Review and version the library as standards and costs change"
+    "Attach the account code that fixes what the unit charges when it is applied",
+    "Where the unit is itself a unit of property, attach that identity",
+    "Review, version and activate the library as standards and costs change"
    ],
    "trigger": {
     "kind": "none",
@@ -4933,14 +4934,14 @@
    ],
    "outputs": [
     {
-     "what": "Versioned unit and assembly library",
+     "what": "Versioned and active unit and assembly library",
      "party": "DGN",
-     "data": null
+     "data": "MaterialItem"
     },
     {
-     "what": "Unit content available to estimating",
+     "what": "Unit content and account code available to estimating",
      "party": "FIN",
-     "data": null
+     "data": "MaterialItem"
     }
    ],
    "systems": [
@@ -4994,11 +4995,15 @@
    "controls": [
     {
      "kind": "regulatory",
-     "text": "A written property units listing must be maintained and applied consistently for accounting additions and retirements. The unit library and that listing have to agree or the estimate and the accounting will not."
+     "text": "A written property units listing must be maintained and applied consistently for accounting additions and retirements. The unit library and that listing have to agree."
+    },
+    {
+     "kind": "financial",
+     "text": "The unit carries an account code, not an account. The codes, their ledger mapping and the override rules are held once for the organisation, not per unit."
     },
     {
      "kind": "operational",
-     "text": "The content of a unit library has no standards basis. It is the operator's, and it should be versioned and owned rather than accumulating."
+     "text": "Not every unit is a unit of property, so that identity is attached only where it applies. The library's content has no standards basis: it is the operator's, and versioned."
     }
    ],
    "measures": [
@@ -5016,7 +5021,8 @@
    "variants": [
     "Published assembly catalogue adopted from a funder or standards body",
     "Operator-defined library aligned to its own construction standards",
-    "Hybrid, with local units layered on a published catalogue"
+    "Hybrid, with local units layered on a published catalogue",
+    "Unit that is not a unit of property, carrying an account code and no property-unit identity"
    ],
    "notation": {
     "class": "SPEC",
@@ -5048,6 +5054,11 @@
      "for": "library content",
      "cite": "No standards basis. The catalogue's content is the operator's.",
      "status": "judgment"
+    },
+    {
+     "for": "account code and library lifecycle",
+     "cite": "Standard compatible-unit model of a widely deployed utility work management product - structural precedent only",
+     "status": "consensus"
     }
    ],
    "provenance": {

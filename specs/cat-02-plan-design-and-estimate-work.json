@@ -1374,7 +1374,7 @@
   {
    "uid": 10035,
    "id": "2.2.5",
-   "name": "Maintain unit accounting and allocation rules",
+   "name": "Determine unit accounting and allocation treatment",
    "group": {
     "id": "2.2",
     "name": "Estimate work"
@@ -2385,6 +2385,179 @@
    "regulatory": {
     "class": "C",
     "why": "49 CFR 192.13 governs how this is done, not whether it is done"
+   }
+  },
+  {
+   "uid": 10631,
+   "id": "2.3.6",
+   "name": "Publish the authorised estimate and planned units",
+   "group": {
+    "id": "2.3",
+    "name": "Authorise work"
+   },
+   "intent": "Publish the authorised cost estimate and the units planned for install or retirement, so plant accounting can open the work.",
+   "activities": [
+    "Take the accepted estimate and the units it places from 2.2",
+    "Establish the units planned for installation and for retirement",
+    "Publish the authorised estimate and planned units to the property record",
+    "Do not post them - the property record does that, and the as-built follows at 5.3"
+   ],
+   "trigger": {
+    "kind": "conditional",
+    "text": "Work has been authorised at 2.3.4 and the estimate it was authorised on is fixed.",
+    "cim": null
+   },
+   "inputs": [
+    {
+     "what": "Accepted estimate and the units it places",
+     "party": "DGN",
+     "data": "Work"
+    },
+    {
+     "what": "Authorised baseline from 2.3.4",
+     "party": "FIN",
+     "data": "Work"
+    },
+    {
+     "what": "Asset identity of the units to be retired",
+     "party": "AM",
+     "data": "WorkAsset"
+    }
+   ],
+   "outputs": [
+    {
+     "what": "Authorised estimate and planned units published",
+     "party": "FIN",
+     "data": "WorkAsset"
+    },
+    {
+     "what": "Planned retirement units visible to 19.4",
+     "party": "AM",
+     "data": "WorkAsset"
+    }
+   ],
+   "systems": [
+    {
+     "component": "MAI",
+     "role": "owning",
+     "service": "Publication on authorisation"
+    },
+    {
+     "component": "DGN",
+     "role": "originating",
+     "service": "Accepted estimate and placed units"
+    },
+    {
+     "component": "FIN",
+     "role": "receiving",
+     "service": "Estimate and planned units consumed by plant accounting"
+    }
+   ],
+   "interfaces": [
+    {
+     "from": "MAI",
+     "to": "FIN",
+     "payload": "WorkRequest",
+     "verb": "create",
+     "pattern": "event"
+    }
+   ],
+   "roles": [
+    {
+     "role": "Estimator",
+     "raci": "R"
+    },
+    {
+     "role": "Programme manager",
+     "raci": "A"
+    },
+    {
+     "role": "Property accountant",
+     "raci": "C"
+    }
+   ],
+   "data_objects": [
+    "Work",
+    "WorkAsset",
+    "WorkActivityRecord"
+   ],
+   "controls": [
+    {
+     "kind": "financial",
+     "text": "18 CFR 101 Electric Plant Instruction 11 records construction by work order. What crosses here is the planned position at authorisation, not an entry. The property record posts it, and 5.3 publishes the as-built position against the same work order."
+    },
+    {
+     "kind": "operational",
+     "text": "Authorisation releases three things at once: material to the storeroom, work to scheduling, and this. Publishing later than the other two leaves plant accounting blind to work already in the field."
+    }
+   ],
+   "measures": [
+    {
+     "name": "Maintenance cost",
+     "definition": "EN 15341 cl. 12 Mi. Authorised estimate against the eventual as-built position.",
+     "cite": "EN 15341:2019+A1:2022 cl. 12 Mi maintenance-cost indicators"
+    },
+    {
+     "name": "Cycle Time",
+     "definition": "SMRP 5.4.7 from authorisation to the estimate reaching plant accounting.",
+     "cite": "SMRP Best Practices, Pillar 5 Work Management"
+    }
+   ],
+   "variants": [
+    "Install only, no retirement planned",
+    "Install with the planned retirement of the units replaced",
+    "Retirement only, no addition",
+    "Estimate revised after authorisation and republished against the same work order"
+   ],
+   "notation": {
+    "class": "BPMN",
+    "why": "Authorisation fixes an estimate and publishes it with the units it plans to install or retire.",
+    "artifact": "models/2.3-authorise-work.bpmn"
+   },
+   "en17007": {
+    "process": "BUD.4",
+    "title": "Extract budgeted and actual expenditures",
+    "clause": "6.8"
+   },
+   "sources": [
+    {
+     "for": "process",
+     "cite": "EN 17007:2017 cl. 6.8 BUD.4",
+     "status": "verified"
+    },
+    {
+     "for": "work order requirement",
+     "cite": "18 CFR Part 101 Electric Plant Instruction 11; 18 CFR Part 201 is parallel for gas",
+     "status": "regulation"
+    },
+    {
+     "for": "interfaces",
+     "cite": "IEC 61968-6:2015 cl. 4.2 reference components; cl. 5 payloads; Annex A verbs",
+     "status": "clause-verified"
+    },
+    {
+     "for": "data_objects",
+     "cite": "IEC 61968-11:2013 CIM extensions for distribution, Work package",
+     "status": "clause-verified"
+    },
+    {
+     "for": "publication at authorisation",
+     "cite": "Standard model of a widely deployed utility work management product, where approval releases material, schedule and the unit estimate together - structural precedent only",
+     "status": "consensus"
+    },
+    {
+     "for": "not 5.3",
+     "cite": "5.3 publishes the as-built position after completion; this publishes the planned position at authorisation",
+     "status": "judgment"
+    }
+   ],
+   "provenance": {
+    "basis": "regulation",
+    "primary": "18 CFR Part 101 Electric Plant Instruction 11"
+   },
+   "regulatory": {
+    "class": "C",
+    "why": "18 CFR 101 governs how this is done, not whether it is done"
    }
   },
   {
@@ -3411,17 +3584,17 @@
   {
    "uid": 10055,
    "id": "2.5.3",
-   "name": "Validate prerequisites before release",
+   "name": "Validate prerequisites at each release gate",
    "group": {
     "id": "2.5",
     "name": "Obtain permits and satisfy prerequisites"
    },
-   "intent": "Confirm every prerequisite is satisfied before the work is released to be scheduled.",
+   "intent": "Confirm the prerequisites that gate a transition are met before the work passes it.",
    "activities": [
-    "Check permits are held, in date and their conditions understood",
-    "Check material, qualification and equipment are secured",
-    "Check any safety prerequisite - isolation, clearance, briefing - is arranged",
-    "Release the work as ready, or hold it against the missing prerequisite"
+    "Establish which prerequisites gate which transition, and when each becomes live",
+    "Check permits, material, qualification and safety prerequisites as each gate is reached",
+    "Hold the transition against any prerequisite not met, and name the one holding it",
+    "Release the work through the gate once its prerequisites are complete"
    ],
    "trigger": {
     "kind": "message",
@@ -3447,7 +3620,7 @@
    ],
    "outputs": [
     {
-     "what": "Work released as ready to schedule",
+     "what": "Work released through the gate it was held at",
      "party": "SCHD",
      "data": "Work"
     },
@@ -3515,6 +3688,10 @@
     {
      "kind": "operational",
      "text": "Ready is a defined state, not an opinion. Work marked ready without every prerequisite held is what makes schedule compliance meaningless."
+    },
+    {
+     "kind": "operational",
+     "text": "The obligations themselves stay in their own domains - permits here, locate tickets at 8.4, switching and outage at 18.0, mapping at 5.4, customer contribution at 10.6. What is modelled here is the gate: which of them a given transition waits on, and each carries its own owner."
     }
    ],
    "measures": [
@@ -3530,14 +3707,16 @@
     }
    ],
    "variants": [
-    "All prerequisites held - released as ready",
+    "All prerequisites held - released through the gate",
     "Held for permit",
     "Held for material",
-    "Held for qualification or crew availability"
+    "Held for qualification or crew availability",
+    "Held at authorisation for a customer contribution",
+    "Held at dispatch for a locate ticket or a permit condition"
    ],
    "notation": {
     "class": "BPMN",
-    "why": "Known sequence with a defined hold path per prerequisite type.",
+    "why": "Known sequence with a defined hold path per gate and per prerequisite type.",
     "artifact": "models/2.5-permits-and-prerequisites.bpmn"
    },
    "en17007": {
@@ -3564,6 +3743,11 @@
     {
      "for": "measures",
      "cite": "SMRP Best Practices, Pillar 5 Work Management 5.4.9, 5.4.4",
+     "status": "consensus"
+    },
+    {
+     "for": "gating across transitions",
+     "cite": "A prerequisite declares the point at which it becomes live and the status it must reach before the work may pass - structural precedent only",
      "status": "consensus"
     }
    ],
